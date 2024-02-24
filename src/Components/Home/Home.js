@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div>
       <center>
-        <h1>Welcome {userName} to Beyinc !</h1>
+        {/* <h1>Welcome {userName} to Beyinc !</h1> */}
         <Dashboard />
         <DashboardPitchTable />
       </center>
