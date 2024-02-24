@@ -24,9 +24,8 @@ const Dashboard = () => {
             <i class="fas fa-users dashboard-icon"></i>
           </div>
           <div className="dashboard-content">
-            <label>Connections</label>
-            <p>{data?.total_connections}</p>
-            {/* <progress id="progress-bar" value="20" max="100"></progress> */}
+            <label>Approved Connections</label>
+            {/* <p>{data?.connections_approved}</p> */}
           </div>
         </div>
 
@@ -35,9 +34,8 @@ const Dashboard = () => {
             <i class="fas fa-file dashboard-icon"></i>
           </div>
           <div className="dashboard-content">
-            <label>Total Pitches</label>
-            <p>{data?.total_pitches}</p>
-            {/* <progress id="progress-bar" value="40" max="100"></progress> */}
+            <label>Pending Connections</label>
+            {/* <p>{data?.connections_pending}</p> */}
           </div>
         </div>
 
@@ -46,8 +44,8 @@ const Dashboard = () => {
             <i class="fas fa-users dashboard-icon"></i>
           </div>
           <div className="dashboard-content">
-            <label>Connections</label>
-            <p>3280</p>
+            <label> Approved Pitches</label>
+            {/* <p>{data?.pitches.approved}</p> */}
           </div>
         </div>
 
@@ -56,11 +54,10 @@ const Dashboard = () => {
             <i class="fas fa-file dashboard-icon"></i>
           </div>
           <div className="dashboard-content">
-            <label> Total Pitches</label>
-            <p>245</p>
+            <label> Pending Pitches</label>
+            {/* <p>{data?.pitches.pending}</p> */}
           </div>
         </div>
-
       </div>
 
       <div className="dashboard-section-2">

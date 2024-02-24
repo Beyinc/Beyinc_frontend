@@ -34,18 +34,13 @@ body {
   height: 5rem;
   width: 15rem;
 }
-.card-1 {
-  background-color: var(--primary);
+.card-1,.card-3 {
+  background-color: green;
 }
-.card-2 {
-  background-color: #ff6824;
+.card-2,.card-4  {
+  background-color: orange;
 }
-.card-3 {
-  background-color: #1799ac;
-}
-.card-4 {
-  background-color: purple;
-}
+
 
 .dashboard-icon-container {
   width: 60px;
