@@ -363,7 +363,7 @@ const Login = () => {
                       )}
                     </>
                   )}
-                  <div className="passwordHint">
+                  {loginType === "email" && <div className="passwordHint">
                     <ul>
                       <li className={password?.length >= 8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
                       <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
@@ -371,7 +371,8 @@ const Login = () => {
                       <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
                       <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
                     </ul>
-                  </div>
+                  </div>}
+                 
                   <button
                     className="full-width-button"
                     type="submit"
