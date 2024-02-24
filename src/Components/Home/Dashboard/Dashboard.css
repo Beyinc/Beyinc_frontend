@@ -1,0 +1,124 @@
+body {
+  background: #eeeef1;
+}
+.dasboard-container {
+  width: 95%;
+}
+/* section-1 */
+.dashboard-section-1 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 20px 20px;
+  background: white;
+  padding: 20px;
+  /* width: 93% !important; */
+  border-radius: 5px;
+}
+
+.card-1,
+.card-2,
+.card-3,
+.card-4 {
+  margin: 10px;
+  padding: 20px;
+  color: var(--white-text);
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 5rem;
+  width: 15rem;
+}
+.card-1 {
+  background-color: var(--primary);
+}
+.card-2 {
+  background-color: #ff6824;
+}
+.card-3 {
+  background-color: #1799ac;
+}
+.card-4 {
+  background-color: purple;
+}
+
+.dashboard-icon-container {
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dashboard-icon {
+  color: black;
+  font-size: 16px;
+}
+
+.dashboard-content {
+  align-content: flex-start !important;
+}
+
+.dashboard-content p{
+  font-weight: 600;
+  font-size: 20px;
+  /* text-align: left; */
+}
+.dashboard-content.progress {
+  align-self: flex-start;
+}
+
+/* section-2 */
+.dashboard-section-2 {
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 20px 20px;
+  background-color: white;
+  /* width: 94% !important; */
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.piechart {
+  width: 95%;
+}
+
+
+/* section-3 */
+.dashboard-section-3 {
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 20px 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  .dashboard-profile-container{
+    border: 0.5px solid grey;
+    padding: 20px;
+    width: 300px;
+  }
+  .dashboard-profile-container img{
+    height: 200px;
+    width: 200px;
+  }
+  .dashboard-profile-content{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  
+  

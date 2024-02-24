@@ -196,6 +196,21 @@ export const ApiServices = {
     });
   },
 
+
+  getDashboardDetails: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/dashboard/details`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
   changeNotification: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
