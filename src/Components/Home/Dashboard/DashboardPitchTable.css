@@ -1,5 +1,6 @@
 .tableContainer{
-    width: 80% !important;
+    width: 97% !important;
+    margin-bottom: 20px;
 }
 .confirmPopup{
     display: flex;
@@ -7,6 +8,27 @@
 }
 .confirmPopup button{
     width: 100% !important;
+}
+.fa-edit{
+    background: var(--button);
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    transition: all 0.3s ease;
+}
+.fa-edit:hover{
+   transform: scale(1.1);
+   background: var(--button-hover);
+}
+.pitch-del{
+    padding: 10px;
+    border-radius: 10px;
+    color: white; background: red;
+    transition: all 0.3s ease;
+}
+.pitch-del:hover{
+   transform: scale(1.1);
+   background: rgb(190, 6, 6);
 }
 @media (max-width: 768px) {
     .tableContainer{

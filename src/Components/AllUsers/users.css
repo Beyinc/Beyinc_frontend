@@ -77,10 +77,10 @@
   height: fit-content;
   margin-bottom: 20px;
 }
-.fas.fa-trash:hover {
+/* .fas.fa-trash:hover {
   color: red;
   transform: scale(1.2);
-}
+} */
 
 @media (max-width: 760px) {
   .usersWrapper {
