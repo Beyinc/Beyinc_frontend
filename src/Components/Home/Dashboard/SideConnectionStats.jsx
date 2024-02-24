@@ -21,16 +21,7 @@ const SideConnectionStats = ({ Tdata, status }) => {
             const connections = Object.keys(Tdata?.connections);
             for (let i = 0; i < Object.keys(Tdata?.connections).length; i++) {
                 tempData1.push({ id: i, value: Tdata?.connections[connections[i]][status], label: connections[i] });
-                if (tempUserFlowdata[`userCreatedConv-${status}`]) {
-                    tempUserFlowdata[`userCreatedConv-${status}`] = tempUserFlowdata[`userCreatedConv-${status}`] + Tdata?.connections[connections[i]][`userCreatedConv-${status}`]
-                } else {
-                    tempUserFlowdata[`userCreatedConv-${status}`] = Tdata?.connections[connections[i]][`userCreatedConv-${status}`]
-                }
-                if (tempUserFlowdata[`userReceivedConv-${status}`]) {
-                    tempUserFlowdata[`userReceivedConv-${status}`] = tempUserFlowdata[`userReceivedConv-${status}`] + Tdata?.connections[connections[i]][`userReceivedConv-${status}`]
-                } else {
-                    tempUserFlowdata[`userReceivedConv-${status}`] = Tdata?.connections[connections[i]][`userReceivedConv-${status}`]
-                }
+               
 
                 setConnectionColors(prev => [...prev, defaultConnectionColor[connections[i]]])
             }
@@ -48,11 +39,11 @@ const SideConnectionStats = ({ Tdata, status }) => {
             <div style={{ zindex: '999' }} className='requestDecider'>
                 <div title='Sent by you'>
                     <ArrowUpwardIcon className='sentByyou' />
-                    {userFlowdata[`userCreatedConv-${status}`]}
+                    {Tdata?.connectionStats?.[`userCreatedConv-${status}`] || 0}
                 </div>
                 <div title='Received by you'>
                     <ArrowDownwardIcon className='receivedByyou' />
-                    {userFlowdata[`userReceivedConv-${status}`]}
+                    {Tdata?.connectionStats?.[`userReceivedConv-${status}`] || 0}
                 </div>
 
             </div>
