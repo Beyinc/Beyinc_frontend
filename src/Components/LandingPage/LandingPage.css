@@ -23,7 +23,7 @@ body {
   margin-top: 10px;
 }
 
-.button-container {
+.landing-button-container {
   display: flex;
   flex-direction: row;
 }
