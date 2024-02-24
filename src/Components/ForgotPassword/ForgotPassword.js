@@ -119,7 +119,7 @@ const ResetPassword = () => {
       .catch((err) => {
         dispatch(
           setToast({
-            message: err.response.data.message,
+            message: "Error occured !",
             bgColor: ToastColors.failure,
             visible: "yes",
           })
@@ -208,7 +208,7 @@ const ResetPassword = () => {
       .then((res) => {
         dispatch(
           setToast({
-            message: "Email verified successfully !",
+            message: `${loginType.split('')[0].toUpperCase()+loginType.slice(1)} verified successfully !`,
             bgColor: ToastColors.success,
             visible: "yes",
           })
@@ -575,7 +575,7 @@ const ResetPassword = () => {
                       name="confirmPassword"
                       type="password"
                       className={
-                        confirmPassword !== null &&
+                        confirmPassword &&
                         (confirmPassword === newPassword ? "valid" : "invalid")
                       }
                       value={confirmPassword}
@@ -587,7 +587,7 @@ const ResetPassword = () => {
                       <ul>
                         <li className={newPassword?.length >= 8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
                         <li className={/.*[A-Z].*/.test(newPassword) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                        <li className={/.*[a-z].*/.test(newPassword) && newPassword !== null ? 'success' : 'failure'}>Atleast one small letter</li>
+                        <li className={(/.*[a-z].*/.test(newPassword) && newPassword) ? 'success' : 'failure'}>Atleast one small letter</li>
                         <li className={/.*[!@#$%^&*()_+].*/.test(newPassword) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
                         <li className={/.*[0-9].*/.test(newPassword) ? 'success' : 'failure'}>Atleast one Number</li>
                       </ul>
@@ -599,8 +599,7 @@ const ResetPassword = () => {
                   className="full-width-button"
                   type="submit"
                   disabled={
-                    newPassword === "" ||
-                    newPassword !== confirmPassword}
+                    newPassword === "" || newPassword == null || confirmPassword == null || newPassword!==confirmPassword || !isPasswordValid }
                   onClick={handleResetPassword}
                 >
                   Change Password

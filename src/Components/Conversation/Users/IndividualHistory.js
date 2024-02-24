@@ -58,6 +58,7 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
     }
 
 
+    
     useEffect(() => {
         if (messageCount.includes(friend?._id)) {
             setShowMessageDot(true)
