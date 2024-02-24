@@ -24,7 +24,7 @@ const Dashboard = () => {
           <div className="dashboard-content connections">
             <div>
               <label>Approved Connections</label>
-              <p>{data?.connections_approved}</p>
+              <p>{data?.connections_approved || 0}</p>
             </div>
             <div>
               <SideConnectionStats Tdata={data} status='approved'/>
@@ -36,7 +36,7 @@ const Dashboard = () => {
           <div className="dashboard-content connections">
             <div>
               <label>Pending Connections</label>
-              <p>{data?.connections_pending}</p>
+              <p>{data?.connections_pending || 0}</p>
             </div>
             <div>
               <SideConnectionStats Tdata={data} status='pending' />
@@ -51,7 +51,7 @@ const Dashboard = () => {
           <div className="dashboard-content">
             <div>
               <label> Approved Pitches</label>
-              <p>{data?.pitches?.approved}</p>
+              <p>{data?.pitches?.approved || 0}</p>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ const Dashboard = () => {
           <div className="dashboard-content">
             <div>
               <label> Pending Pitches</label>
-              <p>{data?.pitches?.pending}</p>
+              <p>{data?.pitches?.pending || 0}</p>
            </div>
           </div>
         </div>
