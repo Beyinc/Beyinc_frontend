@@ -107,6 +107,7 @@ const SignUp = () => {
         setInputs((prev) => ({ ...prev, isEmailOtpSent: true }));
       })
       .catch((err) => {
+        setSendEmailOtpLoading(false);
         dispatch(
           setToast({
             message: "OTP sent failed !",
@@ -141,6 +142,7 @@ const SignUp = () => {
         setInputs((prev) => ({ ...prev, emailVerified: true }));
       })
       .catch((err) => {
+        setVerifyEmailOtpLoading(false);
         dispatch(
           setToast({
             message: "Incorrect OTP",
@@ -174,6 +176,7 @@ const SignUp = () => {
         setInputs((prev) => ({ ...prev, mobileVerified: true }));
       })
       .catch((err) => {
+        setVerifyMobileOtpLoading(false)
         console.log(err);
         dispatch(
           setToast({
@@ -210,6 +213,7 @@ const SignUp = () => {
       })
       .catch((err) => {
         e.target.disabled = false;
+        setLoading(false);
         dispatch(
           setToast({
             message: err.response.data.message,
@@ -243,6 +247,7 @@ const SignUp = () => {
       })
       .catch((err) => {
         console.log(err);
+        setSendMobileOtpLoading(false);
         dispatch(
           setToast({
             message: err.response.data,
@@ -575,7 +580,7 @@ const SignUp = () => {
                     <ul>
                       <li className={password?.length>=8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
                       <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                      <li className={/.*[a-z].*/.test(password) && password!==null ? 'success' : 'failure'}>Atleast one small letter</li>
+                      <li className={/.*[a-z].*/.test(password) && password ? 'success' : 'failure'}>Atleast one small letter</li>
                       <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
                       <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
                     </ul>
