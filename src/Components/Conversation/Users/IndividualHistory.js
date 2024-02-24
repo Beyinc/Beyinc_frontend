@@ -70,7 +70,7 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
             <div><img src={(friend?.image == undefined || friend?.image == null || friend?.image?.url === undefined)  ? '/profile.png' : friend?.image?.url} alt="" srcset="" /></div>
             <div className='onlineHolder'>
                 <abbr title={friend?.userName} style={{ textDecoration: 'none' }}>
-                    <div className='userName'>{friend?.userName}</div></abbr>
+                    <div className='userName'>{friend?.userName || 'Anonymous User'}</div></abbr>
 
                 {status === 'pending' ? <><abbr title='pending'>
 
