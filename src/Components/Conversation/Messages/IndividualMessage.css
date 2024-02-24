@@ -1,0 +1,29 @@
+#message {
+  margin-bottom: 0px;
+}
+
+.fas.fa-arrow-left:hover {
+  color: black !important;
+  transform: scale(1.2);
+}
+
+.Dp {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+}
+.User-name {
+  font-weight: 600;
+  margin-top: -8px;
+}
+.loading_viewer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(188, 188, 188, 0.462);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

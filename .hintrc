@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "line-break",
+          "position: sticky",
+          "height: fit-content",
+          "user-select",
+          "backdrop-filter"
+        ]
+      }
+    ]
+  }
+}

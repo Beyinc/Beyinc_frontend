@@ -1,0 +1,15 @@
+.tableContainer{
+    width: 80% !important;
+}
+.confirmPopup{
+    display: flex;
+    gap: 25px;
+}
+.confirmPopup button{
+    width: 100% !important;
+}
+@media (max-width: 768px) {
+    .tableContainer{
+    width: 100% !important;
+}
+}

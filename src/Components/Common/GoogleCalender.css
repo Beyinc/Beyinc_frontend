@@ -1,0 +1,50 @@
+.gmeetForm input {
+  width: 90%;
+}
+.schedulerbtnn {
+  width: auto;
+}
+.attendees,
+.meetTime {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  margin-left: 10px;
+}
+.meetsummary {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .schedulerbtnn {
+    width: 100% !important;
+  }
+  .gmeetForm input {
+    width: 265px !important;
+  }
+  .meetings {
+    font-size: 12px;
+  }
+  .attendees,
+  .meetTime {
+    font-size: 12px !important;
+  }
+  .meetsummary {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.Totalmeetings {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.meetings {
+  background: rgb(241, 235, 235);
+  padding: 10px 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

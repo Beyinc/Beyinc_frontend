@@ -1,0 +1,252 @@
+.livePitchesContainer {
+  background: #f0f0f0;
+  padding: 10px;
+}
+.livePitchesWrapper {
+  margin: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pitchcontainer {
+  flex: 1 0 75%;
+}
+
+.filterContainer,
+.pitchcontainer {
+  background: white;
+}
+.No-users img{
+  width: 50%;
+  height: auto;
+}
+
+
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 220px;
+  padding: 15px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.08), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.filterContainer .filterHeader {
+  font-size: 18px;
+}
+.tagFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.tagFilter .inputTag input[type="text"],
+.inputTag select {
+  width: 200px !important;
+  padding: 10px !important;
+}
+input[type="checkbox"] {
+  width: 20px !important;
+}
+.inputTag {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+}
+.inputTag select {
+  min-width: 220px !important;
+}
+.inputTag i {
+  transform: translate(-20px, -5px);
+}
+.singlePitch {
+  padding: 25px;
+  border-bottom: 1px solid rgb(238, 238, 238);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+}
+.singlePitchWrapper:hover {
+  background: rgba(238, 238, 238, 0.596);
+}
+.singlePitch .desc {
+  font-size: 15px;
+}
+.tags span {
+  color: #007fed;
+}
+
+.star-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.star {
+  font-size: 34px;
+  color: #ffd700;
+  margin-right: 5px;
+}
+
+.star.empty {
+  color: #ccc;
+}
+
+.star.half-filled {
+  position: relative;
+  color: #ffd700;
+}
+
+.star.half-filled::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  top: -2.5px;
+  mask: linear-gradient(to left, #ffd700 50%, transparent 50%);
+  color: #ccc;
+}
+.subcommentsContainer {
+  width: 97%;
+  margin: auto;
+  background: white;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 0px;
+  /* border-left: 1px solid gray; */
+  margin-left: 50px;
+  /* margin-bottom: 30px !important; */
+}
+.average-rating {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.IndicommentsSection {
+  display: flex;
+  gap: 8px;
+}
+.IndicommentsSectionDetailscomment {
+  word-wrap: break-word;
+  max-width: 750px;
+  width: auto;
+  font-size: 13px;
+}
+
+.IndicommentsSectionDetails {
+  flex: 1 0 auto;
+}
+.IndicommentsSectionImage img {
+  height: 40px;
+  width: 40px;
+}
+
+.IndicommentsSectionDetailsUserName {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.totalSubComments {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  color: #007fed;
+  width: 150px;
+  cursor: pointer;
+}
+
+.totalSubComments:hover {
+  background: #50a6f1;
+  color: white;
+}
+.replyTag {
+  font-size: 13px;
+  cursor: pointer;
+  padding: 5px;
+  margin-bottom: 15px !important;
+}
+.replyTag:hover {
+  background: #ccc;
+  padding: 5px;
+  border-radius: 10px;
+}
+.IndicommentsSectionDetailsUserName i {
+  font-size: 14px;
+}
+.IndicommentsSectionDetailsdate {
+  font-size: 10px;
+}
+
+.headingIntrested {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .IndicommentsSectionDetailscomment {
+    word-wrap: break-word;
+    max-width: 250px;
+    width: auto;
+  }
+  .indiPitchHeading{
+    word-wrap: break-word;
+    max-width: 320px;
+    width: auto;
+  }
+  .IndicommentsSectionDetailsUserName {
+    word-wrap: break-word;
+    flex-direction: column;
+    max-width: 300px;
+    align-items: flex-start;
+    gap: 0px;
+    width: auto;
+  }
+  .indiPitchDate {
+    font-size: 10px;
+    word-wrap: break-word;
+    max-width: 350px;
+    width: auto;
+  }
+
+  .commentsContainer img {
+    margin-left: 0px;
+  }
+  .main-container, .indiPitchDesc{
+    width: 300px !important;
+  }
+ .subcommentsContainer{
+  width: 250px;
+ }
+
+  .subcommentsContainer .IndicommentsSection .IndicommentsSectionDetails{
+  word-wrap: break-word;
+ 
+  max-width: 200px;
+  /* margin-bottom: 30px !important; */
+}
+}
+
+.IndicommentsSectionActions {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+   margin: 5px;
+}
+.IndicommentsSectionActions span {
+  margin-right: 10px;
+  height: 16px;
+}
+.IndicommentsSectionActions .icon-blue {
+  color: #6a73fa;
+}

@@ -1,0 +1,588 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* navbar */
+.landing-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background-color: var(--nav-head-bg);
+  backdrop-filter: blur(5px);
+}
+
+.Beyinc-logo img {
+  height: auto;
+  width: 150px;
+  margin-top: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.signin-button {
+  border: 1px solid #ff6824 !important;
+  background: none;
+  color: #ff6824;
+  border-radius: 15px;
+  width: 100px;
+  margin-right: 10px;
+}
+
+.signin-button:hover {
+  background: #ff692412;
+}
+
+.signup-button {
+  background: linear-gradient(35deg, #ff6824 0%, var(--primary) 100%);
+  /* background-color: var(--button) !important; */
+  border-radius: 15px;
+  width: 100px;
+  margin-right: 10px;
+}
+
+.signup-button:hover {
+  background: linear-gradient(35deg, var(--primary) 0%, #ff6824 100%);
+  /* background: var(--button-hover) !important; */
+}
+
+/* section-1 */
+
+.section-1 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 40px;
+}
+.content-1 {
+  text-align: center;
+}
+.content-1 h1 {
+  font-size: 3rem;
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.content-1 h2 {
+  font-size: 2rem;
+}
+.starting-button {
+  background: linear-gradient(35deg, #ff6824 0%, var(--primary) 100%);
+  border-radius: 30px;
+  width: auto;
+  margin-top: 10px;
+  padding: 15px !important;
+  transition: background-color 0.3s ease;
+}
+.starting-button:hover {
+  background: linear-gradient(35deg, var(--primary) 0%, #ff6824 100%);
+}
+.image-1-dummy {
+  display: none;
+}
+.image-1 img {
+  width: 600px;
+  height: 600px;
+  margin-right: 50px;
+}
+
+/* section-2 */
+.section-2 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.image-2 img {
+  width: 600px;
+  height: 600px;
+}
+.content-2 {
+  margin-right: 100px;
+}
+
+.content-2 h1 {
+  font-size: 3rem;
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.content-2 p {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.fa-user-tie {
+  color: var(--white-text);
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  padding: 15px 16px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+.section-2-users {
+  color: var(--white-text);
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  padding: 15px 13px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+.fa-lightbulb {
+  color: var(--white-text);
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  padding: 15px 18px;
+  border-radius: 50%;
+}
+
+/* section-3 */
+.section-3 {
+  margin-bottom: 100px;
+}
+.section-3 h1 {
+  font-size: 3rem;
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-align: center;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 20px auto;
+  max-width: 1250px;
+}
+
+.box {
+  background: #ff692412;
+  padding: 20px;
+  text-align: center;
+  margin: 10px;
+  width: calc(20% - 20px);
+  border-radius: 10px;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
+    transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+.box:hover {
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  color: var(--white-text);
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  transform: scale(1.05);
+}
+
+.box i {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.box h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.box p {
+  font-size: 16px;
+}
+
+/* section-4 */
+
+.section-4 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 40px;
+}
+.content-4 h1 {
+  font-size: 3rem;
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-left: 150px;
+  margin-bottom: 50px;
+}
+.content-4 p {
+  text-align: left;
+  margin-left: 50px;
+}
+.image-4 img {
+  width: 600px;
+  height: 600px;
+  margin-right: 50px;
+}
+.fa-check-square {
+  color: #ff6924;
+  font-size: 20px;
+}
+
+/* section-5 */
+/* .section-5 {
+  margin-top: 40px;
+  background-color: #fff;
+  height: 55vh;
+}
+
+.section-5 h2 {
+  background: linear-gradient(75deg, #ff6824 0%, #656fff 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.benefit-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.benefit-card {
+  width: 29%;
+  height: 25vh;
+  background: #ff692412;
+  padding: 20px;
+  border: 1px solid #ff6924;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  margin-top: 20px;
+}
+
+.benefit-card h3 {
+  margin-top: 80px;
+}
+
+.benefit-card i {
+  font-size: 24px;
+  color: var(--white-text);
+  margin-bottom: 10px;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.card-icon {
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  padding: 20px;
+  border-radius: 20px;
+} */
+
+/* section-6 */
+
+.section-6 {
+  background: #ff692412;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.steps-list {
+  list-style: none;
+  margin: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.content-6 h2 {
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 3rem;
+  margin-top: 20px;
+}
+.step {
+  width: 70%;
+  margin: 10px;
+  padding: 20px;
+  margin-left: 80px;
+  border: 1px solid #ddd;
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+}
+
+.step h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.step p {
+  font-size: 14px;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  /* navbar */
+  .landingPage-container {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .signin-button {
+    font-size: 10px;
+    width: auto;
+    margin-right: 10px;
+  }
+  .signup-button {
+    font-size: 10px;
+    width: auto;
+    margin-right: 10px;
+  }
+
+  /* section-1 */
+  .section-1 {
+    flex-direction: column;
+    align-items: center;
+  }
+  .content-1 h1 {
+    font-size: 1.5rem;
+  }
+  .content-1 h2 {
+    font-size: 1rem;
+  }
+  .image-1 img {
+    display: none;
+  }
+  .image-1-dummy {
+    display: block;
+  }
+  .image-1-dummy img {
+    margin-top: 20px;
+    width: 300px;
+    height: 300px;
+  }
+
+  /* section-2 */
+  .section-2 {
+    flex-direction: column;
+    width: 100%;
+    padding-left: 10px;
+  }
+  .content-2 {
+    font-size: 14px;
+  }
+  .image-2 img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .content-2 {
+    /* margin-left: 20px; */
+    margin-right: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .content-2 h1 {
+    font-size: 1.3rem;
+  }
+  .content-2 p {
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .fa-user-tie {
+    padding: 10px 12px;
+  }
+  .section-2-users {
+    padding: 10px 8px;
+  }
+  .fa-lightbulb {
+    padding: 10px 13px;
+  }
+
+  /* section-3 */
+  .section-3 {
+    margin-bottom: 100px;
+    flex-direction: column;
+  }
+  .section-3 h1 {
+    font-size: 1.5rem;
+    margin-top: 20px;
+  }
+  .container {
+    max-width: 800px;
+  }
+
+  .box {
+    width: calc(75% - 20px);
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  }
+
+  /* section-4 */
+
+  .section-4 {
+    /* flex-direction: column; */
+    width: 98%;
+    /* margin-left: 50px; */
+    margin-bottom: 5px;
+  }
+  .content-4 h1 {
+    font-size: 2rem;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+  .content-4 p {
+    text-align: left;
+    margin-left: 10px;
+    text-align: justify;
+    padding-right: 5px;
+  }
+  .image-4 img {
+    display: none;
+    /* width: 300px;
+    height: 300px;
+    margin-right: 0px; */
+  }
+  .fa-check-square {
+    color: #ff6924;
+    font-size: 15px;
+    margin-right: 0px;
+  }
+
+  /* section-5 */
+  /* .section-5 {
+    flex-direction: column;
+  }
+
+  .section-5 h2 {
+    font-size: 1.2rem;
+  } */
+
+  /* .benefit-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.benefit-card {
+  width: 29%;
+  height: 25vh;
+  background: #ff692412;
+  padding: 20px;
+  border: 1px solid #ff6924;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  margin-top: 20px;
+}
+
+.benefit-card h3 {
+  margin-top: 80px;
+}
+
+.benefit-card i {
+  font-size: 24px;
+  color: var(--white-text);
+  margin-bottom: 10px;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.card-icon {
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  padding: 20px;
+  border-radius: 20px;
+}
+
+
+
+.box {
+  background: #ff692412;
+  padding: 20px;
+  text-align: center;
+  margin: 10px;
+  width: calc(70% - 20px);
+
+}
+.box:hover {
+  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  color: var(--white-text);
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  transform: scale(1.05);
+}
+
+.box i {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.box h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.box p {
+  font-size: 16px;
+}
+ */
+  /* 
+  .benefit-cards {
+    flex-direction: column;
+  }
+
+  .benefit-card {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .benefit-card i {
+    position: static;
+    margin-bottom: 10px;
+  } */
+
+  /* section-6 */
+
+  .section-6 {
+    flex-direction: column;
+    width: 100%;
+    min-height: 1100px;
+    justify-content: flex-start;
+  }
+
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    margin-left: -75px;
+  }
+  .content-6 h2 {
+    font-size: 1.5rem;
+  }
+  .step {
+    /* width: 80%; */
+    /* margin-left: 20px; */
+    /* margin-left: 0px; */
+  }
+
+  .step h3 {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .step p {
+    font-size: 12px;
+  }
+}

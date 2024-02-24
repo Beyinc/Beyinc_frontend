@@ -1,0 +1,32 @@
+.toastStyles{
+    padding: 10px 12px;
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    max-width: 250px;
+    position: fixed;
+    top: 0;
+    line-break: auto;
+    height: auto;
+    border-radius: 10px ;
+    margin-top: 40px;
+    z-index: 999;
+    font-size: 12px;
+    /* margin: auto; */
+}
+
+
+
+@media (max-width: 768px) {
+    .toastStyles{
+        padding: 8px 10px !important;
+        width: 90% !important;
+        margin: auto !important;
+        margin-top: 2px !important;
+        position: fixed;
+        height: 30px;
+        top: 92% !important;
+        border-radius: 10px !important;
+
+     }
+ }

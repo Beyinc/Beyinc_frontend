@@ -1,0 +1,82 @@
+.usersFilterContainer {
+  display: flex;
+  width: 100%;
+  margin: auto;
+  flex-direction: column;
+  gap: 20px;
+  /* align-items: center; */
+  /* border: 1px solid green; */
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.filteredUsers {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 10px;
+  width: 100%;
+  height: fit-content;
+}
+
+.userCardImage {
+  width: 100px;
+  height: 100px;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+#view-request {
+  background: #3b82f6;
+  color: white;
+  padding: 10px;
+  font-weight: 600;
+  margin-top: -10px;
+}
+#view-request:hover {
+  background: #1e4bb8;
+}
+.pitch-container {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.no-requests {
+  height: 450px;
+  width: 450px;
+  margin-top: -30px;
+}
+.usersFilterContainer .filters {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.singleProfile textarea{
+    width: 280px !important;
+  }
+@media only screen and (max-width: 450px) {
+  .usersFilterContainer .filters {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .pitch-container img {
+    margin-inline: 20px;
+    margin-top: 20px;
+    width: 100%;
+    height: fit-content;
+  }
+  .singleProfile textarea{
+    width: 220px !important;
+  }
+}
+.pitch-container img {
+  margin-top: 20px;
+}

@@ -1,0 +1,364 @@
+.newConversation {
+  display: none;
+}
+.newConversation.show {
+  display: block;
+  position: absolute;
+  z-index: 999;
+}
+.searchedUsers {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: -10px;
+  border: var(--border-colors);
+  max-height: 60vh;
+  /* border-radius: 20px; */
+  padding-left: 10px;
+  background: var(--searchmenu-bg);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 280px;
+  border-radius: 0 0 10px 10px;
+  overflow: scroll;
+}
+#search {
+  width: 260px !important;
+  border-radius: 10px 10px 0 0;
+}
+.individuals {
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
+  padding: 5px 5px;
+  padding-left: -10px;
+  transition: all ease 0.2s;
+  margin: 0px 0px 5px 0px;
+  width: 90%;
+  font-size: 12px;
+  /* border-radius: 30px; */
+  position: relative;
+}
+.searchPic {
+  position: relative;
+}
+.individuals:hover {
+  background: #c2e7ff46;
+  border-radius: 10px;
+}
+.role {
+  font-size: 12px;
+}
+.newChatContainer {
+  background: var(--messageNavbar-bg) !important;
+  padding: 10px 20px 4px 20px;
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .newChatContainer {
+    background: var(--messageNavbar-bg) !important;
+    padding: 10px 20px;
+    width: auto !important;
+  }
+  .historyChats {
+    margin-left: 20px;
+  }
+}
+.newChat {
+  padding: 5px 8px;
+  background: var(--button);
+  color: var(--white-text);
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 12px;
+  width: auto;
+
+  margin-top: 5px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  /* margin-top: 12px; */
+  font-size: 14px;
+}
+
+.newChat:hover {
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease, border 0.3s ease;
+  background: var(--button-hover);
+}
+
+/* tabs */
+.css-1nerts0-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: var(--primary) !important;
+}
+.css-11yukd5-MuiTabs-indicator {
+  background-color: var(--primary) !important;
+}
+
+.historyChats {
+  height: 70vh;
+  overflow-y: scroll;
+  background: var(--users-bg);
+}
+
+.onlineHolder {
+  position: relative;
+}
+.online,
+.away,
+.pendingStatusIcon {
+  width: 10px;
+  height: 10px;
+  background: gray;
+  border-radius: 50%;
+  position: absolute;
+  left: -20px;
+  top: 0;
+}
+.online {
+  background: green;
+}
+.pendingStatusIcon {
+  background: none;
+
+  top: -2px;
+}
+
+.statusHeader {
+  font-size: 14px;
+  margin: 15px 0px;
+}
+.fas {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.approved,
+.pending {
+  display: none;
+}
+
+body[data-theme="dark"] .tabs {
+  color: var(--tabPanel-text-color) !important;
+}
+
+.tabs:hover {
+  background: var(--button-hover) !important;
+  color: #fff !important;
+}
+
+.pitchForm {
+  /* padding-top: 20px; */
+  width: 90%;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 20px;
+  /* min-height: 62vh; */
+  /* max-height: 55vh;
+  overflow-y: scroll; */
+}
+.historicalTabHeader {
+  /* padding: 5px; */
+  display: flex;
+  justify-content: space-around;
+  position: sticky;
+  top: 0;
+  width: 300px;
+}
+.historicalTabIcons {
+  cursor: pointer;
+  background-color: #fff;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+}
+.historicalTabIcons.historicalTabIconsselected {
+  background: var(--primary);
+
+  color: #fff;
+  transition: all ease 0.3s;
+}
+.historicalTabIcons:not(.historicalTabIconsselected):hover {
+  background: var(--tab-hover);
+
+  /* color: #fff; */
+}
+.pitchTabs {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: wrap;
+}
+
+.addTeamMembers {
+  border: 1px solid grey;
+  padding: 10px;
+  border-radius: 10px;
+  width: 95%;
+}
+
+.pitchSubmit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.teamInputs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.singleMember {
+  background: rgb(242, 240, 240);
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  border-radius: 10px;
+  margin: 5px 0px;
+}
+
+.deleteMember {
+  position: absolute;
+  top: -5px;
+  right: -3px;
+  cursor: pointer;
+  font-size: 15px !important;
+  background: rgba(255, 0, 0, 0.662);
+  color: white;
+  border-radius: 50%;
+}
+
+.listedTeam {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+textarea {
+  padding: 5px;
+}
+
+.selected {
+  background: var(--historical-selected-chat);
+  border-radius: 10px;
+}
+
+.deleteConv {
+  display: flex;
+  justify-content: space-between;
+  width: 180px;
+}
+.deleteConv .fa-trash {
+  color: red;
+  transition: all ease 0.2s;
+  margin-left: 0px;
+}
+.deleteConv .fa-trash:hover {
+  transform: scale(1.3);
+}
+
+.tags {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.tags .addtags {
+  background: var(--button);
+  padding: 10px 5px 10px 10px;
+  border-radius: 50%;
+  color: white;
+  font-size: 12px;
+  margin-top: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.addtags:hover {
+  background: var(--button-hover);
+}
+
+.file {
+  border: 1px solid lightgrey;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 3px;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+  width: 330px;
+  height: 22px;
+  color: gray;
+  margin-top: -3px;
+}
+.file:hover {
+  color: var(--button-hover);
+}
+
+.fileName {
+  white-space: wrap !important;
+  margin-left: 3px;
+}
+
+.message-count {
+  background: #0b57d0b9;
+  color: white;
+  padding: 2px 2px;
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  top: 16px;
+  /* left: 0; */
+  right: 0;
+  margin-left: 200px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.userName,
+.lastMsg {
+  text-align: start;
+  text-overflow: ellipsis;
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.lastMsg {
+  width: 200px !important;
+}
+
+@media (max-width: 768px) {
+  .userName,
+  .lastMsg {
+    text-align: start;
+    text-overflow: ellipsis;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .message-count {
+    background: #0b57d0b9;
+    color: white;
+    padding: 2px 2px;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    top: 16px;
+    /* left: 0; */
+    right: -30px;
+    margin-left: 200px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+}

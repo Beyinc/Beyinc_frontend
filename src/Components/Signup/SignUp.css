@@ -1,0 +1,324 @@
+.signup-main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fafafa;
+}
+
+.signup-hero {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: webkit-fit-content;
+  padding-top: 25px;
+  padding-bottom: 30px;
+}
+
+/* header style */
+.signup-page .signup-header {
+  text-align: center;
+}
+
+.signup-logo {
+  width: 100%;
+  height: max-content;
+  margin: 0;
+}
+
+.signup-page .signup-header p,
+.signup-page .signup-header button {
+  margin-bottom: 15px;
+}
+
+.signup-page .signup-header > p {
+  font-weight: bold;
+  color: #8e8e8e;
+  font-size: 18px;
+}
+
+.signup-page .signup-header > button {
+  width: inherit;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.signup-page .signup-header div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #8e8e8e;
+}
+
+.signup-page .signup-header div p {
+  padding: 0 20px;
+}
+
+.signup-page .signup-header div hr {
+  width: 200px;
+}
+
+/* signup-container style*/
+.signup-page .signup-container {
+  display: flex;
+  flex-direction: column;
+}
+.passwordHint ul{
+  display: flex;
+  flex-direction: column;
+}
+.passwordHint ul li{
+  white-space: noWrap;
+  font-size: 12px;
+  display: block;
+  text-align: start !important;
+}
+.passwordHint ul li.success{
+ color: green !important;
+}
+.passwordHint ul li.failure{
+ color: red !important;
+}
+.signup-page .signup-container form,
+input {
+  width: inherit;
+}
+
+.signup-page .signup-container .role-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.signup-page .signup-container form input {
+  width: 95%;
+  background-color: #fafafa;
+  padding: 10px 5px;
+  margin: 5px 0;
+}
+
+signup-page .signup-container form .resting-border {
+  border-radius: 5px;
+  border: 1px solid #dbdbdb;
+}
+signup-page .signup-container form .valid {
+  border: 2px solid green;
+}
+
+signup-page .signup-container form .invalid {
+  border: 1px solid red;
+}
+
+.signup-page .signup-container form input:last-of-type {
+  margin-bottom: 10px;
+}
+
+.signup-page .signup-container form button {
+  width: 100%;
+  margin-bottom: 20px;
+  margin-left: 0px;
+  padding: 7px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.signup-page .signup-container ul {
+  list-style: none;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.signup-page .signup-container ul li {
+  display: inline;
+  color: #8e9096;
+}
+
+.signup-page .signup-container ul li a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #8e9096;
+}
+
+/* signup-option style */
+.signup-option p > a {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+/* signup-otherapps style */
+.signup-otherapps {
+  text-align: center;
+}
+
+.signup-otherapps p {
+  margin-bottom: 15px;
+}
+
+.signup-otherapps > button {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+}
+
+/* signup-footer style */
+.signup-footer {
+  padding: 40px 0;
+  bottom: 0;
+  height: 2.5rem;
+}
+
+.signup-footer ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+.signup-footer ul li {
+  display: inline;
+  margin-right: 10px;
+}
+.signup-footer ul li a {
+  text-decoration: none;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.signup-footer p {
+  margin: 10px 0;
+  text-align: center;
+  color: #8e9096;
+  font-size: 14px;
+}
+
+/* Mobile Styles */
+.full-width-button {
+    width: 100% !important;
+  }
+@media only screen and (max-width: 635px) {
+  .signup-otherapps button {
+    margin-bottom: 5px;
+  }
+
+  
+  .signup-otherapps button:after-of-type {
+    margin-bottom: none;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+
+  .signup-page {
+    width: 250px;
+    background-color: #fafafa;
+  }
+
+  .signup-page .signup-header {
+    width: inherit;
+    margin-top: 10px;
+  }
+
+  .signup-page .signup-container {
+    width: inherit;
+  }
+
+  .signup-option {
+    margin: 80px 0;
+  }
+
+  .signup-page .signup-container input {
+    padding: 10px 5px;
+    margin: 5px 0;
+  }
+
+  .signup-page .signup-footer {
+    width: inherith;
+  }
+  .signup-otherapps button {
+    margin-bottom: 5px;
+  }
+
+  .signup-otherapps button:after-of-type {
+    margin-bottom: none;
+  }
+}
+
+@media only screen and (min-width: 401px) {
+  .signup-page {
+    border: 1px solid #dbdbdb;
+    width: 350px;
+    background-color: white;
+    margin: 40px 40px 10px 40px;
+  }
+
+  .signup-page .signup-header {
+    width: 270px;
+  }
+
+  .signup-page .signup-container {
+    width: 270px;
+  }
+
+  .signup-option {
+    border: 1px solid #dbdbdb;
+    background-color: white;
+    width: 350px;
+    height: 70px;
+    margin-top: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .signup-otherapps {
+    margin: 20px 0;
+  }
+
+  .signup-otherapps button {
+    margin-right: 5px;
+  }
+
+  .signup-otherapps button:after-of-type {
+    margin-right: none;
+  }
+
+  .signup-page .signup-footer {
+    width: 100%;
+  }
+}
+
+.signup-option-text {
+  margin: 0;
+}
+.signup-image {
+  width: 600px;
+  height: webkit-fit-content;
+}
+
+@media only screen and (max-width: 1020px) {
+  .signup-image {
+    display: none;
+  }
+}

@@ -1,0 +1,445 @@
+.login-main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fafafa;
+  height: 100vh;
+}
+
+.login-form-container {
+  width: 25%;
+  margin-top: 150px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-left: 200px;
+}
+
+.login-image-container {
+  width: 45%;
+  margin-top: 50px;
+  margin-right: 100px;
+}
+
+.login-image-container img {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: fit-content;
+  padding-top: 25px;
+  padding-bottom: 30px;
+}
+
+/* header style */
+.login-page .login-header {
+  text-align: center;
+}
+
+.login-logo {
+  width: 100%;
+  height: max-content;
+  margin: 0;
+}
+
+.login-page .login-header p,
+.login-page .login-header button {
+  margin-bottom: 15px;
+}
+
+.login-page .login-header > p {
+  font-weight: bold;
+  color: #8e8e8e;
+  font-size: 18px;
+}
+
+.login-page .login-header > button {
+  width: inherit;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.login-page .login-header div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #8e8e8e;
+}
+
+.login-page .login-header div p {
+  padding: 0 20px;
+}
+
+.login-page .login-header div hr {
+  width: 200px;
+}
+
+/* login-container style*/
+.login-page .login-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page .login-container form,
+input {
+  width: inherit;
+}
+
+.login-page .login-container form input {
+  width: 95%;
+  border: 1px solid #dbdbdb;
+  background-color: #fafafa;
+  padding: 10px 5px;
+  margin: 5px 0;
+}
+
+.login-page .login-container form input:last-of-type {
+}
+
+.full-width-button {
+}
+
+.login-page .login-container form button {
+  width: 100% !important;
+  padding: 7px 20px;
+  margin-bottom: 10px;
+  background-color: var(--button);
+  color: #ffffff;
+}
+
+.login-page .login-container form .resting-border {
+  border-radius: 5px;
+  border: none;
+}
+.login-page .login-container form .valid {
+  border: 2px solid green;
+}
+
+.login-page .login-container form .invalid {
+  border: 1px solid red;
+}
+
+.login-page .login-container ul {
+  list-style: none;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.login-page .login-container ul li {
+  display: inline;
+  color: #8e9096;
+}
+
+.login-page .login-container ul li a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #8e9096;
+}
+
+/* login-option style */
+.login-option p > a {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+/* login-otherapps style */
+.login-otherapps {
+  text-align: center;
+}
+
+.login-otherapps p {
+  margin-bottom: 15px;
+}
+
+.login-otherapps > button {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+}
+
+/* login-footer style */
+/* .login-footer {
+  padding: 40px 0;
+  position: absolute; 
+  bottom: 0;
+  height: 2.5rem;
+}
+
+.login-footer ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+.login-footer ul li {
+  display: inline;
+  margin-right: 10px;
+}
+.login-footer ul li a {
+  text-decoration: none;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.login-footer p {
+  margin: 10px 0;
+  text-align: center;
+  color: #8e9096;
+  font-size: 14px;
+} */
+
+/* Mobile Styles */
+
+@media only screen and (max-width: 635px) {
+  .login-otherapps button {
+    margin-bottom: 5px;
+  }
+
+  .login-otherapps button:after-of-type {
+    margin-bottom: none;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .login-page {
+    width: 250px;
+    background-color: #fafafa;
+  }
+
+  .login-page .login-header {
+    width: inherit;
+    margin-top: 30px;
+  }
+
+  .login-page .login-container {
+    width: inherit;
+  }
+
+  .login-option {
+    margin: 80px 0;
+  }
+
+  .login-page .login-container input {
+    padding: 10px 5px;
+    margin: 5px 0;
+  }
+
+  .login-page .login-footer {
+    width: inherith;
+  }
+  .login-otherapps button {
+    margin-bottom: 5px;
+  }
+
+  .login-otherapps button:after-of-type {
+    margin-bottom: none;
+  }
+}
+
+@media only screen and (min-width: 401px) {
+  .login-page {
+    border: 1px solid #dbdbdb;
+    width: 350px;
+    background-color: white;
+    margin: 40px 40px 10px 40px;
+  }
+
+  .login-page .login-header {
+    width: 270px;
+  }
+
+  .login-page .login-container {
+    width: 270px;
+  }
+
+  .login-option {
+    border: 1px solid #dbdbdb;
+    background-color: white;
+    width: 350px;
+    height: 70px;
+    margin-top: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-otherapps {
+    margin: 20px 0;
+  }
+
+  .login-otherapps button {
+    margin-right: 5px;
+  }
+
+  .login-otherapps button:after-of-type {
+    margin-right: none;
+  }
+
+  .login-page .login-footer {
+    width: 100%;
+  }
+}
+
+.login-option-text {
+  margin: 10px 0;
+}
+.login-option-text a {
+  text-decoration: none;
+}
+.login-image {
+  width: 600px;
+  height: fit-content;
+}
+.passwordHint ul{
+  display: flex;
+  flex-direction: column;
+}
+.passwordHint ul li{
+  white-space: noWrap;
+  font-size: 12px;
+  display: block;
+  text-align: start !important;
+}
+.passwordHint ul li.success{
+ color: green !important;
+}
+.passwordHint ul li.failure{
+ color: red !important;
+}
+
+@media only screen and (max-width: 1020px) {
+  .login-image {
+    display: none;
+  }
+}
+
+.tab-wrap {
+  transition: 0.3s box-shadow ease;
+  border-radius: 6px;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  list-style: none;
+  background-color: #fff;
+}
+
+.tab {
+  display: none;
+  &:checked:nth-of-type(1) ~ .tab__content:nth-of-type(1) {
+    opacity: 1;
+    transition: 0.5s opacity ease-in, 0.8s transform ease;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    transform: translateY(0px);
+    text-shadow: 0 0 0;
+  }
+  &:checked:nth-of-type(2) ~ .tab__content:nth-of-type(2) {
+    opacity: 1;
+    transition: 0.5s opacity ease-in, 0.8s transform ease;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    transform: translateY(0px);
+    text-shadow: 0 0 0;
+  }
+  &:first-of-type:not(:last-of-type) + label {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  &:not(:first-of-type):not(:last-of-type) + label {
+    border-radius: 0;
+  }
+  &:last-of-type:not(:first-of-type) + label {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  &:checked + label {
+    background-color: #fff;
+    border-bottom: 4px solid var(--primary);
+    cursor: default;
+    &:hover {
+      box-shadow: 0 -1px 0 #fff inset;
+      background-color: #fff;
+    }
+  }
+  + label {
+    box-shadow: 0 -1px 0 #eee inset;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    color: #333;
+    flex-grow: 3;
+    text-align: center;
+    background-color: #f2f2f2;
+    user-select: none;
+    text-align: center;
+    transition: 0.3s background-color ease, 0.3s box-shadow ease;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 15px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    &:hover {
+      background-color: #f9f9f9;
+      box-shadow: 0 1px 0 #f4f4f4 inset;
+    }
+  }
+  &__content {
+    padding: 10px 25px;
+    background-color: transparent;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    opacity: 0;
+    left: 0;
+    transform: translateY(-3px);
+    border-radius: 6px;
+  }
+}
+
+.input-button-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.input-button-row .valid {
+  width: 206.5px;
+}
+
+.full-width-input {
+  width: 256.5px;
+}
+
+.login-otp-button {
+  width: 40px;
+  padding: 5px;
+}
+
+

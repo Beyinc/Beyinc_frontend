@@ -1,0 +1,13 @@
+.addconvSelect select{
+
+    width: 350px;
+}
+.convButton button{
+    width: 100% !important;
+}
+
+@media (max-width: 768px){
+    .addconvSelect select{
+    width: 100% !important;
+}
+}

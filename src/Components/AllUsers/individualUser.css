@@ -1,0 +1,317 @@
+.profile-Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.individualUserContainer {
+  width: 1390px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.indiUserDetailsContainer {
+  width: 100%;
+  background: white;
+  margin-top: 5px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  /* display: flex; */
+}
+
+.indiUserDetails {
+  border: 1px solid rgba(128, 128, 128, 0.473);
+  padding: 15px;
+  border-radius: 10px;
+  height: 86vh !important;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.left-container {
+  margin-left: 50px;
+}
+.User-Top-Details {
+  display: flex;
+  gap: 0px;
+}
+.profile {
+  width: 250px;
+  height: 250px;
+  margin-bottom: 10px;
+}
+
+.profile-name {
+  background: linear-gradient(90deg, #e800fe 3.31%, #191fff 76.1%);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 28px;
+}
+.profile-role {
+  font-size: 24px;
+}
+
+.indiUserHeading {
+  font-size: 28px;
+  font-weight: 600;
+  width: 700px;
+  margin-left: 30px;
+}
+
+.location-info {
+  display: flex;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.ed-ex-container-dummy {
+  display: none;
+}
+
+.indiPitchDate,
+.indiPitchId {
+  padding: 10px 0px;
+  font-size: 14px;
+}
+.indiPitchDate {
+  font-weight: 400;
+}
+
+.reviewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.indiPitchDesc .about {
+  border: none;
+  padding: 0px 20px;
+  font-size: 14px;
+  width: 92% !important;
+  text-align: justify;
+  margin: auto;
+}
+.indiPitchHiringPositions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 12px;
+  margin: 5px 0px;
+}
+.listedTeam {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.Headings {
+  background: linear-gradient(35deg, #656fff 0%, #ff6824 40%);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 18px;
+  margin-top: 10px;
+}
+.Headings {
+  display: flex;
+  align-items: center;
+}
+
+.Headings::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid lightgray;
+  margin-left: 10px;
+}
+.profile_skills {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.skill {
+  font-size: 12px;
+  background: #e6f2ff;
+  padding: 10px;
+  gap: 5px;
+  border-radius: 5px;
+  margin: 5px 0px;
+  font-weight: 600;
+}
+
+.right-container {
+  margin-left: 30px;
+  margin-top: 35px;
+}
+
+.singleMember {
+  background: #e6f2ff;
+  padding: 10px;
+  gap: 5px;
+  border-radius: 5px;
+  margin: 5px 0px;
+}
+
+.individualUserContainer .commentsContainer {
+  width: 98%;
+  background: white;
+  margin-top: 5px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  /* border: none; */
+}
+.sendIcon {
+  cursor: pointer;
+  font-size: 13px;
+  width: auto;
+  height: auto;
+  padding: 10px;
+}
+.aboutme {
+  margin-left: 20px;
+}
+
+.reviewContainer {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.divider {
+  color: red;
+  height: 2px;
+  width: 30px;
+}
+.review-container {
+  margin-left: 50px;
+  margin-top: 20px;
+}
+.fas.fa-chevron-down {
+  color: grey;
+  font-size: 10px;
+}
+.fas.fa-chevron-up {
+  color: grey;
+  font-size: 10px;
+}
+.fas.fa-chevron-down:hover {
+  color: black;
+  font-size: 12px;
+  rotate: -90deg;
+}
+.fas.fa-chevron-up:hover {
+  color: black;
+  font-size: 12px;
+}
+
+.old-education,
+.old-experience {
+  margin-left: 25px;
+  margin-top: -20px;
+}
+
+@media (max-width: 760px) {
+  .individualUserContainer {
+    width: 350px !important;
+  }
+  .indiUserDetails {
+    flex-direction: column;
+    height: auto !important;
+  }
+  .left-container {
+    margin-left: 0;
+  }
+
+  .right-container {
+    margin-left: 0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+
+  .ed-ex-container {
+    display: none;
+  }
+
+  .aboutme {
+    margin-left: 0;
+  }
+  .ed-ex-container-dummy {
+    display: block;
+  }
+
+  .user-image {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+  }
+  .user-image .profile {
+    width: 200px;
+    height: 200px;
+    align-self: center;
+  }
+  .profile-details {
+    text-align: center;
+  }
+  .profile-name {
+    font-size: 20px;
+  }
+  .profile-role {
+    font-size: 18px;
+  }
+  .language {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .review-container {
+    margin-left: 0px;
+    margin-top: 0px;
+  }
+  .indiUserHeading {
+    width: 300px !important;
+    margin-left: 0px !important;
+    font-size: 16px;
+    font-weight: 600;
+    width: 400px;
+    margin-top: -40px;
+    margin-left: 10px;
+  }
+  .reviewContainer {
+    font-size: 12px;
+  }
+  .individualUserContainer .commentsContainer {
+    width: 320px !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .indiPitchHiringPositions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 12px;
+    width: 300px;
+    margin: 5px 0px;
+  }
+  .writing-review .sendIcon {
+    width: 262px !important;
+    margin-right: 0px !important;
+    transform: translateY(-20px) !important;
+  }
+  .sendIcon {
+    margin-top: 0px;
+    margin-right: 50px;
+    width: 50px !important;
+  }
+  .writing-review {
+    margin-top: 15px !important;
+    flex-direction: column;
+    align-self: flex-start !important;
+  }
+  .writing-review .textarea {
+    width: 250px !important;
+  }
+}
