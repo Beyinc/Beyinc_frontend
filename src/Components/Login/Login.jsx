@@ -173,6 +173,7 @@ const Login = () => {
     };
     await ApiServices.login(obj)
       .then(async (res) => {
+        setLoading(false);
         dispatch(
           setToast({
             message: "User Logged In Successfully !",
@@ -181,7 +182,7 @@ const Login = () => {
           })
         );
         localStorage.setItem("user", JSON.stringify(res.data));
-        // navigate("/");
+        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
         window.location.href = "/dashboard";
       })
       .catch((err) => {
@@ -321,15 +322,7 @@ const Login = () => {
                           name="mobile"
                           onChange={handleChanges}
                         />
-                        {mobileVerified === true && (
-                          <img
-                            src="checked.png"
-                            height={20}
-                            style={{ right: "20px" }}
-                            alt="Your Alt Text"
-                            className="successIcons"
-                          />
-                        )}
+                        
                         {isMobileValid && !otpVisible && (
                           <button type="button" onClick={sendMobileOtpF}>
                             Get OTP
@@ -363,15 +356,16 @@ const Login = () => {
                       )}
                     </>
                   )}
-                  <div className="passwordHint">
+                  {loginType === "email" && <div className="passwordHint">
                     <ul>
                       <li className={password?.length >= 8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
                       <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                      <li className={/.*[a-z].*/.test(password) && password !== null ? 'success' : 'failure'}>Atleast one small letter</li>
+                      <li className={/.*[a-z].*/.test(password) && password ? 'success' : 'failure'}>Atleast one small letter</li>
                       <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
                       <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
                     </ul>
-                  </div>
+                  </div>}
+                 
                   <button
                     className="full-width-button"
                     type="submit"
