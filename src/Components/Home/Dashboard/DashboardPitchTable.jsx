@@ -58,7 +58,7 @@ export default function BasicTable() {
                     <TableRow style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px'}}>
 
                        
-                    <button
+                    <button style={{whiteSpace: 'nowrap'}}
                 onClick={() => {
                   setSelectedId("");
                   setOpen(true);
@@ -152,7 +152,7 @@ export default function BasicTable() {
                     {moment(row.updatedAt).format("MMM D, YYYY ")}
                   </TableCell>
 
-                  {row.associatedTo.length == 0 && (
+                  {row.associatedTo.length == 0 ? (
                     <TableCell
                       style={{
                         display: "flex",
@@ -187,7 +187,7 @@ export default function BasicTable() {
                         <i className="fas fa-trash pitch-del"></i>
                       </div>
                     </TableCell>
-                  )}
+                  ) : <TableCell></TableCell>}
                 </TableRow>
               ))
             ) : (
