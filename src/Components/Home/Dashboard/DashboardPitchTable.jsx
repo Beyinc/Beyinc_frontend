@@ -28,7 +28,7 @@ export default function BasicTable() {
     const [selectedId, setSelectedId] = React.useState('')
     const [type, setType] = React.useState('')
     const dispatch = useDispatch()
-    const { width } = useWindowDimensions()
+  const { width } = useWindowDimensions()
     const deletePitch = async () => {
         await ApiServices.deletePitch({ pitchId: selectedId }).then(async (res) => {
             dispatch(setToast({ message: 'Pitch Deleted', visible: 'yes', bgColor: ToastColors.success }))
@@ -115,9 +115,15 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell>
                     <span
+                      onClick={() => {
+                        if (row.status == 'approved') {
+                          navigate(`/livePitches/${row._id}`)
+                        }
+                      }}
                       style={{
                         fontSize: "14px",
                         marginLeft: "5px",
+                        cursor: row.status == 'approved' && 'pointer',
                         color:
                           row.status == "approved"
                             ? "green"
