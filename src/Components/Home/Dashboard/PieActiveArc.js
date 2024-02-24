@@ -26,7 +26,6 @@ export default function PieActiveArc({ data }) {
     if (Object.keys(data).length > 0) {
       const tempData1 = [];
       const connections = Object.keys(data?.connections);
-      console.log(connections)
       for (let i = 0; i < Object.keys(data?.connections).length; i++) {
         tempData1.push({ id: i, value: data?.connections[connections[i]], label: connections[i]});
         setConnectionColors(prev => [...prev, defaultConnectionColor[connections[i]]])

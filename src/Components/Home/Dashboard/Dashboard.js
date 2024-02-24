@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import PieActiveArc from "./PieActiveArc";
 import { ApiServices } from "../../../Services/ApiServices";
+import SideConnectionStats from "./SideConnectionStats";
 
 const Dashboard = () => {
   const [data, setData] = useState({});
   useEffect(() => {
     ApiServices.getDashboardDetails()
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -20,51 +21,59 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <div className="dashboard-section-1">
         <div className="card-1">
-          <div className="dashboard-icon-container">
-            <i class="fas fa-users dashboard-icon"></i>
-          </div>
-          <div className="dashboard-content">
-            <label>Approved Connections</label>
-            {/* <p>{data?.connections_approved}</p> */}
+          <div className="dashboard-content connections">
+            <div>
+              <label>Approved Connections</label>
+              <p>{data?.connections_approved}</p>
+            </div>
+            <div>
+              <SideConnectionStats Tdata={data} status='approved'/>
+            </div>
           </div>
         </div>
 
         <div className="card-2">
-          <div className="dashboard-icon-container">
-            <i class="fas fa-file dashboard-icon"></i>
-          </div>
-          <div className="dashboard-content">
-            <label>Pending Connections</label>
-            {/* <p>{data?.connections_pending}</p> */}
+          <div className="dashboard-content connections">
+            <div>
+              <label>Pending Connections</label>
+              <p>{data?.connections_pending}</p>
+            </div>
+            <div>
+              <SideConnectionStats Tdata={data} status='pending' />
+            </div>
           </div>
         </div>
 
         <div className="card-3">
-          <div className="dashboard-icon-container">
+          {/* <div className="dashboard-icon-container">
             <i class="fas fa-users dashboard-icon"></i>
-          </div>
+          </div> */}
           <div className="dashboard-content">
-            <label> Approved Pitches</label>
-            {/* <p>{data?.pitches.approved}</p> */}
+            <div>
+              <label> Approved Pitches</label>
+              <p>{data?.pitches?.approved}</p>
+            </div>
           </div>
         </div>
 
         <div className="card-4">
-          <div className="dashboard-icon-container">
+          {/* <div className="dashboard-icon-container">
             <i class="fas fa-file dashboard-icon"></i>
-          </div>
+          </div> */}
           <div className="dashboard-content">
-            <label> Pending Pitches</label>
-            {/* <p>{data?.pitches.pending}</p> */}
+            <div>
+              <label> Pending Pitches</label>
+              <p>{data?.pitches?.pending}</p>
+           </div>
           </div>
         </div>
       </div>
 
-      <div className="dashboard-section-2">
+      {/* <div className="dashboard-section-2">
         <div className="piechart">
           <PieActiveArc data={data} />
         </div>
-      </div>
+      </div> */}
 
       {/* section-3 */}
 

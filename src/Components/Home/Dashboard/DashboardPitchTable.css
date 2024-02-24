@@ -1,5 +1,5 @@
 .tableContainer{
-    width: 97% !important;
+    width: 96% !important;
     margin-bottom: 20px;
 }
 .confirmPopup{
@@ -32,6 +32,6 @@
 }
 @media (max-width: 768px) {
     .tableContainer{
-    width: 100% !important;
+    width: 95% !important;
 }
 }
