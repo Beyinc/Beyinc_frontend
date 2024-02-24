@@ -237,7 +237,7 @@ const AllUsers = () => {
       historicalConversations.reduce(
         (prev, cur) => ({
           ...prev,
-          [cur.members.filter((f) => f._id !== user_id)[0]._id]: {
+          [cur.members.filter((f) => f._id !== user_id)[0]?._id]: {
             status: cur.status,
             id: cur._id,
           },
