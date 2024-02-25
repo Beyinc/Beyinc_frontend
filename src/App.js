@@ -122,6 +122,16 @@ const App = () => {
 
       // setMessages(prev => [...prev, data])
     });
+
+    socket.current.on("allDeviceLogout", (data) => {
+      // console.log(data);
+      localStorage.removeItem("user");
+      localStorage.clear();
+      window.location.href = "/login";
+
+
+      // setMessages(prev => [...prev, data])
+    });
   }, []);
 
   // DONT REMOVE THIS IT IS FOR DARK AND WHITE THEME
@@ -174,6 +184,8 @@ const App = () => {
             d
           )
         );
+      }).catch(err => {
+        
       });
     }
   }, [user_id]);
