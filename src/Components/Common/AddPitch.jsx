@@ -861,7 +861,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                 </div>
                 <div>
                   <input
-                    type="number"
+                    type="text"
                     name="minimumInvestment"
                     value={form?.minimumInvestment}
                     onChange={handleChanges}

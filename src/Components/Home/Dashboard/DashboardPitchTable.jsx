@@ -54,7 +54,7 @@ export default function BasicTable() {
   return (
     <div className="tableHolder">
       <div className="HeadingHolder">
-        <div>Pitches Created By You</div>
+        <div>Pitches Created</div>
         <button style={{ whiteSpace: 'nowrap' }}
           onClick={() => {
             setSelectedId("");
@@ -167,6 +167,17 @@ export default function BasicTable() {
                         height: "100%",
                       }}
                     >
+                      <div
+                        onClick={() => {
+                          navigate(`/livePitches/${row._id}`)
+                        }}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        {/* <EditIcon /> */}
+                        <i className="fas fa-eye eyeInTable"></i>
+                      </div>
                       <div
                         onClick={() => {
                           setOpen(true);
