@@ -877,7 +877,7 @@ const Navbar = () => {
 
 
               <div
-                style={{ display: "flex", gap: "2px", borderRadius: "10px", justifyContent: 'center', alignItems: 'center' }}
+                style={{ display: "flex", gap: "2px", borderRadius: "10px", justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
               >
                 <button
                   onClick={()=>logoutDecider('All')}
