@@ -21,7 +21,6 @@ import { Socket, io } from "socket.io-client";
 import {
   setLastMessageRead,
   setLiveMessage,
-  setMessageAlert,
   setMessageCount,
   setNotification,
   setOnlineUsers,
@@ -82,7 +81,7 @@ const NoMatch = () => {
 const App = () => {
   const notificationAlert = useSelector(state => state.conv.notificationAlert);
 
-  const messageAlert = useSelector((state) => state.conv.messageAlert);
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -106,6 +105,7 @@ const App = () => {
     });
   }, [email]);
 
+ 
   // live message updates
   useEffect(() => {
     socket.current.on("getMessage", (data) => {
@@ -115,10 +115,10 @@ const App = () => {
           message: data.message,
           senderId: data.senderId,
           fileSent: data.fileSent,
-          conversationId: data.conversationId,
+          conversationId: data.conversationId, file: data.file
         })
       );
-      dispatch(setMessageAlert(new Date().toString()));
+     
 
       // setMessages(prev => [...prev, data])
     });
@@ -154,18 +154,27 @@ const App = () => {
 
   useEffect(() => {
     if (user_id !== undefined) {
+
       ApiServices.getTotalMessagesCount({
         receiverId: user_id,
         checkingUser: user_id,
       }).then((res) => {
+        const d = []
+        for (let i = 0; i < res.data.length; i++) {
+          d.push({
+            receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
+            lastText: res.data[i].lastMessageText
+          })
+        }
+        console.log(d)
         dispatch(
           setMessageCount(
-            res.data.map((a) => a.members.filter((f) => f!== user_id)[0])
+            d
           )
         );
       });
     }
-  }, [messageAlert, user_id]);
+  }, [user_id]);
 
   useEffect(() => {
     socket.current.on("getNotification", (data) => {

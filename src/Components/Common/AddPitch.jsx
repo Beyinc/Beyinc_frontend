@@ -547,7 +547,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
             height: "90vh",
             position: "relative",
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "column", margin: "0", paddingTop: '0', paddingLeft: '10px', paddingRight: '10px'
           }}
         >
           <div className="addPitchHeader">
@@ -615,34 +615,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
             >
               Requirements
             </div>
-            {id == '' &&  <><div>
-              <select
-                name="pitch"
-                value={selectedpitchId}
-                onChange={(e) => setselectedpitchId(e.target.value)}
-              >
-                <option value="">Select a pitch for reference</option>
-                {userPitches?.length > 0 &&
-                  userPitches?.map((c) => (
-                    <option value={c._id}>{c.title}</option>
-                  ))}
-              </select>
-            </div><div title="Reload for latest request updates">
-                <CachedIcon
-                  style={{ cursor: "pointer" }}
-                  className={isSpinning ? "spin" : "spinText"}
-                  onClick={() => {
-                    handleReloadClick();
-                    setselectedpitchId('');
-                    setValue(1);
-                    setForm({
-                      title: "",
-                      tags: "",
-                      changeStatus: "change",
-                      hiringPositions: [],
-                    });
-                  } } />
-              </div></>}
+           
             <div
               className={`crossIcon`}
               onClick={() => {
@@ -662,6 +635,33 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
               <CloseIcon />
             </div>
           </div>
+          {id == '' && <div  className="referSelect"><div>
+            <select
+              name="pitch"
+              value={selectedpitchId}
+              onChange={(e) => setselectedpitchId(e.target.value)}
+            >
+              <option value="">Select a pitch for reference</option>
+              {userPitches?.length > 0 &&
+                userPitches?.map((c) => (
+                  <option value={c._id}>{c.title}</option>
+                ))}
+            </select>
+          </div>
+            <div title="Reload for latest request updates">
+              <button onClick={() => {
+                handleReloadClick();
+                setselectedpitchId('');
+                setValue(1);
+                setForm({
+                  title: "",
+                  tags: "",
+                  changeStatus: "change",
+                  hiringPositions: [],
+                })
+              }}>Reset</button>
+            </div>
+          </div>}
           {value == 1 && (
             <div className="pitchForm">
               <div className="pitchformFields">

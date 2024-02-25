@@ -38,7 +38,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import {
   getAllNotifications,
-  setMessageAlert,
+  setMessageCount,
   setNotification,
 } from "../../redux/Conversationreducer/ConversationReducer";
 import { Drawer, Tab, Tabs, Typography } from "@mui/material";
@@ -78,7 +78,7 @@ const Navbar = () => {
   const { email, role, userName, image, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
-  const messageAlert = useSelector((state) => state.conv.messageAlert);
+
   const messageCount = useSelector((state) => state.conv.messageCount);
 
   const notificationSound = new Howl({
@@ -117,10 +117,36 @@ const Navbar = () => {
     if (notificationAlert) {
       notificationSound.play();
     }
-    if (messageAlert) {
+    if (messageCount.length>0) {
       messageSound.play()
     }
-  }, [notificationAlert, messageAlert]);
+  }, [notificationAlert, messageCount]);
+  const liveMessage = useSelector((state) => state.conv.liveMessage);
+
+  useEffect(() => {
+    if (liveMessage) {
+      ApiServices.getTotalMessagesCount({
+        receiverId: user_id,
+        checkingUser: user_id,
+      }).then((res) => {
+        const d = []
+        for (let i = 0; i < res.data.length; i++) {
+          d.push({
+            receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
+            lastText: res.data[i].lastMessageText
+          })
+        }
+        console.log(d)
+        dispatch(
+          setMessageCount(
+            d
+          )
+        );
+      });
+    }
+  }, [liveMessage])
+
+
   const [notificationDrawerState, setNotificationDrawerState] = useState({
     right: false,
   });
@@ -566,7 +592,6 @@ const Navbar = () => {
                 className="icon"
                 onClick={() => {
                   navigate("/conversations");
-                  dispatch(setMessageAlert(false))
                 }}
               ></MessageOutlinedIcon>
               {messageCount.length > 0 && <div

@@ -5,15 +5,29 @@
   position: sticky;
   align-items: center;
   top: -20px;
-  padding:  20px 0;
-background-color: #fff;
+  padding: 40px 0;
+  background-color: #fff;
   font-size: 14px;
   white-space: noWrap;
-  flex-wrap: wrap;
-  z-index: 999;
-} 
+  /* flex-wrap: wrap; */
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.addPitchHeader::-webkit-scrollbar-thumb {
+      background-color: #666; /* Set the color of the scrollbar thumb */
+      border-radius: 4px; /* Set the border radius of the scrollbar thumb */
+      display: none;
+    }
 
 
+.referSelect {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.referSelect select {
+  margin-left: 60px;
+}
 .addPitchIcons {
   cursor: pointer;
   background-color: #fff;
@@ -24,8 +38,8 @@ background-color: #fff;
 }
 
 .addPitchIcons.addPitchIconsselected {
-  background: var(--primary);
-  color: #fff;
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary);
   transition: all ease 0.3s;
 }
 .addPitchIcons:not(.addPitchIconsselected):hover {
@@ -51,13 +65,13 @@ background-color: #fff;
   width: 100%;
 }
 
-.addTeamMembers .teamInputs{
-      display: flex;
+.addTeamMembers .teamInputs {
+  display: flex;
   column-gap: 50px !important;
   align-items: center;
   width: 100%;
-  }
-  
+}
+
 @media (max-width: 768px) {
   .addPitchIcons {
     cursor: pointer;
@@ -97,5 +111,17 @@ background-color: #fff;
   }
   .showHide select {
     width: 250px !important;
+  }
+  .crossIcon{
+    position: sticky;
+   
+    transform: translateY(-20px);
+    right: 0;
+  }
+  .referSelect select {
+    width: 230px !important;
+  }
+  .referSelect select {
+    margin-left: 0px;
   }
 }
