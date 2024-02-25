@@ -142,9 +142,9 @@ export default function ReceivedPitches() {
                                         {moment(row.updatedAt).format("MMM D, YYYY ")}
                                     </TableCell>
                                     <TableCell>
-                                        <div onClick={() => navigate(`/livePitches/${row?._id}`)} style={{ background: 'green', padding: '5px', borderRadius: '5px', width: '60px', color: 'white', textAlign: 'center', cursor: 'pointer' }}>
+                                        {row.status == 'approved' ? <div onClick={() => navigate(`/livePitches/${row?._id}`)} style={{ background: 'green', padding: '5px', borderRadius: '5px', width: '60px', color: 'white', textAlign: 'center', cursor: 'pointer' }}>
                                             View
-                                        </div>
+                                        </div>: ''}
                                     </TableCell>
 
                                 </TableRow>
