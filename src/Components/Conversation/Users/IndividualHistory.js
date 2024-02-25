@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ApiServices } from '../../../Services/ApiServices'
-import { getAllHistoricalConversations, setReceiverId } from '../../../redux/Conversationreducer/ConversationReducer'
+import { getAllHistoricalConversations, setMessageCount, setReceiverId } from '../../../redux/Conversationreducer/ConversationReducer'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useNavigate, useParams } from 'react-router';
 import { Box, Dialog, DialogContent } from '@mui/material';
@@ -66,7 +66,12 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
     useEffect(() => {
         if (messageCount.length > 0 && messageCount.map(f => f.receiverId).includes(friend?._id)) {
             setLastMessageText(messageCount.find(f => f.receiverId == friend?._id).lastText)
-            setShowMessageDot(true)
+            if (conversationId !== messageCount.find(f => f.receiverId == friend?._id).conversationId) {
+                setShowMessageDot(true)
+            } else {
+                dispatch(setMessageCount(messageCount.filter(f=>f.conversationId!==conversationId)))
+                setShowMessageDot(false)
+            }
         } else {
             setShowMessageDot(false)
         }
