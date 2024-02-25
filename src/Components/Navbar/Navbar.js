@@ -38,13 +38,14 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import {
   getAllNotifications,
-  setMessageAlert,
+  setMessageCount,
   setNotification,
 } from "../../redux/Conversationreducer/ConversationReducer";
 import { Drawer, Tab, Tabs, Typography } from "@mui/material";
 import MessageRequest from "../Conversation/Notification/MessageRequest";
 import { format } from "timeago.js";
 import useWindowDimensions from "../Common/WindowSize";
+import { socket_io } from "../../Utils";
 
 function a11yProps(index) {
   return {
@@ -78,7 +79,12 @@ const Navbar = () => {
   const { email, role, userName, image, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
-  const messageAlert = useSelector((state) => state.conv.messageAlert);
+
+  const [logoutOpen, setLogoutOpen] = useState(false)
+  const socket = useRef();
+  useEffect(() => {
+    socket.current = io(socket_io);
+  }, []);
   const messageCount = useSelector((state) => state.conv.messageCount);
 
   const notificationSound = new Howl({
@@ -117,10 +123,39 @@ const Navbar = () => {
     if (notificationAlert) {
       notificationSound.play();
     }
-    if (messageAlert) {
+    if (messageCount.length > 0) {
       messageSound.play()
     }
-  }, [notificationAlert, messageAlert]);
+  }, [notificationAlert, messageCount]);
+  const liveMessage = useSelector((state) => state.conv.liveMessage);
+
+  useEffect(() => {
+    if (liveMessage) {
+      ApiServices.getTotalMessagesCount({
+        receiverId: user_id,
+        checkingUser: user_id,
+      }).then((res) => {
+        const d = []
+        for (let i = 0; i < res.data.length; i++) {
+          d.push({
+            conversationId: res.data[i]._id,
+            receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
+            lastText: res.data[i].lastMessageText
+          })
+        }
+        console.log(d)
+        dispatch(
+          setMessageCount(
+            d
+          )
+        );
+      }).catch(err => {
+
+      });;
+    }
+  }, [liveMessage])
+
+
   const [notificationDrawerState, setNotificationDrawerState] = useState({
     right: false,
   });
@@ -224,7 +259,7 @@ const Navbar = () => {
               <ListItemText primary="Live Pitches" />
             </ListItem>
 
-            
+
           </>
         )}
 
@@ -522,6 +557,25 @@ const Navbar = () => {
 
   const { height, width } = useWindowDimensions();
 
+
+
+  const logoutDecider = (value) => {
+  
+    if (value == 'All') {
+      socket.current.emit("logoutAll", {
+        userId: user_id,
+        
+      });
+      localStorage.removeItem("user");
+      localStorage.clear();
+      window.location.href = "/login";
+    } else if (value == 'Single') {
+      localStorage.removeItem("user");
+      localStorage.clear();
+      window.location.href = "/login";
+    }
+  }
+
   return (
     <div
       className="navbar"
@@ -566,7 +620,6 @@ const Navbar = () => {
                 className="icon"
                 onClick={() => {
                   navigate("/conversations");
-                  dispatch(setMessageAlert(false))
                 }}
               ></MessageOutlinedIcon>
               {messageCount.length > 0 && <div
@@ -593,7 +646,7 @@ const Navbar = () => {
               ></BallotOutlinedIcon>
             </div>
 
-           
+
 
             {role === "Admin" && (
               <>
@@ -693,7 +746,7 @@ const Navbar = () => {
           }}
         >
           <img
-            
+
             id="Profile-img"
             className="Profile-img"
             src={image !== undefined && image !== "" ? image : "/profile.png"}
@@ -789,9 +842,8 @@ const Navbar = () => {
             <div
               className="logout"
               onClick={() => {
-                localStorage.removeItem("user");
-                localStorage.clear();
-                window.location.href = "/login";
+                setLogoutOpen(true)
+               
               }}
             >
               <i
@@ -802,6 +854,57 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+
+        <Dialog
+          open={logoutOpen}
+          onClose={() => setLogoutOpen(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          style={{}}
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <div style={{fontSize: '20px'}}>
+                How Do you want to logout ?
+              </div>
+
+
+
+              <div
+                style={{ display: "flex", gap: "2px", borderRadius: "10px", justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
+              >
+                <button
+                  onClick={()=>logoutDecider('All')}
+                  style={{ whiteSpace: "nowrap", position: "relative" }}
+                  disabled={changeImage === "" && isLoading}
+                >
+
+
+                  Logout from all devices
+
+                </button>
+                <button
+                  onClick={() => logoutDecider('Single')}
+                  style={{ whiteSpace: "nowrap", position: "relative" }}
+                  disabled={changeImage === "" && isLoading}
+                >
+
+
+                  Logout from this device
+
+                </button>
+
+
+              </div>
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
 
         <Dialog
           open={open}

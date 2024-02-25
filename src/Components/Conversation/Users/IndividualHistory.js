@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ApiServices } from '../../../Services/ApiServices'
-import { getAllHistoricalConversations, setReceiverId } from '../../../redux/Conversationreducer/ConversationReducer'
+import { getAllHistoricalConversations, setMessageCount, setReceiverId } from '../../../redux/Conversationreducer/ConversationReducer'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useNavigate, useParams } from 'react-router';
 import { Box, Dialog, DialogContent } from '@mui/material';
@@ -57,11 +57,21 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
         });
     }
 
+    const [lastMessageText, setLastMessageText] = useState('')
+    useEffect(() => {
+        setLastMessageText(a.lastMessageText)
+    }, [a])
 
     
     useEffect(() => {
-        if (messageCount.includes(friend?._id)) {
-            setShowMessageDot(true)
+        if (messageCount.length > 0 && messageCount.map(f => f.receiverId).includes(friend?._id)) {
+            setLastMessageText(messageCount.find(f => f.receiverId == friend?._id).lastText)
+            if (conversationId !== messageCount.find(f => f.receiverId == friend?._id).conversationId) {
+                setShowMessageDot(true)
+            } else {
+                dispatch(setMessageCount(messageCount.filter(f=>f.conversationId!==conversationId)))
+                setShowMessageDot(false)
+            }
         } else {
             setShowMessageDot(false)
         }
@@ -89,7 +99,7 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
                 }
                 <div className='deleteConv'>
                     <div>
-                        <div className='role lastMsg' style={{ fontWeight: showMessageDot ? '600' : 'normal' }}>{a.lastMessageText}</div>
+                        <div className='role lastMsg' style={{ fontWeight: showMessageDot ? '600' : 'normal' }}>{lastMessageText}</div>
                         <div className='role' style={{ textAlign: 'start' }}>{friend?.role}</div>
                     </div>
                     {status == 'pending' && <div className=''>
