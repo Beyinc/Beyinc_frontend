@@ -132,6 +132,7 @@ const Navbar = () => {
         const d = []
         for (let i = 0; i < res.data.length; i++) {
           d.push({
+            conversationId: res.data[i]._id,
             receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
             lastText: res.data[i].lastMessageText
           })

@@ -159,9 +159,11 @@ const App = () => {
         receiverId: user_id,
         checkingUser: user_id,
       }).then((res) => {
+        console.log(res.data)
         const d = []
         for (let i = 0; i < res.data.length; i++) {
           d.push({
+            conversationId: res.data[i]._id,
             receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
             lastText: res.data[i].lastMessageText
           })
