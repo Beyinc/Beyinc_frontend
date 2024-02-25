@@ -577,6 +577,19 @@ export const ApiServices = {
     });
   },
 
+  getReceivedPitches: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/pitch/userReceivedPitch`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   updatePitch: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
