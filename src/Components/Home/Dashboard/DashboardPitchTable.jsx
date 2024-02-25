@@ -119,7 +119,7 @@ export default function BasicTable() {
                     {row.stage}
                   </TableCell>
                   <TableCell>
-                    <span
+                    <div
                       onClick={() => {
                         if (row.status == 'approved') {
                           navigate(`/livePitches/${row._id}`)
@@ -143,11 +143,12 @@ export default function BasicTable() {
                           }`,
                         borderRadius: 5,
                         padding: "3px",
+                        width: '70px', textAlign: 'center'
                       }}
                     >
                       {row.status.split("")[0].toUpperCase() +
                         row.status.slice(1)}
-                    </span>
+                    </div>
                   </TableCell>
                   <TableCell style={{ whiteSpace: "nowrap" }}>
                     {moment(row.createdAt).format("MMM D, YYYY ")}
