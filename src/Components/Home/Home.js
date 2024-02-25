@@ -6,7 +6,7 @@ import Dashboard from "./Dashboard/Dashboard";
 const Home = () => {
   const { role, userName } = useSelector((store) => store.auth.loginDetails);
   return (
-    <div>
+    <div style={{overflowX: 'hidden'}}>
       <center>
         {/* <h1>Welcome {userName} to Beyinc !</h1> */}
         <Dashboard />
