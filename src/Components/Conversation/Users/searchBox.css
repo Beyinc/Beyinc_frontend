@@ -178,9 +178,9 @@ body[data-theme="dark"] .tabs {
   text-align: center;
 }
 .historicalTabIcons.historicalTabIconsselected {
-  background: var(--primary);
+  border-bottom: 2px solid var(--primary);
 
-  color: #fff;
+  color: var(--primary);
   transition: all ease 0.3s;
 }
 .historicalTabIcons:not(.historicalTabIconsselected):hover {

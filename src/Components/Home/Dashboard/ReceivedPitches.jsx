@@ -37,7 +37,7 @@ export default function ReceivedPitches() {
     return (
         <div className="tableHolder" style={{ marginTop: '10px' }} >
             <div className="HeadingHolder">
-                <div>Pitches Recieved By You</div>
+                <div>Pitches Recieved</div>
             </div>
             {rows.length > 0 ? <TableContainer className='tableContainer' component={Paper}>
                 <Table aria-label="simple table">
@@ -142,9 +142,17 @@ export default function ReceivedPitches() {
                                         {moment(row.updatedAt).format("MMM D, YYYY ")}
                                     </TableCell>
                                     <TableCell>
-                                        {row.status == 'approved' ? <div onClick={() => navigate(`/livePitches/${row?._id}`)} style={{ background: 'green', padding: '5px', borderRadius: '5px', width: '60px', color: 'white', textAlign: 'center', cursor: 'pointer' }}>
-                                            View
-                                        </div>: ''}
+                                        {row.status == 'approved' ? <div
+                                            onClick={() => {
+                                                navigate(`/livePitches/${row._id}`)
+                                            }}
+                                            style={{
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            {/* <EditIcon /> */}
+                                            <i className="fas fa-eye eyeInTable"></i>
+                                        </div> : ''}
                                     </TableCell>
 
                                 </TableRow>

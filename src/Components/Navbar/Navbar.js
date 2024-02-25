@@ -768,7 +768,7 @@ const Navbar = () => {
           </div>
 
           <div className="username">Hi, {userName}!</div>
-          <div className="manage" title="view profile" onClick={() => navigate(`/user/${email}`)}>{role}</div>
+          <div className="manage" title="view profile" onClick={() => navigate(`/user/${user_id}`)}>{role}</div>
 
           <div className="editPopupActions">
             <div
