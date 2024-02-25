@@ -157,7 +157,7 @@ export default function BasicTable() {
                     {moment(row.updatedAt).format("MMM D, YYYY ")}
                   </TableCell>
 
-                  {row.associatedTo.length == 0 ? (
+                  
                     <TableCell
                       style={{
                         display: "flex",
@@ -189,21 +189,22 @@ export default function BasicTable() {
                       >
                         {/* <EditIcon /> */}
                         <i className="fas fa-edit"></i>
-                      </div>
-                      <div
-                        onClick={() => {
-                          setconfirmPopup(true);
-                          setSelectedId(row._id);
-                        }}
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        {/* <DeleteIcon /> */}
-                        <i className="fas fa-trash pitch-del"></i>
-                      </div>
+                    </div>
+                    {row.associatedTo.length == 0 && <div
+                      onClick={() => {
+                        setconfirmPopup(true);
+                        setSelectedId(row._id);
+                      }}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      {/* <DeleteIcon /> */}
+                      <i className="fas fa-trash pitch-del"></i>
+                    </div>}
+                     
                     </TableCell>
-                  ) : <TableCell></TableCell>}
+                 
                 </TableRow>
               ))
             )}
