@@ -13,7 +13,7 @@ body {
 .dashboard-section-1 {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  /* justify-content: space-between; */
   margin: 10px auto;
   background: #f1efefae;
   padding: 20px 0px;
@@ -34,6 +34,9 @@ body {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin: 5px;
   height: 8rem;
+}
+.card-4{
+max-width: 24rem ;
 }
 
 .dashboard-icon-container {
