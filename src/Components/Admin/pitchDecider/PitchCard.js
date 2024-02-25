@@ -168,7 +168,7 @@ export default function PitchCard({ d }) {
           <button onClick={() => setOpen(true)}>View</button>
           {open && (
             <PitchDetailsReadOnly
-              approve="Make Live"
+              approve={d.associatedTo.length == 0 ? `Make Live` : `Update`}
               reject="Reject"
               open={open}
               setOpen={setOpen}

@@ -155,6 +155,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
   };
 
   const handleChanges = (e) => {
+    console.log(e.target.value)
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -262,7 +263,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
       const getDefault = async () => {
         await ApiServices.fetchSinglePitch({ pitchId: id!==''? id : selectedpitchId })
           .then((res) => {
-            // console.log(res.data);
+            console.log(res.data);
             if (res.data) {
               setForm({
                 ...res.data,
@@ -668,7 +669,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Pitch title*</label>
                 </div>
                 <div>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="title"
                     value={form?.title}
@@ -683,7 +684,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Website*</label>
                 </div>
                 <div>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="website"
                     value={form?.website}
@@ -698,7 +699,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Where is management located ?*</label>
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="memberscountry"
                     value={form?.memberscountry}
                     onChange={handleChanges}
@@ -717,7 +718,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Domain*</label>
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="industry1"
                     value={form?.industry1}
                     onChange={handleChanges}
@@ -735,7 +736,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Sub domain*</label>
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="industry2"
                     value={form?.industry2}
                     onChange={handleChanges}
@@ -753,7 +754,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Stage*</label>
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="stage"
                     value={form?.stage}
                     onChange={handleChanges}
@@ -771,7 +772,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>User Type*</label>
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="userType"
                     value={form?.userType}
                     onChange={handleChanges}
@@ -790,7 +791,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Ideal User Role*</label>
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="idealInvestor"
                     value={form?.idealInvestor}
                     onChange={handleChanges}
@@ -808,7 +809,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>How much in total have you raised till now?*</label>
                 </div>
                 <div>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     type="number"
                     name="previousRoundRaise"
                     value={form?.previousRoundRaise}
@@ -826,7 +827,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   </label>
                 </div>
                 <div>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     type="number"
                     name="raising"
                     value={form?.raising}
@@ -860,7 +861,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   </label>
                 </div>
                 <div>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="minimumInvestment"
                     value={form?.minimumInvestment}
@@ -879,7 +880,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Overview of Startup*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="overViewOfStartup"
                     value={form?.overViewOfStartup}
@@ -894,7 +895,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Business Model*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="businessModel"
                     value={form?.businessModel}
@@ -910,7 +911,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Revenue Model*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="revenueModel"
                     value={form?.revenueModel}
@@ -926,7 +927,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Target Market*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="targetMarket"
                     value={form?.targetMarket}
@@ -941,7 +942,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Target Users*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="targetUsers"
                     value={form?.targetUsers}
@@ -956,7 +957,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>usp*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="usp"
                     value={form?.usp}
@@ -972,7 +973,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Competitor Analysis*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="competitorAnalysis"
                     value={form?.competitorAnalysis}
@@ -991,7 +992,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Team Overview*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="teamOverview"
                     value={form?.teamOverview}
@@ -1015,7 +1016,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                           </div>
                         )}
                         <div>{t.name}</div>
-                        <div
+                        {form?.associatedTo?.length == 0 && <div
                           onClick={(e) => {
                             setTeamMembers(
                               teamMembers.filter((f, j) => i !== j)
@@ -1027,7 +1028,8 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                           }}
                         >
                           <CloseIcon className="deleteMember" />
-                        </div>
+                        </div>}
+                       
                       </div>
                     ))}
                   </div>
@@ -1042,7 +1044,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                           <span className="fileName">{Teampic}</span>
                         </label>
                       </div>
-                      <input
+                      <input disabled={form?.associatedTo?.length>0}
                         className="file"
                         type="file"
                         accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -1056,7 +1058,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       <div>
                         <label>Name*</label>
                       </div>
-                      <input
+                      <input disabled={form?.associatedTo?.length>0}
                         type="text"
                         name="name"
                         placeholder="Name"
@@ -1078,7 +1080,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       <div>
                         <label>Bio*</label>
                       </div>
-                      <input
+                      <input disabled={form?.associatedTo?.length>0}
                         type="text"
                         name="bio"
                         placeholder="Bio"
@@ -1099,7 +1101,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       <div>
                         <label>Social Link*</label>
                       </div>
-                      <input
+                      <input disabled={form?.associatedTo?.length>0}
                         type="text"
                         name="socialLink"
                         placeholder="Social Links"
@@ -1120,7 +1122,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       <div>
                         <label>Position*</label>
                       </div>
-                      <input
+                      <input disabled={form?.associatedTo?.length>0}
                         type="text"
                         name="position"
                         placeholder="position"
@@ -1191,7 +1193,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                     <CloudUploadIcon />
                     <span className="fileName">{Logo}</span>
                   </label>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     className="file"
                     type="file"
                     accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -1237,7 +1239,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                     <CloudUploadIcon />
                     <span className="fileName">{Banner}</span>
                   </label>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     className="file"
                     id="Banner"
                     type="file"
@@ -1287,7 +1289,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                     <CloudUploadIcon />
                     <span className="fileName">{Business}</span>
                   </label>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     className="file"
                     id="Business"
                     type="file"
@@ -1333,7 +1335,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                     <CloudUploadIcon />
                     <span className="fileName">{Financial}</span>
                   </label>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     className="file"
                     id="Financials"
                     type="file"
@@ -1353,7 +1355,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Heading*</label>
                 </div>
                 <div>
-                  <input
+                  <input disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="heading"
                     value={form?.heading}
@@ -1371,26 +1373,28 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       {form.hiringPositions.map((t, i) => (
                         <div className="singleMember">
                           <div>{t}</div>
-                          <div
-                            onClick={(e) => {
-                              setForm((prev) => ({
-                                ...prev,
-                                hiringPositions: form.hiringPositions.filter(
-                                  (f, j) => i !== j
-                                ),
-                                changeStatus: "change",
-                              }));
-                            }}
-                          >
-                            <CloseIcon className="deleteMember" />
-                          </div>
+                          {form?.associatedTo?.length == 0 &&
+                            <div
+                              onClick={(e) => {
+                                setForm((prev) => ({
+                                  ...prev,
+                                  hiringPositions: form.hiringPositions.filter(
+                                    (f, j) => i !== j
+                                  ),
+                                  changeStatus: "change",
+                                }));
+                              }}
+                            >
+                              <CloseIcon className="deleteMember" />
+                            </div>
+                          }
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
                 <div>
-                  <select
+                  <select disabled={form?.associatedTo?.length>0}
                     name="hiringPositions"
                     // value={form?.hiringPositions}
                     onChange={(e) => {
@@ -1418,7 +1422,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   <label>Description*</label>
                 </div>
                 <div>
-                  <textarea
+                  <textarea disabled={form?.associatedTo?.length>0}
                     type="text"
                     name="description"
                     value={form?.description}
@@ -1438,7 +1442,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       {tags.map((t, i) => (
                         <div className="singleMember">
                           <div>{t}</div>
-                          <div
+                          {form?.associatedTo?.length == 0 && <div
                             onClick={(e) => {
                               setTags(tags.filter((f, j) => i !== j));
                               setForm((prev) => ({
@@ -1448,7 +1452,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                             }}
                           >
                             <CloseIcon className="deleteMember" />
-                          </div>
+                          </div>}
                         </div>
                       ))}
                     </div>
@@ -1457,7 +1461,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
 
                 <div className="tags">
                   <div>
-                    <input
+                    <input disabled={form?.associatedTo?.length>0}
                       type="text"
                       name="tags"
                       value={form?.tags}
@@ -1482,7 +1486,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   </div>
                 </div>
               </div>
-              {/* <div>
+              <div>
                 <div>
                   <label>Do you want pich hide/show after pitch go live?</label>
                 </div>
@@ -1497,7 +1501,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                     <option value="show">Show</option>
                   </select>
                 </div>
-              </div> */}
+              </div>
             </div>
           )}
 
