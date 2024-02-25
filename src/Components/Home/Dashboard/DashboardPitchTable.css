@@ -30,14 +30,14 @@
 .confirmPopup button {
   width: 100% !important;
 }
-.fa-edit {
+.fa-edit, .eyeInTable {
   background: var(--button);
   padding: 10px;
   border-radius: 10px;
   color: white;
   transition: all 0.3s ease;
 }
-.fa-edit:hover {
+.fa-edit:hover, .eyeInTable:hover {
   transform: scale(1.1);
   background: var(--button-hover);
 }

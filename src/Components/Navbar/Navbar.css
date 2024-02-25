@@ -466,9 +466,9 @@ img {
   text-align: center;
 }
 .sideNavIcons.sideselected {
-  background: var(--primary);
+  border-bottom: 2px solid var(--primary);
 
-  color: #fff;
+  color: var(--primary);
   transition: all ease 0.3s;
 }
 .sideNavIcons:not(.sideselected):hover {
