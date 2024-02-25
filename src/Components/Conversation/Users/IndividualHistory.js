@@ -57,10 +57,15 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
         });
     }
 
+    const [lastMessageText, setLastMessageText] = useState('')
+    useEffect(() => {
+        setLastMessageText(a.lastMessageText)
+    }, [a])
 
     
     useEffect(() => {
-        if (messageCount.includes(friend?._id)) {
+        if (messageCount.length > 0 && messageCount.map(f => f.receiverId).includes(friend?._id)) {
+            setLastMessageText(messageCount.find(f => f.receiverId == friend?._id).lastText)
             setShowMessageDot(true)
         } else {
             setShowMessageDot(false)
@@ -89,7 +94,7 @@ const IndividualHistory = ({ a, onlineEmails, status }) => {
                 }
                 <div className='deleteConv'>
                     <div>
-                        <div className='role lastMsg' style={{ fontWeight: showMessageDot ? '600' : 'normal' }}>{a.lastMessageText}</div>
+                        <div className='role lastMsg' style={{ fontWeight: showMessageDot ? '600' : 'normal' }}>{lastMessageText}</div>
                         <div className='role' style={{ textAlign: 'start' }}>{friend?.role}</div>
                     </div>
                     {status == 'pending' && <div className=''>

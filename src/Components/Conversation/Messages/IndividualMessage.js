@@ -26,6 +26,8 @@ import { TextField } from "@mui/material";
 
 const IndividualMessage = () => {
   const [loadingFile, setLoadingFile] = useState("");
+  const [loadingReceivedFile, setloadingReceivedFile] = useState("");
+
   const { conversationId } = useParams();
   const receiverId = useSelector((state) => state.conv.receiverId);
   const liveMessage = useSelector((state) => state.conv.liveMessage);
@@ -37,7 +39,7 @@ const IndividualMessage = () => {
     (state) => state.auth.loginDetails
   );
   const [showDiv, setShowDiv] = useState(true);
-
+  const [sentImageLoader, setSentImageLoader] = useState(false)
   const [messages, setMessages] = useState([]);
   const [sendMessage, setSendMessage] = useState("");
   const [file, setFile] = useState("");
@@ -74,20 +76,8 @@ const IndividualMessage = () => {
     }
   }, [onlineUsers]);
 
-  useEffect(() => {
-    if (conversationId !== "" && receiverId !== undefined && receiverId !== '') {
-      // to make seen for other users this api is works thats why we changing  senderId: receiverId.email, receiverId: email
-      ApiServices.changeStatusMessage({ senderId: receiverId._id, receiverId: user_id, conversationId:conversationId }).then(res => {
-        // console.log('changed status')
-        socket.current.emit("seenMessage", {
-          senderId: user_id,
-          receiverId: receiverId._id,
-          conversationId: conversationId,
-        });
-        dispatch(setMessageCount(messageCount.filter(f => f !== receiverId._id)))
-      }).catch(err => {
-        // console.log(err)
-      })
+  useEffect(()=>{
+    if (conversationId !== undefined) {
       ApiServices.getMessages({
         conversationId: conversationId,
       })
@@ -101,6 +91,29 @@ const IndividualMessage = () => {
         .catch((err) => {
           navigate("/conversations");
         });
+}
+  }, [conversationId])
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      if (conversationId !== "" && receiverId !== undefined && receiverId !== '' && messages[messages.length - 1]?.seen == undefined) {
+        // to make seen for other users this api is works thats why we changing  senderId: receiverId.email, receiverId: email
+
+
+
+        ApiServices.changeStatusMessage({ senderId: receiverId._id, receiverId: user_id, conversationId: conversationId }).then(res => {
+          socket.current.emit("seenMessage", {
+            senderId: user_id,
+            receiverId: receiverId._id,
+            conversationId: conversationId,
+          });
+        }).catch(err => {
+          // console.log(err)
+        })
+
+      }
+      dispatch(setMessageCount(messageCount.filter(f => f.receiverId !== receiverId._id)))
+
     }
   }, [conversationId, messageTrigger, receiverId]);
 
@@ -125,22 +138,25 @@ const IndividualMessage = () => {
 
   useEffect(() => {
     if (liveMessage?.fileSent == true && liveMessage.conversationId == conversationId) {
-      ApiServices.getMessages({
-        conversationId: conversationId,
-      })
-        .then((res) => {
-          setMessages(res.data);
-          setNormalFileName("");
-          setFile("");
-          setSendMessage("");
-          dispatch(setLiveMessage({}))
-          // sendSoundRef?.current?.play()
-          sound.play();
+       if (liveMessage.file !== '' && (!liveMessage.file.includes('/png')) && !liveMessage.file.includes('/jpg') && !liveMessage.file.includes('/webp') && !liveMessage.file.includes('/svg') && !liveMessage.file.includes('/jpeg') && !liveMessage.file.includes('/gif')) {
+        ApiServices.getMessages({
+          conversationId: conversationId,
         })
-        .catch((err) => {
-          navigate("/conversations");
-        });
+          .then((res) => {
+            setMessages(res.data);
+            setNormalFileName("");
+            setFile("");
+            setSendMessage("");
+            dispatch(setLiveMessage({}))
+            // sendSoundRef?.current?.play()
+            sound.play();
+          })
+          .catch((err) => {
+            navigate("/conversations");
+          });
+     }
     }
+    
   }, [liveMessage?.fileSent]);
 
   useEffect(() => {
@@ -153,6 +169,7 @@ const IndividualMessage = () => {
         ...prev,
         { ...liveMessage, createdAt: Date.now() },
       ]);
+      // setloadingReceivedFile(liveMessage.file)
       dispatch(setLiveMessage({}))
       socket.current.emit("seenMessage", {
         senderId: user_id,
@@ -160,6 +177,7 @@ const IndividualMessage = () => {
         conversationId: conversationId,
       });
     }
+  
   }, [liveMessage]);
 
 
@@ -199,6 +217,7 @@ const IndividualMessage = () => {
 
     if (file != "") {
       setLoadingFile(file);
+      setSentImageLoader(true)
       // console.log(file);
     }
     setSendMessage('')
@@ -209,6 +228,7 @@ const IndividualMessage = () => {
     //   senderId: user_id,
     //   receiverId: receiverId?._id,
     // });
+
     if (sendMessage !== "" || file !== "") {
       await ApiServices.sendMessages({
         userId: user_id,
@@ -225,7 +245,7 @@ const IndividualMessage = () => {
               conversationId: conversationId,
               senderId: user_id,
               receiverId: receiverId._id,
-              message: sendMessage,
+              message: sendMessage, file: file
             },
           ]);
           setSendMessage("");
@@ -234,15 +254,36 @@ const IndividualMessage = () => {
             receiverId: receiverId._id,
             message: sendMessage,
             fileSent: file !== "",
-            conversationId: conversationId
+            conversationId: conversationId,
+            file: file
           });
           if (file !== "") {
-            setMessageTrigger(!messageTrigger);
+            setLoadingFile('')
+            setSentImageLoader(false)
+          }
+          if (file!=='' && (!file.includes('/png')) && !file.includes('/jpg') && !file.includes('/webp') && !file.includes('/svg') && !file.includes('/jpeg') && !file.includes('/gif')) {
+            ApiServices.getMessages({
+              conversationId: conversationId,
+            })
+              .then((res) => {
+                setMessages(res.data);
+                setNormalFileName("");
+                setFile("");
+                setSendMessage("");
+                dispatch(setLiveMessage({}))
+                // sendSoundRef?.current?.play()
+                sound.play();
+              })
+              .catch((err) => {
+                navigate("/conversations");
+              });
           }
           document.getElementById("chatFile").value = "";
 
         })
         .catch((err) => {
+          setSentImageLoader(false)
+          setLoadingFile('')
           dispatch(
             setToast({
               message: err.response.data.message,
@@ -444,7 +485,18 @@ const IndividualMessage = () => {
                           }}
                         />
                       ) : (
-                        "File"
+                          
+                            (m.file.secure_url==undefined && (m.file.includes("/png") ||
+                              m.file.includes("/jpg") ||
+                              m.file.includes("/webp") ||
+                              m.file.includes("/gif") ||
+                              m.file.includes("/svg") ||
+                              m.file.includes("/jpeg"))) ?
+
+                          <img src={m.file} alt="" srcset="" style={{ borderRadius: 'none', height: '150px', width: '150px' }} />
+
+                          :
+                          "File"
                       )}
                     </a>
                   )}
@@ -478,7 +530,7 @@ const IndividualMessage = () => {
                     <>
 
                       <img src={loadingFile} alt="" srcset="" style={{ borderRadius: 'none', height: '150px', width: '150px' }} />
-                      <div className="loading_viewer" >                      <div className="button-loader"></div></div>
+                      {sentImageLoader && <div className="loading_viewer" >                      <div className="button-loader"></div></div>}
 
                     </>
                   ) : (
@@ -489,6 +541,7 @@ const IndividualMessage = () => {
             </div>
           </div>
         )}
+
 
       </div>
       {/* <div className="bottom-line"></div> */}

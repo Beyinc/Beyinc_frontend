@@ -11,12 +11,12 @@ import PitchDetailsReadOnly from '../../Common/PitchDetailsReadOnly'
 import { Box, Dialog, DialogContent } from '@mui/material'
 import { gridCSS } from '../../CommonStyles'
 import { io } from 'socket.io-client'
-import { socket_io } from '../../../Utils'
+import { isParent, socket_io } from '../../../Utils'
 import { useNavigate } from 'react-router'
 
 
 const MessageRequest = ({ m, setMessageRequest }) => {
-    const { email, userName, user_id } = useSelector(state => state.auth.loginDetails)
+    const { email, userName, user_id, role } = useSelector(state => state.auth.loginDetails)
     const [pitchDetails, setPitchdetails] = useState(null)
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(1)
@@ -96,19 +96,26 @@ const MessageRequest = ({ m, setMessageRequest }) => {
                     <div className='message'><b>{m.members?.filter((f) => f.user?.userName !== userName)[0]?.userName}</b> sent you a message request</div>
 
                 </div>
-                <div className='updateActions'>
-                    {/* <div style={{ fontSize: '12px' }}><b><i className='fas fa-clock' style={{ fontSize: '16px' }}></i>
+                {!isParent(m.members?.filter((f) => f.user?.userName !== userName)[0]?.role, role) ?
+                    <div className='updateActions'>
+                        {/* <div style={{ fontSize: '12px' }}><b><i className='fas fa-clock' style={{ fontSize: '16px' }}></i>
                         {format(m.createdAt)}</b></div> */}
-                    <attr title='Preview Pitch Details'>
-                        <div className='extraDetails'
-                            onClick={() => {
-                                setOpen(true)
-                            }}
-                        >
-                            <button style={{ width: '100px', borderRadius: '5px' }}>View Pitch</button>
-                        </div>
-                    </attr>
-                </div>
+                        <attr title='Preview Pitch Details'>
+                            <div className='extraDetails'
+                                onClick={() => {
+                                    setOpen(true)
+                                }}
+                            >
+                                <button style={{ width: '100px', borderRadius: '5px' }}>View Pitch</button>
+                            </div>
+                        </attr>
+                    </div>
+                    : <div style={{display: 'flex', gap: '10px'}} className='extraDetails'>
+                        <button onClick={(e)=>update(e, 'approved')}>Accept</button>
+                        <button style={{ background: 'red' }} onClick={(e) => update(e, 'rejected')}>Reject</button>
+                    </div>
+                }
+               
                 {open &&
                     <PitchDetailsReadOnly approve='Approve Chat Request' reject='Reject' open={open} setOpen={setOpen} update={update} value={value} setValue={setValue} pitchDetails={pitchDetails} />
                 }

@@ -12,8 +12,8 @@ body {
 /* section-1 */
 .dashboard-section-1 {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  /* flex-wrap: wrap; */
+  /* justify-content: space-between; */
   margin: 10px auto;
   background: #f1efefae;
   padding: 20px 0px;
@@ -28,13 +28,13 @@ body {
   background: #fff;
   flex: 1;
   padding: 0px 20px 20px 20px;
-  padding: 0px 20px 20px 20px;
-  min-width: 18rem !important;
+  /* max-width: 18rem !important; */
   border-radius: 5px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin: 5px;
   height: 8rem;
 }
+
 
 .dashboard-icon-container {
   width: 60px;
@@ -138,5 +138,18 @@ body {
 @media (max-width: 768px){
   .dashboard-content div p {
   font-size: 25px;
+}
+.dashboard-section-1{
+  flex-wrap: wrap;
+}
+.card-1,
+.card-2,
+.card-3,
+.card-4 {
+  width: 200px !important;
+  /* flex: 0; */
+    /* height: 18rem !important; */
+    
+
 }
 }
