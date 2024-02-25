@@ -1016,7 +1016,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                           </div>
                         )}
                         <div>{t.name}</div>
-                        <div
+                        {form?.associatedTo?.length == 0 && <div
                           onClick={(e) => {
                             setTeamMembers(
                               teamMembers.filter((f, j) => i !== j)
@@ -1028,7 +1028,8 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                           }}
                         >
                           <CloseIcon className="deleteMember" />
-                        </div>
+                        </div>}
+                       
                       </div>
                     ))}
                   </div>
@@ -1372,19 +1373,21 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       {form.hiringPositions.map((t, i) => (
                         <div className="singleMember">
                           <div>{t}</div>
-                          <div
-                            onClick={(e) => {
-                              setForm((prev) => ({
-                                ...prev,
-                                hiringPositions: form.hiringPositions.filter(
-                                  (f, j) => i !== j
-                                ),
-                                changeStatus: "change",
-                              }));
-                            }}
-                          >
-                            <CloseIcon className="deleteMember" />
-                          </div>
+                          {form?.associatedTo?.length == 0 &&
+                            <div
+                              onClick={(e) => {
+                                setForm((prev) => ({
+                                  ...prev,
+                                  hiringPositions: form.hiringPositions.filter(
+                                    (f, j) => i !== j
+                                  ),
+                                  changeStatus: "change",
+                                }));
+                              }}
+                            >
+                              <CloseIcon className="deleteMember" />
+                            </div>
+                          }
                         </div>
                       ))}
                     </div>
@@ -1439,7 +1442,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                       {tags.map((t, i) => (
                         <div className="singleMember">
                           <div>{t}</div>
-                          <div
+                          {form?.associatedTo?.length == 0 && <div
                             onClick={(e) => {
                               setTags(tags.filter((f, j) => i !== j));
                               setForm((prev) => ({
@@ -1449,7 +1452,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                             }}
                           >
                             <CloseIcon className="deleteMember" />
-                          </div>
+                          </div>}
                         </div>
                       ))}
                     </div>
