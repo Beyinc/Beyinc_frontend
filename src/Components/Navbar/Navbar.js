@@ -224,16 +224,7 @@ const Navbar = () => {
               <ListItemText primary="Live Pitches" />
             </ListItem>
 
-            <ListItem
-              button
-              key="userPitches"
-              onClick={() => navigate("/userPitches")}
-            >
-              <ListItemIcon>
-                <ThreePOutlinedIcon className="menu-icon" />
-              </ListItemIcon>
-              <ListItemText primary="User Pitch" />
-            </ListItem>
+            
           </>
         )}
 
@@ -602,13 +593,7 @@ const Navbar = () => {
               ></BallotOutlinedIcon>
             </div>
 
-            <div title="User Pitches">
-              <ThreePOutlinedIcon
-                id="userPitches"
-                className="icon"
-                onClick={() => navigate("/userPitches")}
-              ></ThreePOutlinedIcon>
-            </div>
+           
 
             {role === "Admin" && (
               <>

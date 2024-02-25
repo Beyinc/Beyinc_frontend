@@ -22,50 +22,55 @@ import { setUserAllPitches, setUserLivePitches } from '../../../redux/Conversati
 import AddPitch from '../../Common/AddPitch';
 import { useNavigate } from 'react-router';
 export default function BasicTable() {
-    const rows = useSelector(state => state.conv.userAllPitches)
-    const [open, setOpen] = React.useState(false)
-    const [confirmPopup, setconfirmPopup] = React.useState(false)
-    const [selectedId, setSelectedId] = React.useState('')
-    const [type, setType] = React.useState('')
-    const dispatch = useDispatch()
+  const rows = useSelector(state => state.conv.userAllPitches)
+  const [open, setOpen] = React.useState(false)
+  const [confirmPopup, setconfirmPopup] = React.useState(false)
+  const [selectedId, setSelectedId] = React.useState('')
+  const [type, setType] = React.useState('')
+  const dispatch = useDispatch()
   const { width } = useWindowDimensions()
-    const deletePitch = async () => {
-        await ApiServices.deletePitch({ pitchId: selectedId }).then(async (res) => {
-            dispatch(setToast({ message: 'Pitch Deleted', visible: 'yes', bgColor: ToastColors.success }))
-            setSelectedId('')
-            setconfirmPopup(false)
-            await ApiServices.getuserPitches().then(res => {
-                dispatch(setUserAllPitches(res.data.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt))))
-            }).catch(err => {
-                dispatch(setToast({
-                    message: "Error while fetching pitches",
-                    bgColor: ToastColors.failure,
-                    visible: "yes",
-                }))
-            })
-        }).catch(err => {
-            dispatch(setToast({ message: 'Eror occured', visible: 'yes', bgColor: ToastColors.failure }))
-            setSelectedId('')
-            setconfirmPopup(false)
+  const deletePitch = async () => {
+    await ApiServices.deletePitch({ pitchId: selectedId }).then(async (res) => {
+      dispatch(setToast({ message: 'Pitch Deleted', visible: 'yes', bgColor: ToastColors.success }))
+      setSelectedId('')
+      setconfirmPopup(false)
+      await ApiServices.getuserPitches().then(res => {
+        dispatch(setUserAllPitches(res.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))))
+      }).catch(err => {
+        dispatch(setToast({
+          message: "Error while fetching pitches",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        }))
+      })
+    }).catch(err => {
+      dispatch(setToast({ message: 'Eror occured', visible: 'yes', bgColor: ToastColors.failure }))
+      setSelectedId('')
+      setconfirmPopup(false)
 
-        })
-    }
-    const navigate = useNavigate()
-    return (
-        <><TableContainer className='tableContainer' component={Paper}>
-            <Table aria-label="simple table">
-                <TableHead>
-                    <TableRow style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px'}}>
+    })
+  }
+  const navigate = useNavigate()
+  return (
+    <div className="tableHolder">
+      <div className="HeadingHolder">
+        <div>Pitches Created By You</div>
+        <button style={{ whiteSpace: 'nowrap' }}
+          onClick={() => {
+            setSelectedId("");
+            setOpen(true);
+          }}
+        >
+          Add New Pitch
+        </button>
+      </div>
+      {rows.length > 0 ? <TableContainer className='tableContainer' component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px' }}>
 
-                       
-                    <button style={{whiteSpace: 'nowrap'}}
-                onClick={() => {
-                  setSelectedId("");
-                  setOpen(true);
-                }}
-              >
-                Add New Pitch
-              </button>
+
+
             </TableRow>
             <TableRow>
               <TableCell>
@@ -92,7 +97,7 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.length > 0 ? (
+            {rows.length > 0 && (
               rows?.map((row) => (
                 <TableRow
                   key={row.title}
@@ -114,7 +119,7 @@ export default function BasicTable() {
                     {row.stage}
                   </TableCell>
                   <TableCell>
-                    <span
+                    <div
                       onClick={() => {
                         if (row.status == 'approved') {
                           navigate(`/livePitches/${row._id}`)
@@ -128,22 +133,22 @@ export default function BasicTable() {
                           row.status == "approved"
                             ? "green"
                             : row.status == "pending"
-                            ? "orange"
-                            : "red",
-                        border: `1px dotted ${
-                          row.status == "approved"
-                            ? "green"
-                            : row.status == "pending"
+                              ? "orange"
+                              : "red",
+                        border: `1px dotted ${row.status == "approved"
+                          ? "green"
+                          : row.status == "pending"
                             ? "orange"
                             : "red"
-                        }`,
+                          }`,
                         borderRadius: 5,
                         padding: "3px",
+                        width: '70px', textAlign: 'center'
                       }}
                     >
                       {row.status.split("")[0].toUpperCase() +
                         row.status.slice(1)}
-                    </span>
+                    </div>
                   </TableCell>
                   <TableCell style={{ whiteSpace: "nowrap" }}>
                     {moment(row.createdAt).format("MMM D, YYYY ")}
@@ -190,16 +195,19 @@ export default function BasicTable() {
                   ) : <TableCell></TableCell>}
                 </TableRow>
               ))
-            ) : (
-              <p>No Pitches Recorded</p>
             )}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer> : 
+        <div>
+          <img src="/no-requests.png" style={{ width: '300px', height: '300px' }} width={300} height={300} alt="" />
+          <div>No pitches created by you</div>
+      </div>
+      }
       <Dialog
         fullWidth={width < 700}
         open={confirmPopup}
-        onClose={() => {}}
+        onClose={() => { }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         maxWidth="xl"
@@ -243,6 +251,6 @@ export default function BasicTable() {
         id={selectedId}
         setId={setSelectedId}
       />
-    </>
+    </div>
   );
 }
