@@ -1,37 +1,64 @@
-.tableContainer{
-    width: 96% !important;
-    margin-bottom: 20px;
+.tableHolder {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  align-items: center;
+  width: 95%;
+  padding: 10px;
+  border-radius: 5px;
 }
-.confirmPopup{
-    display: flex;
-    gap: 25px;
+.HeadingHolder {
+  display: flex;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+   color: #6d6d6f;
+
 }
-.confirmPopup button{
-    width: 100% !important;
+.tableContainer {
+  width: 100% !important;
+  /* margin-bottom: 20px; */
+  height: 100%;
 }
-.fa-edit{
-    background: var(--button);
-    padding: 10px;
-    border-radius: 10px;
-    color: white;
-    transition: all 0.3s ease;
+.confirmPopup {
+  display: flex;
+  gap: 25px;
 }
-.fa-edit:hover{
-   transform: scale(1.1);
-   background: var(--button-hover);
+.confirmPopup button {
+  width: 100% !important;
 }
-.pitch-del{
-    padding: 10px;
-    border-radius: 10px;
-    color: white; background: red;
-    transition: all 0.3s ease;
+.fa-edit {
+  background: var(--button);
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  transition: all 0.3s ease;
 }
-.pitch-del:hover{
-   transform: scale(1.1);
-   background: rgb(190, 6, 6);
+.fa-edit:hover {
+  transform: scale(1.1);
+  background: var(--button-hover);
 }
+.pitch-del {
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  background: red;
+  transition: all 0.3s ease;
+}
+.pitch-del:hover {
+  transform: scale(1.1);
+  background: rgb(190, 6, 6);
+}
+
 @media (max-width: 768px) {
-    .tableContainer{
-    width: 95% !important;
-}
+  .tableHolder {
+    width: 90% !important;
+    border-radius: 5px;
+  }
+  .HeadingHolder{
+    font-size: 14px;
+  }
 }
