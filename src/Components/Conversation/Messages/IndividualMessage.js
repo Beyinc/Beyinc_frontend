@@ -408,7 +408,7 @@ const IndividualMessage = () => {
       </div>
 
       <div className="messageBox" style={{ position: 'relative' }}>
-        <div className="downGoing" id='downGoing' style={{ display: showDiv ? 'block' : 'none' }}
+        {messages.length > 6 && <div className="downGoing" id='downGoing' style={{ display: showDiv ? 'block' : 'none' }}
           onClick={() => {
             scrollRef.current?.scrollIntoView({ behavior: "smooth" });
           }}
@@ -418,7 +418,7 @@ const IndividualMessage = () => {
             title="Scroll below"
 
           ></i>
-        </div>
+        </div>}
         {messages.length > 0 &&
           messages.map((m, i) => (
             <>
