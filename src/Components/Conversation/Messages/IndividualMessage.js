@@ -182,7 +182,7 @@ const IndividualMessage = () => {
 
 
   useEffect(() => {
-    if (lastMessageRead) {
+    if (lastMessageRead && lastMessageRead.conversationId == conversationId) {
       const oldMessages = [...messages]
       // console.log({ ...messages[messages.length - 1], seen: new Date() });
       oldMessages.splice(oldMessages.length - 1, 1, { ...oldMessages[oldMessages.length - 1], seen: new Date() })
