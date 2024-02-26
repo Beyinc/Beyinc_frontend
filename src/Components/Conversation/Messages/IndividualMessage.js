@@ -149,7 +149,7 @@ const IndividualMessage = () => {
             setSendMessage("");
             dispatch(setLiveMessage({}))
             // sendSoundRef?.current?.play()
-            sound.play();
+            // sound.play();
           })
           .catch((err) => {
             navigate("/conversations");
@@ -163,7 +163,7 @@ const IndividualMessage = () => {
     // console.log(liveMessage);
     if (Object.keys(liveMessage).length > 0 && liveMessage.conversationId == conversationId) {
       // sendSoundRef?.current?.play();
-      sound.play();
+      // sound.play();
 
       setMessages((prev) => [
         ...prev,
@@ -272,7 +272,7 @@ const IndividualMessage = () => {
                 setSendMessage("");
                 dispatch(setLiveMessage({}))
                 // sendSoundRef?.current?.play()
-                sound.play();
+                // sound.play();
               })
               .catch((err) => {
                 navigate("/conversations");
