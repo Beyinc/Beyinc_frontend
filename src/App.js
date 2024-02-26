@@ -41,29 +41,29 @@ const LandingPage = React.lazy(() =>
 const SignUp = React.lazy(() => import("./Components/Signup/SignUp"));
 const Login = React.lazy(() => import("./Components/Login/Login"));
 const ForgotPassword = React.lazy(() =>
-  wait(1000).then(() => import("./Components/ForgotPassword/ForgotPassword"))
+  import("./Components/ForgotPassword/ForgotPassword")
 );
 const Navbar = React.lazy(() => import("./Components/Navbar/Navbar"));
 const Home = React.lazy(() =>
-  wait(1000).then(() => import("./Components/Home/Home"))
+  import("./Components/Home/Home")
 );
 const Editprofile = React.lazy(() =>
-  wait(1000).then(() => import("./Components/Editprofile/Editprofile"))
+  import("./Components/Editprofile/Editprofile")
 );
 const Conversations = React.lazy(() =>
-  wait(1000).then(() => import("./Components/Conversation/Conversations"))
+  import("./Components/Conversation/Conversations")
 );
 const Notifications = React.lazy(() =>
-  wait(1000).then(() =>
+  
     import("./Components/Conversation/Notification/Notifications")
-  )
+  
 );
 const AllPitches = React.lazy(() =>
-  wait(1000).then(() => import("./Components/Admin/pitchDecider/AllPitches"))
+ import("./Components/Admin/pitchDecider/AllPitches")
 );
 
 const LoggedInPitches = React.lazy(() =>
-  wait(1000).then(() => import("./Components/LoggedInPitches/LoggedInPitches"))
+ import("./Components/LoggedInPitches/LoggedInPitches")
 );
 
 const ENV = process.env;
@@ -147,7 +147,7 @@ const App = () => {
   useEffect(() => {
     socket.current.on("sendseenMessage", (data) => {
       // console.log(data);
-      dispatch(setLastMessageRead(true));
+      dispatch(setLastMessageRead(data));
       ApiServices.changeStatusMessage({
         senderId: data.receiverId,
         receiverId: data.senderId,
