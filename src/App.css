@@ -40,6 +40,7 @@ body[data-theme="light"] {
   --button: #4e54c7;
   --button-hover: #4449ad;
   --tab-hover: #bec0e48a;
+  --primary-light: #4e54c718;
 
   --white-text: #fff;
   --light-transparent: #4e54c748;

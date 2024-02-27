@@ -185,7 +185,7 @@ const IndividualPitch = () => {
       comment_id: commentId,
       comment_owner: pitch._id,
     })
-      .then((res) => { })
+      .then((res) => {})
       .catch((err) => {
         dispatch(
           setToast({
@@ -249,7 +249,6 @@ const IndividualPitch = () => {
           })
         );
       });
-
   };
 
   const removeFromIntrest = async () => {
@@ -276,7 +275,6 @@ const IndividualPitch = () => {
           })
         );
       });
-
   };
 
   return (
@@ -285,7 +283,13 @@ const IndividualPitch = () => {
         <div className="indiPitchDetailsContainer">
           <div className="indiPitchDetails">
             <div className="main-container">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <div className="indiPitchHeading">
                   {pitch?.heading}
                   <i
@@ -298,7 +302,13 @@ const IndividualPitch = () => {
                   ></i>
                 </div>
               </div>
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <div className="indiPitchDate">
                   Posted about{" "}
                   <b>{moment(pitch?.createdAt).format("MMM Do YY")}</b> by{" "}
@@ -321,6 +331,42 @@ const IndividualPitch = () => {
                 ></textarea>
               </div>
 
+              <PitchDetailsReadOnly
+                open={open}
+                setOpen={setOpen}
+                value={value}
+                setValue={setValue}
+                pitchDetails={pitch}
+              />
+            </div>
+            <div className="rating-container">
+              <div className="reviewInterestContainer">
+                <h4>{pitch.review?.length} Global Ratings</h4>
+                <div className="">
+                  <ReviewStars avg={averagereview} />
+                </div>
+                {email !== pitch?.email && (
+                  <div
+                    className={`intrestButton ${
+                      pitch?.intrest?.length > 0 &&
+                      pitch?.intrest.filter((p) => p.email === email).length > 0
+                        ? "removeIntrest"
+                        : "addIntrest"
+                    }`}
+                  >
+                    {pitch?.intrest?.length > 0 &&
+                    pitch?.intrest.filter((p) => p.email === email).length >
+                      0 ? (
+                      <span onClick={removeFromIntrest}>
+                        Remove from interest
+                      </span>
+                    ) : (
+                      <span onClick={addToIntrest}>Add to interest</span>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div style={{marginTop: '20px'}}>
               {pitch?.hiringPositions?.length > 0 && (
                 <div className="indiPitchHiringPositions">
                   <b className="side-headings"> People Needed:</b>
@@ -342,40 +388,6 @@ const IndividualPitch = () => {
                   <div className="hp">{pitch?.industry2}</div>
                 </div>
               )}
-
-              <PitchDetailsReadOnly
-                open={open}
-                setOpen={setOpen}
-                value={value}
-                setValue={setValue}
-                pitchDetails={pitch}
-              />
-            </div>
-            <div className="rating-container">
-              <div className="reviewInterestContainer">
-                <h4>{pitch.review?.length} Global Ratings</h4>
-                <div className="">
-                  <ReviewStars avg={averagereview} />
-                </div>
-                {email !== pitch?.email && (
-                  <div
-                    className={`intrestButton ${pitch?.intrest?.length > 0 &&
-                        pitch?.intrest.filter((p) => p.email === email).length > 0
-                        ? "removeIntrest"
-                        : "addIntrest"
-                      }`}
-                  >
-                    {pitch?.intrest?.length > 0 &&
-                      pitch?.intrest.filter((p) => p.email === email).length >
-                      0 ? (
-                      <span onClick={removeFromIntrest}>
-                        Remove from interest
-                      </span>
-                    ) : (
-                      <span onClick={addToIntrest}>Add to interest</span>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -383,20 +395,19 @@ const IndividualPitch = () => {
         <div className="commentsContainer">
           <h2 className="Rating-heading">Ratings & Discussion</h2>
           <div>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "5px" }}>
               <img src={image} />
               <div>
-                <span>
+                <span style={{fontSize: '14px '}}>
                   <b>{userName}</b>
                 </span>
-                <div style={{ fontSize: "12px", marginBottom: "20px" }}>
+                <div style={{ fontSize: "12px", marginBottom: "10px" }}>
                   Discussions are public and include your account details
                 </div>
               </div>
             </div>
-
             <div className="Rating-Content" style={{ marginLeft: "60px" }}>
-              <h4>Rate this user</h4>
+              <h4 style={{fontSize: '14px '}}>Rate this user</h4>
               <h6>Tell others what you think</h6>
               <div
                 className="stars"
@@ -416,7 +427,7 @@ const IndividualPitch = () => {
                     style={{ color: "blue", cursor: "pointer" }}
                     onClick={() => setIsWritingReview(true)}
                   >
-                    <b>Write a Review</b>
+                    <b style={{fontSize: '12px '}}>Write a Review</b>
                   </div>
                 )}
                 {isWritingReview && (
