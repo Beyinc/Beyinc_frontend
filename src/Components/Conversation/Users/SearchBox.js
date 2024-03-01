@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import "./searchBox.css";
 import { ApiServices } from "../../../Services/ApiServices";
 import MapsUgcIcon from "@mui/icons-material/MapsUgc";
-import { getAllHistoricalConversations, setUserLivePitches } from "../../../redux/Conversationreducer/ConversationReducer";
+import {
+  getAllHistoricalConversations,
+  setUserLivePitches,
+} from "../../../redux/Conversationreducer/ConversationReducer";
 import { setLoading, setToast } from "../../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../../Toast/ToastColors";
 
@@ -13,10 +16,7 @@ import { socket_io } from "../../../Utils";
 import AddPitch from "../../Common/AddPitch";
 import AddConversationPopup from "../../Common/AddConversationPopup";
 
-
 const SearchBox = () => {
-
-
   const [tags, setTags] = useState([]);
 
   const [teamMembers, setTeamMembers] = useState([]);
@@ -27,13 +27,13 @@ const SearchBox = () => {
     socialLink: "",
     position: "",
   });
-  const [IsAdmin, setIsAdmin] = useState(false)
+  const [IsAdmin, setIsAdmin] = useState(false);
   const [defaultTrigger, setdefaultTrigger] = useState(false);
-  const [Teampic, setTeampic] = useState('')
-  const [Logo, SetLogo] = useState('');
-  const [Banner, SetBanner] = useState('');
-  const [Business, SetBusiness] = useState('');
-  const [Financial, SetFinancial] = useState('');
+  const [Teampic, setTeampic] = useState("");
+  const [Logo, SetLogo] = useState("");
+  const [Banner, SetBanner] = useState("");
+  const [Business, SetBusiness] = useState("");
+  const [Financial, SetFinancial] = useState("");
 
   const [isSpinning, setSpinning] = useState(false);
   const handleReloadClick = () => {
@@ -52,22 +52,25 @@ const SearchBox = () => {
   const [receiverId, setReceiverId] = useState("");
   const [receiverRole, setreceiverRole] = useState("");
 
-
   const dispatch = useDispatch();
   useEffect(() => {
     setFilteredUsers(allUsers);
   }, [allUsers]);
 
   useEffect(() => {
-    setFilteredUsers(allUsers.filter((a) => a.userName.toLowerCase().includes(search.toLowerCase())));
+    setFilteredUsers(
+      allUsers.filter((a) =>
+        a.userName.toLowerCase().includes(search.toLowerCase())
+      )
+    );
   }, [search]);
-
-
 
   const handleClickOutside = (event) => {
     if (
       userDetailsRef.current &&
-      !userDetailsRef.current.contains(event.target) && event.target.id !== 'newchat' && event.target.id !== 'Profile-img'
+      !userDetailsRef.current.contains(event.target) &&
+      event.target.id !== "newchat" &&
+      event.target.id !== "Profile-img"
     ) {
       document
         .getElementsByClassName("newConversation")[0]
@@ -88,8 +91,9 @@ const SearchBox = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }} className="newChatContainer">
-        <div id='newchat'
+      <div className="newChatContainer">
+        <div
+          id="newchat"
           className="newChat"
           onClick={() => {
             document
@@ -97,10 +101,10 @@ const SearchBox = () => {
               .classList.toggle("show");
           }}
         >
-          <div id='newchat'>
+          <div id="newchat">
             <MapsUgcIcon style={{ fontSize: "24px" }} />{" "}
           </div>
-          <div id='newchat'>New Chat</div>
+          <div id="newchat">New Chat</div>
         </div>
 
         <div title="Reload for latest request updates">
@@ -122,7 +126,9 @@ const SearchBox = () => {
             id="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search Users to message" autoComplete="off" aria-autocomplete="off"
+            placeholder="Search Users to message"
+            autoComplete="off"
+            aria-autocomplete="off"
           />
         </div>
         <div className="searchedUsers">
@@ -134,8 +140,8 @@ const SearchBox = () => {
                   className="individuals"
                   onClick={() => {
                     setReceiverId(a._id);
-                    setreceiverRole(a.role)
-                    setIsAdmin(a.email == process.env.REACT_APP_ADMIN_MAIL)
+                    setreceiverRole(a.role);
+                    setIsAdmin(a.email == process.env.REACT_APP_ADMIN_MAIL);
                   }}
                 >
                   <div className="searchPic">
@@ -179,7 +185,12 @@ const SearchBox = () => {
               ))}
         </div>
       </div>
-      <AddConversationPopup IsAdmin={IsAdmin} receiverId={receiverId} setReceiverId={setReceiverId} receiverRole={receiverRole} />
+      <AddConversationPopup
+        IsAdmin={IsAdmin}
+        receiverId={receiverId}
+        setReceiverId={setReceiverId}
+        receiverRole={receiverRole}
+      />
     </div>
   );
 };
