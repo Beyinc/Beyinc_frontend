@@ -128,19 +128,39 @@ const EditProfileUI = () => {
     useState(false);
   const [isEducationPopupVisible, setIsEducationPopupVisible] = useState(false);
   const handleEditButtonClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     if (id === undefined) {
       setIsInputPopupVisible(true);
     }
   };
 
   const handleAboutButtonClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsAboutPopupVisible(true);
   };
 
   const handleExperienceButtonClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsExperiencePopupVisible(true);
   };
   const handleEducationButtonClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsEducationPopupVisible(true);
   };
 
@@ -972,7 +992,10 @@ const EditProfileUI = () => {
                 </div>
                 <span
                   className="close-icon"
-                  onClick={() => setIsInputPopupVisible(false)}
+                  onClick={() => {
+                    document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                    setIsInputPopupVisible(false)
+                  }}
                 >
                   <i class="fas fa-times"></i>
                 </span>
@@ -1028,7 +1051,10 @@ const EditProfileUI = () => {
                   <h3>Edit About</h3>
                   <span
                     className="close-icon"
-                    onClick={() => setIsAboutPopupVisible(false)}
+                    onClick={() => {
+                      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                      setIsAboutPopupVisible(false)
+                    }}
                   >
                     <i class="fas fa-times"></i>
                   </span>
@@ -1185,7 +1211,11 @@ const EditProfileUI = () => {
                 <form className="update-form">
                   <div
                     className="close-icon"
-                    onClick={() => setIsExperiencePopupVisible(false)}
+                    onClick={() => {
+                      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+
+                      setIsExperiencePopupVisible(false)
+                    }}
                   >
                     <i class="fas fa-times"></i>
                   </div>
@@ -1374,7 +1404,11 @@ const EditProfileUI = () => {
                 <form className="update-form">
                   <div
                     className="close-icon"
-                    onClick={() => setIsEducationPopupVisible(false)}
+                    onClick={() => {
+                      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+
+                      setIsEducationPopupVisible(false)
+                    }}
                   >
                     <i class="fas fa-times"></i>
                   </div>
