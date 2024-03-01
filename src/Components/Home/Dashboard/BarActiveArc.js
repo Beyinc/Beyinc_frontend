@@ -28,7 +28,7 @@ export default function BarActiveArc({ Tdata }) {
   }, [Tdata]);
   return (
     <div>
-      <label style={{ padding: '5px 25px' }}>Connection Summary</label>
+      <div style={{ padding: '5px 25px'}} className='HeadingHolder'>Connection Summary</div>
       {(pending.length > 0 && approved.length > 0) &&
         <BarChart
           width={width < 768 ? 350 : 500}
