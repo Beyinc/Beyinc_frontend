@@ -31,14 +31,24 @@ body {
   /* max-width: 18rem !important; */
   border-radius: 5px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  margin: 0px 5px;
+  margin: 0px 5px 5px 5px;
   /* height: 8rem; */
 }
+.card-1{
+  margin-left: 0px;
+}
+.card-4{
+  margin-right: 0px;
+}
+
 
 .numItems {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+.numItems div:nth-child(2){
+  width: 150px;
 }
 .dashboard-icon-container {
   width: 50px;
@@ -147,6 +157,11 @@ body {
   .dashboard-content div p {
     font-size: 25px;
   }
+  .numItems{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
   .dashboard-section-1 {
     flex-wrap: wrap;
   }
@@ -154,7 +169,8 @@ body {
   .card-2,
   .card-3,
   .card-4 {
-    width: 200px !important;
+    width: 120px !important;
+      margin: 5px !important;
     /* flex: 0; */
     /* height: 18rem !important; */
   }
