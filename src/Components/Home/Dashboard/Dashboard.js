@@ -31,7 +31,7 @@ const Dashboard = () => {
                 <div className="dashboard-icon-container approved">
                   <i class="far fa-user dashboard-icon" style={{ color: '#519065' }}></i>
                 </div>
-                <div >
+                <div>
                   <label>Approved Connections</label>
                   <p>{data?.connections_approved || 0}</p>
                 </div>
