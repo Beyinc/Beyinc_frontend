@@ -5,6 +5,12 @@
   display: block;
   position: absolute;
   z-index: 999;
+  left: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
 .searchedUsers {
   display: flex;
@@ -30,31 +36,34 @@
   display: flex;
   gap: 15px;
   cursor: pointer;
-  padding: 5px 5px;
+  padding: 10px 5px;
   padding-left: -10px;
   transition: all ease 0.2s;
   margin: 0px 0px 5px 0px;
-  width: 90%;
+  width: 300px;
   font-size: 12px;
   /* border-radius: 30px; */
   position: relative;
+}
+.searchedUsers .individuals {
+  width: fit-content;
 }
 .searchPic {
   position: relative;
 }
 .individuals:hover {
   background: #c2e7ff46;
-  border-radius: 10px;
 }
 .role {
   font-size: 12px;
 }
 .newChatContainer {
-  background: var(--messageNavbar-bg) !important;
-  padding: 10px 20px 4px 20px;
-  /* width: 100%; */
   display: flex;
   align-items: center;
+  background: var(--messageNavbar-bg) !important;
+  padding: 15px 15px 0px 15px;
+  /* width: 100%; */
+  justify-content: space-between;
 }
 @media (max-width: 768px) {
   .newChatContainer {
@@ -62,8 +71,8 @@
     padding: 10px 20px;
     width: auto !important;
   }
-  .historyChats {
-    margin-left: 20px;
+  .individuals {
+    width: 100%;
   }
 }
 .newChat {
@@ -100,7 +109,6 @@
 
 .historyChats {
   height: 70vh;
-  overflow-y: scroll;
   background: var(--users-bg);
 }
 
@@ -168,13 +176,14 @@ body[data-theme="dark"] .tabs {
   justify-content: space-around;
   position: sticky;
   top: 0;
-  width: 300px;
+  width: 100%;
 }
 .historicalTabIcons {
   cursor: pointer;
   background-color: #fff;
   width: 100%;
-  padding: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
   text-align: center;
 }
 .historicalTabIcons.historicalTabIconsselected {
@@ -249,7 +258,6 @@ textarea {
 
 .selected {
   background: var(--historical-selected-chat);
-  border-radius: 10px;
 }
 
 .deleteConv {
@@ -329,7 +337,6 @@ textarea {
 .lastMsg {
   text-align: start;
   text-overflow: ellipsis;
-  width: 300px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -361,4 +368,14 @@ textarea {
     font-size: 12px;
     font-weight: bold;
   }
+}
+
+.individuals .image-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.individuals .image-container img {
+  margin-left: 9px;
 }
