@@ -7,7 +7,7 @@ import ReceivedPitches from "./Dashboard/ReceivedPitches";
 const Home = () => {
   const { role, userName } = useSelector((store) => store.auth.loginDetails);
   return (
-    <div style={{overflowX: 'hidden'}}>
+    <div style={{ overflowX: 'hidden' }}>
       <center>
         {/* <h1>Welcome {userName} to Beyinc !</h1> */}
         <Dashboard />
