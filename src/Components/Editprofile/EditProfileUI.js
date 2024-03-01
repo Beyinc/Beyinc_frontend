@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
@@ -20,29 +20,41 @@ import { Country, State, City } from "country-state-city";
 import { AdminServices } from "../../Services/AdminServices";
 import { jwtDecode } from "jwt-decode";
 import { format } from "timeago.js";
+
+import { Box, Dialog, DialogContent } from "@mui/material";
 import {
   allLanguages,
   allskills,
   convertToDate,
   itPositions,
+  socket_io,
 } from "../../Utils";
 import { Autocomplete, TextField } from "@mui/material";
 import useWindowDimensions from "../Common/WindowSize";
 import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
-
+import { io } from "socket.io-client";
+import { gridCSS } from "../CommonStyles";
 const EditProfileUI = () => {
-  const { email, role, userName, image, phone, user_id } = useSelector(
+  const {id} = useParams()
+  const { user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
+  const socket = useRef();
+  useEffect(() => {
+    socket.current = io(socket_io);
+  }, []);
+
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [inputs, setInputs] = useState({
     email: null,
+    userName: null,
     emailOtp: null,
     mobile: null,
     mobileOtp: null,
     name: null,
     role: null,
+    image: null,
     isMobileOtpSent: null,
     isEmailOtpSent: null,
     emailVerified: null,
@@ -55,10 +67,12 @@ const EditProfileUI = () => {
   const {
     // email,
     // emailOtp,
+    email, role, userName,
     mobile,
     mobileOtp,
     name,
     //  role,
+    image,
     // isEmailOtpSent,
     isMobileOtpSent,
     // emailVerified,
@@ -94,7 +108,7 @@ const EditProfileUI = () => {
   const [bio, setBio] = useState("");
   const [skills, setSkills] = useState([]);
   const [singleSkill, setSingleSkill] = useState("");
-
+  const [editOwnProfile, setEditOwnProfile] = useState(false)
   const [languagesKnown, setlanguagesKnown] = useState([]);
   const [singlelanguagesKnown, setSinglelanguagesKnown] = useState("");
   const [state, setState] = useState("");
@@ -114,7 +128,9 @@ const EditProfileUI = () => {
     useState(false);
   const [isEducationPopupVisible, setIsEducationPopupVisible] = useState(false);
   const handleEditButtonClick = () => {
-    setIsInputPopupVisible(true);
+    if (id === undefined) {
+      setIsInputPopupVisible(true);
+    }
   };
 
   const handleAboutButtonClick = () => {
@@ -230,68 +246,173 @@ const EditProfileUI = () => {
     setIsFormValid(hasEducation && hasWorkExperience);
   }, [totalEducationData, totalExperienceData]);
 
+  const [reasonPop, setReasonPop] = useState(false);
+  const [reason, setReason] = useState("");
+  const [requestUserId, setRequestedUserId] = useState('')
   useEffect(() => {
-    ApiServices.getProfile({ id: user_id })
-      .then((res) => {
-        setInputs((prev) => ({
-          ...prev,
-          updatedAt: res.data.updatedAt,
-          name: res.data.userName,
-          mobile: res.data.phone,
-          role: res.data.role,
-          mobileVerified: true,
-        }));
+    if (id == undefined) {
+      ApiServices.getProfile({ id: user_id })
+        .then((res) => {
+          setEditOwnProfile(true)
+          setInputs((prev) => ({
+            ...prev,
+            updatedAt: res.data.updatedAt,
+            name: res.data.userName,
+            mobile: res.data.phone,
+            role: res.data.role,
+            mobileVerified: true,
+            image: res.data.image?.url || "",
+            email: res.data.email,
+          }));
 
-        if (res.data.documents !== undefined) {
-          setOldDocs((prev) => ({
+          if (res.data.documents !== undefined) {
+            setOldDocs((prev) => ({
+              ...prev,
+              resume: res.data.documents.resume,
+              expertise: res.data.documents.expertise,
+              acheivements: res.data.documents.acheivements,
+              working: res.data.documents.working,
+              degree: res.data.documents.degree,
+            }));
+            setchangeDocuments((prev) => ({
+              ...prev,
+              resume: res.data.documents?.resume || "",
+              expertise: res.data.documents?.expertise || "",
+              acheivements: res.data.documents?.acheivements || "",
+              working: res.data.documents?.working || "",
+              degree: res.data.documents?.degree || "",
+            }));
+            setTotalEducationData(res.data.educationDetails || []);
+            setTotalExperienceData(res.data.experienceDetails || []);
+            setFee(res.data.fee || "");
+            setBio(res.data.bio || "");
+            setSkills(res.data.skills || []);
+            setlanguagesKnown(res.data.languagesKnown || []);
+
+            settown(res.data.town || "");
+            setCountry(res.data.country || "");
+            setState(res.data.state || "");
+            setPlaces({
+              country: Country.getAllCountries(),
+              state:
+                State.getStatesOfCountry(res.data.country?.split("-")[1]) || [],
+              town:
+                City.getCitiesOfState(
+                  res.data.country?.split("-")[1],
+                  res.data.state?.split("-")[1]
+                ) || [],
+            });
+          }
+        })
+
+        .catch((error) => {
+          dispatch(
+            setToast({
+              message: error?.response?.data?.message,
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+        });
+    } else {
+      // Admin functionality
+      AdminServices.getApprovalRequestProfile({ userId: id })
+        .then((res) => {
+          setEditOwnProfile(false)
+          // console.log(res.data);
+          setRequestedUserId(res.data.userInfo._id)
+          setInputs((prev) => ({
             ...prev,
-            resume: res.data.documents.resume,
-            expertise: res.data.documents.expertise,
-            acheivements: res.data.documents.acheivements,
-            working: res.data.documents.working,
-            degree: res.data.documents.degree,
+            updatedAt: res.data.updatedAt,
+            name: res.data.userName,
+            mobile: res.data.phone,
+            role: res.data.role,
+            image: res.data.userInfo.image?.url || "",
+            email: res.data.userInfo.email,
+            status: res.data.verification,
+            mobileVerified: true,
           }));
-          setchangeDocuments((prev) => ({
-            ...prev,
-            resume: res.data.documents?.resume || "",
-            expertise: res.data.documents?.expertise || "",
-            acheivements: res.data.documents?.acheivements || "",
-            working: res.data.documents?.working || "",
-            degree: res.data.documents?.degree || "",
-          }));
+
+          if (res.data.documents !== undefined) {
+            setOldDocs((prev) => ({
+              ...prev,
+              resume: res.data.documents.resume,
+              expertise: res.data.documents.expertise,
+              acheivements: res.data.documents.acheivements,
+              working: res.data.documents.working,
+              degree: res.data.documents.degree,
+            }));
+          }
           setTotalEducationData(res.data.educationDetails || []);
           setTotalExperienceData(res.data.experienceDetails || []);
           setFee(res.data.fee || "");
           setBio(res.data.bio || "");
-          setSkills(res.data.skills || []);
-          setlanguagesKnown(res.data.languagesKnown || []);
-
           settown(res.data.town || "");
           setCountry(res.data.country || "");
           setState(res.data.state || "");
-          setPlaces({
-            country: Country.getAllCountries(),
-            state:
-              State.getStatesOfCountry(res.data.country?.split("-")[1]) || [],
-            town:
-              City.getCitiesOfState(
-                res.data.country?.split("-")[1],
-                res.data.state?.split("-")[1]
-              ) || [],
-          });
-        }
-      })
+          dispatch(setLoading({ visible: "no" }));
+          setSkills(res.data.skills || []);
+          setlanguagesKnown(res.data.languagesKnown || []);
+        })
+        .catch((error) => {
+          dispatch(
+            setToast({
+              message: "No User Found For Request",
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+          dispatch(setLoading({ visible: "no" }));
+          navigate("/profileRequests");
+        });
+    }
+  }, [email, id]);
 
-      .catch((error) => {
-        dispatch(
-          setToast({
-            message: error?.response?.data?.message,
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      });
-  }, [email]);
+  // Admi approval function
+  const adminupdate = async (e, status) => {
+    e.preventDefault();
+    e.target.disabled = true;
+    // setIsLoading(true);
+    if (status == "approved" || (status == "rejected" && reason !== "")) {
+      await AdminServices.updateVerification({
+        userId: id,
+        status: status,
+        reason: reason,
+      })
+        .then((res) => {
+          dispatch(
+            setToast({
+              message: `Profile Status changed to ${status}`,
+              bgColor: ToastColors.success,
+              visible: "yes",
+            })
+          );
+          socket.current.emit("sendNotification", {
+            senderId: user_id,
+            receiverId: requestUserId,
+          });
+          // setIsLoading(false);
+          e.target.disabled = false;
+          navigate("/profileRequests");
+          setReasonPop(false);
+          setReason("");
+        })
+        .catch((err) => {
+          e.target.disabled = false;
+          dispatch(
+            setToast({
+              message: "Error occured when changing status",
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+          // setIsLoading(false);
+        });
+    } else {
+      e.target.disabled = false;
+      setReasonPop(true);
+    }
+  };
 
   const handleChanges = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -351,45 +472,6 @@ const EditProfileUI = () => {
         e.target.disabled = true;
       });
   };
-
-  // const verifyOtp = async (e) => {
-  //   e.preventDefault();
-  //   await ApiServices.verifyOtp({
-  //     email: email,
-  //     otp: emailOtp,
-  //   })
-  //     .then((res) => {
-  //       dispatch(
-  //         setToast({
-  //           message: "Email verified successfully !",
-  //           bgColor: ToastColors.success,
-  //           visible: "yes",
-  //         })
-  //       );
-  //       document.getElementById("emailVerify").style.display = "none";
-  //       document.getElementById("emailOtpInput").disabled = true;
-  //       // setemailVerified(true);
-  //       setInputs((prev) => ({ ...prev, emailVerified: true }));
-  //     })
-  //     .catch((err) => {
-  //       dispatch(
-  //         setToast({
-  //           message: "Incorrect OTP",
-  //           bgColor: ToastColors.failure,
-  //           visible: "yes",
-  //         })
-  //       );
-  //     });
-  //   setTimeout(() => {
-  //     dispatch(
-  //       setToast({
-  //         message: "",
-  //         bgColor: "",
-  //         visible: "no",
-  //       })
-  //     );
-  //   }, 4000);
-  // };
 
   const verifyMobileOtp = async (e) => {
     e.preventDefault();
@@ -565,7 +647,11 @@ const EditProfileUI = () => {
           <div className="Profile-Image">
             <div>
               <img
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  if (id == undefined) {
+                    setOpen(true)
+                  }
+                }}
                 src={
                   image !== undefined && image !== "" ? image : "/profile.png"
                 }
@@ -581,9 +667,9 @@ const EditProfileUI = () => {
                 }}
               >
                 {name}{" "}
-                <span>
+                {id == undefined && <span>
                   <i onClick={handleEditButtonClick} className="fas fa-pen"></i>
-                </span>
+                </span>}
               </div>
               <div style={{ fontWeight: "500", fontSize: "18px" }}>
                 {" "}
@@ -906,9 +992,9 @@ const EditProfileUI = () => {
             }}
           >
             <h3>About</h3>
-            <span>
+            {id == undefined && <span>
               <i onClick={handleAboutButtonClick} className="fas fa-pen"></i>
-            </span>
+            </span>}
           </div>
           <div>{bio}</div>
           <div className="skills-Container">
@@ -1054,12 +1140,12 @@ const EditProfileUI = () => {
               }}
             >
               <h3>Experience</h3>
-              <span>
+              {id == undefined && <span>
                 <i
                   onClick={handleExperienceButtonClick}
                   className="fas fa-pen"
                 ></i>
-              </span>
+              </span>}
             </div>
           </div>
           {totalExperienceData.length > 0 &&
@@ -1244,12 +1330,12 @@ const EditProfileUI = () => {
                 }}
               >
                 <h3>Education</h3>
-                <span>
+                {id == undefined && <span>
                   <i
                     onClick={handleEducationButtonClick}
                     className="fas fa-pen"
                   ></i>
-                </span>
+                </span>}
               </div>
             </div>
             {totalEducationData.length > 0 &&
@@ -1516,20 +1602,20 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                <label htmlFor="resume" className="resume">
-                  <CloudUploadIcon />
-                  <span className="fileName">
-                    {recentUploadedDocs?.resume || "Upload"}
-                  </span>
-                </label>
-                <input
-                  className="resume"
-                  type="file"
-                  name="resume"
-                  id="resume"
-                  onChange={handleResume}
-                  style={{ display: "none" }}
-                />
+                {id == undefined && 
+                <><label htmlFor="resume" className="resume">
+                    <CloudUploadIcon />
+                    <span className="fileName">
+                      {recentUploadedDocs?.resume || "Upload"}
+                    </span>
+                  </label><input
+                      className="resume"
+                      type="file"
+                      name="resume"
+                      id="resume"
+                      onChange={handleResume}
+                      style={{ display: "none" }} /></>
+                }
               </div>
 
               <div>
@@ -1565,20 +1651,25 @@ const EditProfileUI = () => {
                         </attr>
                       )}
                   </div>
-                  <label htmlFor="acheivements" className="resume">
-                    <CloudUploadIcon />
-                    <span className="fileName">
-                      {recentUploadedDocs?.acheivements || "Upload"}
-                    </span>
-                  </label>
-                  <input
-                    type="file"
-                    id="acheivements"
-                    className="resume"
-                    name="acheivements"
-                    onChange={handleResume}
-                    style={{ display: "none" }}
-                  />
+                  {id == undefined && 
+                    <>
+                    <label htmlFor="acheivements" className="resume">
+                      <CloudUploadIcon />
+                      <span className="fileName">
+                        {recentUploadedDocs?.acheivements || "Upload"}
+                      </span>
+                    </label>
+                    <input
+                      type="file"
+                      id="acheivements"
+                      className="resume"
+                      name="acheivements"
+                      onChange={handleResume}
+                      style={{ display: "none" }}
+                    />
+
+                  </>
+                  }
                 </div>
               </div>
 
@@ -1614,21 +1705,24 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                <label htmlFor="degree" className="resume">
-                  <CloudUploadIcon />
-                  <span className="fileName">
-                    {recentUploadedDocs?.degree || "Upload"}
-                  </span>
-                </label>
+                {id == undefined && <>
+                  <label htmlFor="degree" className="resume">
+                    <CloudUploadIcon />
+                    <span className="fileName">
+                      {recentUploadedDocs?.degree || "Upload"}
+                    </span>
+                  </label>
 
-                <input
-                  type="file"
-                  id="degree"
-                  className="resume"
-                  name="degree"
-                  onChange={handleResume}
-                  style={{ display: "none" }}
-                />
+                  <input
+                    type="file"
+                    id="degree"
+                    className="resume"
+                    name="degree"
+                    onChange={handleResume}
+                    style={{ display: "none" }}
+                  />
+                </>}
+               
               </div>
 
               <div>
@@ -1663,21 +1757,23 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                <label htmlFor="expertise" className="resume">
-                  <CloudUploadIcon />
-                  <span className="fileName">
-                    {recentUploadedDocs?.expertise || "Upload"}
-                  </span>
-                </label>
+                {id == undefined && <>
+                  <label htmlFor="expertise" className="resume">
+                    <CloudUploadIcon />
+                    <span className="fileName">
+                      {recentUploadedDocs?.expertise || "Upload"}
+                    </span>
+                  </label>
 
-                <input
-                  type="file"
-                  id="expertise"
-                  className="resume"
-                  name="expertise"
-                  style={{ display: "none" }}
-                  onChange={handleResume}
-                />
+                  <input
+                    type="file"
+                    id="expertise"
+                    className="resume"
+                    name="expertise"
+                    style={{ display: "none" }}
+                    onChange={handleResume}
+                  />
+               </>}
               </div>
 
               <div>
@@ -1712,28 +1808,30 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                <label htmlFor="working" className="resume">
-                  <CloudUploadIcon />
-                  <span className="fileName">
-                    {recentUploadedDocs?.working || "Upload"}
-                  </span>
-                </label>
+                {id == undefined && <>
+                  <label htmlFor="working" className="resume">
+                    <CloudUploadIcon />
+                    <span className="fileName">
+                      {recentUploadedDocs?.working || "Upload"}
+                    </span>
+                  </label>
 
-                <input
-                  type="file"
-                  id="working"
-                  className="resume"
-                  style={{ display: "none" }}
-                  name="working"
-                  onChange={handleResume}
-                />
+                  <input
+                    type="file"
+                    id="working"
+                    className="resume"
+                    style={{ display: "none" }}
+                    name="working"
+                    onChange={handleResume}
+                  />
+                </>}
               </div>
             </div>
           </form>
         </div>
       </section>
 
-      <section className="EditProfile-Buttons-Section">
+      {id == undefined ? <section className="EditProfile-Buttons-Section">
         <div
           style={{
             display: "flex",
@@ -1767,8 +1865,109 @@ const EditProfileUI = () => {
             )}
           </button>
         </div>
-      </section>
+      </section> :   <div className="button-container">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "25%",
+            gap: "10px",
+            marginTop: "15px",
+          }}
+        >
+          {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
 
+          <button
+            type="submit"
+            className="reject-button"
+            onClick={(e) => adminupdate(e, "rejected")}
+            style={{ whiteSpace: "nowrap", position: "relative" }}
+            disabled={inputs.status === "rejected"}
+          >
+            {/* {isLoading ? (
+                                    <>
+                                                             <div className="button-loader"></div>
+                                        <span style={{ marginLeft: "12px" }}>Rejecting...</span>
+                                    </>
+                                ) : ( */}
+            <>Reject</>
+            {/* )} */}
+          </button>
+          <button
+            type="submit"
+              onClick={(e) => adminupdate(e, "approved")}
+            style={{ whiteSpace: "nowrap", position: "relative" }}
+            disabled={inputs.status === "approved"}
+          >
+            {isLoading ? (
+              <>
+                <div className="button-loader"></div>
+                <span style={{ marginLeft: "12px" }}>Approving...</span>
+              </>
+            ) : (
+              <>Approve</>
+            )}
+          </button>
+        </div>
+      </div>}
+
+      <Dialog
+        open={reasonPop}
+        onClose={() => setReasonPop(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={gridCSS.tabContainer}
+
+      // sx={ gridCSS.tabContainer }
+      >
+        <DialogContent
+          style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Box>
+            <b>Enter Reason for rejection</b>
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "5px",
+              right: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => setReasonPop(false)}
+          >
+            <CloseIcon />
+          </Box>
+          <Box className="singleProfile">
+            <textarea
+              style={{
+                resize: "none",
+                // border: "none",
+                textAlign: "justify",
+                fontFamily: "poppins",
+              }}
+              id=""
+              name="message"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Enter your bio"
+            ></textarea>
+          </Box>
+          <button
+            type="submit"
+            disabled={reason == ""}
+            onClick={(e) => {
+              adminupdate(e, "rejected");
+            }}
+          >
+            Ok
+          </button>
+        </DialogContent>
+      </Dialog>
       <ProfileImageUpdate open={open} setOpen={setOpen} />
     </main>
   );
