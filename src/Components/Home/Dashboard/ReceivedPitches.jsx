@@ -84,23 +84,23 @@ export default function ReceivedPitches() {
                                     <TableCell
                                         component="th"
                                         scope="row"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        style={{ whiteSpace: "nowrap", fontSize: '13px' }}
                                     >
                                         {row?.userInfo?.userName}
                                     </TableCell>
                                     <TableCell
                                         component="th"
                                         scope="row"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        style={{ whiteSpace: "nowrap", fontSize: '13px' }}
                                     >
                                         {row.title}
                                     </TableCell>
-                                    <TableCell style={{ whiteSpace: "nowrap" }}>
+                                    <TableCell style={{ whiteSpace: "nowrap", fontSize: '13px' }}>
                                         {row.heading.length > 20
                                             ? `${row.heading.slice(0, 20)}...`
                                             : row.heading}
                                     </TableCell>
-                                    <TableCell style={{ whiteSpace: "nowrap" }}>
+                                    <TableCell style={{ whiteSpace: "nowrap", fontSize: '13px' }}>
                                         {row.stage}
                                     </TableCell>
                                     <TableCell>
@@ -111,7 +111,7 @@ export default function ReceivedPitches() {
                                                 }
                                             }}
                                             style={{
-                                                fontSize: "14px",
+                                                fontSize: "13px",
                                                 marginLeft: "5px",
                                                 cursor: row.status == 'approved' && 'pointer',
                                                 color:
@@ -135,10 +135,10 @@ export default function ReceivedPitches() {
                                                 row.status.slice(1)}
                                         </div>
                                     </TableCell>
-                                    <TableCell style={{ whiteSpace: "nowrap" }}>
+                                    <TableCell style={{ whiteSpace: "nowrap",fontSize: '13px' }}>
                                         {moment(row.createdAt).format("MMM D, YYYY ")}
                                     </TableCell>
-                                    <TableCell style={{ whiteSpace: "nowrap" }}>
+                                    <TableCell style={{ whiteSpace: "nowrap", fontSize: '13px' }}>
                                         {moment(row.updatedAt).format("MMM D, YYYY ")}
                                     </TableCell>
                                     <TableCell>
