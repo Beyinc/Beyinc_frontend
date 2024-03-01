@@ -46,6 +46,7 @@ import MessageRequest from "../Conversation/Notification/MessageRequest";
 import { format } from "timeago.js";
 import useWindowDimensions from "../Common/WindowSize";
 import { socket_io } from "../../Utils";
+import ProfileImageUpdate from "./ProfileImageUpdate";
 
 function a11yProps(index) {
   return {
@@ -388,7 +389,7 @@ const Navbar = () => {
 
   const [open, setOpen] = React.useState(false);
   const userDetailsRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
+ 
 
   const handleClickOpen = () => {
     document
@@ -403,92 +404,9 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [changeImage, setchangeImage] = useState("");
-  const [originalImage, setOriginalImage] = useState("");
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (file.size > 4 * 1024 * 1024) {
-      alert(
-        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
-      );
-      e.target.value = null; // Clear the selected file
-      return;
-    }
-    setOriginalImage(file.name);
-    setFileBase(file);
-  };
-  const setFileBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setchangeImage(reader.result);
-    };
-  };
 
-  const submit = async (e) => {
-    e.target.disabled = true;
-    setIsLoading(true);
-    await ApiServices.updateuserProfileImage({
-      userId: user_id,
-      image: changeImage, email: email
-    })
-      .then(async (res) => {
-        // console.log(res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
-        dispatch(setLoginData(jwtDecode(res.data.accessToken)));
-        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        dispatch(
-          setToast({
-            message: "Image uploaded successfully",
-            bgColor: ToastColors.success,
-            visible: "yes",
-          })
-        );
-        e.target.disabled = false;
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        dispatch(
-          setToast({
-            message: "Error during image upload",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-        setIsLoading(false);
-        e.target.disabled = false;
-      });
+  
 
-  };
-
-  const deleteImg = async (e) => {
-    e.target.disabled = true;
-    await ApiServices.deleteuserProfileImage({ userId: user_id })
-      .then(async (res) => {
-        localStorage.setItem("user", JSON.stringify(res.data));
-        dispatch(setLoginData(jwtDecode(res.data.accessToken)));
-        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        dispatch(
-          setToast({
-            message: "Image removed successfully",
-            bgColor: ToastColors.success,
-            visible: "yes",
-          })
-        );
-        e.target.disabled = false;
-      })
-      .catch((err) => {
-        dispatch(
-          setToast({
-            message: "Error during image delete",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-        e.target.disabled = false;
-      });
-
-  };
 
   const handleClickOutside = (event) => {
     if (
@@ -882,7 +800,6 @@ const Navbar = () => {
                 <button
                   onClick={()=>logoutDecider('All')}
                   style={{ whiteSpace: "nowrap", position: "relative" }}
-                  disabled={changeImage === "" && isLoading}
                 >
 
 
@@ -892,7 +809,6 @@ const Navbar = () => {
                 <button
                   onClick={() => logoutDecider('Single')}
                   style={{ whiteSpace: "nowrap", position: "relative" }}
-                  disabled={changeImage === "" && isLoading}
                 >
 
 
@@ -906,7 +822,10 @@ const Navbar = () => {
           </DialogContent>
         </Dialog>
 
-        <Dialog
+
+<ProfileImageUpdate open={open} setOpen={setOpen}/>
+
+        {/* <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
@@ -987,7 +906,7 @@ const Navbar = () => {
               </div>
             </DialogContentText>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
     </div>
   );

@@ -85,12 +85,12 @@
   animation: fadeIn 0.3s ease-in-out forwards;
 }
 
-#mobile,
+/* #mobile,
 #mobileOtpInput {
   margin-left: 20px !important;
   border-radius: 30px;
   width: 70% !important;
-}
+} */
 
 .fa-pencil-alt {
   font-size: 12px;

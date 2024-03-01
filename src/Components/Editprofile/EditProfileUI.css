@@ -1,0 +1,312 @@
+.EditProfile-Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+/* SECTION-1 */
+.EditProfile-personal-Container {
+  width: 1100px;
+  height: auto;
+  border-radius: 10px;
+  background: white;
+}
+.Personal-Information {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+.Banner {
+  width: 1100px;
+  background: purple;
+  height: 35vh;
+  border-radius: 10px 10px 0px 0px;
+}
+.Profile-Image {
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center;*/
+  flex-direction: column;
+  cursor: pointer;
+}
+.Profile-Image img {
+  margin-top: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+.Personal-Details {
+  padding: 20px;
+}
+.language-display {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.single-language {
+  background: var(--light-transparent);
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+/* POPUP CONTAINERS */
+.popup-container {
+  border: 1px solid grey;
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.popup-container {
+  position: fixed;
+  top: 47.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.288);
+  width: 1500px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popup-content {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  height: 80%;
+  overflow-y: scroll;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.Inputs-Container {
+  display: flex;
+  justify-content: center;
+}
+.Input_Wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  
+}
+.Input_Fields {
+  display: flex;
+}
+
+.Input-Label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.Input_Fields input {
+  width: 220px;
+  font-size: 12px;
+}
+
+.otp_Button {
+  width: 30%;
+  padding: 5px;
+  background-color: var(--button);
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.Work-exp,
+.Ed-details,
+.Location-details {
+  margin-bottom: 20px;
+}
+
+.exp-container,
+.edu-container {
+  flex-direction: column;
+}
+.edu-container,
+.personal-container,
+.upload-files-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.listedTeam {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.singleMember {
+  background: var(-light-transparent);
+  padding: 5px !important;
+  display: flex;
+  font-size: 12px;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  border-radius: 10px;
+  margin: 2px 0px !important;
+}
+
+
+.deleteMember {
+  position: absolute;
+  top: -3px;
+  right: -2px;
+  cursor: pointer;
+  font-size: 10px !important;
+  background: rgba(255, 0, 0, 0.662);
+  color: white;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+.deleteMember:hover {
+  transform: scaleX(1.3);
+}
+.add-button {
+  width: 300px !important;
+  padding: 8px;
+}
+.close-icon {
+  display: flex;
+  justify-content: right;
+  color: gray;
+}
+
+
+
+/* SECTION-2 */
+.EditProfile-About-Section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1100px;
+  height: auto;
+  border-radius: 10px;
+  background: white;
+}
+.About {
+  padding: 20px;
+  text-align: justify;
+}
+.fa-pen {
+  font-size: 14px;
+  color: grey;
+}
+.fa-pen:hover {
+  transform: scale(1.2);
+  color: black;
+}
+.skills-Container {
+  border: 0.7px solid lightgray;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+
+
+/* SECTION-3 */
+.EditProfile-Experience-Container,
+.EditProfile-Education-Container,
+.EditProfile-UploadFiles-Container {
+  width: 1100px;
+  height: auto;
+  border-radius: 10px;
+  background: white;
+}
+.company {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+}
+.profession {
+  font-size: 14px;
+}
+.timeline {
+  font-size: 12px;
+}
+
+.profession,
+.timeline {
+  margin-left: 20px;
+}
+.Exp_Input_Fields,
+.Ed_Input_Fields {
+  display: flex;
+  width: 300px;
+}
+
+
+
+
+
+
+.name {
+  width: 70% !important;
+  height: 2px !important;
+  border: 1px solid grey;
+}
+
+
+
+
+
+
+
+
+
+
+.Ed_Input_Fields input,
+select,
+.Exp_Input_Fields input,
+select {
+  width: 300px;
+  font-size: 12px;
+}
+
+
+
+.resume {
+  border: 1px dashed grey;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  padding: 10px;
+  position: relative;
+  width: 180px;
+  color: gray;
+}
+.resume:hover {
+  color: #0b57d0;
+}
+.fileName {
+  white-space: wrap !important;
+  margin-left: 3px;
+  font-size: 12px;
+}
+
+
+.delete {
+  padding: 10px;
+  border-radius: 10px;
+  color: red;
+  transition: all 0.3s ease;
+}
+.delete:hover {
+  transform: scale(1.2);
+}

@@ -50,6 +50,11 @@ const Home = React.lazy(() =>
 const Editprofile = React.lazy(() =>
   import("./Components/Editprofile/Editprofile")
 );
+
+const EditProfileUI = React.lazy(() =>
+  import("./Components/Editprofile/EditProfileUI")
+);
+
 const Conversations = React.lazy(() =>
   import("./Components/Conversation/Conversations")
 );
@@ -272,6 +277,9 @@ const App = () => {
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
           <Route path="/editProfile" Component={AuthHoc(Editprofile)} />
+          <Route path="/EditProfileUI" Component={AuthHoc(EditProfileUI)} />
+
+
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
           <Route
             path="/conversations/:conversationId"

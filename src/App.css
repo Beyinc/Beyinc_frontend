@@ -107,10 +107,10 @@ i {
   justify-content: center;
 }
 
-p {
+/* p {
   margin-top: 10px;
   text-align: center;
-}
+} */
 
 .login-type-toggle span.active {
   text-decoration: underline;
