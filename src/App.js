@@ -16,7 +16,6 @@ import {
 } from "./redux/AuthReducers/AuthReducer";
 import { ApiServices } from "./Services/ApiServices";
 import UserRequests from "./Components/Admin/UserRequests/UserRequests";
-import { SingleRequestProfile } from "./Components/Admin/UserRequests/SingleProfile";
 import { Socket, io } from "socket.io-client";
 import {
   setLastMessageRead,
@@ -47,9 +46,7 @@ const Navbar = React.lazy(() => import("./Components/Navbar/Navbar"));
 const Home = React.lazy(() =>
   import("./Components/Home/Home")
 );
-const Editprofile = React.lazy(() =>
-  import("./Components/Editprofile/Editprofile")
-);
+
 
 const EditProfileUI = React.lazy(() =>
   import("./Components/Editprofile/EditProfileUI")
@@ -276,8 +273,8 @@ const App = () => {
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
-          <Route path="/editProfile" Component={AuthHoc(Editprofile)} />
-          <Route path="/EditProfileUI" Component={AuthHoc(EditProfileUI)} />
+          {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
+          <Route path="/editProfile" Component={AuthHoc(EditProfileUI)} />
 
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
@@ -300,9 +297,13 @@ const App = () => {
             path="/profileRequests"
             Component={AdminDeciderHoc(UserRequests)}
           />
-          <Route
+          {/* <Route
             path="/singleProfileRequest/:id"
             Component={AdminDeciderHoc(SingleRequestProfile)}
+          /> */}
+          <Route
+            path="/singleProfileRequest/:id"
+            Component={AdminDeciderHoc(EditProfileUI)}
           />
         </Routes>
       </Suspense>

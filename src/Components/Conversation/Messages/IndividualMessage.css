@@ -27,3 +27,19 @@
   justify-content: center;
   align-items: center;
 }
+.messageNavbar .back-arrow {
+  display: none;
+}
+@media (max-width: 768px) {
+  .messageNavbar .back-arrow {
+    display: block;
+    margin-left: 10px;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+  }
+  .messageNavbar img {
+    display: block;
+    margin-left: 8px;
+  }
+}

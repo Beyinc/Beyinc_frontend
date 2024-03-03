@@ -24,7 +24,7 @@
 .Banner {
   width: 1100px;
   background: purple;
-  height: 35vh;
+  height: 28vh;
   border-radius: 10px 10px 0px 0px;
 }
 .Profile-Image {
@@ -56,7 +56,7 @@
 }
 
 /* POPUP CONTAINERS */
-.popup-container {
+/* .popup-container {
   border: 1px solid grey;
   width: 300px;
   display: flex;
@@ -76,12 +76,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+} */
+.popup-container{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.288);
+  z-index: 1000 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .popup-content {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  height: 80%;
+  width: auto;
   overflow-y: scroll;
   padding: 20px;
   border-radius: 5px;
@@ -309,4 +322,24 @@ select {
 }
 .delete:hover {
   transform: scale(1.2);
+}
+
+@media (max-width: 768px){
+  .EditProfile-personal-Container, .Banner, .EditProfile-About-Section, .EditProfile-Experience-Container,
+.EditProfile-Education-Container,
+.EditProfile-UploadFiles-Container, .popup-content {
+    width: 380px ;
+  }
+  .Profile-Image img {
+  margin-top: -100px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.Personal-Details div:first-child{
+ font-size: 16px !important;
+}
+.Personal-Details div:not(:first-child){
+ font-size: 14px !important;
+}
 }

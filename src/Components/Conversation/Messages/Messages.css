@@ -15,10 +15,8 @@
 
 .messages {
   height: 100%;
-  margin-top: -12px;
   width: 100%;
   /* padding: 12px; */
-  border-radius: 20px;
   /* border-left: 1px solid rgb(189, 193, 189); */
 }
 
@@ -26,7 +24,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 5px;
   height: 100%;
   /* margin-left: 15px; */
   /* padding-bottom: 15px; */
@@ -40,11 +37,10 @@
   /* justify-content: space-between; */
   flex-direction: column;
   /* gap: 40px; */
-  padding: 0px 120px;
+  padding: 0px 20px;
   /* margin-top: -10px; */
-  height: 60.2vh;
+  height: 74.5vh;
   overflow-y: scroll;
-  position: relative !important;
   margin-left: -2px;
 }
 
@@ -99,7 +95,7 @@
 }
 .text {
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 8px;
   word-wrap: break-word;
   background: #f2f2f2;
   max-width: 150px;
@@ -123,25 +119,20 @@
 }
 
 .sendBoxContainer {
-  padding: 0 120px;
+  padding: 0 0;
   display: flex;
   align-items: center;
-  gap: 15px;
 }
 
 .sendBox {
   position: sticky;
-  bottom: -10px;
-  border-radius: 10px;
-  border: var(--border-colors);
-  margin-top: 10px;
-  margin-bottom: 5px;
+  bottom: 0;
+  border-top: var(--border-colors);
   display: flex;
   align-items: center;
   min-height: 5vh;
   padding: 5px 15px 5px 0px;
-  width: 650px !important;
-
+  width: 100%;
   justify-content: space-between;
 }
 .sendBox input[type="text"] {
@@ -155,17 +146,35 @@
   padding: 10px !important;
   width: 450px !important;
 }
+.sendBox .search-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.sendBox .sendButtonContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendBox .fas {
+  margin: 0;
+}
 
 .sendBox textarea {
-  margin-bottom: -2px;
-  height: auto;
+  display: table-cell;
+  vertical-align: middle;
   border: 0;
   outline: 0;
   background: var(--input-box-bg);
   color: var(--text-total-color);
   white-space: wrap;
-  padding: 3px !important;
-  width: 550px !important;
+  padding: 5px;
+  padding-inline-start: 15px;
+  width: 100%;
   font-family: poppins;
 }
 
@@ -178,17 +187,18 @@
 
 .uploadingFileIcon {
   cursor: pointer;
-  max-width: 200px;
-  margin-right: -10px !important;
-  margin: 0 4px;
+  margin-top: 4px;
   color: grey;
   padding: 6px 6px;
   border-radius: 50% !important;
   transition: background-color 0.3s, color 0.3s;
 }
+.sendBox .send-container {
+  margin-top: 4px;
+  padding: 6px 6px;
+}
 .blockUnblock {
-  border: var(--border-colors);
-  padding: 5px;
+  padding: 8px;
   width: auto;
   justify-self: flex-end !important;
   margin-right: 10px;
@@ -235,12 +245,12 @@
   white-space: wrap;
 }
 .messageNavbar {
-  padding: 19px 0px 3px 0px;
+  padding: 10px 0px 3px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  /* border-bottom: var(--messageNavbar-border); */
+  /* border-bottom: var(--border-colors); */
   position: relative;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
@@ -265,8 +275,8 @@
   position: sticky;
   top: 0;
   padding: 10px;
-  background: rgb(218, 213, 213);
-  border-radius: 10px;
+  background: #f8f8f8;
+  border-radius: 5px;
   color: black !important;
 }
 
@@ -291,37 +301,33 @@
     border-radius: 0px !important;
   }
   .messageBox {
-    height: auto;
+    height: 91vh;
     min-height: 62vh;
     overflow-y: scroll;
     overflow-x: hidden;
-
-    padding: 0 30px !important;
-    justify-content: center;
+    padding: 0 0;
+    padding-top: 10px;
   }
   .sendBoxContainer {
-    padding: 0 !important;
     justify-content: center;
     gap: 2px !important;
     align-items: center !important;
-    margin: auto !important;
-    width: 350px !important;
+    width: 100%;
   }
 
   .sendBox {
-    width: 250px !important;
+    width: 100%;
     position: sticky;
     bottom: 20px !important;
   }
 
   .sendBox input[type="text"],
   .sendBox textarea {
-    margin-bottom: -2px;
     border: none !important;
     outline: 0;
     white-space: wrap;
-    padding: 3px !important;
-    width: 160px !important;
+    margin: 0 20px;
+    padding: 0;
     font-family: poppins;
   }
   .senMessageView {
@@ -342,4 +348,11 @@
     position: sticky;
     top: 0px !important;
   }
+  .details.owner:first-of-type {
+    margin-top: 200px;
+  }
+}
+.message-upper {
+  height: fit-content;
+  background-color: white;
 }
