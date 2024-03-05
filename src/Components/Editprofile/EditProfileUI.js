@@ -116,6 +116,12 @@ const EditProfileUI = () => {
     Profession: "",
     TotalWorkExperience: "",
     Description: "",
+    // Technology Partner
+    Customers: "",
+    CompanyLocation: "",
+    Banner: "",
+    Logo: "",
+    Services: "",
   });
   const [EducationDetails, setEducationDetails] = useState({
     year: "",
@@ -234,6 +240,12 @@ const EditProfileUI = () => {
       Profession: "",
       TotalWorkExperience: "",
       Description: "",
+      // Technology Partner
+      Customers: "",
+      CompanyLocation: "",
+      Banner: "",
+      Logo: "",
+      Services: "",
     });
   };
   const addEducation = (e) => {
@@ -1614,7 +1626,7 @@ const EditProfileUI = () => {
                       </div>
                     )}
 
-                    {/*Industry Expert Mentor */}
+                    {/*Industry Expert Mentor  &  Entrepreneur */}
                     {mentorCategories === "Industry Expert Mentor" ||
                       (role === "Entrepreneur" && (
                         <div>
@@ -1755,22 +1767,116 @@ const EditProfileUI = () => {
                       </>
                     )}
 
-                    {workingStatus == "Self Employed" && (
+                    {workingStatus == "Self Employed" ||
+                      (role === "Technology Partner" && (
+                        <>
+                          <div>
+                            <div>
+                              <label className="Input-Label">
+                                Startup / Business name*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="text"
+                                name="company"
+                                value={experienceDetails.company}
+                                id=""
+                                onChange={handleChange}
+                                placeholder="Enter Your Business name"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <div>
+                              <label className="Input-Label">
+                                Startup description in short*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <textarea
+                                type="text"
+                                name="Description"
+                                value={experienceDetails.Description}
+                                id=""
+                                onChange={handleChange}
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <div>
+                              <label className="Input-Label">
+                                Current Designation*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <select
+                                name="designation"
+                                value={experienceDetails.designation}
+                                onChange={handleChange}
+                              >
+                                <option value="">Select</option>
+                                {itPositions.map((op) => (
+                                  <option value={op}>{op}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div>
+                              <label className="Input-Label">Profession*</label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="text"
+                                name="Profession"
+                                value={experienceDetails.Profession}
+                                id=""
+                                onChange={handleChange}
+                                placeholder="Enter Your Profession"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <div>
+                              <label className="Input-Label">
+                                Total Work Experience*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="text"
+                                name="TotalWorkExperience"
+                                value={experienceDetails.TotalWorkExperience}
+                                id=""
+                                onChange={handleChange}
+                                placeholder="Enter Your Total Work Experience"
+                              />
+                            </div>
+                          </div>
+                        </>
+                      ))}
+
+                    {role === "Technology Partner" && (
                       <>
                         <div>
                           <div>
                             <label className="Input-Label">
-                              Startup / Business name*
+                              Total Customers*
                             </label>
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="company"
-                              value={experienceDetails.company}
+                              name="Customers"
+                              value={experienceDetails.Customers}
                               id=""
                               onChange={handleChange}
-                              placeholder="Enter Your Business name"
+                              placeholder="Total Number of Customers "
                             />
                           </div>
                         </div>
@@ -1778,73 +1884,81 @@ const EditProfileUI = () => {
                         <div>
                           <div>
                             <label className="Input-Label">
-                              Startup description in short*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <textarea
-                              type="text"
-                              name="Description"
-                              value={experienceDetails.Description}
-                              id=""
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Current Designation*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <select
-                              name="designation"
-                              value={experienceDetails.designation}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              {itPositions.map((op) => (
-                                <option value={op}>{op}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">Profession*</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="Profession"
-                              value={experienceDetails.Profession}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Profession"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Total Work Experience*
+                              Company Location*
                             </label>
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="TotalWorkExperience"
-                              value={experienceDetails.TotalWorkExperience}
+                              name="CompanyLocation"
+                              value={experienceDetails.CompanyLocation}
                               id=""
                               onChange={handleChange}
-                              placeholder="Enter Your Total Work Experience"
+                              placeholder="Company Location "
                             />
                           </div>
                         </div>
+
+                        <>
+                          <div>
+                            <label className="Input-Label">Banner*</label>
+                          </div>
+                          <label htmlFor="Banner" className="resume">
+                            <CloudUploadIcon />
+                            <span className="fileName">
+                              {experienceDetails.Banner || "Upload"}
+                            </span>
+                          </label>
+
+                          <input
+                            type="file"
+                            id="Banner"
+                            className="resume"
+                            style={{ display: "none" }}
+                            name="Banner"
+                            onChange={handleChange}
+                          />
+                        </>
+
+                        <>
+                          <div>
+                            <label className="Input-Label">Logo*</label>
+                          </div>
+                          <label htmlFor="Logo" className="resume">
+                            <CloudUploadIcon />
+                            <span className="fileName">
+                              {experienceDetails.Logo || "Upload"}
+                            </span>
+                          </label>
+
+                          <input
+                            type="file"
+                            id="Logo"
+                            className="resume"
+                            style={{ display: "none" }}
+                            name="Logo"
+                            onChange={handleChange}
+                          />
+                        </>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                            Services*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="Services"
+                              value={experienceDetails.Services}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Services"
+                            />
+                          </div>
+                        </div>
+
                       </>
                     )}
 
