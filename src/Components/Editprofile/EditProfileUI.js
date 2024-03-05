@@ -11,6 +11,9 @@ import {
 import { ToastColors } from "../Toast/ToastColors";
 import axiosInstance from "../axiosInstance";
 import CloseIcon from "@mui/icons-material/Close";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import { ApiServices } from "../../Services/ApiServices";
 import { useNavigate } from "react-router-dom/dist";
@@ -28,6 +31,8 @@ import {
   convertToDate,
   itPositions,
   socket_io,
+  allsalutations,
+  mentorcategories,
 } from "../../Utils";
 import { Autocomplete, TextField } from "@mui/material";
 import useWindowDimensions from "../Common/WindowSize";
@@ -35,10 +40,8 @@ import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
 import { io } from "socket.io-client";
 import { gridCSS } from "../CommonStyles";
 const EditProfileUI = () => {
-  const {id} = useParams()
-  const { user_id } = useSelector(
-    (store) => store.auth.loginDetails
-  );
+  const { id } = useParams();
+  const { user_id } = useSelector((store) => store.auth.loginDetails);
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -47,6 +50,9 @@ const EditProfileUI = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [inputs, setInputs] = useState({
+    workingStatus: null,
+    mentorCategories: null,
+    salutation: null,
     email: null,
     userName: null,
     emailOtp: null,
@@ -67,7 +73,12 @@ const EditProfileUI = () => {
   const {
     // email,
     // emailOtp,
-    email, role, userName,
+    workingStatus,
+    salutation,
+    mentorCategories,
+    email,
+    role,
+    userName,
     mobile,
     mobileOtp,
     name,
@@ -91,11 +102,20 @@ const EditProfileUI = () => {
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
   const [experienceDetails, setExperience] = useState({
-    year: "",
     company: "",
-    profession: "",
+    designation: "",
+    Department: "",
+    Research: "",
+    year: "",
     start: "",
     end: "",
+    Achievements: "",
+    Published: "",
+    StartupExperience: "",
+    Consultancy: "",
+    Profession: "",
+    TotalWorkExperience: "",
+    Description: "",
   });
   const [EducationDetails, setEducationDetails] = useState({
     year: "",
@@ -108,7 +128,7 @@ const EditProfileUI = () => {
   const [bio, setBio] = useState("");
   const [skills, setSkills] = useState([]);
   const [singleSkill, setSingleSkill] = useState("");
-  const [editOwnProfile, setEditOwnProfile] = useState(false)
+  const [editOwnProfile, setEditOwnProfile] = useState(false);
   const [languagesKnown, setlanguagesKnown] = useState([]);
   const [singlelanguagesKnown, setSinglelanguagesKnown] = useState("");
   const [state, setState] = useState("");
@@ -130,7 +150,7 @@ const EditProfileUI = () => {
   const handleEditButtonClick = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     if (id === undefined) {
@@ -141,16 +161,26 @@ const EditProfileUI = () => {
   const handleAboutButtonClick = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsAboutPopupVisible(true);
   };
 
   const handleExperienceButtonClick = () => {
+    if (role == "Mentor" && mentorCategories == null) {
+      dispatch(
+        setToast({
+          message: "Please select Mentor Categories in Personal Information",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+      return;
+    }
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsExperiencePopupVisible(true);
@@ -158,7 +188,7 @@ const EditProfileUI = () => {
   const handleEducationButtonClick = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsEducationPopupVisible(true);
@@ -190,11 +220,20 @@ const EditProfileUI = () => {
     e.preventDefault();
     setTotalExperienceData((prev) => [...prev, experienceDetails]);
     setExperience({
-      profession: "",
+      company: "",
+      designation: "",
+      Department: "",
+      Research: "",
+      year: "",
       start: "",
       end: "",
-      company: "",
-      year: "",
+      Achievements: "",
+      Published: "",
+      StartupExperience: "",
+      Consultancy: "",
+      Profession: "",
+      TotalWorkExperience: "",
+      Description: "",
     });
   };
   const addEducation = (e) => {
@@ -268,12 +307,12 @@ const EditProfileUI = () => {
 
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
-  const [requestUserId, setRequestedUserId] = useState('')
+  const [requestUserId, setRequestedUserId] = useState("");
   useEffect(() => {
     if (id == undefined) {
       ApiServices.getProfile({ id: user_id })
         .then((res) => {
-          setEditOwnProfile(true)
+          setEditOwnProfile(true);
           setInputs((prev) => ({
             ...prev,
             updatedAt: res.data.updatedAt,
@@ -283,6 +322,9 @@ const EditProfileUI = () => {
             mobileVerified: true,
             image: res.data.image?.url || "",
             email: res.data.email,
+            salutation: res.data.salutation,
+            mentorCategories: res.data.mentorCategories,
+            workingStatus: res.data.workingStatus,
           }));
 
           if (res.data.documents !== undefined) {
@@ -338,9 +380,9 @@ const EditProfileUI = () => {
       // Admin functionality
       AdminServices.getApprovalRequestProfile({ userId: id })
         .then((res) => {
-          setEditOwnProfile(false)
+          setEditOwnProfile(false);
           // console.log(res.data);
-          setRequestedUserId(res.data.userInfo._id)
+          setRequestedUserId(res.data.userInfo._id);
           setInputs((prev) => ({
             ...prev,
             updatedAt: res.data.updatedAt,
@@ -351,6 +393,9 @@ const EditProfileUI = () => {
             email: res.data.userInfo.email,
             status: res.data.verification,
             mobileVerified: true,
+            salutation: res.data.userInfo.salutation,
+            mentorCategories: res.data.userInfo.mentorCategories,
+            workingStatus: res.data.userInfo.workingStatus,
           }));
 
           if (res.data.documents !== undefined) {
@@ -527,6 +572,9 @@ const EditProfileUI = () => {
     setIsLoading(true);
     e.target.disabled = true;
     await ApiServices.sendForApproval({
+      workingStatus: workingStatus,
+      salutation: salutation,
+      mentorCategories: mentorCategories,
       email: email,
       userId: user_id,
       state: state,
@@ -659,23 +707,49 @@ const EditProfileUI = () => {
     } else setUniversities([]);
   }, [collegeQuery]);
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
   return (
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
         <div className="Personal-Information">
-          <div className="Banner"></div>
+          <div className="Banner">
+            <Slider {...settings}>
+              <div>
+                <img src="/banner.png" alt="Image 1" />
+              </div>
+              <div>
+                <img src="/Banner-2.png" alt="Image 2" />
+              </div>
+              <div>
+                <img src="/banner.png" alt="Image 3" />
+              </div>
+            </Slider>
+          </div>
           <div className="Profile-Image">
             <div>
               <img
-                onClick={() => {
-                  if (id == undefined) {
-                    setOpen(true)
-                  }
-                }}
                 src={
                   image !== undefined && image !== "" ? image : "/profile.png"
                 }
               />
+              {id == undefined && (
+                <i
+                  class="fas fa-camera hover-icon"
+                  onClick={() => {
+                    if (id == undefined) {
+                      setOpen(true);
+                    }
+                  }}
+                ></i>
+              )}
             </div>
             <div className="Personal-Details">
               <div
@@ -686,14 +760,21 @@ const EditProfileUI = () => {
                   justifyContent: "space-between",
                 }}
               >
-                {name}{" "}
-                {id == undefined && <span>
-                  <i onClick={handleEditButtonClick} className="fas fa-pen"></i>
-                </span>}
+                <div>
+                  {salutation}
+                  {salutation && <span>.</span>} {name}
+                </div>
+                {id == undefined && (
+                  <span>
+                    <i
+                      onClick={handleEditButtonClick}
+                      className="fas fa-pen"
+                    ></i>
+                  </span>
+                )}
               </div>
               <div style={{ fontWeight: "500", fontSize: "18px" }}>
-                {" "}
-                {role}{" "}
+                {role} {role == "Mentor" && mentorCategories}
               </div>
               <div style={{ fontSize: "16px" }}>{email}</div>
               <div style={{ fontSize: "16px" }}>{mobile}</div>
@@ -731,6 +812,28 @@ const EditProfileUI = () => {
                     <h3 style={{ textAlign: "center" }}>
                       Personal Information
                     </h3>
+
+                    {role === "Mentor" && (
+                      <div>
+                        <label className="Input-Label">salutation</label>
+                        <select
+                          name="salutation"
+                          id=""
+                          value={salutation}
+                          onChange={(e) => {
+                            setInputs((prev) => ({
+                              ...prev,
+                              salutation: e.target.value,
+                            }));
+                          }}
+                        >
+                          <option value="">Select</option>
+                          {allsalutations.map((op) => (
+                            <option>{op}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                     <label className="Input-Label">Full Name</label>
                     <div className="Input_Fields">
                       <input
@@ -744,6 +847,29 @@ const EditProfileUI = () => {
                         }}
                       />
                     </div>
+
+                    {role === "Mentor" && (
+                      <div>
+                        <label className="Input-Label">Mentor Categories</label>
+                        <select
+                          name="mentorCategories"
+                          id=""
+                          value={mentorCategories}
+                          onChange={(e) => {
+                            setInputs((prev) => ({
+                              ...prev,
+                              mentorCategories: e.target.value,
+                            }));
+                          }}
+                        >
+                          <option value="">Select</option>
+                          {mentorcategories.map((op) => (
+                            <option>{op}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
                     <label className="Input-Label">Mobile Number</label>
                     <div className="Input_Fields">
                       <div>
@@ -993,8 +1119,9 @@ const EditProfileUI = () => {
                 <span
                   className="close-icon"
                   onClick={() => {
-                    document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-                    setIsInputPopupVisible(false)
+                    document.getElementsByTagName("body")[0].style.overflowY =
+                      "scroll";
+                    setIsInputPopupVisible(false);
                   }}
                 >
                   <i class="fas fa-times"></i>
@@ -1015,24 +1142,29 @@ const EditProfileUI = () => {
             }}
           >
             <h3>About</h3>
-            {id == undefined && <span>
-              <i onClick={handleAboutButtonClick} className="fas fa-pen"></i>
-            </span>}
+            {id == undefined && (
+              <span>
+                <i onClick={handleAboutButtonClick} className="fas fa-pen"></i>
+              </span>
+            )}
           </div>
-          <div>{bio}</div>
+          <div>{bio?.length > 0 ? bio : <div>No bio data found</div>}</div>
+
           <div className="skills-Container">
             <div>
               <label className="Input-Label">Skills</label>
             </div>
             <div>
-              {skills?.length > 0 && (
+              {skills?.length > 0 ? (
                 <div className="listedTeam">
                   {skills?.map((t, i) => (
-                    <div className="singleMember">
+                    <div key={i} className="singleMember">
                       <div>{t}</div>
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div>No skills data found</div>
               )}
             </div>
           </div>
@@ -1052,8 +1184,9 @@ const EditProfileUI = () => {
                   <span
                     className="close-icon"
                     onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-                      setIsAboutPopupVisible(false)
+                      document.getElementsByTagName("body")[0].style.overflowY =
+                        "scroll";
+                      setIsAboutPopupVisible(false);
                     }}
                   >
                     <i class="fas fa-times"></i>
@@ -1085,14 +1218,13 @@ const EditProfileUI = () => {
                 <p style={{ fontSize: "10px", marginTop: "0px" }}>
                   {1000 - bio.length}/1000 characters left
                 </p>
-                
-                
+
                 <div className="skills-Container">
                   <div>
                     <div>
-                    <div>
-                  <h3>Edit Skills</h3>
-                </div>
+                      <div>
+                        <h3>Edit Skills</h3>
+                      </div>
                       {skills?.length > 0 && (
                         <div className="listedTeam">
                           {skills?.map((t, i) => (
@@ -1115,8 +1247,7 @@ const EditProfileUI = () => {
                       style={{
                         display: "flex",
                         gap: "5px",
-                       flexDirection: 'column',
-                       
+                        flexDirection: "column",
                       }}
                     >
                       <div className="skillsSelectBox">
@@ -1132,19 +1263,19 @@ const EditProfileUI = () => {
                         </select>
                       </div>
                       <div>
-                      <button
-                        className="add-button"
-                        onClick={() => {
-                          if (
-                            singleSkill !== "" &&
-                            !skills.includes(singleSkill)
-                          ) {
-                            setSkills((prev) => [...prev, singleSkill]);
-                          }
-                        }}
-                      >
-                        Add
-                      </button>
+                        <button
+                          className="add-button"
+                          onClick={() => {
+                            if (
+                              singleSkill !== "" &&
+                              !skills.includes(singleSkill)
+                            ) {
+                              setSkills((prev) => [...prev, singleSkill]);
+                            }
+                          }}
+                        >
+                          Add
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1166,17 +1297,19 @@ const EditProfileUI = () => {
               }}
             >
               <h3>Experience</h3>
-              {id == undefined && <span>
-                <i
-                  onClick={handleExperienceButtonClick}
-                  className="fas fa-pen"
-                ></i>
-              </span>}
+              {id == undefined && (
+                <span>
+                  <i
+                    onClick={handleExperienceButtonClick}
+                    className="fas fa-pen"
+                  ></i>
+                </span>
+              )}
             </div>
           </div>
-          {totalExperienceData.length > 0 &&
+          {totalExperienceData.length > 0 ? (
             totalExperienceData.map((te, i) => (
-              <div>
+              <div key={i}>
                 <div
                   style={{
                     display: "flex",
@@ -1192,16 +1325,80 @@ const EditProfileUI = () => {
                       padding: "10px",
                     }}
                   >
-                    <div className="company">{te.company} </div>
-                    <div className="profession">{te.profession}</div>
+                    <div className="company">
+                      <h3>{te.company}</h3>
+                    </div>
+
+                    <div className="designation">
+                      {te.designation && (
+                        <>
+                          <b>Designation :</b>
+                          {te.designation}
+                        </>
+                      )}
+                    </div>
+                    <div className="designation">
+                      {te.Department && (
+                        <>
+                          <b>Department :</b>
+                          {te.Department}
+                        </>
+                      )}
+                    </div>
+                    <div className="designation">
+                      {te.Research && (
+                        <>
+                          <b>Research :</b>
+                          {te.Research}
+                        </>
+                      )}
+                    </div>
+
                     <div className="timeline">
+                      <b>Date :</b>
                       {convertToDate(te.start)}-
-                      {te.end == "" ? "Present" : convertToDate(te.end)}
+                      {te.end === "" ? "Present" : convertToDate(te.end)}
+                    </div>
+
+                    <div className="designation">
+                      {te.Achievements && (
+                        <>
+                          <b>Achievements :</b>
+                          {te.Achievements}
+                        </>
+                      )}
+                    </div>
+                    <div className="designation">
+                      {te.Published && (
+                        <>
+                          <b>Published :</b>
+                          {te.Published}
+                        </>
+                      )}
+                    </div>
+                    <div className="designation">
+                      {te.StartupExperience && (
+                        <>
+                          <b>StartupExperience :</b>
+                          {te.StartupExperience}
+                        </>
+                      )}
+                    </div>
+                    <div className="designation">
+                      {te.Consultancy && (
+                        <>
+                          <b>Consultancy :</b>
+                          {te.Consultancy}
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <div>No experience data found</div>
+          )}
         </div>
 
         {isExperiencePopupVisible && (
@@ -1212,75 +1409,444 @@ const EditProfileUI = () => {
                   <div
                     className="close-icon"
                     onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                      document.getElementsByTagName("body")[0].style.overflowY =
+                        "scroll";
 
-                      setIsExperiencePopupVisible(false)
+                      setIsExperiencePopupVisible(false);
                     }}
                   >
                     <i class="fas fa-times"></i>
                   </div>
                   <h3 style={{ textAlign: "center" }}>Experience</h3>
                   <div className="exp-container">
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    {/* Academia Mentor */}
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
-                        <label className="Input-Label">Start Date*</label>
+                        <div>
+                          <label className="Input-Label">Institute Name*</label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="company"
+                            value={experienceDetails.company}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Company name"
+                          />
+                        </div>
                       </div>
-                      <div className="Exp_Input_Fields">
-                        <input
-                          type="date"
-                          value={experienceDetails.start}
-                          name="start"
-                          id=""
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
-                        <label className="Input-Label">End Date</label>
+                        <div>
+                          <label className="Input-Label">
+                            Current Designation*
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <select
+                            name="designation"
+                            value={experienceDetails.designation}
+                            onChange={handleChange}
+                          >
+                            <option value="">Select</option>
+                            {itPositions.map((op) => (
+                              <option value={op}>{op}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
-                      <div className="Exp_Input_Fields">
-                        <input
-                          type="date"
-                          value={experienceDetails.end}
-                          name="end"
-                          id=""
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
-                        <label className="Input-Label">Company*</label>
+                        <div>
+                          <label className="Input-Label">Department*</label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="Department"
+                            value={experienceDetails.Department}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Department name"
+                          />
+                        </div>
                       </div>
-                      <div className="Exp_Input_Fields">
-                        <input
-                          type="text"
-                          name="company"
-                          value={experienceDetails.company}
-                          id=""
-                          onChange={handleChange}
-                          placeholder="Enter Your Company name"
-                        />
-                      </div>
-                    </div>
-                    <div>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
-                        <label className="Input-Label">Profession*</label>
+                        <div>
+                          <label className="Input-Label">
+                            Area of Research*
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="Research"
+                            value={experienceDetails.Research}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Research name"
+                          />
+                        </div>
                       </div>
-                      <div className="Exp_Input_Fields">
-                        <select
-                          name="profession"
-                          value={experienceDetails.profession}
-                          onChange={handleChange}
+                    )}
+                    {mentorCategories == "Academia Mentor" && (
+                      <div>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <option value="">Select</option>
-                          {itPositions.map((op) => (
-                            <option value={op}>{op}</option>
-                          ))}
-                        </select>
+                          <div>
+                            <label className="Input-Label">Start Date*</label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="date"
+                              value={experienceDetails.start}
+                              name="start"
+                              id=""
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <div>
+                            <label className="Input-Label">End Date</label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="date"
+                              value={experienceDetails.end}
+                              name="end"
+                              id=""
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
+                      <div>
+                        <div>
+                          <label className="Input-Label">
+                            Achievements/Part of any Society*
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="Achievements"
+                            value={experienceDetails.Achievements}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Achievements name"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
+                      <div>
+                        <div>
+                          <label className="Input-Label">
+                            Important Paper/Patent Published*
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="Published"
+                            value={experienceDetails.Published}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Paper/Patent Published"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
+                      <div>
+                        <div>
+                          <label className="Input-Label">
+                            Experience in Startups /ongoing /details
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="StartupExperience"
+                            value={experienceDetails.StartupExperience}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your StartupExperience"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {mentorCategories == "Academia Mentor" && (
+                      <div>
+                        <div>
+                          <label className="Input-Label">
+                            Any consultancy, if yes
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="Consultancy"
+                            value={experienceDetails.Consultancy}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Consultancy"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/*Industry Expert Mentor */}
+                    {mentorCategories === "Industry Expert Mentor" ||
+                      (role === "Entrepreneur" && (
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Current Working Status*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <select
+                              name="workingStatus"
+                              id=""
+                              value={workingStatus}
+                              onChange={(e) => {
+                                setInputs((prev) => ({
+                                  ...prev,
+                                  workingStatus: e.target.value,
+                                }));
+                              }}
+                            >
+                              <option value="">Select</option>
+                              {["Job", "Self Employed"].map((op) => (
+                                <option>{op}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      ))}
+
+                    {workingStatus == "Job" && (
+                      <>
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Institute Name*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="company"
+                              value={experienceDetails.company}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Company name"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Current Designation*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <select
+                              name="designation"
+                              value={experienceDetails.designation}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select</option>
+                              {itPositions.map((op) => (
+                                <option value={op}>{op}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <div>
+                              <label className="Input-Label">Start Date*</label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="date"
+                                value={experienceDetails.start}
+                                name="start"
+                                id=""
+                                onChange={handleChange}
+                              />
+                            </div>
+                          </div>
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <div>
+                              <label className="Input-Label">End Date</label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="date"
+                                value={experienceDetails.end}
+                                name="end"
+                                id=""
+                                onChange={handleChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">Profession*</label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="Profession"
+                              value={experienceDetails.Profession}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Profession"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Total Work Experience*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="TotalWorkExperience"
+                              value={experienceDetails.TotalWorkExperience}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Total Work Experience"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {workingStatus == "Self Employed" && (
+                      <>
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Startup / Business name*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="company"
+                              value={experienceDetails.company}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Business name"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Startup description in short*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <textarea
+                              type="text"
+                              name="Description"
+                              value={experienceDetails.Description}
+                              id=""
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Current Designation*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <select
+                              name="designation"
+                              value={experienceDetails.designation}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select</option>
+                              {itPositions.map((op) => (
+                                <option value={op}>{op}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">Profession*</label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="Profession"
+                              value={experienceDetails.Profession}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Profession"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Total Work Experience*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="TotalWorkExperience"
+                              value={experienceDetails.TotalWorkExperience}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Total Work Experience"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
 
                     <div>
                       <button
@@ -1289,7 +1855,7 @@ const EditProfileUI = () => {
                         disabled={
                           experienceDetails.start == "" ||
                           experienceDetails.company == "" ||
-                          experienceDetails.profession == ""
+                          experienceDetails.designation == ""
                         }
                       >
                         Add
@@ -1319,11 +1885,72 @@ const EditProfileUI = () => {
                             <div className="company">
                               <h3>{te.company}</h3>
                             </div>
-                            <div className="profession">{te.profession}</div>
-                            <div className="timeline">
-                              {convertToDate(te.start)}-
-                              {te.end == "" ? "Present" : convertToDate(te.end)}
+                            <div className="designation">
+                              {te.designation && (
+                                <>
+                                  <b>Designation :</b>
+                                  {te.designation}
+                                </>
+                              )}
                             </div>
+                            <div className="designation">
+                              {te.Department && (
+                                <>
+                                  <b>Department :</b>
+                                  {te.Department}
+                                </>
+                              )}
+                            </div>
+                            <div className="designation">
+                              {te.Research && (
+                                <>
+                                  <b>Research :</b>
+                                  {te.Research}
+                                </>
+                              )}
+                            </div>
+
+                            <div className="timeline">
+                              <b>Date :</b>
+                              {convertToDate(te.start)}-
+                              {te.end === ""
+                                ? "Present"
+                                : convertToDate(te.end)}
+                            </div>
+
+                            <div className="designation">
+                              {te.Achievements && (
+                                <>
+                                  <b>Achievements :</b>
+                                  {te.Achievements}
+                                </>
+                              )}
+                            </div>
+                            <div className="designation">
+                              {te.Published && (
+                                <>
+                                  <b>Published :</b>
+                                  {te.Published}
+                                </>
+                              )}
+                            </div>
+                            <div className="designation">
+                              {te.StartupExperience && (
+                                <>
+                                  <b>StartupExperience :</b>
+                                  {te.StartupExperience}
+                                </>
+                              )}
+                            </div>
+                            <div className="designation">
+                              {te.Consultancy && (
+                                <>
+                                  <b>Consultancy :</b>
+                                  {te.Consultancy}
+                                </>
+                              )}
+                            </div>
+
                             <span>
                               <button
                                 className="add-button"
@@ -1360,17 +1987,19 @@ const EditProfileUI = () => {
                 }}
               >
                 <h3>Education</h3>
-                {id == undefined && <span>
-                  <i
-                    onClick={handleEducationButtonClick}
-                    className="fas fa-pen"
-                  ></i>
-                </span>}
+                {id == undefined && (
+                  <span>
+                    <i
+                      onClick={handleEducationButtonClick}
+                      className="fas fa-pen"
+                    ></i>
+                  </span>
+                )}
               </div>
             </div>
-            {totalEducationData.length > 0 &&
+            {totalEducationData.length > 0 ? (
               totalEducationData.map((te, i) => (
-                <div>
+                <div key={i}>
                   <div
                     style={{
                       display: "flex",
@@ -1386,17 +2015,19 @@ const EditProfileUI = () => {
                         padding: "10px",
                       }}
                     >
-                      <div className="company">{te.college} </div>
-
-                      <div className="profession">{te.grade}</div>
+                      <div className="college">{te.college} </div>
+                      <div className="grade">{te.grade}</div>
                       <div className="timeline">
                         {convertToDate(te.Edstart)}-
-                        {te.Edend == "" ? "Present" : convertToDate(te.Edend)}
+                        {te.Edend === "" ? "Present" : convertToDate(te.Edend)}
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div>No education data found</div>
+            )}
           </div>
           {isEducationPopupVisible && (
             <div className="popup-container">
@@ -1405,9 +2036,10 @@ const EditProfileUI = () => {
                   <div
                     className="close-icon"
                     onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                      document.getElementsByTagName("body")[0].style.overflowY =
+                        "scroll";
 
-                      setIsEducationPopupVisible(false)
+                      setIsEducationPopupVisible(false);
                     }}
                   >
                     <i class="fas fa-times"></i>
@@ -1415,6 +2047,97 @@ const EditProfileUI = () => {
                   <div className="edu-container">
                     <h2>Education</h2>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                      <div>
+                        <div>
+                          <label className="Input-Label">
+                            College/University*{" "}
+                            {EducationDetails.grade !== "SSC" &&
+                              EducationDetails.grade !== "" &&
+                              "(Type 5 charecters)"}
+                          </label>
+                        </div>
+                        <div className="Ed_Input_Fields">
+                          {EducationDetails.grade == "SSC" ||
+                          EducationDetails.grade == "" ? (
+                            <input
+                              type="text"
+                              name="college"
+                              value={EducationDetails.college}
+                              id=""
+                              onChange={handleEducationChange}
+                              placeholder="Enter Your College/School/University"
+                            />
+                          ) : (
+                            <>
+                              <Autocomplete
+                                disablePortal
+                                options={universities}
+                                getOptionLabel={(option) => option.name}
+                                sx={{ width: 300 }}
+                                inputValue={
+                                  EducationDetails.college
+                                    ? EducationDetails.college
+                                    : undefined
+                                }
+                                onChange={(e) => handleEducationChange(e, true)}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    value={collegeQuery}
+                                    onChange={hadnleCollegeQueryChange}
+                                    label="College"
+                                  />
+                                )}
+                              />
+                              {/* <input
+                        type="text"
+                        name="collegeQuery"
+                        value={collegeQuery}
+                        id=""
+                        onChange={hadnleCollegeQueryChange}
+                        placeholder="Enter Your College/School/University"
+                      />
+                      {universities.length > 0 && (
+                        <select
+                          value={EducationDetails.college}
+                          name="college"
+                          onChange={handleEducationChange}
+                        >
+                          <option value="">Select college</option>
+                          {universities.map((u) => (
+                            <option value={u.name}>{u.name}</option>
+                          ))}
+                        </select>
+                      )} */}
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <div>
+                          <label className="Input-Label">Grade*</label>
+                        </div>
+                        <div className="Ed_Input_Fields">
+                          <select
+                            name="grade"
+                            id=""
+                            value={EducationDetails.grade}
+                            onChange={handleEducationChange}
+                          >
+                            <option value="">Select</option>
+                            <option value="SSC">10th</option>
+                            <option value="Inter">Inter/Equivalent</option>
+                            <option value="UG">UG (Btech, degree)</option>
+                            <option value="PG">PG</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Business">Business</option>
+                            <option value="LAW">Law</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+
                       <div>
                         <label className="Input-Label">Start Date*</label>
                       </div>
@@ -1440,92 +2163,6 @@ const EditProfileUI = () => {
                           id=""
                           onChange={handleEducationChange}
                         />
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <label className="Input-Label">Grade*</label>
-                      </div>
-                      <div className="Ed_Input_Fields">
-                        <select
-                          name="grade"
-                          id=""
-                          value={EducationDetails.grade}
-                          onChange={handleEducationChange}
-                        >
-                          <option value="">Select</option>
-                          <option value="SSC">10th</option>
-                          <option value="Inter">Inter/Equivalent</option>
-                          <option value="UG">UG (Btech, degree)</option>
-                          <option value="PG">PG</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <label className="Input-Label">
-                          College/University*{" "}
-                          {EducationDetails.grade !== "SSC" &&
-                            EducationDetails.grade !== "" &&
-                            "(Type 5 charecters)"}
-                        </label>
-                      </div>
-                      <div className="Ed_Input_Fields">
-                        {EducationDetails.grade == "SSC" ||
-                        EducationDetails.grade == "" ? (
-                          <input
-                            type="text"
-                            name="college"
-                            value={EducationDetails.college}
-                            id=""
-                            onChange={handleEducationChange}
-                            placeholder="Enter Your College/School/University"
-                          />
-                        ) : (
-                          <>
-                            <Autocomplete
-                              disablePortal
-                              options={universities}
-                              getOptionLabel={(option) => option.name}
-                              sx={{ width: 300 }}
-                              inputValue={
-                                EducationDetails.college
-                                  ? EducationDetails.college
-                                  : undefined
-                              }
-                              onChange={(e) => handleEducationChange(e, true)}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  value={collegeQuery}
-                                  onChange={hadnleCollegeQueryChange}
-                                  label="College"
-                                />
-                              )}
-                            />
-                            {/* <input
-                        type="text"
-                        name="collegeQuery"
-                        value={collegeQuery}
-                        id=""
-                        onChange={hadnleCollegeQueryChange}
-                        placeholder="Enter Your College/School/University"
-                      />
-                      {universities.length > 0 && (
-                        <select
-                          value={EducationDetails.college}
-                          name="college"
-                          onChange={handleEducationChange}
-                        >
-                          <option value="">Select college</option>
-                          {universities.map((u) => (
-                            <option value={u.name}>{u.name}</option>
-                          ))}
-                        </select>
-                      )} */}
-                          </>
-                        )}
                       </div>
                     </div>
 
@@ -1564,7 +2201,7 @@ const EditProfileUI = () => {
                             >
                               <div className="company">{te.college} </div>
 
-                              <div className="profession">{te.grade}</div>
+                              <div className="designation">{te.grade}</div>
                               <div className="timeline">
                                 {convertToDate(te.Edstart)}-
                                 {te.Edend == ""
@@ -1600,7 +2237,7 @@ const EditProfileUI = () => {
       </section>
 
       <section className="EditProfile-UploadFiles-Container">
-        <div style={{ padding: "20px" }}>
+        <div className="upload-mobile-responsive" style={{ padding: "20px" }}>
           <h4>Upload files</h4>
           <form className="update-form">
             <div className="upload-files-container">
@@ -1636,20 +2273,24 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                {id == undefined && 
-                <><label htmlFor="resume" className="resume">
-                    <CloudUploadIcon />
-                    <span className="fileName">
-                      {recentUploadedDocs?.resume || "Upload"}
-                    </span>
-                  </label><input
+                {id == undefined && (
+                  <>
+                    <label htmlFor="resume" className="resume">
+                      <CloudUploadIcon />
+                      <span className="fileName">
+                        {recentUploadedDocs?.resume || "Upload"}
+                      </span>
+                    </label>
+                    <input
                       className="resume"
                       type="file"
                       name="resume"
                       id="resume"
                       onChange={handleResume}
-                      style={{ display: "none" }} /></>
-                }
+                      style={{ display: "none" }}
+                    />
+                  </>
+                )}
               </div>
 
               <div>
@@ -1685,25 +2326,24 @@ const EditProfileUI = () => {
                         </attr>
                       )}
                   </div>
-                  {id == undefined && 
+                  {id == undefined && (
                     <>
-                    <label htmlFor="acheivements" className="resume">
-                      <CloudUploadIcon />
-                      <span className="fileName">
-                        {recentUploadedDocs?.acheivements || "Upload"}
-                      </span>
-                    </label>
-                    <input
-                      type="file"
-                      id="acheivements"
-                      className="resume"
-                      name="acheivements"
-                      onChange={handleResume}
-                      style={{ display: "none" }}
-                    />
-
-                  </>
-                  }
+                      <label htmlFor="acheivements" className="resume">
+                        <CloudUploadIcon />
+                        <span className="fileName">
+                          {recentUploadedDocs?.acheivements || "Upload"}
+                        </span>
+                      </label>
+                      <input
+                        type="file"
+                        id="acheivements"
+                        className="resume"
+                        name="acheivements"
+                        onChange={handleResume}
+                        style={{ display: "none" }}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -1739,24 +2379,25 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                {id == undefined && <>
-                  <label htmlFor="degree" className="resume">
-                    <CloudUploadIcon />
-                    <span className="fileName">
-                      {recentUploadedDocs?.degree || "Upload"}
-                    </span>
-                  </label>
+                {id == undefined && (
+                  <>
+                    <label htmlFor="degree" className="resume">
+                      <CloudUploadIcon />
+                      <span className="fileName">
+                        {recentUploadedDocs?.degree || "Upload"}
+                      </span>
+                    </label>
 
-                  <input
-                    type="file"
-                    id="degree"
-                    className="resume"
-                    name="degree"
-                    onChange={handleResume}
-                    style={{ display: "none" }}
-                  />
-                </>}
-               
+                    <input
+                      type="file"
+                      id="degree"
+                      className="resume"
+                      name="degree"
+                      onChange={handleResume}
+                      style={{ display: "none" }}
+                    />
+                  </>
+                )}
               </div>
 
               <div>
@@ -1791,23 +2432,25 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                {id == undefined && <>
-                  <label htmlFor="expertise" className="resume">
-                    <CloudUploadIcon />
-                    <span className="fileName">
-                      {recentUploadedDocs?.expertise || "Upload"}
-                    </span>
-                  </label>
+                {id == undefined && (
+                  <>
+                    <label htmlFor="expertise" className="resume">
+                      <CloudUploadIcon />
+                      <span className="fileName">
+                        {recentUploadedDocs?.expertise || "Upload"}
+                      </span>
+                    </label>
 
-                  <input
-                    type="file"
-                    id="expertise"
-                    className="resume"
-                    name="expertise"
-                    style={{ display: "none" }}
-                    onChange={handleResume}
-                  />
-               </>}
+                    <input
+                      type="file"
+                      id="expertise"
+                      className="resume"
+                      name="expertise"
+                      style={{ display: "none" }}
+                      onChange={handleResume}
+                    />
+                  </>
+                )}
               </div>
 
               <div>
@@ -1842,109 +2485,119 @@ const EditProfileUI = () => {
                       </attr>
                     )}
                 </div>
-                {id == undefined && <>
-                  <label htmlFor="working" className="resume">
-                    <CloudUploadIcon />
-                    <span className="fileName">
-                      {recentUploadedDocs?.working || "Upload"}
-                    </span>
-                  </label>
+                {id == undefined && (
+                  <>
+                    <label htmlFor="working" className="resume">
+                      <CloudUploadIcon />
+                      <span className="fileName">
+                        {recentUploadedDocs?.working || "Upload"}
+                      </span>
+                    </label>
 
-                  <input
-                    type="file"
-                    id="working"
-                    className="resume"
-                    style={{ display: "none" }}
-                    name="working"
-                    onChange={handleResume}
-                  />
-                </>}
+                    <input
+                      type="file"
+                      id="working"
+                      className="resume"
+                      style={{ display: "none" }}
+                      name="working"
+                      onChange={handleResume}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </form>
         </div>
       </section>
 
-      {id == undefined ? <section className="EditProfile-Buttons-Section">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "10px",
-            marginTop: "15px",
-            marginBottom: "15px",
-          }}
-        >
-          <button>Save</button>
-          <button
-            type="submit"
-            disabled={isLoading || !isFormValid}
-            onClick={update}
-            style={{ whiteSpace: "nowrap", position: "relative" }}
+      {id == undefined ? (
+        <section className="EditProfile-Buttons-Section">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              marginTop: "15px",
+              marginBottom: "15px",
+            }}
           >
-            {isLoading ? (
-              <>
-                <div className="button-loader"></div>
-                <span style={{ marginLeft: "12px" }}>Sending Approval...</span>
-              </>
-            ) : (
-              <>
-                <i
-                  className="fas fa-address-card"
-                  style={{ marginRight: "5px" }}
-                ></i>
-                Send for Approval
-              </>
-            )}
-          </button>
-        </div>
-      </section> :   <div className="button-container">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "25%",
-            gap: "10px",
-            marginTop: "15px",
-          }}
-        >
-          {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+            <button>Save</button>
+            <button
+              type="submit"
+              disabled={
+                isLoading || !isFormValid || image === undefined || image === ""
+              }
+              onClick={update}
+              style={{ whiteSpace: "nowrap", position: "relative" }}
+            >
+              {isLoading ? (
+                <>
+                  <div className="button-loader"></div>
+                  <span style={{ marginLeft: "12px" }}>
+                    Sending Approval...
+                  </span>
+                </>
+              ) : (
+                <>
+                  <i
+                    className="fas fa-address-card"
+                    style={{ marginRight: "5px" }}
+                  ></i>
+                  Send for Approval
+                </>
+              )}
+            </button>
+          </div>
+        </section>
+      ) : (
+        <div className="button-container">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "25%",
+              gap: "10px",
+              marginTop: "15px",
+            }}
+          >
+            {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
 
-          <button
-            type="submit"
-            className="reject-button"
-            onClick={(e) => adminupdate(e, "rejected")}
-            style={{ whiteSpace: "nowrap", position: "relative" }}
-            disabled={inputs.status === "rejected"}
-          >
-            {/* {isLoading ? (
+            <button
+              type="submit"
+              className="reject-button"
+              onClick={(e) => adminupdate(e, "rejected")}
+              style={{ whiteSpace: "nowrap", position: "relative" }}
+              disabled={inputs.status === "rejected"}
+            >
+              {/* {isLoading ? (
                                     <>
                                                              <div className="button-loader"></div>
                                         <span style={{ marginLeft: "12px" }}>Rejecting...</span>
                                     </>
                                 ) : ( */}
-            <>Reject</>
-            {/* )} */}
-          </button>
-          <button
-            type="submit"
+              <>Reject</>
+              {/* )} */}
+            </button>
+            <button
+              type="submit"
               onClick={(e) => adminupdate(e, "approved")}
-            style={{ whiteSpace: "nowrap", position: "relative" }}
-            disabled={inputs.status === "approved"}
-          >
-            {isLoading ? (
-              <>
-                <div className="button-loader"></div>
-                <span style={{ marginLeft: "12px" }}>Approving...</span>
-              </>
-            ) : (
-              <>Approve</>
-            )}
-          </button>
+              style={{ whiteSpace: "nowrap", position: "relative" }}
+              disabled={inputs.status === "approved"}
+            >
+              {isLoading ? (
+                <>
+                  <div className="button-loader"></div>
+                  <span style={{ marginLeft: "12px" }}>Approving...</span>
+                </>
+              ) : (
+                <>Approve</>
+              )}
+            </button>
+          </div>
         </div>
-      </div>}
+      )}
 
       <Dialog
         open={reasonPop}
@@ -1953,7 +2606,7 @@ const EditProfileUI = () => {
         aria-describedby="alert-dialog-description"
         sx={gridCSS.tabContainer}
 
-      // sx={ gridCSS.tabContainer }
+        // sx={ gridCSS.tabContainer }
       >
         <DialogContent
           style={{
@@ -2008,12 +2661,3 @@ const EditProfileUI = () => {
 };
 
 export default EditProfileUI;
-
-
-
-
-
-
-
-
-
