@@ -1431,6 +1431,7 @@ const EditProfileUI = () => {
                   </div>
                   <h3 style={{ textAlign: "center" }}>Experience</h3>
                   <div className="exp-container">
+                  
                     {/* Academia Mentor */}
                     {mentorCategories == "Academia Mentor" && (
                       <div>
@@ -1627,8 +1628,8 @@ const EditProfileUI = () => {
                     )}
 
                     {/*Industry Expert Mentor  &  Entrepreneur */}
-                    {mentorCategories === "Industry Expert Mentor" ||
-                      (role === "Entrepreneur" && (
+                    {(mentorCategories === "Industry Expert Mentor" ||
+                      role === "Entrepreneur") && (
                         <div>
                           <div>
                             <label className="Input-Label">
@@ -1654,7 +1655,7 @@ const EditProfileUI = () => {
                             </select>
                           </div>
                         </div>
-                      ))}
+                      )}
 
                     {workingStatus == "Job" && (
                       <>
@@ -1767,8 +1768,8 @@ const EditProfileUI = () => {
                       </>
                     )}
 
-                    {workingStatus == "Self Employed" ||
-                      (role === "Technology Partner" && (
+                    {(workingStatus == "Self Employed" ||
+                      role === "Technology Partner") && (
                         <>
                           <div>
                             <div>
@@ -1859,7 +1860,7 @@ const EditProfileUI = () => {
                             </div>
                           </div>
                         </>
-                      ))}
+                      )}
 
                     {role === "Technology Partner" && (
                       <>
