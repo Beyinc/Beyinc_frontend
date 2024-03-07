@@ -264,6 +264,14 @@ export const allskills = [
     "Wholesale",
     "3D Printing"
 ]
+
+export const allsalutations = [
+    "Dr", "Mr",
+"Mrs", "Miss"]
+
+export const mentorcategories = [
+    "Academia Mentor", "Industry Expert Mentor "]
+
 export const allLanguages = [
     "English",
     "Spanish",

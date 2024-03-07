@@ -40,6 +40,7 @@ body[data-theme="light"] {
   --button: #4e54c7;
   --button-hover: #4449ad;
   --tab-hover: #bec0e48a;
+  --primary-light: #4e54c718;
 
   --white-text: #fff;
   --light-transparent: #4e54c748;
@@ -107,10 +108,10 @@ i {
   justify-content: center;
 }
 
-p {
+/* p {
   margin-top: 10px;
   text-align: center;
-}
+} */
 
 .login-type-toggle span.active {
   text-decoration: underline;
@@ -292,12 +293,12 @@ button:hover {
 
 .dot:nth-child(4) {
   animation-delay: 0.4s;
-  background: #ff6824;
+  background: #95e544;
 }
 
 .dot:nth-child(5) {
   animation-delay: 0.5s;
-  background: #4e54c7;
+  background: #44e585;
 }
 
 @keyframes slide {

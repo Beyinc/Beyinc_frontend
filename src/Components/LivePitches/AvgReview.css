@@ -1,0 +1,29 @@
+
+.Star-rating {
+    display: flex;
+    align-items: center;
+  }
+  
+  .Star {
+    font-size: 24px;
+    color: #F77D0E;
+   
+  }
+  
+  .Star.empty {
+    color: #ccc;
+  }
+  
+  .star.half-filled {
+    position: relative;
+    color: #F77D0E;
+  }
+  
+  .Star.half-filled::before {
+    content: "★";
+    position: absolute;
+    left: 0;
+    top: -2.5px;
+    mask: linear-gradient(to left, #F77D0E 50%, transparent 50%);
+    color: #ccc;
+  }
