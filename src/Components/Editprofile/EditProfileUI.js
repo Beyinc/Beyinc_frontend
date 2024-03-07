@@ -735,13 +735,10 @@ const EditProfileUI = () => {
           <div className="Banner">
             <Slider {...settings}>
               <div>
-                <img src="/banner.png" alt="Image 1" />
+                <img src="/Banner-1.png" alt="Image 1" />
               </div>
               <div>
                 <img src="/Banner-2.png" alt="Image 2" />
-              </div>
-              <div>
-                <img src="/banner.png" alt="Image 3" />
               </div>
             </Slider>
           </div>
@@ -1366,11 +1363,11 @@ const EditProfileUI = () => {
                       )}
                     </div>
 
-                    <div className="timeline">
+                   {workingStatus !== "Self Employed"  &&  <div className="timeline">
                       <b>Date :</b>
                       {convertToDate(te.start)}-
                       {te.end === "" ? "Present" : convertToDate(te.end)}
-                    </div>
+                    </div>}
 
                     <div className="designation">
                       {te.Achievements && (
@@ -2026,13 +2023,15 @@ const EditProfileUI = () => {
                               )}
                             </div>
 
-                            <div className="timeline">
+                           {workingStatus !== "Self Employed"  && 
+                           <div className="timeline">
                               <b>Date :</b>
                               {convertToDate(te.start)}-
                               {te.end === ""
                                 ? "Present"
                                 : convertToDate(te.end)}
                             </div>
+                           }
 
                             <div className="designation">
                               {te.Achievements && (

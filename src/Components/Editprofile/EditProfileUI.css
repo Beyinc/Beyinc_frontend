@@ -57,12 +57,12 @@
 
 
 .Banner .slick-slider .slick-dots li button:before {
-  display: none;
+  display: white;
 }
 
 
 .Banner .slick-slider .slick-dots li.slick-active button:before {
-  color: yellow; 
+  color: white; 
 }
 
 .Profile-Image {
