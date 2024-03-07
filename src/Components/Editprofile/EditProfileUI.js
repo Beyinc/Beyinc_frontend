@@ -1968,7 +1968,7 @@ const EditProfileUI = () => {
                         className="add-button"
                         onClick={addExperience}
                         disabled={
-                          experienceDetails.start == "" ||
+                         ( experienceDetails.start == "" && workingStatus !== "Self Employed" && role !== "Technology Partner") ||
                           experienceDetails.company == "" ||
                           experienceDetails.designation == ""
                         }
@@ -2000,6 +2000,7 @@ const EditProfileUI = () => {
                             <div className="company">
                               <h3>{te.company}</h3>
                             </div>
+
                             <div className="designation">
                               {te.designation && (
                                 <>
