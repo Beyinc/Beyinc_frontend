@@ -50,7 +50,6 @@ const EditProfileUI = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [inputs, setInputs] = useState({
-    workingStatus: null,
     mentorCategories: null,
     salutation: null,
     email: null,
@@ -73,7 +72,6 @@ const EditProfileUI = () => {
   const {
     // email,
     // emailOtp,
-    workingStatus,
     salutation,
     mentorCategories,
     email,
@@ -96,13 +94,16 @@ const EditProfileUI = () => {
 
   const [nameChanger, setNameChanger] = useState(false);
   const { height, width } = useWindowDimensions();
-
+  const [Logo, SetLogo] = useState("");
+  const [Banner, SetBanner] = useState("");
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
   const [experienceDetails, setExperience] = useState({
+    business: "",
     company: "",
+    institute: "",
     designation: "",
     Department: "",
     Research: "",
@@ -116,12 +117,14 @@ const EditProfileUI = () => {
     Profession: "",
     TotalWorkExperience: "",
     Description: "",
+    startupName: '',
     // Technology Partner
     Customers: "",
     CompanyLocation: "",
     Banner: "",
     Logo: "",
     Services: "",
+    workingStatus: ""
   });
   const [EducationDetails, setEducationDetails] = useState({
     year: "",
@@ -141,6 +144,9 @@ const EditProfileUI = () => {
   const [country, setCountry] = useState("");
   const [town, settown] = useState("");
   const [collegeQuery, setCollegeQuery] = useState("");
+  const [editingExperienceId, seteditingExperienceId] = useState("")
+  const [editingEducationId, seteditingEducationId] = useState("")
+
   const [places, setPlaces] = useState({
     country: [],
     state: [],
@@ -172,6 +178,42 @@ const EditProfileUI = () => {
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsAboutPopupVisible(true);
   };
+
+
+  const handleBannerImage = (e) => {
+    SetBanner(e.target.files[0].name);
+    const file = e.target.files[0];
+    if (file.size > 4 * 1024 * 1024) {
+      alert(
+        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
+      );
+      e.target.value = null; // Clear the selected file
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setExperience((prev) => ({ ...prev, Banner: reader.result }));
+    };
+  };
+
+  const handleLogoImage = (e) => {
+    SetLogo(e.target.files[0].name);
+    const file = e.target.files[0];
+    if (file.size > 4 * 1024 * 1024) {
+      alert(
+        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
+      );
+      e.target.value = null; // Clear the selected file
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setExperience((prev) => ({ ...prev, Logo: reader.result }));
+    };
+  };
+
 
   const handleExperienceButtonClick = () => {
     if (role == "Mentor" && mentorCategories == null) {
@@ -224,8 +266,25 @@ const EditProfileUI = () => {
 
   const addExperience = (e) => {
     e.preventDefault();
-    setTotalExperienceData((prev) => [...prev, experienceDetails]);
+    if (editingExperienceId == '') {
+      setTotalExperienceData((prev) => [...prev, experienceDetails]);
+    } else {
+      setTotalExperienceData(totalExperienceData.map((t, i) => {
+        return i + 1 === editingExperienceId ? experienceDetails : t
+      }))
+      setIsExperiencePopupVisible(false);
+      seteditingExperienceId('')
+      document.getElementsByTagName("body")[0].style.overflowY =
+        "scroll";
+    }
+    SetBanner('')
+    SetLogo('')
     setExperience({
+      areaOfBusiness: "",
+      business: "",
+      institute: "",
+      startupName: '',
+      workingStatus: "",
       company: "",
       designation: "",
       Department: "",
@@ -249,8 +308,19 @@ const EditProfileUI = () => {
     });
   };
   const addEducation = (e) => {
+
     e.preventDefault();
-    setTotalEducationData((prev) => [...prev, EducationDetails]);
+    if (editingEducationId == '') {
+      setTotalEducationData((prev) => [...prev, EducationDetails]);
+    } else {
+      setTotalEducationData(totalEducationData.map((t, i) => {
+        return i+1 === editingEducationId ? EducationDetails : t
+      }))
+      setIsEducationPopupVisible(false);
+      seteditingEducationId('')
+      document.getElementsByTagName("body")[0].style.overflowY =
+        "scroll";
+    }
     setEducationDetails({
       year: "",
       grade: "",
@@ -258,6 +328,7 @@ const EditProfileUI = () => {
       Edstart: "",
       Edend: "",
     });
+    
   };
 
   const [changeResume, setchangeDocuments] = useState({
@@ -336,7 +407,6 @@ const EditProfileUI = () => {
             email: res.data.email,
             salutation: res.data.salutation,
             mentorCategories: res.data.mentorCategories,
-            workingStatus: res.data.workingStatus,
           }));
 
           if (res.data.documents !== undefined) {
@@ -405,9 +475,8 @@ const EditProfileUI = () => {
             email: res.data.userInfo.email,
             status: res.data.verification,
             mobileVerified: true,
-            salutation: res.data.userInfo.salutation,
-            mentorCategories: res.data.userInfo.mentorCategories,
-            workingStatus: res.data.userInfo.workingStatus,
+            salutation: res.data.salutation,
+            mentorCategories: res.data.mentorCategories,
           }));
 
           if (res.data.documents !== undefined) {
@@ -583,8 +652,26 @@ const EditProfileUI = () => {
     e.preventDefault();
     setIsLoading(true);
     e.target.disabled = true;
+    console.log({
+      salutation: salutation,
+      mentorCategories: mentorCategories,
+      email: email,
+      userId: user_id,
+      state: state,
+      town: town,
+      country: country,
+      userName: name,
+      phone: mobile,
+      role: role,
+      fee: fee,
+      bio: bio,
+      skills: skills,
+      languagesKnown: languagesKnown,
+      documents: changeResume,
+      experienceDetails: totalExperienceData,
+      educationdetails: totalEducationData,
+    })
     await ApiServices.sendForApproval({
-      workingStatus: workingStatus,
       salutation: salutation,
       mentorCategories: mentorCategories,
       email: email,
@@ -655,19 +742,19 @@ const EditProfileUI = () => {
 
   const [isFormValid, setIsFormValid] = useState(
     mobileVerified &&
-      (isNameValid ||
-        oldDocs.resume !== "" ||
-        oldDocs.expertise !== "" ||
-        oldDocs.acheivements !== "" ||
-        oldDocs.working !== "" ||
-        oldDocs.degree !== "" ||
-        changeResume.resume !== "" ||
-        changeResume.expertise !== "" ||
-        changeResume.acheivements !== "" ||
-        changeResume.working !== "" ||
-        changeResume.degree !== "") &&
-      totalEducationData.length > 0 &&
-      totalExperienceData.length > 0
+    (isNameValid ||
+      oldDocs.resume !== "" ||
+      oldDocs.expertise !== "" ||
+      oldDocs.acheivements !== "" ||
+      oldDocs.working !== "" ||
+      oldDocs.degree !== "" ||
+      changeResume.resume !== "" ||
+      changeResume.expertise !== "" ||
+      changeResume.acheivements !== "" ||
+      changeResume.working !== "" ||
+      changeResume.degree !== "") &&
+    totalEducationData.length > 0 &&
+    totalExperienceData.length > 0
   );
 
   const handleChangeRadio = (e) => {
@@ -702,7 +789,7 @@ const EditProfileUI = () => {
     if (collegeQuery === "") {
       setUniversities([]);
     }
-    if (collegeQuery.length > 4) {
+    if (collegeQuery.length > 2) {
       const timeoutId = setTimeout(
         async () =>
           await axios
@@ -1303,6 +1390,7 @@ const EditProfileUI = () => {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                width: '99%'
               }}
             >
               <h3>Experience</h3>
@@ -1310,7 +1398,7 @@ const EditProfileUI = () => {
                 <span>
                   <i
                     onClick={handleExperienceButtonClick}
-                    className="fas fa-pen"
+                    className="fas fa-plus"
                   ></i>
                 </span>
               )}
@@ -1318,7 +1406,7 @@ const EditProfileUI = () => {
           </div>
           {totalExperienceData.length > 0 ? (
             totalExperienceData.map((te, i) => (
-              <div key={i}>
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="studies">
                 <div
                   style={{
                     display: "flex",
@@ -1334,14 +1422,32 @@ const EditProfileUI = () => {
                       padding: "10px",
                     }}
                   >
-                    <div className="company">
-                      <h3>{te.company}</h3>
-                    </div>
+                    {(te.institute !== '' && te.institute !== undefined) && <div className="company">
+                      <>
+
+                        {te.institute}(Institute)
+                      </>
+
+                    </div>}
+                    {(te.company !== '' && te.company !== undefined) && <div className="company">
+                      <>
+
+                        {te.company}(Company)
+                      </>
+
+                    </div>}
+                    {(te.startupName !== '' && te.startupName !== undefined) && <div className="company">
+                      <>
+
+                        {te.startupName}(Startup Name)
+                      </>
+
+                    </div>}
 
                     <div className="designation">
                       {te.designation && (
                         <>
-                          <b>Designation :</b>
+                          <b>Designation: </b>
                           {te.designation}
                         </>
                       )}
@@ -1349,7 +1455,7 @@ const EditProfileUI = () => {
                     <div className="designation">
                       {te.Department && (
                         <>
-                          <b>Department :</b>
+                          <b>Department: </b>
                           {te.Department}
                         </>
                       )}
@@ -1357,22 +1463,73 @@ const EditProfileUI = () => {
                     <div className="designation">
                       {te.Research && (
                         <>
-                          <b>Research :</b>
+                          <b>Research: </b>
                           {te.Research}
                         </>
                       )}
                     </div>
 
-                   {workingStatus !== "Self Employed"  &&  <div className="timeline">
-                      <b>Date :</b>
+                    {role !== "Technology Partner" && ((te.workingStatus !== "Self Employed") && <div className="timeline">
+                      <b>Date: </b>
                       {convertToDate(te.start)}-
                       {te.end === "" ? "Present" : convertToDate(te.end)}
+                    </div>)}
+
+
+                    {te.workingStatus == "Self Employed" &&
+                      <>
+                        <div className="timeline">
+                          <b>Working Status: </b>
+                          {te.workingStatus}
+                        </div>
+                        <div className="timeline">
+                          <b>Startup / Business Name: </b>
+                          {te.startupName}
+                        </div><div className="timeline">
+                          <b>Startup Desc: </b>
+                          {te.Description}
+                        </div></>
+                    }
+
+                    {mentorCategories !== 'Academia Mentor' &&
+                      <><div className="timeline">
+                        <b>Profession: </b>
+                        {te.Profession}
+                      </div><div className="timeline">
+                          <b>Total Working Experience: </b>
+                          {te.TotalWorkExperience}
+                        </div></>
+                    }
+                    {role == "Technology Partner" && <div className="timeline">
+                      <b>Startup Desc: </b>
+                      {te.Description}
+                    </div>}
+                    {te.CompanyLocation && <div className="timeline">
+                      <b>Company Location: </b>
+                      {te.CompanyLocation}
+                    </div>}
+
+
+
+                    {te.Customers && <div className="timeline">
+                      <b>Total customers served by company : </b>
+                      {te.Customers}
+                    </div>}
+
+                    {te.Banner && <div className="timeline">
+                      <b>Banner: </b>
+                      <a href={te.Banner?.secure_url} target="_blank">Click here</a>
+                    </div>}
+                    {te.Logo && <div className="timeline">
+                      <b>Logo: </b>
+                      <a href={te.Logo?.secure_url} target="_blank">Click here</a>
+
                     </div>}
 
                     <div className="designation">
                       {te.Achievements && (
                         <>
-                          <b>Achievements :</b>
+                          <b>Achievements: </b>
                           {te.Achievements}
                         </>
                       )}
@@ -1380,7 +1537,7 @@ const EditProfileUI = () => {
                     <div className="designation">
                       {te.Published && (
                         <>
-                          <b>Published :</b>
+                          <b>Published: </b>
                           {te.Published}
                         </>
                       )}
@@ -1388,7 +1545,7 @@ const EditProfileUI = () => {
                     <div className="designation">
                       {te.StartupExperience && (
                         <>
-                          <b>StartupExperience :</b>
+                          <b>StartupExperience: </b>
                           {te.StartupExperience}
                         </>
                       )}
@@ -1396,13 +1553,31 @@ const EditProfileUI = () => {
                     <div className="designation">
                       {te.Consultancy && (
                         <>
-                          <b>Consultancy :</b>
+                          <b>Consultancy: </b>
                           {te.Consultancy}
                         </>
                       )}
                     </div>
                   </div>
                 </div>
+                {id == undefined &&
+                  <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                    <div onClick={(e) => {
+                      seteditingExperienceId(i+1)
+                      setExperience(te)
+                      handleExperienceButtonClick()
+                    }}>
+                      <i class='fas fa-pen'></i>
+                    </div>
+                    <div onClick={(e) => {
+                      setTotalExperienceData((prev) => [
+                        ...prev.filter((f, j) => j !== i),
+                      ]);
+                    }} style={{ color: 'red' }}>
+                      <i class='fas fa-times cross'></i>
+                    </div>
+                  </div>
+                }
               </div>
             ))
           ) : (
@@ -1422,13 +1597,41 @@ const EditProfileUI = () => {
                         "scroll";
 
                       setIsExperiencePopupVisible(false);
+                      seteditingExperienceId('')
+                      setExperience({
+                        areaOfBusiness: "",
+                        business: "",
+                        institute: "",
+                        startupName: '',
+                        workingStatus: "",
+                        company: "",
+                        designation: "",
+                        Department: "",
+                        Research: "",
+                        year: "",
+                        start: "",
+                        end: "",
+                        Achievements: "",
+                        Published: "",
+                        StartupExperience: "",
+                        Consultancy: "",
+                        Profession: "",
+                        TotalWorkExperience: "",
+                        Description: "",
+                        // Technology Partner
+                        Customers: "",
+                        CompanyLocation: "",
+                        Banner: "",
+                        Logo: "",
+                        Services: "",
+                      });
                     }}
                   >
                     <i class="fas fa-times"></i>
                   </div>
                   <h3 style={{ textAlign: "center" }}>Experience</h3>
                   <div className="exp-container">
-                  
+
                     {/* Academia Mentor */}
                     {mentorCategories == "Academia Mentor" && (
                       <div>
@@ -1438,11 +1641,11 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="company"
-                            value={experienceDetails.company}
+                            name="institute"
+                            value={experienceDetails.institute}
                             id=""
                             onChange={handleChange}
-                            placeholder="Enter Your Company name"
+                            placeholder="Enter Your institute name"
                           />
                         </div>
                       </div>
@@ -1637,13 +1840,8 @@ const EditProfileUI = () => {
                             <select
                               name="workingStatus"
                               id=""
-                              value={workingStatus}
-                              onChange={(e) => {
-                                setInputs((prev) => ({
-                                  ...prev,
-                                  workingStatus: e.target.value,
-                                }));
-                              }}
+                              value={experienceDetails.workingStatus}
+                              onChange={handleChange}
                             >
                               <option value="">Select</option>
                               {["Job", "Self Employed"].map((op) => (
@@ -1654,12 +1852,12 @@ const EditProfileUI = () => {
                         </div>
                       )}
 
-                    {workingStatus == "Job" && (
+                    {experienceDetails.workingStatus == "Job" && (
                       <>
                         <div>
                           <div>
                             <label className="Input-Label">
-                              Institute Name*
+                              Company Name*
                             </label>
                           </div>
                           <div className="Exp_Input_Fields">
@@ -1753,7 +1951,8 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
-                              type="text"
+                              type="number"
+                              min={0}
                               name="TotalWorkExperience"
                               value={experienceDetails.TotalWorkExperience}
                               id=""
@@ -1765,7 +1964,7 @@ const EditProfileUI = () => {
                       </>
                     )}
 
-                    {(workingStatus == "Self Employed" ||
+                    {(experienceDetails.workingStatus == "Self Employed" ||
                       role === "Technology Partner") && (
                         <>
                           <div>
@@ -1777,8 +1976,8 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="text"
-                                name="company"
-                                value={experienceDetails.company}
+                                name="startupName"
+                                value={experienceDetails.startupName}
                                 id=""
                                 onChange={handleChange}
                                 placeholder="Enter Your Business name"
@@ -1847,7 +2046,8 @@ const EditProfileUI = () => {
                             </div>
                             <div className="Exp_Input_Fields">
                               <input
-                                type="text"
+                                type="number"
+                                min={0}
                                 name="TotalWorkExperience"
                                 value={experienceDetails.TotalWorkExperience}
                                 id=""
@@ -1869,7 +2069,7 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
-                              type="text"
+                              type="number"
                               name="Customers"
                               value={experienceDetails.Customers}
                               id=""
@@ -1897,6 +2097,24 @@ const EditProfileUI = () => {
                           </div>
                         </div>
 
+                        <div>
+                          <div>
+                            <label className="Input-Label">
+                              Area Of Business*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="areaOfBusiness"
+                              value={experienceDetails.areaOfBusiness}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Area of Business"
+                            />
+                          </div>
+                        </div>
+
                         <>
                           <div>
                             <label className="Input-Label">Banner*</label>
@@ -1904,7 +2122,7 @@ const EditProfileUI = () => {
                           <label htmlFor="Banner" className="resume">
                             <CloudUploadIcon />
                             <span className="fileName">
-                              {experienceDetails.Banner || "Upload"}
+                              {Banner || "Upload"}
                             </span>
                           </label>
 
@@ -1914,7 +2132,7 @@ const EditProfileUI = () => {
                             className="resume"
                             style={{ display: "none" }}
                             name="Banner"
-                            onChange={handleChange}
+                            onChange={handleBannerImage}
                           />
                         </>
 
@@ -1925,7 +2143,7 @@ const EditProfileUI = () => {
                           <label htmlFor="Logo" className="resume">
                             <CloudUploadIcon />
                             <span className="fileName">
-                              {experienceDetails.Logo || "Upload"}
+                              {Logo || "Upload"}
                             </span>
                           </label>
 
@@ -1935,14 +2153,14 @@ const EditProfileUI = () => {
                             className="resume"
                             style={{ display: "none" }}
                             name="Logo"
-                            onChange={handleChange}
+                            onChange={handleLogoImage}
                           />
                         </>
 
                         <div>
                           <div>
                             <label className="Input-Label">
-                            Services*
+                              Services*
                             </label>
                           </div>
                           <div className="Exp_Input_Fields">
@@ -1964,126 +2182,18 @@ const EditProfileUI = () => {
                       <button
                         className="add-button"
                         onClick={addExperience}
-                        disabled={
-                         ( experienceDetails.start == "" && workingStatus !== "Self Employed" && role !== "Technology Partner") ||
-                          experienceDetails.company == "" ||
-                          experienceDetails.designation == ""
-                        }
+                      // disabled={
+                      //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
+                      //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
+                      //   experienceDetails.designation == ""
+                      // }
                       >
-                        Add
+                        {editingExperienceId==''?'Add':'Update'}
                       </button>
                     </div>
                   </div>
                 </form>
-                <div>
-                  {totalExperienceData.length > 0 &&
-                    totalExperienceData.map((te, i) => (
-                      <div>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            gap: "10px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              padding: "10px",
-                            }}
-                          >
-                            <div className="company">
-                              <h3>{te.company}</h3>
-                            </div>
 
-                            <div className="designation">
-                              {te.designation && (
-                                <>
-                                  <b>Designation :</b>
-                                  {te.designation}
-                                </>
-                              )}
-                            </div>
-                            <div className="designation">
-                              {te.Department && (
-                                <>
-                                  <b>Department :</b>
-                                  {te.Department}
-                                </>
-                              )}
-                            </div>
-                            <div className="designation">
-                              {te.Research && (
-                                <>
-                                  <b>Research :</b>
-                                  {te.Research}
-                                </>
-                              )}
-                            </div>
-
-                           {workingStatus !== "Self Employed"  && 
-                           <div className="timeline">
-                              <b>Date :</b>
-                              {convertToDate(te.start)}-
-                              {te.end === ""
-                                ? "Present"
-                                : convertToDate(te.end)}
-                            </div>
-                           }
-
-                            <div className="designation">
-                              {te.Achievements && (
-                                <>
-                                  <b>Achievements :</b>
-                                  {te.Achievements}
-                                </>
-                              )}
-                            </div>
-                            <div className="designation">
-                              {te.Published && (
-                                <>
-                                  <b>Published :</b>
-                                  {te.Published}
-                                </>
-                              )}
-                            </div>
-                            <div className="designation">
-                              {te.StartupExperience && (
-                                <>
-                                  <b>StartupExperience :</b>
-                                  {te.StartupExperience}
-                                </>
-                              )}
-                            </div>
-                            <div className="designation">
-                              {te.Consultancy && (
-                                <>
-                                  <b>Consultancy :</b>
-                                  {te.Consultancy}
-                                </>
-                              )}
-                            </div>
-
-                            <span>
-                              <button
-                                className="add-button"
-                                style={{ background: "red", marginTop: "10px" }}
-                                onClick={(e) => {
-                                  setTotalExperienceData((prev) => [
-                                    ...prev.filter((f, j) => j !== i),
-                                  ]);
-                                }}
-                              >
-                                Delete
-                              </button>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
               </div>
             </div>
           </div>
@@ -2099,6 +2209,7 @@ const EditProfileUI = () => {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  width: '99%'
                 }}
               >
                 <h3>Education</h3>
@@ -2106,7 +2217,7 @@ const EditProfileUI = () => {
                   <span>
                     <i
                       onClick={handleEducationButtonClick}
-                      className="fas fa-pen"
+                      className="fas fa-plus"
                     ></i>
                   </span>
                 )}
@@ -2114,7 +2225,7 @@ const EditProfileUI = () => {
             </div>
             {totalEducationData.length > 0 ? (
               totalEducationData.map((te, i) => (
-                <div key={i}>
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="studies">
                   <div
                     style={{
                       display: "flex",
@@ -2138,6 +2249,22 @@ const EditProfileUI = () => {
                       </div>
                     </div>
                   </div>
+                  {id == undefined && <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                    <div onClick={(e) => {
+                      seteditingEducationId(i + 1)
+                      setEducationDetails(te)
+                      handleEducationButtonClick()
+                    }}>
+                      <i class='fas fa-pen'></i>
+                    </div>
+                    <div onClick={(e) => {
+                      setTotalEducationData((prev) => [
+                        ...prev.filter((f, j) => j !== i),
+                      ]);
+                    }} style={{ color: 'red' }}>
+                      <i class='fas fa-times cross'></i>
+                    </div>
+                  </div>}
                 </div>
               ))
             ) : (
@@ -2155,6 +2282,14 @@ const EditProfileUI = () => {
                         "scroll";
 
                       setIsEducationPopupVisible(false);
+                      seteditingEducationId('')
+                      setEducationDetails({
+                        year: "",
+                        grade: "",
+                        college: "",
+                        Edstart: "",
+                        Edend: "",
+                      });
                     }}
                   >
                     <i class="fas fa-times"></i>
@@ -2162,18 +2297,42 @@ const EditProfileUI = () => {
                   <div className="edu-container">
                     <h2>Education</h2>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+
+                      <div>
+                        <div>
+                          <label className="Input-Label">Grade*</label>
+                        </div>
+                        <div className="Ed_Input_Fields">
+                          <select
+                            name="grade"
+                            id=""
+                            value={EducationDetails.grade}
+                            onChange={handleEducationChange}
+                          >
+                            <option value="">Select</option>
+                            <option value="SSC">10th</option>
+                            <option value="Inter">Inter/Equivalent</option>
+                            <option value="UG">UG (Btech, degree)</option>
+                            <option value="PG">PG</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Business">Business</option>
+                            <option value="LAW">Law</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                      </div>
                       <div>
                         <div>
                           <label className="Input-Label">
                             College/University*{" "}
                             {EducationDetails.grade !== "SSC" &&
                               EducationDetails.grade !== "" &&
-                              "(Type 5 charecters)"}
+                              "(Type 3 charecters)"}
                           </label>
                         </div>
                         <div className="Ed_Input_Fields">
                           {EducationDetails.grade == "SSC" ||
-                          EducationDetails.grade == "" ? (
+                            EducationDetails.grade == "" ? (
                             <input
                               type="text"
                               name="college"
@@ -2189,11 +2348,11 @@ const EditProfileUI = () => {
                                 options={universities}
                                 getOptionLabel={(option) => option.name}
                                 sx={{ width: 300 }}
-                                inputValue={
-                                  EducationDetails.college
-                                    ? EducationDetails.college
-                                    : undefined
-                                }
+                                // inputValue={
+                                //   EducationDetails.college
+                                //     ? EducationDetails.college
+                                //     : undefined
+                                // }
                                 onChange={(e) => handleEducationChange(e, true)}
                                 renderInput={(params) => (
                                   <TextField
@@ -2229,29 +2388,6 @@ const EditProfileUI = () => {
                         </div>
                       </div>
 
-                      <div>
-                        <div>
-                          <label className="Input-Label">Grade*</label>
-                        </div>
-                        <div className="Ed_Input_Fields">
-                          <select
-                            name="grade"
-                            id=""
-                            value={EducationDetails.grade}
-                            onChange={handleEducationChange}
-                          >
-                            <option value="">Select</option>
-                            <option value="SSC">10th</option>
-                            <option value="Inter">Inter/Equivalent</option>
-                            <option value="UG">UG (Btech, degree)</option>
-                            <option value="PG">PG</option>
-                            <option value="Medical">Medical</option>
-                            <option value="Business">Business</option>
-                            <option value="LAW">Law</option>
-                            <option value="other">Other</option>
-                          </select>
-                        </div>
-                      </div>
 
                       <div>
                         <label className="Input-Label">Start Date*</label>
@@ -2291,58 +2427,11 @@ const EditProfileUI = () => {
                           EducationDetails.college == ""
                         }
                       >
-                        Add
+                        {editingEducationId !== '' ? 'Update' : 'Add'}
                       </button>
                     </div>
                   </div>
                   <div>
-                    {totalEducationData.length > 0 &&
-                      totalEducationData.map((te, i) => (
-                        <div>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexWrap: "wrap",
-                              alignItems: "center",
-                              gap: "10px",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                padding: "10px",
-                              }}
-                            >
-                              <div className="company">{te.college} </div>
-
-                              <div className="designation">{te.grade}</div>
-                              <div className="timeline">
-                                {convertToDate(te.Edstart)}-
-                                {te.Edend == ""
-                                  ? "Present"
-                                  : convertToDate(te.Edend)}
-                              </div>
-                              <span>
-                                <button
-                                  className="add-button"
-                                  style={{
-                                    background: "red",
-                                    marginTop: "10px",
-                                  }}
-                                  onClick={(e) => {
-                                    setTotalEducationData((prev) => [
-                                      ...prev.filter((f, j) => j !== i),
-                                    ]);
-                                  }}
-                                >
-                                  Delete
-                                </button>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
                   </div>
                 </form>
               </div>
@@ -2721,7 +2810,7 @@ const EditProfileUI = () => {
         aria-describedby="alert-dialog-description"
         sx={gridCSS.tabContainer}
 
-        // sx={ gridCSS.tabContainer }
+      // sx={ gridCSS.tabContainer }
       >
         <DialogContent
           style={{
