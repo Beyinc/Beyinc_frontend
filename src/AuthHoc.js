@@ -44,7 +44,7 @@ const AuthHoc = (Component) => {
         );
 
         return(
-            JSON.parse(localStorage.getItem("user")).accessToken? <Component /> : loading ? <></> :<Login />
+            (localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).accessToken)? <Component /> : loading ? <></> :<Login />
         )
     }
 }

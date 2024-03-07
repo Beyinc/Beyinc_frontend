@@ -388,6 +388,14 @@ img {
   cursor: pointer;
 }
 
+
+/* profile upload */
+.css-qfso29-MuiTypography-root-MuiDialogContentText-root {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
 .Privacy,
 .Terms {
   display: flex;

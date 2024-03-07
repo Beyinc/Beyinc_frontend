@@ -69,13 +69,14 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 .singlePitchWrapper:hover {
-  background: rgba(238, 238, 238, 0.596);
+  /* background: rgba(238, 238, 238, 0.596); */
+  background: var(--primary-light);
 }
 .singlePitch .desc {
   font-size: 15px;
 }
 .tags span {
-  color: #007fed;
+  color: var(--primary);
 }
 
 .star-rating {
@@ -87,7 +88,7 @@ input[type="checkbox"] {
 
 .star {
   font-size: 34px;
-  color: #ffd700;
+  color: #F77D0E;
   margin-right: 5px;
 }
 
@@ -97,7 +98,7 @@ input[type="checkbox"] {
 
 .star.half-filled {
   position: relative;
-  color: #ffd700;
+  color: #F77D0E;
 }
 
 .star.half-filled::before {
@@ -105,7 +106,7 @@ input[type="checkbox"] {
   position: absolute;
   left: 0;
   top: -2.5px;
-  mask: linear-gradient(to left, #ffd700 50%, transparent 50%);
+  mask: linear-gradient(to left, #F77D0E 50%, transparent 50%);
   color: #ccc;
 }
 .subcommentsContainer {
@@ -158,13 +159,13 @@ input[type="checkbox"] {
   gap: 5px;
   padding: 5px;
   border-radius: 10px;
-  color: #007fed;
-  width: 150px;
+  color: var(--primary);
+  width: 100px;
   cursor: pointer;
 }
 
 .totalSubComments:hover {
-  background: #50a6f1;
+  background: var(--button-hover);
   color: white;
 }
 .replyTag {
@@ -190,6 +191,8 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: space-between;
 }
+
+
 
 @media (max-width: 768px) {
   .IndicommentsSectionDetailscomment {
