@@ -57,12 +57,12 @@
 
 
 .Banner .slick-slider .slick-dots li button:before {
-  display: none;
+  display: white;
 }
 
 
 .Banner .slick-slider .slick-dots li.slick-active button:before {
-  color: yellow; 
+  color: white; 
 }
 
 .Profile-Image {
@@ -264,11 +264,18 @@
   padding: 20px;
   text-align: justify;
 }
-.fa-pen {
+.studies{
+  transition: all ease 0.3s;
+  cursor: pointer;
+}
+.studies:hover{
+background: rgb(245, 240, 240);;
+}
+.fa-pen, .fa-plus {
   font-size: 14px;
   color: grey;
 }
-.fa-pen:hover {
+.fa-pen:hover, .fa-plus:hover {
   transform: scale(1.2);
   color: black;
 }
@@ -348,6 +355,8 @@ select {
   white-space: wrap !important;
   margin-left: 3px;
   font-size: 12px;
+  width: 100px;
+  word-break: break-all;
 }
 
 .delete {
@@ -366,8 +375,8 @@ select {
   .EditProfile-About-Section,
   .EditProfile-Experience-Container,
   .EditProfile-Education-Container,
-  .EditProfile-UploadFiles-Container,
-  .popup-content {
+  .EditProfile-UploadFiles-Container
+  {
     width: 380px;
   }
   
@@ -390,6 +399,19 @@ select {
     border-radius: 10px 10px 0px 0px;
     overflow: hidden; 
     position: relative; 
+  }
+  .resume{
+    width: 300px;
+  }
+  .popup-container{
+    width: 350px;
+  }
+  .popup-content{
+    margin: auto;
+    width: 97%;
+  }
+  .bioText{
+    width: 350px;
   }
 
   /* .upload-mobile-responsive{
