@@ -1288,7 +1288,7 @@ const EditProfileUI = () => {
                     <i class="fas fa-times"></i>
                   </span>
                 </div>
-                <textarea
+                <textarea className="bioText"
                   onChange={(e) => {
                     const inputText = e.target.value;
                     if (inputText.length <= 1000) {
@@ -2452,6 +2452,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
+                    width: width < 700 && '350px'
                   }}
                 >
                   <label className="Input-Label">Resume</label>
@@ -2505,6 +2506,7 @@ const EditProfileUI = () => {
                       alignItems: "center",
                       gap: "2px",
                       justifyContent: "space-between",
+                      width: width<700 && '350px'
                     }}
                   >
                     <label className="Input-Label">Acheivements</label>
@@ -2558,6 +2560,8 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
+                    width: width < 700 && '350px'
+
                   }}
                 >
                   <label className="Input-Label">Degree</label>
@@ -2611,6 +2615,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
+                    width: width < 700 && '350px'
                   }}
                 >
                   <label className="Input-Label">Expertise</label>
@@ -2664,6 +2669,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
+                    width: width < 700 && '350px'
                   }}
                 >
                   <label className="Input-Label">Working</label>

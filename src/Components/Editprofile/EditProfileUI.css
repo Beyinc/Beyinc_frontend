@@ -375,8 +375,8 @@ select {
   .EditProfile-About-Section,
   .EditProfile-Experience-Container,
   .EditProfile-Education-Container,
-  .EditProfile-UploadFiles-Container,
-  .popup-content {
+  .EditProfile-UploadFiles-Container
+  {
     width: 380px;
   }
   
@@ -399,6 +399,19 @@ select {
     border-radius: 10px 10px 0px 0px;
     overflow: hidden; 
     position: relative; 
+  }
+  .resume{
+    width: 300px;
+  }
+  .popup-container{
+    width: 350px;
+  }
+  .popup-content{
+    margin: auto;
+    width: 97%;
+  }
+  .bioText{
+    width: 350px;
   }
 
   /* .upload-mobile-responsive{
