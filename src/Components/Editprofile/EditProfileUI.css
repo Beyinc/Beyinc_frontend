@@ -111,28 +111,7 @@
 }
 
 /* POPUP CONTAINERS */
-/* .popup-container {
-  border: 1px solid grey;
-  width: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-.popup-container {
-  position: fixed;
-  top: 47.5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.288);
-  width: 1500px;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-.popup-container {
+.popup-container, .personal-info-popup-container, .about-popup-container {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -145,7 +124,7 @@
   align-items: center;
   justify-content: center;
 }
-.popup-content {
+.popup-content, .personal-info-popup-content, .about-popup-content {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
@@ -177,6 +156,8 @@
   width: 270px;
   font-size: 12px;
 }
+
+
 
 .otp_Button {
   width: 30%;
@@ -400,32 +381,38 @@ select {
     overflow: hidden; 
     position: relative; 
   }
+
+  .Banner .slick-slider .slick-dots li button:before {
+ margin-top: -80px;
+  }
+  .Input_Fields input {
+    width: 270px !important;
+    font-size: 12px;
+  }
+  .add-button {
+    margin-bottom: 10px;
+  }
+  
+  .Banner .slick-slider .slick-dots li.slick-active button:before {
+    margin-top: -80px;
+  }
   .resume{
     width: 300px;
   }
   .popup-container{
-    width: 350px;
+    width: 22rem;
+    height: 60rem;
+    margin-top: 0px;
+    margin-left: 0px;
   }
+  
   .popup-content{
     margin: auto;
-    width: 97%;
+    width: 100%;
   }
   .bioText{
     width: 350px;
   }
-
-  /* .upload-mobile-responsive{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-  .update-form{
-
-  } */
-
-  
-
 }
 
 

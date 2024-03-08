@@ -993,8 +993,8 @@ const EditProfileUI = () => {
             </span>
           </div> */}
           {isInputPopupVisible && (
-            <div className="popup-container">
-              <div className="popup-content">
+            <div className="personal-info-popup-container">
+              <div className="personal-info-popup-content">
                 <div className="Inputs-Container">
                   <div className="Input_Wrapper">
                     <h3 style={{ textAlign: "center" }}>
@@ -1358,8 +1358,8 @@ const EditProfileUI = () => {
           </div>
         </div>
         {isAboutPopupVisible && (
-          <div className="popup-container">
-            <div className="popup-content">
+          <div className="about-popup-container">
+            <div className="about-popup-content">
               <div>
                 <div
                   style={{
