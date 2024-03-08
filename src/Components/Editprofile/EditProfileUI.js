@@ -1734,7 +1734,7 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="institute"
+                            name="institute" className={experienceDetails.institute=='' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.institute}
                             id=""
                             onChange={handleChange}
@@ -1753,7 +1753,7 @@ const EditProfileUI = () => {
                         </div>
                         <div className="Exp_Input_Fields">
                           <select
-                            name="designation"
+                            name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.designation}
                             onChange={handleChange}
                           >
@@ -1774,7 +1774,7 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Department"
+                            name="Department" className={experienceDetails.Department == '' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.Department}
                             id=""
                             onChange={handleChange}
@@ -1794,7 +1794,7 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Research"
+                            name="Research" className={experienceDetails.Research == '' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.Research}
                             id=""
                             onChange={handleChange}
@@ -1813,7 +1813,7 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
-                              type="date"
+                              type="date" className={experienceDetails.start == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.start}
                               name="start"
                               id=""
@@ -1850,7 +1850,7 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Achievements"
+                            name="Achievements" className={experienceDetails.Achievements == '' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.Achievements}
                             id=""
                             onChange={handleChange}
@@ -1870,7 +1870,7 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Published"
+                            name="Published" className={experienceDetails.Published == '' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.Published}
                             id=""
                             onChange={handleChange}
@@ -1889,7 +1889,7 @@ const EditProfileUI = () => {
                         </div>
                         <div className="Exp_Input_Fields">
                           <input
-                            type="text"
+                            type="text" 
                             name="StartupExperience"
                             value={experienceDetails.StartupExperience}
                             id=""
@@ -1931,7 +1931,7 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <select
-                              name="workingStatus"
+                            name="workingStatus" className={experienceDetails.workingStatus == '' ? 'editErrors' : 'editSuccess'}
                               id=""
                               value={experienceDetails.workingStatus}
                               onChange={handleChange}
@@ -1956,7 +1956,7 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="company"
+                              name="company" className={experienceDetails.company == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.company}
                               id=""
                               onChange={handleChange}
@@ -1973,7 +1973,7 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <select
-                              name="designation"
+                              name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.designation}
                               onChange={handleChange}
                             >
@@ -1994,7 +1994,7 @@ const EditProfileUI = () => {
                             </div>
                             <div className="Exp_Input_Fields">
                               <input
-                                type="date"
+                                type="date" className={experienceDetails.start == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.start}
                                 name="start"
                                 id=""
@@ -2027,7 +2027,7 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="Profession"
+                              name="Profession" className={experienceDetails.Profession == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.Profession}
                               id=""
                               onChange={handleChange}
@@ -2046,7 +2046,7 @@ const EditProfileUI = () => {
                             <input
                               type="number"
                               min={0}
-                              name="TotalWorkExperience"
+                              name="TotalWorkExperience" className={experienceDetails.TotalWorkExperience == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.TotalWorkExperience}
                               id=""
                               onChange={handleChange}
@@ -2069,7 +2069,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="text"
-                                name="startupName"
+                              name="startupName" className={experienceDetails.startupName == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.startupName}
                                 id=""
                                 onChange={handleChange}
@@ -2087,7 +2087,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <textarea
                                 type="text"
-                                name="Description"
+                              name="Description" className={experienceDetails.Description == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.Description}
                                 id=""
                                 onChange={handleChange}
@@ -2103,7 +2103,7 @@ const EditProfileUI = () => {
                             </div>
                             <div className="Exp_Input_Fields">
                               <select
-                                name="designation"
+                              name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.designation}
                                 onChange={handleChange}
                               >
@@ -2122,7 +2122,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="text"
-                                name="Profession"
+                              name="Profession" className={experienceDetails.Profession == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.Profession}
                                 id=""
                                 onChange={handleChange}
@@ -2140,7 +2140,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="number"
-                                min={0}
+                              min={0} className={experienceDetails.TotalWorkExperience == '' ? 'editErrors' : 'editSuccess'}
                                 name="TotalWorkExperience"
                                 value={experienceDetails.TotalWorkExperience}
                                 id=""
@@ -2163,7 +2163,7 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="number"
-                              name="Customers"
+                              name="Customers" className={experienceDetails.Customers == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.Customers}
                               id=""
                               onChange={handleChange}
@@ -2181,7 +2181,7 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="CompanyLocation"
+                              name="CompanyLocation" className={experienceDetails.CompanyLocation == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.CompanyLocation}
                               id=""
                               onChange={handleChange}
@@ -2199,7 +2199,7 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="areaOfBusiness"
+                              name="areaOfBusiness" className={experienceDetails.areaOfBusiness == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.areaOfBusiness}
                               id=""
                               onChange={handleChange}
@@ -2212,7 +2212,7 @@ const EditProfileUI = () => {
                           <div>
                             <label className="Input-Label">Banner*</label>
                           </div>
-                          <label htmlFor="Banner" className="resume">
+                          <label htmlFor="Banner" className={`resume ${experienceDetails.Banner == '' ? 'editErrors' : 'editSuccess'}`}>
                             <CloudUploadIcon />
                             <span className="fileName">
                               {Banner || "Upload"}
@@ -2233,7 +2233,7 @@ const EditProfileUI = () => {
                           <div>
                             <label className="Input-Label">Logo*</label>
                           </div>
-                          <label htmlFor="Logo" className="resume">
+                          <label htmlFor="Logo" className={`resume ${experienceDetails.Logo == '' ? 'editErrors' : 'editSuccess'}`}>
                             <CloudUploadIcon />
                             <span className="fileName">
                               {Logo || "Upload"}
@@ -2259,7 +2259,7 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="Services"
+                              name="Services" className={experienceDetails.Services == '' ? 'editErrors' : 'editSuccess'}
                               value={experienceDetails.Services}
                               id=""
                               onChange={handleChange}
