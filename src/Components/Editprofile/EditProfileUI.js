@@ -838,6 +838,11 @@ const EditProfileUI = () => {
       experienceDetails: totalExperienceData,
       educationDetails: totalEducationData,
     }))
+    dispatch(setToast({
+      message: 'Data Saved Locally',
+      bgColor: ToastColors.success,
+      visible: 'yes'
+    }))
   }
   const retreiveLocal = () => {
     console.log(JSON.parse(localStorage.getItem('editProfile')));
@@ -893,6 +898,12 @@ const EditProfileUI = () => {
             ) || [],
         });
       }
+
+      dispatch(setToast({
+        message: 'Data Retrived Locally',
+        bgColor: ToastColors.success,
+        visible: 'yes'
+      }))
     }
   }
 
