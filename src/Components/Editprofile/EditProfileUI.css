@@ -223,8 +223,8 @@
   margin-bottom: 20px;
 }
 .close-icon {
-  display: flex;
-  justify-content: right;
+  /* display: flex;
+  justify-content: right; */
   color: gray;
 }
 
@@ -350,12 +350,23 @@ select {
   transform: scale(1.2);
 }
 .editErrors {
-  border: 2px solid red;
+  border-bottom: 2px solid red;
 }
 .editSuccess {
-  border: 2px solid green;
+  border-bottom: 2px solid green;
 }
+ input, select, textarea {
+    border: none;
+    border-bottom: 1px solid black;
+    padding: 8px 0px !important;
+    width: 100%;
+  }
 
+  .popup-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 @media (max-width: 768px) {
   .EditProfile-personal-Container,
   .Banner,
@@ -363,7 +374,7 @@ select {
   .EditProfile-Experience-Container,
   .EditProfile-Education-Container,
   .EditProfile-UploadFiles-Container {
-    width: 360px;
+    width: 330px;
   }
 
   .Profile-Image img {
@@ -395,7 +406,6 @@ select {
     font-size: 12px;
   }
   .editErrors {
-    
   }
   .add-button {
     margin-bottom: 20px;
@@ -407,18 +417,18 @@ select {
   .resume {
     width: 300px;
   }
-  .popup-container {
-    width: 90%;
-    height: 100%;
-    margin-top: 0px;
-    margin-left: 0px;
-    background-color: rgba(0, 0, 0, 0);
-    /* margin-left: 10px; */
-  }
+
   .popup-content {
+    overflow-x: hidden !important;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
     margin: auto;
-    width: 100%;
+    width: 330px;
+    height: 100vh;
   }
+ 
   .bioText {
     width: 320px;
   }
