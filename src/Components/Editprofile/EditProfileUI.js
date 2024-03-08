@@ -815,6 +815,87 @@ const EditProfileUI = () => {
     autoplay: true,
     autoplaySpeed: 2000,
   };
+
+
+
+  const savingLocal = () => {
+    localStorage.setItem('editProfile', JSON.stringify({
+      salutation: salutation,
+      mentorCategories: mentorCategories,
+      email: email,
+      userId: user_id,
+      state: state,
+      town: town,
+      country: country,
+      userName: name,
+      phone: mobile,
+      role: role,
+      fee: fee,
+      bio: bio,
+      skills: skills,
+      languagesKnown: languagesKnown,
+      documents: changeResume,
+      experienceDetails: totalExperienceData,
+      educationDetails: totalEducationData,
+    }))
+  }
+  const retreiveLocal = () => {
+    console.log(JSON.parse(localStorage.getItem('editProfile')));
+    if (localStorage.getItem('editProfile')) {
+      const local = JSON.parse(localStorage.getItem('editProfile'))
+      setEditOwnProfile(true);
+      setInputs((prev) => ({
+        ...prev,
+        name: local?.userName,
+        mobile: local?.phone,
+        role: local?.role,
+        mobileVerified: true,
+        email: local?.email,
+        salutation: local?.salutation,
+        mentorCategories: local?.mentorCategories,
+      }));
+
+      if (local?.documents !== undefined) {
+        setOldDocs((prev) => ({
+          ...prev,
+          resume: local?.documents.resume,
+          expertise: local?.documents.expertise,
+          acheivements: local?.documents.acheivements,
+          working: local?.documents.working,
+          degree: local?.documents.degree,
+        }));
+        setchangeDocuments((prev) => ({
+          ...prev,
+          resume: local?.documents?.resume || "",
+          expertise: local?.documents?.expertise || "",
+          acheivements: local?.documents?.acheivements || "",
+          working: local?.documents?.working || "",
+          degree: local?.documents?.degree || "",
+        }));
+        setTotalEducationData(local?.educationDetails || []);
+        setTotalExperienceData(local?.experienceDetails || []);
+        setFee(local?.fee || "");
+        setBio(local?.bio || "");
+        setSkills(local?.skills || []);
+        setlanguagesKnown(local?.languagesKnown || []);
+
+        settown(local?.town || "");
+        setCountry(local?.country || "");
+        setState(local?.state || "");
+        setPlaces({
+          country: Country.getAllCountries(),
+          state:
+            State.getStatesOfCountry(local?.country?.split("-")[1]) || [],
+          town:
+            City.getCitiesOfState(
+              local?.country?.split("-")[1],
+              local?.state?.split("-")[1]
+            ) || [],
+        });
+      }
+    }
+  }
+
   return (
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
@@ -2732,7 +2813,8 @@ const EditProfileUI = () => {
               marginBottom: "15px",
             }}
           >
-            <button>Save</button>
+            <button onClick={retreiveLocal}>Retreive last Save</button>
+            <button onClick={savingLocal}>Save</button>
             <button
               type="submit"
               disabled={
