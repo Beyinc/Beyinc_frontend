@@ -998,10 +998,27 @@ const EditProfileUI = () => {
               <div className="popup-content">
                 <div className="Inputs-Container">
                   <div className="Input_Wrapper">
-                    <h3 style={{ textAlign: "center" }}>
+                    <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                 <h3 style={{ textAlign: "center" }}>
                       Personal Information
                     </h3>
-
+                  <span
+                  className="close-icon"
+                  onClick={() => {
+                    document.getElementsByTagName("body")[0].style.overflowY =
+                      "scroll";
+                    setIsInputPopupVisible(false);
+                  }}
+                >
+                  <i class="fas fa-times"></i>
+                </span>
+                </div>
                     {role === "Mentor" && (
                       <div>
                         <label className="Input-Label">salutation</label>
@@ -1305,16 +1322,6 @@ const EditProfileUI = () => {
                     </div>
                   </div>
                 </div>
-                <span
-                  className="close-icon"
-                  onClick={() => {
-                    document.getElementsByTagName("body")[0].style.overflowY =
-                      "scroll";
-                    setIsInputPopupVisible(false);
-                  }}
-                >
-                  <i class="fas fa-times"></i>
-                </span>
               </div>
             </div>
           )}
@@ -2569,6 +2576,7 @@ const EditProfileUI = () => {
                             style={{
                               height: "30px",
                               width: "30px",
+                              marginRight: '30px'
                             }}
                             src="/view.png"
                             onMouseEnter={() => setShowPreviousFile(true)}
@@ -2623,6 +2631,7 @@ const EditProfileUI = () => {
                               style={{
                                 height: "30px",
                                 width: "30px",
+                                marginRight: '30px'
                               }}
                               src="/view.png"
                               onMouseEnter={() => setShowPreviousFile(true)}
@@ -2678,6 +2687,7 @@ const EditProfileUI = () => {
                             style={{
                               height: "30px",
                               width: "30px",
+                              marginRight: '30px'
                             }}
                             src="/view.png"
                             onMouseEnter={() => setShowPreviousFile(true)}
@@ -2732,6 +2742,7 @@ const EditProfileUI = () => {
                             style={{
                               height: "30px",
                               width: "30px",
+                              marginRight: '30px'
                             }}
                             src="/view.png"
                             onMouseEnter={() => setShowPreviousFile(true)}
@@ -2786,6 +2797,7 @@ const EditProfileUI = () => {
                             style={{
                               height: "30px",
                               width: "30px",
+                              marginRight: '30px'
                             }}
                             src="/view.png"
                             onMouseEnter={() => setShowPreviousFile(true)}
@@ -2832,15 +2844,15 @@ const EditProfileUI = () => {
               marginBottom: "15px",
             }}
           >
-            <button onClick={retreiveLocal}>Retreive last Save</button>
-            <button onClick={savingLocal}>Save</button>
+            <button style={{fontSize: '10px'}} onClick={retreiveLocal}>Retreive last Save</button>
+            <button style={{fontSize: '10px'}} onClick={savingLocal}>Save</button>
             <button
               type="submit"
               disabled={
                 isLoading || !isFormValid || image === undefined || image === ""
               }
               onClick={update}
-              style={{ whiteSpace: "nowrap", position: "relative" }}
+              style={{ whiteSpace: "nowrap", position: "relative", fontSize: '10px' }}
             >
               {isLoading ? (
                 <>
