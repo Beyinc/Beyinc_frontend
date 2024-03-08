@@ -965,8 +965,9 @@ const EditProfileUI = () => {
               <div style={{ fontWeight: "500", fontSize: "18px" }}>
                 {role} {role == "Mentor" && mentorCategories}
               </div>
-              <div style={{ fontSize: "16px" }}>{email}</div>
-              <div style={{ fontSize: "16px" }}>{mobile}</div>
+              <div style={{ fontSize: "12px" }}>{email}</div>
+              <div style={{ fontSize: "12px" }}>{mobile}</div>
+              {role == 'Mentor' && <div style={{ fontSize: "12px" }}>&#8377;{fee} per minute</div>}
               <div className="language-display">
                 {languagesKnown?.map((t, i) => (
                   <div>
@@ -2860,12 +2861,12 @@ const EditProfileUI = () => {
               style={{ whiteSpace: "nowrap", position: "relative", fontSize: '10px' }}
             >
               {isLoading ? (
-                <>
+                <div style={{display: 'flex', gap: '5px', alignItems: 'center'}}>
                   <div className="button-loader"></div>
-                  <span style={{ marginLeft: "12px" }}>
+                  <div style={{ }}>
                     Sending Approval...
-                  </span>
-                </>
+                  </div>
+                </div>
               ) : (
                 <>
                   <i
