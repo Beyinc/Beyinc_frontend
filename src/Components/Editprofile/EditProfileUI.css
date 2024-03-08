@@ -368,6 +368,12 @@ select {
 .delete:hover {
   transform: scale(1.2);
 }
+.editErrors{
+  border: 2px solid red;
+}
+.editSuccess{
+    border: 2px solid green;
+}
 
 @media (max-width: 768px) {
   .EditProfile-personal-Container,
