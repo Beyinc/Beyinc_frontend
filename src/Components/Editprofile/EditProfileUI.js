@@ -998,27 +998,27 @@ const EditProfileUI = () => {
               <div className="popup-content">
                 <div className="Inputs-Container">
                   <div className="Input_Wrapper">
-                    <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                 <h3 style={{ textAlign: "center" }}>
-                      Personal Information
-                    </h3>
-                  <span
-                  className="close-icon"
-                  onClick={() => {
-                    document.getElementsByTagName("body")[0].style.overflowY =
-                      "scroll";
-                    setIsInputPopupVisible(false);
-                  }}
-                >
-                  <i class="fas fa-times"></i>
-                </span>
-                </div>
+                    <div className="popup-header"
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h3>
+                        Personal Information
+                      </h3>
+                      <div
+                        className="close-icon"
+                        onClick={() => {
+                          document.getElementsByTagName("body")[0].style.overflowY =
+                            "scroll";
+                          setIsInputPopupVisible(false);
+                        }}
+                      >
+                        <i class="fas fa-times"></i>
+                      </div>
+                    </div>
                     {role === "Mentor" && (
                       <div>
                         <label className="Input-Label">salutation</label>
@@ -1369,7 +1369,7 @@ const EditProfileUI = () => {
           <div className="popup-container">
             <div className="popup-content">
               <div>
-                <div
+                <div className="popup-header"
                   style={{
                     display: "flex",
                     flexDirection: "row",
@@ -1377,7 +1377,7 @@ const EditProfileUI = () => {
                   }}
                 >
                   <h3>Edit About</h3>
-                  <span
+                  <div
                     className="close-icon"
                     onClick={() => {
                       document.getElementsByTagName("body")[0].style.overflowY =
@@ -1386,7 +1386,7 @@ const EditProfileUI = () => {
                     }}
                   >
                     <i class="fas fa-times"></i>
-                  </span>
+                  </div>
                 </div>
                 <textarea className="bioText"
                   onChange={(e) => {
@@ -1690,46 +1690,48 @@ const EditProfileUI = () => {
             <div className="popup-content">
               <div className="Work-exp">
                 <form className="update-form">
-                  <div
-                    className="close-icon"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
+                  <div className="popup-header">
+                    <h3>Experience</h3>
+                    <div
+                      className="close-icon"
+                      onClick={() => {
+                        document.getElementsByTagName("body")[0].style.overflowY =
+                          "scroll";
 
-                      setIsExperiencePopupVisible(false);
-                      seteditingExperienceId('')
-                      setExperience({
-                        areaOfBusiness: "",
-                        business: "",
-                        institute: "",
-                        startupName: '',
-                        workingStatus: "",
-                        company: "",
-                        designation: "",
-                        Department: "",
-                        Research: "",
-                        year: "",
-                        start: "",
-                        end: "",
-                        Achievements: "",
-                        Published: "",
-                        StartupExperience: "",
-                        Consultancy: "",
-                        Profession: "",
-                        TotalWorkExperience: "",
-                        Description: "",
-                        // Technology Partner
-                        Customers: "",
-                        CompanyLocation: "",
-                        Banner: "",
-                        Logo: "",
-                        Services: "",
-                      });
-                    }}
-                  >
-                    <i class="fas fa-times"></i>
+                        setIsExperiencePopupVisible(false);
+                        seteditingExperienceId('')
+                        setExperience({
+                          areaOfBusiness: "",
+                          business: "",
+                          institute: "",
+                          startupName: '',
+                          workingStatus: "",
+                          company: "",
+                          designation: "",
+                          Department: "",
+                          Research: "",
+                          year: "",
+                          start: "",
+                          end: "",
+                          Achievements: "",
+                          Published: "",
+                          StartupExperience: "",
+                          Consultancy: "",
+                          Profession: "",
+                          TotalWorkExperience: "",
+                          Description: "",
+                          // Technology Partner
+                          Customers: "",
+                          CompanyLocation: "",
+                          Banner: "",
+                          Logo: "",
+                          Services: "",
+                        });
+                      }}
+                    >
+                      <i class="fas fa-times"></i>
+                    </div>
                   </div>
-                  <h3 style={{ textAlign: "center" }}>Experience</h3>
                   <div className="exp-container">
 
                     {/* Academia Mentor */}
@@ -1741,7 +1743,7 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="institute" className={experienceDetails.institute=='' ? 'editErrors' : 'editSuccess'}
+                            name="institute" className={experienceDetails.institute == '' ? 'editErrors' : 'editSuccess'}
                             value={experienceDetails.institute}
                             id=""
                             onChange={handleChange}
@@ -1896,7 +1898,7 @@ const EditProfileUI = () => {
                         </div>
                         <div className="Exp_Input_Fields">
                           <input
-                            type="text" 
+                            type="text"
                             name="StartupExperience"
                             value={experienceDetails.StartupExperience}
                             id=""
@@ -1938,7 +1940,7 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <select
-                            name="workingStatus" className={experienceDetails.workingStatus == '' ? 'editErrors' : 'editSuccess'}
+                              name="workingStatus" className={experienceDetails.workingStatus == '' ? 'editErrors' : 'editSuccess'}
                               id=""
                               value={experienceDetails.workingStatus}
                               onChange={handleChange}
@@ -2076,7 +2078,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="text"
-                              name="startupName" className={experienceDetails.startupName == '' ? 'editErrors' : 'editSuccess'}
+                                name="startupName" className={experienceDetails.startupName == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.startupName}
                                 id=""
                                 onChange={handleChange}
@@ -2094,7 +2096,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <textarea
                                 type="text"
-                              name="Description" className={experienceDetails.Description == '' ? 'editErrors' : 'editSuccess'}
+                                name="Description" className={experienceDetails.Description == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.Description}
                                 id=""
                                 onChange={handleChange}
@@ -2110,7 +2112,7 @@ const EditProfileUI = () => {
                             </div>
                             <div className="Exp_Input_Fields">
                               <select
-                              name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
+                                name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.designation}
                                 onChange={handleChange}
                               >
@@ -2129,7 +2131,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="text"
-                              name="Profession" className={experienceDetails.Profession == '' ? 'editErrors' : 'editSuccess'}
+                                name="Profession" className={experienceDetails.Profession == '' ? 'editErrors' : 'editSuccess'}
                                 value={experienceDetails.Profession}
                                 id=""
                                 onChange={handleChange}
@@ -2147,7 +2149,7 @@ const EditProfileUI = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="number"
-                              min={0} className={experienceDetails.TotalWorkExperience == '' ? 'editErrors' : 'editSuccess'}
+                                min={0} className={experienceDetails.TotalWorkExperience == '' ? 'editErrors' : 'editSuccess'}
                                 name="TotalWorkExperience"
                                 value={experienceDetails.TotalWorkExperience}
                                 id=""
@@ -2285,7 +2287,7 @@ const EditProfileUI = () => {
                         disabled={
                           (role === "Technology Partner" && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Customers == '' || experienceDetails.CompanyLocation == '' || experienceDetails.business == '' || experienceDetails.Banner == '' || experienceDetails.Logo == '' || experienceDetails.Services == ''))
                           ||
-                          (role === "Entrepreneur" && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == ''  || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))
+                          (role === "Entrepreneur" && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))
                           ||
                           (role == 'Mentor' && ((mentorCategories == 'Academia Mentor' && (experienceDetails.institute == '' || experienceDetails.designation !== '' || experienceDetails.Department == '' || experienceDetails.start == '' || experienceDetails.Research == '' || experienceDetails.Achievements == '' || experienceDetails.Published == '')) || (mentorCategories == 'Industry Expert Mentor' && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))))
                         }
@@ -2382,27 +2384,30 @@ const EditProfileUI = () => {
             <div className="popup-container">
               <div className="popup-content">
                 <form className="update-form">
-                  <div
-                    className="close-icon"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
+                  <div className="popup-header">
+                    <h3>Education</h3>
+                    <div
+                      className="close-icon"
+                      onClick={() => {
+                        document.getElementsByTagName("body")[0].style.overflowY =
+                          "scroll";
 
-                      setIsEducationPopupVisible(false);
-                      seteditingEducationId('')
-                      setEducationDetails({
-                        year: "",
-                        grade: "",
-                        college: "",
-                        Edstart: "",
-                        Edend: "",
-                      });
-                    }}
-                  >
-                    <i class="fas fa-times"></i>
+                        setIsEducationPopupVisible(false);
+                        seteditingEducationId('')
+                        setEducationDetails({
+                          year: "",
+                          grade: "",
+                          college: "",
+                          Edstart: "",
+                          Edend: "",
+                        });
+                      }}
+                    >
+                      <i class="fas fa-times"></i>
+                    </div>
                   </div>
+                  
                   <div className="edu-container">
-                    <h2>Education</h2>
                     <div style={{ display: "flex", flexDirection: "column" }}>
 
                       <div>
@@ -2559,7 +2564,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
-                    width: width < 700 && '350px'
+                    width: width < 700 && '320px'
                   }}
                 >
                   <label className="Input-Label">Resume</label>
@@ -2614,7 +2619,7 @@ const EditProfileUI = () => {
                       alignItems: "center",
                       gap: "2px",
                       justifyContent: "space-between",
-                      width: width < 700 && '350px'
+                      width: width < 700 && '320px'
                     }}
                   >
                     <label className="Input-Label">Acheivements</label>
@@ -2669,7 +2674,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
-                    width: width < 700 && '350px'
+                    width: width < 700 && '320px'
 
                   }}
                 >
@@ -2725,7 +2730,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
-                    width: width < 700 && '350px'
+                    width: width < 700 && '320px'
                   }}
                 >
                   <label className="Input-Label">Expertise</label>
@@ -2780,7 +2785,7 @@ const EditProfileUI = () => {
                     alignItems: "center",
                     gap: "2px",
                     justifyContent: "space-between",
-                    width: width < 700 && '350px'
+                    width: width < 700 && '320px'
                   }}
                 >
                   <label className="Input-Label">Working</label>
@@ -2844,8 +2849,8 @@ const EditProfileUI = () => {
               marginBottom: "15px",
             }}
           >
-            <button style={{fontSize: '10px'}} onClick={retreiveLocal}>Retreive last Save</button>
-            <button style={{fontSize: '10px'}} onClick={savingLocal}>Save</button>
+            <button style={{ fontSize: '10px' }} onClick={retreiveLocal}>Retreive last Save</button>
+            <button style={{ fontSize: '10px' }} onClick={savingLocal}>Save</button>
             <button
               type="submit"
               disabled={
