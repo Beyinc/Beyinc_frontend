@@ -5,6 +5,7 @@
   margin-top: 10px;
   flex-direction: column;
   gap: 5px;
+  font-size: 12px;
 }
 
 /* SECTION-1 */
@@ -139,7 +140,6 @@
 }
 .Input_Wrapper {
   display: flex;
-  justify-content: center;
   flex-direction: column;
 }
 .Input_Fields {
@@ -387,7 +387,7 @@ select {
     font-size: 16px !important;
   }
   .Personal-Details div:not(:first-child) {
-    font-size: 14px !important;
+    font-size: 12px !important;
   }
 
   .Banner {
@@ -415,7 +415,7 @@ select {
     margin-top: -80px;
   }
   .resume {
-    width: 300px;
+    width: 280px;
   }
 
   .popup-content {
@@ -432,10 +432,7 @@ select {
   .bioText {
     width: 320px;
   }
-  .Inputs-Container {
-    margin-top: 350px;
-    margin-bottom: 20px;
-  }
+ 
   .close-icon {
     margin-right: 0px;
   }
