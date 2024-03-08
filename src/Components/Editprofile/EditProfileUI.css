@@ -24,12 +24,12 @@
   width: 1100px;
   height: 40vh;
   border-radius: 10px 10px 0px 0px;
-  overflow: hidden; 
-  position: relative; 
+  overflow: hidden;
+  position: relative;
 }
 
 .Banner .slick-slider {
-  position: absolute; 
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -41,28 +41,25 @@
 }
 
 .Banner .slick-slider .slick-slide {
-  height: 100%; 
+  height: 100%;
 }
 
 .Banner .slick-slider .slick-slide img {
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-
 
 .Banner .slick-slider .slick-dots {
-  bottom: 20px; 
+  bottom: 20px;
 }
-
 
 .Banner .slick-slider .slick-dots li button:before {
   display: white;
 }
 
-
 .Banner .slick-slider .slick-dots li.slick-active button:before {
-  color: white; 
+  color: white;
 }
 
 .Profile-Image {
@@ -111,7 +108,7 @@
 }
 
 /* POPUP CONTAINERS */
-.popup-container, .personal-info-popup-container, .about-popup-container {
+.popup-container {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -124,7 +121,7 @@
   align-items: center;
   justify-content: center;
 }
-.popup-content, .personal-info-popup-content, .about-popup-content {
+.popup-content {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
@@ -138,6 +135,7 @@
 .Inputs-Container {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 .Input_Wrapper {
   display: flex;
@@ -156,8 +154,6 @@
   width: 270px;
   font-size: 12px;
 }
-
-
 
 .otp_Button {
   width: 30%;
@@ -224,6 +220,7 @@
 .add-button {
   width: 300px !important;
   padding: 8px;
+  margin-bottom: 20px;
 }
 .close-icon {
   display: flex;
@@ -245,18 +242,20 @@
   padding: 20px;
   text-align: justify;
 }
-.studies{
+.studies {
   transition: all ease 0.3s;
   cursor: pointer;
 }
-.studies:hover{
-background: rgb(245, 240, 240);;
+.studies:hover {
+  background: rgb(245, 240, 240);
 }
-.fa-pen, .fa-plus {
+.fa-pen,
+.fa-plus {
   font-size: 14px;
   color: grey;
 }
-.fa-pen:hover, .fa-plus:hover {
+.fa-pen:hover,
+.fa-plus:hover {
   transform: scale(1.2);
   color: black;
 }
@@ -276,7 +275,8 @@ background: rgb(245, 240, 240);;
   border-radius: 10px;
   background: white;
 }
-.company, .college {
+.company,
+.college {
   font-size: 14px;
   font-weight: 600;
   display: flex;
@@ -285,9 +285,9 @@ background: rgb(245, 240, 240);;
 .designation {
   font-size: 14px;
 }
-.grade{
-margin-left: 20px;
-font-size: 14px;
+.grade {
+  margin-left: 20px;
+  font-size: 14px;
 }
 .timeline {
   font-size: 12px;
@@ -313,7 +313,7 @@ font-size: 14px;
 select,
 .Exp_Input_Fields input,
 select {
-  width: 300px;
+  width: 300px !important;
   font-size: 12px;
 }
 
@@ -349,11 +349,11 @@ select {
 .delete:hover {
   transform: scale(1.2);
 }
-.editErrors{
+.editErrors {
   border: 2px solid red;
 }
-.editSuccess{
-    border: 2px solid green;
+.editSuccess {
+  border: 2px solid green;
 }
 
 @media (max-width: 768px) {
@@ -362,11 +362,10 @@ select {
   .EditProfile-About-Section,
   .EditProfile-Experience-Container,
   .EditProfile-Education-Container,
-  .EditProfile-UploadFiles-Container
-  {
-    width: 380px;
+  .EditProfile-UploadFiles-Container {
+    width: 360px;
   }
-  
+
   .Profile-Image img {
     margin-top: -250px;
     width: 150px;
@@ -381,45 +380,53 @@ select {
   }
 
   .Banner {
-    width: 370px;
+    width: 98%;
     height: 30vh;
     border-radius: 10px 10px 0px 0px;
-    overflow: hidden; 
-    position: relative; 
+    overflow: hidden;
+    position: relative;
   }
 
   .Banner .slick-slider .slick-dots li button:before {
- margin-top: -80px;
+    margin-top: -80px;
   }
   .Input_Fields input {
     width: 270px !important;
     font-size: 12px;
   }
-  .add-button {
-    margin-bottom: 10px;
+  .editErrors {
+    
   }
-  
+  .add-button {
+    margin-bottom: 20px;
+  }
+
   .Banner .slick-slider .slick-dots li.slick-active button:before {
     margin-top: -80px;
   }
-  .resume{
+  .resume {
     width: 300px;
   }
-  .popup-container{
-    width: 22rem;
-    height: 60rem;
+  .popup-container {
+    width: 90%;
+    height: 100%;
     margin-top: 0px;
     margin-left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    /* margin-left: 10px; */
   }
-  
-  .popup-content{
+  .popup-content {
     margin: auto;
     width: 100%;
   }
-  .bioText{
-    width: 350px;
+  .bioText {
+    width: 320px;
+  }
+  .Inputs-Container {
+    margin-top: 350px;
+    margin-bottom: 20px;
+  }
+  .close-icon {
+    margin-right: 0px;
   }
 }
-
-
-
