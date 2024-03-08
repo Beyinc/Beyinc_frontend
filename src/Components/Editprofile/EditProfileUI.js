@@ -126,6 +126,7 @@ const EditProfileUI = () => {
     Services: "",
     workingStatus: ""
   });
+
   const [EducationDetails, setEducationDetails] = useState({
     year: "",
     grade: "",
@@ -314,7 +315,7 @@ const EditProfileUI = () => {
       setTotalEducationData((prev) => [...prev, EducationDetails]);
     } else {
       setTotalEducationData(totalEducationData.map((t, i) => {
-        return i+1 === editingEducationId ? EducationDetails : t
+        return i + 1 === editingEducationId ? EducationDetails : t
       }))
       setIsEducationPopupVisible(false);
       seteditingEducationId('')
@@ -328,7 +329,7 @@ const EditProfileUI = () => {
       Edstart: "",
       Edend: "",
     });
-    
+
   };
 
   const [changeResume, setchangeDocuments] = useState({
@@ -1655,7 +1656,7 @@ const EditProfileUI = () => {
                 {id == undefined &&
                   <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
                     <div onClick={(e) => {
-                      seteditingExperienceId(i+1)
+                      seteditingExperienceId(i + 1)
                       setExperience(te)
                       handleExperienceButtonClick()
                     }}>
@@ -2274,13 +2275,20 @@ const EditProfileUI = () => {
                       <button
                         className="add-button"
                         onClick={addExperience}
+                        disabled={
+                          (role === "Technology Partner" && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Customers == '' || experienceDetails.CompanyLocation == '' || experienceDetails.business == '' || experienceDetails.Banner == '' || experienceDetails.Logo == '' || experienceDetails.Services == ''))
+                          ||
+                          (role === "Entrepreneur" && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == ''  || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))
+                          ||
+                          (role == 'Mentor' && ((mentorCategories == 'Academia Mentor' && (experienceDetails.institute == '' || experienceDetails.designation !== '' || experienceDetails.Department == '' || experienceDetails.start == '' || experienceDetails.Research == '' || experienceDetails.Achievements == '' || experienceDetails.Published == '')) || (mentorCategories == 'Industry Expert Mentor' && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))))
+                        }
                       // disabled={
                       //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
                       //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
                       //   experienceDetails.designation == ""
                       // }
                       >
-                        {editingExperienceId==''?'Add':'Update'}
+                        {editingExperienceId == '' ? 'Add' : 'Update'}
                       </button>
                     </div>
                   </div>
@@ -2598,7 +2606,7 @@ const EditProfileUI = () => {
                       alignItems: "center",
                       gap: "2px",
                       justifyContent: "space-between",
-                      width: width<700 && '350px'
+                      width: width < 700 && '350px'
                     }}
                   >
                     <label className="Input-Label">Acheivements</label>
