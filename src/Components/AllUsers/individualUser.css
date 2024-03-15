@@ -280,9 +280,7 @@
     margin-top: -40px;
     margin-left: 10px;
   }
-  .reviewContainer {
-    font-size: 12px;
-  }
+  
   .individualUserContainer .commentsContainer {
     width: 320px !important;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

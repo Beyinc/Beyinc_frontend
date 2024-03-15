@@ -39,9 +39,17 @@ import useWindowDimensions from "../Common/WindowSize";
 import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
 import { io } from "socket.io-client";
 import { gridCSS } from "../CommonStyles";
+import ReviewStars from "../LivePitches/ReviewStars";
+import AddReviewStars from "../LivePitches/AddReviewStars";
+import IndividualUserReview from "../AllUsers/IndividualUserReview";
+
 const EditProfileUI = () => {
   const { id } = useParams();
-  const { user_id } = useSelector((store) => store.auth.loginDetails);
+  const {
+    user_id,
+    userName: loggedUserName,
+    image: loggedImage,
+  } = useSelector((store) => store.auth.loginDetails);
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -50,8 +58,10 @@ const EditProfileUI = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [inputs, setInputs] = useState({
+    verification: null,
     mentorCategories: null,
     salutation: null,
+    review: [],
     email: null,
     userName: null,
     emailOtp: null,
@@ -70,6 +80,8 @@ const EditProfileUI = () => {
   });
 
   const {
+    review,
+    verification,
     // email,
     // emailOtp,
     salutation,
@@ -117,14 +129,14 @@ const EditProfileUI = () => {
     Profession: "",
     TotalWorkExperience: "",
     Description: "",
-    startupName: '',
+    startupName: "",
     // Technology Partner
     Customers: "",
     CompanyLocation: "",
     Banner: "",
     Logo: "",
     Services: "",
-    workingStatus: ""
+    workingStatus: "",
   });
 
   const [EducationDetails, setEducationDetails] = useState({
@@ -145,8 +157,8 @@ const EditProfileUI = () => {
   const [country, setCountry] = useState("");
   const [town, settown] = useState("");
   const [collegeQuery, setCollegeQuery] = useState("");
-  const [editingExperienceId, seteditingExperienceId] = useState("")
-  const [editingEducationId, seteditingEducationId] = useState("")
+  const [editingExperienceId, seteditingExperienceId] = useState("");
+  const [editingEducationId, seteditingEducationId] = useState("");
 
   const [places, setPlaces] = useState({
     country: [],
@@ -179,7 +191,6 @@ const EditProfileUI = () => {
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsAboutPopupVisible(true);
   };
-
 
   const handleBannerImage = (e) => {
     SetBanner(e.target.files[0].name);
@@ -214,7 +225,6 @@ const EditProfileUI = () => {
       setExperience((prev) => ({ ...prev, Logo: reader.result }));
     };
   };
-
 
   const handleExperienceButtonClick = () => {
     if (role == "Mentor" && mentorCategories == null) {
@@ -267,24 +277,25 @@ const EditProfileUI = () => {
 
   const addExperience = (e) => {
     e.preventDefault();
-    if (editingExperienceId == '') {
+    if (editingExperienceId == "") {
       setTotalExperienceData((prev) => [...prev, experienceDetails]);
     } else {
-      setTotalExperienceData(totalExperienceData.map((t, i) => {
-        return i + 1 === editingExperienceId ? experienceDetails : t
-      }))
+      setTotalExperienceData(
+        totalExperienceData.map((t, i) => {
+          return i + 1 === editingExperienceId ? experienceDetails : t;
+        })
+      );
       setIsExperiencePopupVisible(false);
-      seteditingExperienceId('')
-      document.getElementsByTagName("body")[0].style.overflowY =
-        "scroll";
+      seteditingExperienceId("");
+      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
     }
-    SetBanner('')
-    SetLogo('')
+    SetBanner("");
+    SetLogo("");
     setExperience({
       areaOfBusiness: "",
       business: "",
       institute: "",
-      startupName: '',
+      startupName: "",
       workingStatus: "",
       company: "",
       designation: "",
@@ -309,18 +320,18 @@ const EditProfileUI = () => {
     });
   };
   const addEducation = (e) => {
-
     e.preventDefault();
-    if (editingEducationId == '') {
+    if (editingEducationId == "") {
       setTotalEducationData((prev) => [...prev, EducationDetails]);
     } else {
-      setTotalEducationData(totalEducationData.map((t, i) => {
-        return i + 1 === editingEducationId ? EducationDetails : t
-      }))
+      setTotalEducationData(
+        totalEducationData.map((t, i) => {
+          return i + 1 === editingEducationId ? EducationDetails : t;
+        })
+      );
       setIsEducationPopupVisible(false);
-      seteditingEducationId('')
-      document.getElementsByTagName("body")[0].style.overflowY =
-        "scroll";
+      seteditingEducationId("");
+      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
     }
     setEducationDetails({
       year: "",
@@ -329,7 +340,6 @@ const EditProfileUI = () => {
       Edstart: "",
       Edend: "",
     });
-
   };
 
   const [changeResume, setchangeDocuments] = useState({
@@ -392,128 +402,367 @@ const EditProfileUI = () => {
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
   const [requestUserId, setRequestedUserId] = useState("");
-  useEffect(() => {
-    if (id == undefined) {
-      ApiServices.getProfile({ id: user_id })
-        .then((res) => {
-          setEditOwnProfile(true);
-          setInputs((prev) => ({
-            ...prev,
-            updatedAt: res.data.updatedAt,
-            name: res.data.userName,
-            mobile: res.data.phone,
-            role: res.data.role,
-            mobileVerified: true,
-            image: res.data.image?.url || "",
-            email: res.data.email,
-            salutation: res.data.salutation,
-            mentorCategories: res.data.mentorCategories,
-          }));
 
-          if (res.data.documents !== undefined) {
-            setOldDocs((prev) => ({
+  const [userpage, setuserpage] = useState(null);
+
+  // Adding Comment section
+  const [comment, setComment] = useState("");
+  const [allComments, setAllComments] = useState([]);
+  const [convExits, setConvExists] = useState(false);
+  const [averagereview, setAverageReview] = useState(0);
+  const [emailTrigger, setemailTrigger] = useState(false);
+
+  useEffect(() => {
+    if (userpage === true) {
+      ApiServices.checkConvBtwTwo({ senderId: user_id, receiverId: id })
+        .then((res) => {
+          setConvExists(true);
+        })
+        .catch((err) => {
+          setConvExists(false);
+        });
+    }
+  }, [userpage, user_id]);
+  const onLike = (commentId, isLike) => {
+    ApiServices.likeComment({ comment_id: commentId, comment_owner: id })
+      .then((res) => {
+        // dispatch(
+        //   setToast({
+        //     message: isLike ? "Comment Liked" : "Comment Disliked",
+        //     bgColor: ToastColors.success,
+        //     visible: "yes",
+        //   })
+        // );
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occurred",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  };
+
+  const sendText = async () => {
+    setComment("");
+    if (comment !== "") {
+      await ApiServices.addUserComment({
+        userId: id,
+        comment: comment,
+        commentBy: user_id,
+      })
+        .then((res) => {
+          setemailTrigger(!emailTrigger);
+        })
+        .catch((err) => {
+          // navigate("/searchusers");
+          dispatch(
+            setToast({
+              visible: "yes",
+              message: "Error Occurred while adding comment",
+              bgColor: ToastColors.failure,
+            })
+          );
+        });
+    }
+  };
+
+  const onDisLike = (commentId, isLike) => {
+    ApiServices.dislikeComment({
+      comment_id: commentId,
+      comment_owner: id,
+    })
+      .then((res) => {})
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occurred",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  };
+
+  useEffect(() => {
+    if (id !== undefined && userpage == true) {
+      // dispatch(setLoading({ visible: "yes" }));
+      ApiServices.getuserComments({ userId: id })
+        .then((res) => {
+          setAllComments(
+            res.data.sort((a, b) => {
+              return new Date(b.createdAt) - new Date(a.createdAt);
+            })
+          );
+        })
+        .catch((err) => {
+          dispatch(
+            setToast({
+              message: "Error Occurred",
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+          // console.log(err);
+          // navigate("/searchusers");
+        });
+    }
+  }, [id, emailTrigger, userpage]);
+
+  const [filledStars, setFilledStars] = useState(0);
+  const [isWritingReview, setIsWritingReview] = useState(false);
+
+  useEffect(() => {
+    if (userpage == true) {
+      ApiServices.getUsersStarsFrom({
+        userId: id,
+        reviewBy: user_id,
+      }).then((res) => {
+        setFilledStars(res.data.review !== undefined ? res.data.review : 0);
+      });
+    }
+  }, [id, userpage]);
+
+  const sendReview = async () => {
+    await ApiServices.addUserReview({
+      userId: id,
+      review: {
+        reviewBy: user_id,
+        review: filledStars,
+      },
+    })
+      .then((res) => {
+        dispatch(
+          setToast({
+            message: "Review Updated",
+            visible: "yes",
+            bgColor: ToastColors.success,
+          })
+        );
+        setemailTrigger(!emailTrigger);
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occurred",
+            visible: "yes",
+            bgColor: ToastColors.failure,
+          })
+        );
+      });
+  };
+
+  useEffect(() => {
+    if (window.location.pathname.includes("/user")) {
+      setuserpage(true);
+    } else {
+      setuserpage(false);
+    }
+  }, [window.location.pathname]);
+
+  useEffect(() => {
+    if (userpage !== null) {
+      if (id == undefined) {
+        ApiServices.getProfile({ id: user_id })
+          .then((res) => {
+            setEditOwnProfile(true);
+            setInputs((prev) => ({
               ...prev,
-              resume: res.data.documents.resume,
-              expertise: res.data.documents.expertise,
-              acheivements: res.data.documents.acheivements,
-              working: res.data.documents.working,
-              degree: res.data.documents.degree,
+              updatedAt: res.data.updatedAt,
+              name: res.data.userName,
+              mobile: res.data.phone,
+              role: res.data.role,
+              mobileVerified: true,
+              image: res.data.image?.url || "",
+              email: res.data.email,
+              salutation: res.data.salutation,
+              mentorCategories: res.data.mentorCategories,
             }));
-            setchangeDocuments((prev) => ({
+
+            if (res.data.documents !== undefined) {
+              setOldDocs((prev) => ({
+                ...prev,
+                resume: res.data.documents.resume,
+                expertise: res.data.documents.expertise,
+                acheivements: res.data.documents.acheivements,
+                working: res.data.documents.working,
+                degree: res.data.documents.degree,
+              }));
+              setchangeDocuments((prev) => ({
+                ...prev,
+                resume: res.data.documents?.resume || "",
+                expertise: res.data.documents?.expertise || "",
+                acheivements: res.data.documents?.acheivements || "",
+                working: res.data.documents?.working || "",
+                degree: res.data.documents?.degree || "",
+              }));
+              setTotalEducationData(res.data.educationDetails || []);
+              setTotalExperienceData(res.data.experienceDetails || []);
+              setFee(res.data.fee || "");
+              setBio(res.data.bio || "");
+              setSkills(res.data.skills || []);
+              setlanguagesKnown(res.data.languagesKnown || []);
+
+              settown(res.data.town || "");
+              setCountry(res.data.country || "");
+              setState(res.data.state || "");
+              setPlaces({
+                country: Country.getAllCountries(),
+                state:
+                  State.getStatesOfCountry(res.data.country?.split("-")[1]) ||
+                  [],
+                town:
+                  City.getCitiesOfState(
+                    res.data.country?.split("-")[1],
+                    res.data.state?.split("-")[1]
+                  ) || [],
+              });
+            }
+          })
+
+          .catch((error) => {
+            dispatch(
+              setToast({
+                message: error?.response?.data?.message,
+                bgColor: ToastColors.failure,
+                visible: "yes",
+              })
+            );
+          });
+      } else if (id !== undefined && userpage == false) {
+        // Admin functionality
+        AdminServices.getApprovalRequestProfile({ userId: id })
+          .then((res) => {
+            setEditOwnProfile(false);
+            // console.log(res.data);
+            setRequestedUserId(res.data.userInfo._id);
+            setInputs((prev) => ({
               ...prev,
-              resume: res.data.documents?.resume || "",
-              expertise: res.data.documents?.expertise || "",
-              acheivements: res.data.documents?.acheivements || "",
-              working: res.data.documents?.working || "",
-              degree: res.data.documents?.degree || "",
+              updatedAt: res.data.updatedAt,
+              name: res.data.userName,
+              mobile: res.data.phone,
+              role: res.data.role,
+              image: res.data.userInfo.image?.url || "",
+              email: res.data.userInfo.email,
+              status: res.data.verification,
+              mobileVerified: true,
+              salutation: res.data.salutation,
+              mentorCategories: res.data.mentorCategories,
             }));
+
+            if (res.data.documents !== undefined) {
+              setOldDocs((prev) => ({
+                ...prev,
+                resume: res.data.documents.resume,
+                expertise: res.data.documents.expertise,
+                acheivements: res.data.documents.acheivements,
+                working: res.data.documents.working,
+                degree: res.data.documents.degree,
+              }));
+            }
             setTotalEducationData(res.data.educationDetails || []);
             setTotalExperienceData(res.data.experienceDetails || []);
             setFee(res.data.fee || "");
             setBio(res.data.bio || "");
-            setSkills(res.data.skills || []);
-            setlanguagesKnown(res.data.languagesKnown || []);
-
             settown(res.data.town || "");
             setCountry(res.data.country || "");
             setState(res.data.state || "");
-            setPlaces({
-              country: Country.getAllCountries(),
-              state:
-                State.getStatesOfCountry(res.data.country?.split("-")[1]) || [],
-              town:
-                City.getCitiesOfState(
-                  res.data.country?.split("-")[1],
-                  res.data.state?.split("-")[1]
-                ) || [],
-            });
-          }
-        })
-
-        .catch((error) => {
-          dispatch(
-            setToast({
-              message: error?.response?.data?.message,
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        });
-    } else {
-      // Admin functionality
-      AdminServices.getApprovalRequestProfile({ userId: id })
-        .then((res) => {
-          setEditOwnProfile(false);
-          // console.log(res.data);
-          setRequestedUserId(res.data.userInfo._id);
-          setInputs((prev) => ({
-            ...prev,
-            updatedAt: res.data.updatedAt,
-            name: res.data.userName,
-            mobile: res.data.phone,
-            role: res.data.role,
-            image: res.data.userInfo.image?.url || "",
-            email: res.data.userInfo.email,
-            status: res.data.verification,
-            mobileVerified: true,
-            salutation: res.data.salutation,
-            mentorCategories: res.data.mentorCategories,
-          }));
-
-          if (res.data.documents !== undefined) {
-            setOldDocs((prev) => ({
+            dispatch(setLoading({ visible: "no" }));
+            setSkills(res.data.skills || []);
+            setlanguagesKnown(res.data.languagesKnown || []);
+          })
+          .catch((error) => {
+            dispatch(
+              setToast({
+                message: "No User Found For Request",
+                bgColor: ToastColors.failure,
+                visible: "yes",
+              })
+            );
+            dispatch(setLoading({ visible: "no" }));
+            navigate("/profileRequests");
+          });
+      } else if (id !== undefined && userpage == true) {
+        ApiServices.getProfile({ id: id })
+          .then((res) => {
+            if (res.data.review !== undefined && res.data.review?.length > 0) {
+              let avgR = 0;
+              res.data.review?.map((rev) => {
+                avgR += rev.review;
+              });
+              setAverageReview(avgR / res.data.review.length);
+            }
+            setEditOwnProfile(true);
+            setInputs((prev) => ({
               ...prev,
-              resume: res.data.documents.resume,
-              expertise: res.data.documents.expertise,
-              acheivements: res.data.documents.acheivements,
-              working: res.data.documents.working,
-              degree: res.data.documents.degree,
+              verification: res.data.verification,
+              review: res.data.review,
+              updatedAt: res.data.updatedAt,
+              name: res.data.userName,
+              mobile: res.data.phone,
+              role: res.data.role,
+              mobileVerified: true,
+              image: res.data.image?.url || "",
+              email: res.data.email,
+              salutation: res.data.salutation,
+              mentorCategories: res.data.mentorCategories,
             }));
-          }
-          setTotalEducationData(res.data.educationDetails || []);
-          setTotalExperienceData(res.data.experienceDetails || []);
-          setFee(res.data.fee || "");
-          setBio(res.data.bio || "");
-          settown(res.data.town || "");
-          setCountry(res.data.country || "");
-          setState(res.data.state || "");
-          dispatch(setLoading({ visible: "no" }));
-          setSkills(res.data.skills || []);
-          setlanguagesKnown(res.data.languagesKnown || []);
-        })
-        .catch((error) => {
-          dispatch(
-            setToast({
-              message: "No User Found For Request",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-          dispatch(setLoading({ visible: "no" }));
-          navigate("/profileRequests");
-        });
+
+            if (res.data.documents !== undefined) {
+              setOldDocs((prev) => ({
+                ...prev,
+                resume: res.data.documents.resume,
+                expertise: res.data.documents.expertise,
+                acheivements: res.data.documents.acheivements,
+                working: res.data.documents.working,
+                degree: res.data.documents.degree,
+              }));
+              setchangeDocuments((prev) => ({
+                ...prev,
+                resume: res.data.documents?.resume || "",
+                expertise: res.data.documents?.expertise || "",
+                acheivements: res.data.documents?.acheivements || "",
+                working: res.data.documents?.working || "",
+                degree: res.data.documents?.degree || "",
+              }));
+              setTotalEducationData(res.data.educationDetails || []);
+              setTotalExperienceData(res.data.experienceDetails || []);
+              setFee(res.data.fee || "");
+              setBio(res.data.bio || "");
+              setSkills(res.data.skills || []);
+              setlanguagesKnown(res.data.languagesKnown || []);
+
+              settown(res.data.town || "");
+              setCountry(res.data.country || "");
+              setState(res.data.state || "");
+              setPlaces({
+                country: Country.getAllCountries(),
+                state:
+                  State.getStatesOfCountry(res.data.country?.split("-")[1]) ||
+                  [],
+                town:
+                  City.getCitiesOfState(
+                    res.data.country?.split("-")[1],
+                    res.data.state?.split("-")[1]
+                  ) || [],
+              });
+            }
+          })
+
+          .catch((error) => {
+            dispatch(
+              setToast({
+                message: error?.response?.data?.message,
+                bgColor: ToastColors.failure,
+                visible: "yes",
+              })
+            );
+          });
+      }
     }
-  }, [email, id]);
+  }, [email, id, userpage, emailTrigger]);
 
   // Admi approval function
   const adminupdate = async (e, status) => {
@@ -649,6 +898,25 @@ const EditProfileUI = () => {
         );
       });
   };
+  const deleteComment = async (did) => {
+    await ApiServices.removeUserComment({ userId: id, commentId: did })
+      .then((res) => {
+        // setuser((prev) => ({
+        //   ...prev,
+        //   comments: (user.comments = user.comments.filter((f) => f._id !== did)),
+        // }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            visible: "yes",
+            message: "Error Occurred",
+            bgColor: "red",
+          })
+        );
+      });
+  };
+
   const update = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -671,7 +939,7 @@ const EditProfileUI = () => {
       documents: changeResume,
       experienceDetails: totalExperienceData,
       educationdetails: totalEducationData,
-    })
+    });
     await ApiServices.sendForApproval({
       salutation: salutation,
       mentorCategories: mentorCategories,
@@ -743,19 +1011,19 @@ const EditProfileUI = () => {
 
   const [isFormValid, setIsFormValid] = useState(
     mobileVerified &&
-    (isNameValid ||
-      oldDocs.resume !== "" ||
-      oldDocs.expertise !== "" ||
-      oldDocs.acheivements !== "" ||
-      oldDocs.working !== "" ||
-      oldDocs.degree !== "" ||
-      changeResume.resume !== "" ||
-      changeResume.expertise !== "" ||
-      changeResume.acheivements !== "" ||
-      changeResume.working !== "" ||
-      changeResume.degree !== "") &&
-    totalEducationData.length > 0 &&
-    totalExperienceData.length > 0
+      (isNameValid ||
+        oldDocs.resume !== "" ||
+        oldDocs.expertise !== "" ||
+        oldDocs.acheivements !== "" ||
+        oldDocs.working !== "" ||
+        oldDocs.degree !== "" ||
+        changeResume.resume !== "" ||
+        changeResume.expertise !== "" ||
+        changeResume.acheivements !== "" ||
+        changeResume.working !== "" ||
+        changeResume.degree !== "") &&
+      totalEducationData.length > 0 &&
+      totalExperienceData.length > 0
   );
 
   const handleChangeRadio = (e) => {
@@ -817,38 +1085,42 @@ const EditProfileUI = () => {
     autoplaySpeed: 2000,
   };
 
-
-
   const savingLocal = () => {
-    localStorage.setItem('editProfile', JSON.stringify({
-      salutation: salutation,
-      mentorCategories: mentorCategories,
-      email: email,
-      userId: user_id,
-      state: state,
-      town: town,
-      country: country,
-      userName: name,
-      phone: mobile,
-      role: role,
-      fee: fee,
-      bio: bio,
-      skills: skills,
-      languagesKnown: languagesKnown,
-      documents: changeResume,
-      experienceDetails: totalExperienceData,
-      educationDetails: totalEducationData,
-    }))
-    dispatch(setToast({
-      message: 'Data Saved Locally',
-      bgColor: ToastColors.success,
-      visible: 'yes'
-    }))
-  }
+    localStorage.setItem(
+      "editProfile",
+      JSON.stringify({
+        salutation: salutation,
+        mentorCategories: mentorCategories,
+        email: email,
+        userId: user_id,
+        state: state,
+        town: town,
+        country: country,
+        userName: name,
+        phone: mobile,
+        role: role,
+        fee: fee,
+        bio: bio,
+        skills: skills,
+        languagesKnown: languagesKnown,
+        documents: changeResume,
+        experienceDetails: totalExperienceData,
+        educationDetails: totalEducationData,
+      })
+    );
+    dispatch(
+      setToast({
+        message: "Data Saved Locally",
+        bgColor: ToastColors.success,
+        visible: "yes",
+      })
+    );
+  };
+
   const retreiveLocal = () => {
-    console.log(JSON.parse(localStorage.getItem('editProfile')));
-    if (localStorage.getItem('editProfile')) {
-      const local = JSON.parse(localStorage.getItem('editProfile'))
+    console.log(JSON.parse(localStorage.getItem("editProfile")));
+    if (localStorage.getItem("editProfile")) {
+      const local = JSON.parse(localStorage.getItem("editProfile"));
       setEditOwnProfile(true);
       setInputs((prev) => ({
         ...prev,
@@ -890,8 +1162,7 @@ const EditProfileUI = () => {
         setState(local?.state || "");
         setPlaces({
           country: Country.getAllCountries(),
-          state:
-            State.getStatesOfCountry(local?.country?.split("-")[1]) || [],
+          state: State.getStatesOfCountry(local?.country?.split("-")[1]) || [],
           town:
             City.getCitiesOfState(
               local?.country?.split("-")[1],
@@ -900,13 +1171,15 @@ const EditProfileUI = () => {
         });
       }
 
-      dispatch(setToast({
-        message: 'Data Retrived Locally',
-        bgColor: ToastColors.success,
-        visible: 'yes'
-      }))
+      dispatch(
+        setToast({
+          message: "Data Retrived Locally",
+          bgColor: ToastColors.success,
+          visible: "yes",
+        })
+      );
     }
-  }
+  };
 
   return (
     <main className="EditProfile-Container">
@@ -929,6 +1202,7 @@ const EditProfileUI = () => {
                   image !== undefined && image !== "" ? image : "/profile.png"
                 }
               />
+              {verification == "approved" && <div>Verified</div>}
               {id == undefined && (
                 <i
                   class="fas fa-camera hover-icon"
@@ -940,6 +1214,7 @@ const EditProfileUI = () => {
                 ></i>
               )}
             </div>
+            <div style={{display: 'flex', justifyContent: "space-between"}}>
             <div className="Personal-Details">
               <div
                 style={{
@@ -967,7 +1242,9 @@ const EditProfileUI = () => {
               </div>
               <div style={{ fontSize: "12px" }}>{email}</div>
               <div style={{ fontSize: "12px" }}>{mobile}</div>
-              {role == 'Mentor' && <div style={{ fontSize: "12px" }}>&#8377;{fee} per minute</div>}
+              {role == "Mentor" && (
+                <div style={{ fontSize: "12px" }}>&#8377;{fee} per minute</div>
+              )}
               <div className="language-display">
                 {languagesKnown?.map((t, i) => (
                   <div>
@@ -977,6 +1254,25 @@ const EditProfileUI = () => {
               </div>
               {/* <div style={{ fontSize: "16px" }}> &#8377; {fee} / per min</div>
               <div>{}</div> */}
+            </div>
+            
+            {userpage == true && (
+              <div className="review-container">
+                <div className="reviewContainer">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <b>{review?.length}</b> <span> Global Ratings</span>
+                  </div>
+                  <ReviewStars avg={averagereview} />
+                </div>
+              </div>
+            )}
             </div>
           </div>
 
@@ -999,21 +1295,21 @@ const EditProfileUI = () => {
               <div className="popup-content">
                 <div className="Inputs-Container">
                   <div className="Input_Wrapper">
-                    <div className="popup-header"
+                    <div
+                      className="popup-header"
                       style={{
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "space-between",
                       }}
                     >
-                      <h3>
-                        Personal Information
-                      </h3>
+                      <h3>Personal Information</h3>
                       <div
                         className="close-icon"
                         onClick={() => {
-                          document.getElementsByTagName("body")[0].style.overflowY =
-                            "scroll";
+                          document.getElementsByTagName(
+                            "body"
+                          )[0].style.overflowY = "scroll";
                           setIsInputPopupVisible(false);
                         }}
                       >
@@ -1338,7 +1634,7 @@ const EditProfileUI = () => {
               justifyContent: "space-between",
             }}
           >
-            <h3>About</h3>
+            <h3 className="EditProfile-Headings">About</h3>
             {id == undefined && (
               <span>
                 <i onClick={handleAboutButtonClick} className="fas fa-pen"></i>
@@ -1370,7 +1666,8 @@ const EditProfileUI = () => {
           <div className="popup-container">
             <div className="popup-content">
               <div>
-                <div className="popup-header"
+                <div
+                  className="popup-header"
                   style={{
                     display: "flex",
                     flexDirection: "row",
@@ -1389,7 +1686,8 @@ const EditProfileUI = () => {
                     <i class="fas fa-times"></i>
                   </div>
                 </div>
-                <textarea className="bioText"
+                <textarea
+                  className="bioText"
                   onChange={(e) => {
                     const inputText = e.target.value;
                     if (inputText.length <= 1000) {
@@ -1491,10 +1789,10 @@ const EditProfileUI = () => {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width: '99%'
+                width: "99%",
               }}
             >
-              <h3>Experience</h3>
+              <h3 className="EditProfile-Headings">Experience</h3>
               {id == undefined && (
                 <span>
                   <i
@@ -1507,7 +1805,15 @@ const EditProfileUI = () => {
           </div>
           {totalExperienceData.length > 0 ? (
             totalExperienceData.map((te, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="studies">
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+                className="studies"
+              >
                 <div
                   style={{
                     display: "flex",
@@ -1523,27 +1829,21 @@ const EditProfileUI = () => {
                       padding: "10px",
                     }}
                   >
-                    {(te.institute !== '' && te.institute !== undefined) && <div className="company">
-                      <>
-
-                        {te.institute}(Institute)
-                      </>
-
-                    </div>}
-                    {(te.company !== '' && te.company !== undefined) && <div className="company">
-                      <>
-
-                        {te.company}(Company)
-                      </>
-
-                    </div>}
-                    {(te.startupName !== '' && te.startupName !== undefined) && <div className="company">
-                      <>
-
-                        {te.startupName}(Startup Name)
-                      </>
-
-                    </div>}
+                    {te.institute !== "" && te.institute !== undefined && (
+                      <div className="company">
+                        <>{te.institute}(Institute)</>
+                      </div>
+                    )}
+                    {te.company !== "" && te.company !== undefined && (
+                      <div className="company">
+                        <>{te.company}(Company)</>
+                      </div>
+                    )}
+                    {te.startupName !== "" && te.startupName !== undefined && (
+                      <div className="company">
+                        <>{te.startupName}(Startup Name)</>
+                      </div>
+                    )}
 
                     <div className="designation">
                       {te.designation && (
@@ -1570,14 +1870,16 @@ const EditProfileUI = () => {
                       )}
                     </div>
 
-                    {role !== "Technology Partner" && ((te.workingStatus !== "Self Employed") && <div className="timeline">
-                      <b>Date: </b>
-                      {convertToDate(te.start)}-
-                      {te.end === "" ? "Present" : convertToDate(te.end)}
-                    </div>)}
+                    {role !== "Technology Partner" &&
+                      te.workingStatus !== "Self Employed" && (
+                        <div className="timeline">
+                          <b>Date: </b>
+                          {convertToDate(te.start)}-
+                          {te.end === "" ? "Present" : convertToDate(te.end)}
+                        </div>
+                      )}
 
-
-                    {te.workingStatus == "Self Employed" &&
+                    {te.workingStatus == "Self Employed" && (
                       <>
                         <div className="timeline">
                           <b>Working Status: </b>
@@ -1586,46 +1888,62 @@ const EditProfileUI = () => {
                         <div className="timeline">
                           <b>Startup / Business Name: </b>
                           {te.startupName}
-                        </div><div className="timeline">
+                        </div>
+                        <div className="timeline">
                           <b>Startup Desc: </b>
                           {te.Description}
-                        </div></>
-                    }
+                        </div>
+                      </>
+                    )}
 
-                    {mentorCategories !== 'Academia Mentor' &&
-                      <><div className="timeline">
-                        <b>Profession: </b>
-                        {te.Profession}
-                      </div><div className="timeline">
+                    {mentorCategories !== "Academia Mentor" && (
+                      <>
+                        <div className="timeline">
+                          <b>Profession: </b>
+                          {te.Profession}
+                        </div>
+                        <div className="timeline">
                           <b>Total Working Experience: </b>
                           {te.TotalWorkExperience}
-                        </div></>
-                    }
-                    {role == "Technology Partner" && <div className="timeline">
-                      <b>Startup Desc: </b>
-                      {te.Description}
-                    </div>}
-                    {te.CompanyLocation && <div className="timeline">
-                      <b>Company Location: </b>
-                      {te.CompanyLocation}
-                    </div>}
+                        </div>
+                      </>
+                    )}
+                    {role == "Technology Partner" && (
+                      <div className="timeline">
+                        <b>Startup Desc: </b>
+                        {te.Description}
+                      </div>
+                    )}
+                    {te.CompanyLocation && (
+                      <div className="timeline">
+                        <b>Company Location: </b>
+                        {te.CompanyLocation}
+                      </div>
+                    )}
 
+                    {te.Customers && (
+                      <div className="timeline">
+                        <b>Total customers served by company : </b>
+                        {te.Customers}
+                      </div>
+                    )}
 
-
-                    {te.Customers && <div className="timeline">
-                      <b>Total customers served by company : </b>
-                      {te.Customers}
-                    </div>}
-
-                    {te.Banner && <div className="timeline">
-                      <b>Banner: </b>
-                      <a href={te.Banner?.secure_url} target="_blank">Click here</a>
-                    </div>}
-                    {te.Logo && <div className="timeline">
-                      <b>Logo: </b>
-                      <a href={te.Logo?.secure_url} target="_blank">Click here</a>
-
-                    </div>}
+                    {te.Banner && (
+                      <div className="timeline">
+                        <b>Banner: </b>
+                        <a href={te.Banner?.secure_url} target="_blank">
+                          Click here
+                        </a>
+                      </div>
+                    )}
+                    {te.Logo && (
+                      <div className="timeline">
+                        <b>Logo: </b>
+                        <a href={te.Logo?.secure_url} target="_blank">
+                          Click here
+                        </a>
+                      </div>
+                    )}
 
                     <div className="designation">
                       {te.Achievements && (
@@ -1661,24 +1979,35 @@ const EditProfileUI = () => {
                     </div>
                   </div>
                 </div>
-                {id == undefined &&
-                  <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <div onClick={(e) => {
-                      seteditingExperienceId(i + 1)
-                      setExperience(te)
-                      handleExperienceButtonClick()
-                    }}>
-                      <i class='fas fa-pen'></i>
+                {id == undefined && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "5px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      onClick={(e) => {
+                        seteditingExperienceId(i + 1);
+                        setExperience(te);
+                        handleExperienceButtonClick();
+                      }}
+                    >
+                      <i class="fas fa-pen"></i>
                     </div>
-                    <div onClick={(e) => {
-                      setTotalExperienceData((prev) => [
-                        ...prev.filter((f, j) => j !== i),
-                      ]);
-                    }} style={{ color: 'red' }}>
-                      <i class='fas fa-times cross'></i>
+                    <div
+                      onClick={(e) => {
+                        setTotalExperienceData((prev) => [
+                          ...prev.filter((f, j) => j !== i),
+                        ]);
+                      }}
+                      style={{ color: "red" }}
+                    >
+                      <i class="fas fa-times cross"></i>
                     </div>
                   </div>
-                }
+                )}
               </div>
             ))
           ) : (
@@ -1696,16 +2025,17 @@ const EditProfileUI = () => {
                     <div
                       className="close-icon"
                       onClick={() => {
-                        document.getElementsByTagName("body")[0].style.overflowY =
-                          "scroll";
+                        document.getElementsByTagName(
+                          "body"
+                        )[0].style.overflowY = "scroll";
 
                         setIsExperiencePopupVisible(false);
-                        seteditingExperienceId('')
+                        seteditingExperienceId("");
                         setExperience({
                           areaOfBusiness: "",
                           business: "",
                           institute: "",
-                          startupName: '',
+                          startupName: "",
                           workingStatus: "",
                           company: "",
                           designation: "",
@@ -1734,7 +2064,6 @@ const EditProfileUI = () => {
                     </div>
                   </div>
                   <div className="exp-container">
-
                     {/* Academia Mentor */}
                     {mentorCategories == "Academia Mentor" && (
                       <div>
@@ -1744,7 +2073,12 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="institute" className={experienceDetails.institute == '' ? 'editErrors' : 'editSuccess'}
+                            name="institute"
+                            className={
+                              experienceDetails.institute == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
                             value={experienceDetails.institute}
                             id=""
                             onChange={handleChange}
@@ -1763,7 +2097,12 @@ const EditProfileUI = () => {
                         </div>
                         <div className="Exp_Input_Fields">
                           <select
-                            name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
+                            name="designation"
+                            className={
+                              experienceDetails.designation == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
                             value={experienceDetails.designation}
                             onChange={handleChange}
                           >
@@ -1784,7 +2123,12 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Department" className={experienceDetails.Department == '' ? 'editErrors' : 'editSuccess'}
+                            name="Department"
+                            className={
+                              experienceDetails.Department == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
                             value={experienceDetails.Department}
                             id=""
                             onChange={handleChange}
@@ -1804,7 +2148,12 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Research" className={experienceDetails.Research == '' ? 'editErrors' : 'editSuccess'}
+                            name="Research"
+                            className={
+                              experienceDetails.Research == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
                             value={experienceDetails.Research}
                             id=""
                             onChange={handleChange}
@@ -1823,7 +2172,12 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
-                              type="date" className={experienceDetails.start == '' ? 'editErrors' : 'editSuccess'}
+                              type="date"
+                              className={
+                                experienceDetails.start == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.start}
                               name="start"
                               id=""
@@ -1860,7 +2214,12 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Achievements" className={experienceDetails.Achievements == '' ? 'editErrors' : 'editSuccess'}
+                            name="Achievements"
+                            className={
+                              experienceDetails.Achievements == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
                             value={experienceDetails.Achievements}
                             id=""
                             onChange={handleChange}
@@ -1880,7 +2239,12 @@ const EditProfileUI = () => {
                         <div className="Exp_Input_Fields">
                           <input
                             type="text"
-                            name="Published" className={experienceDetails.Published == '' ? 'editErrors' : 'editSuccess'}
+                            name="Published"
+                            className={
+                              experienceDetails.Published == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
                             value={experienceDetails.Published}
                             id=""
                             onChange={handleChange}
@@ -1933,40 +2297,48 @@ const EditProfileUI = () => {
                     {/*Industry Expert Mentor  &  Entrepreneur */}
                     {(mentorCategories === "Industry Expert Mentor" ||
                       role === "Entrepreneur") && (
+                      <div>
                         <div>
-                          <div>
-                            <label className="Input-Label">
-                              Current Working Status*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <select
-                              name="workingStatus" className={experienceDetails.workingStatus == '' ? 'editErrors' : 'editSuccess'}
-                              id=""
-                              value={experienceDetails.workingStatus}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              {["Job", "Self Employed"].map((op) => (
-                                <option>{op}</option>
-                              ))}
-                            </select>
-                          </div>
+                          <label className="Input-Label">
+                            Current Working Status*
+                          </label>
                         </div>
-                      )}
+                        <div className="Exp_Input_Fields">
+                          <select
+                            name="workingStatus"
+                            className={
+                              experienceDetails.workingStatus == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
+                            id=""
+                            value={experienceDetails.workingStatus}
+                            onChange={handleChange}
+                          >
+                            <option value="">Select</option>
+                            {["Job", "Self Employed"].map((op) => (
+                              <option>{op}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
 
                     {experienceDetails.workingStatus == "Job" && (
                       <>
                         <div>
                           <div>
-                            <label className="Input-Label">
-                              Company Name*
-                            </label>
+                            <label className="Input-Label">Company Name*</label>
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="company" className={experienceDetails.company == '' ? 'editErrors' : 'editSuccess'}
+                              name="company"
+                              className={
+                                experienceDetails.company == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.company}
                               id=""
                               onChange={handleChange}
@@ -1983,7 +2355,12 @@ const EditProfileUI = () => {
                           </div>
                           <div className="Exp_Input_Fields">
                             <select
-                              name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
+                              name="designation"
+                              className={
+                                experienceDetails.designation == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.designation}
                               onChange={handleChange}
                             >
@@ -2004,7 +2381,12 @@ const EditProfileUI = () => {
                             </div>
                             <div className="Exp_Input_Fields">
                               <input
-                                type="date" className={experienceDetails.start == '' ? 'editErrors' : 'editSuccess'}
+                                type="date"
+                                className={
+                                  experienceDetails.start == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                }
                                 value={experienceDetails.start}
                                 name="start"
                                 id=""
@@ -2037,7 +2419,12 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="Profession" className={experienceDetails.Profession == '' ? 'editErrors' : 'editSuccess'}
+                              name="Profession"
+                              className={
+                                experienceDetails.Profession == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.Profession}
                               id=""
                               onChange={handleChange}
@@ -2056,7 +2443,12 @@ const EditProfileUI = () => {
                             <input
                               type="number"
                               min={0}
-                              name="TotalWorkExperience" className={experienceDetails.TotalWorkExperience == '' ? 'editErrors' : 'editSuccess'}
+                              name="TotalWorkExperience"
+                              className={
+                                experienceDetails.TotalWorkExperience == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.TotalWorkExperience}
                               id=""
                               onChange={handleChange}
@@ -2069,98 +2461,123 @@ const EditProfileUI = () => {
 
                     {(experienceDetails.workingStatus == "Self Employed" ||
                       role === "Technology Partner") && (
-                        <>
+                      <>
+                        <div>
                           <div>
-                            <div>
-                              <label className="Input-Label">
-                                Startup / Business name*
-                              </label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="text"
-                                name="startupName" className={experienceDetails.startupName == '' ? 'editErrors' : 'editSuccess'}
-                                value={experienceDetails.startupName}
-                                id=""
-                                onChange={handleChange}
-                                placeholder="Enter Your Business name"
-                              />
-                            </div>
+                            <label className="Input-Label">
+                              Startup / Business name*
+                            </label>
                           </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="startupName"
+                              className={
+                                experienceDetails.startupName == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
+                              value={experienceDetails.startupName}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Business name"
+                            />
+                          </div>
+                        </div>
 
+                        <div>
                           <div>
-                            <div>
-                              <label className="Input-Label">
-                                Startup description in short*
-                              </label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <textarea
-                                type="text"
-                                name="Description" className={experienceDetails.Description == '' ? 'editErrors' : 'editSuccess'}
-                                value={experienceDetails.Description}
-                                id=""
-                                onChange={handleChange}
-                              />
-                            </div>
+                            <label className="Input-Label">
+                              Startup description in short*
+                            </label>
                           </div>
+                          <div className="Exp_Input_Fields">
+                            <textarea
+                              type="text"
+                              name="Description"
+                              className={
+                                experienceDetails.Description == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
+                              value={experienceDetails.Description}
+                              id=""
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
 
+                        <div>
                           <div>
-                            <div>
-                              <label className="Input-Label">
-                                Current Designation*
-                              </label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <select
-                                name="designation" className={experienceDetails.designation == '' ? 'editErrors' : 'editSuccess'}
-                                value={experienceDetails.designation}
-                                onChange={handleChange}
-                              >
-                                <option value="">Select</option>
-                                {itPositions.map((op) => (
-                                  <option value={op}>{op}</option>
-                                ))}
-                              </select>
-                            </div>
+                            <label className="Input-Label">
+                              Current Designation*
+                            </label>
                           </div>
+                          <div className="Exp_Input_Fields">
+                            <select
+                              name="designation"
+                              className={
+                                experienceDetails.designation == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
+                              value={experienceDetails.designation}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select</option>
+                              {itPositions.map((op) => (
+                                <option value={op}>{op}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
 
+                        <div>
                           <div>
-                            <div>
-                              <label className="Input-Label">Profession*</label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="text"
-                                name="Profession" className={experienceDetails.Profession == '' ? 'editErrors' : 'editSuccess'}
-                                value={experienceDetails.Profession}
-                                id=""
-                                onChange={handleChange}
-                                placeholder="Enter Your Profession"
-                              />
-                            </div>
+                            <label className="Input-Label">Profession*</label>
                           </div>
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="text"
+                              name="Profession"
+                              className={
+                                experienceDetails.Profession == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
+                              value={experienceDetails.Profession}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Profession"
+                            />
+                          </div>
+                        </div>
 
+                        <div>
                           <div>
-                            <div>
-                              <label className="Input-Label">
-                                Total Work Experience*
-                              </label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="number"
-                                min={0} className={experienceDetails.TotalWorkExperience == '' ? 'editErrors' : 'editSuccess'}
-                                name="TotalWorkExperience"
-                                value={experienceDetails.TotalWorkExperience}
-                                id=""
-                                onChange={handleChange}
-                                placeholder="Enter Your Total Work Experience"
-                              />
-                            </div>
+                            <label className="Input-Label">
+                              Total Work Experience*
+                            </label>
                           </div>
-                        </>
-                      )}
+                          <div className="Exp_Input_Fields">
+                            <input
+                              type="number"
+                              min={0}
+                              className={
+                                experienceDetails.TotalWorkExperience == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
+                              name="TotalWorkExperience"
+                              value={experienceDetails.TotalWorkExperience}
+                              id=""
+                              onChange={handleChange}
+                              placeholder="Enter Your Total Work Experience"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
 
                     {role === "Technology Partner" && (
                       <>
@@ -2173,7 +2590,12 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="number"
-                              name="Customers" className={experienceDetails.Customers == '' ? 'editErrors' : 'editSuccess'}
+                              name="Customers"
+                              className={
+                                experienceDetails.Customers == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.Customers}
                               id=""
                               onChange={handleChange}
@@ -2191,7 +2613,12 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="CompanyLocation" className={experienceDetails.CompanyLocation == '' ? 'editErrors' : 'editSuccess'}
+                              name="CompanyLocation"
+                              className={
+                                experienceDetails.CompanyLocation == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.CompanyLocation}
                               id=""
                               onChange={handleChange}
@@ -2209,7 +2636,12 @@ const EditProfileUI = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="areaOfBusiness" className={experienceDetails.areaOfBusiness == '' ? 'editErrors' : 'editSuccess'}
+                              name="areaOfBusiness"
+                              className={
+                                experienceDetails.areaOfBusiness == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.areaOfBusiness}
                               id=""
                               onChange={handleChange}
@@ -2222,7 +2654,14 @@ const EditProfileUI = () => {
                           <div>
                             <label className="Input-Label">Banner*</label>
                           </div>
-                          <label htmlFor="Banner" className={`resume ${experienceDetails.Banner == '' ? 'editErrors' : 'editSuccess'}`}>
+                          <label
+                            htmlFor="Banner"
+                            className={`resume ${
+                              experienceDetails.Banner == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }`}
+                          >
                             <CloudUploadIcon />
                             <span className="fileName">
                               {Banner || "Upload"}
@@ -2243,11 +2682,16 @@ const EditProfileUI = () => {
                           <div>
                             <label className="Input-Label">Logo*</label>
                           </div>
-                          <label htmlFor="Logo" className={`resume ${experienceDetails.Logo == '' ? 'editErrors' : 'editSuccess'}`}>
+                          <label
+                            htmlFor="Logo"
+                            className={`resume ${
+                              experienceDetails.Logo == ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }`}
+                          >
                             <CloudUploadIcon />
-                            <span className="fileName">
-                              {Logo || "Upload"}
-                            </span>
+                            <span className="fileName">{Logo || "Upload"}</span>
                           </label>
 
                           <input
@@ -2262,14 +2706,17 @@ const EditProfileUI = () => {
 
                         <div>
                           <div>
-                            <label className="Input-Label">
-                              Services*
-                            </label>
+                            <label className="Input-Label">Services*</label>
                           </div>
                           <div className="Exp_Input_Fields">
                             <input
                               type="text"
-                              name="Services" className={experienceDetails.Services == '' ? 'editErrors' : 'editSuccess'}
+                              name="Services"
+                              className={
+                                experienceDetails.Services == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
                               value={experienceDetails.Services}
                               id=""
                               onChange={handleChange}
@@ -2277,7 +2724,6 @@ const EditProfileUI = () => {
                             />
                           </div>
                         </div>
-
                       </>
                     )}
 
@@ -2286,24 +2732,70 @@ const EditProfileUI = () => {
                         className="add-button"
                         onClick={addExperience}
                         disabled={
-                          (role === "Technology Partner" && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Customers == '' || experienceDetails.CompanyLocation == '' || experienceDetails.business == '' || experienceDetails.Banner == '' || experienceDetails.Logo == '' || experienceDetails.Services == ''))
-                          ||
-                          (role === "Entrepreneur" && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))
-                          ||
-                          (role == 'Mentor' && ((mentorCategories == 'Academia Mentor' && (experienceDetails.institute == '' || experienceDetails.designation !== '' || experienceDetails.Department == '' || experienceDetails.start == '' || experienceDetails.Research == '' || experienceDetails.Achievements == '' || experienceDetails.Published == '')) || (mentorCategories == 'Industry Expert Mentor' && ((experienceDetails.workingStatus == 'Job' && (experienceDetails.company == '' || experienceDetails.designation == '' || experienceDetails.start == '' || experienceDetails.TotalWorkExperience == '' || experienceDetails.Profession == '')) || (experienceDetails.workingStatus == 'Self Employed' && (experienceDetails.startupName == '' || experienceDetails.Description == '' || experienceDetails.designation == '' || experienceDetails.Profession == '' || experienceDetails.TotalWorkExperience == ''))))))
+                          (role === "Technology Partner" &&
+                            (experienceDetails.startupName == "" ||
+                              experienceDetails.Description == "" ||
+                              experienceDetails.designation == "" ||
+                              experienceDetails.Profession == "" ||
+                              experienceDetails.TotalWorkExperience == "" ||
+                              experienceDetails.Customers == "" ||
+                              experienceDetails.CompanyLocation == "" ||
+                              experienceDetails.business == "" ||
+                              experienceDetails.Banner == "" ||
+                              experienceDetails.Logo == "" ||
+                              experienceDetails.Services == "")) ||
+                          (role === "Entrepreneur" &&
+                            ((experienceDetails.workingStatus == "Job" &&
+                              (experienceDetails.company == "" ||
+                                experienceDetails.designation == "" ||
+                                experienceDetails.start == "" ||
+                                experienceDetails.TotalWorkExperience == "" ||
+                                experienceDetails.Profession == "")) ||
+                              (experienceDetails.workingStatus ==
+                                "Self Employed" &&
+                                (experienceDetails.startupName == "" ||
+                                  experienceDetails.Description == "" ||
+                                  experienceDetails.designation == "" ||
+                                  experienceDetails.Profession == "" ||
+                                  experienceDetails.TotalWorkExperience ==
+                                    "")))) ||
+                          (role == "Mentor" &&
+                            ((mentorCategories == "Academia Mentor" &&
+                              (experienceDetails.institute == "" ||
+                                experienceDetails.designation !== "" ||
+                                experienceDetails.Department == "" ||
+                                experienceDetails.start == "" ||
+                                experienceDetails.Research == "" ||
+                                experienceDetails.Achievements == "" ||
+                                experienceDetails.Published == "")) ||
+                              (mentorCategories == "Industry Expert Mentor" &&
+                                ((experienceDetails.workingStatus == "Job" &&
+                                  (experienceDetails.company == "" ||
+                                    experienceDetails.designation == "" ||
+                                    experienceDetails.start == "" ||
+                                    experienceDetails.TotalWorkExperience ==
+                                      "" ||
+                                    experienceDetails.Profession == "")) ||
+                                  (experienceDetails.workingStatus ==
+                                    "Self Employed" &&
+                                    (experienceDetails.startupName == "" ||
+                                      experienceDetails.Description == "" ||
+                                      experienceDetails.designation == "" ||
+                                      experienceDetails.Profession == "" ||
+                                      experienceDetails.TotalWorkExperience ==
+                                        ""))))))
                         }
-                      // disabled={
-                      //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
-                      //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
-                      //   experienceDetails.designation == ""
-                      // }
+                        // disabled={
+                        //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
+                        //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
+                        //   experienceDetails.designation == ""
+                        // }
                       >
-                        {editingExperienceId == '' ? 'Add' : 'Update'}
+                        {editingExperienceId == "" ? "Add" : "Update"}
                       </button>
                     </div>
                   </div>
                 </form>
-
               </div>
             </div>
           </div>
@@ -2319,10 +2811,10 @@ const EditProfileUI = () => {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  width: '99%'
+                  width: "99%",
                 }}
               >
-                <h3>Education</h3>
+                <h3 className="EditProfile-Headings">Education</h3>
                 {id == undefined && (
                   <span>
                     <i
@@ -2335,7 +2827,15 @@ const EditProfileUI = () => {
             </div>
             {totalEducationData.length > 0 ? (
               totalEducationData.map((te, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="studies">
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                  className="studies"
+                >
                   <div
                     style={{
                       display: "flex",
@@ -2359,22 +2859,35 @@ const EditProfileUI = () => {
                       </div>
                     </div>
                   </div>
-                  {id == undefined && <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <div onClick={(e) => {
-                      seteditingEducationId(i + 1)
-                      setEducationDetails(te)
-                      handleEducationButtonClick()
-                    }}>
-                      <i class='fas fa-pen'></i>
+                  {id == undefined && (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "5px",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        onClick={(e) => {
+                          seteditingEducationId(i + 1);
+                          setEducationDetails(te);
+                          handleEducationButtonClick();
+                        }}
+                      >
+                        <i class="fas fa-pen"></i>
+                      </div>
+                      <div
+                        onClick={(e) => {
+                          setTotalEducationData((prev) => [
+                            ...prev.filter((f, j) => j !== i),
+                          ]);
+                        }}
+                        style={{ color: "red" }}
+                      >
+                        <i class="fas fa-times cross"></i>
+                      </div>
                     </div>
-                    <div onClick={(e) => {
-                      setTotalEducationData((prev) => [
-                        ...prev.filter((f, j) => j !== i),
-                      ]);
-                    }} style={{ color: 'red' }}>
-                      <i class='fas fa-times cross'></i>
-                    </div>
-                  </div>}
+                  )}
                 </div>
               ))
             ) : (
@@ -2390,11 +2903,12 @@ const EditProfileUI = () => {
                     <div
                       className="close-icon"
                       onClick={() => {
-                        document.getElementsByTagName("body")[0].style.overflowY =
-                          "scroll";
+                        document.getElementsByTagName(
+                          "body"
+                        )[0].style.overflowY = "scroll";
 
                         setIsEducationPopupVisible(false);
-                        seteditingEducationId('')
+                        seteditingEducationId("");
                         setEducationDetails({
                           year: "",
                           grade: "",
@@ -2407,10 +2921,9 @@ const EditProfileUI = () => {
                       <i class="fas fa-times"></i>
                     </div>
                   </div>
-                  
+
                   <div className="edu-container">
                     <div style={{ display: "flex", flexDirection: "column" }}>
-
                       <div>
                         <div>
                           <label className="Input-Label">Grade*</label>
@@ -2445,7 +2958,7 @@ const EditProfileUI = () => {
                         </div>
                         <div className="Ed_Input_Fields">
                           {EducationDetails.grade == "SSC" ||
-                            EducationDetails.grade == "" ? (
+                          EducationDetails.grade == "" ? (
                             <input
                               type="text"
                               name="college"
@@ -2501,7 +3014,6 @@ const EditProfileUI = () => {
                         </div>
                       </div>
 
-
                       <div>
                         <label className="Input-Label">Start Date*</label>
                       </div>
@@ -2540,12 +3052,11 @@ const EditProfileUI = () => {
                           EducationDetails.college == ""
                         }
                       >
-                        {editingEducationId !== '' ? 'Update' : 'Add'}
+                        {editingEducationId !== "" ? "Update" : "Add"}
                       </button>
                     </div>
                   </div>
-                  <div>
-                  </div>
+                  <div></div>
                 </form>
               </div>
             </div>
@@ -2553,66 +3064,12 @@ const EditProfileUI = () => {
         </div>
       </section>
 
-      <section className="EditProfile-UploadFiles-Container">
-        <div className="upload-mobile-responsive" style={{ padding: "20px" }}>
-          <h4>Upload files</h4>
-          <form className="update-form">
-            <div className="upload-files-container">
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    justifyContent: "space-between",
-                    width: width < 700 && '320px'
-                  }}
-                >
-                  <label className="Input-Label">Resume</label>
-                  {oldDocs.resume !== "" &&
-                    oldDocs.resume !== undefined &&
-                    Object.keys(oldDocs.resume).length !== 0 && (
-                      <attr title="view previous resume">
-                        <a
-                          href={oldDocs.resume?.secure_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <img
-                            style={{
-                              height: "30px",
-                              width: "30px",
-                              marginRight: '30px'
-                            }}
-                            src="/view.png"
-                            onMouseEnter={() => setShowPreviousFile(true)}
-                            onMouseLeave={() => setShowPreviousFile(false)}
-                          />
-                        </a>
-                      </attr>
-                    )}
-                </div>
-                {id == undefined && (
-                  <>
-                    <label htmlFor="resume" className="resume">
-                      <CloudUploadIcon />
-                      <span className="fileName">
-                        {recentUploadedDocs?.resume || "Upload"}
-                      </span>
-                    </label>
-                    <input
-                      className="resume"
-                      type="file"
-                      name="resume"
-                      id="resume"
-                      onChange={handleResume}
-                      style={{ display: "none" }}
-                    />
-                  </>
-                )}
-              </div>
-
-              <div>
+      {userpage === false && (
+        <section className="EditProfile-UploadFiles-Container">
+          <div style={{ padding: "20px" }}>
+            <h3 className="EditProfile-Headings">Documents</h3>
+            <form className="update-form">
+              <div className="upload-files-container">
                 <div>
                   <div
                     style={{
@@ -2620,16 +3077,16 @@ const EditProfileUI = () => {
                       alignItems: "center",
                       gap: "2px",
                       justifyContent: "space-between",
-                      width: width < 700 && '320px'
+                      width: width < 700 && "320px",
                     }}
                   >
-                    <label className="Input-Label">Acheivements</label>
-                    {oldDocs.acheivements !== "" &&
-                      oldDocs.acheivements !== undefined &&
-                      Object.keys(oldDocs.acheivements).length !== 0 && (
-                        <attr title="view previous acheivements">
+                    <label className="Input-Label">Resume</label>
+                    {oldDocs.resume !== "" &&
+                      oldDocs.resume !== undefined &&
+                      Object.keys(oldDocs.resume).length !== 0 && (
+                        <attr title="view previous resume">
                           <a
-                            href={oldDocs.acheivements?.secure_url}
+                            href={oldDocs.resume?.secure_url}
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -2637,7 +3094,7 @@ const EditProfileUI = () => {
                               style={{
                                 height: "30px",
                                 width: "30px",
-                                marginRight: '30px'
+                                marginRight: "30px",
                               }}
                               src="/view.png"
                               onMouseEnter={() => setShowPreviousFile(true)}
@@ -2649,284 +3106,506 @@ const EditProfileUI = () => {
                   </div>
                   {id == undefined && (
                     <>
-                      <label htmlFor="acheivements" className="resume">
+                      <label htmlFor="resume" className="resume">
                         <CloudUploadIcon />
                         <span className="fileName">
-                          {recentUploadedDocs?.acheivements || "Upload"}
+                          {recentUploadedDocs?.resume || "Upload"}
                         </span>
                       </label>
                       <input
-                        type="file"
-                        id="acheivements"
                         className="resume"
-                        name="acheivements"
+                        type="file"
+                        name="resume"
+                        id="resume"
                         onChange={handleResume}
                         style={{ display: "none" }}
                       />
                     </>
                   )}
                 </div>
-              </div>
 
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    justifyContent: "space-between",
-                    width: width < 700 && '320px'
-
-                  }}
-                >
-                  <label className="Input-Label">Degree</label>
-                  {oldDocs.degree !== "" &&
-                    oldDocs.degree !== undefined &&
-                    Object.keys(oldDocs.degree).length !== 0 && (
-                      <attr title="view previous degree ">
-                        <a
-                          href={oldDocs.degree?.secure_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <img
-                            style={{
-                              height: "30px",
-                              width: "30px",
-                              marginRight: '30px'
-                            }}
-                            src="/view.png"
-                            onMouseEnter={() => setShowPreviousFile(true)}
-                            onMouseLeave={() => setShowPreviousFile(false)}
-                          />
-                        </a>
-                      </attr>
+                <div>
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                        justifyContent: "space-between",
+                        width: width < 700 && "320px",
+                      }}
+                    >
+                      <label className="Input-Label">Acheivements</label>
+                      {oldDocs.acheivements !== "" &&
+                        oldDocs.acheivements !== undefined &&
+                        Object.keys(oldDocs.acheivements).length !== 0 && (
+                          <attr title="view previous acheivements">
+                            <a
+                              href={oldDocs.acheivements?.secure_url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  marginRight: "30px",
+                                }}
+                                src="/view.png"
+                                onMouseEnter={() => setShowPreviousFile(true)}
+                                onMouseLeave={() => setShowPreviousFile(false)}
+                              />
+                            </a>
+                          </attr>
+                        )}
+                    </div>
+                    {id == undefined && (
+                      <>
+                        <label htmlFor="acheivements" className="resume">
+                          <CloudUploadIcon />
+                          <span className="fileName">
+                            {recentUploadedDocs?.acheivements || "Upload"}
+                          </span>
+                        </label>
+                        <input
+                          type="file"
+                          id="acheivements"
+                          className="resume"
+                          name="acheivements"
+                          onChange={handleResume}
+                          style={{ display: "none" }}
+                        />
+                      </>
                     )}
-                </div>
-                {id == undefined && (
-                  <>
-                    <label htmlFor="degree" className="resume">
-                      <CloudUploadIcon />
-                      <span className="fileName">
-                        {recentUploadedDocs?.degree || "Upload"}
-                      </span>
-                    </label>
-
-                    <input
-                      type="file"
-                      id="degree"
-                      className="resume"
-                      name="degree"
-                      onChange={handleResume}
-                      style={{ display: "none" }}
-                    />
-                  </>
-                )}
-              </div>
-
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    justifyContent: "space-between",
-                    width: width < 700 && '320px'
-                  }}
-                >
-                  <label className="Input-Label">Expertise</label>
-                  {oldDocs.expertise !== "" &&
-                    oldDocs.expertise !== undefined &&
-                    Object.keys(oldDocs.expertise).length !== 0 && (
-                      <attr title="view previous expertise ">
-                        <a
-                          href={oldDocs.expertise?.secure_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <img
-                            style={{
-                              height: "30px",
-                              width: "30px",
-                              marginRight: '30px'
-                            }}
-                            src="/view.png"
-                            onMouseEnter={() => setShowPreviousFile(true)}
-                            onMouseLeave={() => setShowPreviousFile(false)}
-                          />
-                        </a>
-                      </attr>
-                    )}
-                </div>
-                {id == undefined && (
-                  <>
-                    <label htmlFor="expertise" className="resume">
-                      <CloudUploadIcon />
-                      <span className="fileName">
-                        {recentUploadedDocs?.expertise || "Upload"}
-                      </span>
-                    </label>
-
-                    <input
-                      type="file"
-                      id="expertise"
-                      className="resume"
-                      name="expertise"
-                      style={{ display: "none" }}
-                      onChange={handleResume}
-                    />
-                  </>
-                )}
-              </div>
-
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px",
-                    justifyContent: "space-between",
-                    width: width < 700 && '320px'
-                  }}
-                >
-                  <label className="Input-Label">Working</label>
-                  {oldDocs.working !== "" &&
-                    oldDocs.working !== undefined &&
-                    Object.keys(oldDocs.working).length !== 0 && (
-                      <attr title="view previous working ">
-                        <a
-                          href={oldDocs.working?.secure_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <img
-                            style={{
-                              height: "30px",
-                              width: "30px",
-                              marginRight: '30px'
-                            }}
-                            src="/view.png"
-                            onMouseEnter={() => setShowPreviousFile(true)}
-                            onMouseLeave={() => setShowPreviousFile(false)}
-                          />
-                        </a>
-                      </attr>
-                    )}
-                </div>
-                {id == undefined && (
-                  <>
-                    <label htmlFor="working" className="resume">
-                      <CloudUploadIcon />
-                      <span className="fileName">
-                        {recentUploadedDocs?.working || "Upload"}
-                      </span>
-                    </label>
-
-                    <input
-                      type="file"
-                      id="working"
-                      className="resume"
-                      style={{ display: "none" }}
-                      name="working"
-                      onChange={handleResume}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {id == undefined ? (
-        <section className="EditProfile-Buttons-Section">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "10px",
-              marginTop: "15px",
-              marginBottom: "15px",
-            }}
-          >
-            <button style={{ fontSize: '10px' }} onClick={retreiveLocal}>Retreive last Save</button>
-            <button style={{ fontSize: '10px' }} onClick={savingLocal}>Save</button>
-            <button
-              type="submit"
-              disabled={
-                isLoading || !isFormValid || image === undefined || image === ""
-              }
-              onClick={update}
-              style={{ whiteSpace: "nowrap", position: "relative", fontSize: '10px' }}
-            >
-              {isLoading ? (
-                <div style={{display: 'flex', gap: '5px', alignItems: 'center'}}>
-                  <div className="button-loader"></div>
-                  <div style={{ }}>
-                    Sending Approval...
                   </div>
                 </div>
-              ) : (
-                <>
-                  <i
-                    className="fas fa-address-card"
-                    style={{ marginRight: "5px" }}
-                  ></i>
-                  Send for Approval
-                </>
-              )}
-            </button>
+
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2px",
+                      justifyContent: "space-between",
+                      width: width < 700 && "320px",
+                    }}
+                  >
+                    <label className="Input-Label">Degree</label>
+                    {oldDocs.degree !== "" &&
+                      oldDocs.degree !== undefined &&
+                      Object.keys(oldDocs.degree).length !== 0 && (
+                        <attr title="view previous degree ">
+                          <a
+                            href={oldDocs.degree?.secure_url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <img
+                              style={{
+                                height: "30px",
+                                width: "30px",
+                                marginRight: "30px",
+                              }}
+                              src="/view.png"
+                              onMouseEnter={() => setShowPreviousFile(true)}
+                              onMouseLeave={() => setShowPreviousFile(false)}
+                            />
+                          </a>
+                        </attr>
+                      )}
+                  </div>
+                  {id == undefined && (
+                    <>
+                      <label htmlFor="degree" className="resume">
+                        <CloudUploadIcon />
+                        <span className="fileName">
+                          {recentUploadedDocs?.degree || "Upload"}
+                        </span>
+                      </label>
+
+                      <input
+                        type="file"
+                        id="degree"
+                        className="resume"
+                        name="degree"
+                        onChange={handleResume}
+                        style={{ display: "none" }}
+                      />
+                    </>
+                  )}
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2px",
+                      justifyContent: "space-between",
+                      width: width < 700 && "320px",
+                    }}
+                  >
+                    <label className="Input-Label">Expertise</label>
+                    {oldDocs.expertise !== "" &&
+                      oldDocs.expertise !== undefined &&
+                      Object.keys(oldDocs.expertise).length !== 0 && (
+                        <attr title="view previous expertise ">
+                          <a
+                            href={oldDocs.expertise?.secure_url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <img
+                              style={{
+                                height: "30px",
+                                width: "30px",
+                                marginRight: "30px",
+                              }}
+                              src="/view.png"
+                              onMouseEnter={() => setShowPreviousFile(true)}
+                              onMouseLeave={() => setShowPreviousFile(false)}
+                            />
+                          </a>
+                        </attr>
+                      )}
+                  </div>
+                  {id == undefined && (
+                    <>
+                      <label htmlFor="expertise" className="resume">
+                        <CloudUploadIcon />
+                        <span className="fileName">
+                          {recentUploadedDocs?.expertise || "Upload"}
+                        </span>
+                      </label>
+
+                      <input
+                        type="file"
+                        id="expertise"
+                        className="resume"
+                        name="expertise"
+                        style={{ display: "none" }}
+                        onChange={handleResume}
+                      />
+                    </>
+                  )}
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2px",
+                      justifyContent: "space-between",
+                      width: width < 700 && "320px",
+                    }}
+                  >
+                    <label className="Input-Label">Working</label>
+                    {oldDocs.working !== "" &&
+                      oldDocs.working !== undefined &&
+                      Object.keys(oldDocs.working).length !== 0 && (
+                        <attr title="view previous working ">
+                          <a
+                            href={oldDocs.working?.secure_url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <img
+                              style={{
+                                height: "30px",
+                                width: "30px",
+                                marginRight: "30px",
+                              }}
+                              src="/view.png"
+                              onMouseEnter={() => setShowPreviousFile(true)}
+                              onMouseLeave={() => setShowPreviousFile(false)}
+                            />
+                          </a>
+                        </attr>
+                      )}
+                  </div>
+                  {id == undefined && (
+                    <>
+                      <label htmlFor="working" className="resume">
+                        <CloudUploadIcon />
+                        <span className="fileName">
+                          {recentUploadedDocs?.working || "Upload"}
+                        </span>
+                      </label>
+
+                      <input
+                        type="file"
+                        id="working"
+                        className="resume"
+                        style={{ display: "none" }}
+                        name="working"
+                        onChange={handleResume}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </form>
           </div>
         </section>
-      ) : (
-        <div className="button-container">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "25%",
-              gap: "10px",
-              marginTop: "15px",
-            }}
-          >
-            {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+      )}
 
-            <button
-              type="submit"
-              className="reject-button"
-              onClick={(e) => adminupdate(e, "rejected")}
-              style={{ whiteSpace: "nowrap", position: "relative" }}
-              disabled={inputs.status === "rejected"}
+      {userpage == true && (
+        <>
+          {id !==
+            jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+              .user_id && (
+            <section  className="EditProfile-comments-Container">
+              <div style={{ padding: "20px" }}>
+                <h2 className="Rating-heading">Ratings & Reviews</h2>
+                {convExits ||
+                jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                  .role == "Admin" ? (
+                  id !==
+                    jwtDecode(
+                      JSON.parse(localStorage.getItem("user")).accessToken
+                    ).user_id && (
+                    <div>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <img
+                          src={
+                            loggedImage !== "" && loggedImage !== undefined
+                              ? loggedImage
+                              : "/profile.png"
+                          }
+                        />
+                        <div>
+                          <span>
+                            <b>{loggedUserName}</b>
+                          </span>
+                          <div
+                            style={{ fontSize: "12px", marginBottom: "20px" }}
+                          >
+                            Reviews are public and include your account details
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className="Rating-Content"
+                        style={{ marginLeft: "60px" }}
+                      >
+                        <h4>Rate this user</h4>
+                        <h6>Tell others what you think</h6>
+                        <div
+                          className="stars"
+                          style={{ display: "flex", marginBottom: "10px" }}
+                        >
+                          <AddReviewStars
+                            filledStars={filledStars}
+                            setFilledStars={setFilledStars}
+                          />{" "}
+                          <button
+                            style={{
+                              cursor: "pointer",
+                              fontSize: "13px",
+                              width: "auto",
+                            }}
+                            onClick={sendReview}
+                          >
+                            Post
+                          </button>
+                        </div>
+                        <div>
+                          {!isWritingReview && (
+                            <div
+                              style={{ color: "blue", cursor: "pointer" }}
+                              onClick={() => setIsWritingReview(true)}
+                            >
+                              <b>Write a Review</b>
+                            </div>
+                          )}
+                          {isWritingReview && (
+                            <div
+                              className="writing-review"
+                              style={{
+                                display: "flex",
+                                gap: "20px",
+                                alignItems: "center",
+                              }}
+                            >
+                              <div>
+                                <textarea
+                                  className="textarea"
+                                  rows={2}
+                                  cols={50}
+                                  value={comment}
+                                  style={{ resize: "none" }}
+                                  onChange={(e) => setComment(e.target.value)}
+                                  placeholder="Describe Your Experience"
+                                />
+                              </div>
+                              <div>
+                                <button
+                                  onClick={sendText}
+                                  className="sendIcon"
+                                  style={{
+                                    cursor:
+                                      comment === ""
+                                        ? "not-allowed"
+                                        : "pointer",
+                                    fontSize: "13px",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  Post Review
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <>
+                    <div style={{ fontSize: "20px", marginBottom: "20px" }}>
+                      Conversation with this user should exist to add reviews
+                    </div>
+                  </>
+                )}
+
+                {allComments.length > 0 && (
+                  <div>
+                    <b>Reviews:</b>
+                  </div>
+                )}
+                <div
+                  style={{
+                    maxHeight: "340px",
+                    overflow: "scroll",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                  }}
+                >
+                  {allComments.length > 0 &&
+                    allComments.map((c, index) => (
+                      <IndividualUserReview
+                        onLike={onLike}
+                        key={index}
+                        c={c}
+                        deleteComment={deleteComment}
+                        onDisLike={onDisLike}
+                      />
+                    ))}
+                </div>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+
+      {userpage === false &&
+        (id == undefined ? (
+          <section className="EditProfile-Buttons-Section">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                marginTop: "15px",
+                marginBottom: "15px",
+              }}
             >
-              {/* {isLoading ? (
+              <button style={{ fontSize: "10px" }} onClick={retreiveLocal}>
+                Retreive last Save
+              </button>
+              <button style={{ fontSize: "10px" }} onClick={savingLocal}>
+                Save
+              </button>
+              <button
+                type="submit"
+                disabled={
+                  isLoading ||
+                  !isFormValid ||
+                  image === undefined ||
+                  image === ""
+                }
+                onClick={update}
+                style={{
+                  whiteSpace: "nowrap",
+                  position: "relative",
+                  fontSize: "10px",
+                }}
+              >
+                {isLoading ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "5px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div className="button-loader"></div>
+                    <div style={{}}>Sending Approval...</div>
+                  </div>
+                ) : (
+                  <>
+                    <i
+                      className="fas fa-address-card"
+                      style={{ marginRight: "5px" }}
+                    ></i>
+                    Send for Approval
+                  </>
+                )}
+              </button>
+            </div>
+          </section>
+        ) : (
+          <div className="button-container">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "25%",
+                gap: "10px",
+                marginTop: "15px",
+              }}
+            >
+              {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+
+              <button
+                type="submit"
+                className="reject-button"
+                onClick={(e) => adminupdate(e, "rejected")}
+                style={{ whiteSpace: "nowrap", position: "relative" }}
+                disabled={inputs.status === "rejected"}
+              >
+                {/* {isLoading ? (
                                     <>
                                                              <div className="button-loader"></div>
                                         <span style={{ marginLeft: "12px" }}>Rejecting...</span>
                                     </>
                                 ) : ( */}
-              <>Reject</>
-              {/* )} */}
-            </button>
-            <button
-              type="submit"
-              onClick={(e) => adminupdate(e, "approved")}
-              style={{ whiteSpace: "nowrap", position: "relative" }}
-              disabled={inputs.status === "approved"}
-            >
-              {isLoading ? (
-                <>
-                  <div className="button-loader"></div>
-                  <span style={{ marginLeft: "12px" }}>Approving...</span>
-                </>
-              ) : (
-                <>Approve</>
-              )}
-            </button>
+                <>Reject</>
+                {/* )} */}
+              </button>
+              <button
+                type="submit"
+                onClick={(e) => adminupdate(e, "approved")}
+                style={{ whiteSpace: "nowrap", position: "relative" }}
+                disabled={inputs.status === "approved"}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="button-loader"></div>
+                    <span style={{ marginLeft: "12px" }}>Approving...</span>
+                  </>
+                ) : (
+                  <>Approve</>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        ))}
 
       <Dialog
         open={reasonPop}
@@ -2935,7 +3614,7 @@ const EditProfileUI = () => {
         aria-describedby="alert-dialog-description"
         sx={gridCSS.tabContainer}
 
-      // sx={ gridCSS.tabContainer }
+        // sx={ gridCSS.tabContainer }
       >
         <DialogContent
           style={{
