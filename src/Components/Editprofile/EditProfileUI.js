@@ -1214,7 +1214,7 @@ const EditProfileUI = () => {
                 ></i>
               )}
             </div>
-            <div style={{display: 'flex', justifyContent: "space-between"}}>
+            <div className="personal-rating-container" style={{display: 'flex', justifyContent: "space-between"}}>
             <div className="Personal-Details">
               <div
                 style={{
