@@ -38,6 +38,7 @@ const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
 );
 const SignUp = React.lazy(() => import("./Components/Signup/SignUp"));
+const UserDetails = React.lazy(() => import("./Components/Signup/UserDetails"));
 const Login = React.lazy(() => import("./Components/Login/Login"));
 const ForgotPassword = React.lazy(() =>
   import("./Components/ForgotPassword/ForgotPassword")
@@ -267,6 +268,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/signup" Component={LoginAuth(SignUp)} />
+          <Route path="/userDetails" Component={LoginAuth(UserDetails)} />
           <Route path="/login" Component={LoginAuth(Login)} />
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
