@@ -189,9 +189,9 @@ const UserDetails = () => {
                 <h2>{type.title}</h2>
                 <p>{type.description}</p>
               </div>
-              {selectedBox === type.title && (
+              {/* {selectedBox === type.title && (
                 <i className="fas fa-check tick-icon"></i>
-              )}
+              )} */}
             </div>
           ))}
         </div>

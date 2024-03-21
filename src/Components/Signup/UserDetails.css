@@ -115,6 +115,9 @@ p {
   gap: 5px;
   cursor: pointer;
 }
+/* .investor-type:hover {
+ background-color: var(--primary-light);
+} */
 
 .gradient-icon {
   display: flex;
@@ -151,8 +154,10 @@ p {
   padding: 5px;
 }
 .selected-box {
-  background-color: var(--primary-light);
+  background-color: var(--primary);
+  color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: 0.5 ease-in;
 }
 
 .userDetails-primary-container h1,
