@@ -3,14 +3,13 @@
   background-color: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 1200px;
-  margin: 0 auto; 
-   padding-top: 0px;
+  margin: 0 auto;
+  padding-top: 0px;
   overflow-y: scroll;
-
 }
-.stepper-container{
+.stepper-container {
   position: fixed;
-  background:  #f9f9f9;
+  background: #f9f9f9;
   width: 80%;
   z-index: 1;
   padding: 10px;
@@ -71,13 +70,13 @@
   background-color: var(--primary);
 }
 
-
-.userDetails-role-container h1, .step2-content h1, .step3-content h1{
+.userDetails-role-container h1,
+.step2-content h1,
+.step3-content h1 {
   text-align: center;
   font-size: 1.2em;
   margin-bottom: 0.5em;
   margin-top: 5em;
-
 }
 
 .userDetails-role-container h4 {
@@ -129,12 +128,10 @@
   background: var(--primary);
   margin-right: 5px;
   margin-top: 10px;
-}
-
-.gradient-icon i {
-  font-size: 16px;
   color: #fff;
 }
+
+
 
 .investor-type h2 {
   font-size: 0.8em;
@@ -186,6 +183,7 @@ select {
   background-repeat: no-repeat;
   background-position: right 8px center;
   padding-right: 30px;
+  cursor: pointer;
 }
 
 select:focus {
@@ -207,12 +205,12 @@ select:focus {
 
 input[type="checkbox"] {
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .checkbox-container .checkbox-content {
   font-size: 14px;
   cursor: pointer;
-  margin-top: 10px;
 }
 
 .domain-selection,
@@ -269,7 +267,6 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  
 }
 
 .steps-button {
@@ -286,12 +283,12 @@ input[type="checkbox"] {
 }
 
 .css-9mgopn-MuiDivider-root {
- margin-top: 10px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
 }
 
-
-.step2-content h2{
-font-size: 1em;
-margin-bottom: 0.5em;
-margin-top: 0.5rem;
+.step2-content h2 {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5rem;
 }

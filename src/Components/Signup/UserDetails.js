@@ -5,70 +5,81 @@ import { Divider } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Navigate, useNavigate } from "react-router-dom";
+import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
+import EmojiObjectsOutlinedIcon from '@mui/icons-material/EmojiObjectsOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import RoomPreferencesOutlinedIcon from '@mui/icons-material/RoomPreferencesOutlined';
+import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
+import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
+import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
+import CorporateFareOutlinedIcon from '@mui/icons-material/CorporateFareOutlined';
+import LaptopMacOutlinedIcon from '@mui/icons-material/LaptopMacOutlined';
 
 const investorTypes = [
   {
     title: "Individual/Entrepreneur",
     description:
       "Already started your entrepreneurial journey as an idea or newly established business",
-    iconClass: "fas fa-lightbulb",
+    iconClass: <EmojiObjectsOutlinedIcon />,
   },
   {
     title: "Startup",
     description:
       "A company in the early stages of development and looking to scale.",
-    iconClass: "fas fa-rocket",
+    iconClass:<RocketLaunchOutlinedIcon />,
   },
   {
     title: "Mentor",
     description:
       "A person who shares their knowledge and experience to guide and support others.",
-    iconClass: "fas fa-user-tie",
+    iconClass: <SchoolOutlinedIcon />,
   },
   {
     title: "Incubator",
     description:
       "An organization that provides startups with workspace, mentorship, and resources.",
-    iconClass: "fas fa-building",
+    iconClass: <RoomPreferencesOutlinedIcon />,
   },
   {
     title: "Accelerator",
     description:
       "A program that helps startups grow rapidly through mentorship, funding, and connections.",
-    iconClass: "fas fa-fast-forward",
+    iconClass:  <SpeedOutlinedIcon />,
   },
   {
     title: "Individual Investor",
     description: "An individual who invests their own money in companies.",
-    iconClass: "fas fa-money-bill-wave",
+    iconClass: <AccountBalanceOutlinedIcon />,
   },
   {
     title: "Institutional Investor",
     description:
       "An organization that invests money on behalf of others, such as pension funds or insurance companies.",
-    iconClass: "fas fa-chart-line",
+    iconClass: <ApartmentOutlinedIcon />,
   },
   {
     title: "Trade Bodies",
     description:
       "Organizations that represent the interests of businesses in a particular sector.",
-    iconClass: "fas fa-handshake",
+    iconClass: <HandshakeOutlinedIcon />,
   },
   {
     title: "Government Body",
     description:
       "A department or agency of the government that supports startups.",
-    iconClass: "fas fa-gavel",
+    iconClass: <GavelOutlinedIcon />,
   },
   {
     title: "Corporate",
     description: "A large company that invests in or partners with startups.",
-    iconClass: "fas fa-building",
+    iconClass: <CorporateFareOutlinedIcon />,
   },
   {
     title: "Technology Partner",
     description: "A company that provides technology or services to startups.",
-    iconClass: "fas fa-laptop",
+    iconClass: <LaptopMacOutlinedIcon />,
   },
 ];
 
@@ -217,7 +228,8 @@ const UserDetails = () => {
                 >
                   <div>
                     <span className="gradient-icon">
-                      <i className={type.iconClass}></i>
+                      {/* <i className={type.iconClass}></i> */}
+                      <span>{type.iconClass}</span>
                     </span>
                   </div>
                   <div>
@@ -276,7 +288,7 @@ const UserDetails = () => {
           <div className="userDetails-checkbox-container">
             <h1>Follow others and see relevant post </h1>
             <label>
-              Yor are interested in...*
+              You are interested in...*
               <span
                 style={{
                   fontSize: "10px",
