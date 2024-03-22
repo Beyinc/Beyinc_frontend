@@ -72,7 +72,7 @@
 }
 
 
-.userDetails-role-container h1 {
+.userDetails-role-container h1, .step2-content h1, .step3-content h1{
   text-align: center;
   font-size: 1.2em;
   margin-bottom: 0.5em;
@@ -86,7 +86,7 @@
   margin-bottom: 1em;
 }
 
-p {
+.investor-types p {
   text-align: left;
   font-size: 0.8em;
   margin-bottom: 1em;
@@ -287,4 +287,11 @@ input[type="checkbox"] {
 
 .css-9mgopn-MuiDivider-root {
  margin-top: 10px !important;
+}
+
+
+.step2-content h2{
+font-size: 1em;
+margin-bottom: 0.5em;
+margin-top: 0.5rem;
 }

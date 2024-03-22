@@ -1596,6 +1596,7 @@ const EditProfileUI = () => {
                               ))}
                             </select>
                           </div>
+
                           <div>
                             <button
                               className="add-button"
@@ -1614,6 +1615,7 @@ const EditProfileUI = () => {
                               Add
                             </button>
                           </div>
+                          
                         </div>
                       </div>
                     </div>

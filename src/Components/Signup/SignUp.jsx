@@ -16,7 +16,7 @@ const SignUp = () => {
     mobile: null,
     mobileOtp: null,
     name: null,
-    role: null,
+    // role: null,
     password: null,
     isMobileOtpSent: null,
     isEmailOtpSent: null,
@@ -32,7 +32,7 @@ const SignUp = () => {
   const [verifyEmailOtpLoading, setVerifyEmailOtpLoading] = useState(false);
   const [sendMobileOtpLoading, setSendMobileOtpLoading] = useState(false);
   const [verifyMobileOtpLoading, setVerifyMobileOtpLoading] = useState(false);
-  const [roles, setRoles] = useState([]);
+  // const [roles, setRoles] = useState([]);
 
   const {
     email,
@@ -40,7 +40,7 @@ const SignUp = () => {
     mobile,
     mobileOtp,
     name,
-    role,
+    // role,
     password,
     isEmailOtpSent,
     isMobileOtpSent,
@@ -198,7 +198,7 @@ const SignUp = () => {
       password: password,
       userName: name,
       phone: mobile,
-      role: role,
+      // role: role,
     })
       .then((res) => {
         dispatch(
@@ -208,7 +208,7 @@ const SignUp = () => {
             visible: "yes",
           })
         );
-        navigate("/login");
+        navigate("/userDetails");
         setLoading(false);
       })
       .catch((err) => {
@@ -274,7 +274,7 @@ const SignUp = () => {
 
   useEffect(() => {
     ApiServices.getAllRoles().then((res) => {
-      setRoles(res.data);
+      // setRoles(res.data);
     }).catch((err) => {
       console.log(err);
       if (err.message == "Network Error") {
@@ -327,7 +327,7 @@ const SignUp = () => {
                     onChange={handleChanges}
                     placeholder="Full Name*"
                   />
-                  <div className="role-container">
+                  {/* <div className="role-container">
                     {roles?.map((r) => (
                       <div
                         style={{
@@ -346,7 +346,7 @@ const SignUp = () => {
                         <label for={r.role}>{r.role}</label>
                       </div>
                     ))}
-                  </div>
+                  </div> */}
                   <input
                     type="email"
                     className={

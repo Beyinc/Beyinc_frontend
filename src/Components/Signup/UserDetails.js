@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "./UserDetails.css";
 import { domain_subdomain, allskills } from "../../Utils";
 import { Divider } from "@mui/material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const investorTypes = [
   {
@@ -89,7 +92,7 @@ const Stepper = ({ currentStep }) => {
       </div>
       <div className="stepper-content">
         <div>Details</div>
-        <div>Interest</div>
+        <div>Additional Information</div>
         <div>Profile</div>
       </div>
     </div>
@@ -97,7 +100,9 @@ const Stepper = ({ currentStep }) => {
 };
 
 const UserDetails = () => {
-  const [selectedBox, setSelectedBox] = useState("");
+  const navigate = useNavigate()
+  // Step 1 state variables
+  const [role, setRole] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedDropdownPrimary, setSelectedDropdownPrimary] = useState("");
   const [selectedDropdownSecondary, setSelectedDropdownSecondary] =
@@ -108,8 +113,16 @@ const UserDetails = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
 
+  // Step 2 state variables
+  const [selectedBecomePlatform, setSelectedBecomePlatform] = useState("");
+  const [fee, setFee] = useState(0);
+  const [selectedProfile, setSelectedProfile] = useState("");
+  const [selectedOneToOne, setSelectedOneToOne] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
   const handleBoxSelect = (boxType) => {
-    setSelectedBox(boxType);
+    setRole(boxType);
   };
 
   const handleDropdownPrimary = (event) => {
@@ -165,229 +178,424 @@ const UserDetails = () => {
     );
   };
 
+  const handleSubmit = () => {
+    const formData = {
+      role,
+      selectedDropdownPrimary,
+      selectedDropdownSecondary,
+      selectedTypes,
+      selectedDomains,
+      skills: selectedSkills,
+      selectedBecomePlatform,
+      fee,
+      selectedDate,
+      selectedTime,
+      selectedProfile,
+      selectedOneToOne,
+    };
+    console.log(formData);
+    navigate("/login");
+  };
+
   return (
     <main className="userDetails-container">
       <Stepper currentStep={currentStep} />
-      <div className="userDetails-role-container">
-        <h1>Tell Us Who You Are?</h1>
-        <h4>Select one of these</h4>
-        <div className="investor-types">
-          {investorTypes.map((type) => (
-            <div
-              key={type.title}
-              className={`investor-type ${
-                selectedBox === type.title ? "selected-box" : ""
-              }`}
-              onClick={() => handleBoxSelect(type.title)}
-            >
-              <div>
-                <span className="gradient-icon">
-                  <i className={type.iconClass}></i>
-                </span>
-              </div>
-              <div>
-                <h2>{type.title}</h2>
-                <p>{type.description}</p>
-              </div>
-              {/* {selectedBox === type.title && (
+      {/* step-1 */}
+      {currentStep === 1 && (
+        <div>
+          <div className="userDetails-role-container">
+            <h1>Tell Us Who You Are?</h1>
+            <h4>Select one of these</h4>
+            <div className="investor-types">
+              {investorTypes.map((type) => (
+                <div
+                  key={type.title}
+                  className={`investor-type ${
+                    role === type.title ? "selected-box" : ""
+                  }`}
+                  onClick={() => handleBoxSelect(type.title)}
+                >
+                  <div>
+                    <span className="gradient-icon">
+                      <i className={type.iconClass}></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h2>{type.title}</h2>
+                    <p>{type.description}</p>
+                  </div>
+                  {/* {selectedBox === type.title && (
                 <i className="fas fa-check tick-icon"></i>
               )} */}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-
-      <Divider />
-
-      <div className="userDetails-primary-container">
-        <h1>Use our platform as</h1>
-        <div className="primary-dropdown">
-          <div>
-            <label htmlFor="investorTypes">Primary *</label>
-            <select
-              id="investorTypes"
-              value={selectedDropdownPrimary}
-              onChange={handleDropdownPrimary}
-            >
-              <option value="">Select an option</option>
-              {investorTypes.map((type) => (
-                <option key={type.title} value={type.title}>
-                  {type.title}
-                </option>
-              ))}
-            </select>
           </div>
 
-          <div>
-            <label htmlFor="investorTypes">Secondary (optional)</label>
-            <select
-              id="investorTypes"
-              value={selectedDropdownSecondary}
-              onChange={handleDropdownSecondary}
-            >
-              <option value="">Select an option</option>
+          <Divider />
+
+          <div className="userDetails-primary-container">
+            <h1>Use our platform as</h1>
+            <div className="primary-dropdown">
+              <div>
+                <label htmlFor="investorTypes">Primary *</label>
+                <select
+                  id="investorTypes"
+                  value={selectedDropdownPrimary}
+                  onChange={handleDropdownPrimary}
+                >
+                  <option value="">Select an option</option>
+                  {investorTypes.map((type) => (
+                    <option key={type.title} value={type.title}>
+                      {type.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="investorTypes">Secondary (optional)</label>
+                <select
+                  id="investorTypes"
+                  value={selectedDropdownSecondary}
+                  onChange={handleDropdownSecondary}
+                >
+                  <option value="">Select an option</option>
+                  {investorTypes.map((type) => (
+                    <option key={type.title} value={type.title}>
+                      {type.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <Divider />
+
+          <div className="userDetails-checkbox-container">
+            <h1>Follow others and see relevant post </h1>
+            <label>
+              Yor are interested in...*
+              <span
+                style={{
+                  fontSize: "10px",
+                  color: "gray",
+                  marginLeft: "10px",
+                  marginTop: "5px",
+                }}
+              >
+                (maximum 5 selections)
+              </span>
+            </label>
+            <div className="checkbox-container">
               {investorTypes.map((type) => (
-                <option key={type.title} value={type.title}>
-                  {type.title}
-                </option>
+                <div key={type.title} className="checkbox-item">
+                  <input
+                    type="checkbox"
+                    id={type.title}
+                    value={type.title}
+                    checked={selectedTypes.includes(type.title)}
+                    onChange={handleCheckboxChange}
+                  />
+                  <p className="checkbox-content" htmlFor={type.title}>
+                    {type.title}
+                  </p>
+                </div>
               ))}
-            </select>
+            </div>
+          </div>
+
+          <Divider />
+
+          <div className="domain-selection">
+            <h1>
+              Select Interested Domains*
+              <span
+                style={{
+                  fontSize: "10px",
+                  color: "gray",
+                  marginLeft: "10px",
+                  marginTop: "5px",
+                }}
+              >
+                (maximum 5 domains)
+              </span>
+            </h1>
+            <div className="dropdown-container">
+              <label htmlFor="domainSelect">Select Domain:</label>
+              <select
+                id="domainSelect"
+                value={newDomain}
+                onChange={(e) => {
+
+                  setNewDomain(e.target.value)
+                  setSelectedDomains([...selectedDomains, e.target.value]);
+
+                  setNewDomain("");
+
+                }}
+              >
+                <option value="">Select a domain</option>
+                {domainOptions.map((domain) => (
+                  <option key={domain} value={domain}>
+                    {domain}
+                  </option>
+                ))}
+              </select>
+              {selectedDomains.length > 0 && (
+                <div className="selected-domains">
+                  {selectedDomains.map((domain) => (
+                    <div key={domain} className="selected-domain">
+                      <span>{domain}</span>
+                      <button
+                        className="domain-delete-button"
+                        onClick={() => handleRemoveDomain(domain)}
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <Divider />
+
+          <div className="skills-selection">
+            <h1 className="heading">
+              Select Skills*{" "}
+              <span
+                style={{
+                  fontSize: "10px",
+                  color: "gray",
+                  marginLeft: "10px",
+                  marginTop: "5px",
+                }}
+              >
+                (maximum 5 skills)
+              </span>
+            </h1>
+            <div className="dropdown-container">
+              <label htmlFor="skillSelect">Select Skill:</label>
+              <select
+                id="skillSelect"
+                value={newSkill}
+                onChange={(e) => {
+                  setNewSkill(e.target.value)
+                  setSelectedSkills([...selectedSkills, e.target.value]);
+                    setNewSkill("");
+                }}
+              >
+                <option value="">Select a skill</option>
+                {skillsOptions.map((skill) => (
+                  <option key={skill} value={skill}>
+                    {skill}
+                  </option>
+                ))}
+              </select>
+              {selectedSkills.length > 0 && (
+                <div className="selected-skills">
+                  {selectedSkills.map((skill) => (
+                    <div key={skill} className="selected-skill">
+                      <span>{skill}</span>
+                      <button
+                        className="domain-delete-button"
+                        onClick={() => handleRemoveSkill(skill)}
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <Divider />
-
-      <div className="userDetails-checkbox-container">
-        <h1>Follow others and see relevant post </h1>
-        <label>
-          Yor are interested in...*
-          <span
-            style={{
-              fontSize: "10px",
-              color: "gray",
-              marginLeft: "10px",
-              marginTop: "5px",
-            }}
-          >
-            (maximum 5 selections)
-          </span>
-        </label>
-        <div className="checkbox-container">
-          {investorTypes.map((type) => (
-            <div key={type.title} className="checkbox-item">
+      {/* step-2 */}
+      {currentStep === 2 && (
+        <div className="step2-content">
+          <h1>Additional Information</h1>
+          <div>
+            <h2>Want to become on this platform</h2>
+            <p>
               <input
-                type="checkbox"
-                id={type.title}
-                value={type.title}
-                checked={selectedTypes.includes(type.title)}
-                onChange={handleCheckboxChange}
+                type="radio"
+                name="becomePlatform"
+                value="Cofounder"
+                checked={selectedBecomePlatform === "Cofounder"}
+                onChange={(e) => setSelectedBecomePlatform(e.target.value)}
               />
-              <p className="checkbox-content" htmlFor={type.title}>
-                {type.title}
+              Cofounder
+            </p>
+            <p>
+              <input
+                type="radio"
+                name="becomePlatform"
+                value="Mentor"
+                checked={selectedBecomePlatform === "Mentor"}
+                onChange={(e) => setSelectedBecomePlatform(e.target.value)}
+              />
+              Mentor
+            </p>
+            <p>
+              <input
+                type="radio"
+                name="becomePlatform"
+                value="Investor"
+                checked={selectedBecomePlatform === "Investor"}
+                onChange={(e) => setSelectedBecomePlatform(e.target.value)}
+              />
+              Investor
+            </p>
+            <p>
+              <input
+                type="radio"
+                name="becomePlatform"
+                value="Not Interested"
+                checked={selectedBecomePlatform === "Not Interested"}
+                onChange={(e) => {
+                  setFee('')
+                  setSelectedDate('')
+                  setSelectedTime('')
+                  setSelectedProfile('')
+                  setSelectedOneToOne('')
+                  setSelectedBecomePlatform(e.target.value)
+                }}
+              />
+              Not Interested
+            </p>
+          </div>
+
+          {/* If yes, select approx. price per minute */}
+          {selectedBecomePlatform !== "Not Interested" && (
+            <div>
+              <h2>
+                Select the approx. price (Rs.) per minute for each session
+              </h2>
+              <input
+                type="number"
+                min={0}
+                max={1000}
+                value={fee}
+                onChange={(e) => setFee(e.target.value)}
+              />
+            </div>
+          )}
+
+          {/* If yes, time availability */}
+          <div>
+            {selectedBecomePlatform !== "Not Interested" && (
+              <div>
+                <h2>Time availability</h2>
+                <div>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    dateFormat="MMMM d, yyyy"
+                    placeholderText="Select date"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="time"
+                    value={selectedTime}
+                    onChange={(e) => setSelectedTime(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* If yes, make profile same as */}
+          {selectedBecomePlatform !== "Not Interested" && (
+            <div>
+              <h2>Make profile same as</h2>
+              <p>
+                <input
+                  type="radio"
+                  name="profileSameAs"
+                  value="Primary"
+                  checked={selectedProfile === "Primary"}
+                  onChange={(e) => setSelectedProfile(e.target.value)}
+                />
+                Primary
+              </p>
+              <p>
+                <input
+                  type="radio"
+                  name="profileSameAs"
+                  value="Secondary"
+                  checked={selectedProfile === "Secondary"}
+                  onChange={(e) => setSelectedProfile(e.target.value)}
+                />
+                Secondary
               </p>
             </div>
-          ))}
-        </div>
-      </div>
+          )}
 
-      <Divider />
-
-      <div className="domain-selection">
-        <h1>
-          Select Interested Domains*
-          <span
-            style={{
-              fontSize: "10px",
-              color: "gray",
-              marginLeft: "10px",
-              marginTop: "5px",
-            }}
-          >
-            (maximum 5 domains)
-          </span>
-        </h1>
-        <div className="dropdown-container">
-          <label htmlFor="domainSelect">Select Domain:</label>
-          <select
-            id="domainSelect"
-            value={newDomain}
-            onChange={(e) => setNewDomain(e.target.value)}
-            onBlur={() => {
-              if (
-                newDomain &&
-                selectedDomains.length < 5 &&
-                !selectedDomains.includes(newDomain)
-              ) {
-                setSelectedDomains([...selectedDomains, newDomain]);
-                setNewDomain("");
-              }
-            }}
-          >
-            <option value="">Select a domain</option>
-            {domainOptions.map((domain) => (
-              <option key={domain} value={domain}>
-                {domain}
-              </option>
-            ))}
-          </select>
-          <button style={{ marginLeft: "10px" }}>Add</button>
-          {selectedDomains.length > 0 && (
-            <div className="selected-domains">
-              {selectedDomains.map((domain) => (
-                <div key={domain} className="selected-domain">
-                  <span>{domain}</span>
-                  <button
-                    className="domain-delete-button"
-                    onClick={() => handleRemoveDomain(domain)}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
+          {/* Want to have one-to-one session */}
+          {selectedBecomePlatform !== "Not Interested" && (
+          <div>
+            <h2>Want to have one-to-one session with</h2>
+            <p>
+              <input
+                type="radio"
+                name="oneToOneSession"
+                value="Cofounder"
+                checked={selectedOneToOne === "Cofounder"}
+                onChange={(e) => setSelectedOneToOne(e.target.value)}
+              />
+              Cofounder
+            </p>
+            <p>
+              <input
+                type="radio"
+                name="oneToOneSession"
+                value="Mentor"
+                checked={selectedOneToOne === "Mentor"}
+                onChange={(e) => setSelectedOneToOne(e.target.value)}
+              />
+              Mentor
+            </p>
+            <p>
+              <input
+                type="radio"
+                name="oneToOneSession"
+                value="Investor"
+                checked={selectedOneToOne === "Investor"}
+                onChange={(e) => setSelectedOneToOne(e.target.value)}
+              />
+              Investor
+            </p>
+            <p>
+              <input
+                type="radio"
+                name="oneToOneSession"
+                value="Not Interested"
+                checked={selectedOneToOne === "Not Interested"}
+                onChange={(e) => setSelectedOneToOne(e.target.value)}
+              />
+              Not Interested
+            </p>
+          </div>
           )}
         </div>
-      </div>
-      <Divider />
-      <div className="skills-selection">
-        <h1 className="heading">
-          Select Skills*{" "}
-          <span
-            style={{
-              fontSize: "10px",
-              color: "gray",
-              marginLeft: "10px",
-              marginTop: "5px",
-            }}
-          >
-            (maximum 5 skills)
-          </span>
-        </h1>
-        <div className="dropdown-container">
-          <label htmlFor="skillSelect">Select Skill:</label>
-          <select
-            id="skillSelect"
-            value={newSkill}
-            onChange={(e) => setNewSkill(e.target.value)}
-            onBlur={() => {
-              if (
-                newSkill &&
-                selectedSkills.length < 5 &&
-                !selectedSkills.includes(newSkill)
-              ) {
-                setSelectedSkills([...selectedSkills, newSkill]);
-                setNewSkill("");
-              }
-            }}
-          >
-            <option value="">Select a skill</option>
-            {skillsOptions.map((skill) => (
-              <option key={skill} value={skill}>
-                {skill}
-              </option>
-            ))}
-          </select>
-          <button style={{ marginLeft: "10px" }}>Add</button>
-          {selectedSkills.length > 0 && (
-            <div className="selected-skills">
-              {selectedSkills.map((skill) => (
-                <div key={skill} className="selected-skill">
-                  <span>{skill}</span>
-                  <button
-                    className="domain-delete-button"
-                    onClick={() => handleRemoveSkill(skill)}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      )}
 
-     
+      {/* step-3 */}
+      {currentStep === 3 && (
+        <div className="step3-content">
+          <h1>Profile</h1>
+        </div>
+      )}
+
+
+      
+
       <div className="steps-button-container">
         <div>
           {currentStep > 1 && (
@@ -403,7 +611,9 @@ const UserDetails = () => {
               Next Step
             </button>
           ) : (
-            <button className="steps-button">Submit</button>
+            <button className="steps-button" onClick={handleSubmit}>
+              Submit
+            </button>
           )}
         </div>
       </div>
