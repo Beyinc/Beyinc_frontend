@@ -131,8 +131,6 @@
   color: #fff;
 }
 
-
-
 .investor-type h2 {
   font-size: 0.8em;
   margin-bottom: 0.5em;
@@ -288,6 +286,11 @@ input[type="checkbox"] {
 }
 
 .step2-content h2 {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5rem;
+}
+.step3-content h2 {
   font-size: 1em;
   margin-bottom: 0.5em;
   margin-top: 0.5rem;
