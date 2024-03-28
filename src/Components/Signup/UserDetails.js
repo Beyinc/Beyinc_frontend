@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./UserDetails.css";
 import { domain_subdomain, allskills } from "../../Utils";
-import { Divider } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
 import CorporateFareOutlinedIcon from "@mui/icons-material/CorporateFareOutlined";
 import LaptopMacOutlinedIcon from "@mui/icons-material/LaptopMacOutlined";
+
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const investorTypes = [
   {
@@ -115,6 +117,313 @@ const Stepper = ({ currentStep }) => {
         <div>Details</div>
         <div>Additional Information</div>
         <div>Profile</div>
+      </div>
+    </div>
+  );
+};
+const UploadProfile = ({ step3Data, setStep3Data, isCompany, label }) => {
+  const handleUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setStep3Data((prev) => ({
+        ...prev,
+        [e.target.name]: { name: file?.name, data: reader.result },
+      }));
+    };
+  };
+  return (
+    <div className="upload-buttons-container">
+      <Button variant="outlined">
+        <label
+          htmlFor="profile"
+          style={{ cursor: "pointer" }}
+          className="resume"
+        >
+          <CloudUploadIcon />
+          <span className="fileName">
+            {step3Data?.profile?.name || label
+              ? "Upload " + label
+              : isCompany
+              ? "Upload Company Logo"
+              : "Upload profile picture"}
+          </span>
+        </label>
+        <input
+          type="file"
+          id="profile"
+          className="resume"
+          name="profile"
+          onChange={handleUpload}
+          style={{ display: "none" }}
+        />
+      </Button>
+      <Button variant="outlined">
+        <label
+          htmlFor="banner"
+          style={{ cursor: "pointer" }}
+          className="resume"
+        >
+          <CloudUploadIcon />
+          <span className="fileName">
+            {step3Data?.banner?.name || "Upload banner picture"}
+          </span>
+        </label>
+        <input
+          type="file"
+          id="banner"
+          className="resume"
+          name="banner"
+          onChange={handleUpload}
+          style={{ display: "none" }}
+        />{" "}
+      </Button>
+    </div>
+  );
+};
+
+const AboutStartup = ({ step3Data, setStep3Data }) => {
+  return (
+    <div>
+      <UploadProfile
+        isCompany={true}
+        setStep3Data={setStep3Data}
+        step3Data={step3Data}
+      />
+      <h2>Type of startup?</h2>
+      <p>
+        <input
+          type="radio"
+          name="becomePlatform"
+          value="Funded"
+          checked={step3Data.typeStartup === "Funded"}
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
+          }
+        />
+        Funded
+      </p>
+      <p>
+        <input
+          type="radio"
+          name="becomePlatform"
+          value="Bootstrapped"
+          checked={step3Data.typeStartup === "Bootstrapped"}
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
+          }
+        />
+        Bootstrapped
+      </p>
+      <div className="primary-dropdown">
+        <div>
+          <label htmlFor="investorTypes">Stage of startup</label>
+          <select
+            id="investorTypes"
+            onChange={(e) =>
+              setStep3Data((p) => ({
+                ...p,
+                startupStage: e.target.value,
+              }))
+            }
+            value={step3Data.startupStage}
+          >
+            <option value="">Select an option</option>
+            {startupStage.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div>
+        <h2>When did the startup start?</h2>
+        <div>
+          <DatePicker
+            onChange={(e) => setStep3Data((p) => ({ ...p, startupDate: e }))}
+            value={step3Data.startupDate}
+            dateFormat="MMMM d, yyyy"
+            placeholderText="Select date"
+          />
+        </div>
+      </div>
+      <div>
+        <h2>Total customers till date</h2>
+        <input
+          type="number"
+          onChange={(e) =>
+            setStep3Data((p) => ({
+              ...p,
+              total_customers: e.target.value,
+            }))
+          }
+          value={step3Data.total_customers}
+        />
+      </div>
+      <div>
+        <h2>Annual turnover</h2>
+        <input
+          type="text"
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, turnover: e.target.value }))
+          }
+          value={step3Data.turnover}
+        />
+      </div>
+      <div>
+        <h2>Is company registered?</h2>
+        <p>
+          <input
+            type="radio"
+            name="becomePlatform"
+            value="yes"
+            checked={step3Data.isStartupRegistered === "yes"}
+            onChange={(e) =>
+              setStep3Data((p) => ({
+                ...p,
+                isStartupRegistered: e.target.value,
+              }))
+            }
+          />
+          Yes
+        </p>
+        <p>
+          <input
+            type="radio"
+            name="becomePlatform"
+            value="no"
+            checked={step3Data.isStartupRegistered === "no"}
+            onChange={(e) =>
+              setStep3Data((p) => ({
+                ...p,
+                isStartupRegistered: e.target.value,
+              }))
+            }
+          />
+          No
+        </p>
+      </div>
+      {step3Data.isStartupRegistered === "yes" ? (
+        <div>
+          <h2>Company CIN</h2>
+          <input
+            type="text"
+            onChange={(e) =>
+              setStep3Data((p) => ({
+                ...p,
+                startupCIN: e.target.value,
+              }))
+            }
+            value={step3Data.startupCIN}
+          />
+        </div>
+      ) : (
+        ""
+      )}
+      <div className="domain-selection">
+        <h2>Select Domains of the startup</h2>
+        <div className="dropdown-container">
+          <select
+            id="domainSelect"
+            value={step3Data.startupDomain}
+            onChange={(e) => {
+              setStep3Data((p) => ({
+                ...p,
+                startupDomain: [
+                  ...(step3Data.startupDomain ? step3Data.startupDomain : []),
+                  e.target.value,
+                ],
+              }));
+            }}
+          >
+            <option value="">Select a domain</option>
+            {domainOptions.map((domain) => (
+              <option key={domain} value={domain}>
+                {domain}
+              </option>
+            ))}
+          </select>
+          {step3Data.startupDomain?.length > 0 && (
+            <div className="selected-domains">
+              {step3Data.startupDomain.map((domain) => (
+                <div key={domain} className="selected-domain">
+                  <span>{domain}</span>
+                  <button
+                    className="domain-delete-button"
+                    onClick={() =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        startupDomain: [
+                          ...(step3Data.startupDomain
+                            ? step3Data.startupDomain
+                            : []
+                          ).filter((d) => d !== domain),
+                        ],
+                      }))
+                    }
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <h2>Location</h2>
+        <input
+          type="text"
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, location: e.target.value }))
+          }
+          value={step3Data.location}
+        />
+      </div>
+
+      <div>
+        <h2>Instagram Link</h2>
+        <input
+          type="text"
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, Instagram: e.target.value }))
+          }
+          value={step3Data.Instagram}
+        />
+      </div>
+      <div>
+        <h2>Youtube Link</h2>
+        <input
+          type="text"
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, Youtube: e.target.value }))
+          }
+          value={step3Data.Youtube}
+        />
+      </div>
+      <div>
+        <h2>LinkedIn Link</h2>
+        <input
+          type="text"
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
+          }
+          value={step3Data.linkedin}
+        />
+      </div>
+      <div>
+        <h2>Twitter Link</h2>
+        <input
+          type="text"
+          onChange={(e) =>
+            setStep3Data((p) => ({ ...p, twitter: e.target.value }))
+          }
+          value={step3Data.twitter}
+        />
       </div>
     </div>
   );
@@ -615,6 +924,10 @@ const UserDetails = () => {
           <h1>Profile</h1>
           {role === "Individual/Entrepreneur" ? (
             <div>
+              <UploadProfile
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <h2>Do you have your own startup?</h2>
               <p>
                 <input
@@ -640,6 +953,12 @@ const UserDetails = () => {
                 />
                 No
               </p>
+              {step3Data.haveStartup === "yes" && (
+                <AboutStartup
+                  step3Data={step3Data}
+                  setStep3Data={setStep3Data}
+                />
+              )}
               <div>
                 <h2>Website Link</h2>
                 <input
@@ -702,249 +1021,13 @@ const UserDetails = () => {
               </div>
             </div>
           ) : role === "Startup" ? (
-            <div>
-              <h2>Type of startup?</h2>
-              <p>
-                <input
-                  type="radio"
-                  name="becomePlatform"
-                  value="Funded"
-                  checked={step3Data.typeStartup === "Funded"}
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
-                  }
-                />
-                Funded
-              </p>
-              <p>
-                <input
-                  type="radio"
-                  name="becomePlatform"
-                  value="Bootstrapped"
-                  checked={step3Data.typeStartup === "Bootstrapped"}
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
-                  }
-                />
-                Bootstrapped
-              </p>
-              <div className="primary-dropdown">
-                <div>
-                  <label htmlFor="investorTypes">Stage of startup</label>
-                  <select
-                    id="investorTypes"
-                    onChange={(e) =>
-                      setStep3Data((p) => ({
-                        ...p,
-                        startupStage: e.target.value,
-                      }))
-                    }
-                    value={step3Data.startupStage}
-                  >
-                    <option value="">Select an option</option>
-                    {startupStage.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div>
-                <h2>When did the startup start?</h2>
-                <div>
-                  <DatePicker
-                    onChange={(e) =>
-                      setStep3Data((p) => ({ ...p, startupDate: e }))
-                    }
-                    value={step3Data.startupDate}
-                    dateFormat="MMMM d, yyyy"
-                    placeholderText="Select date"
-                  />
-                </div>
-              </div>
-              <div>
-                <h2>Total customers till date</h2>
-                <input
-                  type="number"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({
-                      ...p,
-                      total_customers: e.target.value,
-                    }))
-                  }
-                  value={step3Data.total_customers}
-                />
-              </div>
-              <div>
-                <h2>Annual turnover</h2>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, turnover: e.target.value }))
-                  }
-                  value={step3Data.turnover}
-                />
-              </div>
-              <div>
-                <h2>Is company registered?</h2>
-                <p>
-                  <input
-                    type="radio"
-                    name="becomePlatform"
-                    value="yes"
-                    checked={step3Data.isStartupRegistered === "yes"}
-                    onChange={(e) =>
-                      setStep3Data((p) => ({
-                        ...p,
-                        isStartupRegistered: e.target.value,
-                      }))
-                    }
-                  />
-                  Yes
-                </p>
-                <p>
-                  <input
-                    type="radio"
-                    name="becomePlatform"
-                    value="no"
-                    checked={step3Data.isStartupRegistered === "no"}
-                    onChange={(e) =>
-                      setStep3Data((p) => ({
-                        ...p,
-                        isStartupRegistered: e.target.value,
-                      }))
-                    }
-                  />
-                  No
-                </p>
-              </div>
-              {step3Data.isStartupRegistered === "yes" ? (
-                <div>
-                  <h2>Company CIN</h2>
-                  <input
-                    type="text"
-                    onChange={(e) =>
-                      setStep3Data((p) => ({
-                        ...p,
-                        startupCIN: e.target.value,
-                      }))
-                    }
-                    value={step3Data.startupCIN}
-                  />
-                </div>
-              ) : (
-                ""
-              )}
-              <div className="domain-selection">
-                <h2>Select Domains of the startup</h2>
-                <div className="dropdown-container">
-                  <select
-                    id="domainSelect"
-                    value={step3Data.startupDomain}
-                    onChange={(e) => {
-                      setNewDomain(e.target.value);
-                      setStep3Data((p) => ({
-                        ...p,
-                        startupDomain: [
-                          ...(step3Data.startupDomain
-                            ? step3Data.startupDomain
-                            : []),
-                          e.target.value,
-                        ],
-                      }));
-                      setNewDomain("");
-                    }}
-                  >
-                    <option value="">Select a domain</option>
-                    {domainOptions.map((domain) => (
-                      <option key={domain} value={domain}>
-                        {domain}
-                      </option>
-                    ))}
-                  </select>
-                  {step3Data.startupDomain?.length > 0 && (
-                    <div className="selected-domains">
-                      {step3Data.startupDomain.map((domain) => (
-                        <div key={domain} className="selected-domain">
-                          <span>{domain}</span>
-                          <button
-                            className="domain-delete-button"
-                            onClick={() =>
-                              setStep3Data((p) => ({
-                                ...p,
-                                startupDomain: [
-                                  ...(step3Data.startupDomain
-                                    ? step3Data.startupDomain
-                                    : []
-                                  ).filter((d) => d !== domain),
-                                ],
-                              }))
-                            }
-                          >
-                            X
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <h2>Location</h2>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, location: e.target.value }))
-                  }
-                  value={step3Data.location}
-                />
-              </div>
-
-              <div>
-                <h2>Instagram Link</h2>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, Instagram: e.target.value }))
-                  }
-                  value={step3Data.Instagram}
-                />
-              </div>
-              <div>
-                <h2>Youtube Link</h2>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, Youtube: e.target.value }))
-                  }
-                  value={step3Data.Youtube}
-                />
-              </div>
-              <div>
-                <h2>LinkedIn Link</h2>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
-                  }
-                  value={step3Data.linkedin}
-                />
-              </div>
-              <div>
-                <h2>Twitter Link</h2>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, twitter: e.target.value }))
-                  }
-                  value={step3Data.twitter}
-                />
-              </div>
-            </div>
+            <AboutStartup step3Data={step3Data} setStep3Data={setStep3Data} />
           ) : role === "Mentor" ? (
             <div>
+              <UploadProfile
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <h2>Do you have your own startup?</h2>
               <p>
                 <input
@@ -970,6 +1053,12 @@ const UserDetails = () => {
                 />
                 No
               </p>
+              {step3Data.haveStartup === "yes" && (
+                <AboutStartup
+                  step3Data={step3Data}
+                  setStep3Data={setStep3Data}
+                />
+              )}
               <div>
                 <h2>Website Link</h2>
                 <input
@@ -1047,7 +1136,11 @@ const UserDetails = () => {
             </div>
           ) : role === "Incubator" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                isCompany={true}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Incubator Name:</h2>
                 <input
@@ -1422,7 +1515,11 @@ const UserDetails = () => {
             </div>
           ) : role === "Accelerator" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                isCompany={true}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Accelerator Name:</h2>
                 <input
@@ -1797,7 +1894,10 @@ const UserDetails = () => {
             </div>
           ) : role === "Individual Investor" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Name:</h2>
                 <input
@@ -2122,7 +2222,11 @@ const UserDetails = () => {
             </div>
           ) : role === "Government Body" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                label={"Department Logo"}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Name:</h2>
                 <input
@@ -2352,7 +2456,11 @@ const UserDetails = () => {
             </div>
           ) : role === "Corporate" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                isCompany={true}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Name:</h2>
                 <input
@@ -2594,7 +2702,11 @@ const UserDetails = () => {
             </div>
           ) : role === "Trade Body" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                label={"Logo"}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Name:</h2>
                 <input
@@ -2846,7 +2958,11 @@ const UserDetails = () => {
             </div>
           ) : role === "Technology Partner" ? (
             <div>
-              {/* logo and banner */}
+              <UploadProfile
+                label={"Logo"}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
               <div>
                 <h2>Name:</h2>
                 <input
