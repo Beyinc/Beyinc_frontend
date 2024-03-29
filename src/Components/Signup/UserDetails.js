@@ -186,37 +186,8 @@ const UploadProfile = ({ step3Data, setStep3Data, isCompany, label }) => {
 
 const AboutStartup = ({ step3Data, setStep3Data }) => {
   return (
-    <div>
-      <UploadProfile
-        isCompany={true}
-        setStep3Data={setStep3Data}
-        step3Data={step3Data}
-      />
-      <h2>Type of startup?</h2>
-      <p>
-        <input
-          type="radio"
-          name="becomePlatform"
-          value="Funded"
-          checked={step3Data.typeStartup === "Funded"}
-          onChange={(e) =>
-            setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
-          }
-        />
-        Funded
-      </p>
-      <p>
-        <input
-          type="radio"
-          name="becomePlatform"
-          value="Bootstrapped"
-          checked={step3Data.typeStartup === "Bootstrapped"}
-          onChange={(e) =>
-            setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
-          }
-        />
-        Bootstrapped
-      </p>
+    <>
+      {" "}
       <div className="primary-dropdown">
         <div>
           <label htmlFor="investorTypes">Stage of startup</label>
@@ -278,7 +249,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
         <p>
           <input
             type="radio"
-            name="becomePlatform"
+            name="companyRegistered"
             value="yes"
             checked={step3Data.isStartupRegistered === "yes"}
             onChange={(e) =>
@@ -293,7 +264,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
         <p>
           <input
             type="radio"
-            name="becomePlatform"
+            name="companyRegistered"
             value="no"
             checked={step3Data.isStartupRegistered === "no"}
             onChange={(e) =>
@@ -373,7 +344,6 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           )}
         </div>
       </div>
-
       <div>
         <h2>Location</h2>
         <input
@@ -384,48 +354,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           value={step3Data.location}
         />
       </div>
-
-      <div>
-        <h2>Instagram Link</h2>
-        <input
-          type="text"
-          onChange={(e) =>
-            setStep3Data((p) => ({ ...p, Instagram: e.target.value }))
-          }
-          value={step3Data.Instagram}
-        />
-      </div>
-      <div>
-        <h2>Youtube Link</h2>
-        <input
-          type="text"
-          onChange={(e) =>
-            setStep3Data((p) => ({ ...p, Youtube: e.target.value }))
-          }
-          value={step3Data.Youtube}
-        />
-      </div>
-      <div>
-        <h2>LinkedIn Link</h2>
-        <input
-          type="text"
-          onChange={(e) =>
-            setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
-          }
-          value={step3Data.linkedin}
-        />
-      </div>
-      <div>
-        <h2>Twitter Link</h2>
-        <input
-          type="text"
-          onChange={(e) =>
-            setStep3Data((p) => ({ ...p, twitter: e.target.value }))
-          }
-          value={step3Data.twitter}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 
@@ -932,7 +861,7 @@ const UserDetails = () => {
               <p>
                 <input
                   type="radio"
-                  name="becomePlatform"
+                  name="haveStartup"
                   value="yes"
                   checked={step3Data.haveStartup === "yes"}
                   onChange={(e) =>
@@ -944,7 +873,7 @@ const UserDetails = () => {
               <p>
                 <input
                   type="radio"
-                  name="becomePlatform"
+                  name="haveStartup"
                   value="no"
                   checked={step3Data.haveStartup === "no"}
                   onChange={(e) =>
@@ -1021,7 +950,79 @@ const UserDetails = () => {
               </div>
             </div>
           ) : role === "Startup" ? (
-            <AboutStartup step3Data={step3Data} setStep3Data={setStep3Data} />
+            <div>
+              <UploadProfile
+                isCompany={true}
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
+              <h2>Type of startup?</h2>
+              <p>
+                <input
+                  type="radio"
+                  name="startupType"
+                  value="Funded"
+                  checked={step3Data.typeStartup === "Funded"}
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
+                  }
+                />
+                Funded
+              </p>
+              <p>
+                <input
+                  type="radio"
+                  name="startupType"
+                  value="Bootstrapped"
+                  checked={step3Data.typeStartup === "Bootstrapped"}
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
+                  }
+                />
+                Bootstrapped
+              </p>
+
+              <div>
+                <h2>Instagram Link</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, Instagram: e.target.value }))
+                  }
+                  value={step3Data.Instagram}
+                />
+              </div>
+              <div>
+                <h2>Youtube Link</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, Youtube: e.target.value }))
+                  }
+                  value={step3Data.Youtube}
+                />
+              </div>
+              <div>
+                <h2>LinkedIn Link</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
+                  }
+                  value={step3Data.linkedin}
+                />
+              </div>
+              <div>
+                <h2>Twitter Link</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, twitter: e.target.value }))
+                  }
+                  value={step3Data.twitter}
+                />
+              </div>
+            </div>
           ) : role === "Mentor" ? (
             <div>
               <UploadProfile
@@ -1032,7 +1033,7 @@ const UserDetails = () => {
               <p>
                 <input
                   type="radio"
-                  name="becomePlatform"
+                  name="haveStartup"
                   value="yes"
                   checked={step3Data.haveStartup === "yes"}
                   onChange={(e) =>
@@ -1044,7 +1045,7 @@ const UserDetails = () => {
               <p>
                 <input
                   type="radio"
-                  name="becomePlatform"
+                  name="haveStartup"
                   value="no"
                   checked={step3Data.haveStartup === "no"}
                   onChange={(e) =>
@@ -1484,7 +1485,7 @@ const UserDetails = () => {
                 <p>
                   <input
                     type="radio"
-                    name="becomePlatform"
+                    name="vacancyAvaliable"
                     value="yes"
                     checked={step3Data.isVacancyAvaliable === "yes"}
                     onChange={(e) =>
@@ -1499,7 +1500,7 @@ const UserDetails = () => {
                 <p>
                   <input
                     type="radio"
-                    name="becomePlatform"
+                    name="vacancyAvaliable"
                     value="no"
                     checked={step3Data.isVacancyAvaliable === "no"}
                     onChange={(e) =>
@@ -1759,6 +1760,39 @@ const UserDetails = () => {
                   </select>
                 </div>
               </div>
+              <div>
+                <h2>SEBI Registered?</h2>
+                <p>
+                  <input
+                    type="radio"
+                    name="SEBI"
+                    value="yes"
+                    checked={step3Data.isSEBI === "yes"}
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        isSEBI: e.target.value,
+                      }))
+                    }
+                  />
+                  Yes
+                </p>
+                <p>
+                  <input
+                    type="radio"
+                    name="SEBI"
+                    value="no"
+                    checked={step3Data.isSEBI === "no"}
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        isSEBI: e.target.value,
+                      }))
+                    }
+                  />
+                  No
+                </p>
+              </div>
               <h2>POC details</h2>
               <div>
                 <h2>Name</h2>
@@ -1863,7 +1897,7 @@ const UserDetails = () => {
                 <p>
                   <input
                     type="radio"
-                    name="becomePlatform"
+                    name="vacancyAvaliable"
                     value="yes"
                     checked={step3Data.isVacancyAvaliable === "yes"}
                     onChange={(e) =>
@@ -1878,7 +1912,7 @@ const UserDetails = () => {
                 <p>
                   <input
                     type="radio"
-                    name="becomePlatform"
+                    name="vacancyAvaliable"
                     value="no"
                     checked={step3Data.isVacancyAvaliable === "no"}
                     onChange={(e) =>
@@ -1936,6 +1970,368 @@ const UserDetails = () => {
                   >
                     <option value="">Select an option</option>
                     {budgets.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <h2>Experience</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, experience: e.target.value }))
+                  }
+                  value={step3Data.experience}
+                />
+              </div>
+              <div>
+                <h2>Education</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, education: e.target.value }))
+                  }
+                  value={step3Data.education}
+                />
+              </div>
+              <div className="domain-selection">
+                <h2>Intrested Domains:</h2>
+                <div className="dropdown-container">
+                  <select
+                    id="domainSelect"
+                    value={step3Data.incubatorDomain}
+                    onChange={(e) => {
+                      setNewDomain(e.target.value);
+                      setStep3Data((p) => ({
+                        ...p,
+                        incubatorDomain: [
+                          ...(step3Data.incubatorDomain
+                            ? step3Data.incubatorDomain
+                            : []),
+                          e.target.value,
+                        ],
+                      }));
+                      setNewDomain("");
+                    }}
+                  >
+                    <option value="">Select a domain</option>
+                    {domainOptions.map((domain) => (
+                      <option key={domain} value={domain}>
+                        {domain}
+                      </option>
+                    ))}
+                  </select>
+                  {step3Data.incubatorDomain?.length > 0 && (
+                    <div className="selected-domains">
+                      {step3Data.incubatorDomain.map((domain) => (
+                        <div key={domain} className="selected-domain">
+                          <span>{domain}</span>
+                          <button
+                            className="domain-delete-button"
+                            onClick={() =>
+                              setStep3Data((p) => ({
+                                ...p,
+                                incubatorDomain: [
+                                  ...(step3Data.incubatorDomain
+                                    ? step3Data.incubatorDomain
+                                    : []
+                                  ).filter((d) => d !== domain),
+                                ],
+                              }))
+                            }
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="domain-selection">
+                <h2>Intrested Skills:</h2>
+                <div className="dropdown-container">
+                  <select
+                    id="domainSelect"
+                    value={step3Data.skills}
+                    onChange={(e) => {
+                      setNewDomain(e.target.value);
+                      setStep3Data((p) => ({
+                        ...p,
+                        skills: [
+                          ...(step3Data.skills ? step3Data.skills : []),
+                          e.target.value,
+                        ],
+                      }));
+                      setNewDomain("");
+                    }}
+                  >
+                    <option value="">Select a skill</option>
+                    {skillsOptions.map((domain) => (
+                      <option key={domain} value={domain}>
+                        {domain}
+                      </option>
+                    ))}
+                  </select>
+                  {step3Data.skills?.length > 0 && (
+                    <div className="selected-domains">
+                      {step3Data.skills.map((domain) => (
+                        <div key={domain} className="selected-domain">
+                          <span>{domain}</span>
+                          <button
+                            className="domain-delete-button"
+                            onClick={() =>
+                              setStep3Data((p) => ({
+                                ...p,
+                                skills: [
+                                  ...(step3Data.skills
+                                    ? step3Data.skills
+                                    : []
+                                  ).filter((d) => d !== domain),
+                                ],
+                              }))
+                            }
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="primary-dropdown">
+                <div>
+                  <label htmlFor="investorTypes">Stage of startup</label>
+                  <select
+                    id="investorTypes"
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        startupStage: e.target.value,
+                      }))
+                    }
+                    value={step3Data.startupStage}
+                  >
+                    <option value="">Select an option</option>
+                    {startupStage.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <h2>POC details</h2>
+              <div>
+                <h2>Name</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
+                  }
+                  value={step3Data.poc_name}
+                />
+              </div>
+              <div>
+                <h2>Designation</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({
+                      ...p,
+                      poc_designation: e.target.value,
+                    }))
+                  }
+                  value={step3Data.poc_designation}
+                />
+              </div>
+              <div>
+                <h2>Email</h2>
+                <input
+                  type="email"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
+                  }
+                  value={step3Data.poc_email}
+                />
+              </div>
+              <div>
+                <h2>Mobile No.</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
+                  }
+                  value={step3Data.poc_mobile}
+                />
+              </div>
+
+              <div>
+                <h2>Website Link</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, website: e.target.value }))
+                  }
+                  value={step3Data.website}
+                />
+              </div>
+              <div>
+                <h2>Location</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, location: e.target.value }))
+                  }
+                  value={step3Data.location}
+                />
+              </div>
+              <div>
+                <h2>Success Stories</h2>
+                <div>
+                  <h2>Startup Name:</h2>
+                  <input
+                    type="text"
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        startup_name: e.target.value,
+                      }))
+                    }
+                    value={step3Data.startup_name}
+                  />
+                </div>
+                <div>
+                  <h2>About Startup:</h2>
+                  <input
+                    type="text"
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        startup_about: e.target.value,
+                      }))
+                    }
+                    value={step3Data.startup_about}
+                  />
+                </div>{" "}
+                <div>
+                  <h2>Amount Funded:</h2>
+                  <input
+                    type="text"
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        startup_fund: e.target.value,
+                      }))
+                    }
+                    value={step3Data.startup_fund}
+                  />
+                </div>
+              </div>
+              <div>
+                <h2>LinkedIn Link</h2>
+                <input
+                  aria-multiline={"true"}
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
+                  }
+                  value={step3Data.linkedin}
+                />
+              </div>
+              <div>
+                <h2>Twitter Link</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, twitter: e.target.value }))
+                  }
+                  value={step3Data.twitter}
+                />
+              </div>
+            </div>
+          ) : role === "Institutional Investor" ? (
+            <div>
+              <UploadProfile
+                setStep3Data={setStep3Data}
+                step3Data={step3Data}
+              />
+              <div>
+                <h2>Name:</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({
+                      ...p,
+                      incubator_name: e.target.value,
+                    }))
+                  }
+                  value={step3Data.incubator_name}
+                />
+              </div>
+              <div>
+                <h2>About:</h2>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, about: e.target.value }))
+                  }
+                  value={step3Data.about}
+                />
+              </div>
+              <div className="primary-dropdown">
+                <div>
+                  <label htmlFor="investorTypes">Select avaliable budget</label>
+                  <select
+                    id="investorTypes"
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        budget: e.target.value,
+                      }))
+                    }
+                    value={step3Data.budget}
+                  >
+                    <option value="">Select an option</option>
+                    {[
+                      "0-25 Lakh",
+                      "25-50 Lakh",
+                      "50 Lakh- 1 cr",
+                      "1-10 cr",
+                      "Above 10 cr",
+                    ].map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="primary-dropdown">
+                <div>
+                  <label htmlFor="investorTypes">Select Investor Type</label>
+                  <select
+                    id="investorTypes"
+                    onChange={(e) =>
+                      setStep3Data((p) => ({
+                        ...p,
+                        budget: e.target.value,
+                      }))
+                    }
+                    value={step3Data.budget}
+                  >
+                    <option value="">Select an option</option>
+                    {[
+                      "Angle Group",
+                      "Priate Company",
+                      "Venture Capital",
+                      "Private Equity",
+                      "Others",
+                    ].map((type) => (
                       <option key={type} value={type}>
                         {type}
                       </option>
