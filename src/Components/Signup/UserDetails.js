@@ -2700,7 +2700,7 @@ const UserDetails = () => {
                 />
               </div>
             </div>
-          ) : role === "Trade Body" ? (
+          ) : role === "Trade Bodies" ? (
             <div>
               <UploadProfile
                 label={"Logo"}
@@ -3204,52 +3204,53 @@ const UserDetails = () => {
             </div>
           ) : (
             ""
-          )}
+          )}{" "}
+          <div className="terms-of-use-containuer">
+            <h2>Terms and Conditions</h2>
+            <p>
+              1) This website, the official platform of Beyinc Entrepreneurship
+              Venture Pvt. Ltd., is designed to offer general information to
+              visitors. The content and documents provided here serve as
+              reference materials and are not intended to constitute legal
+              documentation.
+            </p>
+            <p>
+              2) BeyInc does not guarantee the accuracy or completeness of the
+              information, text, graphics, links, or other elements found within
+              the BeyInc web portal. Due to updates and corrections, the web
+              content is subject to regular changes.
+            </p>
+            <p>
+              3) The information on this website may contain links to content
+              from non-governmental or private organizations, provided by BeyInc
+              for your convenience. Clicking on these links redirects you away
+              from the ‘BeyInc’ wesite, subjecting you to the privacy and
+              security policies of the external website owners.
+            </p>
+            <p>
+              4) BeyInc serves as a connectivity platform for stakeholders and
+              is not liable for any idea copying, product infringement, or of
+              any kind and not limited to monetary loss between connecting
+              parties.
+            </p>
+            <p>
+              5) These terms and conditions are governed by Indian laws and any
+              dispute arising from them is subject to the jurisdiction of the
+              courts of Chennai, India.
+            </p>
+            <p>
+              <input
+                type="checkbox"
+                checked={agreeToTerms}
+                onChange={() => setAgreeToTerms(!agreeToTerms)}
+                name="terms"
+                id="terms"
+              />
+              I Agree Terms & Conditions
+            </p>
+          </div>
         </div>
       )}
-
-      <div className="terms-of-use-containuer">
-        <h2>Terms and Conditions</h2>
-        <p>
-          1) This website, the official platform of Beyinc Entrepreneurship
-          Venture Pvt. Ltd., is designed to offer general information to
-          visitors. The content and documents provided here serve as reference
-          materials and are not intended to constitute legal documentation.
-        </p>
-        <p>
-          2) BeyInc does not guarantee the accuracy or completeness of the
-          information, text, graphics, links, or other elements found within the
-          BeyInc web portal. Due to updates and corrections, the web content is
-          subject to regular changes.
-        </p>
-        <p>
-          3) The information on this website may contain links to content from
-          non-governmental or private organizations, provided by BeyInc for your
-          convenience. Clicking on these links redirects you away from the
-          ‘BeyInc’ wesite, subjecting you to the privacy and security policies
-          of the external website owners.
-        </p>
-        <p>
-          4) BeyInc serves as a connectivity platform for stakeholders and is
-          not liable for any idea copying, product infringement, or of any kind
-          and not limited to monetary loss between connecting parties.
-        </p>
-        <p>
-          5) These terms and conditions are governed by Indian laws and any
-          dispute arising from them is subject to the jurisdiction of the courts
-          of Chennai, India.
-        </p>
-        <p>
-          <input
-            type="checkbox"
-            checked={agreeToTerms}
-            onChange={() => setAgreeToTerms(!agreeToTerms)}
-            name="terms"
-            id="terms"
-          />
-          I Agree Terms & Conditions
-        </p>
-      </div>
 
       <div className="steps-button-container">
         <div>
