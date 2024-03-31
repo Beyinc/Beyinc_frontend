@@ -19,6 +19,7 @@ import LaptopMacOutlinedIcon from "@mui/icons-material/LaptopMacOutlined";
 
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
+import { ApiServices } from "../../Services/ApiServices";
 
 const investorTypes = [
   {
@@ -497,7 +498,7 @@ const UserDetails = () => {
       selectedProfile,
       selectedOneToOne,
     };
-    //post api here
+    await ApiServices.editUserFirstTime({ formData, step3Data });
   };
 
   return (

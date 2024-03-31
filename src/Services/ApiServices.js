@@ -196,7 +196,6 @@ export const ApiServices = {
     });
   },
 
-
   getDashboardDetails: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -209,7 +208,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
+  editUserFirstTime: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`userDetails/updateProfile`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   changeNotification: (obj) => {
     return new Promise((resolve, reject) => {
@@ -275,7 +285,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   changeStatusMessage: (obj) => {
     return new Promise((resolve, reject) => {
@@ -705,7 +714,6 @@ export const ApiServices = {
     });
   },
 
-
   getuserComments: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -720,8 +728,6 @@ export const ApiServices = {
     });
   },
 
-
-  
   dislikeComment: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -735,8 +741,6 @@ export const ApiServices = {
     });
   },
 
-
-
   getPitchComments: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -749,5 +753,4 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 };
