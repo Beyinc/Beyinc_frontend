@@ -18,6 +18,7 @@ import CorporateFareOutlinedIcon from "@mui/icons-material/CorporateFareOutlined
 import LaptopMacOutlinedIcon from "@mui/icons-material/LaptopMacOutlined";
 
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import axios from "axios";
 
 const investorTypes = [
   {
@@ -144,11 +145,12 @@ const UploadProfile = ({ step3Data, setStep3Data, isCompany, label }) => {
         >
           <CloudUploadIcon />
           <span className="fileName">
-            {step3Data?.profile?.name || label
-              ? "Upload " + label
-              : isCompany
-              ? "Upload Company Logo"
-              : "Upload profile picture"}
+            {step3Data?.profile?.name ||
+              (label
+                ? "Upload " + label
+                : isCompany
+                ? "Upload Company Logo"
+                : "Upload profile picture")}
           </span>
         </label>
         <input
@@ -179,6 +181,45 @@ const UploadProfile = ({ step3Data, setStep3Data, isCompany, label }) => {
           onChange={handleUpload}
           style={{ display: "none" }}
         />{" "}
+      </Button>
+    </div>
+  );
+};
+
+const UploadFile = ({ step3Data, setStep3Data }) => {
+  const handleUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setStep3Data((prev) => ({
+        ...prev,
+        [e.target.name]: { name: file?.name, data: reader.result },
+      }));
+    };
+  };
+  return (
+    <div className="upload-buttons-container">
+      <Button variant="outlined">
+        <label
+          htmlFor="vacancyFile"
+          style={{ cursor: "pointer" }}
+          className="resume"
+        >
+          <CloudUploadIcon />
+          <span className="fileName">
+            {step3Data?.vacancyFile?.name || "Upload file"}
+          </span>
+        </label>
+        <input
+          type="file"
+          id="vacancyFile"
+          className="resume"
+          name="vacancyFile"
+          onChange={handleUpload}
+          style={{ display: "none" }}
+        />
       </Button>
     </div>
   );
@@ -441,7 +482,7 @@ const UserDetails = () => {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = {
       role,
       selectedDropdownPrimary,
@@ -456,8 +497,7 @@ const UserDetails = () => {
       selectedProfile,
       selectedOneToOne,
     };
-    console.log(formData);
-    navigate("/login");
+    //post api here
   };
 
   return (
@@ -981,7 +1021,7 @@ const UserDetails = () => {
                 />
                 Bootstrapped
               </p>
-
+              <AboutStartup setStep3Data={setStep3Data} step3Data={step3Data} />
               <div>
                 <h2>Instagram Link</h2>
                 <input
@@ -1513,6 +1553,30 @@ const UserDetails = () => {
                   No
                 </p>
               </div>
+              {step3Data.isVacancyAvaliable === "yes" ? (
+                <>
+                  {" "}
+                  <div>
+                    <h2>Description</h2>
+                    <input
+                      type="text"
+                      onChange={(e) =>
+                        setStep3Data((p) => ({
+                          ...p,
+                          description: e.target.value,
+                        }))
+                      }
+                      value={step3Data.description}
+                    />
+                  </div>
+                  <UploadFile
+                    setStep3Data={setStep3Data}
+                    step3Data={step3Data}
+                  />
+                </>
+              ) : (
+                ""
+              )}
             </div>
           ) : role === "Accelerator" ? (
             <div>
@@ -1567,10 +1631,10 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({
                       ...p,
-                      currentIncubatees: e.target.value,
+                      currentAcceleratees: e.target.value,
                     }))
                   }
-                  value={step3Data.currentIncubatees}
+                  value={step3Data.currentAcceleratees}
                 />
               </div>
               <div>
@@ -1925,6 +1989,29 @@ const UserDetails = () => {
                   No
                 </p>
               </div>
+              {step3Data.isVacancyAvaliable === "yes" ? (
+                <>
+                  <div>
+                    <h2>Description</h2>
+                    <input
+                      type="text"
+                      onChange={(e) =>
+                        setStep3Data((p) => ({
+                          ...p,
+                          description: e.target.value,
+                        }))
+                      }
+                      value={step3Data.description}
+                    />
+                  </div>
+                  <UploadFile
+                    setStep3Data={setStep3Data}
+                    step3Data={step3Data}
+                  />
+                </>
+              ) : (
+                ""
+              )}
             </div>
           ) : role === "Individual Investor" ? (
             <div>
@@ -2630,10 +2717,10 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({
                       ...p,
-                      incubator_name: e.target.value,
+                      name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data.name}
                 />
               </div>
               <div>
@@ -2651,9 +2738,9 @@ const UserDetails = () => {
                 <input
                   type="text"
                   onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, about: e.target.value }))
+                    setStep3Data((p) => ({ ...p, department: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data.department}
                 />
               </div>
               <div className="domain-selection">
@@ -2661,14 +2748,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data.intrestedDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
-                        incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                        intrestedDomain: [
+                          ...(step3Data.intrestedDomain
+                            ? step3Data.intrestedDomain
                             : []),
                           e.target.value,
                         ],
@@ -2683,9 +2770,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data.intrestedDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data.intrestedDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -2693,9 +2780,9 @@ const UserDetails = () => {
                             onClick={() =>
                               setStep3Data((p) => ({
                                 ...p,
-                                incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                intrestedDomain: [
+                                  ...(step3Data.intrestedDomain
+                                    ? step3Data.intrestedDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -3131,9 +3218,9 @@ const UserDetails = () => {
                 <input
                   type="text"
                   onChange={(e) =>
-                    setStep3Data((p) => ({ ...p, about: e.target.value }))
+                    setStep3Data((p) => ({ ...p, trade: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data.trade}
                 />
               </div>
               <div className="primary-dropdown">
