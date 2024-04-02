@@ -25,6 +25,9 @@ import LaptopMacOutlinedIcon from "@mui/icons-material/LaptopMacOutlined";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
 import { ApiServices } from "../../Services/ApiServices";
+import { useDispatch } from "react-redux";
+import { setToast } from "../../redux/AuthReducers/AuthReducer";
+import { ToastColors } from "../Toast/ToastColors";
 
 const investorTypes = [
   {
@@ -507,9 +510,12 @@ const UserDetails = () => {
     );
   };
 
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     const formData = {
       role,
+      experienceDetails,
+      educationDetails: EducationDetails,
       selectedDropdownPrimary,
       selectedDropdownSecondary,
       selectedTypes,
@@ -524,7 +530,25 @@ const UserDetails = () => {
       totalExperienceData,
       totalEducationData
     };
-    await ApiServices.editUserFirstTime({ formData, step3Data });
+    try {
+      await ApiServices.editUserFirstTime({ ...formData, step3Data });
+      dispatch(
+        setToast({
+          message: "Profile updated successfully",
+          bgColor: ToastColors.success,
+          visible: "yes",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setToast({
+          message:
+            "Some error occured check if all inputs are filled and try again later",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    }
   };
   const handleChange = (e) => {
     setExperience((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -1174,11 +1198,9 @@ const UserDetails = () => {
                               className="add-button"
                               onClick={addExperience}
                               disabled={
-                                  
-                                    experienceDetails.company == "" ||
-                                      experienceDetails.designation == "" ||
-                                      experienceDetails.start == "" 
-                              
+                                experienceDetails.company == "" ||
+                                experienceDetails.designation == "" ||
+                                experienceDetails.start == ""
                               }
                               // disabled={
                               //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||

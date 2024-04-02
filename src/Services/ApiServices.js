@@ -208,6 +208,19 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  isFirstTimeLogin: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/userDetails/isProfileComplete`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   editUserFirstTime: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
