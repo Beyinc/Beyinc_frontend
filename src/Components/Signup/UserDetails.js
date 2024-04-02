@@ -514,6 +514,8 @@ const UserDetails = () => {
   const handleSubmit = async () => {
     const formData = {
       role,
+      experienceDetails,
+      educationDetails: EducationDetails,
       selectedDropdownPrimary,
       selectedDropdownSecondary,
       selectedTypes,
@@ -527,7 +529,7 @@ const UserDetails = () => {
       selectedOneToOne,
     };
     try {
-      await ApiServices.editUserFirstTime({ formData, step3Data });
+      await ApiServices.editUserFirstTime({ ...formData, step3Data });
       dispatch(
         setToast({
           message: "Profile updated successfully",
@@ -1194,11 +1196,9 @@ const UserDetails = () => {
                               className="add-button"
                               onClick={addExperience}
                               disabled={
-                                  
-                                    experienceDetails.company == "" ||
-                                      experienceDetails.designation == "" ||
-                                      experienceDetails.start == "" 
-                              
+                                experienceDetails.company == "" ||
+                                experienceDetails.designation == "" ||
+                                experienceDetails.start == ""
                               }
                               // disabled={
                               //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
