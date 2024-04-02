@@ -20,6 +20,9 @@ import LaptopMacOutlinedIcon from "@mui/icons-material/LaptopMacOutlined";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
 import { ApiServices } from "../../Services/ApiServices";
+import { useDispatch } from "react-redux";
+import { setToast } from "../../redux/AuthReducers/AuthReducer";
+import { ToastColors } from "../Toast/ToastColors";
 
 const investorTypes = [
   {
@@ -483,6 +486,7 @@ const UserDetails = () => {
     );
   };
 
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     const formData = {
       role,
@@ -498,7 +502,25 @@ const UserDetails = () => {
       selectedProfile,
       selectedOneToOne,
     };
-    await ApiServices.editUserFirstTime({ formData, step3Data });
+    try {
+      await ApiServices.editUserFirstTime({ formData, step3Data });
+      dispatch(
+        setToast({
+          message: "Profile updated successfully",
+          bgColor: ToastColors.success,
+          visible: "yes",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setToast({
+          message:
+            "Some error occured check if all inputs are filled and try again later",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    }
   };
 
   return (
