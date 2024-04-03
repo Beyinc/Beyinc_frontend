@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UserDetails.css";
 import {
   domain_subdomain,
@@ -25,7 +25,7 @@ import LaptopMacOutlinedIcon from "@mui/icons-material/LaptopMacOutlined";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
 import { ApiServices } from "../../Services/ApiServices";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 
@@ -511,7 +511,7 @@ const UserDetails = () => {
   };
 
   const dispatch = useDispatch();
-  const handleSubmit = async () => {
+  const handleSubmit = async (isDraft) => {
     const formData = {
       role,
       experienceDetails,
@@ -527,6 +527,7 @@ const UserDetails = () => {
       selectedTime,
       selectedProfile,
       selectedOneToOne,
+      isDraft,
     };
     try {
       await ApiServices.editUserFirstTime({ ...formData, step3Data });
@@ -616,6 +617,10 @@ const UserDetails = () => {
       Edend: "",
     });
   };
+  const userDetail = useSelector((store) => store.auth.loginDetails);
+  useEffect(() => {
+    console.log(userDetail);
+  }, []);
 
   return (
     <main className="userDetails-container">
@@ -4264,6 +4269,9 @@ const UserDetails = () => {
       )}
 
       <div className="steps-button-container">
+        <button className="steps-button" onClick={() => handleSubmit(true)}>
+          Save
+        </button>
         <div>
           {currentStep > 1 && (
             <button className="steps-button" onClick={handlePrevStep}>
