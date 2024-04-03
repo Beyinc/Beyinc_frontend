@@ -773,7 +773,7 @@ const EditProfileUI = () => {
     e.target.disabled = true;
     // setIsLoading(true);
     if (status == "approved" || (status == "rejected" && reason !== "")) {
-      await ApiServices.updateStatusDirectly({
+      await ApiServices.updateStatusByAdmin({
         userId: id,
         status: status,
         reason: reason,
