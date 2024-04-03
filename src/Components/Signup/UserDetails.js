@@ -511,7 +511,7 @@ const UserDetails = () => {
   };
 
   const dispatch = useDispatch();
-  const handleSubmit = async (isDraft) => {
+  const handleSubmit = async (e, isDraft) => {
     const formData = {
       role,
       experienceDetails,
@@ -531,8 +531,12 @@ const UserDetails = () => {
       totalExperienceData,
       totalEducationData,
     };
+
     try {
-      await ApiServices.editUserFirstTime({ ...formData, step3Data });
+      await ApiServices.editUserFirstTime({
+        ...formData,
+        step3Data,
+      });
       dispatch(
         setToast({
           message: "Profile updated successfully",
@@ -541,6 +545,7 @@ const UserDetails = () => {
         })
       );
     } catch (error) {
+      console.log(error);
       dispatch(
         setToast({
           message:
@@ -619,9 +624,46 @@ const UserDetails = () => {
       Edend: "",
     });
   };
-  const userDetail = useSelector((store) => store.auth.loginDetails);
+  const fillInputs = async () => {
+    const res = await ApiServices.getProfile();
+    const {
+      role,
+      experienceDetails,
+      educationDetails,
+      selectedDropdownPrimary,
+      selectedDropdownSecondary,
+      selectedTypes,
+      selectedDomains,
+      skills,
+      selectedBecomePlatform,
+      fee,
+      selectedDate,
+      selectedTime,
+      selectedProfile,
+      selectedOneToOne,
+      totalExperienceData,
+      totalEducationData,
+    } = res.data;
+    setStep3Data(res.data.role_details);
+    setRole(role);
+    setExperience(experienceDetails);
+    setEducationDetails(educationDetails);
+    setSelectedDropdownPrimary(selectedDropdownPrimary);
+    setSelectedTypes(selectedTypes ? selectedTypes : []);
+    setSelectedDropdownSecondary(selectedDropdownSecondary);
+    setSelectedBecomePlatform(selectedBecomePlatform);
+    setSelectedSkills(skills ? skills : []);
+    setSelectedOneToOne(selectedOneToOne);
+    setSelectedDomains(selectedDomains ? selectedDomains : []);
+    setFee(fee);
+    setSelectedTime(selectedTime);
+    setSelectedDate(selectedDate);
+    setSelectedProfile(selectedProfile);
+    setTotalExperienceData(totalExperienceData ? totalExperienceData : []);
+    setTotalEducationData(totalEducationData ? totalEducationData : []);
+  };
   useEffect(() => {
-    console.log(userDetail);
+    fillInputs();
   }, []);
 
   return (
@@ -5310,7 +5352,7 @@ const UserDetails = () => {
       )}
 
       <div className="steps-button-container">
-        <button className="steps-button" onClick={() => handleSubmit(true)}>
+        <button className="steps-button" onClick={(e) => handleSubmit(e, true)}>
           Save
         </button>
         <div>

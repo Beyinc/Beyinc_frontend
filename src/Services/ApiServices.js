@@ -260,7 +260,7 @@ export const ApiServices = {
   editUserFirstTime: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post(`userDetails/updateProfile`)
+        .post(`userDetails/updateProfile`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
