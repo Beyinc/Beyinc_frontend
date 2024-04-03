@@ -109,6 +109,30 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  updateStatusDirectly: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/updateStatusDirect`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  sendDirectUpdate: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/directeditprofile`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   getProfile: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
