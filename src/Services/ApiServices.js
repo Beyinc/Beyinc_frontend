@@ -112,7 +112,7 @@ export const ApiServices = {
   updateStatusDirectly: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post(`/userDetails/updateStatusDirect`, obj)
+        .post(`/userDetails/updateVerificationByAdmin`, obj)
         .then((res) => {
           if (res) {
             resolve(res);

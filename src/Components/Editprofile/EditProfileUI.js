@@ -571,6 +571,7 @@ const EditProfileUI = () => {
             setEditOwnProfile(true);
             setInputs((prev) => ({
               ...prev,
+              verification: res.data.verification,
               updatedAt: res.data.updatedAt,
               name: res.data.userName,
               mobile: res.data.phone,
@@ -638,15 +639,15 @@ const EditProfileUI = () => {
           .then((res) => {
             setEditOwnProfile(false);
             // console.log(res.data);
-            setRequestedUserId(res.data.userInfo._id);
+            setRequestedUserId(res.data._id);
             setInputs((prev) => ({
               ...prev,
               updatedAt: res.data.updatedAt,
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              image: res.data.userInfo.image?.url || "",
-              email: res.data.userInfo.email,
+              image: res.data.image?.url || "",
+              email: res.data.email,
               status: res.data.verification,
               mobileVerified: true,
               salutation: res.data.salutation,
@@ -675,6 +676,7 @@ const EditProfileUI = () => {
             setlanguagesKnown(res.data.languagesKnown || []);
           })
           .catch((error) => {
+            console.log(error)
             dispatch(
               setToast({
                 message: "No User Found For Request",
@@ -1183,6 +1185,20 @@ const EditProfileUI = () => {
     }
   };
 
+  const sendForApproval = async () => {
+    await ApiServices.updateStatusDirectly({ userId: user_id, verificationStatus: 'pending' }).then(res => {
+      setInputs((prev)=>({...prev, verification: 'pending'}))
+    }).catch(err => {
+      dispatch(
+        setToast({
+          message: "Error in update status",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    })
+  }
+
   return (
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
@@ -1266,7 +1282,7 @@ const EditProfileUI = () => {
                   {id == undefined && (
                     <>
                       {(verification == "" || verification == "rejected") && (
-                        <button>Verify Now</button>
+                        <button onClick={sendForApproval}>Verify Now</button>
                       )}
                       {verification == "approved" && <button>Approved</button>}
                       {verification == "pending" && <button>Pending</button>}
