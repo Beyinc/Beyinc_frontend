@@ -172,6 +172,7 @@ const EditProfileUI = () => {
   const [isExperiencePopupVisible, setIsExperiencePopupVisible] =
     useState(false);
   const [isEducationPopupVisible, setIsEducationPopupVisible] = useState(false);
+
   const handleEditButtonClick = () => {
     window.scrollTo({
       top: 0,
@@ -570,6 +571,7 @@ const EditProfileUI = () => {
             setEditOwnProfile(true);
             setInputs((prev) => ({
               ...prev,
+              verification: res.data.verification,
               updatedAt: res.data.updatedAt,
               name: res.data.userName,
               mobile: res.data.phone,
@@ -637,15 +639,15 @@ const EditProfileUI = () => {
           .then((res) => {
             setEditOwnProfile(false);
             // console.log(res.data);
-            setRequestedUserId(res.data.userInfo._id);
+            setRequestedUserId(res.data._id);
             setInputs((prev) => ({
               ...prev,
               updatedAt: res.data.updatedAt,
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              image: res.data.userInfo.image?.url || "",
-              email: res.data.userInfo.email,
+              image: res.data.image?.url || "",
+              email: res.data.email,
               status: res.data.verification,
               mobileVerified: true,
               salutation: res.data.salutation,
@@ -674,6 +676,7 @@ const EditProfileUI = () => {
             setlanguagesKnown(res.data.languagesKnown || []);
           })
           .catch((error) => {
+            console.log(error)
             dispatch(
               setToast({
                 message: "No User Found For Request",
@@ -770,7 +773,7 @@ const EditProfileUI = () => {
     e.target.disabled = true;
     // setIsLoading(true);
     if (status == "approved" || (status == "rejected" && reason !== "")) {
-      await AdminServices.updateVerification({
+      await ApiServices.updateStatusByAdmin({
         userId: id,
         status: status,
         reason: reason,
@@ -940,7 +943,7 @@ const EditProfileUI = () => {
       experienceDetails: totalExperienceData,
       educationdetails: totalEducationData,
     });
-    await ApiServices.sendForApproval({
+    await ApiServices.sendDirectUpdate({
       salutation: salutation,
       mentorCategories: mentorCategories,
       email: email,
@@ -984,7 +987,8 @@ const EditProfileUI = () => {
         });
         localStorage.setItem("user", JSON.stringify(res.data));
         dispatch(setLoginData(jwtDecode(res.data.accessToken)));
-        navigate("/dashboard");
+        // navigate("/dashboard");
+        // window.location.reload()
         setIsLoading(false);
       })
       .catch((err) => {
@@ -1181,6 +1185,20 @@ const EditProfileUI = () => {
     }
   };
 
+  const sendForApproval = async () => {
+    await ApiServices.updateStatusDirectly({ userId: user_id, verificationStatus: 'pending' }).then(res => {
+      setInputs((prev)=>({...prev, verification: 'pending'}))
+    }).catch(err => {
+      dispatch(
+        setToast({
+          message: "Error in update status",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    })
+  }
+
   return (
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
@@ -1214,65 +1232,82 @@ const EditProfileUI = () => {
                 ></i>
               )}
             </div>
-            <div className="personal-rating-container" style={{display: 'flex', justifyContent: "space-between"}}>
-            <div className="Personal-Details">
-              <div
-                style={{
-                  fontWeight: "600",
-                  fontSize: "24px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div>
-                  {salutation}
-                  {salutation && <span>.</span>} {name}
-                </div>
-                {id == undefined && (
-                  <span>
-                    <i
-                      onClick={handleEditButtonClick}
-                      className="fas fa-pen"
-                    ></i>
-                  </span>
-                )}
-              </div>
-              <div style={{ fontWeight: "500", fontSize: "18px" }}>
-                {role} {role == "Mentor" && mentorCategories}
-              </div>
-              <div style={{ fontSize: "12px" }}>{email}</div>
-              <div style={{ fontSize: "12px" }}>{mobile}</div>
-              {role == "Mentor" && (
-                <div style={{ fontSize: "12px" }}>&#8377;{fee} per minute</div>
-              )}
-              <div className="language-display">
-                {languagesKnown?.map((t, i) => (
+            <div
+              className="personal-rating-container"
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <div className="Personal-Details">
+                <div
+                  style={{
+                    fontWeight: "600",
+                    fontSize: "24px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div>
-                    <div className="single-language">{t}</div>
+                    {salutation}
+                    {salutation && <span>.</span>} {name}
                   </div>
-                ))}
-              </div>
-              {/* <div style={{ fontSize: "16px" }}> &#8377; {fee} / per min</div>
+                  {id == undefined && (
+                    <span>
+                      <i
+                        onClick={handleEditButtonClick}
+                        className="fas fa-pen"
+                      ></i>
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontWeight: "500", fontSize: "18px" }}>
+                  {role} {role == "Mentor" && mentorCategories}
+                </div>
+                <div style={{ fontSize: "12px" }}>{email}</div>
+                <div style={{ fontSize: "12px" }}>{mobile}</div>
+                {role == "Mentor" && (
+                  <div style={{ fontSize: "12px" }}>
+                    &#8377;{fee} per minute
+                  </div>
+                )}
+                <div className="language-display">
+                  {languagesKnown?.map((t, i) => (
+                    <div>
+                      <div className="single-language">{t}</div>
+                    </div>
+                  ))}
+                </div>
+                {/* <div style={{ fontSize: "16px" }}> &#8377; {fee} / per min</div>
               <div>{}</div> */}
-            </div>
-            
-            {userpage == true && (
-              <div className="review-container">
-                <div className="reviewContainer">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <b>{review?.length}</b> <span> Global Ratings</span>
-                  </div>
-                  <ReviewStars avg={averagereview} />
+
+                <div>
+                  {id == undefined && (
+                    <>
+                      {(verification == "" || verification == "rejected") && (
+                        <button onClick={sendForApproval}>Verify Now</button>
+                      )}
+                      {verification == "approved" && <button>Approved</button>}
+                      {verification == "pending" && <button>Pending</button>}
+                    </>
+                  )}
                 </div>
               </div>
-            )}
+
+              {userpage == true && (
+                <div className="review-container">
+                  <div className="reviewContainer">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <b>{review?.length}</b> <span> Global Ratings</span>
+                    </div>
+                    <ReviewStars avg={averagereview} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -1615,7 +1650,6 @@ const EditProfileUI = () => {
                               Add
                             </button>
                           </div>
-                          
                         </div>
                       </div>
                     </div>
@@ -3357,7 +3391,7 @@ const EditProfileUI = () => {
           {id !==
             jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
               .user_id && (
-            <section  className="EditProfile-comments-Container">
+            <section className="EditProfile-comments-Container">
               <div style={{ padding: "20px" }}>
                 <h2 className="Rating-heading">Ratings & Reviews</h2>
                 {convExits ||
@@ -3546,15 +3580,15 @@ const EditProfileUI = () => {
                     }}
                   >
                     <div className="button-loader"></div>
-                    <div style={{}}>Sending Approval...</div>
+                    <div style={{}}>Updating...</div>
                   </div>
                 ) : (
                   <>
-                    <i
+                    {/* <i
                       className="fas fa-address-card"
                       style={{ marginRight: "5px" }}
-                    ></i>
-                    Send for Approval
+                    ></i> */}
+                    Update
                   </>
                 )}
               </button>

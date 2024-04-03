@@ -528,6 +528,8 @@ const UserDetails = () => {
       selectedProfile,
       selectedOneToOne,
       isDraft,
+      totalExperienceData,
+      totalEducationData,
     };
     try {
       await ApiServices.editUserFirstTime({ ...formData, step3Data });
@@ -1643,7 +1645,208 @@ const UserDetails = () => {
                   value={step3Data.website}
                 />
               </div>
-              <div>
+
+              <section className="EditProfile-Experience-Container">
+                <div className="popup-container">
+                  <div className="popup-content">
+                    <div className="Work-exp">
+                      <form className="update-form">
+                        <div className="popup-header">
+                          <h3>Experience</h3>
+                          <div
+                            className="close-icon"
+                            onClick={() => {
+                              document.getElementsByTagName(
+                                "body"
+                              )[0].style.overflowY = "scroll";
+
+                              setExperience({
+                                company: "",
+                                designation: "",
+                                year: "",
+                                start: "",
+                                end: "",
+                              });
+                            }}
+                          ></div>
+                        </div>
+                        <div className="exp-container">
+                          <>
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Company Name*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="company"
+                                  className={
+                                    experienceDetails.company == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.company}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Company name"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Current Designation*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <select
+                                  name="designation"
+                                  className={
+                                    experienceDetails.designation == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.designation}
+                                  onChange={handleChange}
+                                >
+                                  <option value="">Select</option>
+                                  {itPositions.map((op) => (
+                                    <option value={op}>{op}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div>
+                                  <label className="Input-Label">
+                                    Start Date*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    className={
+                                      experienceDetails.start == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.start}
+                                    name="start"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div>
+                                  <label className="Input-Label">
+                                    End Date
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    value={experienceDetails.end}
+                                    name="end"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </>
+
+                          <div>
+                            <button
+                              className="add-button"
+                              onClick={addExperience}
+                              disabled={
+                                experienceDetails.company == "" ||
+                                experienceDetails.designation == "" ||
+                                experienceDetails.start == ""
+                              }
+                              // disabled={
+                              //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
+                              //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
+                              //   experienceDetails.designation == ""
+                              // }
+                            >
+                              {editingExperienceId == "" ? "Add" : "Update"}
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              {totalExperienceData.length > 0 ? (
+                totalExperienceData.map((te, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                    className="studies"
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          padding: "10px",
+                        }}
+                      >
+                        <div className="company">
+                          <>{te.company}(Company)</>
+                        </div>
+                        <div className="designation">
+                          {te.designation && (
+                            <>
+                              <b>Designation: </b>
+                              {te.designation}
+                            </>
+                          )}
+                        </div>
+
+                        <div className="timeline">
+                          <b>Date: </b>
+                          {convertToDate(te.start)}-
+                          {te.end === "" ? "Present" : convertToDate(te.end)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>Add experience data </div>
+              )}
+
+              {/* <div>
                 <h2>Experience</h2>
                 <input
                   type="text"
@@ -1652,7 +1855,7 @@ const UserDetails = () => {
                   }
                   value={step3Data.experience}
                 />
-              </div>
+              </div> */}
               <div>
                 <h2>startupStage</h2>
                 <input
@@ -2597,7 +2800,426 @@ const UserDetails = () => {
                   </select>
                 </div>
               </div>
+              <section className="EditProfile-Experience-Container">
+                <div className="popup-container">
+                  <div className="popup-content">
+                    <div className="Work-exp">
+                      <form className="update-form">
+                        <div className="popup-header">
+                          <h3>Experience</h3>
+                          <div
+                            className="close-icon"
+                            onClick={() => {
+                              document.getElementsByTagName(
+                                "body"
+                              )[0].style.overflowY = "scroll";
+
+                              setExperience({
+                                company: "",
+                                designation: "",
+                                year: "",
+                                start: "",
+                                end: "",
+                              });
+                            }}
+                          ></div>
+                        </div>
+                        <div className="exp-container">
+                          <>
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Company Name*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="company"
+                                  className={
+                                    experienceDetails.company == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.company}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Company name"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Current Designation*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <select
+                                  name="designation"
+                                  className={
+                                    experienceDetails.designation == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.designation}
+                                  onChange={handleChange}
+                                >
+                                  <option value="">Select</option>
+                                  {itPositions.map((op) => (
+                                    <option value={op}>{op}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div>
+                                  <label className="Input-Label">
+                                    Start Date*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    className={
+                                      experienceDetails.start == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.start}
+                                    name="start"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div>
+                                  <label className="Input-Label">
+                                    End Date
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    value={experienceDetails.end}
+                                    name="end"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </>
+
+                          <div>
+                            <button
+                              className="add-button"
+                              onClick={addExperience}
+                              disabled={
+                                experienceDetails.company == "" ||
+                                experienceDetails.designation == "" ||
+                                experienceDetails.start == ""
+                              }
+                              // disabled={
+                              //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
+                              //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
+                              //   experienceDetails.designation == ""
+                              // }
+                            >
+                              {editingExperienceId == "" ? "Add" : "Update"}
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              {totalExperienceData.length > 0 ? (
+                totalExperienceData.map((te, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                    className="studies"
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          padding: "10px",
+                        }}
+                      >
+                        <div className="company">
+                          <>{te.company}(Company)</>
+                        </div>
+                        <div className="designation">
+                          {te.designation && (
+                            <>
+                              <b>Designation: </b>
+                              {te.designation}
+                            </>
+                          )}
+                        </div>
+
+                        <div className="timeline">
+                          <b>Date: </b>
+                          {convertToDate(te.start)}-
+                          {te.end === "" ? "Present" : convertToDate(te.end)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>Add experience data </div>
+              )}
+
               <div>
+                <section className="EditProfile-Education-Container">
+                  <div
+                    className="Ed-details"
+                    style={{ flexDirection: "column" }}
+                  >
+                    <div className="popup-container">
+                      <div className="popup-content">
+                        <form className="update-form">
+                          <div className="popup-header">
+                            <h3>Education</h3>
+                            <div
+                              className="close-icon"
+                              onClick={() => {
+                                document.getElementsByTagName(
+                                  "body"
+                                )[0].style.overflowY = "scroll";
+                                seteditingEducationId("");
+                                setEducationDetails({
+                                  year: "",
+                                  grade: "",
+                                  college: "",
+                                  Edstart: "",
+                                  Edend: "",
+                                });
+                              }}
+                            ></div>
+                          </div>
+
+                          <div className="edu-container">
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <div>
+                                <div>
+                                  <label className="Input-Label">Grade*</label>
+                                </div>
+                                <div className="Ed_Input_Fields">
+                                  <select
+                                    name="grade"
+                                    id=""
+                                    value={EducationDetails.grade}
+                                    onChange={handleEducationChange}
+                                  >
+                                    <option value="">Select</option>
+                                    <option value="SSC">10th</option>
+                                    <option value="Inter">
+                                      Inter/Equivalent
+                                    </option>
+                                    <option value="UG">
+                                      UG (Btech, degree)
+                                    </option>
+                                    <option value="PG">PG</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Business">Business</option>
+                                    <option value="LAW">Law</option>
+                                    <option value="other">Other</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    College/University*{" "}
+                                    {EducationDetails.grade !== "SSC" &&
+                                      EducationDetails.grade !== "" &&
+                                      "(Type 3 charecters)"}
+                                  </label>
+                                </div>
+                                <div className="Ed_Input_Fields">
+                                  {EducationDetails.grade == "SSC" ||
+                                  EducationDetails.grade == "" ? (
+                                    <input
+                                      type="text"
+                                      name="college"
+                                      value={EducationDetails.college}
+                                      id=""
+                                      onChange={handleEducationChange}
+                                      placeholder="Enter Your College/School/University"
+                                    />
+                                  ) : (
+                                    <>
+                                      <Autocomplete
+                                        disablePortal
+                                        options={universities}
+                                        getOptionLabel={(option) => option.name}
+                                        sx={{ width: 300 }}
+                                        // inputValue={
+                                        //   EducationDetails.college
+                                        //     ? EducationDetails.college
+                                        //     : undefined
+                                        // }
+                                        onChange={(e) =>
+                                          handleEducationChange(e, true)
+                                        }
+                                        renderInput={(params) => (
+                                          <TextField
+                                            {...params}
+                                            value={collegeQuery}
+                                            onChange={hadnleCollegeQueryChange}
+                                            label="College"
+                                          />
+                                        )}
+                                      />
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="Input-Label">
+                                  Start Date*
+                                </label>
+                              </div>
+                              <div className="Ed_Input_Fields">
+                                <input
+                                  type="date"
+                                  value={EducationDetails.Edstart}
+                                  name="Edstart"
+                                  id=""
+                                  onChange={handleEducationChange}
+                                />
+                              </div>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <div>
+                                <label className="Input-Label">End Date</label>
+                              </div>
+                              <div className="Ed_Input_Fields">
+                                <input
+                                  type="date"
+                                  value={EducationDetails.Edend}
+                                  name="Edend"
+                                  id=""
+                                  onChange={handleEducationChange}
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <button
+                                className="add-button"
+                                onClick={addEducation}
+                                disabled={
+                                  EducationDetails.Edstart == "" ||
+                                  EducationDetails.grade == "" ||
+                                  EducationDetails.college == ""
+                                }
+                              >
+                                {editingEducationId !== "" ? "Update" : "Add"}
+                              </button>
+                            </div>
+                          </div>
+                          <div></div>
+                        </form>
+                      </div>
+                    </div>
+                    <div style={{ padding: "20px" }}>
+                      {totalEducationData.length > 0 ? (
+                        totalEducationData.map((te, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              width: "100%",
+                            }}
+                            className="studies"
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                alignItems: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  padding: "10px",
+                                }}
+                              >
+                                <div className="college">{te.college} </div>
+                                <div className="grade">{te.grade}</div>
+                                <div className="timeline">
+                                  {convertToDate(te.Edstart)}-
+                                  {te.Edend === ""
+                                    ? "Present"
+                                    : convertToDate(te.Edend)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div>Add education data </div>
+                      )}
+                    </div>
+                  </div>
+                </section>
+
+                {/* <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, education: e.target.value }))
+                  }
+                  value={step3Data.education}
+                /> */}
+              </div>
+              {/* <div>
                 <h2>Experience</h2>
                 <input
                   type="text"
@@ -2616,7 +3238,7 @@ const UserDetails = () => {
                   }
                   value={step3Data.education}
                 />
-              </div>
+              </div> */}
               <div className="domain-selection">
                 <h2>Intrested Domains:</h2>
                 <div className="dropdown-container">
@@ -2959,7 +3581,426 @@ const UserDetails = () => {
                   </select>
                 </div>
               </div>
+              <section className="EditProfile-Experience-Container">
+                <div className="popup-container">
+                  <div className="popup-content">
+                    <div className="Work-exp">
+                      <form className="update-form">
+                        <div className="popup-header">
+                          <h3>Experience</h3>
+                          <div
+                            className="close-icon"
+                            onClick={() => {
+                              document.getElementsByTagName(
+                                "body"
+                              )[0].style.overflowY = "scroll";
+
+                              setExperience({
+                                company: "",
+                                designation: "",
+                                year: "",
+                                start: "",
+                                end: "",
+                              });
+                            }}
+                          ></div>
+                        </div>
+                        <div className="exp-container">
+                          <>
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Company Name*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="company"
+                                  className={
+                                    experienceDetails.company == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.company}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Company name"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Current Designation*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <select
+                                  name="designation"
+                                  className={
+                                    experienceDetails.designation == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.designation}
+                                  onChange={handleChange}
+                                >
+                                  <option value="">Select</option>
+                                  {itPositions.map((op) => (
+                                    <option value={op}>{op}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div>
+                                  <label className="Input-Label">
+                                    Start Date*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    className={
+                                      experienceDetails.start == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.start}
+                                    name="start"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div>
+                                  <label className="Input-Label">
+                                    End Date
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    value={experienceDetails.end}
+                                    name="end"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </>
+
+                          <div>
+                            <button
+                              className="add-button"
+                              onClick={addExperience}
+                              disabled={
+                                experienceDetails.company == "" ||
+                                experienceDetails.designation == "" ||
+                                experienceDetails.start == ""
+                              }
+                              // disabled={
+                              //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
+                              //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
+                              //   experienceDetails.designation == ""
+                              // }
+                            >
+                              {editingExperienceId == "" ? "Add" : "Update"}
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              {totalExperienceData.length > 0 ? (
+                totalExperienceData.map((te, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                    className="studies"
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          padding: "10px",
+                        }}
+                      >
+                        <div className="company">
+                          <>{te.company}(Company)</>
+                        </div>
+                        <div className="designation">
+                          {te.designation && (
+                            <>
+                              <b>Designation: </b>
+                              {te.designation}
+                            </>
+                          )}
+                        </div>
+
+                        <div className="timeline">
+                          <b>Date: </b>
+                          {convertToDate(te.start)}-
+                          {te.end === "" ? "Present" : convertToDate(te.end)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>Add experience data </div>
+              )}
+
               <div>
+                <section className="EditProfile-Education-Container">
+                  <div
+                    className="Ed-details"
+                    style={{ flexDirection: "column" }}
+                  >
+                    <div className="popup-container">
+                      <div className="popup-content">
+                        <form className="update-form">
+                          <div className="popup-header">
+                            <h3>Education</h3>
+                            <div
+                              className="close-icon"
+                              onClick={() => {
+                                document.getElementsByTagName(
+                                  "body"
+                                )[0].style.overflowY = "scroll";
+                                seteditingEducationId("");
+                                setEducationDetails({
+                                  year: "",
+                                  grade: "",
+                                  college: "",
+                                  Edstart: "",
+                                  Edend: "",
+                                });
+                              }}
+                            ></div>
+                          </div>
+
+                          <div className="edu-container">
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <div>
+                                <div>
+                                  <label className="Input-Label">Grade*</label>
+                                </div>
+                                <div className="Ed_Input_Fields">
+                                  <select
+                                    name="grade"
+                                    id=""
+                                    value={EducationDetails.grade}
+                                    onChange={handleEducationChange}
+                                  >
+                                    <option value="">Select</option>
+                                    <option value="SSC">10th</option>
+                                    <option value="Inter">
+                                      Inter/Equivalent
+                                    </option>
+                                    <option value="UG">
+                                      UG (Btech, degree)
+                                    </option>
+                                    <option value="PG">PG</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Business">Business</option>
+                                    <option value="LAW">Law</option>
+                                    <option value="other">Other</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    College/University*{" "}
+                                    {EducationDetails.grade !== "SSC" &&
+                                      EducationDetails.grade !== "" &&
+                                      "(Type 3 charecters)"}
+                                  </label>
+                                </div>
+                                <div className="Ed_Input_Fields">
+                                  {EducationDetails.grade == "SSC" ||
+                                  EducationDetails.grade == "" ? (
+                                    <input
+                                      type="text"
+                                      name="college"
+                                      value={EducationDetails.college}
+                                      id=""
+                                      onChange={handleEducationChange}
+                                      placeholder="Enter Your College/School/University"
+                                    />
+                                  ) : (
+                                    <>
+                                      <Autocomplete
+                                        disablePortal
+                                        options={universities}
+                                        getOptionLabel={(option) => option.name}
+                                        sx={{ width: 300 }}
+                                        // inputValue={
+                                        //   EducationDetails.college
+                                        //     ? EducationDetails.college
+                                        //     : undefined
+                                        // }
+                                        onChange={(e) =>
+                                          handleEducationChange(e, true)
+                                        }
+                                        renderInput={(params) => (
+                                          <TextField
+                                            {...params}
+                                            value={collegeQuery}
+                                            onChange={hadnleCollegeQueryChange}
+                                            label="College"
+                                          />
+                                        )}
+                                      />
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="Input-Label">
+                                  Start Date*
+                                </label>
+                              </div>
+                              <div className="Ed_Input_Fields">
+                                <input
+                                  type="date"
+                                  value={EducationDetails.Edstart}
+                                  name="Edstart"
+                                  id=""
+                                  onChange={handleEducationChange}
+                                />
+                              </div>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <div>
+                                <label className="Input-Label">End Date</label>
+                              </div>
+                              <div className="Ed_Input_Fields">
+                                <input
+                                  type="date"
+                                  value={EducationDetails.Edend}
+                                  name="Edend"
+                                  id=""
+                                  onChange={handleEducationChange}
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <button
+                                className="add-button"
+                                onClick={addEducation}
+                                disabled={
+                                  EducationDetails.Edstart == "" ||
+                                  EducationDetails.grade == "" ||
+                                  EducationDetails.college == ""
+                                }
+                              >
+                                {editingEducationId !== "" ? "Update" : "Add"}
+                              </button>
+                            </div>
+                          </div>
+                          <div></div>
+                        </form>
+                      </div>
+                    </div>
+                    <div style={{ padding: "20px" }}>
+                      {totalEducationData.length > 0 ? (
+                        totalEducationData.map((te, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              width: "100%",
+                            }}
+                            className="studies"
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                alignItems: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  padding: "10px",
+                                }}
+                              >
+                                <div className="college">{te.college} </div>
+                                <div className="grade">{te.grade}</div>
+                                <div className="timeline">
+                                  {convertToDate(te.Edstart)}-
+                                  {te.Edend === ""
+                                    ? "Present"
+                                    : convertToDate(te.Edend)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div>Add education data </div>
+                      )}
+                    </div>
+                  </div>
+                </section>
+
+                {/* <input
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, education: e.target.value }))
+                  }
+                  value={step3Data.education}
+                /> */}
+              </div>
+              {/* <div>
                 <h2>Experience</h2>
                 <input
                   type="text"
@@ -2978,7 +4019,7 @@ const UserDetails = () => {
                   }
                   value={step3Data.education}
                 />
-              </div>
+              </div> */}
               <div className="domain-selection">
                 <h2>Intrested Domains:</h2>
                 <div className="dropdown-container">
