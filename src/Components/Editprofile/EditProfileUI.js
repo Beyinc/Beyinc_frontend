@@ -676,7 +676,7 @@ const EditProfileUI = () => {
             setlanguagesKnown(res.data.languagesKnown || []);
           })
           .catch((error) => {
-            console.log(error)
+            console.log(error);
             dispatch(
               setToast({
                 message: "No User Found For Request",
@@ -730,6 +730,10 @@ const EditProfileUI = () => {
                 working: res.data.documents?.working || "",
                 degree: res.data.documents?.degree || "",
               }));
+              console.log(
+                "res.data.educationDetails",
+                res.data.educationDetails
+              );
               setTotalEducationData(res.data.educationDetails || []);
               setTotalExperienceData(res.data.experienceDetails || []);
               setFee(res.data.fee || "");
@@ -1186,18 +1190,23 @@ const EditProfileUI = () => {
   };
 
   const sendForApproval = async () => {
-    await ApiServices.updateStatusDirectly({ userId: user_id, verificationStatus: 'pending' }).then(res => {
-      setInputs((prev)=>({...prev, verification: 'pending'}))
-    }).catch(err => {
-      dispatch(
-        setToast({
-          message: "Error in update status",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
+    await ApiServices.updateStatusDirectly({
+      userId: user_id,
+      verificationStatus: "pending",
     })
-  }
+      .then((res) => {
+        setInputs((prev) => ({ ...prev, verification: "pending" }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error in update status",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  };
 
   return (
     <main className="EditProfile-Container">
@@ -1967,7 +1976,11 @@ const EditProfileUI = () => {
                     {te.Banner && (
                       <div className="timeline">
                         <b>Banner: </b>
-                        <a href={te.Banner?.secure_url} target="_blank">
+                        <a
+                          href={te.Banner?.secure_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           Click here
                         </a>
                       </div>
@@ -1975,7 +1988,11 @@ const EditProfileUI = () => {
                     {te.Logo && (
                       <div className="timeline">
                         <b>Logo: </b>
-                        <a href={te.Logo?.secure_url} target="_blank">
+                        <a
+                          href={te.Logo?.secure_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           Click here
                         </a>
                       </div>
