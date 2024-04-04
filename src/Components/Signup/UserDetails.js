@@ -249,7 +249,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
                 startupStage: e.target.value,
               }))
             }
-            value={step3Data.startupStage}
+            value={step3Data?.startupStage}
           >
             <option value="">Select an option</option>
             {startupStage.map((type) => (
@@ -265,7 +265,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
         <div>
           <DatePicker
             onChange={(e) => setStep3Data((p) => ({ ...p, startupDate: e }))}
-            value={step3Data.startupDate}
+            value={step3Data?.startupDate}
             dateFormat="MMMM d, yyyy"
             placeholderText="Select date"
           />
@@ -281,7 +281,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
               total_customers: e.target.value,
             }))
           }
-          value={step3Data.total_customers}
+          value={step3Data?.total_customers}
         />
       </div>
       <div>
@@ -291,7 +291,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           onChange={(e) =>
             setStep3Data((p) => ({ ...p, turnover: e.target.value }))
           }
-          value={step3Data.turnover}
+          value={step3Data?.turnover}
         />
       </div>
       <div>
@@ -301,7 +301,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
             type="radio"
             name="companyRegistered"
             value="yes"
-            checked={step3Data.isStartupRegistered === "yes"}
+            checked={step3Data?.isStartupRegistered === "yes"}
             onChange={(e) =>
               setStep3Data((p) => ({
                 ...p,
@@ -316,7 +316,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
             type="radio"
             name="companyRegistered"
             value="no"
-            checked={step3Data.isStartupRegistered === "no"}
+            checked={step3Data?.isStartupRegistered === "no"}
             onChange={(e) =>
               setStep3Data((p) => ({
                 ...p,
@@ -327,7 +327,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           No
         </p>
       </div>
-      {step3Data.isStartupRegistered === "yes" ? (
+      {step3Data?.isStartupRegistered === "yes" ? (
         <div>
           <h2>Company CIN</h2>
           <input
@@ -338,7 +338,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
                 startupCIN: e.target.value,
               }))
             }
-            value={step3Data.startupCIN}
+            value={step3Data?.startupCIN}
           />
         </div>
       ) : (
@@ -349,12 +349,12 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
         <div className="dropdown-container">
           <select
             id="domainSelect"
-            value={step3Data.startupDomain}
+            value={step3Data?.startupDomain}
             onChange={(e) => {
               setStep3Data((p) => ({
                 ...p,
                 startupDomain: [
-                  ...(step3Data.startupDomain ? step3Data.startupDomain : []),
+                  ...(step3Data?.startupDomain ? step3Data?.startupDomain : []),
                   e.target.value,
                 ],
               }));
@@ -367,9 +367,9 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
               </option>
             ))}
           </select>
-          {step3Data.startupDomain?.length > 0 && (
+          {step3Data?.startupDomain?.length > 0 && (
             <div className="selected-domains">
-              {step3Data.startupDomain.map((domain) => (
+              {step3Data?.startupDomain.map((domain) => (
                 <div key={domain} className="selected-domain">
                   <span>{domain}</span>
                   <button
@@ -378,8 +378,8 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
                       setStep3Data((p) => ({
                         ...p,
                         startupDomain: [
-                          ...(step3Data.startupDomain
-                            ? step3Data.startupDomain
+                          ...(step3Data?.startupDomain
+                            ? step3Data?.startupDomain
                             : []
                           ).filter((d) => d !== domain),
                         ],
@@ -401,7 +401,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           onChange={(e) =>
             setStep3Data((p) => ({ ...p, location: e.target.value }))
           }
-          value={step3Data.location}
+          value={step3Data?.location}
         />
       </div>
     </>
@@ -1069,7 +1069,7 @@ const UserDetails = () => {
                   type="radio"
                   name="haveStartup"
                   value="yes"
-                  checked={step3Data.haveStartup === "yes"}
+                  checked={step3Data?.haveStartup === "yes"}
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, haveStartup: e.target.value }))
                   }
@@ -1081,14 +1081,14 @@ const UserDetails = () => {
                   type="radio"
                   name="haveStartup"
                   value="no"
-                  checked={step3Data.haveStartup === "no"}
+                  checked={step3Data?.haveStartup === "no"}
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, haveStartup: e.target.value }))
                   }
                 />
                 No
               </p>
-              {step3Data.haveStartup === "yes" && (
+              {step3Data?.haveStartup === "yes" && (
                 <AboutStartup
                   step3Data={step3Data}
                   setStep3Data={setStep3Data}
@@ -1101,7 +1101,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               {/* <div>
@@ -1111,7 +1111,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, experience: e.target.value }))
                   }
-                  value={step3Data.experience}
+                  value={step3Data?.experience}
                 />
               </div> */}
 
@@ -1531,7 +1531,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, education: e.target.value }))
                   }
-                  value={step3Data.education}
+                  value={step3Data?.education}
                 /> */}
               </div>
 
@@ -1542,7 +1542,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
               <div>
@@ -1552,7 +1552,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -1562,7 +1562,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -1579,7 +1579,7 @@ const UserDetails = () => {
                   type="radio"
                   name="startupType"
                   value="Funded"
-                  checked={step3Data.typeStartup === "Funded"}
+                  checked={step3Data?.typeStartup === "Funded"}
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
                   }
@@ -1591,7 +1591,7 @@ const UserDetails = () => {
                   type="radio"
                   name="startupType"
                   value="Bootstrapped"
-                  checked={step3Data.typeStartup === "Bootstrapped"}
+                  checked={step3Data?.typeStartup === "Bootstrapped"}
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, typeStartup: e.target.value }))
                   }
@@ -1606,7 +1606,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, Instagram: e.target.value }))
                   }
-                  value={step3Data.Instagram}
+                  value={step3Data?.Instagram}
                 />
               </div>
               <div>
@@ -1616,7 +1616,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, Youtube: e.target.value }))
                   }
-                  value={step3Data.Youtube}
+                  value={step3Data?.Youtube}
                 />
               </div>
               <div>
@@ -1626,7 +1626,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -1636,7 +1636,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -1652,7 +1652,7 @@ const UserDetails = () => {
                   type="radio"
                   name="haveStartup"
                   value="yes"
-                  checked={step3Data.haveStartup === "yes"}
+                  checked={step3Data?.haveStartup === "yes"}
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, haveStartup: e.target.value }))
                   }
@@ -1664,14 +1664,14 @@ const UserDetails = () => {
                   type="radio"
                   name="haveStartup"
                   value="no"
-                  checked={step3Data.haveStartup === "no"}
+                  checked={step3Data?.haveStartup === "no"}
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, haveStartup: e.target.value }))
                   }
                 />
                 No
               </p>
-              {step3Data.haveStartup === "yes" && (
+              {step3Data?.haveStartup === "yes" && (
                 <AboutStartup
                   step3Data={step3Data}
                   setStep3Data={setStep3Data}
@@ -1684,7 +1684,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
 
@@ -1895,7 +1895,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, experience: e.target.value }))
                   }
-                  value={step3Data.experience}
+                  value={step3Data?.experience}
                 />
               </div> */}
               <div>
@@ -1905,7 +1905,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, education: e.target.value }))
                   }
-                  value={step3Data.education}
+                  value={step3Data?.education}
                 />
               </div>
               <div>
@@ -1915,7 +1915,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
               <div>
@@ -1928,7 +1928,7 @@ const UserDetails = () => {
                       successStories: e.target.value,
                     }))
                   }
-                  value={step3Data.successStories}
+                  value={step3Data?.successStories}
                 />
               </div>
               <div>
@@ -1939,7 +1939,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -1949,7 +1949,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -1970,7 +1970,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -1980,7 +1980,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div>
@@ -1993,7 +1993,7 @@ const UserDetails = () => {
                         incubatorEstablishmentDate: e,
                       }))
                     }
-                    value={step3Data.incubatorEstablishmentDate}
+                    value={step3Data?.incubatorEstablishmentDate}
                     dateFormat="MMMM d, yyyy"
                     placeholderText="Select date"
                   />
@@ -2009,7 +2009,7 @@ const UserDetails = () => {
                       currentIncubatees: e.target.value,
                     }))
                   }
-                  value={step3Data.currentIncubatees}
+                  value={step3Data?.currentIncubatees}
                 />
               </div>
               <div>
@@ -2022,7 +2022,7 @@ const UserDetails = () => {
                       programDuration: e.target.value,
                     }))
                   }
-                  value={step3Data.programDuration}
+                  value={step3Data?.programDuration}
                 />
               </div>
               <div>
@@ -2035,7 +2035,7 @@ const UserDetails = () => {
                       graduatedIncubatees: e.target.value,
                     }))
                   }
-                  value={step3Data.graduatedIncubatees}
+                  value={step3Data?.graduatedIncubatees}
                 />
               </div>
               <div>
@@ -2045,7 +2045,7 @@ const UserDetails = () => {
                     type="radio"
                     name="GovtFunded"
                     value="yes"
-                    checked={step3Data.haveStartup === "yes"}
+                    checked={step3Data?.haveStartup === "yes"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2060,7 +2060,7 @@ const UserDetails = () => {
                     type="radio"
                     name="GovtFunded"
                     value="no"
-                    checked={step3Data.haveStartup === "no"}
+                    checked={step3Data?.haveStartup === "no"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2076,14 +2076,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -2098,9 +2098,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -2109,8 +2109,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -2130,13 +2130,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -2150,9 +2150,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -2161,8 +2161,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -2188,7 +2188,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -2207,7 +2207,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -2220,7 +2220,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -2230,7 +2230,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -2240,7 +2240,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
 
@@ -2251,7 +2251,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -2261,7 +2261,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
               <div>
@@ -2274,7 +2274,7 @@ const UserDetails = () => {
                       successStories: e.target.value,
                     }))
                   }
-                  value={step3Data.successStories}
+                  value={step3Data?.successStories}
                 />
               </div>
               <div>
@@ -2285,7 +2285,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -2295,7 +2295,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
               <div>
@@ -2305,7 +2305,7 @@ const UserDetails = () => {
                     type="radio"
                     name="vacancyAvaliable"
                     value="yes"
-                    checked={step3Data.isVacancyAvaliable === "yes"}
+                    checked={step3Data?.isVacancyAvaliable === "yes"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2320,7 +2320,7 @@ const UserDetails = () => {
                     type="radio"
                     name="vacancyAvaliable"
                     value="no"
-                    checked={step3Data.isVacancyAvaliable === "no"}
+                    checked={step3Data?.isVacancyAvaliable === "no"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2331,7 +2331,7 @@ const UserDetails = () => {
                   No
                 </p>
               </div>
-              {step3Data.isVacancyAvaliable === "yes" ? (
+              {step3Data?.isVacancyAvaliable === "yes" ? (
                 <>
                   {" "}
                   <div>
@@ -2344,7 +2344,7 @@ const UserDetails = () => {
                           description: e.target.value,
                         }))
                       }
-                      value={step3Data.description}
+                      value={step3Data?.description}
                     />
                   </div>
                   <UploadFile
@@ -2373,7 +2373,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -2383,7 +2383,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div>
@@ -2396,7 +2396,7 @@ const UserDetails = () => {
                         incubatorEstablishmentDate: e,
                       }))
                     }
-                    value={step3Data.incubatorEstablishmentDate}
+                    value={step3Data?.incubatorEstablishmentDate}
                     dateFormat="MMMM d, yyyy"
                     placeholderText="Select date"
                   />
@@ -2412,7 +2412,7 @@ const UserDetails = () => {
                       currentAcceleratees: e.target.value,
                     }))
                   }
-                  value={step3Data.currentAcceleratees}
+                  value={step3Data?.currentAcceleratees}
                 />
               </div>
               <div>
@@ -2425,7 +2425,7 @@ const UserDetails = () => {
                       programDuration: e.target.value,
                     }))
                   }
-                  value={step3Data.programDuration}
+                  value={step3Data?.programDuration}
                 />
               </div>
               <div>
@@ -2438,7 +2438,7 @@ const UserDetails = () => {
                       graduatedIncubatees: e.target.value,
                     }))
                   }
-                  value={step3Data.graduatedIncubatees}
+                  value={step3Data?.graduatedIncubatees}
                 />
               </div>
               <div>
@@ -2448,7 +2448,7 @@ const UserDetails = () => {
                     type="radio"
                     name="GovtFunded"
                     value="yes"
-                    checked={step3Data.haveStartup === "yes"}
+                    checked={step3Data?.haveStartup === "yes"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2463,7 +2463,7 @@ const UserDetails = () => {
                     type="radio"
                     name="GovtFunded"
                     value="no"
-                    checked={step3Data.haveStartup === "no"}
+                    checked={step3Data?.haveStartup === "no"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2479,14 +2479,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -2501,9 +2501,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -2512,8 +2512,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -2533,13 +2533,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -2553,9 +2553,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -2564,8 +2564,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -2591,7 +2591,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -2609,7 +2609,7 @@ const UserDetails = () => {
                     type="radio"
                     name="SEBI"
                     value="yes"
-                    checked={step3Data.isSEBI === "yes"}
+                    checked={step3Data?.isSEBI === "yes"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2624,7 +2624,7 @@ const UserDetails = () => {
                     type="radio"
                     name="SEBI"
                     value="no"
-                    checked={step3Data.isSEBI === "no"}
+                    checked={step3Data?.isSEBI === "no"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2643,7 +2643,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -2656,7 +2656,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -2666,7 +2666,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -2676,7 +2676,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
 
@@ -2687,7 +2687,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -2697,7 +2697,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
               <div>
@@ -2710,7 +2710,7 @@ const UserDetails = () => {
                       successStories: e.target.value,
                     }))
                   }
-                  value={step3Data.successStories}
+                  value={step3Data?.successStories}
                 />
               </div>
               <div>
@@ -2721,7 +2721,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -2731,7 +2731,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
               <div>
@@ -2741,7 +2741,7 @@ const UserDetails = () => {
                     type="radio"
                     name="vacancyAvaliable"
                     value="yes"
-                    checked={step3Data.isVacancyAvaliable === "yes"}
+                    checked={step3Data?.isVacancyAvaliable === "yes"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2756,7 +2756,7 @@ const UserDetails = () => {
                     type="radio"
                     name="vacancyAvaliable"
                     value="no"
-                    checked={step3Data.isVacancyAvaliable === "no"}
+                    checked={step3Data?.isVacancyAvaliable === "no"}
                     onChange={(e) =>
                       setStep3Data((p) => ({
                         ...p,
@@ -2767,7 +2767,7 @@ const UserDetails = () => {
                   No
                 </p>
               </div>
-              {step3Data.isVacancyAvaliable === "yes" ? (
+              {step3Data?.isVacancyAvaliable === "yes" ? (
                 <>
                   <div>
                     <h2>Description</h2>
@@ -2779,7 +2779,7 @@ const UserDetails = () => {
                           description: e.target.value,
                         }))
                       }
-                      value={step3Data.description}
+                      value={step3Data?.description}
                     />
                   </div>
                   <UploadFile
@@ -2807,7 +2807,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -2817,7 +2817,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div className="primary-dropdown">
@@ -2831,7 +2831,7 @@ const UserDetails = () => {
                         budget: e.target.value,
                       }))
                     }
-                    value={step3Data.budget}
+                    value={step3Data?.budget}
                   >
                     <option value="">Select an option</option>
                     {budgets.map((type) => (
@@ -3258,7 +3258,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, education: e.target.value }))
                   }
-                  value={step3Data.education}
+                  value={step3Data?.education}
                 /> */}
               </div>
               {/* <div>
@@ -3268,7 +3268,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, experience: e.target.value }))
                   }
-                  value={step3Data.experience}
+                  value={step3Data?.experience}
                 />
               </div>
               <div>
@@ -3278,7 +3278,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, education: e.target.value }))
                   }
-                  value={step3Data.education}
+                  value={step3Data?.education}
                 />
               </div> */}
               <div className="domain-selection">
@@ -3286,14 +3286,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -3308,9 +3308,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -3319,8 +3319,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -3340,13 +3340,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -3360,9 +3360,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -3371,8 +3371,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -3398,7 +3398,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -3417,7 +3417,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -3430,7 +3430,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -3440,7 +3440,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -3450,7 +3450,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
 
@@ -3461,7 +3461,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -3471,7 +3471,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
               <div>
@@ -3486,7 +3486,7 @@ const UserDetails = () => {
                         startup_name: e.target.value,
                       }))
                     }
-                    value={step3Data.startup_name}
+                    value={step3Data?.startup_name}
                   />
                 </div>
                 <div>
@@ -3499,7 +3499,7 @@ const UserDetails = () => {
                         startup_about: e.target.value,
                       }))
                     }
-                    value={step3Data.startup_about}
+                    value={step3Data?.startup_about}
                   />
                 </div>{" "}
                 <div>
@@ -3512,7 +3512,7 @@ const UserDetails = () => {
                         startup_fund: e.target.value,
                       }))
                     }
-                    value={step3Data.startup_fund}
+                    value={step3Data?.startup_fund}
                   />
                 </div>
               </div>
@@ -3524,7 +3524,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -3534,7 +3534,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -3554,7 +3554,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -3564,7 +3564,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div className="primary-dropdown">
@@ -3578,7 +3578,7 @@ const UserDetails = () => {
                         budget: e.target.value,
                       }))
                     }
-                    value={step3Data.budget}
+                    value={step3Data?.budget}
                   >
                     <option value="">Select an option</option>
                     {[
@@ -3606,7 +3606,7 @@ const UserDetails = () => {
                         budget: e.target.value,
                       }))
                     }
-                    value={step3Data.budget}
+                    value={step3Data?.budget}
                   >
                     <option value="">Select an option</option>
                     {[
@@ -4039,7 +4039,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, education: e.target.value }))
                   }
-                  value={step3Data.education}
+                  value={step3Data?.education}
                 /> */}
               </div>
               {/* <div>
@@ -4049,7 +4049,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, experience: e.target.value }))
                   }
-                  value={step3Data.experience}
+                  value={step3Data?.experience}
                 />
               </div>
               <div>
@@ -4059,7 +4059,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, education: e.target.value }))
                   }
-                  value={step3Data.education}
+                  value={step3Data?.education}
                 />
               </div> */}
               <div className="domain-selection">
@@ -4067,14 +4067,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -4089,9 +4089,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4100,8 +4100,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4121,13 +4121,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -4141,9 +4141,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4152,8 +4152,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4179,7 +4179,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -4198,7 +4198,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -4211,7 +4211,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -4221,7 +4221,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -4231,7 +4231,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
 
@@ -4242,7 +4242,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -4252,7 +4252,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
               <div>
@@ -4267,7 +4267,7 @@ const UserDetails = () => {
                         startup_name: e.target.value,
                       }))
                     }
-                    value={step3Data.startup_name}
+                    value={step3Data?.startup_name}
                   />
                 </div>
                 <div>
@@ -4280,7 +4280,7 @@ const UserDetails = () => {
                         startup_about: e.target.value,
                       }))
                     }
-                    value={step3Data.startup_about}
+                    value={step3Data?.startup_about}
                   />
                 </div>{" "}
                 <div>
@@ -4293,7 +4293,7 @@ const UserDetails = () => {
                         startup_fund: e.target.value,
                       }))
                     }
-                    value={step3Data.startup_fund}
+                    value={step3Data?.startup_fund}
                   />
                 </div>
               </div>
@@ -4305,7 +4305,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -4315,7 +4315,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -4336,7 +4336,7 @@ const UserDetails = () => {
                       name: e.target.value,
                     }))
                   }
-                  value={step3Data.name}
+                  value={step3Data?.name}
                 />
               </div>
               <div>
@@ -4346,7 +4346,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div>
@@ -4356,7 +4356,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, department: e.target.value }))
                   }
-                  value={step3Data.department}
+                  value={step3Data?.department}
                 />
               </div>
               <div className="domain-selection">
@@ -4364,14 +4364,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.intrestedDomain}
+                    value={step3Data?.intrestedDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         intrestedDomain: [
-                          ...(step3Data.intrestedDomain
-                            ? step3Data.intrestedDomain
+                          ...(step3Data?.intrestedDomain
+                            ? step3Data?.intrestedDomain
                             : []),
                           e.target.value,
                         ],
@@ -4386,9 +4386,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.intrestedDomain?.length > 0 && (
+                  {step3Data?.intrestedDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.intrestedDomain.map((domain) => (
+                      {step3Data?.intrestedDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4397,8 +4397,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 intrestedDomain: [
-                                  ...(step3Data.intrestedDomain
-                                    ? step3Data.intrestedDomain
+                                  ...(step3Data?.intrestedDomain
+                                    ? step3Data?.intrestedDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4418,13 +4418,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -4438,9 +4438,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4449,8 +4449,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4474,7 +4474,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -4487,7 +4487,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -4497,7 +4497,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -4507,7 +4507,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
               <div>
@@ -4517,7 +4517,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -4527,7 +4527,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
 
@@ -4539,7 +4539,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -4549,7 +4549,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -4570,7 +4570,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -4580,7 +4580,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div className="primary-dropdown">
@@ -4594,7 +4594,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -4610,14 +4610,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -4632,9 +4632,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4643,8 +4643,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4664,13 +4664,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -4684,9 +4684,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4695,8 +4695,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4720,7 +4720,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -4733,7 +4733,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -4743,7 +4743,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -4753,7 +4753,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
               <div>
@@ -4763,7 +4763,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -4773,7 +4773,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
 
@@ -4785,7 +4785,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -4795,7 +4795,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -4816,7 +4816,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -4826,7 +4826,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div>
@@ -4836,7 +4836,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, trade: e.target.value }))
                   }
-                  value={step3Data.trade}
+                  value={step3Data?.trade}
                 />
               </div>
               <div className="primary-dropdown">
@@ -4850,7 +4850,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -4866,14 +4866,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -4888,9 +4888,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4899,8 +4899,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4920,13 +4920,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -4940,9 +4940,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -4951,8 +4951,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -4976,7 +4976,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -4989,7 +4989,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -4999,7 +4999,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -5009,7 +5009,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
               <div>
@@ -5019,7 +5019,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -5029,7 +5029,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
 
@@ -5041,7 +5041,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -5051,7 +5051,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
@@ -5072,7 +5072,7 @@ const UserDetails = () => {
                       incubator_name: e.target.value,
                     }))
                   }
-                  value={step3Data.incubator_name}
+                  value={step3Data?.incubator_name}
                 />
               </div>
               <div>
@@ -5082,7 +5082,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, about: e.target.value }))
                   }
-                  value={step3Data.about}
+                  value={step3Data?.about}
                 />
               </div>
               <div className="primary-dropdown">
@@ -5096,7 +5096,7 @@ const UserDetails = () => {
                         startupStage: e.target.value,
                       }))
                     }
-                    value={step3Data.startupStage}
+                    value={step3Data?.startupStage}
                   >
                     <option value="">Select an option</option>
                     {startupStage.map((type) => (
@@ -5112,14 +5112,14 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.incubatorDomain}
+                    value={step3Data?.incubatorDomain}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         incubatorDomain: [
-                          ...(step3Data.incubatorDomain
-                            ? step3Data.incubatorDomain
+                          ...(step3Data?.incubatorDomain
+                            ? step3Data?.incubatorDomain
                             : []),
                           e.target.value,
                         ],
@@ -5134,9 +5134,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.incubatorDomain?.length > 0 && (
+                  {step3Data?.incubatorDomain?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.incubatorDomain.map((domain) => (
+                      {step3Data?.incubatorDomain.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -5145,8 +5145,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 incubatorDomain: [
-                                  ...(step3Data.incubatorDomain
-                                    ? step3Data.incubatorDomain
+                                  ...(step3Data?.incubatorDomain
+                                    ? step3Data?.incubatorDomain
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -5166,13 +5166,13 @@ const UserDetails = () => {
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
-                    value={step3Data.skills}
+                    value={step3Data?.skills}
                     onChange={(e) => {
                       setNewDomain(e.target.value);
                       setStep3Data((p) => ({
                         ...p,
                         skills: [
-                          ...(step3Data.skills ? step3Data.skills : []),
+                          ...(step3Data?.skills ? step3Data?.skills : []),
                           e.target.value,
                         ],
                       }));
@@ -5186,9 +5186,9 @@ const UserDetails = () => {
                       </option>
                     ))}
                   </select>
-                  {step3Data.skills?.length > 0 && (
+                  {step3Data?.skills?.length > 0 && (
                     <div className="selected-domains">
-                      {step3Data.skills.map((domain) => (
+                      {step3Data?.skills.map((domain) => (
                         <div key={domain} className="selected-domain">
                           <span>{domain}</span>
                           <button
@@ -5197,8 +5197,8 @@ const UserDetails = () => {
                               setStep3Data((p) => ({
                                 ...p,
                                 skills: [
-                                  ...(step3Data.skills
-                                    ? step3Data.skills
+                                  ...(step3Data?.skills
+                                    ? step3Data?.skills
                                     : []
                                   ).filter((d) => d !== domain),
                                 ],
@@ -5222,7 +5222,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_name: e.target.value }))
                   }
-                  value={step3Data.poc_name}
+                  value={step3Data?.poc_name}
                 />
               </div>
               <div>
@@ -5235,7 +5235,7 @@ const UserDetails = () => {
                       poc_designation: e.target.value,
                     }))
                   }
-                  value={step3Data.poc_designation}
+                  value={step3Data?.poc_designation}
                 />
               </div>
               <div>
@@ -5245,7 +5245,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_email: e.target.value }))
                   }
-                  value={step3Data.poc_email}
+                  value={step3Data?.poc_email}
                 />
               </div>
               <div>
@@ -5255,7 +5255,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, poc_mobile: e.target.value }))
                   }
-                  value={step3Data.poc_mobile}
+                  value={step3Data?.poc_mobile}
                 />
               </div>
               <div>
@@ -5265,7 +5265,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, website: e.target.value }))
                   }
-                  value={step3Data.website}
+                  value={step3Data?.website}
                 />
               </div>
               <div>
@@ -5275,7 +5275,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, location: e.target.value }))
                   }
-                  value={step3Data.location}
+                  value={step3Data?.location}
                 />
               </div>
 
@@ -5287,7 +5287,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, linkedin: e.target.value }))
                   }
-                  value={step3Data.linkedin}
+                  value={step3Data?.linkedin}
                 />
               </div>
               <div>
@@ -5297,7 +5297,7 @@ const UserDetails = () => {
                   onChange={(e) =>
                     setStep3Data((p) => ({ ...p, twitter: e.target.value }))
                   }
-                  value={step3Data.twitter}
+                  value={step3Data?.twitter}
                 />
               </div>
             </div>
