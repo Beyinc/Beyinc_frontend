@@ -269,7 +269,6 @@ input[type="checkbox"] {
 
 .steps-button {
   display: block;
-  margin: 0 auto;
   padding: 1em 2em;
   background-color: var(--button);
   color: #fff;
