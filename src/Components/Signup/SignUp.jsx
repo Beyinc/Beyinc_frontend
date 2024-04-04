@@ -117,7 +117,6 @@ const SignUp = () => {
         );
         e.target.disabled = true;
       });
-
   };
 
   const verifyOtp = async (e) => {
@@ -151,12 +150,11 @@ const SignUp = () => {
           })
         );
       });
-
   };
 
   const verifyMobileOtp = async (e) => {
     e.preventDefault();
-    setVerifyMobileOtpLoading(true)
+    setVerifyMobileOtpLoading(true);
     await ApiServices.verifyOtp({
       email: `+91${mobile}`,
       otp: mobileOtp,
@@ -172,11 +170,11 @@ const SignUp = () => {
         document.getElementById("mobileVerify").style.display = "none";
         document.getElementById("mobileOTPinput").disabled = true;
         // setmobileVerified(true);
-        setVerifyMobileOtpLoading(false)
+        setVerifyMobileOtpLoading(false);
         setInputs((prev) => ({ ...prev, mobileVerified: true }));
       })
       .catch((err) => {
-        setVerifyMobileOtpLoading(false)
+        setVerifyMobileOtpLoading(false);
         console.log(err);
         dispatch(
           setToast({
@@ -186,7 +184,6 @@ const SignUp = () => {
           })
         );
       });
-
   };
 
   const signup = async (e) => {
@@ -200,7 +197,7 @@ const SignUp = () => {
       phone: mobile,
       // role: role,
     })
-      .then((res) => {
+      .then(async (res) => {
         dispatch(
           setToast({
             message: "User Registered Successfully !",
@@ -208,6 +205,8 @@ const SignUp = () => {
             visible: "yes",
           })
         );
+        localStorage.setItem("user", JSON.stringify(res.data));
+        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
         navigate("/userDetails");
         setLoading(false);
       })
@@ -222,7 +221,6 @@ const SignUp = () => {
           })
         );
       });
-
   };
 
   const sendMobileOtpF = async (e) => {
@@ -257,7 +255,6 @@ const SignUp = () => {
         );
         e.target.disabled = true;
       });
-
   };
 
   const isFormValid =
@@ -273,20 +270,22 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    ApiServices.getAllRoles().then((res) => {
-      // setRoles(res.data);
-    }).catch((err) => {
-      console.log(err);
-      if (err.message == "Network Error") {
-        dispatch(
-          setToast({
-            message: "Check your network connection",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      }
-    });
+    ApiServices.getAllRoles()
+      .then((res) => {
+        // setRoles(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.message == "Network Error") {
+          dispatch(
+            setToast({
+              message: "Check your network connection",
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+        }
+      });
   }, []);
 
   return (
@@ -578,14 +577,48 @@ const SignUp = () => {
                   />
                   <div className="passwordHint">
                     <ul>
-                      <li className={password?.length>=8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
-                      <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                      <li className={/.*[a-z].*/.test(password) && password ? 'success' : 'failure'}>Atleast one small letter</li>
-                      <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
-                      <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
+                      <li
+                        className={
+                          password?.length >= 8 ? "success" : "failure"
+                        }
+                      >
+                        Password should be atleast 8 character length
+                      </li>
+                      <li
+                        className={
+                          /.*[A-Z].*/.test(password) ? "success" : "failure"
+                        }
+                      >
+                        Atleast one capital letter
+                      </li>
+                      <li
+                        className={
+                          /.*[a-z].*/.test(password) && password
+                            ? "success"
+                            : "failure"
+                        }
+                      >
+                        Atleast one small letter
+                      </li>
+                      <li
+                        className={
+                          /.*[!@#$%^&*()_+].*/.test(password)
+                            ? "success"
+                            : "failure"
+                        }
+                      >
+                        Atleast one special character (!@#$%^&*()_+)
+                      </li>
+                      <li
+                        className={
+                          /.*[0-9].*/.test(password) ? "success" : "failure"
+                        }
+                      >
+                        Atleast one Number
+                      </li>
                     </ul>
                   </div>
-                    
+
                   <button
                     type="submit"
                     className="full-width-button"

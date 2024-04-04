@@ -194,7 +194,6 @@ const UploadProfile = ({ step3Data, setStep3Data, isCompany, label }) => {
     </div>
   );
 };
-
 const UploadFile = ({ step3Data, setStep3Data }) => {
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -233,7 +232,6 @@ const UploadFile = ({ step3Data, setStep3Data }) => {
     </div>
   );
 };
-
 const AboutStartup = ({ step3Data, setStep3Data }) => {
   return (
     <>
@@ -514,8 +512,8 @@ const UserDetails = () => {
   const handleSubmit = async (e, isDraft) => {
     const formData = {
       role,
-      experienceDetails,
-      educationDetails: EducationDetails,
+      experienceDetails: totalExperienceData,
+      educationDetails: totalEducationData,
       selectedDropdownPrimary,
       selectedDropdownSecondary,
       selectedTypes,
