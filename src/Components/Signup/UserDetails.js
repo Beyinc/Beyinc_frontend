@@ -644,7 +644,7 @@ const UserDetails = () => {
       totalExperienceData,
       totalEducationData,
     } = res.data;
-    setStep3Data(res.data.role_details);
+    setStep3Data(res.data.role_details ? res.data.role_details : {});
     setRole(role);
     setExperience(experienceDetails);
     setEducationDetails(educationDetails);
