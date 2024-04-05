@@ -451,6 +451,7 @@ const UserDetails = () => {
   });
   const [universities, setUniversities] = useState([]);
   const [collegeQuery, setCollegeQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const handleBoxSelect = (boxType) => {
     setRole(boxType);
   };
@@ -510,6 +511,10 @@ const UserDetails = () => {
 
   const dispatch = useDispatch();
   const handleSubmit = async (e, isDraft) => {
+    e.preventDefault(); // Prevent default form submission behavior
+  
+    setIsLoading(true);
+  
     const formData = {
       role,
       experienceDetails: totalExperienceData,
@@ -529,12 +534,13 @@ const UserDetails = () => {
       totalExperienceData,
       totalEducationData,
     };
-
+  
     try {
       await ApiServices.editUserFirstTime({
         ...formData,
         step3Data,
       });
+  
       dispatch(
         setToast({
           message: "Profile updated successfully",
@@ -542,19 +548,24 @@ const UserDetails = () => {
           visible: "yes",
         })
       );
+      
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
+      
       dispatch(
         setToast({
           message:
-            "Some error occured check if all inputs are filled and try again later",
+            "Some error occurred. Check if all inputs are filled and try again later.",
           bgColor: ToastColors.failure,
           visible: "yes",
         })
       );
+    } finally {
+      setIsLoading(false); 
     }
   };
+  
   const handleChange = (e) => {
     setExperience((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -5391,9 +5402,20 @@ const UserDetails = () => {
               Next Step
             </button>
           ) : (
-            <button className="steps-button" onClick={handleSubmit}>
-              Submit
-            </button>
+            <button
+      className={`steps-button ${isLoading ? 'loading' : ''}`}
+      onClick={handleSubmit}
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <>
+          <div className="button-loader"></div>
+          <span style={{ marginLeft: "12px" }}>Submitting...</span>
+        </>
+      ) : (
+        <>Submit</>
+      )}
+    </button>
           )}
         </div>
       </div>
