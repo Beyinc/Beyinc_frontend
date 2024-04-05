@@ -1077,6 +1077,8 @@ const UserDetails = () => {
       {currentStep === 3 && (
         <div className="step2-content">
           <h1>Profile</h1>
+      
+      {role && (<div style={{marginBottom: '10px'}}>  <b>Selected Role :</b> {role}</div>)}
           {role === "Individual/Entrepreneur" ? (
             <div>
               <UploadProfile
