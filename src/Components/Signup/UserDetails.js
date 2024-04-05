@@ -1136,8 +1136,8 @@ const UserDetails = () => {
               </div> */}
 
               <section className="EditProfile-Experience-Container">
-                <div className="popup-container">
-                  <div className="popup-content">
+                <div>
+                  <div>
                     <div className="Work-exp">
                       <form className="update-form">
                         <div className="popup-header">
@@ -1335,14 +1335,14 @@ const UserDetails = () => {
                 <div>Add experience data </div>
               )}
 
-              <div>
+              <div >
                 <section className="EditProfile-Education-Container">
                   <div
                     className="Ed-details"
                     style={{ flexDirection: "column" }}
                   >
-                    <div className="popup-container">
-                      <div className="popup-content">
+                    <div>
+                      <div>
                         <form className="update-form">
                           <div className="popup-header">
                             <h3>Education</h3>
@@ -1364,7 +1364,7 @@ const UserDetails = () => {
                             ></div>
                           </div>
 
-                          <div className="edu-container">
+                          <div>
                             <div
                               style={{
                                 display: "flex",
