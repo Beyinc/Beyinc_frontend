@@ -1075,7 +1075,7 @@ const UserDetails = () => {
 
       {/* step-3 */}
       {currentStep === 3 && (
-        <div className="step2-content">
+        <div className="step3-content">
           <h1>Profile</h1>
       
       {role && (<div style={{marginBottom: '10px'}}>  <b>Selected Role :</b> {role}</div>)}
@@ -1337,7 +1337,7 @@ const UserDetails = () => {
                 <div>Add experience data </div>
               )}
 
-              <div >
+              <div>
                 <section className="EditProfile-Education-Container">
                   <div
                     className="Ed-details"

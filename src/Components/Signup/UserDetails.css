@@ -293,8 +293,26 @@ input[type="checkbox"] {
   font-size: 1em;
   margin-bottom: 0.5em;
   margin-top: 0.5rem;
+  width: fit-content;
 }
-
+.step3-content h1 {
+  width: fit-content;
+}
+.step3-content div {
+  width: 100%;
+}
+.step3-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.step3-content {
+  width: 100%;
+}
+.step3-content input {
+  width: 98%;
+}
 .upload-buttons-container {
   display: flex;
   gap: 10px;
