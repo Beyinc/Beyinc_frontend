@@ -1287,14 +1287,27 @@ const EditProfileUI = () => {
                 {/* <div style={{ fontSize: "16px" }}> &#8377; {fee} / per min</div>
               <div>{}</div> */}
 
-                <div>
+                <div style={{ marginTop: '10px' }}>
                   {id == undefined && (
                     <>
                       {(verification == "" || verification == "rejected") && (
-                        <button onClick={sendForApproval}>Verify Now</button>
+                        <button
+                          onClick={sendForApproval}
+                          style={{ backgroundColor: "red" }}
+                        >
+                          Verify Now
+                        </button>
                       )}
-                      {verification == "approved" && <button>Approved</button>}
-                      {verification == "pending" && <button>Pending</button>}
+                      {verification == "approved" && (
+                        <button style={{ backgroundColor: "green" }}>
+                          Approved
+                        </button>
+                      )}
+                      {verification == "pending" && (
+                        <button style={{ backgroundColor: "orange" }}>
+                          Pending
+                        </button>
+                      )}
                     </>
                   )}
                 </div>
@@ -3006,7 +3019,7 @@ const EditProfileUI = () => {
                             College/University*{" "}
                             {EducationDetails.grade !== "SSC" &&
                               EducationDetails.grade !== "" &&
-                              "(Type 3 charecters)"}
+                              "(Type 3 characters)"}
                           </label>
                         </div>
                         <div className="Ed_Input_Fields">
