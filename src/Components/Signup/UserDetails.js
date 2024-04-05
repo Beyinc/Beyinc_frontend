@@ -601,6 +601,27 @@ const UserDetails = () => {
     setCollegeQuery(e.target.value);
   };
 
+  useEffect(() => {
+    if (collegeQuery === "") {
+      setUniversities([]);
+    }
+    if (collegeQuery.length > 2) {
+      const timeoutId = setTimeout(
+        async () =>
+          await axios
+            .post(process.env.REACT_APP_BACKEND + "/helper/allColleges", {
+              name: collegeQuery,
+            })
+            .then((res) => {
+              // console.log(res.data.college.length);
+              setUniversities(res.data.college);
+            }),
+        500
+      );
+      return () => clearTimeout(timeoutId);
+    } else setUniversities([]);
+  }, [collegeQuery]);
+
   const addEducation = (e) => {
     e.preventDefault();
     if (editingEducationId == "") {
@@ -1382,7 +1403,7 @@ const UserDetails = () => {
                                     College/University*{" "}
                                     {EducationDetails.grade !== "SSC" &&
                                       EducationDetails.grade !== "" &&
-                                      "(Type 3 charecters)"}
+                                      "(Type 3 characters)"}
                                   </label>
                                 </div>
                                 <div className="Ed_Input_Fields">

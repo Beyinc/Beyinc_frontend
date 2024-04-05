@@ -3006,7 +3006,7 @@ const EditProfileUI = () => {
                             College/University*{" "}
                             {EducationDetails.grade !== "SSC" &&
                               EducationDetails.grade !== "" &&
-                              "(Type 3 charecters)"}
+                              "(Type 3 characters)"}
                           </label>
                         </div>
                         <div className="Ed_Input_Fields">
