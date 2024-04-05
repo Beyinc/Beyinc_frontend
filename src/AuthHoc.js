@@ -45,11 +45,6 @@ const AuthHoc = (Component) => {
     }, 1000);
     const { email } = useSelector((store) => store.auth.loginDetails);
     const checkFirsttime = async () => {
-      console.log(
-        localStorage.getItem("user"),
-        JSON.parse(localStorage.getItem("user")).accessToken,
-        "token log"
-      );
       if (
         localStorage.getItem("user") &&
         JSON.parse(localStorage.getItem("user")).accessToken

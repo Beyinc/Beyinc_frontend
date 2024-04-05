@@ -542,6 +542,7 @@ const UserDetails = () => {
           visible: "yes",
         })
       );
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       dispatch(
