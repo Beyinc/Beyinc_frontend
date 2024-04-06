@@ -20,7 +20,7 @@ export default function UserRequestCard({ d }) {
   //     })
   // }, [d])
 
-  const openUser = () => navigate(`/user/${d.userInfo._id}`);
+  const openUser = () => navigate(`/user/${d._id}`);
   return (
     <div
       className={
@@ -38,8 +38,8 @@ export default function UserRequestCard({ d }) {
             <img
               alt="user-pic"
               src={
-                d.userInfo?.image !== undefined && d.userInfo?.image !== ""
-                  ? d.userInfo?.image.url
+                d.image !== undefined && d.image !== ""
+                  ? d.image.url
                   : "/profile.png"
               }
             />

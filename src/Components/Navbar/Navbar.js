@@ -23,7 +23,7 @@ import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 // import ThreePOutlinedIcon from "@mui/icons-material/ThreePOutlined";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { io } from "socket.io-client";
 
 import Box from "@mui/material/Box";
@@ -81,10 +81,11 @@ const Navbar = () => {
     (store) => store.auth.loginDetails
   );
 
-  const [logoutOpen, setLogoutOpen] = useState(false)
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
+    checkFirsttime();
   }, []);
   const messageCount = useSelector((state) => state.conv.messageCount);
 
@@ -125,7 +126,7 @@ const Navbar = () => {
       notificationSound.play();
     }
     if (messageCount.length > 0) {
-      messageSound.play()
+      messageSound.play();
     }
   }, [notificationAlert, messageCount]);
   const liveMessage = useSelector((state) => state.conv.liveMessage);
@@ -135,27 +136,22 @@ const Navbar = () => {
       ApiServices.getTotalMessagesCount({
         receiverId: user_id,
         checkingUser: user_id,
-      }).then((res) => {
-        const d = []
-        for (let i = 0; i < res.data.length; i++) {
-          d.push({
-            conversationId: res.data[i]._id,
-            receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
-            lastText: res.data[i].lastMessageText
-          })
-        }
-        console.log(d)
-        dispatch(
-          setMessageCount(
-            d
-          )
-        );
-      }).catch(err => {
-
-      });;
+      })
+        .then((res) => {
+          const d = [];
+          for (let i = 0; i < res.data.length; i++) {
+            d.push({
+              conversationId: res.data[i]._id,
+              receiverId: res.data[i].members.filter((f) => f !== user_id)[0],
+              lastText: res.data[i].lastMessageText,
+            });
+          }
+          console.log(d);
+          dispatch(setMessageCount(d));
+        })
+        .catch((err) => {});
     }
-  }, [liveMessage])
-
+  }, [liveMessage]);
 
   const [notificationDrawerState, setNotificationDrawerState] = useState({
     right: false,
@@ -223,15 +219,16 @@ const Navbar = () => {
             >
               <ListItemIcon>
                 <MessageOutlinedIcon className="menu-icon" />
-                {messageCount.length > 0 && <div
-                  className="Conversations-count mobile"
-                  title="unread conversations"
-                >
-                  {messageCount.length}
-                </div>}
+                {messageCount.length > 0 && (
+                  <div
+                    className="Conversations-count mobile"
+                    title="unread conversations"
+                  >
+                    {messageCount.length}
+                  </div>
+                )}
               </ListItemIcon>
               <ListItemText primary="Conversations" />
-
             </ListItem>
           </>
         )}
@@ -259,8 +256,6 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Live Pitches" />
             </ListItem>
-
-
           </>
         )}
 
@@ -333,8 +328,18 @@ const Navbar = () => {
         />
       </Tabs> */}
       <div className="SideNotificationHeader">
-        <div className={`sideNavIcons ${value == 1 && 'sideselected'}`} onClick={() => setValue(1)}>Notifications  ({notifications?.length})</div>
-        <div className={`sideNavIcons ${value == 2 && 'sideselected'}`} onClick={() => setValue(2)}>Message Requests ({messageRequest?.length})</div>
+        <div
+          className={`sideNavIcons ${value == 1 && "sideselected"}`}
+          onClick={() => setValue(1)}
+        >
+          Notifications ({notifications?.length})
+        </div>
+        <div
+          className={`sideNavIcons ${value == 2 && "sideselected"}`}
+          onClick={() => setValue(2)}
+        >
+          Message Requests ({messageRequest?.length})
+        </div>
       </div>
       {value == 1 &&
         notifications.map((n) => (
@@ -371,25 +376,24 @@ const Navbar = () => {
             </div>
             {/* <div className="divider"></div> */}
           </>
-        ))
-      }
-      {value == 2 && (messageRequest.length > 0 || notifications.length > 0) && (
-        <>
-          <div>
-            {messageRequest?.map((m) => (
-              <>
-                <MessageRequest m={m} setMessageRequest={setMessageRequest} />
-              </>
-            ))}
-          </div>
-        </>
-      )}
+        ))}
+      {value == 2 &&
+        (messageRequest.length > 0 || notifications.length > 0) && (
+          <>
+            <div>
+              {messageRequest?.map((m) => (
+                <>
+                  <MessageRequest m={m} setMessageRequest={setMessageRequest} />
+                </>
+              ))}
+            </div>
+          </>
+        )}
     </Box>
   );
 
   const [open, setOpen] = React.useState(false);
   const userDetailsRef = useRef(null);
- 
 
   const handleClickOpen = () => {
     document
@@ -404,9 +408,6 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  
-
 
   const handleClickOutside = (event) => {
     if (
@@ -475,24 +476,33 @@ const Navbar = () => {
 
   const { height, width } = useWindowDimensions();
 
-
-
   const logoutDecider = (value) => {
-  
-    if (value == 'All') {
+    if (value == "All") {
       socket.current.emit("logoutAll", {
         userId: user_id,
-        
       });
       localStorage.removeItem("user");
       localStorage.clear();
       window.location.href = "/login";
-    } else if (value == 'Single') {
+    } else if (value == "Single") {
       localStorage.removeItem("user");
       localStorage.clear();
       window.location.href = "/login";
     }
-  }
+  };
+
+  const [firstTime, setFirstTime] = useState(false);
+
+  const checkFirsttime = async () => {
+    if (
+      localStorage.getItem("user") &&
+      JSON.parse(localStorage.getItem("user")).accessToken
+    ) {
+      const res = await ApiServices.isFirstTimeLogin();
+      return setFirstTime(!res.data.isProfileComplete);
+    }
+    setFirstTime(false);
+  };
 
   return (
     <div
@@ -511,16 +521,14 @@ const Navbar = () => {
         <img
           id="logoImage"
           src={
-            localStorage.getItem("theme") == "light"
-              ? "/logo.png"
-              : "/logo.png"
+            localStorage.getItem("theme") == "light" ? "/logo.png" : "/logo.png"
           }
           alt="logo"
         />
       </div>
 
       <div className="menuIcons">
-        {width > 770 && (
+        {width > 770 && !firstTime && (
           <>
             <div title="dashboard">
               <DashboardOutlinedIcon
@@ -532,7 +540,6 @@ const Navbar = () => {
               ></DashboardOutlinedIcon>
             </div>
             <div style={{ position: "relative" }} title="Conversations">
-              {" "}
               <MessageOutlinedIcon
                 id="conversations"
                 className="icon"
@@ -540,12 +547,14 @@ const Navbar = () => {
                   navigate("/conversations");
                 }}
               ></MessageOutlinedIcon>
-              {messageCount.length > 0 && <div
-                className="Conversations-count"
-                title="unread conversations"
-              >
-                {messageCount.length}
-              </div>}
+              {messageCount.length > 0 && (
+                <div
+                  className="Conversations-count"
+                  title="unread conversations"
+                >
+                  {messageCount.length}
+                </div>
+              )}
             </div>
 
             <div title="Search Users">
@@ -563,8 +572,6 @@ const Navbar = () => {
                 onClick={() => navigate("/livePitches")}
               ></BallotOutlinedIcon>
             </div>
-
-
 
             {role === "Admin" && (
               <>
@@ -606,7 +613,7 @@ const Navbar = () => {
           </>
         )}
 
-        {width < 770 && (
+        {width < 770 && !firstTime && (
           <div id="notifications" className="icon">
             <NotificationsOutlinedIcon
               title="notifications"
@@ -664,7 +671,6 @@ const Navbar = () => {
           }}
         >
           <img
-
             id="Profile-img"
             className="Profile-img"
             src={image !== undefined && image !== "" ? image : "/profile.png"}
@@ -687,7 +693,7 @@ const Navbar = () => {
             </abbr>
           )}
         </div>
-        {width < 770 && (
+        {width < 770 && !firstTime && (
           <>
             <div className="icon" onClick={toggleDrawer("right", true)}>
               <MenuRoundedIcon />
@@ -724,7 +730,7 @@ const Navbar = () => {
                   borderRadius: "50%",
                   cursor: "pointer",
                   maxWidth: "100%",
-                  display: 'block'
+                  display: "block",
                 }}
                 src={
                   image !== undefined && image !== "" ? image : "/profile.png"
@@ -739,7 +745,13 @@ const Navbar = () => {
           </div>
 
           <div className="username">Hi, {userName}!</div>
-          <div className="manage" title="view profile" onClick={() => navigate(`/user/${user_id}`)}>{role}</div>
+          <div
+            className="manage"
+            title="view profile"
+            onClick={() => navigate(`/user/${user_id}`)}
+          >
+            {role}
+          </div>
 
           <div className="editPopupActions">
             <div
@@ -760,8 +772,7 @@ const Navbar = () => {
             <div
               className="logout"
               onClick={() => {
-                setLogoutOpen(true)
-               
+                setLogoutOpen(true);
               }}
             >
               <i
@@ -783,47 +794,41 @@ const Navbar = () => {
           <DialogTitle
             id="alert-dialog-title"
             style={{ display: "flex", justifyContent: "center" }}
-          >
-
-          </DialogTitle>
+          ></DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              <div style={{fontSize: '20px'}}>
+              <div style={{ fontSize: "20px" }}>
                 How Do you want to logout ?
               </div>
 
-
-
               <div
-                style={{ display: "flex", gap: "2px", borderRadius: "10px", justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
+                style={{
+                  display: "flex",
+                  gap: "2px",
+                  borderRadius: "10px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
               >
                 <button
-                  onClick={()=>logoutDecider('All')}
+                  onClick={() => logoutDecider("All")}
                   style={{ whiteSpace: "nowrap", position: "relative" }}
                 >
-
-
                   Logout from all devices
-
                 </button>
                 <button
-                  onClick={() => logoutDecider('Single')}
+                  onClick={() => logoutDecider("Single")}
                   style={{ whiteSpace: "nowrap", position: "relative" }}
                 >
-
-
                   Logout from this device
-
                 </button>
-
-
               </div>
             </DialogContentText>
           </DialogContent>
         </Dialog>
 
-
-<ProfileImageUpdate open={open} setOpen={setOpen}/>
+        <ProfileImageUpdate open={open} setOpen={setOpen} />
 
         {/* <Dialog
           open={open}

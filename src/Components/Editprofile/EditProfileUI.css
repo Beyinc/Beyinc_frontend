@@ -283,8 +283,7 @@
   width: 1400px;
   height: auto;
   border-radius: 10px;
-  background: white;
-
+  background: white
 }
 .EditProfile-UploadFiles-Container{
   margin-bottom: 10px;
@@ -425,8 +424,8 @@ select {
   .EditProfile-About-Section,
   .EditProfile-Experience-Container,
   .EditProfile-Education-Container,
-  .EditProfile-UploadFiles-Container {
-    width: 330px;
+.EditProfile-UploadFiles-Container,.EditProfile-comments-Container{
+    width: 360px;
   }
 
   .Profile-Image img {
@@ -442,8 +441,12 @@ select {
     font-size: 12px !important;
   }
   .review-container {
-    margin-left: 0px;
-    margin-top: 0px;
+    margin-left: 100px;
+    margin-bottom: 10px;
+  }
+  .personal-rating-container{
+    flex-direction: column;
+    
   }
 
   .Banner {
