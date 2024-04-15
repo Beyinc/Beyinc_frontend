@@ -1,0 +1,131 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.privacy-policy-main-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+.privacy-policy-section-container {
+  max-width: 70%;
+  margin: 0 auto;
+  padding: 50px;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #fff;
+  color: black;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.navbar li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+.navbar a:hover {
+  color: var(--primary);
+}
+
+
+
+.Privacy-Policy-Image-Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Privacy-Policy-Image-Container img {
+  width: 300px;
+  height: auto;
+}
+/* Section styles */
+.privacy-policy-section-container section {
+  margin-bottom: 30px;
+  text-align: justify;
+  
+}
+
+.privacy-policy-section-container section h2 {
+  color: var(--primary);
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 580;
+}
+
+.privacy-policy-section-container section h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.privacy-policy-section-container section h4 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.privacy-policy-section-container section p {
+  color: black;
+  line-height: 1.6;
+
+}
+
+.privacy-policy-section-container section ul,
+ol {
+  margin-bottom: 10px;
+}
+
+.privacy-policy-section-container section li {
+  margin-bottom: 5px;
+  margin-left: 30px;
+}
+
+.privacy-policy-section-container section a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.privacy-policy-section-container section a:hover {
+  text-decoration: underline;
+}
+
+
+
+@media (max-width: 768px) {
+  .privacy-policy-main-container {
+   
+  }
+  .privacy-policy-section-container {
+    padding: 20px;
+    max-width: 100%;
+
+  }
+  .navbar {
+    display: none;
+  }
+
+  .privacy-policy-section-container section li {
+    margin-bottom: 5px;
+    margin-left: 5px;
+  }
+}

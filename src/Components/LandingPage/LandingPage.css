@@ -303,7 +303,7 @@ body {
   font-size: 3rem;
   margin-top: 20px;
 }
-.step {
+.landing-page-step {
   width: 70%;
   margin: 10px;
   padding: 20px;
@@ -315,12 +315,12 @@ body {
   position: relative;
 }
 
-.step h3 {
+.landing-page-step h3 {
   font-size: 16px;
   margin-bottom: 5px;
 }
 
-.step p {
+.landing-page-step p {
   font-size: 14px;
   color: #fff;
 }

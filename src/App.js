@@ -37,6 +37,9 @@ import { ToastColors } from "./Components/Toast/ToastColors";
 const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
 );
+const PrivacyPolicy = React.lazy(() =>
+  import("./Components/LandingPage/PrivacyPolicy/PrivacyPolicy")
+);
 const SignUp = React.lazy(() => import("./Components/Signup/SignUp"));
 const UserDetails = React.lazy(() => import("./Components/Signup/UserDetails"));
 const Login = React.lazy(() => import("./Components/Login/Login"));
@@ -272,6 +275,7 @@ const App = () => {
           <Route path="/login" Component={LoginAuth(Login)} />
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
+          <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />

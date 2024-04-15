@@ -6,6 +6,7 @@ import Footer from "../Home/Footer/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+
 const LandingPage = () => {
   const navigate = useNavigate();
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
@@ -210,39 +211,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* section-5 */}
-      {/* <section className="section-5" data-aos="fade-up">
-        <h2>Why Choose BeyInc?</h2>
-        <ul className="benefit-cards">
-          <li className="benefit-card" data-aos="fade-right">
-            <i className="fas fa-user-tie card-icon"></i>
-            <h3>Expert Mentorship</h3>
-            <p>
-              Get guidance from experienced mentors from top institutions and
-              industries.
-            </p>
-          </li>
-          <li className="benefit-card" data-aos="fade-up">
-            <i className="fas fa-handshake card-icon"></i>
-            <h3>Meaningful Connections</h3>
-            <p>
-              Connect with like-minded entrepreneurs and build valuable
-              partnerships.
-            </p>
-          </li>
-          <li className="benefit-card" data-aos="fade-left">
-            <i className="fas fa-users card-icon"></i>
-            <h3>Supportive Community</h3>
-            <p>
-              Join a community of passionate individuals and learn from each
-              other.
-            </p>
-          </li>
-        </ul>
-      </section> */}
-
       {/* section-6 */}
-
       <section className="section-6" data-aos="fade-up">
         <div className="content-6">
           <h2>Get Started in 5 Easy Steps</h2>
@@ -250,7 +219,7 @@ const LandingPage = () => {
         <div>
           <ul className="steps-list">
             <li data-aos="fade-right">
-              <div className="step">
+              <div className="landing-page-step">
                 <div>
                   <i className="fas fa-user-plus"></i>{" "}
                 </div>
@@ -264,7 +233,7 @@ const LandingPage = () => {
               </div>
             </li>
             <li data-aos="fade-left">
-              <div className="step">
+              <div className="landing-page-step">
                 <div>
                   <i className="fas fa-id-card"></i>{" "}
                 </div>
@@ -278,7 +247,7 @@ const LandingPage = () => {
               </div>
             </li>
             <li data-aos="fade-right">
-              <div className="step">
+              <div className="landing-page-step">
                 <div>
                   <i className="fas fa-bullhorn"></i>{" "}
                 </div>
@@ -292,7 +261,7 @@ const LandingPage = () => {
               </div>
             </li>
             <li data-aos="fade-left">
-              <div className="step">
+              <div className="landing-page-step">
                 <div>
                   <i className="fas fa-handshake"></i>{" "}
                 </div>
@@ -306,7 +275,7 @@ const LandingPage = () => {
               </div>
             </li>
             <li data-aos="fade-right">
-              <div className="step">
+              <div className="landing-page-step">
                 <div>
                   <i className="fas fa-comments"></i>{" "}
                 </div>
