@@ -1952,7 +1952,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Success storoes about your mentorship</h2>
+                <h2>Success stories about your mentorship</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -2105,7 +2105,7 @@ const UserDetails = () => {
                 </p>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -2159,7 +2159,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -2232,7 +2232,7 @@ const UserDetails = () => {
                   </select>
                 </div>
               </div>
-              <h2>POC details</h2>
+              <h2>Point Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -2508,7 +2508,7 @@ const UserDetails = () => {
                 </p>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -2562,7 +2562,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -2668,7 +2668,7 @@ const UserDetails = () => {
                   No
                 </p>
               </div>
-              <h2>POC details</h2>
+              <h2>Point Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -3315,7 +3315,7 @@ const UserDetails = () => {
                 />
               </div> */}
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -3369,7 +3369,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -3442,7 +3442,7 @@ const UserDetails = () => {
                   </select>
                 </div>
               </div>
-              <h2>POC details</h2>
+              <h2>oint Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -4096,7 +4096,7 @@ const UserDetails = () => {
                 />
               </div> */}
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -4150,7 +4150,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -4223,7 +4223,7 @@ const UserDetails = () => {
                   </select>
                 </div>
               </div>
-              <h2>POC details</h2>
+              <h2>oint Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -4393,7 +4393,7 @@ const UserDetails = () => {
                 />
               </div>
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -4499,7 +4499,7 @@ const UserDetails = () => {
                 </div>
               </div>
 
-              <h2>POC details</h2>
+              <h2>Point Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -4639,7 +4639,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -4693,7 +4693,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -4745,7 +4745,7 @@ const UserDetails = () => {
                 </div>
               </div>
 
-              <h2>POC details</h2>
+              <h2>oint Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -4895,7 +4895,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -4949,7 +4949,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -5001,7 +5001,7 @@ const UserDetails = () => {
                 </div>
               </div>
 
-              <h2>POC details</h2>
+              <h2>Point Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input
@@ -5141,7 +5141,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Domains:</h2>
+                <h2>Interested Domains:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -5195,7 +5195,7 @@ const UserDetails = () => {
                 </div>
               </div>
               <div className="domain-selection">
-                <h2>Intrested Skills:</h2>
+                <h2>Interested Skills:</h2>
                 <div className="dropdown-container">
                   <select
                     id="domainSelect"
@@ -5247,7 +5247,7 @@ const UserDetails = () => {
                 </div>
               </div>
 
-              <h2>POC details</h2>
+              <h2>Point Of Contact details</h2>
               <div>
                 <h2>Name</h2>
                 <input

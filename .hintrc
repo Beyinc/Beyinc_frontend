@@ -11,7 +11,8 @@
           "position: sticky",
           "height: fit-content",
           "user-select",
-          "backdrop-filter"
+          "backdrop-filter",
+          "width: fit-content"
         ]
       }
     ]
