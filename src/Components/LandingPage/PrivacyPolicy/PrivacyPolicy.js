@@ -70,26 +70,58 @@ const PrivacyPolicy = () => {
          
         </section>
 <Divider />
-        <section id="contact">
-          <h2>Contact</h2>
-          <div className="Privacy-Policy-Image-Container">
+<section id="contact">
+  <h2>Contact</h2>
+  <div className="Privacy-Policy-Image-Container">
             <img src="/Address.png"/>
         </div>
-          <p>
-            If you have any questions about BeyInc, please contact us at
-            <span style={{marginRight: '2px'}}> </span><a href="mailto:admin@beyinc.org">admin@beyinc.org</a>.
-            <br />
-            <b>Address:</b>
-            <br />
-            Jains Pebble Brook,<br/> Phase 1, Thoraipakkam,<br/> Chennai -600097, India
-            <br />
-            <b>Phone:</b> <br/><a href="tel:+917091973974">+91 7091973974</a>
-            [Sudhanshu S Kanha]
-            <br />
-            <b>Phone:</b> <br/><a href="tel:+918310868561">+91 8310868561</a>
-            [Abhishek Gupta]
-          </p>
-        </section>
+  <div class="cofounders-container">
+    <div class="cofounder-card">
+      <img src="/CEO.jpg" alt="Cofounder 1 Image" class="cofounder-image rounded-image"/>
+      <div class="cofounder-info">
+        <h3>Sudhanshu S Kanha</h3>
+        <p>Founder & CEO</p>
+        <p>MS ,Ocean Engg, IIT Madras ‘23</p>
+        <a href="mailto:sudhanshukanha123@gmail.com">sudhanshukanha123@gmail.com</a>
+        <br/>
+        <a href="tel:+917091973974">+91 7091973974</a>
+      </div>
+    </div>
+    <div class="cofounder-card">
+      <img src="/CXO.jpg" alt="Cofounder 2 Image" class="cofounder-image rounded-image"/>
+      <div class="cofounder-info">
+        <h3>Abhishek Gupta</h3>
+        <p>Co-founder & CXO</p>
+        <p>MS ,DoMS, IIT Madras ‘23</p>
+        <a href="mailto:abhishek.guptaag2@gmail.com ">abhishek.guptaag2@gmail.com </a>
+        <br/>
+        <a href="tel:+918310868561">+91 8310868561</a>
+      </div>
+    </div>
+
+    <div class="cofounder-card">
+      <img src="/CTO.jpg" alt="Cofounder 3 Image" class="cofounder-image rounded-image"/>
+      <div class="cofounder-info">
+        <h3>Shankar Mukesh Y</h3>
+        <p>Co-founder & CTO</p>
+        <p>JNTUA, Anantapur</p>
+        <a href="mailto:abhishek@beyinc.org">ysankarmukesh@gmail.com </a>
+        <br/>
+      </div>
+    </div>
+    </div>
+  <p>
+    If you have any questions about BeyInc, please contact us at
+    <span></span><a href="mailto:admin@beyinc.org">admin@beyinc.org</a>.
+    <br />
+    <b>Address:</b>
+    <br />
+    Jains Pebble Brook,<br/>
+    Phase 1, Thoraipakkam,<br/>
+    Chennai -600097, India
+  </p>
+</section>
+
 
         <Divider />
 

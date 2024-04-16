@@ -108,18 +108,45 @@ ol {
 .privacy-policy-section-container section a:hover {
   text-decoration: underline;
 }
+.cofounders-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 2rem 0; 
+}
 
+.cofounder-card {
+  margin: 1rem;
+  background-color: #fff;
+  border-radius: 10px; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  text-align: center;
+  width: calc(30% - 2rem); 
+  padding: 1rem;
+  cursor: pointer;
+}
+.cofounder-card:hover{
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+ 
+}
+
+.cofounder-image {
+  width: 100px; 
+  height: auto;
+  border-radius: 50%;
+}
+
+.cofounder-info {
+  font-size: 14px;
+}
 
 
 @media (max-width: 768px) {
-  .privacy-policy-main-container {
-   
-  }
   .privacy-policy-section-container {
     padding: 20px;
     max-width: 100%;
-
   }
+
   .navbar {
     display: none;
   }
@@ -127,5 +154,18 @@ ol {
   .privacy-policy-section-container section li {
     margin-bottom: 5px;
     margin-left: 5px;
+  }
+
+  .cofounders-container {
+    flex-direction: column;
+  }
+
+  .cofounder-card {
+    width: 90% !important; 
+    margin: 0.5rem 0; 
+  }
+
+  .cofounder-info {
+    font-size: 12px;
   }
 }
