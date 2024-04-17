@@ -321,3 +321,32 @@ input[type="checkbox"] {
   display: flex;
   gap: 10px;
 }
+
+
+@media (max-width : 768px) {
+  .stepper {
+    width: 100%;
+  }
+  .stepper-step {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 5px;
+    font-size: 10px;
+    color: gray;
+  }
+  .stepper-content {
+    margin-bottom: 20px;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 12px;
+  }
+  .userDetails-role-container .investor-types{
+    display: flex;
+    flex-direction: column;
+    width: 720px;
+  }
+  .userDetails-checkbox-container .checkbox-container{
+display: flex;
+flex-direction: column;
+  }
+}
