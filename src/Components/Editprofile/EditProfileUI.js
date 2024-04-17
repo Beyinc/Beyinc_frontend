@@ -159,6 +159,7 @@ const EditProfileUI = () => {
   const [collegeQuery, setCollegeQuery] = useState("");
   const [editingExperienceId, seteditingExperienceId] = useState("");
   const [editingEducationId, seteditingEducationId] = useState("");
+  const followerNotification = useSelector(state => state.conv.followerNotification);
 
   const [places, setPlaces] = useState({
     country: [],
@@ -366,6 +367,10 @@ const EditProfileUI = () => {
     degree: "",
   });
 
+  const [followers, setFollowers] = useState([])
+  const [followering, setFollowering] = useState([])
+
+
   const handleChange = (e) => {
     setExperience((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -568,6 +573,9 @@ const EditProfileUI = () => {
       if (id == undefined) {
         ApiServices.getProfile({ id: user_id })
           .then((res) => {
+            setFollowering(res.data.following)
+            setFollowers(res.data.followers)
+
             setEditOwnProfile(true);
             setInputs((prev) => ({
               ...prev,
@@ -576,7 +584,7 @@ const EditProfileUI = () => {
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              mobileVerified: true,
+              mobileVerified: res.data.phone.length>0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
               salutation: res.data.salutation,
@@ -649,7 +657,7 @@ const EditProfileUI = () => {
               image: res.data.image?.url || "",
               email: res.data.email,
               status: res.data.verification,
-              mobileVerified: true,
+              mobileVerified: res.data.phone.length > 0 ? true : false,
               salutation: res.data.salutation,
               mentorCategories: res.data.mentorCategories,
             }));
@@ -697,6 +705,8 @@ const EditProfileUI = () => {
               });
               setAverageReview(avgR / res.data.review.length);
             }
+            setFollowering(res.data.following)
+            setFollowers(res.data.followers)
             setEditOwnProfile(true);
             setInputs((prev) => ({
               ...prev,
@@ -706,7 +716,7 @@ const EditProfileUI = () => {
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              mobileVerified: true,
+              mobileVerified: res.data.phone.length > 0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
               salutation: res.data.salutation,
@@ -769,7 +779,9 @@ const EditProfileUI = () => {
           });
       }
     }
-  }, [email, id, userpage, emailTrigger]);
+  }, [email, id, userpage, emailTrigger, followerNotification]);
+
+
 
   // Admi approval function
   const adminupdate = async (e, status) => {
@@ -1208,10 +1220,56 @@ const EditProfileUI = () => {
       });
   };
 
+
+
+  const followerController = async (e) => {
+    e.target.disabled = true
+    await ApiServices.saveFollowers({ followerReqBy: user_id, followerReqTo: id }).then(res => {
+      setFollowering(res.data.following)
+      setFollowers(res.data.followers)
+      if (res.data.followers.map(f => f._id).includes(user_id)) {
+        socket.current.emit("sendNotification", {
+          senderId: user_id,
+          receiverId: id,
+        });
+        socket.current.emit("sendFollowerNotification", {
+          senderId: user_id,
+          receiverId: id,
+          type: 'adding',
+          image: image,
+          role: role,
+          _id: id,
+          userName: userName
+        });
+
+      } else {
+        socket.current.emit("sendFollowerNotification", {
+          senderId: user_id,
+          receiverId: id,
+          type: 'removing', _id: id
+        });
+      }
+     
+      
+    }).catch((err) => {
+      dispatch(
+        setToast({
+          message: "Error in update status",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    });
+    e.target.disabled = false
+  }
+
   return (
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
         <div className="Personal-Information">
+          {mobileVerified == false && <div className='mobilenote'>
+            Note: Mobile number should be verified to send or update the profile
+          </div>}
           <div className="Banner">
             <Slider {...settings}>
               <div>
@@ -1240,6 +1298,15 @@ const EditProfileUI = () => {
                   }}
                 ></i>
               )}
+            </div>
+            <div style={{marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '10px'}}>
+              <>
+                {userpage == true && <button onClick={followerController}>
+                  {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
+                </button>}
+                <div>{followers.length} Followers</div>
+                <div>{followering.length} Following</div>
+                </>
             </div>
             <div
               className="personal-rating-container"
@@ -1313,7 +1380,7 @@ const EditProfileUI = () => {
                 </div>
               </div>
 
-              {userpage == true && (
+              {(userpage == true || window.location.pathname=='/editProfile') && (
                 <div className="review-container">
                   <div className="reviewContainer">
                     <div

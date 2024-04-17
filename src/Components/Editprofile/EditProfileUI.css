@@ -419,6 +419,17 @@ select {
   margin-right: 50px;
   width: 50px !important;
 }
+.mobilenote{
+  background: rgb(185, 65, 65);
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  width: 100%;
+  position: sticky;
+  top: 60px;
+  z-index: 1000;
+}
+
 @media (max-width: 768px) {
   .EditProfile-personal-Container,
   .Banner,

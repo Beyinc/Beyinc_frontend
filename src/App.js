@@ -18,6 +18,7 @@ import { ApiServices } from "./Services/ApiServices";
 import UserRequests from "./Components/Admin/UserRequests/UserRequests";
 import { Socket, io } from "socket.io-client";
 import {
+  setFollowerNotification,
   setLastMessageRead,
   setLiveMessage,
   setMessageCount,
@@ -203,6 +204,12 @@ const App = () => {
       dispatch(setNotification(true));
       // setMessages(prev => [...prev, data])
     });
+
+    socket.current.on("getFollowerNotification", (data) => {
+      // console.log(data);
+      dispatch(setFollowerNotification(data))
+      // setMessages(prev => [...prev, data])
+    });
   }, []);
 
   useEffect(() => {
@@ -277,7 +284,7 @@ const App = () => {
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/posts" element={AuthHoc(Posts)} />
+          <Route path="/posts" Component={AuthHoc(Posts)} />
 
           <Route path="*" element={<NoMatch />} />
 

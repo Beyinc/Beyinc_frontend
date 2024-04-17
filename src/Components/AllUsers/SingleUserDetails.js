@@ -21,7 +21,7 @@ const SingleUserDetails = ({
   setreceiverRole,
 }) => {
   // console.log(d);
-  const { email } = useSelector((state) => state.auth.loginDetails);
+  const { email, user_id } = useSelector((state) => state.auth.loginDetails);
   const dispatch = useDispatch();
 
   const [averagereview, setAverageReview] = useState(0);
@@ -38,7 +38,13 @@ const SingleUserDetails = ({
     }
   }, [d]);
 
-  const openUser = () => navigate(`/user/${d._id}`);
+  const openUser = () => {
+    if (user_id == d._id) {
+      navigate(`/editProfile`)
+    } else {
+      navigate(`/user/${d._id}`)
+    }
+  };
 
   const isCurrentUser = email === d.email;
   const openChat = async (e) => {
