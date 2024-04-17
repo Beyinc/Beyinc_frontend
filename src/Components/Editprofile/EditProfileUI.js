@@ -576,7 +576,7 @@ const EditProfileUI = () => {
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              mobileVerified: true,
+              mobileVerified: res.data.phone.length>0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
               salutation: res.data.salutation,
@@ -649,7 +649,7 @@ const EditProfileUI = () => {
               image: res.data.image?.url || "",
               email: res.data.email,
               status: res.data.verification,
-              mobileVerified: true,
+              mobileVerified: res.data.phone.length > 0 ? true : false,
               salutation: res.data.salutation,
               mentorCategories: res.data.mentorCategories,
             }));
@@ -706,7 +706,7 @@ const EditProfileUI = () => {
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              mobileVerified: true,
+              mobileVerified: res.data.phone.length > 0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
               salutation: res.data.salutation,
@@ -1212,6 +1212,9 @@ const EditProfileUI = () => {
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
         <div className="Personal-Information">
+          {mobileVerified == false && <div className='mobilenote'>
+            Note: Mobile number should be verified to send or update the profile
+          </div>}
           <div className="Banner">
             <Slider {...settings}>
               <div>
@@ -1313,7 +1316,7 @@ const EditProfileUI = () => {
                 </div>
               </div>
 
-              {userpage == true && (
+              {(userpage == true || window.location.pathname=='/editProfile') && (
                 <div className="review-container">
                   <div className="reviewContainer">
                     <div
