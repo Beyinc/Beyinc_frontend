@@ -8,6 +8,7 @@ import { ToastColors } from "../Toast/ToastColors";
 import axiosInstance from "../axiosInstance";
 import { ApiServices } from "../../Services/ApiServices";
 import { useNavigate } from "react-router-dom/dist";
+import GoogleAuth from "../GoogleAuth/GoogleAuth";
 
 const SignUp = () => {
   const [inputs, setInputs] = useState({
@@ -194,7 +195,7 @@ const SignUp = () => {
       email: email,
       password: password,
       userName: name,
-      phone: mobile,
+      // phone: mobile,
       // role: role,
     })
       .then(async (res) => {
@@ -259,9 +260,9 @@ const SignUp = () => {
 
   const isFormValid =
     isEmailValid &&
-    isMobileValid &&
+    // isMobileValid &&
     emailVerified &&
-    mobileVerified &&
+    // mobileVerified &&
     isNameValid &&
     isPasswordValid;
 
@@ -455,7 +456,7 @@ const SignUp = () => {
                       )}
                     </>
                   )}
-                  <input
+                  {/* <input
                     type="number"
                     className={
                       mobile !== null &&
@@ -563,7 +564,7 @@ const SignUp = () => {
                         </button>
                       )}
                     </>
-                  )}
+                  )} */}
                   <input
                     type="password"
                     className={
@@ -676,9 +677,11 @@ const SignUp = () => {
                   <hr />
                 </div>
               </div>
+              <GoogleAuth />
               <p className="signup-option-text">
                 Already have an account? <a href="/login">Log in</a>
               </p>
+
             </div>
           </div>
         </div>

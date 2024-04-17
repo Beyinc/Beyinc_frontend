@@ -271,7 +271,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/signup" Component={LoginAuth(SignUp)} />
-          <Route path="/userDetails" Component={LoginAuth(UserDetails)} />
+          <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
           <Route path="/login" Component={LoginAuth(Login)} />
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />

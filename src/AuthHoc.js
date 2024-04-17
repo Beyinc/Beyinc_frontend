@@ -38,7 +38,7 @@ export const AdminDeciderHoc = (Component) => {
 const AuthHoc = (Component) => {
   return function WithHooks(props) {
     const [loading, setLoading] = useState(true);
-    const [firstTime, setFirstTime] = useState(false);
+    const [firstTime, setFirstTime] = useState(null);
 
     setTimeout(() => {
       setLoading(false);
@@ -60,11 +60,11 @@ const AuthHoc = (Component) => {
 
     return localStorage.getItem("user") &&
       JSON.parse(localStorage.getItem("user")).accessToken ? (
-      firstTime ? (
-        <UserDetails />
-      ) : (
-        <Component />
-      )
+        firstTime !== null && (firstTime ? (
+          <UserDetails />
+        ) : (
+          <Component />
+        )) 
     ) : loading ? (
       <></>
     ) : (

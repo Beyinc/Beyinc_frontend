@@ -132,7 +132,7 @@ const Navbar = () => {
   const liveMessage = useSelector((state) => state.conv.liveMessage);
 
   useEffect(() => {
-    if (liveMessage) {
+    if (liveMessage && user_id!==undefined) {
       ApiServices.getTotalMessagesCount({
         receiverId: user_id,
         checkingUser: user_id,
@@ -491,7 +491,7 @@ const Navbar = () => {
     }
   };
 
-  const [firstTime, setFirstTime] = useState(false);
+  const [firstTime, setFirstTime] = useState(null);
 
   const checkFirsttime = async () => {
     if (
@@ -528,7 +528,7 @@ const Navbar = () => {
       </div>
 
       <div className="menuIcons">
-        {width > 770 && !firstTime && (
+        {width > 770 && firstTime!==null && !firstTime && (
           <>
             <div title="dashboard">
               <DashboardOutlinedIcon
@@ -710,7 +710,7 @@ const Navbar = () => {
             </Drawer>
           </>
         )}
-        <div className="userDetails" ref={userDetailsRef}>
+        <div className={`userDetails ${firstTime && 'userDetailsAlt'}`} ref={userDetailsRef}>
           <span className="line-loader"></span>
           <div
             className="closeIcon"
@@ -724,7 +724,7 @@ const Navbar = () => {
           </div>
           <div>
             <div className="email">{email}</div>
-            <div className="popupImg">
+            {firstTime == false && <div className="popupImg">
               <img
                 style={{
                   borderRadius: "50%",
@@ -741,36 +741,46 @@ const Navbar = () => {
                 className="fas fa-pencil-alt edit-icon"
                 onClick={handleClickOpen}
               ></i>
-            </div>
+            </div>}
           </div>
 
-          <div className="username">Hi, {userName}!</div>
-          <div
+          {firstTime!==null && (firstTime == false ? <><div className="username">Hi, {userName}!</div><div
             className="manage"
             title="view profile"
             onClick={() => navigate(`/user/${user_id}`)}
           >
             {role}
-          </div>
-
-          <div className="editPopupActions">
-            <div
-              className="Account"
-              onClick={() => {
-                document
-                  .getElementsByClassName("userDetails")[0]
-                  .classList.remove("showUserDetails");
-                navigate(`/editProfile`);
-              }}
-            >
-              <i
-                className="fas fa-user-edit"
-                style={{ marginRight: "5px" }}
-              ></i>{" "}
-              Edit Profile
-            </div>
-            <div
-              className="logout"
+          </div><div className="editPopupActions">
+              <div
+                className="Account"
+                onClick={() => {
+                  document
+                    .getElementsByClassName("userDetails")[0]
+                    .classList.remove("showUserDetails");
+                  navigate(`/editProfile`);
+                } }
+              >
+                <i
+                  className="fas fa-user-edit"
+                  style={{ marginRight: "5px" }}
+                ></i>{" "}
+                Edit Profile
+              </div>
+              <div
+                className="logout"
+                onClick={() => {
+                  setLogoutOpen(true);
+                } }
+              >
+                <i
+                  className="fas fa-sign-out-alt"
+                  style={{ marginRight: "5px" }}
+                ></i>{" "}
+                Logout
+              </div>
+            </div></>
+            : <div
+              className="logoutAlt"
               onClick={() => {
                 setLogoutOpen(true);
               }}
@@ -780,8 +790,8 @@ const Navbar = () => {
                 style={{ marginRight: "5px" }}
               ></i>{" "}
               Logout
-            </div>
-          </div>
+            </div>)}
+          
         </div>
 
         <Dialog

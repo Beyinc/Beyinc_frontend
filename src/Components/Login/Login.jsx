@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import axiosInstance from "../axiosInstance";
+import GoogleAuth from "../GoogleAuth/GoogleAuth";
 
 const Login = () => {
   const [inputs, setInputs] = useState({
@@ -415,6 +416,7 @@ const Login = () => {
                   <hr />
                 </div>
               </div>
+              <GoogleAuth />
               <p className="login-option-text">
                 New here? <a href="/signup">Sign up</a>
               </p>

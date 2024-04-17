@@ -539,15 +539,25 @@ const UserDetails = () => {
       await ApiServices.editUserFirstTime({
         ...formData,
         step3Data,
+      }).then(res => {
+        dispatch(
+          setToast({
+            message: "Profile updated successfully",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+      }).catch(err => {
+        dispatch(
+          setToast({
+            message: "Error occured",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
       });
   
-      dispatch(
-        setToast({
-          message: "Profile updated successfully",
-          bgColor: ToastColors.success,
-          visible: "yes",
-        })
-      );
+     
       
       navigate("/dashboard");
     } catch (error) {
