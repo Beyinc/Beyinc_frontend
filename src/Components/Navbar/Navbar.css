@@ -383,6 +383,22 @@ img {
   /* margin-left: 194px; */
   font-weight: 400;
 }
+
+.userDetailsAlt{
+  height: 140px !important;
+}
+
+.logoutAlt {
+  color: #fff;
+  background-color: var(--button);
+  padding: 10px;
+
+  border-radius: 5px !important;
+  margin-top: 30px;
+  text-align: center;
+  /* margin-left: 194px; */
+  font-weight: 400;
+}
 .logout:hover {
   background-color: var(--button-hover);
   cursor: pointer;

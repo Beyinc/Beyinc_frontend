@@ -37,7 +37,11 @@ import { ToastColors } from "./Components/Toast/ToastColors";
 const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
 );
+const PrivacyPolicy = React.lazy(() =>
+  import("./Components/LandingPage/PrivacyPolicy/PrivacyPolicy")
+);
 const SignUp = React.lazy(() => import("./Components/Signup/SignUp"));
+const UserDetails = React.lazy(() => import("./Components/Signup/UserDetails"));
 const Login = React.lazy(() => import("./Components/Login/Login"));
 const ForgotPassword = React.lazy(() =>
   import("./Components/ForgotPassword/ForgotPassword")
@@ -267,9 +271,11 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/signup" Component={LoginAuth(SignUp)} />
+          <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
           <Route path="/login" Component={LoginAuth(Login)} />
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
+          <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
@@ -290,8 +296,8 @@ const App = () => {
             Component={AuthHoc(IndividualPitch)}
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
-          <Route path="/user/:id" Component={AuthHoc(IndividualUser)} />
-
+          <Route path="/user/:id" Component={AuthHoc(EditProfileUI)} />
+        
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
             path="/profileRequests"

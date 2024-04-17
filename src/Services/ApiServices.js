@@ -13,6 +13,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  SSORegister: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/auth/ssoRegister`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   updateuserProfileImage: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -109,6 +121,42 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  updateStatusDirectly: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/updateStatusDirect`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  updateStatusByAdmin: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/updateVerificationByAdmin`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  sendDirectUpdate: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/directeditprofile`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   getProfile: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -196,7 +244,6 @@ export const ApiServices = {
     });
   },
 
-
   getDashboardDetails: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -210,6 +257,30 @@ export const ApiServices = {
     });
   },
 
+  isFirstTimeLogin: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/userDetails/isProfileComplete`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  editUserFirstTime: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`userDetails/updateProfile`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   changeNotification: (obj) => {
     return new Promise((resolve, reject) => {
@@ -275,7 +346,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   changeStatusMessage: (obj) => {
     return new Promise((resolve, reject) => {
@@ -705,7 +775,6 @@ export const ApiServices = {
     });
   },
 
-
   getuserComments: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -720,8 +789,6 @@ export const ApiServices = {
     });
   },
 
-
-  
   dislikeComment: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -735,8 +802,6 @@ export const ApiServices = {
     });
   },
 
-
-
   getPitchComments: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -749,5 +814,4 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 };

@@ -10,7 +10,7 @@
 
 /* SECTION-1 */
 .EditProfile-personal-Container {
-  width: 1100px;
+  width: 1400px;
   height: auto;
   border-radius: 10px;
   background: white;
@@ -22,8 +22,8 @@
   flex-direction: column;
 }
 .Banner {
-  width: 1100px;
-  height: 40vh;
+  width: 1400px;
+  height: 52vh;
   border-radius: 10px 10px 0px 0px;
   overflow: hidden;
   position: relative;
@@ -92,9 +92,19 @@
   background-color: rgba(0, 0, 0, 0.29);
   color: #fff;
 }
-
+.EditProfile-Headings{
+  background: linear-gradient(35deg, #656fff 0%, #ff6824 40%);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 18px;
+}
 .Personal-Details {
   padding: 20px;
+  
+}
+.review-container {
+  margin-left: 50px;
+  margin-top: 20px;
 }
 .language-display {
   display: flex;
@@ -233,7 +243,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 1100px;
+  width: 1400px;
   height: auto;
   border-radius: 10px;
   background: white;
@@ -269,11 +279,14 @@
 /* SECTION-3 */
 .EditProfile-Experience-Container,
 .EditProfile-Education-Container,
-.EditProfile-UploadFiles-Container {
-  width: 1100px;
+.EditProfile-UploadFiles-Container,.EditProfile-comments-Container {
+  width: 1400px;
   height: auto;
   border-radius: 10px;
-  background: white;
+  background: white
+}
+.EditProfile-UploadFiles-Container{
+  margin-bottom: 10px;
 }
 .company,
 .college {
@@ -367,14 +380,52 @@ select {
     justify-content: space-between;
     align-items: center;
   }
+  .reviewContainer {
+    font-size: 12px;
+  }
+  .reviewContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .reviewContainer {
+    margin-top: 10px;
+    margin-right: 100px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  }
+  .Rating-heading{
+    background: linear-gradient(90deg, #e800fe 3.31%, #191fff 76.1%);
+    -webkit-background-clip: text;
+    color: transparent; 
+    font-size: 18px;
+}
+.sendIcon {
+  cursor: pointer;
+  font-size: 13px;
+  width: auto;
+  height: auto;
+  padding: 10px;
+}
+.writing-review .sendIcon {
+  width: 262px !important;
+  margin-right: 0px !important;
+  transform: translateY(-20px) !important;
+}
+.sendIcon {
+  margin-top: 0px;
+  margin-right: 50px;
+  width: 50px !important;
+}
 @media (max-width: 768px) {
   .EditProfile-personal-Container,
   .Banner,
   .EditProfile-About-Section,
   .EditProfile-Experience-Container,
   .EditProfile-Education-Container,
-  .EditProfile-UploadFiles-Container {
-    width: 330px;
+.EditProfile-UploadFiles-Container,.EditProfile-comments-Container{
+    width: 360px;
   }
 
   .Profile-Image img {
@@ -388,6 +439,14 @@ select {
   }
   .Personal-Details div:not(:first-child) {
     font-size: 12px !important;
+  }
+  .review-container {
+    margin-left: 100px;
+    margin-bottom: 10px;
+  }
+  .personal-rating-container{
+    flex-direction: column;
+    
   }
 
   .Banner {

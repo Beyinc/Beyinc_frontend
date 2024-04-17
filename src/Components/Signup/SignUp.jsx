@@ -8,6 +8,7 @@ import { ToastColors } from "../Toast/ToastColors";
 import axiosInstance from "../axiosInstance";
 import { ApiServices } from "../../Services/ApiServices";
 import { useNavigate } from "react-router-dom/dist";
+import GoogleAuth from "../GoogleAuth/GoogleAuth";
 
 const SignUp = () => {
   const [inputs, setInputs] = useState({
@@ -16,7 +17,7 @@ const SignUp = () => {
     mobile: null,
     mobileOtp: null,
     name: null,
-    role: null,
+    // role: null,
     password: null,
     isMobileOtpSent: null,
     isEmailOtpSent: null,
@@ -32,7 +33,7 @@ const SignUp = () => {
   const [verifyEmailOtpLoading, setVerifyEmailOtpLoading] = useState(false);
   const [sendMobileOtpLoading, setSendMobileOtpLoading] = useState(false);
   const [verifyMobileOtpLoading, setVerifyMobileOtpLoading] = useState(false);
-  const [roles, setRoles] = useState([]);
+  // const [roles, setRoles] = useState([]);
 
   const {
     email,
@@ -40,7 +41,7 @@ const SignUp = () => {
     mobile,
     mobileOtp,
     name,
-    role,
+    // role,
     password,
     isEmailOtpSent,
     isMobileOtpSent,
@@ -117,7 +118,6 @@ const SignUp = () => {
         );
         e.target.disabled = true;
       });
-
   };
 
   const verifyOtp = async (e) => {
@@ -151,12 +151,11 @@ const SignUp = () => {
           })
         );
       });
-
   };
 
   const verifyMobileOtp = async (e) => {
     e.preventDefault();
-    setVerifyMobileOtpLoading(true)
+    setVerifyMobileOtpLoading(true);
     await ApiServices.verifyOtp({
       email: `+91${mobile}`,
       otp: mobileOtp,
@@ -172,11 +171,11 @@ const SignUp = () => {
         document.getElementById("mobileVerify").style.display = "none";
         document.getElementById("mobileOTPinput").disabled = true;
         // setmobileVerified(true);
-        setVerifyMobileOtpLoading(false)
+        setVerifyMobileOtpLoading(false);
         setInputs((prev) => ({ ...prev, mobileVerified: true }));
       })
       .catch((err) => {
-        setVerifyMobileOtpLoading(false)
+        setVerifyMobileOtpLoading(false);
         console.log(err);
         dispatch(
           setToast({
@@ -186,7 +185,6 @@ const SignUp = () => {
           })
         );
       });
-
   };
 
   const signup = async (e) => {
@@ -197,10 +195,10 @@ const SignUp = () => {
       email: email,
       password: password,
       userName: name,
-      phone: mobile,
-      role: role,
+      // phone: mobile,
+      // role: role,
     })
-      .then((res) => {
+      .then(async (res) => {
         dispatch(
           setToast({
             message: "User Registered Successfully !",
@@ -208,7 +206,9 @@ const SignUp = () => {
             visible: "yes",
           })
         );
-        navigate("/login");
+        localStorage.setItem("user", JSON.stringify(res.data));
+        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
+        navigate("/userDetails");
         setLoading(false);
       })
       .catch((err) => {
@@ -222,7 +222,6 @@ const SignUp = () => {
           })
         );
       });
-
   };
 
   const sendMobileOtpF = async (e) => {
@@ -257,14 +256,13 @@ const SignUp = () => {
         );
         e.target.disabled = true;
       });
-
   };
 
   const isFormValid =
     isEmailValid &&
-    isMobileValid &&
+    // isMobileValid &&
     emailVerified &&
-    mobileVerified &&
+    // mobileVerified &&
     isNameValid &&
     isPasswordValid;
 
@@ -273,20 +271,22 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    ApiServices.getAllRoles().then((res) => {
-      setRoles(res.data);
-    }).catch((err) => {
-      console.log(err);
-      if (err.message == "Network Error") {
-        dispatch(
-          setToast({
-            message: "Check your network connection",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      }
-    });
+    ApiServices.getAllRoles()
+      .then((res) => {
+        // setRoles(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.message == "Network Error") {
+          dispatch(
+            setToast({
+              message: "Check your network connection",
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+        }
+      });
   }, []);
 
   return (
@@ -327,7 +327,7 @@ const SignUp = () => {
                     onChange={handleChanges}
                     placeholder="Full Name*"
                   />
-                  <div className="role-container">
+                  {/* <div className="role-container">
                     {roles?.map((r) => (
                       <div
                         style={{
@@ -346,7 +346,7 @@ const SignUp = () => {
                         <label for={r.role}>{r.role}</label>
                       </div>
                     ))}
-                  </div>
+                  </div> */}
                   <input
                     type="email"
                     className={
@@ -456,7 +456,7 @@ const SignUp = () => {
                       )}
                     </>
                   )}
-                  <input
+                  {/* <input
                     type="number"
                     className={
                       mobile !== null &&
@@ -564,7 +564,7 @@ const SignUp = () => {
                         </button>
                       )}
                     </>
-                  )}
+                  )} */}
                   <input
                     type="password"
                     className={
@@ -578,14 +578,48 @@ const SignUp = () => {
                   />
                   <div className="passwordHint">
                     <ul>
-                      <li className={password?.length>=8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
-                      <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                      <li className={/.*[a-z].*/.test(password) && password ? 'success' : 'failure'}>Atleast one small letter</li>
-                      <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
-                      <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
+                      <li
+                        className={
+                          password?.length >= 8 ? "success" : "failure"
+                        }
+                      >
+                        Password should be atleast 8 character length
+                      </li>
+                      <li
+                        className={
+                          /.*[A-Z].*/.test(password) ? "success" : "failure"
+                        }
+                      >
+                        Atleast one capital letter
+                      </li>
+                      <li
+                        className={
+                          /.*[a-z].*/.test(password) && password
+                            ? "success"
+                            : "failure"
+                        }
+                      >
+                        Atleast one small letter
+                      </li>
+                      <li
+                        className={
+                          /.*[!@#$%^&*()_+].*/.test(password)
+                            ? "success"
+                            : "failure"
+                        }
+                      >
+                        Atleast one special character (!@#$%^&*()_+)
+                      </li>
+                      <li
+                        className={
+                          /.*[0-9].*/.test(password) ? "success" : "failure"
+                        }
+                      >
+                        Atleast one Number
+                      </li>
                     </ul>
                   </div>
-                    
+
                   <button
                     type="submit"
                     className="full-width-button"
@@ -643,9 +677,11 @@ const SignUp = () => {
                   <hr />
                 </div>
               </div>
+              <GoogleAuth />
               <p className="signup-option-text">
                 Already have an account? <a href="/login">Log in</a>
               </p>
+
             </div>
           </div>
         </div>
