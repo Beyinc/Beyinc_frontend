@@ -1486,7 +1486,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   </div>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <div>
                   <label>Do you want pich hide/show after pitch go live?</label>
                 </div>
@@ -1501,7 +1501,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                     <option value="show">Show</option>
                   </select>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
 
