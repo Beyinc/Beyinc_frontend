@@ -17,7 +17,7 @@ const GoogleAuth = () => {
         await ApiServices.SSORegister({ email: jwtDecode(response.credential).email, userName: jwtDecode(response.credential).email.split('@')[0], role: '' }).then(async(res) => {
             localStorage.setItem("user", JSON.stringify(res.data));
             await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-            window.location.href = "/dashboard";
+            window.location.href = "/posts";
         }).catch(err=>console.log(err))
     }
 

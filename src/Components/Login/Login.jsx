@@ -184,7 +184,7 @@ const Login = () => {
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        window.location.href = "/dashboard";
+        window.location.href = "/posts";
       })
       .catch((err) => {
         setLoading(false);
@@ -222,7 +222,7 @@ const Login = () => {
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        window.location.href = "/dashboard";
+        window.location.href = "/posts";
       })
       .catch((err) => {
         e.target.disabled = false;
