@@ -54,7 +54,12 @@ const PrivacyPolicy = () => {
 
       <div className="privacy-policy-section-container">
         <section id="about">
-
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>About</h2>
           <div className="Privacy-Policy-Image-Container">
             <img src="/About.png"/>
@@ -70,7 +75,13 @@ const PrivacyPolicy = () => {
          
         </section>
 <Divider />
-<section id="contact">
+        <section id="contact">
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
   <h2>Contact</h2>
   <div className="Privacy-Policy-Image-Container">
             <img src="/Address.png"/>
@@ -126,6 +137,12 @@ const PrivacyPolicy = () => {
         <Divider />
 
         <section id="Privacy-Policy">
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>Privacy Policy</h2>
           <p>
             Beyinc is committed to protecting the privacy of our users. This
@@ -191,6 +208,12 @@ const PrivacyPolicy = () => {
         <Divider />
 
         <section id="Terms-&-Conditions">
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>Terms & Conditions</h2>
           <div className="Privacy-Policy-Image-Container">
             <img src="/Terms.png"/>
@@ -265,6 +288,12 @@ const PrivacyPolicy = () => {
         <Divider />
 
         <section id="product-pricing">
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>Product Pricing</h2>
           <div className="Privacy-Policy-Image-Container">
             <img src="/Pricing.png"/>
@@ -360,6 +389,12 @@ const PrivacyPolicy = () => {
         <Divider />
 
         <section id="refund-policy">
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>Refund Policy</h2>
           <div className="Privacy-Policy-Image-Container">
             <img src="/Refund.png"/>
@@ -423,6 +458,12 @@ const PrivacyPolicy = () => {
         <Divider />
 
         <section id="cancellation-policy">
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>Cancellation Policy</h2>
           <div className="Privacy-Policy-Image-Container">
             <img src="/Cancel.png"/>
@@ -490,6 +531,12 @@ const PrivacyPolicy = () => {
         <Divider />
         
         <section id="shipping-and-delivery">
+          <div style={{opacity: '0'}}>
+            dummy content
+          </div>
+          <div style={{ opacity: '0' }}>
+            dummy content
+          </div>
           <h2>Shipping and Delivery</h2>
           <div className="Privacy-Policy-Image-Container">
             <img src="/Shipping.png"/>

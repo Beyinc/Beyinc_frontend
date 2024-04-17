@@ -512,8 +512,10 @@ const UserDetails = () => {
   const dispatch = useDispatch();
   const handleSubmit = async (e, isDraft) => {
     e.preventDefault(); // Prevent default form submission behavior
-  
-    setIsLoading(true);
+    
+    if (isDraft !== true) {
+      setIsLoading(true);
+    }
   
     const formData = {
       role,
@@ -687,8 +689,8 @@ const UserDetails = () => {
     } = res.data;
     setStep3Data(res.data.role_details ? res.data.role_details : {});
     setRole(role);
-    setExperience(experienceDetails);
-    setEducationDetails(educationDetails);
+    setTotalExperienceData(experienceDetails);
+    setTotalEducationData(educationDetails);
     setSelectedDropdownPrimary(selectedDropdownPrimary);
     setSelectedTypes(selectedTypes ? selectedTypes : []);
     setSelectedDropdownSecondary(selectedDropdownSecondary);
