@@ -366,6 +366,10 @@ const EditProfileUI = () => {
     degree: "",
   });
 
+  const [followers, setFollowers] = useState([])
+  const [followering, setFollowering] = useState([])
+
+
   const handleChange = (e) => {
     setExperience((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -568,6 +572,9 @@ const EditProfileUI = () => {
       if (id == undefined) {
         ApiServices.getProfile({ id: user_id })
           .then((res) => {
+            setFollowering(res.data.following)
+            setFollowers(res.data.followers)
+
             setEditOwnProfile(true);
             setInputs((prev) => ({
               ...prev,
@@ -697,6 +704,8 @@ const EditProfileUI = () => {
               });
               setAverageReview(avgR / res.data.review.length);
             }
+            setFollowering(res.data.following)
+            setFollowers(res.data.followers)
             setEditOwnProfile(true);
             setInputs((prev) => ({
               ...prev,
@@ -1208,6 +1217,23 @@ const EditProfileUI = () => {
       });
   };
 
+
+
+  const followerController = async () => {
+    await ApiServices.saveFollowers({ followerReqBy: user_id, followerReqTo: id }).then(res => {
+      setFollowering(res.data.following)
+      setFollowers(res.data.followers)
+    }).catch((err) => {
+      dispatch(
+        setToast({
+          message: "Error in update status",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    });
+  }
+
   return (
     <main className="EditProfile-Container">
       <section className="EditProfile-personal-Container">
@@ -1243,6 +1269,15 @@ const EditProfileUI = () => {
                   }}
                 ></i>
               )}
+            </div>
+            <div style={{marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '10px'}}>
+              <>
+                {userpage == true && <button onClick={followerController}>
+                  {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
+                </button>}
+                <div>{followers.length} Followers</div>
+                <div>{followering.length} Following</div>
+                </>
             </div>
             <div
               className="personal-rating-container"

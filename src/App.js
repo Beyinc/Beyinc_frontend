@@ -277,7 +277,7 @@ const App = () => {
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/posts" element={AuthHoc(Posts)} />
+          <Route path="/posts" Component={AuthHoc(Posts)} />
 
           <Route path="*" element={<NoMatch />} />
 
