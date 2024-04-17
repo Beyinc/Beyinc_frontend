@@ -18,6 +18,7 @@ import { ApiServices } from "./Services/ApiServices";
 import UserRequests from "./Components/Admin/UserRequests/UserRequests";
 import { Socket, io } from "socket.io-client";
 import {
+  setFollowerNotification,
   setLastMessageRead,
   setLiveMessage,
   setMessageCount,
@@ -201,6 +202,12 @@ const App = () => {
     socket.current.on("getNotification", (data) => {
       // console.log(data);
       dispatch(setNotification(true));
+      // setMessages(prev => [...prev, data])
+    });
+
+    socket.current.on("getFollowerNotification", (data) => {
+      // console.log(data);
+      dispatch(setFollowerNotification(data))
       // setMessages(prev => [...prev, data])
     });
   }, []);

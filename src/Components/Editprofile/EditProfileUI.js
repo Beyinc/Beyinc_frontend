@@ -159,6 +159,7 @@ const EditProfileUI = () => {
   const [collegeQuery, setCollegeQuery] = useState("");
   const [editingExperienceId, seteditingExperienceId] = useState("");
   const [editingEducationId, seteditingEducationId] = useState("");
+  const followerNotification = useSelector(state => state.conv.followerNotification);
 
   const [places, setPlaces] = useState({
     country: [],
@@ -778,7 +779,9 @@ const EditProfileUI = () => {
           });
       }
     }
-  }, [email, id, userpage, emailTrigger]);
+  }, [email, id, userpage, emailTrigger, followerNotification]);
+
+
 
   // Admi approval function
   const adminupdate = async (e, status) => {
@@ -1219,10 +1222,35 @@ const EditProfileUI = () => {
 
 
 
-  const followerController = async () => {
+  const followerController = async (e) => {
+    e.target.disabled = true
     await ApiServices.saveFollowers({ followerReqBy: user_id, followerReqTo: id }).then(res => {
       setFollowering(res.data.following)
       setFollowers(res.data.followers)
+      if (res.data.followers.map(f => f._id).includes(user_id)) {
+        socket.current.emit("sendNotification", {
+          senderId: user_id,
+          receiverId: id,
+        });
+        socket.current.emit("sendFollowerNotification", {
+          senderId: user_id,
+          receiverId: id,
+          type: 'adding',
+          image: image,
+          role: role,
+          _id: id,
+          userName: userName
+        });
+
+      } else {
+        socket.current.emit("sendFollowerNotification", {
+          senderId: user_id,
+          receiverId: id,
+          type: 'removing', _id: id
+        });
+      }
+     
+      
     }).catch((err) => {
       dispatch(
         setToast({
@@ -1232,6 +1260,7 @@ const EditProfileUI = () => {
         })
       );
     });
+    e.target.disabled = false
   }
 
   return (
