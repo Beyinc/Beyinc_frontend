@@ -560,7 +560,7 @@ const UserDetails = () => {
       });
   
       if (isDraft !== true) {
-        window.location.href='/dashboard'
+        window.location.href='/posts'
       }
     } catch (error) {
       console.log(error);

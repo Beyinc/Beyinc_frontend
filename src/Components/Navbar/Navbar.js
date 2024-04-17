@@ -25,7 +25,7 @@ import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { io } from "socket.io-client";
-
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Box from "@mui/material/Box";
 // import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
@@ -206,6 +206,12 @@ const Navbar = () => {
       <List>
         {width < 770 && (
           <>
+            <ListItem button key="home" onClick={() => navigate("/posts")}>
+              <ListItemIcon>
+                <HomeOutlinedIcon className="menu-icon" />
+              </ListItemIcon>
+              <ListItemText primary="Posts" />
+            </ListItem>
             <ListItem button key="home" onClick={() => navigate("/dashboard")}>
               <ListItemIcon>
                 <DashboardOutlinedIcon className="menu-icon" />
@@ -530,6 +536,13 @@ const Navbar = () => {
       <div className="menuIcons">
         {width > 770 &&  (
           <>
+            <div title="Posts">
+              <HomeOutlinedIcon
+                id="posts"
+                className="icon"
+                onClick={() => navigate("/posts")}
+              ></HomeOutlinedIcon>
+            </div>
             <div title="dashboard">
               <DashboardOutlinedIcon
                 id="dashboard"
@@ -565,13 +578,7 @@ const Navbar = () => {
               ></SearchOutlinedIcon>
             </div>
 
-            {/* <div title="Live Pitches">
-              <BallotOutlinedIcon
-                id="livePitches"
-                className="icon"
-                onClick={() => navigate("/livePitches")}
-              ></BallotOutlinedIcon>
-            </div> */}
+            
 
             {role === "Admin" && (
               <>

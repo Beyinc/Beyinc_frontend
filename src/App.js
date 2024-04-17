@@ -33,6 +33,7 @@ import AllUsers from "./Components/AllUsers/AllUsers";
 import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
+import Posts from "./Components/Posts/Posts";
 
 const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
@@ -276,6 +277,8 @@ const App = () => {
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/posts" element={AuthHoc(Posts)} />
+
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
