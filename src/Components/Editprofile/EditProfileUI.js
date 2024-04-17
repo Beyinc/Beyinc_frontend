@@ -1672,6 +1672,19 @@ const EditProfileUI = () => {
                               Add
                             </button>
                           </div>
+                          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                            <button
+                              className="add-button"
+                              onClick={() => {
+                                document.getElementsByTagName(
+                                  "body"
+                                )[0].style.overflowY = "scroll";
+                                setIsInputPopupVisible(false)
+                              }}
+                            >
+                              Save
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1830,8 +1843,22 @@ const EditProfileUI = () => {
                           Add
                         </button>
                       </div>
+                      
                     </div>
+                    
                   </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                  <button
+                    className="add-button"
+                    onClick={() => {
+                      document.getElementsByTagName("body")[0].style.overflowY =
+                        "scroll";
+                      setIsAboutPopupVisible(false)
+                    }}
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
@@ -2792,6 +2819,95 @@ const EditProfileUI = () => {
                         </div>
                       </>
                     )}
+
+
+
+                    {mentorCategories == null &&
+                      <><div>
+                        <div>
+                          <label className="Input-Label">
+                            Company Name*
+                          </label>
+                        </div>
+                        <div className="Exp_Input_Fields">
+                          <input
+                            type="text"
+                            name="company"
+                            className={experienceDetails.company == ""
+                              ? "editErrors"
+                              : "editSuccess"}
+                            value={experienceDetails.company}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your Company name" />
+                        </div>
+                      </div><div>
+                          <div>
+                            <label className="Input-Label">
+                              Current Designation*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <select
+                              name="designation"
+                              className={experienceDetails.designation == ""
+                                ? "editErrors"
+                                : "editSuccess"}
+                              value={experienceDetails.designation}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select</option>
+                              {itPositions.map((op) => (
+                                <option value={op}>{op}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div><div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <div>
+                              <label className="Input-Label">
+                                Start Date*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="date"
+                                className={experienceDetails.start == ""
+                                  ? "editErrors"
+                                  : "editSuccess"}
+                                value={experienceDetails.start}
+                                name="start"
+                                id=""
+                                onChange={handleChange} />
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <div>
+                              <label className="Input-Label">
+                                End Date
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="date"
+                                value={experienceDetails.end}
+                                name="end"
+                                id=""
+                                onChange={handleChange} />
+                            </div>
+                          </div>
+                        </div></>
+                    }
 
                     <div>
                       <button
