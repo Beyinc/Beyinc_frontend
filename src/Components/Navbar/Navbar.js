@@ -246,7 +246,7 @@ const Navbar = () => {
               <ListItemText primary="Search Users" />
             </ListItem>
 
-            <ListItem
+            {/* <ListItem
               button
               key="livePitches"
               onClick={() => navigate("/livePitches")}
@@ -255,7 +255,7 @@ const Navbar = () => {
                 <BallotOutlinedIcon className="menu-icon" />
               </ListItemIcon>
               <ListItemText primary="Live Pitches" />
-            </ListItem>
+            </ListItem> */}
           </>
         )}
 
@@ -565,13 +565,13 @@ const Navbar = () => {
               ></SearchOutlinedIcon>
             </div>
 
-            <div title="Live Pitches">
+            {/* <div title="Live Pitches">
               <BallotOutlinedIcon
                 id="livePitches"
                 className="icon"
                 onClick={() => navigate("/livePitches")}
               ></BallotOutlinedIcon>
-            </div>
+            </div> */}
 
             {role === "Admin" && (
               <>
