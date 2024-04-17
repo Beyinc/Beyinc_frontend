@@ -528,7 +528,7 @@ const Navbar = () => {
       </div>
 
       <div className="menuIcons">
-        {width > 770 && firstTime!==null && !firstTime && (
+        {width > 770 &&  (
           <>
             <div title="dashboard">
               <DashboardOutlinedIcon
@@ -613,7 +613,7 @@ const Navbar = () => {
           </>
         )}
 
-        {width < 770 && !firstTime && (
+        {width < 770 &&  (
           <div id="notifications" className="icon">
             <NotificationsOutlinedIcon
               title="notifications"
@@ -693,7 +693,7 @@ const Navbar = () => {
             </abbr>
           )}
         </div>
-        {width < 770 && !firstTime && (
+        {width < 770 && (
           <>
             <div className="icon" onClick={toggleDrawer("right", true)}>
               <MenuRoundedIcon />
