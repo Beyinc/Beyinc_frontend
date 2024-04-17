@@ -393,7 +393,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
         </div>
       </div>
       <div>
-        <h2>Location</h2>
+        <h2>Location *</h2>
         <input
           type="text"
           onChange={(e) =>
@@ -512,8 +512,10 @@ const UserDetails = () => {
   const dispatch = useDispatch();
   const handleSubmit = async (e, isDraft) => {
     e.preventDefault(); // Prevent default form submission behavior
-  
-    setIsLoading(true);
+    
+    if (isDraft !== true) {
+      setIsLoading(true);
+    }
   
     const formData = {
       role,
@@ -687,8 +689,8 @@ const UserDetails = () => {
     } = res.data;
     setStep3Data(res.data.role_details ? res.data.role_details : {});
     setRole(role);
-    setExperience(experienceDetails);
-    setEducationDetails(educationDetails);
+    setTotalExperienceData(experienceDetails);
+    setTotalEducationData(educationDetails);
     setSelectedDropdownPrimary(selectedDropdownPrimary);
     setSelectedTypes(selectedTypes ? selectedTypes : []);
     setSelectedDropdownSecondary(selectedDropdownSecondary);
@@ -748,7 +750,7 @@ const UserDetails = () => {
           <div className="userDetails-primary-container">
             <h1>Use our platform as</h1>
             <div className="primary-dropdown">
-              <div>
+              {/* <div>
                 <label htmlFor="investorTypes">Primary *</label>
                 <select
                   id="investorTypes"
@@ -762,7 +764,7 @@ const UserDetails = () => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
 
               <div>
                 <label htmlFor="investorTypes">Secondary (optional)</label>
@@ -928,7 +930,7 @@ const UserDetails = () => {
         <div className="step2-content">
           <h1>Additional Information</h1>
           <div>
-            <h2>Want to become on this platform</h2>
+            <h2>Want to become on this platform *</h2>
             <p>
               <input
                 type="radio"
@@ -982,7 +984,7 @@ const UserDetails = () => {
           {selectedBecomePlatform !== "Not Interested" && (
             <div>
               <h2>
-                Select the approx. price (Rs.) per minute for each session
+                Select the approx. price (Rs.) per minute for each session *
               </h2>
               <input
                 type="number"
@@ -995,7 +997,7 @@ const UserDetails = () => {
           )}
 
           {/* If yes, time availability */}
-          <div>
+          {/* <div>
             {selectedBecomePlatform !== "Not Interested" && (
               <div>
                 <h2>Time availability</h2>
@@ -1016,12 +1018,12 @@ const UserDetails = () => {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* If yes, make profile same as */}
           {selectedBecomePlatform !== "Not Interested" && (
             <div>
-              <h2>Make profile same as</h2>
+              <h2>Make profile same as *</h2>
               <p>
                 <input
                   type="radio"
@@ -1046,7 +1048,7 @@ const UserDetails = () => {
           )}
 
           {/* Want to have one-to-one session */}
-          {selectedBecomePlatform !== "Not Interested" && (
+          {/* {selectedBecomePlatform !== "Not Interested" && (
             <div>
               <h2>Want to have one-to-one session with</h2>
               <p>
@@ -1090,7 +1092,7 @@ const UserDetails = () => {
                 Not Interested
               </p>
             </div>
-          )}
+          )} */}
         </div>
       )}
 
@@ -1164,7 +1166,7 @@ const UserDetails = () => {
                     <div className="Work-exp">
                       <form className="update-form">
                         <div className="popup-header">
-                          <h3>Experience</h3>
+                          <h3>Experience *</h3>
                           <div
                             className="close-icon"
                             onClick={() => {
@@ -1579,7 +1581,7 @@ const UserDetails = () => {
               </div>
 
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -1689,7 +1691,7 @@ const UserDetails = () => {
                 setStep3Data={setStep3Data}
                 step3Data={step3Data}
               />
-              <h2>Do you have your own startup?</h2>
+              <h2>Do you have your own startup? *</h2>
               <p>
                 <input
                   type="radio"
@@ -1721,7 +1723,7 @@ const UserDetails = () => {
                 />
               )}
               <div>
-                <h2>Website Link</h2>
+                <h2>Website Link *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -1952,7 +1954,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -2298,7 +2300,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -2734,7 +2736,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -3095,7 +3097,7 @@ const UserDetails = () => {
                       <div className="popup-content">
                         <form className="update-form">
                           <div className="popup-header">
-                            <h3>Education</h3>
+                            <h3>Education *</h3>
                             <div
                               className="close-icon"
                               onClick={() => {
@@ -3508,7 +3510,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -4289,7 +4291,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -4564,7 +4566,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -4810,7 +4812,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -5066,7 +5068,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -5312,7 +5314,7 @@ const UserDetails = () => {
                 />
               </div>
               <div>
-                <h2>Location</h2>
+                <h2>Location *</h2>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -5388,7 +5390,7 @@ const UserDetails = () => {
                 name="terms"
                 id="terms"
               />
-              I Agree Terms & Conditions
+              I Agree <a href="BeyIncprivacypolicy#Terms-&-Conditions">Terms & Conditions</a> and <a href="BeyIncprivacypolicy#Privacy-Policy">Privacy Policy</a>
             </p>
           </div>
         </div>
@@ -5409,7 +5411,7 @@ const UserDetails = () => {
         <div>
           {currentStep < 3 ? (
             <button className="steps-button" onClick={handleNextStep}>
-              Next Step
+              Next
             </button>
           ) : (
             <button
