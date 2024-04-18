@@ -42,6 +42,7 @@ import { gridCSS } from "../CommonStyles";
 import ReviewStars from "../LivePitches/ReviewStars";
 import AddReviewStars from "../LivePitches/AddReviewStars";
 import IndividualUserReview from "../AllUsers/IndividualUserReview";
+import ShowingFollowers from "./ShowingFollowers";
 
 const EditProfileUI = () => {
   const { id } = useParams();
@@ -160,7 +161,7 @@ const EditProfileUI = () => {
   const [editingExperienceId, seteditingExperienceId] = useState("");
   const [editingEducationId, seteditingEducationId] = useState("");
   const followerNotification = useSelector(state => state.conv.followerNotification);
-
+  const [typeOfOpen, setTypeOfOpen] = useState(null)
   const [places, setPlaces] = useState({
     country: [],
     state: [],
@@ -1304,9 +1305,30 @@ const EditProfileUI = () => {
                 {userpage == true && <button onClick={followerController}>
                   {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
                 </button>}
-                <div>{followers.length} Followers</div>
-                <div>{followering.length} Following</div>
-                </>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ position: 'relative' }} onClick={() => {
+                    if (typeOfOpen == null) {
+                      setTypeOfOpen('followers')
+                    } else {
+                      setTypeOfOpen(null)
+                    }
+                  }}>{followers.length} Followers
+                  </div>
+                  <div  onClick={() => {
+                    if (typeOfOpen == null) {
+                      setTypeOfOpen('following')
+                    } else {
+                      setTypeOfOpen(null)
+                    }
+                  }}>{followering.length} Following
+                  
+                  </div>
+                  
+                  {typeOfOpen == 'following' && <div>
+
+                  </div>}
+                </div>
+              </>
             </div>
             <div
               className="personal-rating-container"
@@ -3913,6 +3935,7 @@ const EditProfileUI = () => {
         </DialogContent>
       </Dialog>
       <ProfileImageUpdate open={open} setOpen={setOpen} />
+      <ShowingFollowers typeOfOpen={typeOfOpen} setTypeOfOpen={setTypeOfOpen} data={typeOfOpen=='followers' ? followers: followering} />
     </main>
   );
 };
