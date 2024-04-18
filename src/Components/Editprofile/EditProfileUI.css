@@ -430,6 +430,51 @@ select {
   z-index: 1000;
 }
 
+.postContainer{
+  padding: 10px;
+  background: white;
+  width: 1380px;
+  margin: auto;
+}
+.postTypeContainer{
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  display: none ;
+}
+
+.createPostHeader {
+  padding: 10px; background: lightgray; display: flex; justify-content: center; font-size: 18px;
+}
+
+.userTags{
+  display: none;
+
+}
+.userTags.show{
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0%;
+}
+.postTypeSelector{
+ width: 95%; margin-left: -2px; display: flex; justify-content: space-between; padding: 10px; cursor: pointer; background: lightgray 
+}
+
+.postTypeContainer.show{
+ display: flex; 
+ flex-direction: column
+}
+.createPostPitchContainer.show{
+ display: flex; 
+ flex-direction: column
+}
+.individualPostTypes{
+ padding: 5px;
+}
+.individualPostTypes:hover{
+  background: rgb(204, 201, 201);
+ cursor: pointer;
+}
 .followersContainer{
  display: flex;
  gap: 2px;

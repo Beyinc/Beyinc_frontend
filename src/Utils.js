@@ -478,6 +478,23 @@ export const convertToDate = (inputDate) => {
 }
 
 
+
+export const postTypes = [
+    { 'value': 'Idea Discussion', 'color': '#0d2c52' },
+    { 'value': 'Co-founder Needed', 'color': '#af1dd8' },
+    { 'value': 'Tech Partner Needed', 'color': '#60d441' },
+    { 'value': 'Mentor Needed', 'color': '#9f1f04' },
+    { 'value': 'General Post', 'color': '#05eb1b' },
+    { 'value': 'Question and Answer', 'color': '#6920a9' },
+    { 'value': 'Announcement', 'color': '#70b9d5' },
+    { 'value': 'News', 'color': '#f14edf' },
+    { 'value': 'Hiring', 'color': '#e1265d' },
+    { 'value': 'Opportunities', 'color': '#5e8d7c' },
+    { 'value': 'Investment', 'color': '#207b6a' }
+]
+
+
+
 // gives in format 2024-jan-08
 export const formatedDate = (inputDate) => {
     const months = [

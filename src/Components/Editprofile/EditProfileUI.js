@@ -43,6 +43,7 @@ import ReviewStars from "../LivePitches/ReviewStars";
 import AddReviewStars from "../LivePitches/AddReviewStars";
 import IndividualUserReview from "../AllUsers/IndividualUserReview";
 import ShowingFollowers from "./ShowingFollowers";
+import CreatePost from "./CreatePost";
 
 const EditProfileUI = () => {
   const { id } = useParams();
@@ -56,8 +57,10 @@ const EditProfileUI = () => {
     socket.current = io(socket_io);
   }, []);
 
+  const [createPostPopup, setCreatePostpopup] = useState(false)
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
+  const [allPosts, setAllPosts] = useState([])
   const [inputs, setInputs] = useState({
     verification: null,
     mentorCategories: null,
@@ -370,6 +373,8 @@ const EditProfileUI = () => {
 
   const [followers, setFollowers] = useState([])
   const [followering, setFollowering] = useState([])
+  const [editPostToggler, seteditPostToggler] = useState('profile')
+
 
 
   const handleChange = (e) => {
@@ -1264,515 +1269,520 @@ const EditProfileUI = () => {
     e.target.disabled = false
   }
 
-  return (
-    <main className="EditProfile-Container">
-      <section className="EditProfile-personal-Container">
-        <div className="Personal-Information">
-          {mobileVerified == false && <div className='mobilenote'>
-            Note: Mobile number should be verified to send or update the profile
-          </div>}
-          <div className="Banner">
-            <Slider {...settings}>
-              <div>
-                <img src="/Banner-1.png" alt="Image 1" />
-              </div>
-              <div>
-                <img src="/Banner-2.png" alt="Image 2" />
-              </div>
-            </Slider>
-          </div>
-          <div className="Profile-Image">
-            <div>
-              <img
-                src={
-                  image !== undefined && image !== "" ? image : "/profile.png"
-                }
-              />
-              {verification == "approved" && <div>Verified</div>}
-              {id == undefined && (
-                <i
-                  class="fas fa-camera hover-icon"
-                  onClick={() => {
-                    if (id == undefined) {
-                      setOpen(true);
-                    }
-                  }}
-                ></i>
-              )}
-            </div>
-            <div style={{marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '10px'}}>
-              <>
-                {userpage == true && <button onClick={followerController}>
-                  {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
-                </button>}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ position: 'relative' }} onClick={() => {
-                    if (typeOfOpen == null) {
-                      setTypeOfOpen('followers')
-                    } else {
-                      setTypeOfOpen(null)
-                    }
-                  }}>{followers.length} Followers
-                  </div>
-                  <div  onClick={() => {
-                    if (typeOfOpen == null) {
-                      setTypeOfOpen('following')
-                    } else {
-                      setTypeOfOpen(null)
-                    }
-                  }}>{followering.length} Following
-                  
-                  </div>
-                  
-                  {typeOfOpen == 'following' && <div>
 
-                  </div>}
+  return (
+    <>
+      <main className="EditProfile-Container">
+        <section className="EditProfile-personal-Container">
+          <div className="Personal-Information">
+            {mobileVerified == false && <div className='mobilenote'>
+              Note: Mobile number should be verified to send or update the profile
+            </div>}
+            <div className="Banner">
+              <Slider {...settings}>
+                <div>
+                  <img src="/Banner-1.png" alt="Image 1" />
                 </div>
-              </>
+                <div>
+                  <img src="/Banner-2.png" alt="Image 2" />
+                </div>
+              </Slider>
             </div>
-            <div
-              className="personal-rating-container"
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <div className="Personal-Details">
-                <div
-                  style={{
-                    fontWeight: "600",
-                    fontSize: "24px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div>
-                    {salutation}
-                    {salutation && <span>.</span>} {name}
-                  </div>
-                  {id == undefined && (
-                    <span>
-                      <i
-                        onClick={handleEditButtonClick}
-                        className="fas fa-pen"
-                      ></i>
-                    </span>
-                  )}
-                </div>
-                <div style={{ fontWeight: "500", fontSize: "18px" }}>
-                  {role} {role == "Mentor" && mentorCategories}
-                </div>
-                <div style={{ fontSize: "12px" }}>{email}</div>
-                <div style={{ fontSize: "12px" }}>{mobile}</div>
-                {role == "Mentor" && (
-                  <div style={{ fontSize: "12px" }}>
-                    &#8377;{fee} per minute
-                  </div>
+            <div className="Profile-Image">
+              <div>
+                <img
+                  src={
+                    image !== undefined && image !== "" ? image : "/profile.png"
+                  }
+                />
+                {verification == "approved" && <div>Verified</div>}
+                {id == undefined && editPostToggler == 'profile' && (
+                  <i
+                    class="fas fa-camera hover-icon"
+                    onClick={() => {
+                      if (id == undefined) {
+                        setOpen(true);
+                      }
+                    }}
+                  ></i>
                 )}
-                <div className="language-display">
-                  {languagesKnown?.map((t, i) => (
-                    <div>
-                      <div className="single-language">{t}</div>
+              </div>
+              <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <>
+                  {userpage == true && <button onClick={followerController}>
+                    {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
+                  </button>}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px' }}>
+                    <div style={{ position: 'relative' }} onClick={() => {
+                      if (typeOfOpen == null) {
+                        setTypeOfOpen('followers')
+                      } else {
+                        setTypeOfOpen(null)
+                      }
+                    }}>{followers.length} Followers
                     </div>
-                  ))}
+                    <div onClick={() => {
+                      if (typeOfOpen == null) {
+                        setTypeOfOpen('following')
+                      } else {
+                        setTypeOfOpen(null)
+                      }
+                    }}>{followering.length} Following
+
+                    </div>
+
+                    {typeOfOpen == 'following' && <div>
+
+                    </div>}
+                  </div>
+                </>
+              </div>
+              <div className="historicalTabHeader">
+                <div
+                  className={`historicalTabIcons ${editPostToggler == 'profile' && "historicalTabIconsselected"
+                    }`} style={{ fontSize: '18px' }}
+                  onClick={() => seteditPostToggler('profile')}
+                >
+                  Profile
                 </div>
-                {/* <div style={{ fontSize: "16px" }}> &#8377; {fee} / per min</div>
+                <div
+                  className={`historicalTabIcons ${editPostToggler == 'posts' && "historicalTabIconsselected"
+                    }`} style={{ fontSize: '18px' }}
+                  onClick={() => seteditPostToggler('posts')}
+                >
+                  Posts
+                </div>
+              </div>
+              {editPostToggler == 'profile' && <div
+                className="personal-rating-container"
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <div className="Personal-Details">
+                  <div
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "24px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      {salutation}
+                      {salutation && <span>.</span>} {name}
+                    </div>
+                    {id == undefined && (
+                      <span>
+                        <i
+                          onClick={handleEditButtonClick}
+                          className="fas fa-pen"
+                        ></i>
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontWeight: "500", fontSize: "18px" }}>
+                    {role} {role == "Mentor" && mentorCategories}
+                  </div>
+                  <div style={{ fontSize: "12px" }}>{email}</div>
+                  <div style={{ fontSize: "12px" }}>{mobile}</div>
+                  {role == "Mentor" && (
+                    <div style={{ fontSize: "12px" }}>
+                      &#8377;{fee} per minute
+                    </div>
+                  )}
+                  <div className="language-display">
+                    {languagesKnown?.map((t, i) => (
+                      <div>
+                        <div className="single-language">{t}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* <div style={{ fontSize: "16px" }}> &#8377; {fee} / per min</div>
               <div>{}</div> */}
 
-                <div style={{ marginTop: '10px' }}>
-                  {id == undefined && (
-                    <>
-                      {(verification == "" || verification == "rejected") && (
-                        <button
-                          onClick={sendForApproval}
-                          style={{ backgroundColor: "red" }}
-                        >
-                          Verify Now
-                        </button>
-                      )}
-                      {verification == "approved" && (
-                        <button style={{ backgroundColor: "green" }}>
-                          Approved
-                        </button>
-                      )}
-                      {verification == "pending" && (
-                        <button style={{ backgroundColor: "orange" }}>
-                          Pending
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {(userpage == true || window.location.pathname=='/editProfile') && (
-                <div className="review-container">
-                  <div className="reviewContainer">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "5px",
-                      }}
-                    >
-                      <b>{review?.length}</b> <span> Global Ratings</span>
-                    </div>
-                    <ReviewStars avg={averagereview} />
+                  <div style={{ marginTop: '10px' }}>
+                    {id == undefined && (
+                      <>
+                        {(verification == "" || verification == "rejected") && (
+                          <button
+                            onClick={sendForApproval}
+                            style={{ backgroundColor: "red" }}
+                          >
+                            Verify Now
+                          </button>
+                        )}
+                        {verification == "approved" && (
+                          <button style={{ backgroundColor: "green" }}>
+                            Approved
+                          </button>
+                        )}
+                        {verification == "pending" && (
+                          <button style={{ backgroundColor: "orange" }}>
+                            Pending
+                          </button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
 
-          {/* <div
-            style={{
-              fontSize: "12px",
-              color: "#717B9E",
-              textAlign: "center",
-              marginTop: "5px",
-            }}
-          >
-            Profile last updated -{" "}
-            <span style={{ color: "black" }}>
-              <i class="fas fa-clock" style={{ marginRight: "5px" }}></i>
-              {format(updatedAt)}
-            </span>
-          </div> */}
-          {isInputPopupVisible && (
-            <div className="popup-container">
-              <div className="popup-content">
-                <div className="Inputs-Container">
-                  <div className="Input_Wrapper">
-                    <div
-                      className="popup-header"
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <h3>Personal Information</h3>
+                {(userpage == true || window.location.pathname == '/editProfile') && (
+                  <div className="review-container">
+                    <div className="reviewContainer">
                       <div
-                        className="close-icon"
-                        onClick={() => {
-                          document.getElementsByTagName(
-                            "body"
-                          )[0].style.overflowY = "scroll";
-                          setIsInputPopupVisible(false);
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "5px",
                         }}
                       >
-                        <i class="fas fa-times"></i>
+                        <b>{review?.length}</b> <span> Global Ratings</span>
                       </div>
+                      <ReviewStars avg={averagereview} />
                     </div>
-                    {role === "Mentor" && (
-                      <div>
-                        <label className="Input-Label">salutation</label>
-                        <select
-                          name="salutation"
-                          id=""
-                          value={salutation}
-                          onChange={(e) => {
-                            setInputs((prev) => ({
-                              ...prev,
-                              salutation: e.target.value,
-                            }));
-                          }}
-                        >
-                          <option value="">Select</option>
-                          {allsalutations.map((op) => (
-                            <option>{op}</option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
-                    <label className="Input-Label">Full Name</label>
-                    <div className="Input_Fields">
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            name: e.target.value,
-                          }));
+                  </div>
+                )}
+              </div>}
+            </div>
+
+            {editPostToggler == 'profile' && isInputPopupVisible && (
+              <div className="popup-container">
+                <div className="popup-content">
+                  <div className="Inputs-Container">
+                    <div className="Input_Wrapper">
+                      <div
+                        className="popup-header"
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
                         }}
-                      />
-                    </div>
-
-                    {role === "Mentor" && (
-                      <div>
-                        <label className="Input-Label">Mentor Categories</label>
-                        <select
-                          name="mentorCategories"
-                          id=""
-                          value={mentorCategories}
+                      >
+                        <h3>Personal Information</h3>
+                        <div
+                          className="close-icon"
+                          onClick={() => {
+                            document.getElementsByTagName(
+                              "body"
+                            )[0].style.overflowY = "scroll";
+                            setIsInputPopupVisible(false);
+                          }}
+                        >
+                          <i class="fas fa-times"></i>
+                        </div>
+                      </div>
+                      {role === "Mentor" && (
+                        <div>
+                          <label className="Input-Label">salutation</label>
+                          <select
+                            name="salutation"
+                            id=""
+                            value={salutation}
+                            onChange={(e) => {
+                              setInputs((prev) => ({
+                                ...prev,
+                                salutation: e.target.value,
+                              }));
+                            }}
+                          >
+                            <option value="">Select</option>
+                            {allsalutations.map((op) => (
+                              <option>{op}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      <label className="Input-Label">Full Name</label>
+                      <div className="Input_Fields">
+                        <input
+                          type="text"
+                          value={name}
                           onChange={(e) => {
                             setInputs((prev) => ({
                               ...prev,
-                              mentorCategories: e.target.value,
+                              name: e.target.value,
                             }));
                           }}
-                        >
-                          <option value="">Select</option>
-                          {mentorcategories.map((op) => (
-                            <option>{op}</option>
-                          ))}
-                        </select>
+                        />
                       </div>
-                    )}
 
-                    <label className="Input-Label">Mobile Number</label>
-                    <div className="Input_Fields">
-                      <div>
+                      {role === "Mentor" && (
                         <div>
-                          <input
-                            type="text"
-                            className={
-                              mobile !== null &&
-                              (mobile.length === 10 ? "valid" : "invalid")
-                            }
-                            name="mobile"
-                            id="mobile"
-                            value={mobile}
-                            onChange={handleChanges}
-                            placeholder="Mobile Number"
-                          />
-                          {mobileVerified === true}
+                          <label className="Input-Label">Mentor Categories</label>
+                          <select
+                            name="mentorCategories"
+                            id=""
+                            value={mentorCategories}
+                            onChange={(e) => {
+                              setInputs((prev) => ({
+                                ...prev,
+                                mentorCategories: e.target.value,
+                              }));
+                            }}
+                          >
+                            <option value="">Select</option>
+                            {mentorcategories.map((op) => (
+                              <option>{op}</option>
+                            ))}
+                          </select>
                         </div>
+                      )}
 
+                      <label className="Input-Label">Mobile Number</label>
+                      <div className="Input_Fields">
                         <div>
-                          {!isMobileOtpSent && isMobileValid && (
-                            <button
-                              type="button"
-                              className="otp_Button"
-                              onClick={sendMobileOtpF}
-                            >
-                              Get OTP
-                            </button>
-                          )}
-                        </div>
-                        <div>
-                          {isMobileOtpSent && mobileVerified !== true && (
-                            <>
-                              <div>
-                                <input
-                                  type="text"
-                                  className={
-                                    mobileOtp !== null &&
-                                    (mobileOtp.length === 6
-                                      ? "valid"
-                                      : "invalid")
-                                  }
-                                  name="mobileOtp"
-                                  value={mobileOtp}
-                                  onChange={handleChanges}
-                                  placeholder="Enter Mobile OTP"
-                                  id="mobileOtpInput"
-                                />
-                                <div>
-                                  {mobileOtp !== null &&
-                                    mobileOtp.length === 6 && (
-                                      <button
-                                        type="button"
-                                        className="otp_Button"
-                                        id="mobileVerify"
-                                        onClick={verifyMobileOtp}
-                                        style={{ whiteSpace: "noWrap" }}
-                                      >
-                                        Verify OTP
-                                      </button>
-                                    )}
-                                </div>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="Location-details">
-                      <h4>Location Info</h4>
-                      <form className="update-form">
-                        <div className="personal-container">
                           <div>
-                            <div>
-                              <label className="Input-Label">Country*</label>
-                            </div>
-                            <select
-                              name="country"
-                              id=""
-                              onChange={(e) => {
-                                setCountry(e.target.value);
-                                setState("");
-                                settown("");
-                                setPlaces((prev) => ({
-                                  ...prev,
-                                  state: [],
-                                  town: [],
-                                }));
-                              }}
-                            >
-                              <option value="">Select</option>
-                              {places.country?.map((op) => (
-                                <option
-                                  value={`${op.name}-${op.isoCode}`}
-                                  selected={country?.split("-")[0] == op.name}
-                                >
-                                  {op.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div>
-                            <div>
-                              <label className="Input-Label">State*</label>
-                            </div>
-                            <select
-                              name="state"
-                              id=""
-                              onChange={(e) => {
-                                setState(e.target.value);
-                                settown("");
-                                setPlaces((prev) => ({ ...prev, town: [] }));
-                              }}
-                            >
-                              <option value="">Select</option>
-                              {places.state?.map((op) => (
-                                <option
-                                  value={`${op.name}-${op.isoCode}`}
-                                  selected={state?.split("-")[0] == op.name}
-                                >
-                                  {op.name}
-                                </option>
-                              ))}
-                            </select>
+                            <input
+                              type="text"
+                              className={
+                                mobile !== null &&
+                                (mobile.length === 10 ? "valid" : "invalid")
+                              }
+                              name="mobile"
+                              id="mobile"
+                              value={mobile}
+                              onChange={handleChanges}
+                              placeholder="Mobile Number"
+                            />
+                            {mobileVerified === true}
                           </div>
 
                           <div>
-                            <div>
-                              <label className="Input-Label">Town/city*</label>
-                            </div>
-                            <select
-                              name="town"
-                              id=""
-                              value={town}
-                              onChange={(e) => settown(e.target.value)}
-                            >
-                              <option value="">Select</option>
-                              {places.town?.map((op) => (
-                                <option
-                                  value={op.name}
-                                  selected={town?.split("-")[0] == op.name}
-                                >
-                                  {op.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                      </form>
-                      <div>
-                        {role == "Mentor" && (
-                          <div>
-                            <div>
-                              <h4>Fee request</h4>
-                            </div>
-                            <div>
-                              <input
-                                type="range"
-                                min={1}
-                                max={50}
-                                name="fee"
-                                value={fee}
-                                id=""
-                                onChange={(e) => setFee(e.target.value)}
-                                placeholder="Enter Fee request per minute"
-                              />{" "}
-                              <p
-                                style={{
-                                  fontSize: "10px",
-                                }}
+                            {!isMobileOtpSent && isMobileValid && (
+                              <button
+                                type="button"
+                                className="otp_Button"
+                                onClick={sendMobileOtpF}
                               >
-                                &#8377; {fee} / per min
-                              </p>
-                            </div>
+                                Get OTP
+                              </button>
+                            )}
                           </div>
-                        )}
-                      </div>
-
-                      <div>
-                        <div>
-                          <label className="Input-Label">Languages Known</label>
-                        </div>
-                        <div>
-                          {languagesKnown?.length > 0 && (
-                            <div className="listedTeam">
-                              {languagesKnown?.map((t, i) => (
-                                <div className="singleMember">
-                                  <div>{t}</div>
-                                  <div
-                                    onClick={(e) => {
-                                      setlanguagesKnown(
-                                        languagesKnown.filter((f, j) => i !== j)
-                                      );
-                                    }}
-                                  >
-                                    <CloseIcon className="deleteMember" />
+                          <div>
+                            {isMobileOtpSent && mobileVerified !== true && (
+                              <>
+                                <div>
+                                  <input
+                                    type="text"
+                                    className={
+                                      mobileOtp !== null &&
+                                      (mobileOtp.length === 6
+                                        ? "valid"
+                                        : "invalid")
+                                    }
+                                    name="mobileOtp"
+                                    value={mobileOtp}
+                                    onChange={handleChanges}
+                                    placeholder="Enter Mobile OTP"
+                                    id="mobileOtpInput"
+                                  />
+                                  <div>
+                                    {mobileOtp !== null &&
+                                      mobileOtp.length === 6 && (
+                                        <button
+                                          type="button"
+                                          className="otp_Button"
+                                          id="mobileVerify"
+                                          onClick={verifyMobileOtp}
+                                          style={{ whiteSpace: "noWrap" }}
+                                        >
+                                          Verify OTP
+                                        </button>
+                                      )}
                                   </div>
                                 </div>
-                              ))}
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="Location-details">
+                        <h4>Location Info</h4>
+                        <form className="update-form">
+                          <div className="personal-container">
+                            <div>
+                              <div>
+                                <label className="Input-Label">Country*</label>
+                              </div>
+                              <select
+                                name="country"
+                                id=""
+                                onChange={(e) => {
+                                  setCountry(e.target.value);
+                                  setState("");
+                                  settown("");
+                                  setPlaces((prev) => ({
+                                    ...prev,
+                                    state: [],
+                                    town: [],
+                                  }));
+                                }}
+                              >
+                                <option value="">Select</option>
+                                {places.country?.map((op) => (
+                                  <option
+                                    value={`${op.name}-${op.isoCode}`}
+                                    selected={country?.split("-")[0] == op.name}
+                                  >
+                                    {op.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div>
+                              <div>
+                                <label className="Input-Label">State*</label>
+                              </div>
+                              <select
+                                name="state"
+                                id=""
+                                onChange={(e) => {
+                                  setState(e.target.value);
+                                  settown("");
+                                  setPlaces((prev) => ({ ...prev, town: [] }));
+                                }}
+                              >
+                                <option value="">Select</option>
+                                {places.state?.map((op) => (
+                                  <option
+                                    value={`${op.name}-${op.isoCode}`}
+                                    selected={state?.split("-")[0] == op.name}
+                                  >
+                                    {op.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div>
+                              <div>
+                                <label className="Input-Label">Town/city*</label>
+                              </div>
+                              <select
+                                name="town"
+                                id=""
+                                value={town}
+                                onChange={(e) => settown(e.target.value)}
+                              >
+                                <option value="">Select</option>
+                                {places.town?.map((op) => (
+                                  <option
+                                    value={op.name}
+                                    selected={town?.split("-")[0] == op.name}
+                                  >
+                                    {op.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                        </form>
+                        <div>
+                          {role == "Mentor" && (
+                            <div>
+                              <div>
+                                <h4>Fee request</h4>
+                              </div>
+                              <div>
+                                <input
+                                  type="range"
+                                  min={1}
+                                  max={50}
+                                  name="fee"
+                                  value={fee}
+                                  id=""
+                                  onChange={(e) => setFee(e.target.value)}
+                                  placeholder="Enter Fee request per minute"
+                                />{" "}
+                                <p
+                                  style={{
+                                    fontSize: "10px",
+                                  }}
+                                >
+                                  &#8377; {fee} / per min
+                                </p>
+                              </div>
                             </div>
                           )}
                         </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "5px",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <div className="skillsSelectBox">
-                            <select
-                              name="languagesKnown"
-                              id=""
-                              onChange={(e) =>
-                                setSinglelanguagesKnown(e.target.value)
-                              }
-                            >
-                              <option value="">Select</option>
-                              {allLanguages.map((d) => (
-                                <option value={d}>{d}</option>
-                              ))}
-                            </select>
-                          </div>
 
+                        <div>
                           <div>
-                            <button
-                              className="add-button"
-                              onClick={() => {
-                                if (
-                                  singlelanguagesKnown !== "" &&
-                                  !languagesKnown.includes(singlelanguagesKnown)
-                                ) {
-                                  setlanguagesKnown((prev) => [
-                                    ...prev,
-                                    singlelanguagesKnown,
-                                  ]);
-                                }
-                              }}
-                            >
-                              Add
-                            </button>
+                            <label className="Input-Label">Languages Known</label>
                           </div>
-                          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                            <button
-                              className="add-button"
-                              onClick={() => {
-                                document.getElementsByTagName(
-                                  "body"
-                                )[0].style.overflowY = "scroll";
-                                setIsInputPopupVisible(false)
-                              }}
-                            >
-                              Save
-                            </button>
+                          <div>
+                            {languagesKnown?.length > 0 && (
+                              <div className="listedTeam">
+                                {languagesKnown?.map((t, i) => (
+                                  <div className="singleMember">
+                                    <div>{t}</div>
+                                    <div
+                                      onClick={(e) => {
+                                        setlanguagesKnown(
+                                          languagesKnown.filter((f, j) => i !== j)
+                                        );
+                                      }}
+                                    >
+                                      <CloseIcon className="deleteMember" />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "5px",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <div className="skillsSelectBox">
+                              <select
+                                name="languagesKnown"
+                                id=""
+                                onChange={(e) =>
+                                  setSinglelanguagesKnown(e.target.value)
+                                }
+                              >
+                                <option value="">Select</option>
+                                {allLanguages.map((d) => (
+                                  <option value={d}>{d}</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div>
+                              <button
+                                className="add-button"
+                                onClick={() => {
+                                  if (
+                                    singlelanguagesKnown !== "" &&
+                                    !languagesKnown.includes(singlelanguagesKnown)
+                                  ) {
+                                    setlanguagesKnown((prev) => [
+                                      ...prev,
+                                      singlelanguagesKnown,
+                                    ]);
+                                  }
+                                }}
+                              >
+                                Add
+                              </button>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                              <button
+                                className="add-button"
+                                onClick={() => {
+                                  document.getElementsByTagName(
+                                    "body"
+                                  )[0].style.overflowY = "scroll";
+                                  setIsInputPopupVisible(false)
+                                }}
+                              >
+                                Save
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1780,1487 +1790,1485 @@ const EditProfileUI = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="EditProfile-About-Section">
-        <div className="About">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <h3 className="EditProfile-Headings">About</h3>
-            {id == undefined && (
-              <span>
-                <i onClick={handleAboutButtonClick} className="fas fa-pen"></i>
-              </span>
             )}
           </div>
-          <div>{bio?.length > 0 ? bio : <div>No bio data found</div>}</div>
-
-          <div className="skills-Container">
-            <div>
-              <label className="Input-Label">Skills</label>
-            </div>
-            <div>
-              {skills?.length > 0 ? (
-                <div className="listedTeam">
-                  {skills?.map((t, i) => (
-                    <div key={i} className="singleMember">
-                      <div>{t}</div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div>No skills data found</div>
-              )}
-            </div>
-          </div>
-        </div>
-        {isAboutPopupVisible && (
-          <div className="popup-container">
-            <div className="popup-content">
-              <div>
+        </section>
+        {editPostToggler == 'profile' &&
+          <>
+            <section className="EditProfile-About-Section">
+              <div className="About">
                 <div
-                  className="popup-header"
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
                   }}
                 >
-                  <h3>Edit About</h3>
-                  <div
-                    className="close-icon"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
-                      setIsAboutPopupVisible(false);
-                    }}
-                  >
-                    <i class="fas fa-times"></i>
-                  </div>
+                  <h3 className="EditProfile-Headings">About</h3>
+                  {id == undefined && (
+                    <span>
+                      <i onClick={handleAboutButtonClick} className="fas fa-pen"></i>
+                    </span>
+                  )}
                 </div>
-                <textarea
-                  className="bioText"
-                  onChange={(e) => {
-                    const inputText = e.target.value;
-                    if (inputText.length <= 1000) {
-                      setBio(inputText);
-                    } else {
-                      setBio(inputText.slice(0, 1000));
-                    }
-                  }}
-                  style={{
-                    resize: "none",
-                    border: "none",
-                    // padding: '20px',
-                    textAlign: "justify",
-                    fontFamily: "poppins",
-                  }}
-                  id=""
-                  cols="155"
-                  rows="13"
-                  name="message"
-                  value={bio}
-                  placeholder="Enter your bio"
-                ></textarea>
-                <p style={{ fontSize: "10px", marginTop: "0px" }}>
-                  {1000 - bio.length}/1000 characters left
-                </p>
+                <div>{bio?.length > 0 ? bio : <div>No bio data found</div>}</div>
 
                 <div className="skills-Container">
                   <div>
-                    <div>
-                      <div>
-                        <h3>Edit Skills</h3>
+                    <label className="Input-Label">Skills</label>
+                  </div>
+                  <div>
+                    {skills?.length > 0 ? (
+                      <div className="listedTeam">
+                        {skills?.map((t, i) => (
+                          <div key={i} className="singleMember">
+                            <div>{t}</div>
+                          </div>
+                        ))}
                       </div>
-                      {skills?.length > 0 && (
-                        <div className="listedTeam">
-                          {skills?.map((t, i) => (
-                            <div className="singleMember">
-                              <div>{t}</div>
-                              <div
-                                onClick={(e) => {
-                                  setSkills(skills.filter((f, j) => i !== j));
+                    ) : (
+                      <div>No skills data found</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {isAboutPopupVisible && (
+                <div className="popup-container">
+                  <div className="popup-content">
+                    <div>
+                      <div
+                        className="popup-header"
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <h3>Edit About</h3>
+                        <div
+                          className="close-icon"
+                          onClick={() => {
+                            document.getElementsByTagName("body")[0].style.overflowY =
+                              "scroll";
+                            setIsAboutPopupVisible(false);
+                          }}
+                        >
+                          <i class="fas fa-times"></i>
+                        </div>
+                      </div>
+                      <textarea
+                        className="bioText"
+                        onChange={(e) => {
+                          const inputText = e.target.value;
+                          if (inputText.length <= 1000) {
+                            setBio(inputText);
+                          } else {
+                            setBio(inputText.slice(0, 1000));
+                          }
+                        }}
+                        style={{
+                          resize: "none",
+                          border: "none",
+                          // padding: '20px',
+                          textAlign: "justify",
+                          fontFamily: "poppins",
+                        }}
+                        id=""
+                        cols="155"
+                        rows="13"
+                        name="message"
+                        value={bio}
+                        placeholder="Enter your bio"
+                      ></textarea>
+                      <p style={{ fontSize: "10px", marginTop: "0px" }}>
+                        {1000 - bio.length}/1000 characters left
+                      </p>
+
+                      <div className="skills-Container">
+                        <div>
+                          <div>
+                            <div>
+                              <h3>Edit Skills</h3>
+                            </div>
+                            {skills?.length > 0 && (
+                              <div className="listedTeam">
+                                {skills?.map((t, i) => (
+                                  <div className="singleMember">
+                                    <div>{t}</div>
+                                    <div
+                                      onClick={(e) => {
+                                        setSkills(skills.filter((f, j) => i !== j));
+                                      }}
+                                    >
+                                      <CloseIcon className="deleteMember" />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "5px",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <div className="skillsSelectBox">
+                              <select
+                                name="skill"
+                                id=""
+                                onChange={(e) => setSingleSkill(e.target.value)}
+                              >
+                                <option value="">Select</option>
+                                {allskills.map((d) => (
+                                  <option value={d}>{d}</option>
+                                ))}
+                              </select>
+                            </div>
+                            <div>
+                              <button
+                                className="add-button"
+                                onClick={() => {
+                                  if (
+                                    singleSkill !== "" &&
+                                    !skills.includes(singleSkill)
+                                  ) {
+                                    setSkills((prev) => [...prev, singleSkill]);
+                                  }
                                 }}
                               >
-                                <CloseIcon className="deleteMember" />
-                              </div>
+                                Add
+                              </button>
                             </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "5px",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <div className="skillsSelectBox">
-                        <select
-                          name="skill"
-                          id=""
-                          onChange={(e) => setSingleSkill(e.target.value)}
-                        >
-                          <option value="">Select</option>
-                          {allskills.map((d) => (
-                            <option value={d}>{d}</option>
-                          ))}
-                        </select>
+                          </div>
+
+                        </div>
                       </div>
-                      <div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
                         <button
                           className="add-button"
                           onClick={() => {
-                            if (
-                              singleSkill !== "" &&
-                              !skills.includes(singleSkill)
-                            ) {
-                              setSkills((prev) => [...prev, singleSkill]);
-                            }
+                            document.getElementsByTagName("body")[0].style.overflowY =
+                              "scroll";
+                            setIsAboutPopupVisible(false)
                           }}
                         >
-                          Add
+                          Save
                         </button>
                       </div>
-                      
                     </div>
-                    
                   </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-                  <button
-                    className="add-button"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
-                      setIsAboutPopupVisible(false)
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
-
-      <section className="EditProfile-Experience-Container">
-        <div style={{ padding: "20px" }}>
-          <div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "99%",
-              }}
-            >
-              <h3 className="EditProfile-Headings">Experience</h3>
-              {id == undefined && (
-                <span>
-                  <i
-                    onClick={handleExperienceButtonClick}
-                    className="fas fa-plus"
-                  ></i>
-                </span>
               )}
-            </div>
-          </div>
-          {totalExperienceData.length > 0 ? (
-            totalExperienceData.map((te, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-                className="studies"
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                >
+            </section>
+
+            <section className="EditProfile-Experience-Container">
+              <div style={{ padding: "20px" }}>
+                <div>
                   <div
                     style={{
                       display: "flex",
-                      flexDirection: "column",
-                      padding: "10px",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "99%",
                     }}
                   >
-                    {te.institute !== "" && te.institute !== undefined && (
-                      <div className="company">
-                        <>{te.institute}(Institute)</>
-                      </div>
+                    <h3 className="EditProfile-Headings">Experience</h3>
+                    {id == undefined && (
+                      <span>
+                        <i
+                          onClick={handleExperienceButtonClick}
+                          className="fas fa-plus"
+                        ></i>
+                      </span>
                     )}
-                    {te.company !== "" && te.company !== undefined && (
-                      <div className="company">
-                        <>{te.company}(Company)</>
-                      </div>
-                    )}
-                    {te.startupName !== "" && te.startupName !== undefined && (
-                      <div className="company">
-                        <>{te.startupName}(Startup Name)</>
-                      </div>
-                    )}
-
-                    <div className="designation">
-                      {te.designation && (
-                        <>
-                          <b>Designation: </b>
-                          {te.designation}
-                        </>
-                      )}
-                    </div>
-                    <div className="designation">
-                      {te.Department && (
-                        <>
-                          <b>Department: </b>
-                          {te.Department}
-                        </>
-                      )}
-                    </div>
-                    <div className="designation">
-                      {te.Research && (
-                        <>
-                          <b>Research: </b>
-                          {te.Research}
-                        </>
-                      )}
-                    </div>
-
-                    {role !== "Technology Partner" &&
-                      te.workingStatus !== "Self Employed" && (
-                        <div className="timeline">
-                          <b>Date: </b>
-                          {convertToDate(te.start)}-
-                          {te.end === "" ? "Present" : convertToDate(te.end)}
-                        </div>
-                      )}
-
-                    {te.workingStatus == "Self Employed" && (
-                      <>
-                        <div className="timeline">
-                          <b>Working Status: </b>
-                          {te.workingStatus}
-                        </div>
-                        <div className="timeline">
-                          <b>Startup / Business Name: </b>
-                          {te.startupName}
-                        </div>
-                        <div className="timeline">
-                          <b>Startup Desc: </b>
-                          {te.Description}
-                        </div>
-                      </>
-                    )}
-
-                    {mentorCategories !== "Academia Mentor" && (
-                      <>
-                        <div className="timeline">
-                          <b>Profession: </b>
-                          {te.Profession}
-                        </div>
-                        <div className="timeline">
-                          <b>Total Working Experience: </b>
-                          {te.TotalWorkExperience}
-                        </div>
-                      </>
-                    )}
-                    {role == "Technology Partner" && (
-                      <div className="timeline">
-                        <b>Startup Desc: </b>
-                        {te.Description}
-                      </div>
-                    )}
-                    {te.CompanyLocation && (
-                      <div className="timeline">
-                        <b>Company Location: </b>
-                        {te.CompanyLocation}
-                      </div>
-                    )}
-
-                    {te.Customers && (
-                      <div className="timeline">
-                        <b>Total customers served by company : </b>
-                        {te.Customers}
-                      </div>
-                    )}
-
-                    {te.Banner && (
-                      <div className="timeline">
-                        <b>Banner: </b>
-                        <a
-                          href={te.Banner?.secure_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Click here
-                        </a>
-                      </div>
-                    )}
-                    {te.Logo && (
-                      <div className="timeline">
-                        <b>Logo: </b>
-                        <a
-                          href={te.Logo?.secure_url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Click here
-                        </a>
-                      </div>
-                    )}
-
-                    <div className="designation">
-                      {te.Achievements && (
-                        <>
-                          <b>Achievements: </b>
-                          {te.Achievements}
-                        </>
-                      )}
-                    </div>
-                    <div className="designation">
-                      {te.Published && (
-                        <>
-                          <b>Published: </b>
-                          {te.Published}
-                        </>
-                      )}
-                    </div>
-                    <div className="designation">
-                      {te.StartupExperience && (
-                        <>
-                          <b>StartupExperience: </b>
-                          {te.StartupExperience}
-                        </>
-                      )}
-                    </div>
-                    <div className="designation">
-                      {te.Consultancy && (
-                        <>
-                          <b>Consultancy: </b>
-                          {te.Consultancy}
-                        </>
-                      )}
-                    </div>
                   </div>
                 </div>
-                {id == undefined && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                      alignItems: "center",
-                    }}
-                  >
+                {totalExperienceData.length > 0 ? (
+                  totalExperienceData.map((te, i) => (
                     <div
-                      onClick={(e) => {
-                        seteditingExperienceId(i + 1);
-                        setExperience(te);
-                        handleExperienceButtonClick();
+                      key={i}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
                       }}
+                      className="studies"
                     >
-                      <i class="fas fa-pen"></i>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "10px",
+                          }}
+                        >
+                          {te.institute !== "" && te.institute !== undefined && (
+                            <div className="company">
+                              <>{te.institute}(Institute)</>
+                            </div>
+                          )}
+                          {te.company !== "" && te.company !== undefined && (
+                            <div className="company">
+                              <>{te.company}(Company)</>
+                            </div>
+                          )}
+                          {te.startupName !== "" && te.startupName !== undefined && (
+                            <div className="company">
+                              <>{te.startupName}(Startup Name)</>
+                            </div>
+                          )}
+
+                          <div className="designation">
+                            {te.designation && (
+                              <>
+                                <b>Designation: </b>
+                                {te.designation}
+                              </>
+                            )}
+                          </div>
+                          <div className="designation">
+                            {te.Department && (
+                              <>
+                                <b>Department: </b>
+                                {te.Department}
+                              </>
+                            )}
+                          </div>
+                          <div className="designation">
+                            {te.Research && (
+                              <>
+                                <b>Research: </b>
+                                {te.Research}
+                              </>
+                            )}
+                          </div>
+
+                          {role !== "Technology Partner" &&
+                            te.workingStatus !== "Self Employed" && (
+                              <div className="timeline">
+                                <b>Date: </b>
+                                {convertToDate(te.start)}-
+                                {te.end === "" ? "Present" : convertToDate(te.end)}
+                              </div>
+                            )}
+
+                          {te.workingStatus == "Self Employed" && (
+                            <>
+                              <div className="timeline">
+                                <b>Working Status: </b>
+                                {te.workingStatus}
+                              </div>
+                              <div className="timeline">
+                                <b>Startup / Business Name: </b>
+                                {te.startupName}
+                              </div>
+                              <div className="timeline">
+                                <b>Startup Desc: </b>
+                                {te.Description}
+                              </div>
+                            </>
+                          )}
+
+                          {mentorCategories !== "Academia Mentor" && (
+                            <>
+                              <div className="timeline">
+                                <b>Profession: </b>
+                                {te.Profession}
+                              </div>
+                              <div className="timeline">
+                                <b>Total Working Experience: </b>
+                                {te.TotalWorkExperience}
+                              </div>
+                            </>
+                          )}
+                          {role == "Technology Partner" && (
+                            <div className="timeline">
+                              <b>Startup Desc: </b>
+                              {te.Description}
+                            </div>
+                          )}
+                          {te.CompanyLocation && (
+                            <div className="timeline">
+                              <b>Company Location: </b>
+                              {te.CompanyLocation}
+                            </div>
+                          )}
+
+                          {te.Customers && (
+                            <div className="timeline">
+                              <b>Total customers served by company : </b>
+                              {te.Customers}
+                            </div>
+                          )}
+
+                          {te.Banner && (
+                            <div className="timeline">
+                              <b>Banner: </b>
+                              <a
+                                href={te.Banner?.secure_url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Click here
+                              </a>
+                            </div>
+                          )}
+                          {te.Logo && (
+                            <div className="timeline">
+                              <b>Logo: </b>
+                              <a
+                                href={te.Logo?.secure_url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Click here
+                              </a>
+                            </div>
+                          )}
+
+                          <div className="designation">
+                            {te.Achievements && (
+                              <>
+                                <b>Achievements: </b>
+                                {te.Achievements}
+                              </>
+                            )}
+                          </div>
+                          <div className="designation">
+                            {te.Published && (
+                              <>
+                                <b>Published: </b>
+                                {te.Published}
+                              </>
+                            )}
+                          </div>
+                          <div className="designation">
+                            {te.StartupExperience && (
+                              <>
+                                <b>StartupExperience: </b>
+                                {te.StartupExperience}
+                              </>
+                            )}
+                          </div>
+                          <div className="designation">
+                            {te.Consultancy && (
+                              <>
+                                <b>Consultancy: </b>
+                                {te.Consultancy}
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      {id == undefined && (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "5px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            onClick={(e) => {
+                              seteditingExperienceId(i + 1);
+                              setExperience(te);
+                              handleExperienceButtonClick();
+                            }}
+                          >
+                            <i class="fas fa-pen"></i>
+                          </div>
+                          <div
+                            onClick={(e) => {
+                              setTotalExperienceData((prev) => [
+                                ...prev.filter((f, j) => j !== i),
+                              ]);
+                            }}
+                            style={{ color: "red" }}
+                          >
+                            <i class="fas fa-times cross"></i>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div
-                      onClick={(e) => {
-                        setTotalExperienceData((prev) => [
-                          ...prev.filter((f, j) => j !== i),
-                        ]);
-                      }}
-                      style={{ color: "red" }}
-                    >
-                      <i class="fas fa-times cross"></i>
-                    </div>
-                  </div>
+                  ))
+                ) : (
+                  <div>No experience data found</div>
                 )}
               </div>
-            ))
-          ) : (
-            <div>No experience data found</div>
-          )}
-        </div>
 
-        {isExperiencePopupVisible && (
-          <div className="popup-container">
-            <div className="popup-content">
-              <div className="Work-exp">
-                <form className="update-form">
-                  <div className="popup-header">
-                    <h3>Experience</h3>
-                    <div
-                      className="close-icon"
-                      onClick={() => {
-                        document.getElementsByTagName(
-                          "body"
-                        )[0].style.overflowY = "scroll";
-
-                        setIsExperiencePopupVisible(false);
-                        seteditingExperienceId("");
-                        setExperience({
-                          areaOfBusiness: "",
-                          business: "",
-                          institute: "",
-                          startupName: "",
-                          workingStatus: "",
-                          company: "",
-                          designation: "",
-                          Department: "",
-                          Research: "",
-                          year: "",
-                          start: "",
-                          end: "",
-                          Achievements: "",
-                          Published: "",
-                          StartupExperience: "",
-                          Consultancy: "",
-                          Profession: "",
-                          TotalWorkExperience: "",
-                          Description: "",
-                          // Technology Partner
-                          Customers: "",
-                          CompanyLocation: "",
-                          Banner: "",
-                          Logo: "",
-                          Services: "",
-                        });
-                      }}
-                    >
-                      <i class="fas fa-times"></i>
-                    </div>
-                  </div>
-                  <div className="exp-container">
-                    {/* Academia Mentor */}
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">Institute Name*</label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="institute"
-                            className={
-                              experienceDetails.institute == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            value={experienceDetails.institute}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your institute name"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Current Designation*
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <select
-                            name="designation"
-                            className={
-                              experienceDetails.designation == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            value={experienceDetails.designation}
-                            onChange={handleChange}
-                          >
-                            <option value="">Select</option>
-                            {itPositions.map((op) => (
-                              <option value={op}>{op}</option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">Department*</label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="Department"
-                            className={
-                              experienceDetails.Department == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            value={experienceDetails.Department}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your Department name"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Area of Research*
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="Research"
-                            className={
-                              experienceDetails.Research == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            value={experienceDetails.Research}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your Research name"
-                          />
-                        </div>
-                      </div>
-                    )}
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <div>
-                            <label className="Input-Label">Start Date*</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="date"
-                              className={
-                                experienceDetails.start == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.start}
-                              name="start"
-                              id=""
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <div>
-                            <label className="Input-Label">End Date</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="date"
-                              value={experienceDetails.end}
-                              name="end"
-                              id=""
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Achievements/Part of any Society*
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="Achievements"
-                            className={
-                              experienceDetails.Achievements == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            value={experienceDetails.Achievements}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your Achievements name"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Important Paper/Patent Published*
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="Published"
-                            className={
-                              experienceDetails.Published == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            value={experienceDetails.Published}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your Paper/Patent Published"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Experience in Startups /ongoing /details
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="StartupExperience"
-                            value={experienceDetails.StartupExperience}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your StartupExperience"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {mentorCategories == "Academia Mentor" && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Any consultancy, if yes
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="Consultancy"
-                            value={experienceDetails.Consultancy}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your Consultancy"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {/*Industry Expert Mentor  &  Entrepreneur */}
-                    {(mentorCategories === "Industry Expert Mentor" ||
-                      role === "Entrepreneur") && (
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            Current Working Status*
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <select
-                            name="workingStatus"
-                            className={
-                              experienceDetails.workingStatus == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            id=""
-                            value={experienceDetails.workingStatus}
-                            onChange={handleChange}
-                          >
-                            <option value="">Select</option>
-                            {["Job", "Self Employed"].map((op) => (
-                              <option>{op}</option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    )}
-
-                    {experienceDetails.workingStatus == "Job" && (
-                      <>
-                        <div>
-                          <div>
-                            <label className="Input-Label">Company Name*</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="company"
-                              className={
-                                experienceDetails.company == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.company}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Company name"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Current Designation*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <select
-                              name="designation"
-                              className={
-                                experienceDetails.designation == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.designation}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              {itPositions.map((op) => (
-                                <option value={op}>{op}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div>
+              {isExperiencePopupVisible && (
+                <div className="popup-container">
+                  <div className="popup-content">
+                    <div className="Work-exp">
+                      <form className="update-form">
+                        <div className="popup-header">
+                          <h3>Experience</h3>
                           <div
-                            style={{ display: "flex", flexDirection: "column" }}
+                            className="close-icon"
+                            onClick={() => {
+                              document.getElementsByTagName(
+                                "body"
+                              )[0].style.overflowY = "scroll";
+
+                              setIsExperiencePopupVisible(false);
+                              seteditingExperienceId("");
+                              setExperience({
+                                areaOfBusiness: "",
+                                business: "",
+                                institute: "",
+                                startupName: "",
+                                workingStatus: "",
+                                company: "",
+                                designation: "",
+                                Department: "",
+                                Research: "",
+                                year: "",
+                                start: "",
+                                end: "",
+                                Achievements: "",
+                                Published: "",
+                                StartupExperience: "",
+                                Consultancy: "",
+                                Profession: "",
+                                TotalWorkExperience: "",
+                                Description: "",
+                                // Technology Partner
+                                Customers: "",
+                                CompanyLocation: "",
+                                Banner: "",
+                                Logo: "",
+                                Services: "",
+                              });
+                            }}
                           >
+                            <i class="fas fa-times"></i>
+                          </div>
+                        </div>
+                        <div className="exp-container">
+                          {/* Academia Mentor */}
+                          {mentorCategories == "Academia Mentor" && (
                             <div>
-                              <label className="Input-Label">Start Date*</label>
+                              <div>
+                                <label className="Input-Label">Institute Name*</label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="institute"
+                                  className={
+                                    experienceDetails.institute == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.institute}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your institute name"
+                                />
+                              </div>
                             </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="date"
-                                className={
-                                  experienceDetails.start == ""
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Current Designation*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <select
+                                  name="designation"
+                                  className={
+                                    experienceDetails.designation == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.designation}
+                                  onChange={handleChange}
+                                >
+                                  <option value="">Select</option>
+                                  {itPositions.map((op) => (
+                                    <option value={op}>{op}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">Department*</label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="Department"
+                                  className={
+                                    experienceDetails.Department == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.Department}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Department name"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Area of Research*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="Research"
+                                  className={
+                                    experienceDetails.Research == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.Research}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Research name"
+                                />
+                              </div>
+                            </div>
+                          )}
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div
+                                style={{ display: "flex", flexDirection: "column" }}
+                              >
+                                <div>
+                                  <label className="Input-Label">Start Date*</label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    className={
+                                      experienceDetails.start == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.start}
+                                    name="start"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                style={{ display: "flex", flexDirection: "column" }}
+                              >
+                                <div>
+                                  <label className="Input-Label">End Date</label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="date"
+                                    value={experienceDetails.end}
+                                    name="end"
+                                    id=""
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Achievements/Part of any Society*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="Achievements"
+                                  className={
+                                    experienceDetails.Achievements == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.Achievements}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Achievements name"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Important Paper/Patent Published*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="Published"
+                                  className={
+                                    experienceDetails.Published == ""
+                                      ? "editErrors"
+                                      : "editSuccess"
+                                  }
+                                  value={experienceDetails.Published}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Paper/Patent Published"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Experience in Startups /ongoing /details
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="StartupExperience"
+                                  value={experienceDetails.StartupExperience}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your StartupExperience"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {mentorCategories == "Academia Mentor" && (
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  Any consultancy, if yes
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="Consultancy"
+                                  value={experienceDetails.Consultancy}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Consultancy"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {/*Industry Expert Mentor  &  Entrepreneur */}
+                          {(mentorCategories === "Industry Expert Mentor" ||
+                            role === "Entrepreneur") && (
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Current Working Status*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <select
+                                    name="workingStatus"
+                                    className={
+                                      experienceDetails.workingStatus == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    id=""
+                                    value={experienceDetails.workingStatus}
+                                    onChange={handleChange}
+                                  >
+                                    <option value="">Select</option>
+                                    {["Job", "Self Employed"].map((op) => (
+                                      <option>{op}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                            )}
+
+                          {experienceDetails.workingStatus == "Job" && (
+                            <>
+                              <div>
+                                <div>
+                                  <label className="Input-Label">Company Name*</label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="text"
+                                    name="company"
+                                    className={
+                                      experienceDetails.company == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.company}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Enter Your Company name"
+                                  />
+                                </div>
+                              </div>
+
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Current Designation*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <select
+                                    name="designation"
+                                    className={
+                                      experienceDetails.designation == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.designation}
+                                    onChange={handleChange}
+                                  >
+                                    <option value="">Select</option>
+                                    {itPositions.map((op) => (
+                                      <option value={op}>{op}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div>
+                                <div
+                                  style={{ display: "flex", flexDirection: "column" }}
+                                >
+                                  <div>
+                                    <label className="Input-Label">Start Date*</label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="date"
+                                      className={
+                                        experienceDetails.start == ""
+                                          ? "editErrors"
+                                          : "editSuccess"
+                                      }
+                                      value={experienceDetails.start}
+                                      name="start"
+                                      id=""
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                </div>
+                                <div
+                                  style={{ display: "flex", flexDirection: "column" }}
+                                >
+                                  <div>
+                                    <label className="Input-Label">End Date</label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="date"
+                                      value={experienceDetails.end}
+                                      name="end"
+                                      id=""
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div>
+                                <div>
+                                  <label className="Input-Label">Profession*</label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="text"
+                                    name="Profession"
+                                    className={
+                                      experienceDetails.Profession == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.Profession}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Enter Your Profession"
+                                  />
+                                </div>
+                              </div>
+
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Total Work Experience*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    name="TotalWorkExperience"
+                                    className={
+                                      experienceDetails.TotalWorkExperience == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.TotalWorkExperience}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Enter Your Total Work Experience"
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+                          {(experienceDetails.workingStatus == "Self Employed" ||
+                            role === "Technology Partner") && (
+                              <>
+                                <div>
+                                  <div>
+                                    <label className="Input-Label">
+                                      Startup / Business name*
+                                    </label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="text"
+                                      name="startupName"
+                                      className={
+                                        experienceDetails.startupName == ""
+                                          ? "editErrors"
+                                          : "editSuccess"
+                                      }
+                                      value={experienceDetails.startupName}
+                                      id=""
+                                      onChange={handleChange}
+                                      placeholder="Enter Your Business name"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div>
+                                    <label className="Input-Label">
+                                      Startup description in short*
+                                    </label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <textarea
+                                      type="text"
+                                      name="Description"
+                                      className={
+                                        experienceDetails.Description == ""
+                                          ? "editErrors"
+                                          : "editSuccess"
+                                      }
+                                      value={experienceDetails.Description}
+                                      id=""
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div>
+                                    <label className="Input-Label">
+                                      Current Designation*
+                                    </label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <select
+                                      name="designation"
+                                      className={
+                                        experienceDetails.designation == ""
+                                          ? "editErrors"
+                                          : "editSuccess"
+                                      }
+                                      value={experienceDetails.designation}
+                                      onChange={handleChange}
+                                    >
+                                      <option value="">Select</option>
+                                      {itPositions.map((op) => (
+                                        <option value={op}>{op}</option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div>
+                                    <label className="Input-Label">Profession*</label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="text"
+                                      name="Profession"
+                                      className={
+                                        experienceDetails.Profession == ""
+                                          ? "editErrors"
+                                          : "editSuccess"
+                                      }
+                                      value={experienceDetails.Profession}
+                                      id=""
+                                      onChange={handleChange}
+                                      placeholder="Enter Your Profession"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div>
+                                    <label className="Input-Label">
+                                      Total Work Experience*
+                                    </label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      className={
+                                        experienceDetails.TotalWorkExperience == ""
+                                          ? "editErrors"
+                                          : "editSuccess"
+                                      }
+                                      name="TotalWorkExperience"
+                                      value={experienceDetails.TotalWorkExperience}
+                                      id=""
+                                      onChange={handleChange}
+                                      placeholder="Enter Your Total Work Experience"
+                                    />
+                                  </div>
+                                </div>
+                              </>
+                            )}
+
+                          {role === "Technology Partner" && (
+                            <>
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Total Customers*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="number"
+                                    name="Customers"
+                                    className={
+                                      experienceDetails.Customers == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.Customers}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Total Number of Customers "
+                                  />
+                                </div>
+                              </div>
+
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Company Location*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="text"
+                                    name="CompanyLocation"
+                                    className={
+                                      experienceDetails.CompanyLocation == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.CompanyLocation}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Company Location "
+                                  />
+                                </div>
+                              </div>
+
+                              <div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Area Of Business*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="text"
+                                    name="areaOfBusiness"
+                                    className={
+                                      experienceDetails.areaOfBusiness == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.areaOfBusiness}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Area of Business"
+                                  />
+                                </div>
+                              </div>
+
+                              <>
+                                <div>
+                                  <label className="Input-Label">Banner*</label>
+                                </div>
+                                <label
+                                  htmlFor="Banner"
+                                  className={`resume ${experienceDetails.Banner == ""
                                     ? "editErrors"
                                     : "editSuccess"
-                                }
-                                value={experienceDetails.start}
-                                name="start"
-                                id=""
-                                onChange={handleChange}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            style={{ display: "flex", flexDirection: "column" }}
-                          >
-                            <div>
-                              <label className="Input-Label">End Date</label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="date"
-                                value={experienceDetails.end}
-                                name="end"
-                                id=""
-                                onChange={handleChange}
-                              />
-                            </div>
-                          </div>
-                        </div>
+                                    }`}
+                                >
+                                  <CloudUploadIcon />
+                                  <span className="fileName">
+                                    {Banner || "Upload"}
+                                  </span>
+                                </label>
 
-                        <div>
+                                <input
+                                  type="file"
+                                  id="Banner"
+                                  className="resume"
+                                  style={{ display: "none" }}
+                                  name="Banner"
+                                  onChange={handleBannerImage}
+                                />
+                              </>
+
+                              <>
+                                <div>
+                                  <label className="Input-Label">Logo*</label>
+                                </div>
+                                <label
+                                  htmlFor="Logo"
+                                  className={`resume ${experienceDetails.Logo == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                    }`}
+                                >
+                                  <CloudUploadIcon />
+                                  <span className="fileName">{Logo || "Upload"}</span>
+                                </label>
+
+                                <input
+                                  type="file"
+                                  id="Logo"
+                                  className="resume"
+                                  style={{ display: "none" }}
+                                  name="Logo"
+                                  onChange={handleLogoImage}
+                                />
+                              </>
+
+                              <div>
+                                <div>
+                                  <label className="Input-Label">Services*</label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <input
+                                    type="text"
+                                    name="Services"
+                                    className={
+                                      experienceDetails.Services == ""
+                                        ? "editErrors"
+                                        : "editSuccess"
+                                    }
+                                    value={experienceDetails.Services}
+                                    id=""
+                                    onChange={handleChange}
+                                    placeholder="Services"
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+
+
+                          {mentorCategories == null &&
+                            <><div>
+                              <div>
+                                <label className="Input-Label">
+                                  Company Name*
+                                </label>
+                              </div>
+                              <div className="Exp_Input_Fields">
+                                <input
+                                  type="text"
+                                  name="company"
+                                  className={experienceDetails.company == ""
+                                    ? "editErrors"
+                                    : "editSuccess"}
+                                  value={experienceDetails.company}
+                                  id=""
+                                  onChange={handleChange}
+                                  placeholder="Enter Your Company name" />
+                              </div>
+                            </div><div>
+                                <div>
+                                  <label className="Input-Label">
+                                    Current Designation*
+                                  </label>
+                                </div>
+                                <div className="Exp_Input_Fields">
+                                  <select
+                                    name="designation"
+                                    className={experienceDetails.designation == ""
+                                      ? "editErrors"
+                                      : "editSuccess"}
+                                    value={experienceDetails.designation}
+                                    onChange={handleChange}
+                                  >
+                                    <option value="">Select</option>
+                                    {itPositions.map((op) => (
+                                      <option value={op}>{op}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div><div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                  }}
+                                >
+                                  <div>
+                                    <label className="Input-Label">
+                                      Start Date*
+                                    </label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="date"
+                                      className={experienceDetails.start == ""
+                                        ? "editErrors"
+                                        : "editSuccess"}
+                                      value={experienceDetails.start}
+                                      name="start"
+                                      id=""
+                                      onChange={handleChange} />
+                                  </div>
+                                </div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                  }}
+                                >
+                                  <div>
+                                    <label className="Input-Label">
+                                      End Date
+                                    </label>
+                                  </div>
+                                  <div className="Exp_Input_Fields">
+                                    <input
+                                      type="date"
+                                      value={experienceDetails.end}
+                                      name="end"
+                                      id=""
+                                      onChange={handleChange} />
+                                  </div>
+                                </div>
+                              </div></>
+                          }
+
                           <div>
-                            <label className="Input-Label">Profession*</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="Profession"
-                              className={
-                                experienceDetails.Profession == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.Profession}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Profession"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Total Work Experience*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="number"
-                              min={0}
-                              name="TotalWorkExperience"
-                              className={
-                                experienceDetails.TotalWorkExperience == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.TotalWorkExperience}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Total Work Experience"
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    {(experienceDetails.workingStatus == "Self Employed" ||
-                      role === "Technology Partner") && (
-                      <>
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Startup / Business name*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="startupName"
-                              className={
-                                experienceDetails.startupName == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.startupName}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Business name"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Startup description in short*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <textarea
-                              type="text"
-                              name="Description"
-                              className={
-                                experienceDetails.Description == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.Description}
-                              id=""
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Current Designation*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <select
-                              name="designation"
-                              className={
-                                experienceDetails.designation == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.designation}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              {itPositions.map((op) => (
-                                <option value={op}>{op}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">Profession*</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="Profession"
-                              className={
-                                experienceDetails.Profession == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.Profession}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Profession"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Total Work Experience*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="number"
-                              min={0}
-                              className={
-                                experienceDetails.TotalWorkExperience == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              name="TotalWorkExperience"
-                              value={experienceDetails.TotalWorkExperience}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Total Work Experience"
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    {role === "Technology Partner" && (
-                      <>
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Total Customers*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="number"
-                              name="Customers"
-                              className={
-                                experienceDetails.Customers == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.Customers}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Total Number of Customers "
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Company Location*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="CompanyLocation"
-                              className={
-                                experienceDetails.CompanyLocation == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.CompanyLocation}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Company Location "
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">
-                              Area Of Business*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="areaOfBusiness"
-                              className={
-                                experienceDetails.areaOfBusiness == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.areaOfBusiness}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Area of Business"
-                            />
-                          </div>
-                        </div>
-
-                        <>
-                          <div>
-                            <label className="Input-Label">Banner*</label>
-                          </div>
-                          <label
-                            htmlFor="Banner"
-                            className={`resume ${
-                              experienceDetails.Banner == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }`}
-                          >
-                            <CloudUploadIcon />
-                            <span className="fileName">
-                              {Banner || "Upload"}
-                            </span>
-                          </label>
-
-                          <input
-                            type="file"
-                            id="Banner"
-                            className="resume"
-                            style={{ display: "none" }}
-                            name="Banner"
-                            onChange={handleBannerImage}
-                          />
-                        </>
-
-                        <>
-                          <div>
-                            <label className="Input-Label">Logo*</label>
-                          </div>
-                          <label
-                            htmlFor="Logo"
-                            className={`resume ${
-                              experienceDetails.Logo == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }`}
-                          >
-                            <CloudUploadIcon />
-                            <span className="fileName">{Logo || "Upload"}</span>
-                          </label>
-
-                          <input
-                            type="file"
-                            id="Logo"
-                            className="resume"
-                            style={{ display: "none" }}
-                            name="Logo"
-                            onChange={handleLogoImage}
-                          />
-                        </>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">Services*</label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="Services"
-                              className={
-                                experienceDetails.Services == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={experienceDetails.Services}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Services"
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-
-
-                    {mentorCategories == null &&
-                      <><div>
-                        <div>
-                          <label className="Input-Label">
-                            Company Name*
-                          </label>
-                        </div>
-                        <div className="Exp_Input_Fields">
-                          <input
-                            type="text"
-                            name="company"
-                            className={experienceDetails.company == ""
-                              ? "editErrors"
-                              : "editSuccess"}
-                            value={experienceDetails.company}
-                            id=""
-                            onChange={handleChange}
-                            placeholder="Enter Your Company name" />
-                        </div>
-                      </div><div>
-                          <div>
-                            <label className="Input-Label">
-                              Current Designation*
-                            </label>
-                          </div>
-                          <div className="Exp_Input_Fields">
-                            <select
-                              name="designation"
-                              className={experienceDetails.designation == ""
-                                ? "editErrors"
-                                : "editSuccess"}
-                              value={experienceDetails.designation}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              {itPositions.map((op) => (
-                                <option value={op}>{op}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div><div>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div>
-                              <label className="Input-Label">
-                                Start Date*
-                              </label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="date"
-                                className={experienceDetails.start == ""
-                                  ? "editErrors"
-                                  : "editSuccess"}
-                                value={experienceDetails.start}
-                                name="start"
-                                id=""
-                                onChange={handleChange} />
-                            </div>
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div>
-                              <label className="Input-Label">
-                                End Date
-                              </label>
-                            </div>
-                            <div className="Exp_Input_Fields">
-                              <input
-                                type="date"
-                                value={experienceDetails.end}
-                                name="end"
-                                id=""
-                                onChange={handleChange} />
-                            </div>
-                          </div>
-                        </div></>
-                    }
-
-                    <div>
-                      <button
-                        className="add-button"
-                        onClick={addExperience}
-                        disabled={
-                          (role === "Technology Partner" &&
-                            (experienceDetails.startupName == "" ||
-                              experienceDetails.Description == "" ||
-                              experienceDetails.designation == "" ||
-                              experienceDetails.Profession == "" ||
-                              experienceDetails.TotalWorkExperience == "" ||
-                              experienceDetails.Customers == "" ||
-                              experienceDetails.CompanyLocation == "" ||
-                              experienceDetails.business == "" ||
-                              experienceDetails.Banner == "" ||
-                              experienceDetails.Logo == "" ||
-                              experienceDetails.Services == "")) ||
-                          (role === "Entrepreneur" &&
-                            ((experienceDetails.workingStatus == "Job" &&
-                              (experienceDetails.company == "" ||
-                                experienceDetails.designation == "" ||
-                                experienceDetails.start == "" ||
-                                experienceDetails.TotalWorkExperience == "" ||
-                                experienceDetails.Profession == "")) ||
-                              (experienceDetails.workingStatus ==
-                                "Self Employed" &&
-                                (experienceDetails.startupName == "" ||
-                                  experienceDetails.Description == "" ||
-                                  experienceDetails.designation == "" ||
-                                  experienceDetails.Profession == "" ||
-                                  experienceDetails.TotalWorkExperience ==
-                                    "")))) ||
-                          (role == "Mentor" &&
-                            ((mentorCategories == "Academia Mentor" &&
-                              (experienceDetails.institute == "" ||
-                                experienceDetails.designation !== "" ||
-                                experienceDetails.Department == "" ||
-                                experienceDetails.start == "" ||
-                                experienceDetails.Research == "" ||
-                                experienceDetails.Achievements == "" ||
-                                experienceDetails.Published == "")) ||
-                              (mentorCategories == "Industry Expert Mentor" &&
-                                ((experienceDetails.workingStatus == "Job" &&
-                                  (experienceDetails.company == "" ||
+                            <button
+                              className="add-button"
+                              onClick={addExperience}
+                              disabled={
+                                (role === "Technology Partner" &&
+                                  (experienceDetails.startupName == "" ||
+                                    experienceDetails.Description == "" ||
                                     experienceDetails.designation == "" ||
-                                    experienceDetails.start == "" ||
-                                    experienceDetails.TotalWorkExperience ==
-                                      "" ||
-                                    experienceDetails.Profession == "")) ||
-                                  (experienceDetails.workingStatus ==
-                                    "Self Employed" &&
-                                    (experienceDetails.startupName == "" ||
-                                      experienceDetails.Description == "" ||
+                                    experienceDetails.Profession == "" ||
+                                    experienceDetails.TotalWorkExperience == "" ||
+                                    experienceDetails.Customers == "" ||
+                                    experienceDetails.CompanyLocation == "" ||
+                                    experienceDetails.business == "" ||
+                                    experienceDetails.Banner == "" ||
+                                    experienceDetails.Logo == "" ||
+                                    experienceDetails.Services == "")) ||
+                                (role === "Entrepreneur" &&
+                                  ((experienceDetails.workingStatus == "Job" &&
+                                    (experienceDetails.company == "" ||
                                       experienceDetails.designation == "" ||
-                                      experienceDetails.Profession == "" ||
-                                      experienceDetails.TotalWorkExperience ==
-                                        ""))))))
-                        }
-                        // disabled={
-                        //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
-                        //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
-                        //   experienceDetails.designation == ""
-                        // }
-                      >
-                        {editingExperienceId == "" ? "Add" : "Update"}
-                      </button>
+                                      experienceDetails.start == "" ||
+                                      experienceDetails.TotalWorkExperience == "" ||
+                                      experienceDetails.Profession == "")) ||
+                                    (experienceDetails.workingStatus ==
+                                      "Self Employed" &&
+                                      (experienceDetails.startupName == "" ||
+                                        experienceDetails.Description == "" ||
+                                        experienceDetails.designation == "" ||
+                                        experienceDetails.Profession == "" ||
+                                        experienceDetails.TotalWorkExperience ==
+                                        "")))) ||
+                                (role == "Mentor" &&
+                                  ((mentorCategories == "Academia Mentor" &&
+                                    (experienceDetails.institute == "" ||
+                                      experienceDetails.designation !== "" ||
+                                      experienceDetails.Department == "" ||
+                                      experienceDetails.start == "" ||
+                                      experienceDetails.Research == "" ||
+                                      experienceDetails.Achievements == "" ||
+                                      experienceDetails.Published == "")) ||
+                                    (mentorCategories == "Industry Expert Mentor" &&
+                                      ((experienceDetails.workingStatus == "Job" &&
+                                        (experienceDetails.company == "" ||
+                                          experienceDetails.designation == "" ||
+                                          experienceDetails.start == "" ||
+                                          experienceDetails.TotalWorkExperience ==
+                                          "" ||
+                                          experienceDetails.Profession == "")) ||
+                                        (experienceDetails.workingStatus ==
+                                          "Self Employed" &&
+                                          (experienceDetails.startupName == "" ||
+                                            experienceDetails.Description == "" ||
+                                            experienceDetails.designation == "" ||
+                                            experienceDetails.Profession == "" ||
+                                            experienceDetails.TotalWorkExperience ==
+                                            ""))))))
+                              }
+                            // disabled={
+                            //   (experienceDetails.start == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") ||
+                            //   (experienceDetails.company == "" && experienceDetails.workingStatus !== "Self Employed" && role !== "Technology Partner") || (experienceDetails.workingStatus !== "Self Employed" && experienceDetails.startupName == '') ||
+                            //   experienceDetails.designation == ""
+                            // }
+                            >
+                              {editingExperienceId == "" ? "Add" : "Update"}
+                            </button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
+                </div>
+              )}
+            </section>
 
-      <section className="EditProfile-Education-Container">
-        <div className="Ed-details" style={{ flexDirection: "column" }}>
-          <div style={{ padding: "20px" }}>
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "99%",
-                }}
-              >
-                <h3 className="EditProfile-Headings">Education</h3>
-                {id == undefined && (
-                  <span>
-                    <i
-                      onClick={handleEducationButtonClick}
-                      className="fas fa-plus"
-                    ></i>
-                  </span>
-                )}
-              </div>
-            </div>
-            {totalEducationData.length > 0 ? (
-              totalEducationData.map((te, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                  className="studies"
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      alignItems: "center",
-                      gap: "10px",
-                    }}
-                  >
+            <section className="EditProfile-Education-Container">
+              <div className="Ed-details" style={{ flexDirection: "column" }}>
+                <div style={{ padding: "20px" }}>
+                  <div>
                     <div
                       style={{
                         display: "flex",
-                        flexDirection: "column",
-                        padding: "10px",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        width: "99%",
                       }}
                     >
-                      <div className="college">{te.college} </div>
-                      <div className="grade">{te.grade}</div>
-                      <div className="timeline">
-                        {convertToDate(te.Edstart)}-
-                        {te.Edend === "" ? "Present" : convertToDate(te.Edend)}
-                      </div>
+                      <h3 className="EditProfile-Headings">Education</h3>
+                      {id == undefined && (
+                        <span>
+                          <i
+                            onClick={handleEducationButtonClick}
+                            className="fas fa-plus"
+                          ></i>
+                        </span>
+                      )}
                     </div>
                   </div>
-                  {id == undefined && (
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "5px",
-                        alignItems: "center",
-                      }}
-                    >
+                  {totalEducationData.length > 0 ? (
+                    totalEducationData.map((te, i) => (
                       <div
-                        onClick={(e) => {
-                          seteditingEducationId(i + 1);
-                          setEducationDetails(te);
-                          handleEducationButtonClick();
+                        key={i}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          width: "100%",
                         }}
+                        className="studies"
                       >
-                        <i class="fas fa-pen"></i>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            alignItems: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              padding: "10px",
+                            }}
+                          >
+                            <div className="college">{te.college} </div>
+                            <div className="grade">{te.grade}</div>
+                            <div className="timeline">
+                              {convertToDate(te.Edstart)}-
+                              {te.Edend === "" ? "Present" : convertToDate(te.Edend)}
+                            </div>
+                          </div>
+                        </div>
+                        {id == undefined && (
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "5px",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div
+                              onClick={(e) => {
+                                seteditingEducationId(i + 1);
+                                setEducationDetails(te);
+                                handleEducationButtonClick();
+                              }}
+                            >
+                              <i class="fas fa-pen"></i>
+                            </div>
+                            <div
+                              onClick={(e) => {
+                                setTotalEducationData((prev) => [
+                                  ...prev.filter((f, j) => j !== i),
+                                ]);
+                              }}
+                              style={{ color: "red" }}
+                            >
+                              <i class="fas fa-times cross"></i>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div
-                        onClick={(e) => {
-                          setTotalEducationData((prev) => [
-                            ...prev.filter((f, j) => j !== i),
-                          ]);
-                        }}
-                        style={{ color: "red" }}
-                      >
-                        <i class="fas fa-times cross"></i>
-                      </div>
-                    </div>
+                    ))
+                  ) : (
+                    <div>No education data found</div>
                   )}
                 </div>
-              ))
-            ) : (
-              <div>No education data found</div>
-            )}
-          </div>
-          {isEducationPopupVisible && (
-            <div className="popup-container">
-              <div className="popup-content">
-                <form className="update-form">
-                  <div className="popup-header">
-                    <h3>Education</h3>
-                    <div
-                      className="close-icon"
-                      onClick={() => {
-                        document.getElementsByTagName(
-                          "body"
-                        )[0].style.overflowY = "scroll";
+                {isEducationPopupVisible && (
+                  <div className="popup-container">
+                    <div className="popup-content">
+                      <form className="update-form">
+                        <div className="popup-header">
+                          <h3>Education</h3>
+                          <div
+                            className="close-icon"
+                            onClick={() => {
+                              document.getElementsByTagName(
+                                "body"
+                              )[0].style.overflowY = "scroll";
 
-                        setIsEducationPopupVisible(false);
-                        seteditingEducationId("");
-                        setEducationDetails({
-                          year: "",
-                          grade: "",
-                          college: "",
-                          Edstart: "",
-                          Edend: "",
-                        });
-                      }}
-                    >
-                      <i class="fas fa-times"></i>
-                    </div>
-                  </div>
-
-                  <div className="edu-container">
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <div>
-                        <div>
-                          <label className="Input-Label">Grade*</label>
-                        </div>
-                        <div className="Ed_Input_Fields">
-                          <select
-                            name="grade"
-                            id=""
-                            value={EducationDetails.grade}
-                            onChange={handleEducationChange}
+                              setIsEducationPopupVisible(false);
+                              seteditingEducationId("");
+                              setEducationDetails({
+                                year: "",
+                                grade: "",
+                                college: "",
+                                Edstart: "",
+                                Edend: "",
+                              });
+                            }}
                           >
-                            <option value="">Select</option>
-                            <option value="SSC">10th</option>
-                            <option value="Inter">Inter/Equivalent</option>
-                            <option value="UG">UG (Btech, degree)</option>
-                            <option value="PG">PG</option>
-                            <option value="Medical">Medical</option>
-                            <option value="Business">Business</option>
-                            <option value="LAW">Law</option>
-                            <option value="other">Other</option>
-                          </select>
+                            <i class="fas fa-times"></i>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <div>
-                          <label className="Input-Label">
-                            College/University*{" "}
-                            {EducationDetails.grade !== "SSC" &&
-                              EducationDetails.grade !== "" &&
-                              "(Type 3 characters)"}
-                          </label>
-                        </div>
-                        <div className="Ed_Input_Fields">
-                          {EducationDetails.grade == "SSC" ||
-                          EducationDetails.grade == "" ? (
-                            <input
-                              type="text"
-                              name="college"
-                              value={EducationDetails.college}
-                              id=""
-                              onChange={handleEducationChange}
-                              placeholder="Enter Your College/School/University"
-                            />
-                          ) : (
-                            <>
-                              <Autocomplete
-                                disablePortal
-                                options={universities}
-                                getOptionLabel={(option) => option.name}
-                                sx={{ width: 300 }}
-                                // inputValue={
-                                //   EducationDetails.college
-                                //     ? EducationDetails.college
-                                //     : undefined
-                                // }
-                                onChange={(e) => handleEducationChange(e, true)}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    value={collegeQuery}
-                                    onChange={hadnleCollegeQueryChange}
-                                    label="College"
+
+                        <div className="edu-container">
+                          <div style={{ display: "flex", flexDirection: "column" }}>
+                            <div>
+                              <div>
+                                <label className="Input-Label">Grade*</label>
+                              </div>
+                              <div className="Ed_Input_Fields">
+                                <select
+                                  name="grade"
+                                  id=""
+                                  value={EducationDetails.grade}
+                                  onChange={handleEducationChange}
+                                >
+                                  <option value="">Select</option>
+                                  <option value="SSC">10th</option>
+                                  <option value="Inter">Inter/Equivalent</option>
+                                  <option value="UG">UG (Btech, degree)</option>
+                                  <option value="PG">PG</option>
+                                  <option value="Medical">Medical</option>
+                                  <option value="Business">Business</option>
+                                  <option value="LAW">Law</option>
+                                  <option value="other">Other</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div>
+                              <div>
+                                <label className="Input-Label">
+                                  College/University*{" "}
+                                  {EducationDetails.grade !== "SSC" &&
+                                    EducationDetails.grade !== "" &&
+                                    "(Type 3 characters)"}
+                                </label>
+                              </div>
+                              <div className="Ed_Input_Fields">
+                                {EducationDetails.grade == "SSC" ||
+                                  EducationDetails.grade == "" ? (
+                                  <input
+                                    type="text"
+                                    name="college"
+                                    value={EducationDetails.college}
+                                    id=""
+                                    onChange={handleEducationChange}
+                                    placeholder="Enter Your College/School/University"
                                   />
-                                )}
-                              />
-                              {/* <input
+                                ) : (
+                                  <>
+                                    <Autocomplete
+                                      disablePortal
+                                      options={universities}
+                                      getOptionLabel={(option) => option.name}
+                                      sx={{ width: 300 }}
+                                      // inputValue={
+                                      //   EducationDetails.college
+                                      //     ? EducationDetails.college
+                                      //     : undefined
+                                      // }
+                                      onChange={(e) => handleEducationChange(e, true)}
+                                      renderInput={(params) => (
+                                        <TextField
+                                          {...params}
+                                          value={collegeQuery}
+                                          onChange={hadnleCollegeQueryChange}
+                                          label="College"
+                                        />
+                                      )}
+                                    />
+                                    {/* <input
                         type="text"
                         name="collegeQuery"
                         value={collegeQuery}
@@ -3280,122 +3288,69 @@ const EditProfileUI = () => {
                           ))}
                         </select>
                       )} */}
-                            </>
-                          )}
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="Input-Label">Start Date*</label>
+                            </div>
+                            <div className="Ed_Input_Fields">
+                              <input
+                                type="date"
+                                value={EducationDetails.Edstart}
+                                name="Edstart"
+                                id=""
+                                onChange={handleEducationChange}
+                              />
+                            </div>
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column" }}>
+                            <div>
+                              <label className="Input-Label">End Date</label>
+                            </div>
+                            <div className="Ed_Input_Fields">
+                              <input
+                                type="date"
+                                value={EducationDetails.Edend}
+                                name="Edend"
+                                id=""
+                                onChange={handleEducationChange}
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <button
+                              className="add-button"
+                              onClick={addEducation}
+                              disabled={
+                                EducationDetails.Edstart == "" ||
+                                EducationDetails.grade == "" ||
+                                EducationDetails.college == ""
+                              }
+                            >
+                              {editingEducationId !== "" ? "Update" : "Add"}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-
-                      <div>
-                        <label className="Input-Label">Start Date*</label>
-                      </div>
-                      <div className="Ed_Input_Fields">
-                        <input
-                          type="date"
-                          value={EducationDetails.Edstart}
-                          name="Edstart"
-                          id=""
-                          onChange={handleEducationChange}
-                        />
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <div>
-                        <label className="Input-Label">End Date</label>
-                      </div>
-                      <div className="Ed_Input_Fields">
-                        <input
-                          type="date"
-                          value={EducationDetails.Edend}
-                          name="Edend"
-                          id=""
-                          onChange={handleEducationChange}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <button
-                        className="add-button"
-                        onClick={addEducation}
-                        disabled={
-                          EducationDetails.Edstart == "" ||
-                          EducationDetails.grade == "" ||
-                          EducationDetails.college == ""
-                        }
-                      >
-                        {editingEducationId !== "" ? "Update" : "Add"}
-                      </button>
+                        <div></div>
+                      </form>
                     </div>
                   </div>
-                  <div></div>
-                </form>
+                )}
               </div>
-            </div>
-          )}
-        </div>
-      </section>
+            </section>
+          </>
+        }
 
-      {userpage === false && (
-        <section className="EditProfile-UploadFiles-Container">
-          <div style={{ padding: "20px" }}>
-            <h3 className="EditProfile-Headings">Documents</h3>
-            <form className="update-form">
-              <div className="upload-files-container">
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "2px",
-                      justifyContent: "space-between",
-                      width: width < 700 && "320px",
-                    }}
-                  >
-                    <label className="Input-Label">Resume</label>
-                    {oldDocs.resume !== "" &&
-                      oldDocs.resume !== undefined &&
-                      Object.keys(oldDocs.resume).length !== 0 && (
-                        <attr title="view previous resume">
-                          <a
-                            href={oldDocs.resume?.secure_url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <img
-                              style={{
-                                height: "30px",
-                                width: "30px",
-                                marginRight: "30px",
-                              }}
-                              src="/view.png"
-                              onMouseEnter={() => setShowPreviousFile(true)}
-                              onMouseLeave={() => setShowPreviousFile(false)}
-                            />
-                          </a>
-                        </attr>
-                      )}
-                  </div>
-                  {id == undefined && (
-                    <>
-                      <label htmlFor="resume" className="resume">
-                        <CloudUploadIcon />
-                        <span className="fileName">
-                          {recentUploadedDocs?.resume || "Upload"}
-                        </span>
-                      </label>
-                      <input
-                        className="resume"
-                        type="file"
-                        name="resume"
-                        id="resume"
-                        onChange={handleResume}
-                        style={{ display: "none" }}
-                      />
-                    </>
-                  )}
-                </div>
-
-                <div>
+        {editPostToggler == 'profile' && userpage === false && (
+          <section className="EditProfile-UploadFiles-Container">
+            <div style={{ padding: "20px" }}>
+              <h3 className="EditProfile-Headings">Documents</h3>
+              <form className="update-form">
+                <div className="upload-files-container">
                   <div>
                     <div
                       style={{
@@ -3406,13 +3361,13 @@ const EditProfileUI = () => {
                         width: width < 700 && "320px",
                       }}
                     >
-                      <label className="Input-Label">Acheivements</label>
-                      {oldDocs.acheivements !== "" &&
-                        oldDocs.acheivements !== undefined &&
-                        Object.keys(oldDocs.acheivements).length !== 0 && (
-                          <attr title="view previous acheivements">
+                      <label className="Input-Label">Resume</label>
+                      {oldDocs.resume !== "" &&
+                        oldDocs.resume !== undefined &&
+                        Object.keys(oldDocs.resume).length !== 0 && (
+                          <attr title="view previous resume">
                             <a
-                              href={oldDocs.acheivements?.secure_url}
+                              href={oldDocs.resume?.secure_url}
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -3432,511 +3387,585 @@ const EditProfileUI = () => {
                     </div>
                     {id == undefined && (
                       <>
-                        <label htmlFor="acheivements" className="resume">
+                        <label htmlFor="resume" className="resume">
                           <CloudUploadIcon />
                           <span className="fileName">
-                            {recentUploadedDocs?.acheivements || "Upload"}
+                            {recentUploadedDocs?.resume || "Upload"}
                           </span>
                         </label>
                         <input
-                          type="file"
-                          id="acheivements"
                           className="resume"
-                          name="acheivements"
+                          type="file"
+                          name="resume"
+                          id="resume"
                           onChange={handleResume}
                           style={{ display: "none" }}
                         />
                       </>
                     )}
                   </div>
-                </div>
 
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "2px",
-                      justifyContent: "space-between",
-                      width: width < 700 && "320px",
-                    }}
-                  >
-                    <label className="Input-Label">Degree</label>
-                    {oldDocs.degree !== "" &&
-                      oldDocs.degree !== undefined &&
-                      Object.keys(oldDocs.degree).length !== 0 && (
-                        <attr title="view previous degree ">
-                          <a
-                            href={oldDocs.degree?.secure_url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <img
-                              style={{
-                                height: "30px",
-                                width: "30px",
-                                marginRight: "30px",
-                              }}
-                              src="/view.png"
-                              onMouseEnter={() => setShowPreviousFile(true)}
-                              onMouseLeave={() => setShowPreviousFile(false)}
-                            />
-                          </a>
-                        </attr>
-                      )}
-                  </div>
-                  {id == undefined && (
-                    <>
-                      <label htmlFor="degree" className="resume">
-                        <CloudUploadIcon />
-                        <span className="fileName">
-                          {recentUploadedDocs?.degree || "Upload"}
-                        </span>
-                      </label>
-
-                      <input
-                        type="file"
-                        id="degree"
-                        className="resume"
-                        name="degree"
-                        onChange={handleResume}
-                        style={{ display: "none" }}
-                      />
-                    </>
-                  )}
-                </div>
-
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "2px",
-                      justifyContent: "space-between",
-                      width: width < 700 && "320px",
-                    }}
-                  >
-                    <label className="Input-Label">Expertise</label>
-                    {oldDocs.expertise !== "" &&
-                      oldDocs.expertise !== undefined &&
-                      Object.keys(oldDocs.expertise).length !== 0 && (
-                        <attr title="view previous expertise ">
-                          <a
-                            href={oldDocs.expertise?.secure_url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <img
-                              style={{
-                                height: "30px",
-                                width: "30px",
-                                marginRight: "30px",
-                              }}
-                              src="/view.png"
-                              onMouseEnter={() => setShowPreviousFile(true)}
-                              onMouseLeave={() => setShowPreviousFile(false)}
-                            />
-                          </a>
-                        </attr>
-                      )}
-                  </div>
-                  {id == undefined && (
-                    <>
-                      <label htmlFor="expertise" className="resume">
-                        <CloudUploadIcon />
-                        <span className="fileName">
-                          {recentUploadedDocs?.expertise || "Upload"}
-                        </span>
-                      </label>
-
-                      <input
-                        type="file"
-                        id="expertise"
-                        className="resume"
-                        name="expertise"
-                        style={{ display: "none" }}
-                        onChange={handleResume}
-                      />
-                    </>
-                  )}
-                </div>
-
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "2px",
-                      justifyContent: "space-between",
-                      width: width < 700 && "320px",
-                    }}
-                  >
-                    <label className="Input-Label">Working</label>
-                    {oldDocs.working !== "" &&
-                      oldDocs.working !== undefined &&
-                      Object.keys(oldDocs.working).length !== 0 && (
-                        <attr title="view previous working ">
-                          <a
-                            href={oldDocs.working?.secure_url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <img
-                              style={{
-                                height: "30px",
-                                width: "30px",
-                                marginRight: "30px",
-                              }}
-                              src="/view.png"
-                              onMouseEnter={() => setShowPreviousFile(true)}
-                              onMouseLeave={() => setShowPreviousFile(false)}
-                            />
-                          </a>
-                        </attr>
-                      )}
-                  </div>
-                  {id == undefined && (
-                    <>
-                      <label htmlFor="working" className="resume">
-                        <CloudUploadIcon />
-                        <span className="fileName">
-                          {recentUploadedDocs?.working || "Upload"}
-                        </span>
-                      </label>
-
-                      <input
-                        type="file"
-                        id="working"
-                        className="resume"
-                        style={{ display: "none" }}
-                        name="working"
-                        onChange={handleResume}
-                      />
-                    </>
-                  )}
-                </div>
-              </div>
-            </form>
-          </div>
-        </section>
-      )}
-
-      {userpage == true && (
-        <>
-          {id !==
-            jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
-              .user_id && (
-            <section className="EditProfile-comments-Container">
-              <div style={{ padding: "20px" }}>
-                <h2 className="Rating-heading">Ratings & Reviews</h2>
-                {convExits ||
-                jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
-                  .role == "Admin" ? (
-                  id !==
-                    jwtDecode(
-                      JSON.parse(localStorage.getItem("user")).accessToken
-                    ).user_id && (
+                  <div>
                     <div>
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        <img
-                          src={
-                            loggedImage !== "" && loggedImage !== undefined
-                              ? loggedImage
-                              : "/profile.png"
-                          }
-                        />
-                        <div>
-                          <span>
-                            <b>{loggedUserName}</b>
-                          </span>
-                          <div
-                            style={{ fontSize: "12px", marginBottom: "20px" }}
-                          >
-                            Reviews are public and include your account details
-                          </div>
-                        </div>
-                      </div>
-
                       <div
-                        className="Rating-Content"
-                        style={{ marginLeft: "60px" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "2px",
+                          justifyContent: "space-between",
+                          width: width < 700 && "320px",
+                        }}
                       >
-                        <h4>Rate this user</h4>
-                        <h6>Tell others what you think</h6>
-                        <div
-                          className="stars"
-                          style={{ display: "flex", marginBottom: "10px" }}
-                        >
-                          <AddReviewStars
-                            filledStars={filledStars}
-                            setFilledStars={setFilledStars}
-                          />{" "}
-                          <button
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "13px",
-                              width: "auto",
-                            }}
-                            onClick={sendReview}
-                          >
-                            Post
-                          </button>
-                        </div>
-                        <div>
-                          {!isWritingReview && (
-                            <div
-                              style={{ color: "blue", cursor: "pointer" }}
-                              onClick={() => setIsWritingReview(true)}
-                            >
-                              <b>Write a Review</b>
-                            </div>
-                          )}
-                          {isWritingReview && (
-                            <div
-                              className="writing-review"
-                              style={{
-                                display: "flex",
-                                gap: "20px",
-                                alignItems: "center",
-                              }}
-                            >
-                              <div>
-                                <textarea
-                                  className="textarea"
-                                  rows={2}
-                                  cols={50}
-                                  value={comment}
-                                  style={{ resize: "none" }}
-                                  onChange={(e) => setComment(e.target.value)}
-                                  placeholder="Describe Your Experience"
-                                />
-                              </div>
-                              <div>
-                                <button
-                                  onClick={sendText}
-                                  className="sendIcon"
+                        <label className="Input-Label">Acheivements</label>
+                        {oldDocs.acheivements !== "" &&
+                          oldDocs.acheivements !== undefined &&
+                          Object.keys(oldDocs.acheivements).length !== 0 && (
+                            <attr title="view previous acheivements">
+                              <a
+                                href={oldDocs.acheivements?.secure_url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                <img
                                   style={{
-                                    cursor:
-                                      comment === ""
-                                        ? "not-allowed"
-                                        : "pointer",
-                                    fontSize: "13px",
-                                    padding: "10px",
+                                    height: "30px",
+                                    width: "30px",
+                                    marginRight: "30px",
+                                  }}
+                                  src="/view.png"
+                                  onMouseEnter={() => setShowPreviousFile(true)}
+                                  onMouseLeave={() => setShowPreviousFile(false)}
+                                />
+                              </a>
+                            </attr>
+                          )}
+                      </div>
+                      {id == undefined && (
+                        <>
+                          <label htmlFor="acheivements" className="resume">
+                            <CloudUploadIcon />
+                            <span className="fileName">
+                              {recentUploadedDocs?.acheivements || "Upload"}
+                            </span>
+                          </label>
+                          <input
+                            type="file"
+                            id="acheivements"
+                            className="resume"
+                            name="acheivements"
+                            onChange={handleResume}
+                            style={{ display: "none" }}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                        justifyContent: "space-between",
+                        width: width < 700 && "320px",
+                      }}
+                    >
+                      <label className="Input-Label">Degree</label>
+                      {oldDocs.degree !== "" &&
+                        oldDocs.degree !== undefined &&
+                        Object.keys(oldDocs.degree).length !== 0 && (
+                          <attr title="view previous degree ">
+                            <a
+                              href={oldDocs.degree?.secure_url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  marginRight: "30px",
+                                }}
+                                src="/view.png"
+                                onMouseEnter={() => setShowPreviousFile(true)}
+                                onMouseLeave={() => setShowPreviousFile(false)}
+                              />
+                            </a>
+                          </attr>
+                        )}
+                    </div>
+                    {id == undefined && (
+                      <>
+                        <label htmlFor="degree" className="resume">
+                          <CloudUploadIcon />
+                          <span className="fileName">
+                            {recentUploadedDocs?.degree || "Upload"}
+                          </span>
+                        </label>
+
+                        <input
+                          type="file"
+                          id="degree"
+                          className="resume"
+                          name="degree"
+                          onChange={handleResume}
+                          style={{ display: "none" }}
+                        />
+                      </>
+                    )}
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                        justifyContent: "space-between",
+                        width: width < 700 && "320px",
+                      }}
+                    >
+                      <label className="Input-Label">Expertise</label>
+                      {oldDocs.expertise !== "" &&
+                        oldDocs.expertise !== undefined &&
+                        Object.keys(oldDocs.expertise).length !== 0 && (
+                          <attr title="view previous expertise ">
+                            <a
+                              href={oldDocs.expertise?.secure_url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  marginRight: "30px",
+                                }}
+                                src="/view.png"
+                                onMouseEnter={() => setShowPreviousFile(true)}
+                                onMouseLeave={() => setShowPreviousFile(false)}
+                              />
+                            </a>
+                          </attr>
+                        )}
+                    </div>
+                    {id == undefined && (
+                      <>
+                        <label htmlFor="expertise" className="resume">
+                          <CloudUploadIcon />
+                          <span className="fileName">
+                            {recentUploadedDocs?.expertise || "Upload"}
+                          </span>
+                        </label>
+
+                        <input
+                          type="file"
+                          id="expertise"
+                          className="resume"
+                          name="expertise"
+                          style={{ display: "none" }}
+                          onChange={handleResume}
+                        />
+                      </>
+                    )}
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                        justifyContent: "space-between",
+                        width: width < 700 && "320px",
+                      }}
+                    >
+                      <label className="Input-Label">Working</label>
+                      {oldDocs.working !== "" &&
+                        oldDocs.working !== undefined &&
+                        Object.keys(oldDocs.working).length !== 0 && (
+                          <attr title="view previous working ">
+                            <a
+                              href={oldDocs.working?.secure_url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  marginRight: "30px",
+                                }}
+                                src="/view.png"
+                                onMouseEnter={() => setShowPreviousFile(true)}
+                                onMouseLeave={() => setShowPreviousFile(false)}
+                              />
+                            </a>
+                          </attr>
+                        )}
+                    </div>
+                    {id == undefined && (
+                      <>
+                        <label htmlFor="working" className="resume">
+                          <CloudUploadIcon />
+                          <span className="fileName">
+                            {recentUploadedDocs?.working || "Upload"}
+                          </span>
+                        </label>
+
+                        <input
+                          type="file"
+                          id="working"
+                          className="resume"
+                          style={{ display: "none" }}
+                          name="working"
+                          onChange={handleResume}
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+        )}
+
+        {editPostToggler == 'profile' && userpage == true && (
+          <>
+            {id !==
+              jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                .user_id && (
+                <section className="EditProfile-comments-Container">
+                  <div style={{ padding: "20px" }}>
+                    <h2 className="Rating-heading">Ratings & Reviews</h2>
+                    {convExits ||
+                      jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                        .role == "Admin" ? (
+                      id !==
+                      jwtDecode(
+                        JSON.parse(localStorage.getItem("user")).accessToken
+                      ).user_id && (
+                        <div>
+                          <div style={{ display: "flex", gap: "10px" }}>
+                            <img
+                              src={
+                                loggedImage !== "" && loggedImage !== undefined
+                                  ? loggedImage
+                                  : "/profile.png"
+                              }
+                            />
+                            <div>
+                              <span>
+                                <b>{loggedUserName}</b>
+                              </span>
+                              <div
+                                style={{ fontSize: "12px", marginBottom: "20px" }}
+                              >
+                                Reviews are public and include your account details
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            className="Rating-Content"
+                            style={{ marginLeft: "60px" }}
+                          >
+                            <h4>Rate this user</h4>
+                            <h6>Tell others what you think</h6>
+                            <div
+                              className="stars"
+                              style={{ display: "flex", marginBottom: "10px" }}
+                            >
+                              <AddReviewStars
+                                filledStars={filledStars}
+                                setFilledStars={setFilledStars}
+                              />{" "}
+                              <button
+                                style={{
+                                  cursor: "pointer",
+                                  fontSize: "13px",
+                                  width: "auto",
+                                }}
+                                onClick={sendReview}
+                              >
+                                Post
+                              </button>
+                            </div>
+                            <div>
+                              {!isWritingReview && (
+                                <div
+                                  style={{ color: "blue", cursor: "pointer" }}
+                                  onClick={() => setIsWritingReview(true)}
+                                >
+                                  <b>Write a Review</b>
+                                </div>
+                              )}
+                              {isWritingReview && (
+                                <div
+                                  className="writing-review"
+                                  style={{
+                                    display: "flex",
+                                    gap: "20px",
+                                    alignItems: "center",
                                   }}
                                 >
-                                  Post Review
-                                </button>
-                              </div>
+                                  <div>
+                                    <textarea
+                                      className="textarea"
+                                      rows={2}
+                                      cols={50}
+                                      value={comment}
+                                      style={{ resize: "none" }}
+                                      onChange={(e) => setComment(e.target.value)}
+                                      placeholder="Describe Your Experience"
+                                    />
+                                  </div>
+                                  <div>
+                                    <button
+                                      onClick={sendText}
+                                      className="sendIcon"
+                                      style={{
+                                        cursor:
+                                          comment === ""
+                                            ? "not-allowed"
+                                            : "pointer",
+                                        fontSize: "13px",
+                                        padding: "10px",
+                                      }}
+                                    >
+                                      Post Review
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          )}
+                          </div>
                         </div>
+                      )
+                    ) : (
+                      <>
+                        <div style={{ fontSize: "20px", marginBottom: "20px" }}>
+                          Conversation with this user should exist to add reviews
+                        </div>
+                      </>
+                    )}
+
+                    {allComments.length > 0 && (
+                      <div>
+                        <b>Reviews:</b>
                       </div>
+                    )}
+                    <div
+                      style={{
+                        maxHeight: "340px",
+                        overflow: "scroll",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "5px",
+                      }}
+                    >
+                      {allComments.length > 0 &&
+                        allComments.map((c, index) => (
+                          <IndividualUserReview
+                            onLike={onLike}
+                            key={index}
+                            c={c}
+                            deleteComment={deleteComment}
+                            onDisLike={onDisLike}
+                          />
+                        ))}
                     </div>
-                  )
-                ) : (
-                  <>
-                    <div style={{ fontSize: "20px", marginBottom: "20px" }}>
-                      Conversation with this user should exist to add reviews
-                    </div>
-                  </>
-                )}
-
-                {allComments.length > 0 && (
-                  <div>
-                    <b>Reviews:</b>
                   </div>
-                )}
-                <div
-                  style={{
-                    maxHeight: "340px",
-                    overflow: "scroll",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
-                  }}
-                >
-                  {allComments.length > 0 &&
-                    allComments.map((c, index) => (
-                      <IndividualUserReview
-                        onLike={onLike}
-                        key={index}
-                        c={c}
-                        deleteComment={deleteComment}
-                        onDisLike={onDisLike}
-                      />
-                    ))}
-                </div>
-              </div>
-            </section>
-          )}
-        </>
-      )}
+                </section>
+              )}
+          </>
+        )}
 
-      {userpage === false &&
-        (id == undefined ? (
-          <section className="EditProfile-Buttons-Section">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-                marginTop: "15px",
-                marginBottom: "15px",
-              }}
-            >
-              <button style={{ fontSize: "10px" }} onClick={retreiveLocal}>
-                Retreive last Save
-              </button>
-              <button style={{ fontSize: "10px" }} onClick={savingLocal}>
-                Save
-              </button>
-              <button
-                type="submit"
-                disabled={
-                  isLoading ||
-                  !isFormValid ||
-                  image === undefined ||
-                  image === ""
-                }
-                onClick={update}
+        {editPostToggler == 'profile' && userpage === false &&
+          (id == undefined ? (
+            <section className="EditProfile-Buttons-Section">
+              <div
                 style={{
-                  whiteSpace: "nowrap",
-                  position: "relative",
-                  fontSize: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "10px",
+                  marginTop: "15px",
+                  marginBottom: "15px",
                 }}
               >
-                {isLoading ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div className="button-loader"></div>
-                    <div style={{}}>Updating...</div>
-                  </div>
-                ) : (
-                  <>
-                    {/* <i
+                <button style={{ fontSize: "10px" }} onClick={retreiveLocal}>
+                  Retreive last Save
+                </button>
+                <button style={{ fontSize: "10px" }} onClick={savingLocal}>
+                  Save
+                </button>
+                <button
+                  type="submit"
+                  disabled={
+                    isLoading ||
+                    !isFormValid ||
+                    image === undefined ||
+                    image === ""
+                  }
+                  onClick={update}
+                  style={{
+                    whiteSpace: "nowrap",
+                    position: "relative",
+                    fontSize: "10px",
+                  }}
+                >
+                  {isLoading ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "5px",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div className="button-loader"></div>
+                      <div style={{}}>Updating...</div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* <i
                       className="fas fa-address-card"
                       style={{ marginRight: "5px" }}
                     ></i> */}
-                    Update
-                  </>
-                )}
-              </button>
-            </div>
-          </section>
-        ) : (
-          <div className="button-container">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "25%",
-                gap: "10px",
-                marginTop: "15px",
-              }}
-            >
-              {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
-
-              <button
-                type="submit"
-                className="reject-button"
-                onClick={(e) => adminupdate(e, "rejected")}
-                style={{ whiteSpace: "nowrap", position: "relative" }}
-                disabled={inputs.status === "rejected"}
+                      Update
+                    </>
+                  )}
+                </button>
+              </div>
+            </section>
+          ) : (
+            <div className="button-container">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "25%",
+                  gap: "10px",
+                  marginTop: "15px",
+                }}
               >
-                {/* {isLoading ? (
+                {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+
+                <button
+                  type="submit"
+                  className="reject-button"
+                  onClick={(e) => adminupdate(e, "rejected")}
+                  style={{ whiteSpace: "nowrap", position: "relative" }}
+                  disabled={inputs.status === "rejected"}
+                >
+                  {/* {isLoading ? (
                                     <>
                                                              <div className="button-loader"></div>
                                         <span style={{ marginLeft: "12px" }}>Rejecting...</span>
                                     </>
                                 ) : ( */}
-                <>Reject</>
-                {/* )} */}
-              </button>
-              <button
-                type="submit"
-                onClick={(e) => adminupdate(e, "approved")}
-                style={{ whiteSpace: "nowrap", position: "relative" }}
-                disabled={inputs.status === "approved"}
-              >
-                {isLoading ? (
-                  <>
-                    <div className="button-loader"></div>
-                    <span style={{ marginLeft: "12px" }}>Approving...</span>
-                  </>
-                ) : (
-                  <>Approve</>
-                )}
-              </button>
+                  <>Reject</>
+                  {/* )} */}
+                </button>
+                <button
+                  type="submit"
+                  onClick={(e) => adminupdate(e, "approved")}
+                  style={{ whiteSpace: "nowrap", position: "relative" }}
+                  disabled={inputs.status === "approved"}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="button-loader"></div>
+                      <span style={{ marginLeft: "12px" }}>Approving...</span>
+                    </>
+                  ) : (
+                    <>Approve</>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-      <Dialog
-        open={reasonPop}
-        onClose={() => setReasonPop(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={gridCSS.tabContainer}
+
+
+        {/* FOR POSTS */}
+
+
+
+
+        <CreatePost setCreatePostpopup={setCreatePostpopup} createPostPopup={createPostPopup} setAllPosts={setAllPosts} />
+
+
+        <Dialog
+          open={reasonPop}
+          onClose={() => setReasonPop(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={gridCSS.tabContainer}
 
         // sx={ gridCSS.tabContainer }
-      >
-        <DialogContent
-          style={{
-            position: "relative",
-            display: "flex",
-            flexDirection: "column",
-          }}
         >
-          <Box>
-            <b>Enter Reason for rejection</b>
-          </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "5px",
-              right: "10px",
-              cursor: "pointer",
+          <DialogContent
+            style={{
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
             }}
-            onClick={() => setReasonPop(false)}
           >
-            <CloseIcon />
-          </Box>
-          <Box className="singleProfile">
-            <textarea
-              style={{
-                resize: "none",
-                // border: "none",
-                textAlign: "justify",
-                fontFamily: "poppins",
+            <Box>
+              <b>Enter Reason for rejection</b>
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "5px",
+                right: "10px",
+                cursor: "pointer",
               }}
-              id=""
-              name="message"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Enter your bio"
-            ></textarea>
-          </Box>
-          <button
-            type="submit"
-            disabled={reason == ""}
-            onClick={(e) => {
-              adminupdate(e, "rejected");
-            }}
-          >
-            Ok
-          </button>
-        </DialogContent>
-      </Dialog>
-      <ProfileImageUpdate open={open} setOpen={setOpen} />
-      <ShowingFollowers typeOfOpen={typeOfOpen} setTypeOfOpen={setTypeOfOpen} data={typeOfOpen=='followers' ? followers: followering} />
-    </main>
+              onClick={() => setReasonPop(false)}
+            >
+              <CloseIcon />
+            </Box>
+            <Box className="singleProfile">
+              <textarea
+                style={{
+                  resize: "none",
+                  // border: "none",
+                  textAlign: "justify",
+                  fontFamily: "poppins",
+                }}
+                id=""
+                name="message"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Enter your bio"
+              ></textarea>
+            </Box>
+            <button
+              type="submit"
+              disabled={reason == ""}
+              onClick={(e) => {
+                adminupdate(e, "rejected");
+              }}
+            >
+              Ok
+            </button>
+          </DialogContent>
+        </Dialog>
+        <ProfileImageUpdate open={open} setOpen={setOpen} />
+        <ShowingFollowers typeOfOpen={typeOfOpen} setTypeOfOpen={setTypeOfOpen} data={typeOfOpen == 'followers' ? followers : followering} />
+      </main>
+      {
+        editPostToggler == 'posts' &&
+        <div className="postContainer">
+            <div>
+              <button onClick={() => setCreatePostpopup(true)}>Create Post</button>
+            </div>
+        </div>
+      }
+   </>
   );
 };
 

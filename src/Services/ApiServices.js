@@ -827,4 +827,21 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+
+
+
+
+  createPost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/createPost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };
