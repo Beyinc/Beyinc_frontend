@@ -443,7 +443,35 @@ box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .createPostHeader {
-  padding: 10px; background: lightgray; display: flex; justify-content: center; font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px; background: lightgray; font-size: 18px;
+}
+
+.subMenu{
+  position: absolute;
+  width: 160px;
+  right: 100%;
+  display: none;
+  height: auto;
+  background: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.wholePostWrapper{
+  display: flex;
+  gap: 10px
+}
+.subMenu div{
+  padding: 5px;
+}
+.subMenu.show{
+  display: block;
+}
+.subMenu div:hover{
+  background: lightgray;
 }
 
 .userTags{

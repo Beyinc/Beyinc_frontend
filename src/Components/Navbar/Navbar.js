@@ -47,6 +47,7 @@ import { format } from "timeago.js";
 import useWindowDimensions from "../Common/WindowSize";
 import { socket_io } from "../../Utils";
 import ProfileImageUpdate from "./ProfileImageUpdate";
+import PostDiscussionRequest from "../Editprofile/PostDiscussionRequest";
 
 function a11yProps(index) {
   return {
@@ -98,6 +99,8 @@ const Navbar = () => {
   });
 
   const [messageRequest, setMessageRequest] = useState([]);
+  const [postDiscussionRequest, setpostDiscussionRequest] = useState([]);
+
 
   const notifications = useSelector((state) => state.conv.notifications);
   const [value, setValue] = useState(1);
@@ -163,9 +166,17 @@ const Navbar = () => {
     dispatch(getAllNotifications(user_id));
   };
 
+  const getPostDiscussionRequest = async () => {
+    await ApiServices.getPostRequestDiscussion({ user_id: user_id }).then((res) => {
+      setpostDiscussionRequest(res.data);
+    });
+    dispatch(getAllNotifications(user_id));
+  };
+
   useEffect(() => {
     if (notificationDrawerState.right == true) {
       getNotifys();
+      getPostDiscussionRequest()
     }
   }, [notificationDrawerState]);
 
@@ -346,6 +357,12 @@ const Navbar = () => {
         >
           Message Requests ({messageRequest?.length})
         </div>
+        <div
+          className={`sideNavIcons ${value == 3 && "sideselected"}`}
+          onClick={() => setValue(3)}
+        >
+          Post Discussion Requests ({messageRequest?.length})
+        </div>
       </div>
       {value == 1 &&
         notifications.map((n) => (
@@ -390,6 +407,18 @@ const Navbar = () => {
               {messageRequest?.map((m) => (
                 <>
                   <MessageRequest m={m} setMessageRequest={setMessageRequest} />
+                </>
+              ))}
+            </div>
+          </>
+        )}
+      {value == 3 &&
+        (postDiscussionRequest.length > 0 || notifications.length > 0) && (
+          <>
+            <div>
+              {postDiscussionRequest?.map((m) => (
+                <>
+                  <PostDiscussionRequest m={m} setpostDiscussionRequest={setpostDiscussionRequest} />
                 </>
               ))}
             </div>

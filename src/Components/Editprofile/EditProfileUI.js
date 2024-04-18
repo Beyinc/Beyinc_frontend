@@ -3989,9 +3989,9 @@ const EditProfileUI = () => {
       {
         editPostToggler == 'posts' &&
         <div className="postContainer">
-            <div>
+            {id == undefined && <div>
               <button onClick={() => setCreatePostpopup(true)}>Create Post</button>
-            </div>
+            </div>}
             <div className='postCardContainer'>
               {allPosts?.map(post => (
                 <IndividualPostCard post={post} />

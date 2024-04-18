@@ -55,11 +55,11 @@ const MessageRequest = ({ m, setMessageRequest }) => {
                 });
 
             }).catch(err => {
-                setToast({
+                dispatch(setToast({
                     message: 'Error occured when updating request',
                     bgColor: ToastColors.failure,
                     visible: "yes",
-                })
+                }))
                 e.target.disabled = false
 
             })
