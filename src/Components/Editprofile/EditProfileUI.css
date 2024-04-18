@@ -430,6 +430,26 @@ select {
   z-index: 1000;
 }
 
+.followersContainer{
+ display: flex;
+ gap: 2px;
+ flex-direction: column;
+}
+.individualFollower{
+  display: flex;
+ align-items: center;
+ gap: 10px;
+ padding: 10px;
+ cursor: pointer;
+}
+.individualFollower:hover{
+  background: lightgray;
+}
+.individualFollower img{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
 @media (max-width: 768px) {
   .EditProfile-personal-Container,
   .Banner,
