@@ -63,7 +63,19 @@ const EditProfileUI = () => {
   const [universities, setUniversities] = useState([]);
   const [allPosts, setAllPosts] = useState([])
   useEffect(() => {
-    if (user_id !== undefined) {
+    if (id !== undefined) {
+      ApiServices.getUsersPost({ user_id:id }).then(res => {
+        setAllPosts(res.data)
+      }).catch(err => {
+        dispatch(
+          setToast({
+            message: 'Error Occured!',
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      })
+    } else {
       ApiServices.getUsersPost({ user_id }).then(res => {
         setAllPosts(res.data)
       }).catch(err => {

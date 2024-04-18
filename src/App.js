@@ -35,6 +35,7 @@ import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
 import Posts from "./Components/Posts/Posts";
+import IndividualPostDetailsCard from "./Components/Editprofile/IndividualPostDetailsCard";
 
 const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
@@ -301,6 +302,8 @@ const App = () => {
           <Route path="/notifications" Component={AuthHoc(Notifications)} />
           <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
           <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
+          <Route path="/posts/:id" Component={AuthHoc(IndividualPostDetailsCard)} />
+
           <Route
             path="/livePitches/:pitchId"
             Component={AuthHoc(IndividualPitch)}

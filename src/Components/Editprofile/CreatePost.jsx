@@ -75,7 +75,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
         socket.current = io(socket_io);
     }, []);
 
-    const addingpost = async () => {
+    const addingpost = async (e) => {
+        e.target.disabled=true
         await ApiServices.createPost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email}, type: posttype }).then(res => {
             setDescription('')
             setUserPitchid(null)
@@ -99,6 +100,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 })
             );
         })
+        e.target.disabled = false
     }
 
     return (
