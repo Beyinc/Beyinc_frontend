@@ -604,7 +604,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
             >
               Documents
             </div>
-            <div
+            {/* <div
               className={`addPitchIcons ${
                 value === 6 && "addPitchIconsselected"
               }`}
@@ -614,7 +614,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
               }}
             >
               Requirements
-            </div>
+            </div> */}
            
             <div
               className={`crossIcon`}
@@ -1505,7 +1505,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
             </div>
           )}
 
-          {value == 6 ? (
+          {value == 5 ? (
             <div className="pitchSubmit">
               <button
                 type="submit"
@@ -1515,8 +1515,7 @@ const AddPitch = ({ open, setOpen, id, setId }) => {
                   areValue2FieldsEmpty() ||
                   areValue3FieldsEmpty() ||
                   areValue4FieldsEmpty() ||
-                  areValue5FieldsEmpty() ||
-                  areValue6FieldsEmpty()
+                  areValue5FieldsEmpty() 
                 }
               >
                 {id == '' ? 'Create pitch' : 'Update Pitch'}
