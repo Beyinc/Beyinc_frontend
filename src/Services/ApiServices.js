@@ -844,4 +844,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+
+  getUsersPost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/getUsersPost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };

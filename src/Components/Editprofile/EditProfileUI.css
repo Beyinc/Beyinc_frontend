@@ -457,7 +457,7 @@ box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   bottom: 0%;
 }
 .postTypeSelector{
- width: 95%; margin-left: -2px; display: flex; justify-content: space-between; padding: 10px; cursor: pointer; background: lightgray 
+ width: 97%; margin-left: -2px; display: flex; justify-content: space-between; padding: 10px; cursor: pointer; background: lightgray 
 }
 
 .postTypeContainer.show{
@@ -494,6 +494,43 @@ box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   height: 50px;
   width: 50px;
   border-radius: 50%;
+}
+
+.postCardContainer{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+}
+.postImageContainer{
+  width: 250px;
+  height: 250px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+}
+.postImageContainerLayer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  font-weight: 600;
+  left: 0;
+  background: rgba(156, 148, 148, 0.516);
+  border-radius: 10px;
+  transition: all ease 0.2s;
+}
+
+.postImageContainer img{
+  width: 100%;
+  height: 100%;
+  margin-left: 0px;
+  object-fit: cover;
 }
 @media (max-width: 768px) {
   .EditProfile-personal-Container,

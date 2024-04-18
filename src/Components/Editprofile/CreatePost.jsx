@@ -103,10 +103,15 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
 
     return (
         <Dialog
-
+    fullScreen
             open={createPostPopup}
             onClose={() => {
-                setCreatePostpopup(false);
+                setDescription('')
+                setUserPitchid(null)
+                setuserTags([])
+                setImage('')
+                setposttype('')
+                setCreatePostpopup(false)
             }}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -124,12 +129,21 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: '10px',
-                    width: '900px'
                 }}
             >
 
-                <div className='createPostHeader'>
+                <div className='createPostHeader' styl={{position: 'relative'}}>
                     Create New Post
+                    <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => {
+                        setDescription('')
+                        setUserPitchid(null)
+                        setuserTags([])
+                        setImage('')
+                        setposttype('')
+                        setCreatePostpopup(false)
+                    }}>
+                        <i class="fas fa-times"></i>
+                    </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     {(image !== undefined && image !== "") ?
@@ -137,8 +151,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                             <img
                                 style={{
                                     cursor: "pointer",
-                                    height: "250px",
-                                    width: "300px",
+                                    height: "500px",
+                                    width: "500px",
                                 }}
                                 src={image}
                                 alt="Profile"

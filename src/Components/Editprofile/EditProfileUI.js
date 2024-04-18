@@ -44,6 +44,7 @@ import AddReviewStars from "../LivePitches/AddReviewStars";
 import IndividualUserReview from "../AllUsers/IndividualUserReview";
 import ShowingFollowers from "./ShowingFollowers";
 import CreatePost from "./CreatePost";
+import IndividualPostCard from "./IndividualPostCard";
 
 const EditProfileUI = () => {
   const { id } = useParams();
@@ -61,6 +62,22 @@ const EditProfileUI = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [allPosts, setAllPosts] = useState([])
+  useEffect(() => {
+    if (user_id !== undefined) {
+      ApiServices.getUsersPost({ user_id }).then(res => {
+        setAllPosts(res.data)
+      }).catch(err => {
+        dispatch(
+          setToast({
+            message: 'Error Occured!',
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      })
+    }
+    
+  }, [user_id])
   const [inputs, setInputs] = useState({
     verification: null,
     mentorCategories: null,
@@ -3962,6 +3979,11 @@ const EditProfileUI = () => {
         <div className="postContainer">
             <div>
               <button onClick={() => setCreatePostpopup(true)}>Create Post</button>
+            </div>
+            <div className='postCardContainer'>
+              {allPosts?.map(post => (
+                <IndividualPostCard post={post} />
+              ))}
             </div>
         </div>
       }
