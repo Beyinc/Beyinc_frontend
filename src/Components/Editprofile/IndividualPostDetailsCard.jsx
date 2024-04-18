@@ -175,7 +175,7 @@ const IndividualPostDetailsCard = () => {
                 </div>
 
                 <div className='wholePostWrapper'>
-                    <div className='leftPostWrapper' style={{ margin: '10px' }}>
+                    <div className='leftPostWrapper' style={{flex:'1', margin: '10px' }}>
                         <div className="postImageDetailsContainer">
                             <img src={post?.image?.url} alt="" srcset="" />
                         </div>

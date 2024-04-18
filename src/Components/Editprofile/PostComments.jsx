@@ -27,7 +27,7 @@ const PostComments = ({ fetchComments, postId }) => {
         socket.current = io(socket_io);
     }, []);
 
-  
+
 
     useEffect(() => {
         if (postId && fetchComments) {
@@ -130,75 +130,72 @@ const PostComments = ({ fetchComments, postId }) => {
     };
 
     return (
+
+
+
         <div className="">
-            <div className="">
-                
-                <div className="">
-                    
-                  
 
-                    {allComments.length > 0 && (
-                        <div>
-                            <b>Discussions:</b>
-                        </div>
+
+
+            {allComments.length > 0 && (
+                <div>
+                    <b>Discussions:</b>
+                </div>
+            )}
+            <div style={{height: '500px', overflowY: 'scroll', overflowX: 'hidden'}}>
+                {allComments.length > 0 &&
+                    allComments?.map(
+                        (c) =>
+                            c.parentCommentId == undefined && (
+                                <IndividualPostComments
+                                    c={c}
+                                    deleteComment={deleteComment}
+                                    setpostTrigger={setpostTrigger}
+                                    postTrigger={postTrigger}
+                                    onLike={onLike}
+                                    onDisLike={onDisLike} postId={postId}
+                                />
+                            )
                     )}
-                    {allComments.length > 0 &&
-                        allComments?.map(
-                            (c) =>
-                                c.parentCommentId == undefined && (
-                                    <IndividualPostComments
-                                        c={c}
-                                        deleteComment={deleteComment}
-                                        setpostTrigger={setpostTrigger}
-                                        postTrigger={postTrigger}
-                                        onLike={onLike}
-                                        onDisLike={onDisLike} postId={postId}
-                                    />
-                                )
-                        )}
-                    
-                    <div>
+           </div>
 
 
 
+                <div className='postCommentAddSection'>
+                    <div
+                        className="writing-review"
+                        style={{
+                            display: "flex",
+                            gap: "20px",
+                            alignItems: "flex-end",
+                        }}
+                    >
                         <div>
-                            <div
-                                className="writing-review"
+                            <textarea
+                                className="textarea"
+                                rows={2}
+                                cols={50}
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                placeholder="Describe Your Experience"
+                                style={{ resize: "none" }}
+                            />
+                        </div>
+                        <div>
+                            <button
+                                onClick={sendText}
+                                className="sendIcon"
                                 style={{
-                                    display: "flex",
-                                    gap: "20px",
-                                    alignItems: "center",
+                                    cursor: comment == "" ? "not-allowed" : "pointer",
+                                    fontSize: "13px",
+                                    padding: "10px",
                                 }}
                             >
-                                <div>
-                                    <textarea
-                                        className="textarea"
-                                        rows={2}
-                                        cols={50}
-                                        value={comment}
-                                        onChange={(e) => setComment(e.target.value)}
-                                        placeholder="Describe Your Experience"
-                                        style={{ resize: "none" }}
-                                    />
-                                </div>
-                                <div>
-                                    <button
-                                        onClick={sendText}
-                                        className="sendIcon"
-                                        style={{
-                                            cursor: comment == "" ? "not-allowed" : "pointer",
-                                            fontSize: "13px",
-                                            padding: "10px",
-                                        }}
-                                    >
-                                        Post Review
-                                    </button>
-                                </div>
-                            </div>
+                                Post Review
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     );
 };

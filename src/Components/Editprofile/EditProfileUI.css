@@ -436,6 +436,11 @@ select {
   width: 1380px;
   margin: auto;
 }
+.postCommentAddSection{
+  position: fixed;
+  bottom: 30px;
+  width: 100%;
+}
 .postTypeContainer{
 box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
