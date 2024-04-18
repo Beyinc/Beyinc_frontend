@@ -968,4 +968,61 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+
+
+
+
+  getPostComments: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/post/getPostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  addPostComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/post/addPostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  likePostComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch(`/post/likePostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  DislikePostComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch(`/post/DislikePostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
 };

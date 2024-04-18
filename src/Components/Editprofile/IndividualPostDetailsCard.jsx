@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import EditPost from './EditPost';
+import PostComments from './PostComments';
 const IndividualPostDetailsCard = () => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
@@ -206,7 +207,7 @@ const IndividualPostDetailsCard = () => {
                         </div>
                     </div>
                     <div className='rightPostWrapper'>
-                        {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id) ? 'comment' : post?.openDiscussionRequests.map(o => o._id).includes(user_id) ? <button>Discussion Request Pending</button> :<button onClick={addingRequestDiscussion}>Join for discussion</button> }
+                        {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id) ? <PostComments postId={post?._id} fetchComments={(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id)} /> : post?.openDiscussionRequests.map(o => o._id).includes(user_id) ? <button>Discussion Request Pending</button> :<button onClick={addingRequestDiscussion}>Join for discussion</button> }
                     </div>
                 </div>
 
