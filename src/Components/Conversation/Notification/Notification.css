@@ -72,7 +72,7 @@
   /* justify-content: space-between; */
   width: 100%;
   /* margin: auto 5px; */
-
+  gap: 15px;
   padding: 0px;
   transition: all ease 0.3s;
 }
@@ -106,8 +106,8 @@
   color: red;
 }
 
-.extraDetails {
-  /* margin: 0px 20px; */
+.extraDetails button {
+  padding: 8px;
 }
 
 .pitchdetails {

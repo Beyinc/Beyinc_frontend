@@ -1016,7 +1016,7 @@ const EditProfileUI = () => {
       .then((res) => {
         dispatch(
           setToast({
-            message: "Profile Sent for approval",
+            message: "Profile Updated",
             bgColor: ToastColors.success,
             visible: "yes",
           })
@@ -3970,7 +3970,7 @@ const EditProfileUI = () => {
                 name="message"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                placeholder="Enter your bio"
+                placeholder="Enter reason"
               ></textarea>
             </Box>
             <button
@@ -3985,7 +3985,7 @@ const EditProfileUI = () => {
           </DialogContent>
         </Dialog>
         <ProfileImageUpdate open={open} setOpen={setOpen} />
-        <ShowingFollowers typeOfOpen={typeOfOpen} setTypeOfOpen={setTypeOfOpen} data={typeOfOpen == 'followers' ? followers : followering} />
+        <ShowingFollowers typeOfOpen={typeOfOpen} setTypeOfOpen={setTypeOfOpen} data={typeOfOpen == null ? [] : (typeOfOpen == 'followers' ? followers : followering)} />
       </main>
       {
         editPostToggler == 'posts' &&

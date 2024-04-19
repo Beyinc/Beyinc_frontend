@@ -34,7 +34,7 @@ const ShowingFollowers = ({ data, typeOfOpen, setTypeOfOpen }) => {
             >
 
                 <div style={{padding: '10px'}}>
-                    <h2>{typeOfOpen?.split('')[0].toUpperCase() + typeOfOpen?.slice(1)}</h2>
+                    <h2>{typeOfOpen!==null && typeOfOpen?.split('')[0].toUpperCase() + typeOfOpen?.slice(1)}</h2>
                 </div>
                 <div className='followersContainer'>
                     {data?.map(d => (

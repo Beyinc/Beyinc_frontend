@@ -34,10 +34,10 @@ const PostDiscussionRequest = ({ m, setpostDiscussionRequest }) => {
                             <div onClick={() => {
                                 navigate(`/user/${o?._id}`);
                             }}>
-                                <img style={{ height: '50px', width: '50px', borderRadius: '50%' }} src={o?.image?.url || '/profile.png'} alt="" srcset="" />
+                                <img style={{ height: '30px', width: '30px', borderRadius: '50%' }} src={o?.image?.url || '/profile.png'} alt="" srcset="" />
                             </div>
-                            <div className='message'>
-                                <b>{o.userName}</b> has made a discussion request for post <Link to={`/posts/${m._id}`}>{m._id}</Link>
+                            <div className='message' style={{width: '100%'}}>
+                                <b>{o.userName}</b> has made a discussion request for post <Link to={`/posts/${m._id}`}>View Post</Link>
                             </div>
                         </div>
                         <div style={{ display: 'flex', gap: '10px' }} className='extraDetails'>

@@ -176,77 +176,78 @@ const IndividualPostDetailsCard = () => {
                     gap: '10px',
                 }}
             >
-                <div className='createPostHeader' styl={{ position: 'relative' }}>
-                    {post?.createdBy?.userName}'s Post Details
-                    <div style={{
-                        display: "flex",
-                        alignItems: 'center',
-                        gap: '10px',
-                        color: 'black'
-                    }}>
-                        <div style={{ cursor: 'pointer', position: 'relative' }}>
-                            <MoreHorizIcon id='menu' onClick={() => {
-                                document.getElementsByClassName('postIndiViewer')[0].classList.toggle('show');
-                            } } />
-                            <div className='subMenu postIndiViewer' ref={userDetailsRef}>
-                                {post?.createdBy?._id == user_id &&
-                                    <>
-                                    <div onClick={() => {
-                                        setEditPostCount(prev=>prev+1)
-                                        setEditPostpopup(true)
-                                    }}>Edit</div>
-                                    <div onClick={() => setdeletePopUp(true)}>Delete</div>
-                                    </>}
-                                <div onClick={() => setreportpopUp(true)}>Report</div>
+                {post!==null && 
+                
+                 <><div className='createPostHeader' styl={{ position: 'relative' }}>
+                        {post?.createdBy?.userName}'s Post Details
+                        <div style={{
+                            display: "flex",
+                            alignItems: 'center',
+                            gap: '10px',
+                            color: 'black'
+                        }}>
+                            <div style={{ cursor: 'pointer', position: 'relative' }}>
+                                <MoreHorizIcon id='menu' onClick={() => {
+                                    document.getElementsByClassName('postIndiViewer')[0].classList.toggle('show');
+                                } } />
+                                <div className='subMenu postIndiViewer' ref={userDetailsRef}>
+                                    {post?.createdBy?._id == user_id &&
+                                        <>
+                                            <div onClick={() => {
+                                                setEditPostCount(prev => prev + 1);
+                                                setEditPostpopup(true);
+                                            } }>Edit</div>
+                                            <div onClick={() => setdeletePopUp(true)}>Delete</div>
+                                        </>}
+                                    <div onClick={() => setreportpopUp(true)}>Report</div>
+                                </div>
+                            </div>
+                            <div style={{ cursor: 'pointer' }} onClick={() => {
+                                navigate(-1);
+                            } }>
+                                <CloseIcon />
                             </div>
                         </div>
-                        <div style={{ cursor: 'pointer' }} onClick={() => {
-                            navigate(-1);
-                        } }>
-                            <CloseIcon />
-                        </div>
-                    </div>
-                </div>
+                    </div><div className='wholePostWrapper'>
+                            <div className='leftPostWrapper' style={{ flex: '1', margin: '10px' }}>
+                                <div className="postImageDetailsContainer">
+                                    {(post?.image !== undefined && post?.image !== "" && post?.image.url !== '') &&
 
-                <div className='wholePostWrapper'>
-                    <div className='leftPostWrapper' style={{flex:'1', margin: '10px' }}>
-                        <div className="postImageDetailsContainer">
-                            {(post?.image !== undefined && post?.image !== "" && post?.image.url !== '') &&
-
-                                <img src={post?.image?.url} alt="Profile" />
-                            }
-                        </div>
-                        <div>
-                            <b>updated at:</b> {formatedDate(post?.updatedAt)}
-                        </div>
-                        <div>
-                            <b>post type:</b> {post?.type}
-                        </div>
-                        <div>
-                            <b>pitch:</b> {post?.pitchId?.title}
-                        </div>
-                        <div>
-                            <b>users tagged:</b> {post?.tags?.map(p => p.userName)?.join(', ')}
-                        </div>
-                        <div style={{ display: 'flex', gap: '50px' }}>
-                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                {post?.likes.length}
-                                <i style={{ cursor: 'pointer', color: post?.likes?.map(l => l._id).includes(user_id) && 'blue' }} onClick={likingpost}
-                                    class="far fa-thumbs-up "
-                                    aria-hidden="true" />
+                                        <img src={post?.image?.url} alt="Profile" />}
+                                </div>
+                                <div>
+                                    <b>updated at:</b> {formatedDate(post?.updatedAt)}
+                                </div>
+                                <div>
+                                    <b>post type:</b> {post?.type}
+                                </div>
+                                <div>
+                                    <b>pitch:</b> {post?.pitchId?.title}
+                                </div>
+                                <div>
+                                    <b>users tagged:</b> {post?.tags?.map(p => p.userName)?.join(', ')}
+                                </div>
+                                <div style={{ display: 'flex', gap: '50px' }}>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {post?.likes.length}
+                                        <i style={{ cursor: 'pointer', color: post?.likes?.map(l => l._id).includes(user_id) && 'blue' }} onClick={likingpost}
+                                            class="far fa-thumbs-up "
+                                            aria-hidden="true" />
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {post?.disLikes.length}
+                                        <i style={{ cursor: 'pointer', color: post?.disLikes?.map(l => l._id).includes(user_id) && 'blue' }} onClick={dislikePost}
+                                            class="far fa-thumbs-down"
+                                            aria-hidden="true" />
+                                    </div>
+                                </div>
                             </div>
-                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                {post?.disLikes.length}
-                                <i style={{ cursor: 'pointer', color: post?.disLikes?.map(l => l._id).includes(user_id) && 'blue' }} onClick={dislikePost}
-                                    class="far fa-thumbs-down"
-                                    aria-hidden="true" />
+                            <div className='rightPostWrapper'>
+                                {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role == 'Admin') ? <PostComments postId={post?._id} fetchComments={(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role == 'Admin')} /> : post?.openDiscussionRequests.map(o => o._id).includes(user_id) ? <button>Discussion Request Pending</button> : <button onClick={addingRequestDiscussion}>Join for discussion</button>}
                             </div>
-                        </div>
-                    </div>
-                    <div className='rightPostWrapper'>
-                        {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role=='Admin') ? <PostComments postId={post?._id} fetchComments={(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role=='Admin')} /> : post?.openDiscussionRequests.map(o => o._id).includes(user_id) ? <button>Discussion Request Pending</button> :<button onClick={addingRequestDiscussion}>Join for discussion</button> }
-                    </div>
-                </div>
+                        </div></>
+                }
+               
 
 
 
