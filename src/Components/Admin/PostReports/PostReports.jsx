@@ -29,7 +29,8 @@ const PostReports = () => {
   const updatereport = async (e, id, type) => {
     dispatch(setLoading({visible: 'yes'}))
     await ApiServices.updateReport({ id: id, postDecide: type }).then(res => {
-      setAllPosts(allPosts.filter(f=>f._id!==id))
+      setAllPosts(allPosts.filter(f => f._id !== id))
+      setStoredId(null)
     }).catch(err => {
       dispatch(
         setToast({
@@ -48,7 +49,10 @@ const PostReports = () => {
         {allPosts?.map(post => (
           <div style={{display: 'flex', flexDirection: 'column'}}><IndividualPostCard post={post} />
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-              <button onClick={(e) => { setStoredId(post._id)}}>Delete Post</button>
+              <button onClick={(e) => {
+                setDeletePopUp(true)
+                setStoredId(post._id)
+              }}>Delete Post</button>
               <button onClick={(e) => { updatereport(e, post._id, 'keep') }}>Remove Report</button>
             </div>
           </div>
