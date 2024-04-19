@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { ApiServices } from "../../Services/ApiServices";
 import { useDispatch, useSelector } from "react-redux";
-import { setToast } from "../../redux/AuthReducers/AuthReducer";
+import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { io } from "socket.io-client";
 import { socket_io } from "../../Utils";
@@ -53,6 +53,8 @@ const PostComments = ({ fetchComments, postId }) => {
     }, [postId, postTrigger, fetchComments]);
 
     const sendText = async () => {
+        dispatch(setLoading({ visible: "yes" }));
+
         setComment("");
         await ApiServices.addPostComment({
             postId: postId,
@@ -66,10 +68,15 @@ const PostComments = ({ fetchComments, postId }) => {
             .catch((err) => {
                 navigate("/");
             });
+        
+        dispatch(setLoading({ visible: "no" }));
+
     };
 
-    const onLike = (commentId, isLike) => {
-        ApiServices.likePostComment({
+    const onLike = async (commentId, isLike) => {
+        dispatch(setLoading({ visible: "yes" }));
+
+        await ApiServices.likePostComment({
             comment_id: commentId,
         })
             .then((res) => {
@@ -90,10 +97,14 @@ const PostComments = ({ fetchComments, postId }) => {
                     })
                 );
             });
+        dispatch(setLoading({ visible: "no" }));
+
     };
 
-    const onDisLike = (commentId, isLike) => {
-        ApiServices.DislikePostComment({
+    const onDisLike = async (commentId, isLike) => {
+        dispatch(setLoading({ visible: "yes" }));
+
+        await ApiServices.DislikePostComment({
             comment_id: commentId,
         })
             .then((res) => { })
@@ -106,6 +117,8 @@ const PostComments = ({ fetchComments, postId }) => {
                     })
                 );
             });
+        dispatch(setLoading({ visible: "no" }));
+
     };
 
     const deleteComment = async (id) => {
