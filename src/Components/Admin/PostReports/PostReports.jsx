@@ -31,6 +31,7 @@ const PostReports = () => {
     await ApiServices.updateReport({ id: id, postDecide: type }).then(res => {
       setAllPosts(allPosts.filter(f => f._id !== id))
       setStoredId(null)
+      setDeletePopUp(false)
     }).catch(err => {
       dispatch(
         setToast({
