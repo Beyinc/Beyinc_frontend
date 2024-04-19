@@ -11,6 +11,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { jwtDecode } from "jwt-decode";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -294,6 +295,12 @@ const Navbar = () => {
                 <PlagiarismOutlinedIcon className="menu-icon" />
               </ListItemIcon>
               <ListItemText primary="Pitch Request" />
+            </ListItem>
+            <ListItem button key="postReports" onClick={() => navigate("/postReports")}>
+              <ListItemIcon>
+                <ReportGmailerrorredOutlinedIcon className="menu-icon" />
+              </ListItemIcon>
+              <ListItemText primary="Post Reports" />
             </ListItem>
           </>
         )}
@@ -624,6 +631,13 @@ const Navbar = () => {
                     className="icon"
                     onClick={() => navigate("/pitches")}
                   ></PlagiarismOutlinedIcon>
+                </div>
+                <div title="Post Reports">
+                  <ReportGmailerrorredOutlinedIcon
+                    id="postReports"
+                    className="icon"
+                    onClick={() => navigate("/postReports")}
+                  ></ReportGmailerrorredOutlinedIcon>
                 </div>
               </>
             )}

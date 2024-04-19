@@ -34,9 +34,17 @@ import AllUsers from "./Components/AllUsers/AllUsers";
 import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
-import Posts from "./Components/Posts/Posts";
-import IndividualPostDetailsCard from "./Components/Editprofile/IndividualPostDetailsCard";
 
+const Posts = React.lazy(() =>
+  import("./Components/Posts/Posts")
+);
+
+const IndividualPostDetailsCard = React.lazy(() =>
+  import("./Components/Editprofile/IndividualPostDetailsCard")
+);
+const PostReports =React.lazy(() =>
+  import("./Components/Admin/PostReports/PostReports")
+);
 const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
 );
@@ -323,6 +331,12 @@ const App = () => {
           <Route
             path="/singleProfileRequest/:id"
             Component={AdminDeciderHoc(EditProfileUI)}
+          />
+
+
+          <Route
+            path="/postReports"
+            Component={AdminDeciderHoc(PostReports)}
           />
         </Routes>
       </Suspense>

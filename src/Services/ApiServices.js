@@ -1024,5 +1024,44 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  getReportedPosts: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/posts/getReportedPosts`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
+
+  addReport: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/addReport`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  updateReport: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/updateReport`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };

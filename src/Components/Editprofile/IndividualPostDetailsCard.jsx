@@ -97,6 +97,8 @@ const IndividualPostDetailsCard = () => {
         };
     }, []);
     const [deletePop, setdeletePopUp] = useState(false)
+    const [reportpopup, setreportpopUp] = useState(false)
+    const [reportText, setReportText] = useState('')
 
     const deletePost = async (e) => {
         e.target.disabled=true
@@ -104,7 +106,22 @@ const IndividualPostDetailsCard = () => {
             navigate(-1);
         }).catch((err) => {
             setToast({
-                message: "Error occured when updating Pitch",
+                message: "Error occured when updating post",
+                bgColor: ToastColors.failure,
+                visible: "yes",
+            });
+        });
+    }
+
+
+    const reportPost = async (e) => {
+        e.target.disabled = true
+        await ApiServices.addReport({ id, reportby: user_id, reason: reportText }).then(res => {
+            setReportText('')
+            navigate(-1);
+        }).catch((err) => {
+            setToast({
+                message: "Error occured when Reporting",
                 bgColor: ToastColors.failure,
                 visible: "yes",
             });
@@ -176,7 +193,7 @@ const IndividualPostDetailsCard = () => {
                                     }}>Edit</div>
                                     <div onClick={() => setdeletePopUp(true)}>Delete</div>
                                     </>}
-                                <div>Report</div>
+                                <div onClick={() => setreportpopUp(true)}>Report</div>
                             </div>
                         </div>
                         <div style={{ cursor: 'pointer' }} onClick={() => {
@@ -223,7 +240,7 @@ const IndividualPostDetailsCard = () => {
                         </div>
                     </div>
                     <div className='rightPostWrapper'>
-                        {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id) ? <PostComments postId={post?._id} fetchComments={(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id)} /> : post?.openDiscussionRequests.map(o => o._id).includes(user_id) ? <button>Discussion Request Pending</button> :<button onClick={addingRequestDiscussion}>Join for discussion</button> }
+                        {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role=='Admin') ? <PostComments postId={post?._id} fetchComments={(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role=='Admin')} /> : post?.openDiscussionRequests.map(o => o._id).includes(user_id) ? <button>Discussion Request Pending</button> :<button onClick={addingRequestDiscussion}>Join for discussion</button> }
                     </div>
                 </div>
 
@@ -272,6 +289,61 @@ const IndividualPostDetailsCard = () => {
                             setdeletePopUp(false)
                         }}>No</button>
                    </div>
+
+
+                </DialogContent>
+            </Dialog>
+
+
+
+            <Dialog
+
+                open={reportpopup}
+                onClose={() => {
+                    setreportpopUp(false)
+                    setReportText('')
+                }}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="xl"
+                sx={{
+                    ...gridCSS.tabContainer,
+                    // Setting width to auto
+                }}
+
+            >
+                <DialogContent
+                    style={{
+                        padding: '10px',
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: '10px',
+
+                    }}
+                >
+                    <div>
+                        <textarea
+                            className="textarea"
+                            rows={2}
+                            cols={50}
+                            value={reportText} onChange={(e) => { setReportText(e.target.value) }}
+                            placeholder="Report reason"
+                            style={{ resize: 'none' }} />
+                    </div>
+                    
+                    <div style={{
+                        display: "flex",
+                        alignItems: 'center',
+                        gap: '10px',
+                        justifyContent: 'center'
+
+                    }}>
+                        <button disabled={reportText==''} onClick={(e) => {
+                            reportPost(e)
+                        }}>Report</button>
+                        
+                    </div>
 
 
                 </DialogContent>
