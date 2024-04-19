@@ -137,6 +137,10 @@ const IndividualPostDetailsCard = () => {
         e.target.disabled=true
         await ApiServices.requestIntoOpenDiscussion({ id: post?._id, user_id }).then(res => {
             setPost(res.data)
+            socket.current.emit("sendNotification", {
+                senderId: user_id,
+                receiverId: post?.createdBy._id,
+            });
         }).catch((err) => {
             setToast({
                 message: "Error occured when updating Pitch",
