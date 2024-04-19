@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Navbar.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import axiosInstance from "../axiosInstance";
 import { setLoginData, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -369,16 +369,16 @@ const Navbar = () => {
           <>
             <div
               className={`individualrequest`}
-              onClick={() => {
-                navigate(`/user/${n.senderInfo?._id}`);
-              }}
+             
               style={{ marginLeft: "15px", textAlign: "start" }}
             >
               <div
                 className="individualrequestWrapper"
                 style={{ gap: "5px", alignItems: "center", width: "100%" }}
               >
-                <div>
+                <div onClick={() => {
+                  navigate(`/user/${n.senderInfo?._id}`);
+                }}>
                   <img
                     style={{
                       height: "50px",
@@ -394,7 +394,7 @@ const Navbar = () => {
                     srcset=""
                   />
                 </div>
-                <div>{n.message} </div>
+                <div>{n.message} {n.type == 'postDiscussion' && <Link to={`/posts/${n.postId}`}>{n.postId}</Link>}</div>
               </div>
             </div>
             {/* <div className="divider"></div> */}
