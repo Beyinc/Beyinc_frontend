@@ -310,7 +310,7 @@ const Navbar = () => {
   const NotificationList = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 800,
         overFlowX: "hidden",
       }}
       role="presentation"
@@ -388,8 +388,8 @@ const Navbar = () => {
                 }}>
                   <img
                     style={{
-                      height: "50px",
-                      width: "50px",
+                      height: "30px",
+                      width: "30px",
                       borderRadius: "50%",
                     }}
                     src={
@@ -401,7 +401,7 @@ const Navbar = () => {
                     srcset=""
                   />
                 </div>
-                <div>{n.message} {n.type == 'postDiscussion' && <Link to={`/posts/${n.postId}`}>{n.postId}</Link>}</div>
+                <div>{n.message} {n.type == 'postDiscussion' && <Link to={`/posts/${n.postId}`}>View Post</Link>} {n.type == 'report' && <Link style={{ color: 'red' }} to={`/posts/${n.postId}`}>View Post</Link>}</div>
               </div>
             </div>
             {/* <div className="divider"></div> */}
