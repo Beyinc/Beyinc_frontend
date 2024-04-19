@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import EditPost from './EditPost';
 import PostComments from './PostComments';
+import { Link } from 'react-router-dom';
 const IndividualPostDetailsCard = () => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
@@ -222,7 +223,11 @@ const IndividualPostDetailsCard = () => {
                                     <b>post type:</b> {post?.type}
                                 </div>
                                 <div>
-                                    <b>pitch:</b> {post?.pitchId?.title}
+                                    <b>pitch:</b> {post?.pitchId?.title} 
+                                {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role == 'Admin') &&
+
+                                    <Link to={`/livePitches/${post?.pitchId?._id}`}>View Pitch</Link>
+                                }    
                                 </div>
                                 <div>
                                     <b>users tagged:</b> {post?.tags?.map(p => p.userName)?.join(', ')}
