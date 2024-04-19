@@ -402,7 +402,7 @@ const EditProfileUI = () => {
 
   const [followers, setFollowers] = useState([])
   const [followering, setFollowering] = useState([])
-  const [editPostToggler, seteditPostToggler] = useState('profile')
+  const [editPostToggler, seteditPostToggler] = useState('posts')
 
 
 
@@ -1368,19 +1368,20 @@ const EditProfileUI = () => {
               </div>
               <div className="historicalTabHeader">
                 <div
-                  className={`historicalTabIcons ${editPostToggler == 'profile' && "historicalTabIconsselected"
-                    }`} style={{ fontSize: '18px' }}
-                  onClick={() => seteditPostToggler('profile')}
-                >
-                  Profile
-                </div>
-                <div
                   className={`historicalTabIcons ${editPostToggler == 'posts' && "historicalTabIconsselected"
                     }`} style={{ fontSize: '18px' }}
                   onClick={() => seteditPostToggler('posts')}
                 >
                   Posts
                 </div>
+                <div
+                  className={`historicalTabIcons ${editPostToggler == 'profile' && "historicalTabIconsselected"
+                    }`} style={{ fontSize: '18px' }}
+                  onClick={() => seteditPostToggler('profile')}
+                >
+                  Profile
+                </div>
+               
               </div>
               {editPostToggler == 'profile' && <div
                 className="personal-rating-container"

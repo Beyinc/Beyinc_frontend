@@ -11,7 +11,7 @@ import { setToast } from '../../redux/AuthReducers/AuthReducer';
 import { ToastColors } from '../Toast/ToastColors';
 import { io } from 'socket.io-client';
 
-const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost }) => {
+const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCount }) => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
 
@@ -33,14 +33,14 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost }) => {
     const [userPitchId, setUserPitchid] = useState(null)
 
     useEffect(() => {
-        if (post) {
+        if (post || EditPostCount) {
             setImage(post?.image)
             setDescription(post?.description)
             setposttype(post?.type)
             setuserTags(post?.tags)
             setUserPitchid(post?.pitchId)
      }   
-    }, [post])
+    }, [post, EditPostCount])
 
     useEffect(() => {
         ApiServices.getAllUsers({ type: "" }).then((res) => {

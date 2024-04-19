@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { convertToDate, formatedDate, postTypes, socket_io } from '../../Utils';
 import { ApiServices } from '../../Services/ApiServices';
-import { setToast } from '../../redux/AuthReducers/AuthReducer';
+import { setLoading, setToast } from '../../redux/AuthReducers/AuthReducer';
 import { ToastColors } from '../Toast/ToastColors';
 import { io } from 'socket.io-client';
 import './EditProfileUI.css'
@@ -48,6 +48,8 @@ const IndividualPostDetailsCard = () => {
     }, []);
 
     const likingpost = async () => {
+        dispatch(setLoading({ visible: "yes" }));
+
         await ApiServices.likePost({ id: post?._id }).then(res => {
             setPost(res.data)
         }).catch((err) => {
@@ -57,8 +59,12 @@ const IndividualPostDetailsCard = () => {
                 visible: "yes",
             });
         });
+        dispatch(setLoading({ visible: "no" }));
+
     }
     const dislikePost = async () => {
+        dispatch(setLoading({ visible: "yes" }));
+
         await ApiServices.dislikePost({ id: post?._id }).then(res => {
             setPost(res.data)
         }).catch((err) => {
@@ -68,6 +74,8 @@ const IndividualPostDetailsCard = () => {
                 visible: "yes",
             });
         });
+        dispatch(setLoading({ visible: "no" }));
+
     }
     const userDetailsRef = useRef(null);
 
@@ -104,6 +112,8 @@ const IndividualPostDetailsCard = () => {
     }
 
     const [editPostPopup, setEditPostpopup] = useState(false)
+    const [EditPostCount, setEditPostCount] = useState(false)
+
 
 
     const addingRequestDiscussion = async (e) => {
@@ -160,7 +170,10 @@ const IndividualPostDetailsCard = () => {
                             <div className='subMenu postIndiViewer' ref={userDetailsRef}>
                                 {post?.createdBy?._id == user_id &&
                                     <>
-                                    <div onClick={() => setEditPostpopup(true)}>Edit</div>
+                                    <div onClick={() => {
+                                        setEditPostCount(prev=>prev+1)
+                                        setEditPostpopup(true)
+                                    }}>Edit</div>
                                     <div onClick={() => setdeletePopUp(true)}>Delete</div>
                                     </>}
                                 <div>Report</div>
@@ -177,7 +190,10 @@ const IndividualPostDetailsCard = () => {
                 <div className='wholePostWrapper'>
                     <div className='leftPostWrapper' style={{flex:'1', margin: '10px' }}>
                         <div className="postImageDetailsContainer">
-                            <img src={post?.image?.url} alt="" srcset="" />
+                            {(post?.image !== undefined && post?.image !== "" && post?.image.url !== '') &&
+
+                                <img src={post?.image?.url} alt="" srcset="" />
+                            }
                         </div>
                         <div>
                             <b>updated at:</b> {formatedDate(post?.updatedAt)}
@@ -260,7 +276,7 @@ const IndividualPostDetailsCard = () => {
 
                 </DialogContent>
             </Dialog>
-            <EditPost setEditPostpopup={setEditPostpopup} editPostPopup={editPostPopup} post={post} setPost={setPost} />
+            <EditPost EditPostCount={EditPostCount} setEditPostpopup={setEditPostpopup} editPostPopup={editPostPopup} post={post} setPost={setPost} />
         </>
     )
 }
