@@ -368,7 +368,7 @@ const Navbar = () => {
           className={`sideNavIcons ${value == 3 && "sideselected"}`}
           onClick={() => setValue(3)}
         >
-          Post Discussion Requests ({messageRequest?.length})
+          Post Discussion Requests ({postDiscussionRequest?.length})
         </div>
       </div>
       {value == 1 &&
