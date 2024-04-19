@@ -30,14 +30,14 @@ const PostDiscussionRequest = ({ m, setpostDiscussionRequest }) => {
             {m.openDiscussionRequests?.map(o => (
                 <div className='individualrequest' key={o.id}>
                     <div className='individualrequestWrapper'>
-                        <div className='userNotiD' onClick={() => {
-                            navigate(`/posts/${m._id}`);
-                        }}>
-                            <div>
+                        <div className='userNotiD'>
+                            <div onClick={() => {
+                                navigate(`/user/${o?._id}`);
+                            }}>
                                 <img style={{ height: '50px', width: '50px', borderRadius: '50%' }} src={o?.image?.url || '/profile.png'} alt="" srcset="" />
                             </div>
                             <div className='message'>
-                                <b>{o.userName}</b> has made a discussion request for post <Link to={``}>{m._id}</Link>
+                                <b>{o.userName}</b> has made a discussion request for post <Link to={`/posts/${m._id}`}>{m._id}</Link>
                             </div>
                         </div>
                         <div style={{ display: 'flex', gap: '10px' }} className='extraDetails'>

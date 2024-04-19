@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Navbar.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import axiosInstance from "../axiosInstance";
 import { setLoginData, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -11,6 +11,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { jwtDecode } from "jwt-decode";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -295,6 +296,12 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Pitch Request" />
             </ListItem>
+            <ListItem button key="postReports" onClick={() => navigate("/postReports")}>
+              <ListItemIcon>
+                <ReportGmailerrorredOutlinedIcon className="menu-icon" />
+              </ListItemIcon>
+              <ListItemText primary="Post Reports" />
+            </ListItem>
           </>
         )}
       </List>
@@ -369,16 +376,16 @@ const Navbar = () => {
           <>
             <div
               className={`individualrequest`}
-              onClick={() => {
-                navigate(`/user/${n.senderInfo?._id}`);
-              }}
+             
               style={{ marginLeft: "15px", textAlign: "start" }}
             >
               <div
                 className="individualrequestWrapper"
                 style={{ gap: "5px", alignItems: "center", width: "100%" }}
               >
-                <div>
+                <div onClick={() => {
+                  navigate(`/user/${n.senderInfo?._id}`);
+                }}>
                   <img
                     style={{
                       height: "50px",
@@ -394,7 +401,7 @@ const Navbar = () => {
                     srcset=""
                   />
                 </div>
-                <div>{n.message} </div>
+                <div>{n.message} {n.type == 'postDiscussion' && <Link to={`/posts/${n.postId}`}>{n.postId}</Link>}</div>
               </div>
             </div>
             {/* <div className="divider"></div> */}
@@ -624,6 +631,13 @@ const Navbar = () => {
                     className="icon"
                     onClick={() => navigate("/pitches")}
                   ></PlagiarismOutlinedIcon>
+                </div>
+                <div title="Post Reports">
+                  <ReportGmailerrorredOutlinedIcon
+                    id="postReports"
+                    className="icon"
+                    onClick={() => navigate("/postReports")}
+                  ></ReportGmailerrorredOutlinedIcon>
                 </div>
               </>
             )}
