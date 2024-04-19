@@ -209,7 +209,7 @@ const IndividualPostDetailsCard = () => {
                         <div className="postImageDetailsContainer">
                             {(post?.image !== undefined && post?.image !== "" && post?.image.url !== '') &&
 
-                                <img src={post?.image?.url} alt="" srcset="" />
+                                <img src={post?.image?.url} alt="Profile" />
                             }
                         </div>
                         <div>
