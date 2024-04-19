@@ -69,7 +69,7 @@ const Notifications = () => {
         />
       </div> */}
 
-      {(messageRequest.length > 0 || notifications.length > 0) ? (
+      {(postDiscussionRequest.length > 0 || notifications.length > 0) ? (
         <div>
           <div>
             {postDiscussionRequest.length > 0 && <>
