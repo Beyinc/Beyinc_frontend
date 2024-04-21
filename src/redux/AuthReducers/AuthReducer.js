@@ -51,7 +51,7 @@ export const apicallloginDetails = () => async (dispatch) => {
       axiosInstance.customFnAddTokenInHeader(JSON.parse(localStorage.getItem('user')).accessToken);
       dispatch(setLoading({ visible: 'no' }))
     }).catch(async (err) => {
-      
+      localStorage.removeItem('user')
 
       window.location.href = '/login'
       dispatch(setLoading({ visible: 'no' }))

@@ -532,12 +532,13 @@ export const userColor = {
 const heirarchy = {
 
 
-    Investor: 0,
-    Incubation_Cell: 1,
-    Accelerator: 2,
-    Mentor: 3,
-    Entrepreneur: 4,
-    Technology_Partner: 5,
+    'Investor': 0,
+    'Incubation_Cell': 1,
+    'Individual/Entrepreneur': 1,
+    'Accelerator': 2,
+    'Mentor': 3,
+    'Entrepreneur': 4,
+    'Technology_Partner': 5,
 
 };
 
