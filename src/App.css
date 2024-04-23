@@ -3,18 +3,26 @@
 }
 
 body[data-theme="dark"] {
+/* LATEST COLOR PALETTE */
+/* Navbar */
+--nav-head-bg: #072D44;
+--nav-head-icons: #9bf8f4;
+--searchbar-bg:#9bf8f4;
+--menubar-bg: #072D44;
+--menubar-txt: #9bf8f4;
+
   --body-background: #17171e;
   --nabar-text: #fff;
   --text-total-color: #fff;
   --navbar-profile-hover: #2172e2;
   /* --nav-head-bg: #212130; */
-  --nav-head-bg: #032036dd;
-  --nav-head-icons: #fff;
+ 
+ 
   --landingPage-working-container-bg: #212130;
   --chatcontainer-bg: #212130;
   --user-details-container-bg: #212130;
   --menubar-bg: #212130;
-  --menubar-txt: #fff;
+
   --menubar-hover-txt: #6a73fa;
   --users-bg: #212130;
   --newchat-button: #48abec;
@@ -32,7 +40,15 @@ body[data-theme="dark"] {
 }
 
 body[data-theme="light"] {
-  /* LATEST THEME BASED COLORS */
+  /* LATEST COLOR PALETTE */
+ /* Nav bar */
+ --nav-head-bg: #f6f6fc;
+ --nav-head-icons: #4f55c7;
+ --searchbar-bg: #9a97975e;
+
+ --menubar-bg: #f6f6fc;
+ --menubar-txt: #4f55c7;
+
   --text: #040316;
   --background: #fbfbfe;
   --primary: #4e54c7;
@@ -45,9 +61,8 @@ body[data-theme="light"] {
   --white-text: #fff;
   --light-transparent: #4e54c748;
 
-  /* Nav bar */
-  --nav-head-bg: #ffffffdd;
-  --nav-head-icons: #4e54c7;
+ 
+ 
   --nav-head-icons-border: #dddbff;
   --nav-head-selected-icons-border: #4e54c7;
   --nav-head-icons-hover: #4449ad;
@@ -58,8 +73,8 @@ body[data-theme="light"] {
   --singleUserCard-bg: #fff;
   --landingPage-working-container-bg: #f1f1f1;
   --user-details-container-bg: #eaf1fb;
-  --menubar-bg: #fbfbfe;
-  --menubar-txt: #212130;
+  
+ 
   --menubar-hover-txt: #6a73fa;
   --chatcontainer-bg: #fff;
   --searchmenu-bg: #fff;
