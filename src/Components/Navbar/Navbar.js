@@ -49,6 +49,10 @@ import useWindowDimensions from "../Common/WindowSize";
 import { socket_io } from "../../Utils";
 import ProfileImageUpdate from "./ProfileImageUpdate";
 import PostDiscussionRequest from "../Editprofile/PostDiscussionRequest";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
 
 function a11yProps(index) {
   return {
@@ -211,7 +215,13 @@ const Navbar = () => {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
+      sx={{
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -219,18 +229,157 @@ const Navbar = () => {
       <List>
         {width < 770 && (
           <>
-          <div className="menubar-profile-container">
-          <img
-            id="Profile-img"
-            className="menu-profile-img"
-            src={image !== undefined && image !== "" ? image : "/profile.png"}
-            alt=""
-          />
-        <div className="menu-profile-content">
-        <div style={{fontWeight: '600',fontSize: '16px', color: '#fff'}}>{userName}</div>
-        <div style={{fontSize: '10px', color: '#fff'}}>{role}</div>
-        </div>
-          </div>
+            <div className="menubar-profile-container">
+              <img
+                id="Profile-img"
+                className="menu-profile-img"
+                src={
+                  image !== undefined && image !== "" ? image : "/profile.png"
+                }
+                alt=""
+              />
+              <div className="menu-profile-content">
+                <div
+                  style={{ fontWeight: "600", fontSize: "16px", color: "#fff" }}
+                >
+                  {userName}
+                </div>
+                <div style={{ fontSize: "10px", color: "#fff" }}>{role}</div>
+              </div>
+            </div>
+
+            {/* DARK AND WHITE THEME */}
+            <ListItem
+              button
+              key="themeIcon"
+              onClick={(e) => {
+                const body = document.body;
+                const currentTheme = body.getAttribute("data-theme");
+                const newTheme = currentTheme === "light" ? "dark" : "light";
+                const mode = newTheme === "light" ? "Dark" : "Light";
+
+                body.setAttribute("data-theme", newTheme);
+                localStorage.setItem("theme", newTheme);
+                document.getElementById("themeIcon");
+                newTheme == "light" ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 20 20"
+                    id=""
+                    className="menu-icon"
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M17.293 13.293A8 8 0 0 1 6.707 2.707a8.001 8.001 0 1 0 10.586 10.586"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 24 24"
+                    id=""
+                    className="menu-icon"
+                  >
+                    <path
+                      fill="none"
+                      stroke="var(--nav-head-icons)"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 4V2m0 18v2M6.414 6.414L5 5m12.728 12.728l1.414 1.414M4 12H2m18 0h2m-4.271-5.586L19.143 5M6.415 17.728L5 19.142M12 17a5 5 0 1 1 0-10a5 5 0 0 1 0 10"
+                    />
+                  </svg>
+                );
+
+                // Switching the logo based on the theme
+                const logoImg = document.getElementById("logoImage");
+                logoImg.src =
+                  newTheme === "light" ? "/logo.png" : "/Footer-Logo.png";
+                logoImg.alt = `${mode} Logo`;
+                e.currentTarget.title = `${mode} Mode`;
+              }}
+            >
+              {/* <i
+            id="themeIcon"
+            class={`fas fa-${
+              localStorage.getItem("theme") == "light" ? "moon" : "sun"
+            }`}
+          >
+            </i> */}
+              <ListItemIcon>
+                {localStorage.getItem("theme") === "light" ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 20 20"
+                    id=""
+                    className="menu-icon"
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M17.293 13.293A8 8 0 0 1 6.707 2.707a8.001 8.001 0 1 0 10.586 10.586"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    id=""
+                    className="menu-icon"
+                  >
+                    <path
+                      fill="none"
+                      stroke="var(--nav-head-icons)"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 4V2m0 18v2M6.414 6.414L5 5m12.728 12.728l1.414 1.414M4 12H2m18 0h2m-4.271-5.586L19.143 5M6.415 17.728L5 19.142M12 17a5 5 0 1 1 0-10a5 5 0 0 1 0 10"
+                    />
+                  </svg>
+                )}
+              </ListItemIcon>
+
+              <ListItemText
+                primary={`${
+                  localStorage.getItem("theme") === "light" ? "Dark" : "Light"
+                } Mode`}
+              />
+            </ListItem>
+
+            <ListItem
+              button
+              key="editProfile"
+              onClick={() => navigate("/editProfile")}
+            >
+              <ListItemIcon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 1024 1024"
+                  id="editProfile"
+                  className="menu-icon"
+                >
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M832 512a32 32 0 1 1 64 0v352a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h352a32 32 0 0 1 0 64H192v640h640z"
+                  />
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="m469.952 554.24l52.8-7.552L847.104 222.4a32 32 0 1 0-45.248-45.248L477.44 501.44l-7.552 52.8zm422.4-422.4a96 96 0 0 1 0 135.808l-331.84 331.84a32 32 0 0 1-18.112 9.088L436.8 623.68a32 32 0 0 1-36.224-36.224l15.104-105.6a32 32 0 0 1 9.024-18.112l331.904-331.84a96 96 0 0 1 135.744 0z"
+                  />
+                </svg>
+              </ListItemIcon>
+              <ListItemText primary="Edit Profile" />
+            </ListItem>
+
             <ListItem button key="home" onClick={() => navigate("/posts")}>
               <ListItemIcon>
                 <svg
@@ -250,7 +399,11 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button key="home" onClick={() => navigate("/dashboard")}>
+            <ListItem
+              button
+              key="dashboard"
+              onClick={() => navigate("/dashboard")}
+            >
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -311,10 +464,7 @@ const Navbar = () => {
                   />
                 </svg>
                 {messageCount.length > 0 && (
-                  <div
-                    className="Conversations-count mobile"
-                    title="unread conversations"
-                  >
+                  <div className="Conversations-count mobile">
                     {messageCount.length}
                   </div>
                 )}
@@ -328,23 +478,23 @@ const Navbar = () => {
               onClick={() => navigate("/notifications")}
             >
               <ListItemIcon>
-              <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1.2em"
-              height="1.2em"
-              viewBox="0 0 24 24"
-              id="notifications"
-              className="menu-icon"
-            >
-              <g fill="none" fill-rule="evenodd">
-                <path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
-                <path
-                  fill="var(--nav-head-icons)"
-                  d="M5 9a7 7 0 0 1 14 0v3.764l1.822 3.644A1.1 1.1 0 0 1 19.838 18h-3.964a4.002 4.002 0 0 1-7.748 0H4.162a1.1 1.1 0 0 1-.984-1.592L5 12.764zm5.268 9a2 2 0 0 0 3.464 0zM12 4a5 5 0 0 0-5 5v3.764a2 2 0 0 1-.211.894L5.619 16h12.763l-1.17-2.342a2.001 2.001 0 0 1-.212-.894V9a5 5 0 0 0-5-5"
-                />
-              </g>
-              {notificationAlert && <div className="blinkBall"> </div>}
-            </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 24 24"
+                  id="notifications"
+                  className="menu-icon"
+                >
+                  <g fill="none" fill-rule="evenodd">
+                    <path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M5 9a7 7 0 0 1 14 0v3.764l1.822 3.644A1.1 1.1 0 0 1 19.838 18h-3.964a4.002 4.002 0 0 1-7.748 0H4.162a1.1 1.1 0 0 1-.984-1.592L5 12.764zm5.268 9a2 2 0 0 0 3.464 0zM12 4a5 5 0 0 0-5 5v3.764a2 2 0 0 1-.211.894L5.619 16h12.763l-1.17-2.342a2.001 2.001 0 0 1-.212-.894V9a5 5 0 0 0-5-5"
+                    />
+                  </g>
+                  {notificationAlert && <div className="blinkBall"> </div>}
+                </svg>
               </ListItemIcon>
               <ListItemText primary="Notifications" />
             </ListItem>
@@ -375,18 +525,18 @@ const Navbar = () => {
             >
               <ListItemIcon>
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.2em"
-                    height="1.2em"
-                    viewBox="0 0 32 32"
-                    id="profileRequests"
-                    className="menu-icon"
-                  >
-                    <path
-                      fill="var(--nav-head-icons)"
-                      d="M7.5 3A4.5 4.5 0 0 0 3 7.5v17A4.5 4.5 0 0 0 7.5 29h8.792a9.018 9.018 0 0 1-1.357-2H7.5A2.5 2.5 0 0 1 5 24.5v-17A2.5 2.5 0 0 1 7.5 5h17A2.5 2.5 0 0 1 27 7.5v7.435c.728.362 1.4.82 2 1.357V7.5A4.5 4.5 0 0 0 24.5 3zM14 23a8.983 8.983 0 0 1 3.343-7h-5.914A2.429 2.429 0 0 0 9 18.429c0 3.02 2.153 5.205 5.092 5.864A9.067 9.067 0 0 1 14 23m5.75-12.25a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M23 15.5a7.5 7.5 0 1 1 0 15a7.5 7.5 0 0 1 0-15m4.53 4.72a.75.75 0 0 0-1.06 0l-4.72 4.72l-1.97-1.97a.75.75 0 1 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0l5.25-5.25a.75.75 0 0 0 0-1.06"
-                    />
-                  </svg>
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 32 32"
+                  id="profileRequests"
+                  className="menu-icon"
+                >
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M7.5 3A4.5 4.5 0 0 0 3 7.5v17A4.5 4.5 0 0 0 7.5 29h8.792a9.018 9.018 0 0 1-1.357-2H7.5A2.5 2.5 0 0 1 5 24.5v-17A2.5 2.5 0 0 1 7.5 5h17A2.5 2.5 0 0 1 27 7.5v7.435c.728.362 1.4.82 2 1.357V7.5A4.5 4.5 0 0 0 24.5 3zM14 23a8.983 8.983 0 0 1 3.343-7h-5.914A2.429 2.429 0 0 0 9 18.429c0 3.02 2.153 5.205 5.092 5.864A9.067 9.067 0 0 1 14 23m5.75-12.25a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M23 15.5a7.5 7.5 0 1 1 0 15a7.5 7.5 0 0 1 0-15m4.53 4.72a.75.75 0 0 0-1.06 0l-4.72 4.72l-1.97-1.97a.75.75 0 1 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0l5.25-5.25a.75.75 0 0 0 0-1.06"
+                  />
+                </svg>
               </ListItemIcon>
               <ListItemText primary="Profile Requests" />
             </ListItem>
@@ -394,18 +544,18 @@ const Navbar = () => {
             <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
               <ListItemIcon>
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.2em"
-                    height="1.2em"
-                    viewBox="0 0 32 32"
-                    id="profileRequests"
-                    className="menu-icon"
-                  >
-                    <path
-                      fill="var(--nav-head-icons)"
-                      d="M7.5 3A4.5 4.5 0 0 0 3 7.5v17A4.5 4.5 0 0 0 7.5 29h8.792a9.018 9.018 0 0 1-1.357-2H7.5A2.5 2.5 0 0 1 5 24.5v-17A2.5 2.5 0 0 1 7.5 5h17A2.5 2.5 0 0 1 27 7.5v7.435c.728.362 1.4.82 2 1.357V7.5A4.5 4.5 0 0 0 24.5 3zM14 23a8.983 8.983 0 0 1 3.343-7h-5.914A2.429 2.429 0 0 0 9 18.429c0 3.02 2.153 5.205 5.092 5.864A9.067 9.067 0 0 1 14 23m5.75-12.25a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M23 15.5a7.5 7.5 0 1 1 0 15a7.5 7.5 0 0 1 0-15m4.53 4.72a.75.75 0 0 0-1.06 0l-4.72 4.72l-1.97-1.97a.75.75 0 1 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0l5.25-5.25a.75.75 0 0 0 0-1.06"
-                    />
-                  </svg>
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 32 32"
+                  id="profileRequests"
+                  className="menu-icon"
+                >
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M7.5 3A4.5 4.5 0 0 0 3 7.5v17A4.5 4.5 0 0 0 7.5 29h8.792a9.018 9.018 0 0 1-1.357-2H7.5A2.5 2.5 0 0 1 5 24.5v-17A2.5 2.5 0 0 1 7.5 5h17A2.5 2.5 0 0 1 27 7.5v7.435c.728.362 1.4.82 2 1.357V7.5A4.5 4.5 0 0 0 24.5 3zM14 23a8.983 8.983 0 0 1 3.343-7h-5.914A2.429 2.429 0 0 0 9 18.429c0 3.02 2.153 5.205 5.092 5.864A9.067 9.067 0 0 1 14 23m5.75-12.25a3.75 3.75 0 1 1-7.5 0a3.75 3.75 0 0 1 7.5 0M23 15.5a7.5 7.5 0 1 1 0 15a7.5 7.5 0 0 1 0-15m4.53 4.72a.75.75 0 0 0-1.06 0l-4.72 4.72l-1.97-1.97a.75.75 0 1 0-1.06 1.06l2.5 2.5a.75.75 0 0 0 1.06 0l5.25-5.25a.75.75 0 0 0 0-1.06"
+                  />
+                </svg>
               </ListItemIcon>
               <ListItemText primary="Pitch Request" />
             </ListItem>
@@ -416,24 +566,50 @@ const Navbar = () => {
             >
               <ListItemIcon>
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.2em"
-                    height="1.2em"
-                    viewBox="0 0 24 24"
-                    id="postReports"
-                    className="menu-icon"
-                    onClick={() => navigate("/postReports")}
-                  >
-                    <path
-                      fill="var(--nav-head-icons)"
-                      d="M12 17q.425 0 .713-.288T13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17m-1-4h2V7h-2zm-2.75 8L3 15.75v-7.5L8.25 3h7.5L21 8.25v7.5L15.75 21zm.85-2h5.8l4.1-4.1V9.1L14.9 5H9.1L5 9.1v5.8zm2.9-7"
-                    />
-                  </svg>
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 24 24"
+                  id="postReports"
+                  className="menu-icon"
+                  onClick={() => navigate("/postReports")}
+                >
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M12 17q.425 0 .713-.288T13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17m-1-4h2V7h-2zm-2.75 8L3 15.75v-7.5L8.25 3h7.5L21 8.25v7.5L15.75 21zm.85-2h5.8l4.1-4.1V9.1L14.9 5H9.1L5 9.1v5.8zm2.9-7"
+                  />
+                </svg>
               </ListItemIcon>
               <ListItemText primary="Post Reports" />
             </ListItem>
           </>
         )}
+      </List>
+      <List>
+        <ListItem
+          button
+          key="logout"
+          onClick={() => {
+            setLogoutOpen(true);
+          }}
+          style={{ borderTop: "1px solid var(--icons-border)" }}
+        >
+          <ListItemIcon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1.2em"
+              height="1.2em"
+              viewBox="0 0 24 24"
+              className="menu-icon"
+            >
+              <path
+                fill="var(--nav-head-icons)"
+                d="M3 21V3h9v2H5v14h7v2zm13-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+              />
+            </svg>
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
       </List>
     </Box>
   );
@@ -575,6 +751,213 @@ const Navbar = () => {
             </div>
           </>
         )}
+    </Box>
+  );
+
+  // Sidebar
+  const [state, setState] = React.useState({
+    right: false,
+  });
+
+  const toggleSideBarDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const sideBarList = (anchor) => (
+    <Box
+      sx={{
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+      role="presentation"
+      onClick={toggleSideBarDrawer(anchor, false)}
+      onKeyDown={toggleSideBarDrawer(anchor, false)}
+    >
+      <List>
+        <div className="menubar-profile-container">
+          <img
+            id="Profile-img"
+            className="menu-profile-img"
+            src={image !== undefined && image !== "" ? image : "/profile.png"}
+            alt=""
+          />
+          <div className="menu-profile-content">
+            <div style={{ fontWeight: "600", fontSize: "16px", color: "#fff" }}>
+              {userName}
+            </div>
+            <div style={{ fontSize: "10px", color: "#fff" }}>{role}</div>
+          </div>
+        </div>
+        {/* DARK AND WHITE THEME */}
+        <ListItem
+          button
+          key="themeIcon"
+          onClick={(e) => {
+            const body = document.body;
+            const currentTheme = body.getAttribute("data-theme");
+            const newTheme = currentTheme === "light" ? "dark" : "light";
+            const mode = newTheme === "light" ? "Dark" : "Light";
+
+            body.setAttribute("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme);
+            document.getElementById("themeIcon");
+            newTheme == "light" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.2em"
+                height="1.2em"
+                viewBox="0 0 20 20"
+                id=""
+                className="menu-icon"
+              >
+                <path
+                  fill="var(--nav-head-icons)"
+                  d="M17.293 13.293A8 8 0 0 1 6.707 2.707a8.001 8.001 0 1 0 10.586 10.586"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.2em"
+                height="1.2em"
+                viewBox="0 0 24 24"
+                id=""
+                className="menu-icon"
+              >
+                <path
+                  fill="none"
+                  stroke="var(--nav-head-icons)"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4V2m0 18v2M6.414 6.414L5 5m12.728 12.728l1.414 1.414M4 12H2m18 0h2m-4.271-5.586L19.143 5M6.415 17.728L5 19.142M12 17a5 5 0 1 1 0-10a5 5 0 0 1 0 10"
+                />
+              </svg>
+            );
+
+            // Switching the logo based on the theme
+            const logoImg = document.getElementById("logoImage");
+            logoImg.src =
+              newTheme === "light" ? "/logo.png" : "/Footer-Logo.png";
+            logoImg.alt = `${mode} Logo`;
+            e.currentTarget.title = `${mode} Mode`;
+          }}
+        >
+          {/* <i
+            id="themeIcon"
+            class={`fas fa-${
+              localStorage.getItem("theme") == "light" ? "moon" : "sun"
+            }`}
+          >
+            </i> */}
+          <ListItemIcon>
+            {localStorage.getItem("theme") === "light" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                id=""
+                className="menu-icon"
+              >
+                <path
+                  fill="var(--nav-head-icons)"
+                  d="M17.293 13.293A8 8 0 0 1 6.707 2.707a8.001 8.001 0 1 0 10.586 10.586"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                id=""
+                className="menu-icon"
+              >
+                <path
+                  fill="none"
+                  stroke="var(--nav-head-icons)"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4V2m0 18v2M6.414 6.414L5 5m12.728 12.728l1.414 1.414M4 12H2m18 0h2m-4.271-5.586L19.143 5M6.415 17.728L5 19.142M12 17a5 5 0 1 1 0-10a5 5 0 0 1 0 10"
+                />
+              </svg>
+            )}
+          </ListItemIcon>
+
+          <ListItemText
+            primary={`${
+              localStorage.getItem("theme") === "light" ? "Dark" : "Light"
+            } Mode`}
+          />
+        </ListItem>
+
+        <ListItem
+          button
+          key="editProfile"
+          onClick={() => navigate("/editProfile")}
+        >
+          <ListItemIcon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1.2em"
+              height="1.2em"
+              viewBox="0 0 1024 1024"
+              id="editProfile"
+              className="menu-icon"
+            >
+              <path
+                fill="var(--nav-head-icons)"
+                d="M832 512a32 32 0 1 1 64 0v352a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h352a32 32 0 0 1 0 64H192v640h640z"
+              />
+              <path
+                fill="var(--nav-head-icons)"
+                d="m469.952 554.24l52.8-7.552L847.104 222.4a32 32 0 1 0-45.248-45.248L477.44 501.44l-7.552 52.8zm422.4-422.4a96 96 0 0 1 0 135.808l-331.84 331.84a32 32 0 0 1-18.112 9.088L436.8 623.68a32 32 0 0 1-36.224-36.224l15.104-105.6a32 32 0 0 1 9.024-18.112l331.904-331.84a96 96 0 0 1 135.744 0z"
+              />
+            </svg>
+          </ListItemIcon>
+          <ListItemText primary="Edit Profile" />
+        </ListItem>
+      </List>
+
+      <List style={{ borderTop: "1px solid var(--icons-border)" }}>
+        <ListItem
+          button
+          key="logout"
+          onClick={() => {
+            setLogoutOpen(true);
+          }}
+        >
+          <ListItemIcon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1.2em"
+              height="1.2em"
+              viewBox="0 0 24 24"
+              id="logout"
+              className="menu-icon"
+            >
+              <path
+                fill="var(--nav-head-icons)"
+                d="M3 21V3h9v2H5v14h7v2zm13-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+              />
+            </svg>
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </List>
     </Box>
   );
 
@@ -725,7 +1108,7 @@ const Navbar = () => {
       <div className="menuIcons">
         {width > 770 && (
           <>
-            <div className="navbar-item" title="Home"  onClick={() => navigate("/posts")}>
+            <div className="navbar-item" onClick={() => navigate("/posts")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1.2em"
@@ -744,9 +1127,12 @@ const Navbar = () => {
               <div className="navbar-title">Home</div>
             </div>
 
-            <div className="navbar-item" title="Dashboard"  onClick={() => {
-                  navigate("/dashboard");
-                }}>
+            <div
+              className="navbar-item"
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1.2em"
@@ -767,8 +1153,10 @@ const Navbar = () => {
               <div className="navbar-title">Dashboard</div>
             </div>
 
-            <div className="navbar-item" title="Mentors" onClick={() => navigate("/searchusers")}
->
+            <div
+              className="navbar-item"
+              onClick={() => navigate("/searchusers")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1.2em"
@@ -787,7 +1175,10 @@ const Navbar = () => {
 
             {role === "Admin" && (
               <>
-                <div className="navbar-item" title="Profile Requests"  onClick={() => navigate("/profileRequests")}>
+                <div
+                  className="navbar-item"
+                  onClick={() => navigate("/profileRequests")}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="1.2em"
@@ -803,16 +1194,26 @@ const Navbar = () => {
                   </svg>
                   <div className="navbar-title">Profiles</div>
                 </div>
-                <div className="navbar-item" title="Pitch Request"  onClick={() => navigate("/pitches")}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="pitches"  width="1.2em"
+                <div
+                  className="navbar-item"
+                  onClick={() => navigate("/pitches")}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    id="pitches"
+                    width="1.2em"
                     height="1.2em"
                     className="icon"
-                   >
-                    <path  fill="var(--nav-head-icons)" d="M15.5,12C18,12 20,14 20,16.5C20,17.38 19.75,18.21 19.31,18.9L22.39,22L21,23.39L17.88,20.32C17.19,20.75 16.37,21 15.5,21C13,21 11,19 11,16.5C11,14 13,12 15.5,12M15.5,14A2.5,2.5 0 0,0 13,16.5A2.5,2.5 0 0,0 15.5,19A2.5,2.5 0 0,0 18,16.5A2.5,2.5 0 0,0 15.5,14M5,3H19C20.11,3 21,3.89 21,5V13.03C20.5,12.23 19.81,11.54 19,11V5H5V19H9.5C9.81,19.75 10.26,20.42 10.81,21H5C3.89,21 3,20.11 3,19V5C3,3.89 3.89,3 5,3M7,7H17V9H7V7M7,11H12.03C11.23,11.5 10.54,12.19 10,13H7V11M7,15H9.17C9.06,15.5 9,16 9,16.5V17H7V15Z" />
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M15.5,12C18,12 20,14 20,16.5C20,17.38 19.75,18.21 19.31,18.9L22.39,22L21,23.39L17.88,20.32C17.19,20.75 16.37,21 15.5,21C13,21 11,19 11,16.5C11,14 13,12 15.5,12M15.5,14A2.5,2.5 0 0,0 13,16.5A2.5,2.5 0 0,0 15.5,19A2.5,2.5 0 0,0 18,16.5A2.5,2.5 0 0,0 15.5,14M5,3H19C20.11,3 21,3.89 21,5V13.03C20.5,12.23 19.81,11.54 19,11V5H5V19H9.5C9.81,19.75 10.26,20.42 10.81,21H5C3.89,21 3,20.11 3,19V5C3,3.89 3.89,3 5,3M7,7H17V9H7V7M7,11H12.03C11.23,11.5 10.54,12.19 10,13H7V11M7,15H9.17C9.06,15.5 9,16 9,16.5V17H7V15Z"
+                    />
                   </svg>
                   <div className="navbar-title">Pitches</div>
                 </div>
-                <div className="navbar-item" title="Reports">
+                <div className="navbar-item">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="1.2em"
@@ -823,7 +1224,7 @@ const Navbar = () => {
                     onClick={() => navigate("/postReports")}
                   >
                     <path
-                    fill="var(--nav-head-icons)"
+                      fill="var(--nav-head-icons)"
                       d="M12 17q.425 0 .713-.288T13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17m-1-4h2V7h-2zm-2.75 8L3 15.75v-7.5L8.25 3h7.5L21 8.25v7.5L15.75 21zm.85-2h5.8l4.1-4.1V9.1L14.9 5H9.1L5 9.1v5.8zm2.9-7"
                     />
                   </svg>
@@ -835,10 +1236,9 @@ const Navbar = () => {
             <div
               className="navbar-item"
               style={{ position: "relative" }}
-              title="Messages"
               onClick={() => {
-                  navigate("/conversations");
-                }}
+                navigate("/conversations");
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -847,17 +1247,13 @@ const Navbar = () => {
                 viewBox="0 0 24 24"
                 id="conversations"
                 className="icon"
-              
               >
                 <path
                   fill="var(--nav-head-icons)"
                   d="M4 4h16v12H5.17L4 17.17zm0-2c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm2 10h12v2H6zm0-3h12v2H6zm0-3h12v2H6z"
                 />
                 {messageCount.length > 0 && (
-                  <div
-                    className="Conversations-count"
-                    title="unread conversations"
-                  >
+                  <div className="Conversations-count">
                     {messageCount.length}
                   </div>
                 )}
@@ -865,7 +1261,10 @@ const Navbar = () => {
               <div className="navbar-title">Messages</div>
             </div>
 
-            <div className="navbar-item" title="Notifications"  onClick={toggleNotificationDrawer("right", true)}>
+            <div
+              className="navbar-item"
+              onClick={toggleNotificationDrawer("right", true)}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1.2em"
@@ -921,7 +1320,7 @@ const Navbar = () => {
         )} */}
 
         {/* DARK AND WHITE THEME */}
-       {/* <div
+        {/* <div
           id=""
           className="icon"
           title={`Switch to ${
@@ -956,43 +1355,80 @@ const Navbar = () => {
           ></i>
         </div> */}
 
-        <div
-          id="editProfile"
-          style={{ position: "relative" }}
-          onClick={(e) => {
-            document
-              .getElementsByClassName("userDetails")[0]
-              .classList.toggle("showUserDetails");
-          }}
-        >
-          <img
-            id="Profile-img"
-            className="Profile-img"
-            src={image !== undefined && image !== "" ? image : "/profile.png"}
-            alt=""
-          />
-          {verification === "approved" && (
-            <abbr title="verified user">
-              <img
-                src="/verify.png"
-                height={20}
-                style={{
-                  right: "2px",
-                  top: "3px",
-                  height: "13px",
-                  width: "13px",
-                }}
-                alt="Your Alt Text"
-                className="successIcons"
-              />
-            </abbr>
-          )}
-          {/* <div className="navbar-title">Profile</div> */}
-        </div>
+        {width > 770 && (
+          <div>
+            {["right"].map((anchor) => (
+              <React.Fragment key={anchor}>
+                <div
+                  id="editProfile"
+                  style={{ position: "relative" }}
+                  onClick={toggleSideBarDrawer(anchor, true)}
+                >
+                  <img
+                    id="Profile-img"
+                    className="Profile-img"
+                    src={
+                      image !== undefined && image !== ""
+                        ? image
+                        : "/profile.png"
+                    }
+                    alt=""
+                  />
+                  {verification === "approved" && (
+                    <img
+                      src="/verify.png"
+                      height={20}
+                      style={{
+                        right: "2px",
+                        top: "3px",
+                        height: "13px",
+                        width: "13px",
+                      }}
+                      alt="Your Alt Text"
+                      className="successIcons"
+                    />
+                  )}
+                </div>
+
+                <Drawer
+                  anchor={anchor}
+                  open={state[anchor]}
+                  onClose={toggleSideBarDrawer(anchor, false)}
+                >
+                  {sideBarList(anchor)}
+                </Drawer>
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+
         {width < 770 && (
           <>
             <div className="icon" onClick={toggleDrawer("right", true)}>
-              <MenuRoundedIcon />
+              <div id="editProfile" style={{ position: "relative" }}>
+                <img
+                  id="Profile-img"
+                  className="Profile-img"
+                  src={
+                    image !== undefined && image !== "" ? image : "/profile.png"
+                  }
+                  alt=""
+                />
+                {verification === "approved" && (
+                  <img
+                    src="/verify.png"
+                    height={20}
+                    style={{
+                      right: "2px",
+                      top: "3px",
+                      height: "13px",
+                      width: "13px",
+                    }}
+                    alt="Your Alt Text"
+                    className="successIcons"
+                  />
+                )}
+              </div>
             </div>
             <Drawer
               anchor="right"
@@ -1051,7 +1487,6 @@ const Navbar = () => {
                 <div className="username">Hi, {userName}!</div>
                 <div
                   className="manage"
-                  title="view profile"
                   onClick={() => navigate(`/user/${user_id}`)}
                 >
                   {role}

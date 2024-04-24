@@ -8,9 +8,16 @@ body[data-theme="dark"] {
 --nav-head-bg: #072D44;
 --nav-head-icons: #9bf8f4;
 --searchbar-bg:#9bf8f4;
+
 --menubar-bg: #072D44;
 --menubar-txt: #9bf8f4;
+--icons-border:#9bf8f385;
 
+--button-enabled:#4f55c7;
+--button-disabled:#4f55c73f;
+
+
+/* old themes */
   --body-background: #17171e;
   --nabar-text: #fff;
   --text-total-color: #fff;
@@ -45,10 +52,20 @@ body[data-theme="light"] {
  --nav-head-bg: #f6f6fc;
  --nav-head-icons: #4f55c7;
  --searchbar-bg: #9a97975e;
+ --icons-border:#4f55c785;
 
  --menubar-bg: #f6f6fc;
  --menubar-txt: #4f55c7;
 
+ --button-enabled:#4f55c7;
+ --button-disabled:#4f55c73f;
+
+
+
+
+
+
+/* old themes */
   --text: #040316;
   --background: #fbfbfe;
   --primary: #4e54c7;
@@ -216,14 +233,14 @@ input.invalid {
 }
 
 button:disabled {
-  background-color: var(--button) !important;
+  background-color: var(--button-disabled) !important;
   cursor: not-allowed;
 }
 
 button {
   width: auto !important;
   padding: 15px;
-  background-color: var(--button);
+  background-color: var(--button-enabled);
   font-weight: 600;
   transition: background-color 0.3s ease;
   color: #fff;
