@@ -102,7 +102,9 @@
   align-items: center;
   cursor: pointer;
 }
-
+.navbar-item.selected{
+  background: none;
+}
 .navbar-title{
   font-size: 12px;
   font-weight: normal;
@@ -111,6 +113,10 @@
 .navbar-title:hover{
   color: var(--nav-head-icons-hover);
 }
+.selected-title {
+  font-weight: bold;
+}
+
 
 .icon,
 .fas.fa-bars {
