@@ -1735,7 +1735,7 @@ const EditProfile = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             {id == undefined && (
                                                 <div
                                                     style={{
@@ -1771,6 +1771,297 @@ const EditProfile = () => {
                                     <div>No Experience data found</div>
                                 )}
                             </section>
+
+                            <section className="EditProfileAbout">
+                                {userpage === false && (
+                                    <section >
+                                    <div >
+                                        <div className="aboutHeadings">
+                                            <div>Documents</div>
+                                            </div>
+                                            <form className="">
+                                                <div className="upload-files-container">
+                                                    <div>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "2px",
+                                                                justifyContent: "space-between",
+                                                                width: width < 700 && "320px",
+                                                            }}
+                                                        >
+                                                            <label className="Input-Label">Resume</label>
+                                                            {oldDocs.resume !== "" &&
+                                                                oldDocs.resume !== undefined &&
+                                                                Object.keys(oldDocs.resume).length !== 0 && (
+                                                                    <attr title="view previous resume">
+                                                                        <a
+                                                                            href={oldDocs.resume?.secure_url}
+                                                                            target="_blank"
+                                                                            rel="noreferrer"
+                                                                        >
+                                                                            <img
+                                                                                style={{
+                                                                                    height: "30px",
+                                                                                    width: "30px",
+                                                                                    marginRight: "30px",
+                                                                                }}
+                                                                                src="/view.png"
+                                                                                onMouseEnter={() => setShowPreviousFile(true)}
+                                                                                onMouseLeave={() => setShowPreviousFile(false)}
+                                                                            />
+                                                                        </a>
+                                                                    </attr>
+                                                                )}
+                                                        </div>
+                                                        {id == undefined && (
+                                                            <>
+                                                                <label htmlFor="resume" className="resume">
+                                                                    <CloudUploadIcon />
+                                                                    <span className="fileName">
+                                                                        {recentUploadedDocs?.resume || "Upload"}
+                                                                    </span>
+                                                                </label>
+                                                                <input
+                                                                    className="resume"
+                                                                    type="file"
+                                                                    name="resume"
+                                                                    id="resume"
+                                                                    onChange={handleResume}
+                                                                    style={{ display: "none" }}
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </div>
+
+                                                    <div>
+                                                        <div>
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "2px",
+                                                                    justifyContent: "space-between",
+                                                                    width: width < 700 && "320px",
+                                                                }}
+                                                            >
+                                                                <label className="Input-Label">Acheivements</label>
+                                                                {oldDocs.acheivements !== "" &&
+                                                                    oldDocs.acheivements !== undefined &&
+                                                                    Object.keys(oldDocs.acheivements).length !== 0 && (
+                                                                        <attr title="view previous acheivements">
+                                                                            <a
+                                                                                href={oldDocs.acheivements?.secure_url}
+                                                                                target="_blank"
+                                                                                rel="noreferrer"
+                                                                            >
+                                                                                <img
+                                                                                    style={{
+                                                                                        height: "30px",
+                                                                                        width: "30px",
+                                                                                        marginRight: "30px",
+                                                                                    }}
+                                                                                    src="/view.png"
+                                                                                    onMouseEnter={() => setShowPreviousFile(true)}
+                                                                                    onMouseLeave={() => setShowPreviousFile(false)}
+                                                                                />
+                                                                            </a>
+                                                                        </attr>
+                                                                    )}
+                                                            </div>
+                                                            {id == undefined && (
+                                                                <>
+                                                                    <label htmlFor="acheivements" className="resume">
+                                                                        <CloudUploadIcon />
+                                                                        <span className="fileName">
+                                                                            {recentUploadedDocs?.acheivements || "Upload"}
+                                                                        </span>
+                                                                    </label>
+                                                                    <input
+                                                                        type="file"
+                                                                        id="acheivements"
+                                                                        className="resume"
+                                                                        name="acheivements"
+                                                                        onChange={handleResume}
+                                                                        style={{ display: "none" }}
+                                                                    />
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "2px",
+                                                                justifyContent: "space-between",
+                                                                width: width < 700 && "320px",
+                                                            }}
+                                                        >
+                                                            <label className="Input-Label">Degree</label>
+                                                            {oldDocs.degree !== "" &&
+                                                                oldDocs.degree !== undefined &&
+                                                                Object.keys(oldDocs.degree).length !== 0 && (
+                                                                    <attr title="view previous degree ">
+                                                                        <a
+                                                                            href={oldDocs.degree?.secure_url}
+                                                                            target="_blank"
+                                                                            rel="noreferrer"
+                                                                        >
+                                                                            <img
+                                                                                style={{
+                                                                                    height: "30px",
+                                                                                    width: "30px",
+                                                                                    marginRight: "30px",
+                                                                                }}
+                                                                                src="/view.png"
+                                                                                onMouseEnter={() => setShowPreviousFile(true)}
+                                                                                onMouseLeave={() => setShowPreviousFile(false)}
+                                                                            />
+                                                                        </a>
+                                                                    </attr>
+                                                                )}
+                                                        </div>
+                                                        {id == undefined && (
+                                                            <>
+                                                                <label htmlFor="degree" className="resume">
+                                                                    <CloudUploadIcon />
+                                                                    <span className="fileName">
+                                                                        {recentUploadedDocs?.degree || "Upload"}
+                                                                    </span>
+                                                                </label>
+
+                                                                <input
+                                                                    type="file"
+                                                                    id="degree"
+                                                                    className="resume"
+                                                                    name="degree"
+                                                                    onChange={handleResume}
+                                                                    style={{ display: "none" }}
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </div>
+
+                                                    <div>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "2px",
+                                                                justifyContent: "space-between",
+                                                                width: width < 700 && "320px",
+                                                            }}
+                                                        >
+                                                            <label className="Input-Label">Expertise</label>
+                                                            {oldDocs.expertise !== "" &&
+                                                                oldDocs.expertise !== undefined &&
+                                                                Object.keys(oldDocs.expertise).length !== 0 && (
+                                                                    <attr title="view previous expertise ">
+                                                                        <a
+                                                                            href={oldDocs.expertise?.secure_url}
+                                                                            target="_blank"
+                                                                            rel="noreferrer"
+                                                                        >
+                                                                            <img
+                                                                                style={{
+                                                                                    height: "30px",
+                                                                                    width: "30px",
+                                                                                    marginRight: "30px",
+                                                                                }}
+                                                                                src="/view.png"
+                                                                                onMouseEnter={() => setShowPreviousFile(true)}
+                                                                                onMouseLeave={() => setShowPreviousFile(false)}
+                                                                            />
+                                                                        </a>
+                                                                    </attr>
+                                                                )}
+                                                        </div>
+                                                        {id == undefined && (
+                                                            <>
+                                                                <label htmlFor="expertise" className="resume">
+                                                                    <CloudUploadIcon />
+                                                                    <span className="fileName">
+                                                                        {recentUploadedDocs?.expertise || "Upload"}
+                                                                    </span>
+                                                                </label>
+
+                                                                <input
+                                                                    type="file"
+                                                                    id="expertise"
+                                                                    className="resume"
+                                                                    name="expertise"
+                                                                    style={{ display: "none" }}
+                                                                    onChange={handleResume}
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </div>
+
+                                                    <div>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "2px",
+                                                                justifyContent: "space-between",
+                                                                width: width < 700 && "320px",
+                                                            }}
+                                                        >
+                                                            <label className="Input-Label">Working</label>
+                                                            {oldDocs.working !== "" &&
+                                                                oldDocs.working !== undefined &&
+                                                                Object.keys(oldDocs.working).length !== 0 && (
+                                                                    <attr title="view previous working ">
+                                                                        <a
+                                                                            href={oldDocs.working?.secure_url}
+                                                                            target="_blank"
+                                                                            rel="noreferrer"
+                                                                        >
+                                                                            <img
+                                                                                style={{
+                                                                                    height: "30px",
+                                                                                    width: "30px",
+                                                                                    marginRight: "30px",
+                                                                                }}
+                                                                                src="/view.png"
+                                                                                onMouseEnter={() => setShowPreviousFile(true)}
+                                                                                onMouseLeave={() => setShowPreviousFile(false)}
+                                                                            />
+                                                                        </a>
+                                                                    </attr>
+                                                                )}
+                                                        </div>
+                                                        {id == undefined && (
+                                                            <>
+                                                                <label htmlFor="working" className="resume">
+                                                                    <CloudUploadIcon />
+                                                                    <span className="fileName">
+                                                                        {recentUploadedDocs?.working || "Upload"}
+                                                                    </span>
+                                                                </label>
+
+                                                                <input
+                                                                    type="file"
+                                                                    id="working"
+                                                                    className="resume"
+                                                                    style={{ display: "none" }}
+                                                                    name="working"
+                                                                    onChange={handleResume}
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </section>
+                                )}
+                            </section>
+
 
                             {/* Buttons for save data */}
                             {userpage === false &&
@@ -3448,7 +3739,7 @@ const EditProfile = () => {
                                                                             experienceDetails.TotalWorkExperience ==
                                                                             ""))))))
                                                 }
-                                            
+
                                             >
                                                 {editingExperienceId == "" ? "Add" : "Update"}
                                             </button>
