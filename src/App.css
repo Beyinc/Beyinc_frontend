@@ -3,18 +3,34 @@
 }
 
 body[data-theme="dark"] {
+/* LATEST COLOR PALETTE */
+/* Navbar */
+--nav-head-bg: #072D44;
+--nav-head-icons: #9bf8f4;
+--searchbar-bg:#9bf8f3c4;
+--nav-head-icons-hover: #9bf8f382;
+
+--menubar-bg: #072D44;
+--menubar-txt: #9bf8f4;
+--icons-border:#9bf8f385;
+
+--button-enabled:#4f55c7;
+--button-disabled:#4f55c73f;
+
+
+/* old themes */
   --body-background: #17171e;
   --nabar-text: #fff;
   --text-total-color: #fff;
   --navbar-profile-hover: #2172e2;
   /* --nav-head-bg: #212130; */
-  --nav-head-bg: #032036dd;
-  --nav-head-icons: #fff;
+ 
+ 
   --landingPage-working-container-bg: #212130;
   --chatcontainer-bg: #212130;
   --user-details-container-bg: #212130;
   --menubar-bg: #212130;
-  --menubar-txt: #fff;
+
   --menubar-hover-txt: #6a73fa;
   --users-bg: #212130;
   --newchat-button: #48abec;
@@ -32,7 +48,25 @@ body[data-theme="dark"] {
 }
 
 body[data-theme="light"] {
-  /* LATEST THEME BASED COLORS */
+  /* LATEST COLOR PALETTE */
+ /* Nav bar */
+ --nav-head-bg: #f6f6fc;
+ --nav-head-icons: #4f55c7;
+ --searchbar-bg: #9a979796;
+ --icons-border:#4f55c785;
+ --nav-head-icons-hover: #4f55c75a;
+ --menubar-bg: #f6f6fc;
+ --menubar-txt: #4f55c7;
+
+ --button-enabled:#4f55c7;
+ --button-disabled:#4f55c73f;
+
+
+
+
+
+
+/* old themes */
   --text: #040316;
   --background: #fbfbfe;
   --primary: #4e54c7;
@@ -45,9 +79,8 @@ body[data-theme="light"] {
   --white-text: #fff;
   --light-transparent: #4e54c748;
 
-  /* Nav bar */
-  --nav-head-bg: #ffffffdd;
-  --nav-head-icons: #4e54c7;
+ 
+ 
   --nav-head-icons-border: #dddbff;
   --nav-head-selected-icons-border: #4e54c7;
   --nav-head-icons-hover: #4449ad;
@@ -58,8 +91,8 @@ body[data-theme="light"] {
   --singleUserCard-bg: #fff;
   --landingPage-working-container-bg: #f1f1f1;
   --user-details-container-bg: #eaf1fb;
-  --menubar-bg: #fbfbfe;
-  --menubar-txt: #212130;
+  
+ 
   --menubar-hover-txt: #6a73fa;
   --chatcontainer-bg: #fff;
   --searchmenu-bg: #fff;
@@ -201,14 +234,14 @@ input.invalid {
 }
 
 button:disabled {
-  background-color: var(--button) !important;
+  background-color: var(--button-disabled) !important;
   cursor: not-allowed;
 }
 
 button {
   width: auto !important;
   padding: 15px;
-  background-color: var(--button);
+  background-color: var(--button-enabled);
   font-weight: 600;
   transition: background-color 0.3s ease;
   color: #fff;
