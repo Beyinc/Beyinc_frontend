@@ -7,7 +7,8 @@ body[data-theme="dark"] {
 /* Navbar */
 --nav-head-bg: #072D44;
 --nav-head-icons: #9bf8f4;
---searchbar-bg:#9bf8f4;
+--searchbar-bg:#9bf8f3c4;
+--nav-head-icons-hover: #9bf8f382;
 
 --menubar-bg: #072D44;
 --menubar-txt: #9bf8f4;
@@ -51,9 +52,9 @@ body[data-theme="light"] {
  /* Nav bar */
  --nav-head-bg: #f6f6fc;
  --nav-head-icons: #4f55c7;
- --searchbar-bg: #9a97975e;
+ --searchbar-bg: #9a979796;
  --icons-border:#4f55c785;
-
+ --nav-head-icons-hover: #4f55c75a;
  --menubar-bg: #f6f6fc;
  --menubar-txt: #4f55c7;
 

@@ -9,34 +9,16 @@ import { ToastColors } from "../Toast/ToastColors";
 import { Howl } from "howler";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { jwtDecode } from "jwt-decode";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import ReportGmailerrorredOutlinedIcon from "@mui/icons-material/ReportGmailerrorredOutlined";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
-// import ThreePOutlinedIcon from "@mui/icons-material/ThreePOutlined";
-import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
-import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { io } from "socket.io-client";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Box from "@mui/material/Box";
-// import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
-// import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
-// import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-// import InboxIcon from "@mui/icons-material/MoveToInbox";
-// import MailIcon from "@mui/icons-material/Mail";
 import {
   getAllNotifications,
   setMessageCount,
@@ -44,15 +26,10 @@ import {
 } from "../../redux/Conversationreducer/ConversationReducer";
 import { Drawer, Tab, Tabs, Typography } from "@mui/material";
 import MessageRequest from "../Conversation/Notification/MessageRequest";
-import { format } from "timeago.js";
 import useWindowDimensions from "../Common/WindowSize";
 import { socket_io } from "../../Utils";
 import ProfileImageUpdate from "./ProfileImageUpdate";
 import PostDiscussionRequest from "../Editprofile/PostDiscussionRequest";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import Divider from "@mui/material/Divider";
-import ListItemButton from "@mui/material/ListItemButton";
 
 function a11yProps(index) {
   return {
@@ -186,6 +163,7 @@ const Navbar = () => {
     }
   }, [notificationDrawerState]);
 
+  // NOTIFICATION DRAWER
   const [drawerState, setDrawerState] = useState({
     right: false,
   });
@@ -1073,6 +1051,12 @@ const Navbar = () => {
     setFirstTime(false);
   };
 
+  const [isSelected, setIsSelected] = useState("");
+
+  const handleItemClick = (val) => {
+    setIsSelected(val);
+  };
+
   return (
     <div
       className="navbar"
@@ -1108,51 +1092,42 @@ const Navbar = () => {
       <div className="menuIcons">
         {width > 770 && (
           <>
+            {/* HOME ICON */}
             <div className="navbar-item" onClick={() => navigate("/posts")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="1.2em"
-                height="1.2em"
-                viewBox="0 0 24 24"
-                id="posts"
-                className="icon"
-              >
-                <path
-                  fill="none"
-                  stroke="var(--nav-head-icons)"
-                  stroke-width="2"
-                  d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 16a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"
-                />
-              </svg>
-              <div className="navbar-title">Home</div>
-            </div>
-
-            <div
-              className="navbar-item"
-              onClick={() => {
-                navigate("/dashboard");
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1.2em"
-                height="1.2em"
+                width="1em"
+                height="1em"
                 viewBox="0 0 24 24"
                 id="dashboard"
                 className="icon"
               >
                 <path
-                  fill="none"
-                  stroke="var(--nav-head-icons)"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 16v-5m4 5V8m4 8v-2m2-10H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"
+                  fill="var(--nav-head-icons)"
+                  d="M13 9V3h8v6zM3 13V3h8v10zm10 8V11h8v10zM3 21v-6h8v6zm2-10h4V5H5zm10 8h4v-6h-4zm0-12h4V5h-4zM5 19h4v-2H5zm4-2"
                 />
               </svg>
+              <div className="navbar-title">Home</div>
+            </div>
+            {/* DASHBOARD ICON */}
+            <div className="navbar-item" onClick={() => navigate("/dashboard")}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                id="dashboard"
+                className="icon"
+              >
+                <path
+                  fill="var(--nav-head-icons)"
+                  d="M10 2c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1s1-.4 1-1V3c0-.6-.4-1-1-1M5 12c-.6 0-1 .4-1 1v8c0 .6.4 1 1 1s1-.4 1-1v-8c0-.6-.4-1-1-1m10-4c-.6 0-1 .4-1 1v12c0 .6.4 1 1 1s1-.4 1-1V9c0-.6-.4-1-1-1m5 8c-.6 0-1 .4-1 1v4c0 .6.4 1 1 1s1-.4 1-1v-4c0-.6-.4-1-1-1"
+                />
+              </svg>
+
               <div className="navbar-title">Dashboard</div>
             </div>
-
+            {/* MENTOR ICON */}
             <div
               className="navbar-item"
               onClick={() => navigate("/searchusers")}
@@ -1172,9 +1147,9 @@ const Navbar = () => {
               </svg>
               <div className="navbar-title">Mentors</div>
             </div>
-
             {role === "Admin" && (
               <>
+                {/* PROFILE REQUEST ICON */}
                 <div
                   className="navbar-item"
                   onClick={() => navigate("/profileRequests")}
@@ -1194,6 +1169,8 @@ const Navbar = () => {
                   </svg>
                   <div className="navbar-title">Profiles</div>
                 </div>
+
+                {/* PITCHES ICON */}
                 <div
                   className="navbar-item"
                   onClick={() => navigate("/pitches")}
@@ -1213,7 +1190,12 @@ const Navbar = () => {
                   </svg>
                   <div className="navbar-title">Pitches</div>
                 </div>
-                <div className="navbar-item">
+
+                {/* REPORTS ICON */}
+                <div
+                  className="navbar-item"
+                  onClick={() => navigate("/postReports")}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="1.2em"
@@ -1221,7 +1203,6 @@ const Navbar = () => {
                     viewBox="0 0 24 24"
                     id="postReports"
                     className="icon"
-                    onClick={() => navigate("/postReports")}
                   >
                     <path
                       fill="var(--nav-head-icons)"
@@ -1232,13 +1213,11 @@ const Navbar = () => {
                 </div>
               </>
             )}
-
+            {/* MESSAGE ICON */}
             <div
               className="navbar-item"
               style={{ position: "relative" }}
-              onClick={() => {
-                navigate("/conversations");
-              }}
+              onClick={() => navigate("/conversations")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1252,15 +1231,11 @@ const Navbar = () => {
                   fill="var(--nav-head-icons)"
                   d="M4 4h16v12H5.17L4 17.17zm0-2c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm2 10h12v2H6zm0-3h12v2H6zm0-3h12v2H6z"
                 />
-                {messageCount.length > 0 && (
-                  <div className="Conversations-count">
-                    {messageCount.length}
-                  </div>
-                )}
               </svg>
               <div className="navbar-title">Messages</div>
             </div>
 
+            {/* NOTIFICATION ICON */}
             <div
               className="navbar-item"
               onClick={toggleNotificationDrawer("right", true)}
@@ -1273,15 +1248,13 @@ const Navbar = () => {
                 id="notifications"
                 className="icon"
               >
-                <g fill="none" fill-rule="evenodd">
-                  <path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
-                  <path
-                    fill="var(--nav-head-icons)"
-                    d="M5 9a7 7 0 0 1 14 0v3.764l1.822 3.644A1.1 1.1 0 0 1 19.838 18h-3.964a4.002 4.002 0 0 1-7.748 0H4.162a1.1 1.1 0 0 1-.984-1.592L5 12.764zm5.268 9a2 2 0 0 0 3.464 0zM12 4a5 5 0 0 0-5 5v3.764a2 2 0 0 1-.211.894L5.619 16h12.763l-1.17-2.342a2.001 2.001 0 0 1-.212-.894V9a5 5 0 0 0-5-5"
-                  />
-                </g>
-                {notificationAlert && <div className="blinkBall"> </div>}
+                <path
+                  fill="var(--nav-head-icons)"
+                  d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10z"
+                />
+                 {notificationAlert && <div className="blinkBall"> </div>}
               </svg>
+             
               <div className="navbar-title">Notifications</div>
             </div>
 
@@ -1295,65 +1268,6 @@ const Navbar = () => {
             </Drawer>
           </>
         )}
-
-        {/* {width < 770 && (
-          <div title="Notifications">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1.2em"
-              height="1.2em"
-              viewBox="0 0 24 24"
-              id="notifications"
-              className="icon"
-              onClick={toggleNotificationDrawer("right", true)}
-            >
-              <g fill="none" fill-rule="evenodd">
-                <path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
-                <path
-                  fill="var(--nav-head-icons)"
-                  d="M5 9a7 7 0 0 1 14 0v3.764l1.822 3.644A1.1 1.1 0 0 1 19.838 18h-3.964a4.002 4.002 0 0 1-7.748 0H4.162a1.1 1.1 0 0 1-.984-1.592L5 12.764zm5.268 9a2 2 0 0 0 3.464 0zM12 4a5 5 0 0 0-5 5v3.764a2 2 0 0 1-.211.894L5.619 16h12.763l-1.17-2.342a2.001 2.001 0 0 1-.212-.894V9a5 5 0 0 0-5-5"
-                />
-              </g>
-              {notificationAlert && <div className="blinkBall"> </div>}
-            </svg>
-          </div>
-        )} */}
-
-        {/* DARK AND WHITE THEME */}
-        {/* <div
-          id=""
-          className="icon"
-          title={`Switch to ${
-            localStorage.getItem("theme") === "light" ? "Dark" : "Light"
-          } Mode`}
-          onClick={(e) => {
-            const body = document.body;
-            const currentTheme = body.getAttribute("data-theme");
-            const newTheme = currentTheme === "light" ? "dark" : "light";
-            const mode = newTheme === "light" ? "Dark" : "Light";
-
-            body.setAttribute("data-theme", newTheme);
-            localStorage.setItem("theme", newTheme);
-            document.getElementById("themeIcon").className = `fas fa-${
-              newTheme == "light" ? "moon" : "sun"
-            }`;
-
-            // Switching the logo based on the theme
-            const logoImg = document.getElementById("logoImage");
-            logoImg.src =
-              newTheme === "light" ? "/logo.png" : "/Footer-Logo.png";
-            logoImg.alt = `${mode} Logo`;
-
-            e.currentTarget.title = `Switch to ${mode} Mode`;
-          }}
-        >
-          <i
-            id="themeIcon"
-            class={`fas fa-${
-              localStorage.getItem("theme") == "light" ? "moon" : "sun"
-            }`}
-          ></i>
-        </div> */}
 
         {width > 770 && (
           <div>
@@ -1442,7 +1356,7 @@ const Navbar = () => {
             </Drawer>
           </>
         )}
-        <div
+        {/* <div
           className={`userDetails ${firstTime && "userDetailsAlt"}`}
           ref={userDetailsRef}
         >
@@ -1535,7 +1449,7 @@ const Navbar = () => {
                 Logout
               </div>
             ))}
-        </div>
+        </div> */}
 
         <Dialog
           open={logoutOpen}
