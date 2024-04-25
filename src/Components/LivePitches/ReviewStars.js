@@ -28,9 +28,9 @@ const ReviewStars = ({ avg }) => {
             <div > 
                 {renderStars()}
             </div>
-            <div>
+            {/* <div>
                 <div className="average-rating">{avg.toFixed(1).split(".")[1]!= "0"?avg.toFixed(1):avg.toFixed(0)} out of 5</div>
-            </div>
+            </div> */}
         </div>
     );
 };
