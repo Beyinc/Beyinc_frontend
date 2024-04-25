@@ -1775,9 +1775,9 @@ const EditProfile = () => {
                             <section className="EditProfileAbout">
                                 {userpage === false && (
                                     <section >
-                                    <div >
-                                        <div className="aboutHeadings">
-                                            <div>Documents</div>
+                                        <div >
+                                            <div className="aboutHeadings">
+                                                <div>Documents</div>
                                             </div>
                                             <form className="">
                                                 <div className="upload-files-container">
