@@ -2348,7 +2348,7 @@ const EditProfile = () => {
                     {/* Comment SECTION */}
                     {editPostToggler == 'comment' &&
                         <>
-                            {(convExits ||
+                        {(convExits || id==undefined ||
                                 jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
                                     .role == "Admin") ?
                                 <section className="CommentPostContainer">
