@@ -11,7 +11,7 @@ import { setToast } from '../../redux/AuthReducers/AuthReducer';
 import { ToastColors } from '../Toast/ToastColors';
 import { io } from 'socket.io-client';
 
-const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCount }) => {
+const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPostCount }) => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
 
@@ -76,7 +76,7 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
             setImage('')
             setposttype('')
             setEditPostpopup(false)
-            setPost(res.data)
+            setAllPosts(prev => [...prev.map(p => p._id == post._id ? res.data : p)])
            
             for (let i = 0; i < usertags.length; i++) {
                 socket.current.emit("sendNotification", {

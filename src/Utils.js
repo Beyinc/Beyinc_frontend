@@ -494,6 +494,13 @@ export const postTypes = [
 ]
 
 
+// January 15, 2024
+export const MMDDYYFormat = (date) => {
+    const formattedDate = moment(date).format('MMMM D, YYYY'); // "January 15, 2024"
+
+    return formattedDate;
+}
+
 
 // gives in format 2024-jan-08
 export const formatedDate = (inputDate) => {

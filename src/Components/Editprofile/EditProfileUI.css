@@ -369,12 +369,7 @@ select {
 .editSuccess {
   border-bottom: 2px solid green;
 }
- input, select, textarea {
-    border: none;
-    border-bottom: 1px solid black;
-    padding: 8px 0px !important;
-    width: 100%;
-  }
+
 
   .popup-header{
     display: flex;
@@ -453,16 +448,6 @@ box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 10px; background: lightgray; font-size: 18px;
 }
 
-.subMenu{
-  position: absolute;
-  width: 160px;
-  right: 100%;
-  display: none;
-  height: auto;
-  background: white;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-
-}
 
 .wholePostWrapper{
   display: flex;
@@ -470,15 +455,6 @@ box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .rightPostWrapper{
   flex: 1;
-}
-.subMenu div{
-  padding: 5px;
-}
-.subMenu.show{
-  display: block;
-}
-.subMenu div:hover{
-  background: lightgray;
 }
 
 .userTags{

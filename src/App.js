@@ -301,7 +301,6 @@ const App = () => {
           <Route path="/dashboard" Component={AuthHoc(Home)} />
           {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
-          <Route path="/editProfile1" Component={AuthHoc(EditProfileUI)} />
 
 
 

@@ -32,6 +32,7 @@ import {
     socket_io,
     allsalutations,
     mentorcategories,
+    MMDDYYFormat,
 } from "../../Utils";
 import { Autocomplete, TextField } from "@mui/material";
 import useWindowDimensions from "../Common/WindowSize";
@@ -47,6 +48,8 @@ import IndividualPostCard from "./IndividualPostCard";
 import './EditProfile.css'
 import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
+import Post from "./Activities/Post";
+import UserComment from "./Activities/userComment/UserComment";
 
 const EditProfile = () => {
     const { id } = useParams();
@@ -423,7 +426,7 @@ const EditProfile = () => {
 
     const [followers, setFollowers] = useState([])
     const [followering, setFollowering] = useState([])
-    const [editPostToggler, seteditPostToggler] = useState('profile')
+    const [editPostToggler, seteditPostToggler] = useState('posts')
 
 
 
@@ -511,12 +514,12 @@ const EditProfile = () => {
         setComment("");
         if (comment !== "") {
             await ApiServices.addUserComment({
-                userId: id,
+                userId: id!==undefined? id: user_id,
                 comment: comment,
                 commentBy: user_id,
             })
                 .then((res) => {
-                    setemailTrigger(!emailTrigger);
+                    setAllComments(res.data)
                 })
                 .catch((err) => {
                     // navigate("/searchusers");
@@ -549,9 +552,29 @@ const EditProfile = () => {
     };
 
     useEffect(() => {
-        if (id !== undefined && userpage == true) {
+        if (id !== undefined) {
             // dispatch(setLoading({ visible: "yes" }));
             ApiServices.getuserComments({ userId: id })
+                .then((res) => {
+                    setAllComments(
+                        res.data.sort((a, b) => {
+                            return new Date(b.createdAt) - new Date(a.createdAt);
+                        })
+                    );
+                })
+                .catch((err) => {
+                    dispatch(
+                        setToast({
+                            message: "Error Occurred",
+                            bgColor: ToastColors.failure,
+                            visible: "yes",
+                        })
+                    );
+                    // console.log(err);
+                    // navigate("/searchusers");
+                });
+        } else {
+            ApiServices.getuserComments({ userId: user_id })
                 .then((res) => {
                     setAllComments(
                         res.data.sort((a, b) => {
@@ -1541,7 +1564,7 @@ const EditProfile = () => {
                     {editPostToggler == 'profile' &&
                         <>
                             {/* ABOUT */}
-                            <section className="EditProfileAbout">
+                            <section className="EditProfileOuterCard">
                                 <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div>About</div>
                                     {id == undefined && (
                                         <span>
@@ -1557,7 +1580,7 @@ const EditProfile = () => {
                             </section>
 
                             {/* SKILLS */}
-                            <section className="EditProfileAbout">
+                            <section className="EditProfileOuterCard">
                                 <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div>Skills</div>
                                     {id == undefined && (
                                         <span>
@@ -1577,7 +1600,7 @@ const EditProfile = () => {
                             </section>
 
                             {/* EDUCATION */}
-                            <section className="EditProfileAbout">
+                            <section className="EditProfileOuterCard">
                                 <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>Education</div>
                                     {id == undefined && (
@@ -1604,8 +1627,8 @@ const EditProfile = () => {
                                                     <div>
                                                         <div className="collegeName">{te.college}</div>
                                                         <div className="gradeDetails">{te.grade}</div>
-                                                        <div className="timeDetails">{convertToDate(te.Edstart)}-
-                                                            {te.Edend === "" ? "Present" : convertToDate(te.Edend)}</div>
+                                                        <div className="timeDetails">{MMDDYYFormat(te.Edstart)}-
+                                                            {te.Edend === "" ? "Present" : MMDDYYFormat(te.Edend)}</div>
                                                     </div>
                                                 </div>
 
@@ -1647,7 +1670,7 @@ const EditProfile = () => {
                             </section>
 
                             {/* EXPERIENCE */}
-                            <section className="EditProfileAbout">
+                            <section className="EditProfileOuterCard">
                                 <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>Experience</div>
                                     {id == undefined && (
@@ -1723,8 +1746,8 @@ const EditProfile = () => {
                                                         te.workingStatus !== "Self Employed" && (
                                                             <div className="timeDetails">
                                                                 <b>Date: </b>
-                                                                {convertToDate(te.start)}-
-                                                                {te.end === "" ? "Present" : convertToDate(te.end)}
+                                                                {MMDDYYFormat(te.start)}-
+                                                                {te.end === "" ? "Present" : MMDDYYFormat(te.end)}
                                                             </div>
                                                         )}
 
@@ -1873,7 +1896,7 @@ const EditProfile = () => {
                                 )}
                             </section>
 
-                            <section className="EditProfileAbout">
+                            <section className="EditProfileOuterCard">
                                 {userpage === false && (
                                     <section >
                                         <div >
@@ -2272,6 +2295,67 @@ const EditProfile = () => {
                                 ))}
                         </>
                     }
+
+                    {/* POSTS SECTION */}
+                    {editPostToggler == 'posts' &&
+                        <>
+                        {id == undefined && <section className="createPostContainer">
+                            <button onClick={() => setCreatePostpopup(true)}
+                                className="createPostbtn"
+                            >
+                                Create Post
+                            </button>
+                        </section>}
+
+                        {/* post cards */}
+                        
+                            <div className="allPostShowContainer">
+                                {allPosts?.map(post => (
+                                    <Post post={post} setAllPosts={setAllPosts} />
+                                ))}
+                        </div>
+                        
+
+                        
+                       </>
+                    }
+
+                    {/* Comment SECTION */}
+                    {editPostToggler == 'comment' &&
+                        <>
+                        {(convExits ||
+                            jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                                .role == "Admin") ?
+                            <section className="CommentPostContainer">
+                            <div>
+                                <textarea type="text" name="" id=""
+                                    value={comment}
+                                    style={{ resize: "none" }}
+                                    onChange={(e) => setComment(e.target.value)} />
+                            </div>
+                            <button onClick={sendText}
+                                className="createComment"
+                            >
+                                Add Comment
+                            </button>
+                            </section>
+                            :  <div style={{ fontSize: "20px", marginBottom: "20px" }}>
+                            Conversation with this user should exist to add reviews
+                        </div>
+                        }
+                        <div className="allCommentsShowContainer">
+                            {allComments?.map((comment, index) => (
+                                    <UserComment onLike={onLike}
+                                        key={index}
+                                        comment={comment}
+                                        deleteComment={deleteComment}
+                                    onDisLike={onDisLike} setAllComments={setAllComments} />
+                                ))}
+                            </div>
+                        </>
+                    }
+
+                    
                 </div>
                 {isInputPopupVisible && (
                     <div className="popup-container">
@@ -3851,13 +3935,16 @@ const EditProfile = () => {
                         </div>
                     </div>
                 )}
+
+
+
+                
             </div>
             <CreatePost setCreatePostpopup={setCreatePostpopup} createPostPopup={createPostPopup} setAllPosts={setAllPosts} />
             <AddConversationPopup receiverId={pitchSendTo}
                 setReceiverId={setPitchSendTo}
                 receiverRole={receiverRole}
                 IsAdmin={IsAdmin} />
-
             <Dialog
                 open={reasonPop}
                 onClose={() => setReasonPop(false)}

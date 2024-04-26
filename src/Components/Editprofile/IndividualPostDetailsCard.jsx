@@ -187,7 +187,7 @@ const IndividualPostDetailsCard = () => {
                             gap: '10px',
                             color: 'black'
                         }}>
-                            <div style={{ cursor: 'pointer', position: 'relative' }}>
+                            {/* <div style={{ cursor: 'pointer', position: 'relative' }}>
                                 <MoreHorizIcon id='menu' onClick={() => {
                                     document.getElementsByClassName('postIndiViewer')[0].classList.toggle('show');
                                 } } />
@@ -202,7 +202,7 @@ const IndividualPostDetailsCard = () => {
                                         </>}
                                     <div onClick={() => setreportpopUp(true)}>Report</div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div style={{ cursor: 'pointer' }} onClick={() => {
                                 navigate(-1);
                             } }>

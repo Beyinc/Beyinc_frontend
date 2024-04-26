@@ -1,0 +1,8 @@
+.ProfileCommentContainer {
+  border: 1px solid #838282;
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
