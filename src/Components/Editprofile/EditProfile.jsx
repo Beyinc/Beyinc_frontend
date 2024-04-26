@@ -514,7 +514,7 @@ const EditProfile = () => {
         setComment("");
         if (comment !== "") {
             await ApiServices.addUserComment({
-                userId: id!==undefined? id: user_id,
+                userId: id !== undefined ? id : user_id,
                 comment: comment,
                 commentBy: user_id,
             })
@@ -652,7 +652,15 @@ const EditProfile = () => {
             if (id == undefined) {
                 ApiServices.getProfile({ id: user_id })
                     .then((res) => {
+                        if (res.data.review !== undefined && res.data.review?.length > 0) {
+                            let avgR = 0;
+                            res.data.review?.map((rev) => {
+                                avgR += rev.review;
+                            });
+                            setAverageReview(avgR / res.data.review.length);
+                        }
                         setFollowering(res.data.following)
+                        setFollowers(res.data.followers)
                         setFollowers(res.data.followers)
 
                         setEditOwnProfile(true);
@@ -660,7 +668,7 @@ const EditProfile = () => {
                             ...prev,
                             twitter: res.data.twitter,
                             linkedin: res.data.linkedin,
-
+                            review: res.data.review,
                             verification: res.data.verification,
                             updatedAt: res.data.updatedAt,
                             name: res.data.userName,
@@ -729,9 +737,20 @@ const EditProfile = () => {
                     .then((res) => {
                         setEditOwnProfile(false);
                         // console.log(res.data);
+                        if (res.data.review !== undefined && res.data.review?.length > 0) {
+                            let avgR = 0;
+                            res.data.review?.map((rev) => {
+                                avgR += rev.review;
+                            });
+                            setAverageReview(avgR / res.data.review.length);
+                        }
+                        setFollowering(res.data.following)
+                        setFollowers(res.data.followers)
                         setRequestedUserId(res.data._id);
                         setInputs((prev) => ({
                             ...prev,
+                            review: res.data.review,
+
                             twitter: res.data.twitter,
                             linkedin: res.data.linkedin,
                             updatedAt: res.data.updatedAt,
@@ -794,6 +813,8 @@ const EditProfile = () => {
                         setEditOwnProfile(true);
                         setInputs((prev) => ({
                             ...prev,
+                            review: res.data.review,
+
                             twitter: res.data.twitter,
                             linkedin: res.data.linkedin,
                             verification: res.data.verification,
@@ -1381,13 +1402,12 @@ const EditProfile = () => {
     };
     return (
         <div className="EditProfileContainer">
-            {(mobileVerified == false || image=='') && <div className='mobilenote'>
+            {(mobileVerified == false || image == '') && <div className='mobilenote'>
                 Note: Mobile number should be verified and image should not be empty to send or update the profile
             </div>}
             <div className='EditProfileImageContainer'>
                 <img src="/Banner-1.png" alt="Image 1" />
             </div>
-
             <div className='ProfileContainer'>
                 {/* LEFT PART */}
                 <div className='ProfileDetailsCard'>
@@ -1408,6 +1428,9 @@ const EditProfile = () => {
                             ></i>
                         )}
                     </div>
+                    {id !== undefined && <div><ReviewStars avg={averagereview} />
+                    </div>
+                    }
                     <div className="EditProfileUsername">
                         {salutation}
                         {salutation && <span>.</span>} {name && name[0]?.toUpperCase() + name?.slice(1)}
@@ -2302,63 +2325,63 @@ const EditProfile = () => {
                     {/* POSTS SECTION */}
                     {editPostToggler == 'posts' &&
                         <>
-                        {id == undefined && <section className="createPostContainer">
-                            <button onClick={() => setCreatePostpopup(true)}
-                                className="createPostbtn"
-                            >
-                                Create Post
-                            </button>
-                        </section>}
+                            {id == undefined && <section className="createPostContainer">
+                                <button onClick={() => setCreatePostpopup(true)}
+                                    className="createPostbtn"
+                                >
+                                    Create Post
+                                </button>
+                            </section>}
 
-                        {/* post cards */}
-                        
+                            {/* post cards */}
+
                             <div className="allPostShowContainer">
                                 {allPosts?.map(post => (
                                     <Post post={post} setAllPosts={setAllPosts} />
                                 ))}
-                        </div>
-                        
+                            </div>
 
-                        
-                       </>
+
+
+                        </>
                     }
 
                     {/* Comment SECTION */}
                     {editPostToggler == 'comment' &&
                         <>
-                        {(convExits ||
-                            jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
-                                .role == "Admin") ?
-                            <section className="CommentPostContainer">
-                            <div>
-                                <textarea type="text" name="" id=""
-                                    value={comment}
-                                    style={{ resize: "none" }}
-                                    onChange={(e) => setComment(e.target.value)} />
-                            </div>
-                            <button onClick={sendText}
-                                className="createComment"
-                            >
-                                Add Comment
-                            </button>
-                            </section>
-                            :  <div style={{ fontSize: "20px", marginBottom: "20px" }}>
-                            Conversation with this user should exist to add reviews
-                        </div>
-                        }
-                        <div className="allCommentsShowContainer">
-                            {allComments?.map((comment, index) => (
+                            {(convExits ||
+                                jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                                    .role == "Admin") ?
+                                <section className="CommentPostContainer">
+                                    <div>
+                                        <textarea type="text" name="" id=""
+                                            value={comment}
+                                            style={{ resize: "none" }}
+                                            onChange={(e) => setComment(e.target.value)} />
+                                    </div>
+                                    <button onClick={sendText}
+                                        className="createComment"
+                                    >
+                                        Add Comment
+                                    </button>
+                                </section>
+                                : <div style={{ fontSize: "20px", marginBottom: "20px" }}>
+                                    Conversation with this user should exist to add reviews
+                                </div>
+                            }
+                            <div className="allCommentsShowContainer">
+                                {allComments?.map((comment, index) => (
                                     <UserComment onLike={onLike}
                                         key={index}
                                         comment={comment}
                                         deleteComment={deleteComment}
-                                    onDisLike={onDisLike} setAllComments={setAllComments} />
+                                        onDisLike={onDisLike} setAllComments={setAllComments} />
                                 ))}
                             </div>
                         </>
                     }
 
-                    
+
                 </div>
                 {isInputPopupVisible && (
                     <div className="popup-container">
@@ -3941,7 +3964,7 @@ const EditProfile = () => {
 
 
 
-                
+
             </div>
             <CreatePost setCreatePostpopup={setCreatePostpopup} createPostPopup={createPostPopup} setAllPosts={setAllPosts} />
             <AddConversationPopup receiverId={pitchSendTo}
