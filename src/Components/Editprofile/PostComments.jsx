@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 import { socket_io } from "../../Utils";
 import "../LivePitches/IndividualPitch.css";
 import IndividualPostComments from "./IndividualPostComments";
-import './EditProfileUI.css'
+// import './EditProfile.css'
 const PostComments = ({ fetchComments, postId }) => {
     console.log(postId);
     const [pitch, setpitch] = useState("");

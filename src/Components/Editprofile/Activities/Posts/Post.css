@@ -1,0 +1,161 @@
+.ProfilepostContainer {
+  border: 1px solid #838282;
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.allPostShowContainer, .allCommentsShowContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.PostheaderimageContainer img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+.PostHeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.postTotaldetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.postCardUserName {
+  font-family: Gentium Book Basic;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 23.14px;
+  text-align: left;
+}
+.postCardRole {
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 23.14px;
+  text-align: left;
+  color: #656262;
+}
+
+.postDescContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.postDescContainer .postType {
+  font-family: Gentium Book Basic;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 23.14px;
+}
+.postDescContainer .postDesc {
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 23.14px;
+  text-align: left;
+}
+
+.tagsContainer {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: var(--posttags-color);
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.PostimageContainer img {
+  width: 100%;
+  height: 421px;
+  border-radius: 0 !important;
+  margin-left: 0;
+}
+
+.likeCommentDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #838282;
+  padding-bottom: 13px;
+}
+
+.commentTotal {
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 23.14px;
+  color: #838282;
+}
+.likeTotal {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 23.14px;
+  color: #838282;
+}
+.likeTotal div{
+     display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 23.14px;
+  color: #838282;
+}
+
+.actionsHolder {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-top: 10px;
+}
+.likeActionHolder {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.actionText {
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 23.14px;
+  text-align: left;
+}
+
+
+.subMenu {
+  position: absolute;
+  width: 160px;
+  right: 100%;
+  display: none;
+  height: auto;
+  background: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.subMenu div {
+  padding: 5px;
+}
+.subMenu.show {
+  display: block !important;
+}
+.subMenu div:hover {
+  background: lightgray;
+}

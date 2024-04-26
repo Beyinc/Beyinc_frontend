@@ -34,6 +34,7 @@ import AllUsers from "./Components/AllUsers/AllUsers";
 import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
+import EditProfile from "./Components/Editprofile/EditProfile";
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
@@ -62,10 +63,6 @@ const Home = React.lazy(() =>
   import("./Components/Home/Home")
 );
 
-
-const EditProfileUI = React.lazy(() =>
-  import("./Components/Editprofile/EditProfileUI")
-);
 
 const Conversations = React.lazy(() =>
   import("./Components/Conversation/Conversations")
@@ -299,7 +296,8 @@ const App = () => {
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
           {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
-          <Route path="/editProfile" Component={AuthHoc(EditProfileUI)} />
+          <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
+
 
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
@@ -317,7 +315,7 @@ const App = () => {
             Component={AuthHoc(IndividualPitch)}
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
-          <Route path="/user/:id" Component={AuthHoc(EditProfileUI)} />
+          <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
@@ -330,7 +328,7 @@ const App = () => {
           /> */}
           <Route
             path="/singleProfileRequest/:id"
-            Component={AdminDeciderHoc(EditProfileUI)}
+            Component={AdminDeciderHoc(EditProfile)}
           />
 
 

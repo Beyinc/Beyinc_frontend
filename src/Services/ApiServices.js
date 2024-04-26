@@ -801,6 +801,19 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  deleteUserComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/deleteUserComment`, obj)
+        .then((res) => {
+          if (res) {
+            // console.log(res);
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   dislikeComment: (obj) => {
     return new Promise((resolve, reject) => {

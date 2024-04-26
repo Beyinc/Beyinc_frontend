@@ -10,18 +10,18 @@ import { ApiServices } from '../../Services/ApiServices';
 import { setLoading, setToast } from '../../redux/AuthReducers/AuthReducer';
 import { ToastColors } from '../Toast/ToastColors';
 import { io } from 'socket.io-client';
-import './EditProfileUI.css'
+// import './EditProfile.css'
 import CloseIcon from "@mui/icons-material/Close";
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import EditPost from './EditPost';
+import EditPost from './Activities/Posts/EditPost';
 import PostComments from './PostComments';
 import { Link } from 'react-router-dom';
 const IndividualPostDetailsCard = () => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
     const { id } = useParams()
-    
+
     const [post, setPost] = useState(null)
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const IndividualPostDetailsCard = () => {
                     visible: "yes",
                 });
             });
-      }  
+        }
     }, [id])
 
     const { width } = useWindowDimensions()
@@ -102,7 +102,7 @@ const IndividualPostDetailsCard = () => {
     const [reportText, setReportText] = useState('')
 
     const deletePost = async (e) => {
-        e.target.disabled=true
+        e.target.disabled = true
         await ApiServices.deletepost({ id }).then(res => {
             navigate(-1);
         }).catch((err) => {
@@ -135,7 +135,7 @@ const IndividualPostDetailsCard = () => {
 
 
     const addingRequestDiscussion = async (e) => {
-        e.target.disabled=true
+        e.target.disabled = true
         await ApiServices.requestIntoOpenDiscussion({ id: post?._id, user_id }).then(res => {
             setPost(res.data)
             socket.current.emit("sendNotification", {
@@ -158,7 +158,7 @@ const IndividualPostDetailsCard = () => {
             open={id !== undefined}
             onClose={() => {
                 navigate(-1);
-            } }
+            }}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             maxWidth="xl"
@@ -177,9 +177,9 @@ const IndividualPostDetailsCard = () => {
                     gap: '10px',
                 }}
             >
-                {post!==null && 
-                
-                 <><div className='createPostHeader' styl={{ position: 'relative' }}>
+                {post !== null &&
+
+                    <><div className='createPostHeader' styl={{ position: 'relative' }}>
                         {post?.createdBy?.userName}'s Post Details
                         <div style={{
                             display: "flex",
@@ -187,7 +187,7 @@ const IndividualPostDetailsCard = () => {
                             gap: '10px',
                             color: 'black'
                         }}>
-                            <div style={{ cursor: 'pointer', position: 'relative' }}>
+                            {/* <div style={{ cursor: 'pointer', position: 'relative' }}>
                                 <MoreHorizIcon id='menu' onClick={() => {
                                     document.getElementsByClassName('postIndiViewer')[0].classList.toggle('show');
                                 } } />
@@ -202,10 +202,10 @@ const IndividualPostDetailsCard = () => {
                                         </>}
                                     <div onClick={() => setreportpopUp(true)}>Report</div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div style={{ cursor: 'pointer' }} onClick={() => {
                                 navigate(-1);
-                            } }>
+                            }}>
                                 <CloseIcon />
                             </div>
                         </div>
@@ -222,13 +222,13 @@ const IndividualPostDetailsCard = () => {
                                 <div>
                                     <b>post type:</b> {post?.type}
                                 </div>
-                                <div>
-                                    <b>pitch:</b> {post?.pitchId?.title} 
+                            {post?.pitchId && <div>
+                                <b>pitch:</b> {post?.pitchId?.title}
                                 {(post?.openDiscussion == true || post?.openDiscussionTeam.map(o => o._id).includes(user_id) || post?.createdBy._id == user_id || role == 'Admin') &&
 
                                     <Link to={`/livePitches/${post?.pitchId?._id}`}>View Pitch</Link>
-                                }    
-                                </div>
+                                }
+                            </div>}
                                 <div>
                                     <b>users tagged:</b> {post?.tags?.map(p => p.userName)?.join(', ')}
                                 </div>
@@ -252,27 +252,27 @@ const IndividualPostDetailsCard = () => {
                             </div>
                         </div></>
                 }
-               
+
 
 
 
             </DialogContent>
         </Dialog>
-        <Dialog
-            
-            open={deletePop}
-            onClose={() => {
-                setdeletePopUp(false)
-            } }
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            maxWidth="xl"
-            sx={{
-                ...gridCSS.tabContainer,
-                // Setting width to auto
-            }}
+            <Dialog
 
-        >
+                open={deletePop}
+                onClose={() => {
+                    setdeletePopUp(false)
+                }}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="xl"
+                sx={{
+                    ...gridCSS.tabContainer,
+                    // Setting width to auto
+                }}
+
+            >
                 <DialogContent
                     style={{
                         padding: '10px',
@@ -280,10 +280,10 @@ const IndividualPostDetailsCard = () => {
                         display: "flex",
                         flexDirection: "column",
                         gap: '10px',
-                        
+
                     }}
                 >
-                   
+
                     Are you sure to delete the post?
                     <div style={{
                         display: "flex",
@@ -298,7 +298,7 @@ const IndividualPostDetailsCard = () => {
                         <button onClick={() => {
                             setdeletePopUp(false)
                         }}>No</button>
-                   </div>
+                    </div>
 
 
                 </DialogContent>
@@ -341,7 +341,7 @@ const IndividualPostDetailsCard = () => {
                             placeholder="Report reason"
                             style={{ resize: 'none' }} />
                     </div>
-                    
+
                     <div style={{
                         display: "flex",
                         alignItems: 'center',
@@ -349,10 +349,10 @@ const IndividualPostDetailsCard = () => {
                         justifyContent: 'center'
 
                     }}>
-                        <button disabled={reportText==''} onClick={(e) => {
+                        <button disabled={reportText == ''} onClick={(e) => {
                             reportPost(e)
                         }}>Report</button>
-                        
+
                     </div>
 
 

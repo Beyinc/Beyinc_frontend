@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToast } from '../../redux/AuthReducers/AuthReducer';
 import { ToastColors } from '../Toast/ToastColors';
 
-const PostDiscussionRequest = ({ m, setpostDiscussionRequest }) => {
+const PostDiscussionRequestNotifications = ({ m, setpostDiscussionRequest }) => {
     const navigate = useNavigate()
     const { email, userName, user_id, role } = useSelector(state => state.auth.loginDetails)
     const dispatch = useDispatch()
@@ -51,4 +51,4 @@ const PostDiscussionRequest = ({ m, setpostDiscussionRequest }) => {
     );
 };
 
-export default PostDiscussionRequest;
+export default PostDiscussionRequestNotifications;

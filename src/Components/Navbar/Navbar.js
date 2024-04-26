@@ -29,7 +29,7 @@ import MessageRequest from "../Conversation/Notification/MessageRequest";
 import useWindowDimensions from "../Common/WindowSize";
 import { socket_io } from "../../Utils";
 import ProfileImageUpdate from "./ProfileImageUpdate";
-import PostDiscussionRequest from "../Editprofile/PostDiscussionRequest";
+import PostDiscussionRequest from "../Editprofile/PostDiscussionRequestNotifications";
 import { useLocation } from "react-router-dom";
 
 function a11yProps(index) {
@@ -134,7 +134,7 @@ const Navbar = () => {
           console.log(d);
           dispatch(setMessageCount(d));
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   }, [liveMessage]);
 
@@ -326,9 +326,8 @@ const Navbar = () => {
               </ListItemIcon>
 
               <ListItemText
-                primary={`${
-                  localStorage.getItem("theme") === "light" ? "Dark" : "Light"
-                } Mode`}
+                primary={`${localStorage.getItem("theme") === "light" ? "Dark" : "Light"
+                  } Mode`}
               />
             </ListItem>
 
@@ -877,9 +876,8 @@ const Navbar = () => {
           </ListItemIcon>
 
           <ListItemText
-            primary={`${
-              localStorage.getItem("theme") === "light" ? "Dark" : "Light"
-            } Mode`}
+            primary={`${localStorage.getItem("theme") === "light" ? "Dark" : "Light"
+              } Mode`}
           />
         </ListItem>
 
@@ -1061,7 +1059,7 @@ const Navbar = () => {
   const currentPath = location.pathname;
 
   useEffect(() => {
-    
+
     if (currentPath === "/posts") {
       setSelectedIcon("home");
     } else if (currentPath === "/") {
@@ -1118,9 +1116,8 @@ const Navbar = () => {
             {/* HOME ICON */}
 
             <div
-              className={`navbar-item ${
-                selectedIcon === "home" ? "selected" : ""
-              }`}
+              className={`navbar-item ${selectedIcon === "home" ? "selected" : ""
+                }`}
               onClick={() => {
                 navigate("/posts");
                 handleItemClick("home");
@@ -1161,9 +1158,8 @@ const Navbar = () => {
             {/* DASHBOARD ICON */}
 
             <div
-              className={`navbar-item ${
-                selectedIcon === "dashboard" ? "selected" : ""
-              }`}
+              className={`navbar-item ${selectedIcon === "dashboard" ? "selected" : ""
+                }`}
               onClick={() => {
                 navigate("/dashboard");
                 handleItemClick("dashboard");
@@ -1203,9 +1199,8 @@ const Navbar = () => {
 
             {/* MENTOR ICON */}
             <div
-              className={`navbar-item ${
-                selectedIcon === "mentors" ? "selected" : ""
-              }`}
+              className={`navbar-item ${selectedIcon === "mentors" ? "selected" : ""
+                }`}
               onClick={() => {
                 navigate("/searchusers");
                 handleItemClick("mentors");
@@ -1248,9 +1243,8 @@ const Navbar = () => {
                 {/* PROFILE REQUEST ICON */}
                 {role === "Admin" && (
                   <div
-                    className={`navbar-item ${
-                      selectedIcon === "profiles" ? "selected" : ""
-                    }`}
+                    className={`navbar-item ${selectedIcon === "profiles" ? "selected" : ""
+                      }`}
                     onClick={() => {
                       navigate("/profileRequests");
                       handleItemClick("profiles");
@@ -1292,9 +1286,8 @@ const Navbar = () => {
                 {/* PITCHES ICON */}
                 {role === "Admin" && (
                   <div
-                    className={`navbar-item ${
-                      selectedIcon === "pitches" ? "selected" : ""
-                    }`}
+                    className={`navbar-item ${selectedIcon === "pitches" ? "selected" : ""
+                      }`}
                     onClick={() => {
                       navigate("/pitches");
                       handleItemClick("pitches");
@@ -1337,9 +1330,8 @@ const Navbar = () => {
 
                 {role === "Admin" && (
                   <div
-                    className={`navbar-item ${
-                      selectedIcon === "reports" ? "selected" : ""
-                    }`}
+                    className={`navbar-item ${selectedIcon === "reports" ? "selected" : ""
+                      }`}
                     onClick={() => {
                       navigate("/postReports");
                       handleItemClick("reports");
@@ -1382,9 +1374,8 @@ const Navbar = () => {
 
             {/* MESSAGE ICON */}
             <div
-              className={`navbar-item ${
-                selectedIcon === "messages" ? "selected" : ""
-              }`}
+              className={`navbar-item ${selectedIcon === "messages" ? "selected" : ""
+                }`}
               onClick={() => {
                 navigate("/conversations");
                 handleItemClick("messages");

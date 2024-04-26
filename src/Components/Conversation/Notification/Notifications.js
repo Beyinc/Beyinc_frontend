@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageRequest from "./MessageRequest";
 import { getAllNotifications, setNotification, setNotificationData } from "../../../redux/Conversationreducer/ConversationReducer";
 import AllNotifications from "./AllNotifications";
-import PostDiscussionRequest from "../../Editprofile/PostDiscussionRequest";
+import PostDiscussionRequest from "../../Editprofile/PostDiscussionRequestNotifications";
 
 const Notifications = () => {
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);

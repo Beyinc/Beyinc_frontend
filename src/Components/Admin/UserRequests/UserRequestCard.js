@@ -20,7 +20,7 @@ export default function UserRequestCard({ d }) {
   //     })
   // }, [d])
 
-  const openUser = () => navigate(`/user/${d._id}`);
+  const openUser = () => navigate(`/singleProfileRequest/${d._id}`);
   return (
     <div
       className={

@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Dialog, DialogContent } from '@mui/material';
-import useWindowDimensions from '../Common/WindowSize';
-import { gridCSS } from '../CommonStyles';
+import useWindowDimensions from '../../../Common/WindowSize';
+import { gridCSS } from '../../../CommonStyles';
 import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { postTypes, socket_io } from '../../Utils';
-import { ApiServices } from '../../Services/ApiServices';
-import { setToast } from '../../redux/AuthReducers/AuthReducer';
-import { ToastColors } from '../Toast/ToastColors';
+import { postTypes, socket_io } from '../../../../Utils';
+import { ApiServices } from '../../../../Services/ApiServices';
+import { setToast } from '../../../../redux/AuthReducers/AuthReducer';
+import { ToastColors } from '../../../Toast/ToastColors';
 import { io } from 'socket.io-client';
 
-const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCount }) => {
+const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
 
@@ -24,6 +24,24 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
     const [image, setImage] = useState('')
     const [posttype, setposttype] = useState('')
     const [description, setDescription] = useState('')
+    const handleImage = (e) => {
+        const file = e.target.files[0];
+        if (file.size > 4 * 1024 * 1024) {
+            alert(
+                `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
+            );
+            e.target.value = null; // Clear the selected file
+            return;
+        }
+        setFileBase(file);
+    };
+    const setFileBase = (file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setImage(reader.result);
+        };
+    };
 
 
     const [allUsers, setAllusers] = useState([])
@@ -31,16 +49,6 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
     const [search, setSearch] = useState("");
     const [filteredusers, setFilteredUsers] = useState([]);
     const [userPitchId, setUserPitchid] = useState(null)
-
-    useEffect(() => {
-        if (post || EditPostCount) {
-            setImage(post?.image)
-            setDescription(post?.description)
-            setposttype(post?.type)
-            setuserTags(post?.tags)
-            setUserPitchid(post?.pitchId)
-     }   
-    }, [post, EditPostCount])
 
     useEffect(() => {
         ApiServices.getAllUsers({ type: "" }).then((res) => {
@@ -67,17 +75,16 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
         socket.current = io(socket_io);
     }, []);
 
-    const updatePost = async (e) => {
+    const addingpost = async (e) => {
         e.target.disabled = true
-        await ApiServices.updatePost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, id: post?._id }).then(res => {
+        await ApiServices.createPost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, openDiscussion: (userPitchId !== null && userPitchId !== undefined && posttype !== 'General Post') }).then(res => {
             setDescription('')
             setUserPitchid(null)
             setuserTags([])
             setImage('')
             setposttype('')
-            setEditPostpopup(false)
-            setPost(res.data)
-           
+            setCreatePostpopup(false)
+            setAllPosts(prev => [res.data, ...prev])
             for (let i = 0; i < usertags.length; i++) {
                 socket.current.emit("sendNotification", {
                     senderId: user_id,
@@ -99,14 +106,14 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
     return (
         <Dialog
             fullScreen
-            open={editPostPopup}
+            open={createPostPopup}
             onClose={() => {
                 setDescription('')
                 setUserPitchid(null)
                 setuserTags([])
                 setImage('')
                 setposttype('')
-                setEditPostpopup(false)
+                setCreatePostpopup(false)
             }}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -128,28 +135,28 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
             >
 
                 <div className='createPostHeader' styl={{ position: 'relative' }}>
-                    Update Post
+                    Create New Post
                     <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => {
                         setDescription('')
                         setUserPitchid(null)
                         setuserTags([])
                         setImage('')
                         setposttype('')
-                        setEditPostpopup(false)
+                        setCreatePostpopup(false)
                     }}>
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    {(image !== undefined && image !== "" && image.url!=='') &&
+                    {(image !== undefined && image !== "") ?
                         <div style={{ position: 'relative' }}>
                             <img
                                 style={{
                                     cursor: "pointer",
-                                    height: "500px", 
+                                    height: "500px",
                                     width: "500px",
                                 }}
-                                src={image.url}
+                                src={image}
                                 alt="Profile"
                             />
                             <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => setImage('')}>
@@ -157,7 +164,19 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
                             </div>
                         </div>
 
-                       }
+                        : <div>
+                            <label htmlFor="profilePic" className="profileImage" style={{ marginLeft: '30px' }}>
+                                <CloudUploadIcon />
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*,.webp"
+                                name=""
+                                id="profilePic"
+                                onChange={handleImage}
+                                style={{ display: "none" }}
+                            />
+                        </div>}
 
                     <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         <div>
@@ -316,7 +335,7 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
                             </div></>}
 
 
-                        <button style={{ margin: '10px 10px 10px -5px' }} onClick={updatePost} disabled={description == '' || image == ''}>Update Post</button>
+                        <button style={{ margin: '10px 10px 10px -5px' }} onClick={addingpost} disabled={description == '' || image == ''}>Create Post</button>
                     </div>
                 </div>
 
@@ -327,4 +346,4 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setPost, EditPostCoun
     )
 }
 
-export default EditPost
+export default CreatePost
