@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import IndividualPostCard from '../../Editprofile/IndividualPostCard'
 import { ApiServices } from '../../../Services/ApiServices'
 import { useDispatch } from 'react-redux'
 import { setLoading, setToast } from '../../../redux/AuthReducers/AuthReducer'
 import { ToastColors } from '../../Toast/ToastColors'
 import { Dialog, DialogContent } from '@mui/material';
 import { gridCSS } from '../../CommonStyles';
-import Post from '../../Editprofile/Activities/Post'
+import Post from '../../Editprofile/Activities/Posts/Post'
 
 const PostReports = () => {
   const [allPosts, setAllPosts] = useState([])
@@ -28,7 +27,7 @@ const PostReports = () => {
   }, [])
 
   const updatereport = async (e, id, type) => {
-    dispatch(setLoading({visible: 'yes'}))
+    dispatch(setLoading({ visible: 'yes' }))
     await ApiServices.updateReport({ id: id, postDecide: type }).then(res => {
       setAllPosts(allPosts.filter(f => f._id !== id))
       setStoredId(null)
@@ -49,7 +48,7 @@ const PostReports = () => {
     <div className="postContainer">
       <div className='postCardContainer'>
         {allPosts?.map(post => (
-          <div style={{display: 'flex', flexDirection: 'column'}}><Post post={post} />
+          <div style={{ display: 'flex', flexDirection: 'column' }}><Post post={post} />
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <button onClick={(e) => {
                 setDeletePopUp(true)
@@ -59,7 +58,7 @@ const PostReports = () => {
             </div>
           </div>
         ))}
-       
+
         <Dialog
 
           open={deletePopUp}

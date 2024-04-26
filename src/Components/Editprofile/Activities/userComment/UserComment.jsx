@@ -7,6 +7,7 @@ import { gridCSS } from '../../../CommonStyles';
 import { ApiServices } from '../../../../Services/ApiServices';
 import { setToast } from '../../../../redux/AuthReducers/AuthReducer';
 import { ToastColors } from '../../../Toast/ToastColors';
+import { Navigate, useNavigate } from 'react-router';
 
 const UserComment = ({ comment, deleteComment, onLike, onDisLike, setAllComments }) => {
     console.log(comment);
@@ -51,12 +52,20 @@ const UserComment = ({ comment, deleteComment, onLike, onDisLike, setAllComments
         e.target.disabled = false
 
     }
+
+    const navigate = useNavigate()
   return (
       <section className="EditProfileOuterCard">
 
           <div className='ProfileCommentContainer'>
               <div className='PostHeaderContainer'>
-                  <div className='postTotaldetails'>
+                  <div className='postTotaldetails' onClick={() => {
+                      if (comment?.commentBy?._id == user_id) {
+                          navigate(`/editProfile`)
+                      } else {
+                          navigate(`/user/${comment?.commentBy?._id}`)
+                      }
+                  }}>
                       <div className='PostheaderimageContainer'>
                           <img src={comment?.commentBy?.image !== "" && comment?.commentBy?.image !== undefined && comment?.commentBy?.image?.url !== ''
                               ? comment?.commentBy?.image?.url

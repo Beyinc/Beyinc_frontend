@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Dialog, DialogContent } from '@mui/material';
-import useWindowDimensions from '../Common/WindowSize';
-import { gridCSS } from '../CommonStyles';
+import useWindowDimensions from '../../../Common/WindowSize';
+import { gridCSS } from '../../../CommonStyles';
 import { useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { postTypes, socket_io } from '../../Utils';
-import { ApiServices } from '../../Services/ApiServices';
-import { setToast } from '../../redux/AuthReducers/AuthReducer';
-import { ToastColors } from '../Toast/ToastColors';
+import { postTypes, socket_io } from '../../../../Utils';
+import { ApiServices } from '../../../../Services/ApiServices';
+import { setToast } from '../../../../redux/AuthReducers/AuthReducer';
+import { ToastColors } from '../../../Toast/ToastColors';
 import { io } from 'socket.io-client';
 
-const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
+const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPostCount }) => {
     const userPitches = useSelector(state => state.conv.userLivePitches)
     const dispatch = useDispatch()
 
@@ -24,24 +24,6 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
     const [image, setImage] = useState('')
     const [posttype, setposttype] = useState('')
     const [description, setDescription] = useState('')
-    const handleImage = (e) => {
-        const file = e.target.files[0];
-        if (file.size > 4 * 1024 * 1024) {
-            alert(
-                `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
-            );
-            e.target.value = null; // Clear the selected file
-            return;
-        }
-        setFileBase(file);
-    };
-    const setFileBase = (file) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setImage(reader.result);
-        };
-    };
 
 
     const [allUsers, setAllusers] = useState([])
@@ -49,6 +31,16 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
     const [search, setSearch] = useState("");
     const [filteredusers, setFilteredUsers] = useState([]);
     const [userPitchId, setUserPitchid] = useState(null)
+
+    useEffect(() => {
+        if (post || EditPostCount) {
+            setImage(post?.image)
+            setDescription(post?.description)
+            setposttype(post?.type)
+            setuserTags(post?.tags)
+            setUserPitchid(post?.pitchId)
+        }
+    }, [post, EditPostCount])
 
     useEffect(() => {
         ApiServices.getAllUsers({ type: "" }).then((res) => {
@@ -75,17 +67,18 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
         socket.current = io(socket_io);
     }, []);
 
-    const addingpost = async (e) => {
-        e.target.disabled=true
-        await ApiServices.createPost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, openDiscussion: (userPitchId !== null && userPitchId !== undefined && posttype !== 'General Post') }).then(res => {
+    const updatePost = async (e) => {
+        e.target.disabled = true
+        await ApiServices.updatePost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, id: post?._id }).then(res => {
             setDescription('')
             setUserPitchid(null)
             setuserTags([])
             setImage('')
             setposttype('')
-            setCreatePostpopup(false)
-            setAllPosts(prev => [res.data, ...prev])
-            for (let i = 0; i < usertags.length; i++){
+            setEditPostpopup(false)
+            setAllPosts(prev => [...prev.map(p => p._id == post._id ? res.data : p)])
+
+            for (let i = 0; i < usertags.length; i++) {
                 socket.current.emit("sendNotification", {
                     senderId: user_id,
                     receiverId: usertags[i]._id,
@@ -105,15 +98,15 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
 
     return (
         <Dialog
-    fullScreen
-            open={createPostPopup}
+            fullScreen
+            open={editPostPopup}
             onClose={() => {
                 setDescription('')
                 setUserPitchid(null)
                 setuserTags([])
                 setImage('')
                 setposttype('')
-                setCreatePostpopup(false)
+                setEditPostpopup(false)
             }}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -134,21 +127,21 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 }}
             >
 
-                <div className='createPostHeader' styl={{position: 'relative'}}>
-                    Create New Post
+                <div className='createPostHeader' styl={{ position: 'relative' }}>
+                    Update Post
                     <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => {
                         setDescription('')
                         setUserPitchid(null)
                         setuserTags([])
                         setImage('')
                         setposttype('')
-                        setCreatePostpopup(false)
+                        setEditPostpopup(false)
                     }}>
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    {(image !== undefined && image !== "") ?
+                    {(image !== undefined && image !== "" && image.url !== '') &&
                         <div style={{ position: 'relative' }}>
                             <img
                                 style={{
@@ -156,7 +149,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                                     height: "500px",
                                     width: "500px",
                                 }}
-                                src={image}
+                                src={image.url}
                                 alt="Profile"
                             />
                             <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => setImage('')}>
@@ -164,19 +157,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                             </div>
                         </div>
 
-                        : <div>
-                            <label htmlFor="profilePic" className="profileImage" style={{ marginLeft: '30px' }}>
-                                <CloudUploadIcon />
-                            </label>
-                            <input
-                                type="file"
-                                accept="image/*,.webp"
-                                name=""
-                                id="profilePic"
-                                onChange={handleImage}
-                                style={{ display: "none" }}
-                            />
-                        </div>}
+                    }
 
                     <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         <div>
@@ -319,7 +300,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                         {posttype !== 'General Post' && <><div className='postTypeSelector'
                             onClick={() => {
                                 document.getElementsByClassName('createPostPitchContainer')[0].classList.toggle('show');
-                            } }
+                            }}
                         >
                             <div>Pitch: {userPitchId?.title}</div>
                             <div>
@@ -330,12 +311,12 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                                     <div className='individualPostTypes' onClick={() => {
                                         setUserPitchid(p);
                                         document.getElementsByClassName('createPostPitchContainer')[0].classList.remove('show');
-                                    } }>{p.title}</div>
+                                    }}>{p.title}</div>
                                 ))}
                             </div></>}
 
 
-                        <button style={{ margin: '10px 10px 10px -5px' }} onClick={addingpost} disabled={description==''||image==''}>Create Post</button>
+                        <button style={{ margin: '10px 10px 10px -5px' }} onClick={updatePost} disabled={description == '' || image == ''}>Update Post</button>
                     </div>
                 </div>
 
@@ -346,4 +327,4 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
     )
 }
 
-export default CreatePost
+export default EditPost

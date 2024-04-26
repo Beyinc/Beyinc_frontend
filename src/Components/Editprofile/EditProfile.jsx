@@ -43,12 +43,11 @@ import ReviewStars from "../LivePitches/ReviewStars";
 import AddReviewStars from "../LivePitches/AddReviewStars";
 import IndividualUserReview from "../AllUsers/IndividualUserReview";
 import ShowingFollowers from "./ShowingFollowers";
-import CreatePost from "./CreatePost";
-import IndividualPostCard from "./IndividualPostCard";
+import CreatePost from "./Activities/Posts/CreatePost";
 import './EditProfile.css'
 import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
-import Post from "./Activities/Post";
+import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
 
 const EditProfile = () => {

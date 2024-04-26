@@ -64,10 +64,6 @@ const Home = React.lazy(() =>
 );
 
 
-const EditProfileUI = React.lazy(() =>
-  import("./Components/Editprofile/EditProfileUI")
-);
-
 const Conversations = React.lazy(() =>
   import("./Components/Conversation/Conversations")
 );

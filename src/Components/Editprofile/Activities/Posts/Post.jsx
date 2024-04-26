@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './Post.css'
-import { gridCSS } from '../../CommonStyles';
+import { gridCSS } from '../../../CommonStyles';
 
-import { MMDDYYFormat, convertToDate } from '../../../Utils'
+import { MMDDYYFormat, convertToDate } from '../../../../Utils'
 import { useNavigate } from 'react-router'
-import { ApiServices } from '../../../Services/ApiServices'
-import { ToastColors } from '../../Toast/ToastColors'
-import { setLoading, setToast } from '../../../redux/AuthReducers/AuthReducer'
+import { ApiServices } from '../../../../Services/ApiServices'
+import { ToastColors } from '../../../Toast/ToastColors'
+import { setLoading, setToast } from '../../../../redux/AuthReducers/AuthReducer'
 import { Dialog, DialogContent } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux'
-import EditPost from '../EditPost'
+import EditPost from './EditPost'
 const Post = ({ post, setAllPosts }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false)
@@ -48,8 +48,8 @@ const Post = ({ post, setAllPosts }) => {
     // dispatch(setLoading({ visible: "yes" }));
 
     await ApiServices.likePost({ id: post?._id }).then(res => {
-   
-      setAllPosts(prev=>[...prev.map(p=>p._id==post?._id? res.data: p)])
+
+      setAllPosts(prev => [...prev.map(p => p._id == post?._id ? res.data : p)])
     }).catch((err) => {
       setToast({
         message: "Error occured when updating Pitch",
@@ -99,7 +99,7 @@ const Post = ({ post, setAllPosts }) => {
 
   const deletePost = async (e) => {
     e.target.disabled = true
-    await ApiServices.deletepost({ id:post?._id }).then(res => {
+    await ApiServices.deletepost({ id: post?._id }).then(res => {
       // navigate(-1);
       setAllPosts(prev => [...prev.filter(p => p._id !== post?._id)])
       setdeletePopUp(false)
@@ -117,7 +117,7 @@ const Post = ({ post, setAllPosts }) => {
 
   const reportPost = async (e) => {
     e.target.disabled = true
-    await ApiServices.addReport({ id:post?._id, reportby: user_id, reason: reportText }).then(res => {
+    await ApiServices.addReport({ id: post?._id, reportby: user_id, reason: reportText }).then(res => {
       setReportText('')
       navigate(-1);
     }).catch((err) => {
@@ -146,22 +146,22 @@ const Post = ({ post, setAllPosts }) => {
 
             </div>
           </div>
-          <div style={{position: 'relative'}}> 
+          <div style={{ position: 'relative' }}>
             <div id='menu' onClick={() => {
               document.getElementsByClassName(`postSubActions${post?._id}`)[0]?.classList.toggle('show');
             }}>
               <svg id='menu' width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.75 15C8.75 15.663 8.48661 16.2989 8.01777 16.7678C7.54893 17.2366 6.91304 17.5 6.25 17.5C5.58696 17.5 4.95107 17.2366 4.48223 16.7678C4.01339 16.2989 3.75 15.663 3.75 15C3.75 14.337 4.01339 13.7011 4.48223 13.2322C4.95107 12.7634 5.58696 12.5 6.25 12.5C6.91304 12.5 7.54893 12.7634 8.01777 13.2322C8.48661 13.7011 8.75 14.337 8.75 15ZM17.5 15C17.5 15.663 17.2366 16.2989 16.7678 16.7678C16.2989 17.2366 15.663 17.5 15 17.5C14.337 17.5 13.7011 17.2366 13.2322 16.7678C12.7634 16.2989 12.5 15.663 12.5 15C12.5 14.337 12.7634 13.7011 13.2322 13.2322C13.7011 12.7634 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.7634 16.7678 13.2322C17.2366 13.7011 17.5 14.337 17.5 15ZM26.25 15C26.25 15.663 25.9866 16.2989 25.5178 16.7678C25.0489 17.2366 24.413 17.5 23.75 17.5C23.087 17.5 22.4511 17.2366 21.9822 16.7678C21.5134 16.2989 21.25 15.663 21.25 15C21.25 14.337 21.5134 13.7011 21.9822 13.2322C22.4511 12.7634 23.087 12.5 23.75 12.5C24.413 12.5 25.0489 12.7634 25.5178 13.2322C25.9866 13.7011 26.25 14.337 26.25 15Z" fill="black" />
               </svg>
-           </div>
+            </div>
             <div id='menu' className={`subMenu postSubActions${post?._id}`} ref={userDetailsRef}>
               {post?.createdBy?._id == user_id &&
                 <>
-                <div id='menu' onClick={() => {
+                  <div id='menu' onClick={() => {
                     setEditPostCount(prev => prev + 1);
                     setEditPostpopup(true);
                   }}>Edit</div>
-                <div id='menu' onClick={() => setdeletePopUp(true)}>Delete</div>
+                  <div id='menu' onClick={() => setdeletePopUp(true)}>Delete</div>
                 </>}
               {post?.createdBy?._id !== user_id && <div id='menu' onClick={() => setreportpopUp(true)}>Report</div>}
             </div>
@@ -174,7 +174,7 @@ const Post = ({ post, setAllPosts }) => {
           <div className='postDesc'>{post?.description}</div>
           <div className='tagsContainer'>
             {post?.tags?.map(t => (
-              <div className='indiTag' onClick={()=>navigate(`/user/${t._id}`)}>
+              <div className='indiTag' onClick={() => navigate(`/user/${t._id}`)}>
                 {`@${t?.userName}`}
               </div>
             ))}
@@ -227,7 +227,7 @@ const Post = ({ post, setAllPosts }) => {
             {/* DISLIKE ACTION */}
             <div className='likeActionHolder'>
               <div onClick={dislikePost} >
-                <svg width="40" height="40" viewBox="0 0 40 40" fill={ "none"} xmlns="http://www.w3.org/2000/svg">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill={"none"} xmlns="http://www.w3.org/2000/svg">
                   <path d="M34.6055 19.1524C34.7461 18.6836 34.8164 18.1993 34.8164 17.7071C34.8164 16.6016 34.4531 15.5391 33.7969 14.6719C33.9375 14.2032 34.0078 13.7188 34.0078 13.2266C34.0078 12.1211 33.6445 11.0586 32.9883 10.1914C33.1289 9.72269 33.1992 9.23831 33.1992 8.74613C33.1992 6.7305 32 4.91409 30.1406 4.12113C29.8138 3.98022 29.4614 3.90841 29.1055 3.91019H5.625C4.93359 3.91019 4.375 4.46878 4.375 5.16019V19.3789C4.375 20.0703 4.93359 20.6289 5.625 20.6289H10.6758L14.0273 32.7696C14.5664 34.7266 16.3633 36.0938 18.3945 36.0938C19.5547 36.0938 20.6367 35.6328 21.4375 34.7891C22.2383 33.9493 22.6484 32.8477 22.5898 31.6875L22.3555 26.8868H31.7266C32.1992 26.8868 32.6602 26.7618 33.0664 26.5235C34.6445 25.6055 35.625 23.9414 35.625 22.1875C35.625 21.0821 35.2617 20.0196 34.6055 19.1524ZM7.1875 17.8125V6.71878H10.3516V17.8125H7.1875ZM31.6875 24.0782H19.4062L19.7812 31.8282C19.8047 32.293 19.5977 32.7305 19.2109 33.0196C18.9727 33.1953 18.6797 33.2852 18.3867 33.2813C18.0124 33.2777 17.6494 33.1527 17.3522 32.9252C17.0549 32.6977 16.8395 32.3799 16.7383 32.0196L12.8516 17.9375V6.71878H29.0781C29.4686 6.89377 29.8002 7.17783 30.033 7.53679C30.2659 7.89576 30.39 8.31435 30.3906 8.74222C30.3906 9.12113 30.3008 9.4805 30.1211 9.80863L29.5781 10.8008L30.4336 11.543C30.6744 11.7515 30.8674 12.0095 30.9995 12.2994C31.1316 12.5892 31.1998 12.9041 31.1992 13.2227C31.1992 13.6016 31.1094 13.961 30.9297 14.2891L30.3867 15.2813L31.2422 16.0235C31.483 16.232 31.676 16.49 31.8081 16.7798C31.9402 17.0697 32.0083 17.3846 32.0078 17.7032C32.0078 18.0821 31.918 18.4414 31.7383 18.7696L31.1914 19.7657L32.0469 20.5078C32.2877 20.7164 32.4807 20.9744 32.6128 21.2642C32.7449 21.5541 32.813 21.869 32.8125 22.1875C32.8125 22.9336 32.3828 23.6524 31.6875 24.0782Z" fill={post?.disLikes?.map(l => l._id).includes(user_id) ? '#4f55c7' : "black"} />
                 </svg>
 
