@@ -62,3 +62,9 @@ line-height: 17.36px;
 text-align: left;
 
 }
+
+
+.userLikesActions{
+  display: flex;
+  gap: 20px;
+}
