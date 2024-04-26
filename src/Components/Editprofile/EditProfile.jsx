@@ -2339,19 +2339,34 @@ const EditProfile = () => {
                                     {(convExits || id == undefined ||
                                         jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
                                             .role == "Admin") ?
-                                        <section className="CommentPostContainer">
-                                            <div>
-                                                <textarea type="text" name="" id=""
-                                                    value={comment} placeholder="Add a review comment..."
-                                                    style={{ resize: "none" }}
-                                                    onChange={(e) => setComment(e.target.value)} />
+                                        <div style={{ display: 'flex',  gap: '5px', alignItems: 'center', marginLeft: '-15px' }}>
+                                            <div className='addingCommentImageShow'>
+                                                <img
+                                                    src={
+                                                        loggedImage !== undefined && loggedImage !== "" ? loggedImage : "/profile.png"
+                                                    }
+                                                />
                                             </div>
-                                            {/* <button onClick={sendText}
+                                            <section className="CommentPostContainer">
+                                                <div>
+                                                    <textarea type="text" name="" id=""
+                                                        value={comment} placeholder="Add a review comment..."
+                                                        style={{ resize: "none" }}
+                                                        onChange={(e) => setComment(e.target.value)} />
+                                                </div>
+                                                <div onClick={sendText} style={{ cursor: comment == '' && 'not-allowed' }}>
+                                                    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2" stroke="var(--post-outer-border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </div>
+                                                {/* <button onClick={sendText}
                                         className="createComment"
                                     >
                                         Add Comment
                                     </button> */}
-                                        </section>
+                                            </section>
+                                        </div>
                                         : <div style={{ fontSize: "20px", marginBottom: "20px", textAlign: 'center' }}>
                                             Conversation with this user should exist to add reviews
                                         </div>
