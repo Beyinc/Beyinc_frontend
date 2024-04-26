@@ -77,7 +77,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
 
     const addingpost = async (e) => {
         e.target.disabled=true
-        await ApiServices.createPost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email}, type: posttype }).then(res => {
+        await ApiServices.createPost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, openDiscussion: (userPitchId !== null && userPitchId !== undefined && posttype !== 'General Post') }).then(res => {
             setDescription('')
             setUserPitchid(null)
             setuserTags([])
