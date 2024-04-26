@@ -1382,9 +1382,17 @@ const EditProfile = () => {
                             ></i>
                         )}
                     </div>
-                    <div className="EditProfileUsername" onClick={id == undefined ? handleEditButtonClick : null}>
+                    <div className="EditProfileUsername">
                         {salutation}
                         {salutation && <span>.</span>} {name && name[0]?.toUpperCase() + name?.slice(1)}
+                        {id == undefined && (
+                            <span>
+                                <i
+                                    onClick={handleEditButtonClick}
+                                    className="fas fa-pen"
+                                ></i>
+                            </span>
+                        )}
                     </div>
                     <div className='personaDetails'>
                         {role} {role == "Mentor" && mentorCategories}

@@ -64,7 +64,7 @@
   cursor: pointer;
 }
 .EditProfileUsername:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .personaDetails {
