@@ -271,7 +271,7 @@ border-radius: 50%;
 
 .ActivtyDetailsCardToggle {
   cursor: pointer;
-  color: var(--editProfile-toggler-bottom);
+  color: black;
 
   font-family: Gentium Book Basic;
   font-size: 25px;
