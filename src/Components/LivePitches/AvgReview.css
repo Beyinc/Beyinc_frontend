@@ -6,7 +6,7 @@
   
   .Star {
     font-size: 24px;
-    color: #F77D0E;
+    color: var(--editProfile-toggler-bottom);
    
   }
   
@@ -16,7 +16,7 @@
   
   .star.half-filled {
     position: relative;
-    color: #F77D0E;
+    color: var(--editProfile-toggler-bottom);
   }
   
   .Star.half-filled::before {
@@ -24,6 +24,6 @@
     position: absolute;
     left: 0;
     top: -2.5px;
-    mask: linear-gradient(to left, #F77D0E 50%, transparent 50%);
+    mask: linear-gradient(to left, var(--editProfile-toggler-bottom) 50%, transparent 50%);
     color: #ccc;
   }

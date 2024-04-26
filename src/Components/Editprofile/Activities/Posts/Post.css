@@ -1,5 +1,5 @@
 .ProfilepostContainer {
-  border: 1px solid #838282;
+  border: 1px solid var(--post-outer-border);
   border-radius: 10px;
   padding: 30px;
   display: flex;
@@ -10,6 +10,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.indiTag{
+    color: var(--followBtn-bg);
 }
 .PostheaderimageContainer img {
   width: 70px;
@@ -41,7 +44,7 @@
   font-weight: 400;
   line-height: 23.14px;
   text-align: left;
-  color: #656262;
+  color: var(--personalDetails-color);
 }
 
 .postDescContainer {
@@ -85,7 +88,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #838282;
+  border-bottom: 1px solid var(--post-outer-border);
   padding-bottom: 13px;
 }
 

@@ -21,7 +21,7 @@
 .ProfileDetailsCard {
   width: 350px;
   height: auto;
-  max-height: 600px;
+  max-height: 680px;
   padding: 10px;
   box-shadow: -1px -1px 7px 1px #00000040;
   transform: translateY(-150px);
@@ -73,13 +73,14 @@
   font-weight: 700;
   line-height: 20.83px;
   text-align: left;
-  color: #656262;
+  color: var(--personalDetails-color);
 }
 
 .profileFollowBtn {
   margin-top: 20px;
-
-  box-shadow: 1px 2px 3px 0px #ffffff40 inset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 282px;
   height: 43px;
   padding: 10px 100px 10px 100px;
@@ -88,6 +89,9 @@
   font-size: 18px;
   font-weight: 700;
   line-height: 23.44px;
+  box-shadow: 1px 3px 4px 0px #00000040;
+  background: var(--followBtn-bg);
+  color: var(--followBtn-color);
 }
 .createPostContainer {
   width: 920px;
@@ -96,9 +100,10 @@
   border-radius: 20px;
   opacity: 0px;
   box-shadow: 1px 4px 4px 0px #00000040;
+  background: var(--editprofile-details-card-bg);
   cursor: pointer;
 }
-.CommentPostContainer{
+.CommentPostContainer {
   width: 920px;
   height: auto;
   padding: 30px 40px;
@@ -109,7 +114,7 @@
   display: flex;
   flex-direction: column;
 }
-.createComment{
+.createComment {
   font-family: Gentium Book Basic;
   align-self: flex-end !important;
   white-space: noWrap;
@@ -122,7 +127,9 @@
 }
 .createPostbtn {
   font-family: Gentium Book Basic;
-
+  box-shadow: 1px 3px 4px 0px #00000040;
+  background: var(--followBtn-bg);
+  color: var(--followBtn-color);
   width: 180px;
   height: 43px;
   padding: 10px 50px;
@@ -131,19 +138,23 @@
   font-weight: 700;
 }
 .profileMessageBtn {
+  box-shadow: 1px 3px 4px 0px #00000040;
+
   margin-top: 10px;
-  box-shadow: 1px 2px 3px 0px #ffffff40 inset;
   width: 282px;
   height: 43px;
   padding: 10px 100px 10px 100px;
   border-radius: 20px;
   font-family: Roboto;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
   line-height: 23.44px;
   background: none !important;
-  border: 2.5px solid var(--button-enabled);
-  color: var(--button-enabled);
+  border: 2.5px solid var(--followBtn-bg);
+  color: var(--followBtn-bg);
 }
 .profileMessageBtn.chat {
   border: 2.5px solid green !important;
@@ -173,10 +184,10 @@
   padding: 2px 8px;
   margin: 5px;
 }
-.followDetails div{
+.followDetails div {
   transition: all ease 0.2s;
 }
-.followDetails:hover div{
+.followDetails:hover div {
   transform: scale(1.01);
 }
 
@@ -208,7 +219,9 @@
 }
 
 .reviewPostButton {
-  box-shadow: 1px 2px 3px 0px #ffffff40 inset;
+  background: var(--followBtn-bg);
+  color: var(--followBtn-color);
+  box-shadow: 1px 2px 3px 0px #ffffff40;
   width: 282px;
   height: 43px;
   padding: 10px 100px 10px 100px;
@@ -230,7 +243,8 @@
 
 .ActivtyDetailsCardToggle {
   cursor: pointer;
-  color: var(--button-enabled);
+  color: var(--editProfile-toggler-bottom);
+
   font-family: Gentium Book Basic;
   font-size: 25px;
   font-weight: 700;
@@ -239,19 +253,16 @@
   text-align: center;
   padding: 10px;
   gap: 10px;
-  border-radius: 30px;
   opacity: 0px;
 }
 
 .ActivtyDetailsCardToggleSelected {
-  background: #d3d4f1;
+  border-bottom: 4px solid var(--editProfile-toggler-bottom);
   width: 187px;
+  color: var(--editProfile-toggler-bottom);
   text-align: center;
   padding: 10px;
   gap: 10px;
-  border-radius: 30px;
-  opacity: 0px;
-  box-shadow: 1px 4px 4px 0px #00000040;
 }
 
 .EditProfileOuterCard {
@@ -262,13 +273,14 @@
   opacity: 0px;
   box-shadow: 1px 4px 4px 0px #00000040;
   cursor: pointer;
+  background: var(--editprofile-details-card-bg);
 }
 .EditProfileOuterCard .aboutHeadings {
   font-family: Gentium Book Basic;
   font-size: 25px;
   font-weight: 700;
   line-height: 28.93px;
-  color: var(--button-enabled);
+  color: var(--editProfile-toggler-bottom);
 }
 .bioText {
   font-family: Gentium Book Basic;
@@ -293,9 +305,9 @@
   font-family: Roboto;
   font-size: 16px;
   line-height: 23.44px;
-  background: none !important;
-  border: 2.5px solid var(--button-enabled);
-  color: var(--button-enabled);
+  background: var(--skills-bg) !important;
+
+  color: var(--skills-color);
 }
 
 .indiEducation {
@@ -306,7 +318,7 @@
 }
 
 .indiEducationCont:not(:last-child) {
-  border-bottom: 1.2px solid #b5b2b2;
+  border-bottom: 1.2px solid var(--post-outer-border);
 }
 
 .collegeName {
@@ -314,6 +326,7 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 23.14px;
+  color: var(--followBtn-bg);
 }
 .gradeDetails {
   font-family: Gentium Book Basic;
@@ -368,8 +381,10 @@
 }
 
 .Input-Label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
+  color: var(--followBtn-bg);
+  font-family: Gentium Book Basic;
 }
 .Input_Fields input {
   width: 270px;
@@ -475,12 +490,10 @@
 .fa-pen,
 .fa-plus {
   font-size: 14px;
-  color: grey;
 }
 .fa-pen:hover,
 .fa-plus:hover {
   transform: scale(1.2);
-  color: black;
 }
 .skills-Container {
   border: 0.7px solid lightgray;
@@ -546,7 +559,7 @@ select {
 }
 
 .resume {
-  border: 1px dashed grey;
+  border: 1px dashed var(--followBtn-bg);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -555,7 +568,7 @@ select {
   padding: 10px;
   position: relative;
   width: 180px;
-  color: gray;
+  color: var(--followBtn-bg);
 }
 .resume:hover {
   color: #0b57d0;
@@ -586,7 +599,6 @@ select {
 input,
 select,
 textarea {
- 
   padding: 10px !important;
   width: 100%;
 }
@@ -669,7 +681,6 @@ textarea {
   background: lightgray;
   font-size: 18px;
 }
-
 
 .wholePostWrapper {
   display: flex;

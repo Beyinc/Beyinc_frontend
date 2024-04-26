@@ -88,7 +88,7 @@ input[type="checkbox"] {
 
 .star {
   font-size: 34px;
-  color: #F77D0E;
+  color: var(--editProfile-toggler-bottom);
   margin-right: 5px;
 }
 
@@ -98,15 +98,15 @@ input[type="checkbox"] {
 
 .star.half-filled {
   position: relative;
-  color: #F77D0E;
+  color: var(--editProfile-toggler-bottom);
 }
 
 .star.half-filled::before {
   content: "★";
   position: absolute;
   left: 0;
-  top: -2.5px;
-  mask: linear-gradient(to left, #F77D0E 50%, transparent 50%);
+  top: -2px;
+  mask: linear-gradient(to left, var(--editProfile-toggler-bottom) 50%, transparent 50%);
   color: #ccc;
 }
 .subcommentsContainer {
