@@ -487,16 +487,10 @@ const EditProfile = () => {
                 });
         }
     }, [userpage, user_id]);
-    const onLike = (commentId, isLike) => {
-        ApiServices.likeComment({ comment_id: commentId, comment_owner: id })
+    const onLike = async (commentId, isLike) => {
+        await ApiServices.likeComment({ comment_id: commentId, comment_owner: id==undefined?user_id:id })
             .then((res) => {
-                // dispatch(
-                //   setToast({
-                //     message: isLike ? "Comment Liked" : "Comment Disliked",
-                //     bgColor: ToastColors.success,
-                //     visible: "yes",
-                //   })
-                // );
+                setAllComments(res.data)
             })
             .catch((err) => {
                 dispatch(
@@ -533,12 +527,14 @@ const EditProfile = () => {
         }
     };
 
-    const onDisLike = (commentId, isLike) => {
-        ApiServices.dislikeComment({
+    const onDisLike = async (commentId, isLike) => {
+       await ApiServices.dislikeComment({
             comment_id: commentId,
-            comment_owner: id,
+            comment_owner: id==undefined?user_id:id,
         })
-            .then((res) => { })
+           .then((res) => {
+            setAllComments(res.data)
+           })
             .catch((err) => {
                 dispatch(
                     setToast({
