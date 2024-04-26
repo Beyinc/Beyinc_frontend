@@ -45,6 +45,8 @@ import ShowingFollowers from "./ShowingFollowers";
 import CreatePost from "./CreatePost";
 import IndividualPostCard from "./IndividualPostCard";
 import './EditProfile.css'
+import AddConversationPopup from "../Common/AddConversationPopup";
+import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 
 const EditProfile = () => {
     const { id } = useParams();
@@ -57,6 +59,10 @@ const EditProfile = () => {
     useEffect(() => {
         socket.current = io(socket_io);
     }, []);
+
+    const [receiverRole, setreceiverRole] = useState("");
+    const [pitchSendTo, setPitchSendTo] = useState("");
+    const [IsAdmin, setIsAdmin] = useState(false)
 
     const [createPostPopup, setCreatePostpopup] = useState(false)
     const [showPreviousFile, setShowPreviousFile] = useState(false);
@@ -797,10 +803,10 @@ const EditProfile = () => {
                                 working: res.data.documents?.working || "",
                                 degree: res.data.documents?.degree || "",
                             }));
-                            console.log(
-                                "res.data.educationDetails",
-                                res.data.educationDetails
-                            );
+                            // console.log(
+                            //     "res.data.educationDetails",
+                            //     res.data.educationDetails
+                            // );
                             setTotalEducationData(res.data.educationDetails || []);
                             setTotalExperienceData(res.data.experienceDetails || []);
                             setFee(res.data.fee || "");
@@ -1326,6 +1332,30 @@ const EditProfile = () => {
         e.target.disabled = false
     }
 
+
+    const [connectStatus, setConnectStatus] = useState(null);
+    const historicalConversations = useSelector(
+        (state) => state.conv.historicalConversations
+    );
+    useEffect(() => {
+        if (id !== undefined) {
+            dispatch(getAllHistoricalConversations(user_id));
+        }
+    }, []);
+    useEffect(() => {
+        let obj = {};
+        if (historicalConversations?.filter(f => f.members.map(m => m._id).includes(id)).length > 0) {
+            obj[id] = { status: historicalConversations?.filter(f => f.members.map(m => m._id).includes(id))[0]?.status, id: historicalConversations?.filter(f => f.members.map(m => m._id).includes(id))[0]?._id }
+        }
+        setConnectStatus(
+            obj
+        );
+    }, [historicalConversations]);
+
+
+    const openChat = async (e) => {
+        navigate(`/conversations/${connectStatus[id]?.id}`);
+    };
     return (
         <div className="EditProfileContainer">
             <div className='EditProfileImageContainer'>
@@ -1361,13 +1391,54 @@ const EditProfile = () => {
                     </div>
                     {id == undefined && <div className='personaDetails'>{email}</div>}
                     {id == undefined && <div className='personaDetails'>{mobile}</div>}
+
+                    {id == undefined && (
+                        <>
+                            {(verification == "" || verification == "rejected") && (
+                                <button
+                                    onClick={sendForApproval}
+                                    className="profileMessageBtn"
+                                >
+                                    Verify Now
+                                </button>
+                            )}
+                            {verification == "approved" && (
+                                <button className="profileMessageBtn chat">
+                                    Approved
+                                </button>
+                            )}
+                            {verification == "pending" && (
+                                <button className="profileMessageBtn pend">
+                                    Pending
+                                </button>
+                            )}
+                        </>
+                    )}
+
+
                     {userpage == true && <button onClick={followerController} className="profileFollowBtn">
                         {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
                     </button>}
 
-                    {userpage == true && <button onClick={() => navigate('/conversations')} className="profileMessageBtn">
-                        Message
-                    </button>}
+                    {userpage == true && connectStatus &&
+                        (connectStatus[id]?.status === "pending" ? (
+                            <button className="profileMessageBtn pend">Pending</button>
+                        ) : (connectStatus[id]?.status === "approved" ? (
+                            <button className="profileMessageBtn chat" onClick={openChat}>
+                                Chat
+                            </button>
+                        ) : (
+                            <button
+                                className="profileMessageBtn"
+                                onClick={() => {
+                                    setPitchSendTo(id);
+                                    setreceiverRole(role);
+                                    setIsAdmin(email == process.env.REACT_APP_ADMIN_MAIL)
+                                }}
+                            >
+                                Connect
+                            </button>
+                        )))}
 
                     <div className="followDetails" onClick={() => {
                         if (typeOfOpen == null) {
@@ -1454,19 +1525,41 @@ const EditProfile = () => {
                             }`} onClick={() => seteditPostToggler('posts')}>
                             Activity
                         </div>
+                        <div className={`ActivtyDetailsCardToggle ${editPostToggler == 'comment' && "ActivtyDetailsCardToggleSelected"
+                            }`} onClick={() => seteditPostToggler('comment')}>
+                            Comment
+                        </div>
                     </div>
                     {editPostToggler == 'profile' &&
                         <>
                             {/* ABOUT */}
-                            <section className="EditProfileAbout" onClick={id == undefined ? handleAboutButtonClick : null}>
-                                <div className="aboutHeadings">About</div>
+                            <section className="EditProfileAbout">
+                                <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div>About</div>
+                                    {id == undefined && (
+                                        <span>
+                                            <i
+                                                onClick={handleAboutButtonClick}
+                                                className="fas fa-plus"
+                                            ></i>
+                                        </span>
+                                    )}
+                                </div>
                                 <div className='bioText'>{bio?.length > 0 ? bio : <div>No bio data found</div>}</div>
 
                             </section>
 
                             {/* SKILLS */}
-                            <section className="EditProfileAbout" onClick={id == undefined ? handleSkillButtonClick : null}>
-                                <div className="aboutHeadings">Skills</div>
+                            <section className="EditProfileAbout">
+                                <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div>Skills</div>
+                                    {id == undefined && (
+                                        <span>
+                                            <i
+                                                onClick={handleSkillButtonClick}
+                                                className="fas fa-plus"
+                                            ></i>
+                                        </span>
+                                    )}
+                                </div>
                                 <div className="indiSkillsContainer">
                                     {skills?.map((t, i) => (
                                         <div className="indiSkills">{t}</div>
@@ -3752,7 +3845,10 @@ const EditProfile = () => {
                 )}
             </div>
             <CreatePost setCreatePostpopup={setCreatePostpopup} createPostPopup={createPostPopup} setAllPosts={setAllPosts} />
-
+            <AddConversationPopup receiverId={pitchSendTo}
+                setReceiverId={setPitchSendTo}
+                receiverRole={receiverRole}
+                IsAdmin={IsAdmin} />
 
             <Dialog
                 open={reasonPop}

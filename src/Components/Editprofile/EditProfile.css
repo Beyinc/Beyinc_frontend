@@ -104,6 +104,15 @@
   border: 2.5px solid var(--button-enabled);
   color: var(--button-enabled);
 }
+.profileMessageBtn.chat{
+  border: 2.5px solid green !important;
+  color: green;
+}
+
+.profileMessageBtn.pend{
+  border: 2.5px solid orange !important;
+  color: orange;
+}
 
 .followDetails {
   display: flex;
