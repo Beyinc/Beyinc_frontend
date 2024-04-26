@@ -425,7 +425,7 @@ const EditProfile = () => {
 
     const [followers, setFollowers] = useState([])
     const [followering, setFollowering] = useState([])
-    const [editPostToggler, seteditPostToggler] = useState('comment')
+    const [editPostToggler, seteditPostToggler] = useState('profile')
 
 
 
