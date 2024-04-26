@@ -425,7 +425,7 @@ const EditProfile = () => {
 
     const [followers, setFollowers] = useState([])
     const [followering, setFollowering] = useState([])
-    const [editPostToggler, seteditPostToggler] = useState('profile')
+    const [editPostToggler, seteditPostToggler] = useState('comment')
 
 
 
@@ -1433,7 +1433,7 @@ const EditProfile = () => {
                     <div className="EditProfileUsername">
                         {salutation}
                         {salutation && <span>.</span>} {name && name[0]?.toUpperCase() + name?.slice(1)}
-                        {id!==undefined && verification === "approved" && (
+                        {id !== undefined && verification === "approved" && (
                             <img
                                 src="/verify.png"
                                 alt=""
@@ -1441,12 +1441,12 @@ const EditProfile = () => {
                                     width: "22.92px",
                                     height: "21.88px",
                                     marginLeft: '2px',
-                                   marginBottom: '-4px',
+                                    marginBottom: '-4px',
                                 }}
                             />)}
                         {id == undefined && (
                             <span>
-                                <i style={{color: 'var(--followBtn-bg)'}}
+                                <i style={{ color: 'var(--followBtn-bg)' }}
                                     onClick={handleEditButtonClick}
                                     className="fas fa-pen"
                                 ></i>
@@ -1542,7 +1542,7 @@ const EditProfile = () => {
                     {twitter && <div className="locationdetails">
                         <div>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="var(--followBtn-bg)"  />
+                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="var(--followBtn-bg)" />
                             </svg>
                         </div>
                         <a href={twitter} target="_blank">
@@ -1553,7 +1553,7 @@ const EditProfile = () => {
                     {linkedin && <div className="locationdetails">
                         <div>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="var(--followBtn-bg)"  />
+                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="var(--followBtn-bg)" />
                             </svg>
 
                         </div>
@@ -1598,7 +1598,7 @@ const EditProfile = () => {
                         </div>
                     </div>
                     {editPostToggler == 'profile' &&
-                        <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {/* ABOUT */}
                             <section className="EditProfileOuterCard">
                                 <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}><div>About</div>
@@ -1656,8 +1656,8 @@ const EditProfile = () => {
                                                 <div className="indiEducation">
                                                     <div>
                                                         <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="50" height="50" rx="5" fill="var(--followBtn-bg)"  fill-opacity="0.3" />
-                                                            <path d="M25.0001 10L6.66675 20L25.0001 30L40.0001 21.8167V33.3333H43.3334V20M13.3334 26.9667V33.6333L25.0001 40L36.6667 33.6333V26.9667L25.0001 33.3333L13.3334 26.9667Z" fill="var(--followBtn-bg)"  />
+                                                            <rect width="50" height="50" rx="5" fill="var(--followBtn-bg)" fill-opacity="0.3" />
+                                                            <path d="M25.0001 10L6.66675 20L25.0001 30L40.0001 21.8167V33.3333H43.3334V20M13.3334 26.9667V33.6333L25.0001 40L36.6667 33.6333V26.9667L25.0001 33.3333L13.3334 26.9667Z" fill="var(--followBtn-bg)" />
                                                         </svg>
                                                     </div>
                                                     <div>
@@ -1683,7 +1683,7 @@ const EditProfile = () => {
                                                                 handleEducationButtonClick();
                                                             }}
                                                         >
-                                                            <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-pen"></i>
+                                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-pen"></i>
                                                         </div>
                                                         <div
                                                             onClick={(e) => {
@@ -1693,7 +1693,7 @@ const EditProfile = () => {
                                                             }}
                                                             style={{ color: "red" }}
                                                         >
-                                                            <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times cross"></i>
+                                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times cross"></i>
                                                         </div>
                                                     </div>
                                                 )}
@@ -1911,7 +1911,7 @@ const EditProfile = () => {
                                                             handleExperienceButtonClick();
                                                         }}
                                                     >
-                                                        <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-pen"></i>
+                                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-pen"></i>
                                                     </div>
                                                     <div
                                                         onClick={(e) => {
@@ -1921,7 +1921,7 @@ const EditProfile = () => {
                                                         }}
                                                         style={{ color: "red" }}
                                                     >
-                                                        <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times cross"></i>
+                                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times cross"></i>
                                                     </div>
                                                 </div>
                                             )}
@@ -1959,13 +1959,13 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.resume?.secure_url}
                                                                             target="_blank"
-                                                                        rel="noreferrer"
-                                                                        style={{
-                                                                            marginRight: "30px",
-                                                                        }}
-                                                                    >
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
-                                    
+                                                                            rel="noreferrer"
+                                                                            style={{
+                                                                                marginRight: "30px",
+                                                                            }}
+                                                                        >
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
                                                                         </a>
                                                                     </attr>
                                                                 )}
@@ -2009,11 +2009,11 @@ const EditProfile = () => {
                                                                             <a
                                                                                 href={oldDocs.acheivements?.secure_url}
                                                                                 target="_blank"
-                                                                            rel="noreferrer" style={{
-                                                                                marginRight: "30px",
-                                                                            }}
-                                                                        >
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+                                                                                rel="noreferrer" style={{
+                                                                                    marginRight: "30px",
+                                                                                }}
+                                                                            >
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
 
                                                                             </a>
                                                                         </attr>
@@ -2058,11 +2058,11 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.degree?.secure_url}
                                                                             target="_blank"
-                                                                        rel="noreferrer" style={{
-                                                                            marginRight: "30px",
-                                                                        }}
-                                                                    >
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+                                                                            rel="noreferrer" style={{
+                                                                                marginRight: "30px",
+                                                                            }}
+                                                                        >
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
 
                                                                         </a>
                                                                     </attr>
@@ -2107,11 +2107,11 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.expertise?.secure_url}
                                                                             target="_blank"
-                                                                        rel="noreferrer" style={{
-                                                                            marginRight: "30px",
-                                                                        }}
-                                                                    >
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+                                                                            rel="noreferrer" style={{
+                                                                                marginRight: "30px",
+                                                                            }}
+                                                                        >
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
 
                                                                         </a>
                                                                     </attr>
@@ -2156,11 +2156,11 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.working?.secure_url}
                                                                             target="_blank"
-                                                                        rel="noreferrer" style={{
-                                                                            marginRight: "30px",
-                                                                        }}
-                                                                    >
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+                                                                            rel="noreferrer" style={{
+                                                                                marginRight: "30px",
+                                                                            }}
+                                                                        >
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
 
                                                                         </a>
                                                                     </attr>
@@ -2330,34 +2330,40 @@ const EditProfile = () => {
                     {/* Comment SECTION */}
                     {editPostToggler == 'comment' &&
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        {(convExits || id==undefined ||
-                                jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
-                                    .role == "Admin") ?
-                                <section className="CommentPostContainer">
-                                    <div>
-                                        <textarea type="text" name="" id=""
-                                            value={comment}
-                                            style={{ resize: "none" }}
-                                            onChange={(e) => setComment(e.target.value)} />
-                                    </div>
-                                    <button onClick={sendText}
+
+                            <div className="allCommentsShowContainer">
+                                <section className="EditProfileOuterCard">
+                                    <div className="commentHeader">Reviews</div>
+                                    <div className="commentLengthHeader">{allComments?.length} Reviews</div>
+
+                                    {(convExits || id == undefined ||
+                                        jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                                            .role == "Admin") ?
+                                        <section className="CommentPostContainer">
+                                            <div>
+                                                <textarea type="text" name="" id=""
+                                                    value={comment} placeholder="Add a review comment..."
+                                                    style={{ resize: "none" }}
+                                                    onChange={(e) => setComment(e.target.value)} />
+                                            </div>
+                                            {/* <button onClick={sendText}
                                         className="createComment"
                                     >
                                         Add Comment
-                                    </button>
+                                    </button> */}
+                                        </section>
+                                        : <div style={{ fontSize: "20px", marginBottom: "20px", textAlign: 'center' }}>
+                                            Conversation with this user should exist to add reviews
+                                        </div>
+                                    }
+                                    {allComments?.map((comment, index) => (
+                                        <UserComment onLike={onLike}
+                                            key={index}
+                                            comment={comment}
+                                            deleteComment={deleteComment}
+                                            onDisLike={onDisLike} setAllComments={setAllComments} />
+                                    ))}
                                 </section>
-                                : <div style={{ fontSize: "20px", marginBottom: "20px" }}>
-                                    Conversation with this user should exist to add reviews
-                                </div>
-                            }
-                            <div className="allCommentsShowContainer">
-                                {allComments?.map((comment, index) => (
-                                    <UserComment onLike={onLike}
-                                        key={index}
-                                        comment={comment}
-                                        deleteComment={deleteComment}
-                                        onDisLike={onDisLike} setAllComments={setAllComments} />
-                                ))}
                             </div>
                         </div>
                     }
@@ -2387,7 +2393,7 @@ const EditProfile = () => {
                                                 setIsInputPopupVisible(false);
                                             }}
                                         >
-                                            <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times"></i>
+                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                         </div>
                                     </div>
                                     {role === "Mentor" && (
@@ -2759,7 +2765,7 @@ const EditProfile = () => {
                                             setIsAboutPopupVisible(false);
                                         }}
                                     >
-                                        <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times"></i>
+                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                     </div>
                                 </div>
                                 <textarea
@@ -2833,7 +2839,7 @@ const EditProfile = () => {
                                                         setisSkillsPopupVisibile(false);
                                                     }}
                                                 >
-                                                    <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times"></i>
+                                                    <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                                 </div>
                                             </div>
                                             {skills?.length > 0 && (
@@ -2927,7 +2933,7 @@ const EditProfile = () => {
                                             });
                                         }}
                                     >
-                                        <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times"></i>
+                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                     </div>
                                 </div>
 
@@ -3119,7 +3125,7 @@ const EditProfile = () => {
                                                 });
                                             }}
                                         >
-                                            <i style={{color: 'var(--followBtn-bg)'}} class="fas fa-times"></i>
+                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                         </div>
                                     </div>
                                     <div className="exp-container">

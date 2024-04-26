@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 10px;
 }
-.allPostShowContainer, .allCommentsShowContainer {
+.allPostShowContainer {
   display: flex;
   flex-direction: column;
   gap: 10px;
