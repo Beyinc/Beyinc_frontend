@@ -426,7 +426,7 @@ const EditProfile = () => {
 
     const [followers, setFollowers] = useState([])
     const [followering, setFollowering] = useState([])
-    const [editPostToggler, seteditPostToggler] = useState('posts')
+    const [editPostToggler, seteditPostToggler] = useState('profile')
 
 
 
@@ -1381,6 +1381,9 @@ const EditProfile = () => {
     };
     return (
         <div className="EditProfileContainer">
+            {(mobileVerified == false || image=='') && <div className='mobilenote'>
+                Note: Mobile number should be verified and image should not be empty to send or update the profile
+            </div>}
             <div className='EditProfileImageContainer'>
                 <img src="/Banner-1.png" alt="Image 1" />
             </div>
