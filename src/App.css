@@ -29,19 +29,28 @@ body[data-theme="dark"] {
   /* LANDING PAGE TEXTS */
   --landingpage-h1: #4f55c7;
 
-    /* editProfile */
-  --editprofile-details-card-bg: #072d44;
+  /* editProfile */
+  --editprofile-details-card-bg: #4a7fa0;
   --popup-content-bg: #072d44;
   --popup-content-text-color: #072d44;
   --itemsSelect-bg: #1b6390;
-  --posttags-color:#072d44;
+  --posttags-color: #072d44;
+  --editProfile-toggler-bottom: #9bf8f4;
+  --personalDetails-color: #ffffffb2;
+  --followBtn-bg: #9bf8f4;
+  --followBtn-color: #072d44;
+    --skills-bg: #9BF8F4;
+--skills-color:#072D44;
+--post-outer-border:  #FFFFFF80;
+--likeAction-bg: #FFFFFF;
+--userComment-bg:#3C6D8A;
+
+
 
   /* old themes */
   --nabar-text: #fff;
   --navbar-profile-hover: #2172e2;
   /* --nav-head-bg: #212130; */
-
-
 
   --landingPage-working-container-bg: #212130;
   --chatcontainer-bg: #212130;
@@ -92,9 +101,19 @@ body[data-theme="light"] {
   /* editProfile */
   --editprofile-details-card-bg: #f6f6fc;
   --popup-content-bg: #f6f6fc;
-    --popup-content-text-color: #f6f6fc;
+  --popup-content-text-color: #f6f6fc;
   --itemsSelect-bg: #aeaeb1;
-    --posttags-color:#4f55c7;
+  --posttags-color: #4f55c7;
+  --editProfile-toggler-bottom: #4f55c7;
+  --personalDetails-color: #656262;
+  --followBtn-bg: #4f55c7;
+  --followBtn-color: #ffffff;
+  --skills-bg: #4F55C733;
+--post-outer-border: #838282;
+--skills-color:#4F55C7;
+--likeAction-bg: #000000;
+--userComment-bg: #4F55C71A;
+
 
 
   /* old themes */

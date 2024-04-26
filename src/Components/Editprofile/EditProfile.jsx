@@ -425,7 +425,7 @@ const EditProfile = () => {
 
     const [followers, setFollowers] = useState([])
     const [followering, setFollowering] = useState([])
-    const [editPostToggler, seteditPostToggler] = useState('profile')
+    const [editPostToggler, seteditPostToggler] = useState('comment')
 
 
 
@@ -487,16 +487,10 @@ const EditProfile = () => {
                 });
         }
     }, [userpage, user_id]);
-    const onLike = (commentId, isLike) => {
-        ApiServices.likeComment({ comment_id: commentId, comment_owner: id })
+    const onLike = async (commentId, isLike) => {
+        await ApiServices.likeComment({ comment_id: commentId, comment_owner: id==undefined?user_id:id })
             .then((res) => {
-                // dispatch(
-                //   setToast({
-                //     message: isLike ? "Comment Liked" : "Comment Disliked",
-                //     bgColor: ToastColors.success,
-                //     visible: "yes",
-                //   })
-                // );
+                setAllComments(res.data)
             })
             .catch((err) => {
                 dispatch(
@@ -533,12 +527,14 @@ const EditProfile = () => {
         }
     };
 
-    const onDisLike = (commentId, isLike) => {
-        ApiServices.dislikeComment({
+    const onDisLike = async (commentId, isLike) => {
+       await ApiServices.dislikeComment({
             comment_id: commentId,
-            comment_owner: id,
+            comment_owner: id==undefined?user_id:id,
         })
-            .then((res) => { })
+           .then((res) => {
+            setAllComments(res.data)
+           })
             .catch((err) => {
                 dispatch(
                     setToast({
@@ -1433,9 +1429,20 @@ const EditProfile = () => {
                     <div className="EditProfileUsername">
                         {salutation}
                         {salutation && <span>.</span>} {name && name[0]?.toUpperCase() + name?.slice(1)}
+                        {id !== undefined && verification === "approved" && (
+                            <img
+                                src="/verify.png"
+                                alt=""
+                                style={{
+                                    width: "22.92px",
+                                    height: "21.88px",
+                                    marginLeft: '2px',
+                                    marginBottom: '-4px',
+                                }}
+                            />)}
                         {id == undefined && (
                             <span>
-                                <i
+                                <i style={{ color: 'var(--followBtn-bg)' }}
                                     onClick={handleEditButtonClick}
                                     className="fas fa-pen"
                                 ></i>
@@ -1459,12 +1466,12 @@ const EditProfile = () => {
                                 </button>
                             )}
                             {verification == "approved" && (
-                                <button className="profileMessageBtn chat">
+                                <button className="profileMessageBtn">
                                     Approved
                                 </button>
                             )}
                             {verification == "pending" && (
-                                <button className="profileMessageBtn pend">
+                                <button className="profileMessageBtn">
                                     Pending
                                 </button>
                             )}
@@ -1478,9 +1485,9 @@ const EditProfile = () => {
 
                     {userpage == true && connectStatus &&
                         (connectStatus[id]?.status === "pending" ? (
-                            <button className="profileMessageBtn pend">Pending</button>
+                            <button className="profileMessageBtn">Pending</button>
                         ) : (connectStatus[id]?.status === "approved" ? (
-                            <button className="profileMessageBtn chat" onClick={openChat}>
+                            <button className="profileMessageBtn" onClick={openChat}>
                                 Chat
                             </button>
                         ) : (
@@ -1520,7 +1527,7 @@ const EditProfile = () => {
                     <div className="locationdetails">
                         <div>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20.3204 15.0939C21.0019 13.8147 21.3571 12.3871 21.3542 10.9377C21.3542 6.04756 17.3902 2.0835 12.5001 2.0835C7.60995 2.0835 3.64589 6.04756 3.64589 10.9377C3.64221 13.0264 4.38055 15.0485 5.72922 16.6434L5.73964 16.6564L5.74901 16.6668H5.72922L10.9834 22.245C11.1782 22.4517 11.4132 22.6164 11.6739 22.729C11.9347 22.8416 12.2157 22.8997 12.4998 22.8997C12.7838 22.8997 13.0649 22.8416 13.3257 22.729C13.5864 22.6164 13.8214 22.4517 14.0162 22.245L19.2709 16.6668H19.2511L19.2594 16.6569L19.2605 16.6559C19.298 16.6111 19.3353 16.566 19.3724 16.5205C19.7338 16.0765 20.0513 15.5991 20.3204 15.0939ZM12.5027 14.3226C11.6739 14.3226 10.879 13.9933 10.2929 13.4073C9.7069 12.8212 9.37766 12.0264 9.37766 11.1976C9.37766 10.3688 9.7069 9.5739 10.2929 8.98785C10.879 8.4018 11.6739 8.07256 12.5027 8.07256C13.3315 8.07256 14.1263 8.4018 14.7124 8.98785C15.2984 9.5739 15.6277 10.3688 15.6277 11.1976C15.6277 12.0264 15.2984 12.8212 14.7124 13.4073C14.1263 13.9933 13.3315 14.3226 12.5027 14.3226Z" fill="#4F55C7" />
+                                <path d="M20.3204 15.0939C21.0019 13.8147 21.3571 12.3871 21.3542 10.9377C21.3542 6.04756 17.3902 2.0835 12.5001 2.0835C7.60995 2.0835 3.64589 6.04756 3.64589 10.9377C3.64221 13.0264 4.38055 15.0485 5.72922 16.6434L5.73964 16.6564L5.74901 16.6668H5.72922L10.9834 22.245C11.1782 22.4517 11.4132 22.6164 11.6739 22.729C11.9347 22.8416 12.2157 22.8997 12.4998 22.8997C12.7838 22.8997 13.0649 22.8416 13.3257 22.729C13.5864 22.6164 13.8214 22.4517 14.0162 22.245L19.2709 16.6668H19.2511L19.2594 16.6569L19.2605 16.6559C19.298 16.6111 19.3353 16.566 19.3724 16.5205C19.7338 16.0765 20.0513 15.5991 20.3204 15.0939ZM12.5027 14.3226C11.6739 14.3226 10.879 13.9933 10.2929 13.4073C9.7069 12.8212 9.37766 12.0264 9.37766 11.1976C9.37766 10.3688 9.7069 9.5739 10.2929 8.98785C10.879 8.4018 11.6739 8.07256 12.5027 8.07256C13.3315 8.07256 14.1263 8.4018 14.7124 8.98785C15.2984 9.5739 15.6277 10.3688 15.6277 11.1976C15.6277 12.0264 15.2984 12.8212 14.7124 13.4073C14.1263 13.9933 13.3315 14.3226 12.5027 14.3226Z" fill="var(--followBtn-bg)" />
                             </svg>
                         </div>
                         <div>
@@ -1531,7 +1538,7 @@ const EditProfile = () => {
                     {twitter && <div className="locationdetails">
                         <div>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="#4F55C7" />
+                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="var(--followBtn-bg)" />
                             </svg>
                         </div>
                         <a href={twitter} target="_blank">
@@ -1542,7 +1549,7 @@ const EditProfile = () => {
                     {linkedin && <div className="locationdetails">
                         <div>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="#4F55C7" />
+                                <path d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z" fill="var(--followBtn-bg)" />
                             </svg>
 
                         </div>
@@ -1583,24 +1590,24 @@ const EditProfile = () => {
                         </div>
                         <div className={`ActivtyDetailsCardToggle ${editPostToggler == 'comment' && "ActivtyDetailsCardToggleSelected"
                             }`} onClick={() => seteditPostToggler('comment')}>
-                            Comment
+                            Reviews
                         </div>
                     </div>
                     {editPostToggler == 'profile' &&
-                        <>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {/* ABOUT */}
                             <section className="EditProfileOuterCard">
-                                <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div>About</div>
+                                <div className="aboutHeadings" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}><div>About</div>
                                     {id == undefined && (
                                         <span>
                                             <i
                                                 onClick={handleAboutButtonClick}
-                                                className="fas fa-plus"
+                                                className="fas fa-pen"
                                             ></i>
                                         </span>
                                     )}
                                 </div>
-                                <div className='bioText'>{bio?.length > 0 ? bio : <div>No bio data found</div>}</div>
+                                <div className=''>{bio?.length > 0 ? bio : <div>No bio data found</div>}</div>
 
                             </section>
 
@@ -1611,7 +1618,7 @@ const EditProfile = () => {
                                         <span>
                                             <i
                                                 onClick={handleSkillButtonClick}
-                                                className="fas fa-plus"
+                                                className="fas fa-pen"
                                             ></i>
                                         </span>
                                     )}
@@ -1645,8 +1652,8 @@ const EditProfile = () => {
                                                 <div className="indiEducation">
                                                     <div>
                                                         <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect width="50" height="50" rx="5" fill="#4F55C7" fill-opacity="0.3" />
-                                                            <path d="M25.0001 10L6.66675 20L25.0001 30L40.0001 21.8167V33.3333H43.3334V20M13.3334 26.9667V33.6333L25.0001 40L36.6667 33.6333V26.9667L25.0001 33.3333L13.3334 26.9667Z" fill="#4F55C7" />
+                                                            <rect width="50" height="50" rx="5" fill="var(--followBtn-bg)" fill-opacity="0.3" />
+                                                            <path d="M25.0001 10L6.66675 20L25.0001 30L40.0001 21.8167V33.3333H43.3334V20M13.3334 26.9667V33.6333L25.0001 40L36.6667 33.6333V26.9667L25.0001 33.3333L13.3334 26.9667Z" fill="var(--followBtn-bg)" />
                                                         </svg>
                                                     </div>
                                                     <div>
@@ -1672,7 +1679,7 @@ const EditProfile = () => {
                                                                 handleEducationButtonClick();
                                                             }}
                                                         >
-                                                            <i class="fas fa-pen"></i>
+                                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-pen"></i>
                                                         </div>
                                                         <div
                                                             onClick={(e) => {
@@ -1682,7 +1689,7 @@ const EditProfile = () => {
                                                             }}
                                                             style={{ color: "red" }}
                                                         >
-                                                            <i class="fas fa-times cross"></i>
+                                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times cross"></i>
                                                         </div>
                                                     </div>
                                                 )}
@@ -1714,9 +1721,9 @@ const EditProfile = () => {
                                             <div className="indiEducation">
                                                 <div>
                                                     <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <rect width="50" height="50" rx="5" fill="#4F55C7" fill-opacity="0.3" />
-                                                        <path d="M16.6667 28.335H20.0001V31.6683H16.6667V28.335Z" fill="#4F55C7" />
-                                                        <path d="M36.6667 8.3335H23.3333C22.4493 8.3335 21.6014 8.68469 20.9763 9.30981C20.3512 9.93493 20 10.7828 20 11.6668V21.6668H13.3333C11.495 21.6668 10 23.1618 10 25.0002V40.0002C10 40.4422 10.1756 40.8661 10.4882 41.1787C10.8007 41.4912 11.2246 41.6668 11.6667 41.6668H38.3333C38.7754 41.6668 39.1993 41.4912 39.5118 41.1787C39.8244 40.8661 40 40.4422 40 40.0002V11.6668C40 10.7828 39.6488 9.93493 39.0237 9.30981C38.3986 8.68469 37.5507 8.3335 36.6667 8.3335ZM13.3333 38.3335V25.0002H23.3333V38.3335H13.3333ZM28.3333 18.3335H25V15.0002H28.3333V18.3335ZM35 31.6668H31.6667V28.3335H35V31.6668ZM35 25.0002H31.6667V21.6668H35V25.0002ZM35 18.3335H31.6667V15.0002H35V18.3335Z" fill="#4F55C7" />
+                                                        <rect width="50" height="50" rx="5" fill="var(--followBtn-bg)" fill-opacity="0.3" />
+                                                        <path d="M16.6667 28.335H20.0001V31.6683H16.6667V28.335Z" fill="var(--followBtn-bg)" />
+                                                        <path d="M36.6667 8.3335H23.3333C22.4493 8.3335 21.6014 8.68469 20.9763 9.30981C20.3512 9.93493 20 10.7828 20 11.6668V21.6668H13.3333C11.495 21.6668 10 23.1618 10 25.0002V40.0002C10 40.4422 10.1756 40.8661 10.4882 41.1787C10.8007 41.4912 11.2246 41.6668 11.6667 41.6668H38.3333C38.7754 41.6668 39.1993 41.4912 39.5118 41.1787C39.8244 40.8661 40 40.4422 40 40.0002V11.6668C40 10.7828 39.6488 9.93493 39.0237 9.30981C38.3986 8.68469 37.5507 8.3335 36.6667 8.3335ZM13.3333 38.3335V25.0002H23.3333V38.3335H13.3333ZM28.3333 18.3335H25V15.0002H28.3333V18.3335ZM35 31.6668H31.6667V28.3335H35V31.6668ZM35 25.0002H31.6667V21.6668H35V25.0002ZM35 18.3335H31.6667V15.0002H35V18.3335Z" fill="var(--followBtn-bg)" />
                                                     </svg>
                                                 </div>
                                                 <div
@@ -1900,7 +1907,7 @@ const EditProfile = () => {
                                                             handleExperienceButtonClick();
                                                         }}
                                                     >
-                                                        <i class="fas fa-pen"></i>
+                                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-pen"></i>
                                                     </div>
                                                     <div
                                                         onClick={(e) => {
@@ -1910,7 +1917,7 @@ const EditProfile = () => {
                                                         }}
                                                         style={{ color: "red" }}
                                                     >
-                                                        <i class="fas fa-times cross"></i>
+                                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times cross"></i>
                                                     </div>
                                                 </div>
                                             )}
@@ -1949,17 +1956,12 @@ const EditProfile = () => {
                                                                             href={oldDocs.resume?.secure_url}
                                                                             target="_blank"
                                                                             rel="noreferrer"
+                                                                            style={{
+                                                                                marginRight: "30px",
+                                                                            }}
                                                                         >
-                                                                            <img
-                                                                                style={{
-                                                                                    height: "30px",
-                                                                                    width: "30px",
-                                                                                    marginRight: "30px",
-                                                                                }}
-                                                                                src="/view.png"
-                                                                                onMouseEnter={() => setShowPreviousFile(true)}
-                                                                                onMouseLeave={() => setShowPreviousFile(false)}
-                                                                            />
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
                                                                         </a>
                                                                     </attr>
                                                                 )}
@@ -2003,18 +2005,12 @@ const EditProfile = () => {
                                                                             <a
                                                                                 href={oldDocs.acheivements?.secure_url}
                                                                                 target="_blank"
-                                                                                rel="noreferrer"
+                                                                                rel="noreferrer" style={{
+                                                                                    marginRight: "30px",
+                                                                                }}
                                                                             >
-                                                                                <img
-                                                                                    style={{
-                                                                                        height: "30px",
-                                                                                        width: "30px",
-                                                                                        marginRight: "30px",
-                                                                                    }}
-                                                                                    src="/view.png"
-                                                                                    onMouseEnter={() => setShowPreviousFile(true)}
-                                                                                    onMouseLeave={() => setShowPreviousFile(false)}
-                                                                                />
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
                                                                             </a>
                                                                         </attr>
                                                                     )}
@@ -2058,18 +2054,12 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.degree?.secure_url}
                                                                             target="_blank"
-                                                                            rel="noreferrer"
+                                                                            rel="noreferrer" style={{
+                                                                                marginRight: "30px",
+                                                                            }}
                                                                         >
-                                                                            <img
-                                                                                style={{
-                                                                                    height: "30px",
-                                                                                    width: "30px",
-                                                                                    marginRight: "30px",
-                                                                                }}
-                                                                                src="/view.png"
-                                                                                onMouseEnter={() => setShowPreviousFile(true)}
-                                                                                onMouseLeave={() => setShowPreviousFile(false)}
-                                                                            />
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
                                                                         </a>
                                                                     </attr>
                                                                 )}
@@ -2113,18 +2103,12 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.expertise?.secure_url}
                                                                             target="_blank"
-                                                                            rel="noreferrer"
+                                                                            rel="noreferrer" style={{
+                                                                                marginRight: "30px",
+                                                                            }}
                                                                         >
-                                                                            <img
-                                                                                style={{
-                                                                                    height: "30px",
-                                                                                    width: "30px",
-                                                                                    marginRight: "30px",
-                                                                                }}
-                                                                                src="/view.png"
-                                                                                onMouseEnter={() => setShowPreviousFile(true)}
-                                                                                onMouseLeave={() => setShowPreviousFile(false)}
-                                                                            />
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
                                                                         </a>
                                                                     </attr>
                                                                 )}
@@ -2168,18 +2152,12 @@ const EditProfile = () => {
                                                                         <a
                                                                             href={oldDocs.working?.secure_url}
                                                                             target="_blank"
-                                                                            rel="noreferrer"
+                                                                            rel="noreferrer" style={{
+                                                                                marginRight: "30px",
+                                                                            }}
                                                                         >
-                                                                            <img
-                                                                                style={{
-                                                                                    height: "30px",
-                                                                                    width: "30px",
-                                                                                    marginRight: "30px",
-                                                                                }}
-                                                                                src="/view.png"
-                                                                                onMouseEnter={() => setShowPreviousFile(true)}
-                                                                                onMouseLeave={() => setShowPreviousFile(false)}
-                                                                            />
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
                                                                         </a>
                                                                     </attr>
                                                                 )}
@@ -2318,12 +2296,12 @@ const EditProfile = () => {
                                         </div>
                                     </div>
                                 ))}
-                        </>
+                        </div>
                     }
 
                     {/* POSTS SECTION */}
                     {editPostToggler == 'posts' &&
-                        <>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {id == undefined && <section className="createPostContainer">
                                 <button onClick={() => setCreatePostpopup(true)}
                                     className="createPostbtn"
@@ -2342,42 +2320,61 @@ const EditProfile = () => {
 
 
 
-                        </>
+                        </div>
                     }
 
                     {/* Comment SECTION */}
                     {editPostToggler == 'comment' &&
-                        <>
-                        {(convExits || id==undefined ||
-                                jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
-                                    .role == "Admin") ?
-                                <section className="CommentPostContainer">
-                                    <div>
-                                        <textarea type="text" name="" id=""
-                                            value={comment}
-                                            style={{ resize: "none" }}
-                                            onChange={(e) => setComment(e.target.value)} />
-                                    </div>
-                                    <button onClick={sendText}
-                                        className="createComment"
-                                    >
-                                        Add Comment
-                                    </button>
-                                </section>
-                                : <div style={{ fontSize: "20px", marginBottom: "20px" }}>
-                                    Conversation with this user should exist to add reviews
-                                </div>
-                            }
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
                             <div className="allCommentsShowContainer">
-                                {allComments?.map((comment, index) => (
-                                    <UserComment onLike={onLike}
-                                        key={index}
-                                        comment={comment}
-                                        deleteComment={deleteComment}
-                                        onDisLike={onDisLike} setAllComments={setAllComments} />
-                                ))}
+                                <section className="EditProfileOuterCard">
+                                    <div className="commentHeader">Reviews</div>
+                                    <div className="commentLengthHeader">{allComments?.length} Reviews</div>
+
+                                    {(convExits || id == undefined ||
+                                        jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
+                                            .role == "Admin") ?
+                                        <div style={{ display: 'flex',  gap: '5px', alignItems: 'center', marginLeft: '-15px' }}>
+                                            <div className='addingCommentImageShow'>
+                                                <img
+                                                    src={
+                                                        loggedImage !== undefined && loggedImage !== "" ? loggedImage : "/profile.png"
+                                                    }
+                                                />
+                                            </div>
+                                            <section className="CommentPostContainer">
+                                                <div>
+                                                    <textarea type="text" name="" id=""
+                                                        value={comment} placeholder="Add a review comment..."
+                                                        style={{ resize: "none" }}
+                                                        onChange={(e) => setComment(e.target.value)} />
+                                                </div>
+                                                <div onClick={sendText} style={{ cursor: comment == '' && 'not-allowed' }}>
+                                                    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2" stroke="var(--post-outer-border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </div>
+                                               
+                                            </section>
+                                        </div>
+                                        : <div style={{ fontSize: "20px", marginBottom: "20px", textAlign: 'center' }}>
+                                            Conversation with this user should exist to add reviews
+                                        </div>
+                                    }
+                                    <div style={{display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '40px'}}>
+                                        {allComments?.map((comment, index) => (
+                                            <UserComment onLike={onLike}
+                                                key={index}
+                                                comment={comment}
+                                                deleteComment={deleteComment}
+                                                onDisLike={onDisLike} setAllComments={setAllComments} />
+                                        ))}
+                                    </div>
+                                </section>
                             </div>
-                        </>
+                        </div>
                     }
 
 
@@ -2405,7 +2402,7 @@ const EditProfile = () => {
                                                 setIsInputPopupVisible(false);
                                             }}
                                         >
-                                            <i class="fas fa-times"></i>
+                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                         </div>
                                     </div>
                                     {role === "Mentor" && (
@@ -2777,7 +2774,7 @@ const EditProfile = () => {
                                             setIsAboutPopupVisible(false);
                                         }}
                                     >
-                                        <i class="fas fa-times"></i>
+                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                     </div>
                                 </div>
                                 <textarea
@@ -2851,7 +2848,7 @@ const EditProfile = () => {
                                                         setisSkillsPopupVisibile(false);
                                                     }}
                                                 >
-                                                    <i class="fas fa-times"></i>
+                                                    <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                                 </div>
                                             </div>
                                             {skills?.length > 0 && (
@@ -2945,7 +2942,7 @@ const EditProfile = () => {
                                             });
                                         }}
                                     >
-                                        <i class="fas fa-times"></i>
+                                        <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                     </div>
                                 </div>
 
@@ -3137,7 +3134,7 @@ const EditProfile = () => {
                                                 });
                                             }}
                                         >
-                                            <i class="fas fa-times"></i>
+                                            <i style={{ color: 'var(--followBtn-bg)' }} class="fas fa-times"></i>
                                         </div>
                                     </div>
                                     <div className="exp-container">
