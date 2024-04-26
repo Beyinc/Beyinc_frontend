@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import axios from "axios";
+import '../../App.css'
 import { useDispatch } from "react-redux";
 import {
     setLoginData,
