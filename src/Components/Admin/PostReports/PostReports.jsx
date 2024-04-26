@@ -6,6 +6,7 @@ import { setLoading, setToast } from '../../../redux/AuthReducers/AuthReducer'
 import { ToastColors } from '../../Toast/ToastColors'
 import { Dialog, DialogContent } from '@mui/material';
 import { gridCSS } from '../../CommonStyles';
+import Post from '../../Editprofile/Activities/Post'
 
 const PostReports = () => {
   const [allPosts, setAllPosts] = useState([])
@@ -48,7 +49,7 @@ const PostReports = () => {
     <div className="postContainer">
       <div className='postCardContainer'>
         {allPosts?.map(post => (
-          <div style={{display: 'flex', flexDirection: 'column'}}><IndividualPostCard post={post} />
+          <div style={{display: 'flex', flexDirection: 'column'}}><Post post={post} />
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <button onClick={(e) => {
                 setDeletePopUp(true)
