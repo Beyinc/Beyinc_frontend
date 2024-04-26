@@ -2360,24 +2360,22 @@ const EditProfile = () => {
                                                     </svg>
 
                                                 </div>
-                                                {/* <button onClick={sendText}
-                                        className="createComment"
-                                    >
-                                        Add Comment
-                                    </button> */}
+                                               
                                             </section>
                                         </div>
                                         : <div style={{ fontSize: "20px", marginBottom: "20px", textAlign: 'center' }}>
                                             Conversation with this user should exist to add reviews
                                         </div>
                                     }
-                                    {allComments?.map((comment, index) => (
-                                        <UserComment onLike={onLike}
-                                            key={index}
-                                            comment={comment}
-                                            deleteComment={deleteComment}
-                                            onDisLike={onDisLike} setAllComments={setAllComments} />
-                                    ))}
+                                    <div style={{display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '40px'}}>
+                                        {allComments?.map((comment, index) => (
+                                            <UserComment onLike={onLike}
+                                                key={index}
+                                                comment={comment}
+                                                deleteComment={deleteComment}
+                                                onDisLike={onDisLike} setAllComments={setAllComments} />
+                                        ))}
+                                    </div>
                                 </section>
                             </div>
                         </div>

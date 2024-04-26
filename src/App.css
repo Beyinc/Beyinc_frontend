@@ -43,6 +43,8 @@ body[data-theme="dark"] {
 --skills-color:#072D44;
 --post-outer-border:  #FFFFFF80;
 --likeAction-bg: #FFFFFF;
+--userComment-bg:#3C6D8A;
+
 
 
   /* old themes */
@@ -110,6 +112,7 @@ body[data-theme="light"] {
 --post-outer-border: #838282;
 --skills-color:#4F55C7;
 --likeAction-bg: #000000;
+--userComment-bg: #4F55C71A;
 
 
 
