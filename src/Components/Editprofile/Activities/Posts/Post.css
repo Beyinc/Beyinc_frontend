@@ -97,7 +97,7 @@
   font-size: 18px;
   font-weight: 400;
   line-height: 23.14px;
-  color: #838282;
+  color: var(--post-outer-border);
 }
 .likeTotal {
   display: flex;

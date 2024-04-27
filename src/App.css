@@ -39,13 +39,12 @@ body[data-theme="dark"] {
   --personalDetails-color: #ffffffb2;
   --followBtn-bg: #9bf8f4;
   --followBtn-color: #072d44;
-    --skills-bg: #9BF8F4;
---skills-color:#072D44;
---post-outer-border:  #FFFFFF80;
---likeAction-bg: #FFFFFF;
---userComment-bg:#3C6D8A;
-
-
+  --skills-bg: #9bf8f4;
+  --skills-color: #072d44;
+  --post-outer-border: #ffffff80;
+  --likeAction-bg: #ffffff;
+  --userComment-bg: #3c6d8a;
+  --postType-bg: #F4C5C5;
 
   /* old themes */
   --nabar-text: #fff;
@@ -108,13 +107,12 @@ body[data-theme="light"] {
   --personalDetails-color: #656262;
   --followBtn-bg: #4f55c7;
   --followBtn-color: #ffffff;
-  --skills-bg: #4F55C733;
---post-outer-border: #838282;
---skills-color:#4F55C7;
---likeAction-bg: #000000;
---userComment-bg: #4F55C71A;
-
-
+  --skills-bg: #4f55c733;
+  --post-outer-border: #838282;
+  --skills-color: #4f55c7;
+  --likeAction-bg: #000000;
+  --userComment-bg: #4f55c71a;
+  --postType-bg: #F4C5C5;
 
   /* old themes */
   --text: #040316;
