@@ -24,6 +24,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
     const [image, setImage] = useState('')
     const [posttype, setposttype] = useState('')
     const [description, setDescription] = useState('')
+    const [link, setlink] = useState('')
     const handleImage = (e) => {
         const file = e.target.files[0];
         if (file.size > 4 * 1024 * 1024) {
@@ -77,9 +78,10 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
 
     const addingpost = async (e) => {
         e.target.disabled = true
-        await ApiServices.createPost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, openDiscussion: (userPitchId !== null && userPitchId !== undefined && posttype !== 'General Post') }).then(res => {
+        await ApiServices.createPost({ description, link, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, openDiscussion: (userPitchId !== null && userPitchId !== undefined && posttype !== 'General Post') }).then(res => {
             setDescription('')
             setUserPitchid(null)
+            setlink('')
             setuserTags([])
             setImage('')
             setposttype('')
@@ -110,6 +112,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
             onClose={() => {
                 setDescription('')
                 setUserPitchid(null)
+                
+            setlink('')
                 setuserTags([])
                 setImage('')
                 setposttype('')
@@ -139,6 +143,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                     <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => {
                         setDescription('')
                         setUserPitchid(null)
+                        
+            setlink('')
                         setuserTags([])
                         setImage('')
                         setposttype('')
@@ -192,6 +198,19 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                                 cols={10}
                             ></textarea>
                         </div>
+                        <div>
+                            <label>Link</label>
+                        </div>
+                        <div>
+                            <textarea
+                                type="text" style={{ width: '95%', resize: 'none' }}
+                                name="overViewOfStartup"
+                                value={link}
+                                onChange={(e) => setlink(e.target.value)}
+                                rows={2}
+                                cols={10}
+                            ></textarea>
+                        </div>
                         <div className='postTypeSelector'
                             onClick={() => {
                                 document.getElementsByClassName('postTypeContainer')[0].classList.toggle('show')
@@ -210,6 +229,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                                     } else {
                                         setposttype(p.value)
                                         setUserPitchid(null)
+                                        
+            setlink('')
                                     }
                                     document.getElementsByClassName('postTypeContainer')[0].classList.remove('show')
                                 }}>{p.value}</div>
