@@ -199,7 +199,7 @@ const Navbar = () => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
+        justifyContent: "space-between", background: 'var(--menubar-bg)', color: 'var(--menubar-txt)'
       }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
@@ -756,7 +756,7 @@ const Navbar = () => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
+        justifyContent: "space-between", background: 'var(--menubar-bg)', color: 'var(--menubar-txt)'
       }}
       role="presentation"
       onClick={toggleSideBarDrawer(anchor, false)}
