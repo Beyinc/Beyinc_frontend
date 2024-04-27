@@ -165,7 +165,7 @@ const Post = ({ post, setAllPosts }) => {
                   }}>Edit</div>
                 <div id='menu' style={{ color: 'black' }} onClick={() => setdeletePopUp(true)}>Delete</div>
                 </>}
-              {post?.createdBy?._id !== user_id && <div id='menu' onClick={() => setreportpopUp(true)}>Report</div>}
+              {post?.createdBy?._id !== user_id && <div id='menu' style={{ color: 'black' }} onClick={() => setreportpopUp(true)}>Report</div>}
             </div>
           </div>
         </div>
