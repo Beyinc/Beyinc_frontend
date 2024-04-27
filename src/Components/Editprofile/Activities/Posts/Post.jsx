@@ -159,11 +159,11 @@ const Post = ({ post, setAllPosts }) => {
             <div id='menu' className={`subMenu postSubActions${post?._id}`} ref={userDetailsRef}>
               {post?.createdBy?._id == user_id &&
                 <>
-                  <div id='menu' onClick={() => {
+                  <div id='menu' style={{color: 'black'}} onClick={() => {
                     setEditPostCount(prev => prev + 1);
                     setEditPostpopup(true);
                   }}>Edit</div>
-                  <div id='menu' onClick={() => setdeletePopUp(true)}>Delete</div>
+                <div id='menu' style={{ color: 'black' }} onClick={() => setdeletePopUp(true)}>Delete</div>
                 </>}
               {post?.createdBy?._id !== user_id && <div id='menu' onClick={() => setreportpopUp(true)}>Report</div>}
             </div>
