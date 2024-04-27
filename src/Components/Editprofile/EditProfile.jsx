@@ -1928,114 +1928,65 @@ const EditProfile = () => {
                                 )}
                             </section>
 
-                            <section className="EditProfileOuterCard">
-                                {userpage === false && (
-                                    <section >
-                                        <div >
-                                            <div className="aboutHeadings">
-                                                <div>Documents</div>
-                                            </div>
-                                            <form className="">
-                                                <div className="upload-files-container">
-                                                    <div>
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "2px",
-                                                                justifyContent: "space-between",
-                                                                width: width < 700 && "320px",
-                                                            }}
-                                                        >
-                                                            <label className="Input-Label">Resume</label>
-                                                            {oldDocs.resume !== "" &&
-                                                                oldDocs.resume !== undefined &&
-                                                                Object.keys(oldDocs.resume).length !== 0 && (
-                                                                    <attr title="view previous resume">
-                                                                        <a
-                                                                            href={oldDocs.resume?.secure_url}
-                                                                            target="_blank"
-                                                                            rel="noreferrer"
-                                                                            style={{
-                                                                                marginRight: "30px",
-                                                                            }}
-                                                                        >
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+                            {userpage === false && <section className="EditProfileOuterCard">
+                                
+                                <section >
+                                    <div >
+                                        <div className="aboutHeadings">
+                                            <div>Documents</div>
+                                        </div>
+                                        <form className="">
+                                            <div className="upload-files-container">
+                                                <div>
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "2px",
+                                                            justifyContent: "space-between",
+                                                            width: width < 700 && "320px",
+                                                        }}
+                                                    >
+                                                        <label className="Input-Label">Resume</label>
+                                                        {oldDocs.resume !== "" &&
+                                                            oldDocs.resume !== undefined &&
+                                                            Object.keys(oldDocs.resume).length !== 0 && (
+                                                                <attr title="view previous resume">
+                                                                    <a
+                                                                        href={oldDocs.resume?.secure_url}
+                                                                        target="_blank"
+                                                                        rel="noreferrer"
+                                                                        style={{
+                                                                            marginRight: "30px",
+                                                                        }}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
 
-                                                                        </a>
-                                                                    </attr>
-                                                                )}
-                                                        </div>
-                                                        {id == undefined && (
-                                                            <>
-                                                                <label htmlFor="resume" className="resume">
-                                                                    <CloudUploadIcon />
-                                                                    <span className="fileName">
-                                                                        {recentUploadedDocs?.resume || "Upload"}
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="resume"
-                                                                    type="file"
-                                                                    name="resume"
-                                                                    id="resume"
-                                                                    onChange={handleResume}
-                                                                    style={{ display: "none" }}
-                                                                />
-                                                            </>
-                                                        )}
-                                                    </div>
-
-                                                    <div>
-                                                        <div>
-                                                            <div
-                                                                style={{
-                                                                    display: "flex",
-                                                                    alignItems: "center",
-                                                                    gap: "2px",
-                                                                    justifyContent: "space-between",
-                                                                    width: width < 700 && "320px",
-                                                                }}
-                                                            >
-                                                                <label className="Input-Label">Acheivements</label>
-                                                                {oldDocs.acheivements !== "" &&
-                                                                    oldDocs.acheivements !== undefined &&
-                                                                    Object.keys(oldDocs.acheivements).length !== 0 && (
-                                                                        <attr title="view previous acheivements">
-                                                                            <a
-                                                                                href={oldDocs.acheivements?.secure_url}
-                                                                                target="_blank"
-                                                                                rel="noreferrer" style={{
-                                                                                    marginRight: "30px",
-                                                                                }}
-                                                                            >
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
-
-                                                                            </a>
-                                                                        </attr>
-                                                                    )}
-                                                            </div>
-                                                            {id == undefined && (
-                                                                <>
-                                                                    <label htmlFor="acheivements" className="resume">
-                                                                        <CloudUploadIcon />
-                                                                        <span className="fileName">
-                                                                            {recentUploadedDocs?.acheivements || "Upload"}
-                                                                        </span>
-                                                                    </label>
-                                                                    <input
-                                                                        type="file"
-                                                                        id="acheivements"
-                                                                        className="resume"
-                                                                        name="acheivements"
-                                                                        onChange={handleResume}
-                                                                        style={{ display: "none" }}
-                                                                    />
-                                                                </>
+                                                                    </a>
+                                                                </attr>
                                                             )}
-                                                        </div>
                                                     </div>
+                                                    {id == undefined && (
+                                                        <>
+                                                            <label htmlFor="resume" className="resume">
+                                                                <CloudUploadIcon />
+                                                                <span className="fileName">
+                                                                    {recentUploadedDocs?.resume || "Upload"}
+                                                                </span>
+                                                            </label>
+                                                            <input
+                                                                className="resume"
+                                                                type="file"
+                                                                name="resume"
+                                                                id="resume"
+                                                                onChange={handleResume}
+                                                                style={{ display: "none" }}
+                                                            />
+                                                        </>
+                                                    )}
+                                                </div>
 
+                                                <div>
                                                     <div>
                                                         <div
                                                             style={{
@@ -2046,13 +1997,13 @@ const EditProfile = () => {
                                                                 width: width < 700 && "320px",
                                                             }}
                                                         >
-                                                            <label className="Input-Label">Degree</label>
-                                                            {oldDocs.degree !== "" &&
-                                                                oldDocs.degree !== undefined &&
-                                                                Object.keys(oldDocs.degree).length !== 0 && (
-                                                                    <attr title="view previous degree ">
+                                                            <label className="Input-Label">Acheivements</label>
+                                                            {oldDocs.acheivements !== "" &&
+                                                                oldDocs.acheivements !== undefined &&
+                                                                Object.keys(oldDocs.acheivements).length !== 0 && (
+                                                                    <attr title="view previous acheivements">
                                                                         <a
-                                                                            href={oldDocs.degree?.secure_url}
+                                                                            href={oldDocs.acheivements?.secure_url}
                                                                             target="_blank"
                                                                             rel="noreferrer" style={{
                                                                                 marginRight: "30px",
@@ -2066,128 +2017,177 @@ const EditProfile = () => {
                                                         </div>
                                                         {id == undefined && (
                                                             <>
-                                                                <label htmlFor="degree" className="resume">
+                                                                <label htmlFor="acheivements" className="resume">
                                                                     <CloudUploadIcon />
                                                                     <span className="fileName">
-                                                                        {recentUploadedDocs?.degree || "Upload"}
+                                                                        {recentUploadedDocs?.acheivements || "Upload"}
                                                                     </span>
                                                                 </label>
-
                                                                 <input
                                                                     type="file"
-                                                                    id="degree"
+                                                                    id="acheivements"
                                                                     className="resume"
-                                                                    name="degree"
+                                                                    name="acheivements"
                                                                     onChange={handleResume}
                                                                     style={{ display: "none" }}
-                                                                />
-                                                            </>
-                                                        )}
-                                                    </div>
-
-                                                    <div>
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "2px",
-                                                                justifyContent: "space-between",
-                                                                width: width < 700 && "320px",
-                                                            }}
-                                                        >
-                                                            <label className="Input-Label">Expertise</label>
-                                                            {oldDocs.expertise !== "" &&
-                                                                oldDocs.expertise !== undefined &&
-                                                                Object.keys(oldDocs.expertise).length !== 0 && (
-                                                                    <attr title="view previous expertise ">
-                                                                        <a
-                                                                            href={oldDocs.expertise?.secure_url}
-                                                                            target="_blank"
-                                                                            rel="noreferrer" style={{
-                                                                                marginRight: "30px",
-                                                                            }}
-                                                                        >
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
-
-                                                                        </a>
-                                                                    </attr>
-                                                                )}
-                                                        </div>
-                                                        {id == undefined && (
-                                                            <>
-                                                                <label htmlFor="expertise" className="resume">
-                                                                    <CloudUploadIcon />
-                                                                    <span className="fileName">
-                                                                        {recentUploadedDocs?.expertise || "Upload"}
-                                                                    </span>
-                                                                </label>
-
-                                                                <input
-                                                                    type="file"
-                                                                    id="expertise"
-                                                                    className="resume"
-                                                                    name="expertise"
-                                                                    style={{ display: "none" }}
-                                                                    onChange={handleResume}
-                                                                />
-                                                            </>
-                                                        )}
-                                                    </div>
-
-                                                    <div>
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "2px",
-                                                                justifyContent: "space-between",
-                                                                width: width < 700 && "320px",
-                                                            }}
-                                                        >
-                                                            <label className="Input-Label">Working</label>
-                                                            {oldDocs.working !== "" &&
-                                                                oldDocs.working !== undefined &&
-                                                                Object.keys(oldDocs.working).length !== 0 && (
-                                                                    <attr title="view previous working ">
-                                                                        <a
-                                                                            href={oldDocs.working?.secure_url}
-                                                                            target="_blank"
-                                                                            rel="noreferrer" style={{
-                                                                                marginRight: "30px",
-                                                                            }}
-                                                                        >
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
-
-                                                                        </a>
-                                                                    </attr>
-                                                                )}
-                                                        </div>
-                                                        {id == undefined && (
-                                                            <>
-                                                                <label htmlFor="working" className="resume">
-                                                                    <CloudUploadIcon />
-                                                                    <span className="fileName">
-                                                                        {recentUploadedDocs?.working || "Upload"}
-                                                                    </span>
-                                                                </label>
-
-                                                                <input
-                                                                    type="file"
-                                                                    id="working"
-                                                                    className="resume"
-                                                                    style={{ display: "none" }}
-                                                                    name="working"
-                                                                    onChange={handleResume}
                                                                 />
                                                             </>
                                                         )}
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
-                                    </section>
-                                )}
-                            </section>
+
+                                                <div>
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "2px",
+                                                            justifyContent: "space-between",
+                                                            width: width < 700 && "320px",
+                                                        }}
+                                                    >
+                                                        <label className="Input-Label">Degree</label>
+                                                        {oldDocs.degree !== "" &&
+                                                            oldDocs.degree !== undefined &&
+                                                            Object.keys(oldDocs.degree).length !== 0 && (
+                                                                <attr title="view previous degree ">
+                                                                    <a
+                                                                        href={oldDocs.degree?.secure_url}
+                                                                        target="_blank"
+                                                                        rel="noreferrer" style={{
+                                                                            marginRight: "30px",
+                                                                        }}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
+                                                                    </a>
+                                                                </attr>
+                                                            )}
+                                                    </div>
+                                                    {id == undefined && (
+                                                        <>
+                                                            <label htmlFor="degree" className="resume">
+                                                                <CloudUploadIcon />
+                                                                <span className="fileName">
+                                                                    {recentUploadedDocs?.degree || "Upload"}
+                                                                </span>
+                                                            </label>
+
+                                                            <input
+                                                                type="file"
+                                                                id="degree"
+                                                                className="resume"
+                                                                name="degree"
+                                                                onChange={handleResume}
+                                                                style={{ display: "none" }}
+                                                            />
+                                                        </>
+                                                    )}
+                                                </div>
+
+                                                <div>
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "2px",
+                                                            justifyContent: "space-between",
+                                                            width: width < 700 && "320px",
+                                                        }}
+                                                    >
+                                                        <label className="Input-Label">Expertise</label>
+                                                        {oldDocs.expertise !== "" &&
+                                                            oldDocs.expertise !== undefined &&
+                                                            Object.keys(oldDocs.expertise).length !== 0 && (
+                                                                <attr title="view previous expertise ">
+                                                                    <a
+                                                                        href={oldDocs.expertise?.secure_url}
+                                                                        target="_blank"
+                                                                        rel="noreferrer" style={{
+                                                                            marginRight: "30px",
+                                                                        }}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
+                                                                    </a>
+                                                                </attr>
+                                                            )}
+                                                    </div>
+                                                    {id == undefined && (
+                                                        <>
+                                                            <label htmlFor="expertise" className="resume">
+                                                                <CloudUploadIcon />
+                                                                <span className="fileName">
+                                                                    {recentUploadedDocs?.expertise || "Upload"}
+                                                                </span>
+                                                            </label>
+
+                                                            <input
+                                                                type="file"
+                                                                id="expertise"
+                                                                className="resume"
+                                                                name="expertise"
+                                                                style={{ display: "none" }}
+                                                                onChange={handleResume}
+                                                            />
+                                                        </>
+                                                    )}
+                                                </div>
+
+                                                <div>
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "2px",
+                                                            justifyContent: "space-between",
+                                                            width: width < 700 && "320px",
+                                                        }}
+                                                    >
+                                                        <label className="Input-Label">Working</label>
+                                                        {oldDocs.working !== "" &&
+                                                            oldDocs.working !== undefined &&
+                                                            Object.keys(oldDocs.working).length !== 0 && (
+                                                                <attr title="view previous working ">
+                                                                    <a
+                                                                        href={oldDocs.working?.secure_url}
+                                                                        target="_blank"
+                                                                        rel="noreferrer" style={{
+                                                                            marginRight: "30px",
+                                                                        }}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 16 16"><path fill="var(--followBtn-bg)" d="M5 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5.414a1.5 1.5 0 0 0-.44-1.06L9.647 1.439A1.5 1.5 0 0 0 8.586 1zM4 3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.793 2H9.5a.5.5 0 0 1-.5-.5V2.207z" /></svg>
+
+                                                                    </a>
+                                                                </attr>
+                                                            )}
+                                                    </div>
+                                                    {id == undefined && (
+                                                        <>
+                                                            <label htmlFor="working" className="resume">
+                                                                <CloudUploadIcon />
+                                                                <span className="fileName">
+                                                                    {recentUploadedDocs?.working || "Upload"}
+                                                                </span>
+                                                            </label>
+
+                                                            <input
+                                                                type="file"
+                                                                id="working"
+                                                                className="resume"
+                                                                style={{ display: "none" }}
+                                                                name="working"
+                                                                onChange={handleResume}
+                                                            />
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                                
+                            </section>}
 
 
                             {/* Buttons for save data */}
