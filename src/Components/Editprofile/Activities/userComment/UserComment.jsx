@@ -10,7 +10,7 @@ import { ToastColors } from '../../../Toast/ToastColors';
 import { Navigate, useNavigate } from 'react-router';
 
 const UserComment = ({ comment, deleteComment, onLike, onDisLike, setAllComments }) => {
-    console.log(comment);
+    // console.log(comment);
     const dispatch = useDispatch()
 
     const [deletePop, setdeletePopUp] = useState(false)
@@ -95,7 +95,7 @@ const UserComment = ({ comment, deleteComment, onLike, onDisLike, setAllComments
                             <div id='menu' className={`subMenu postSubActions${comment?._id}`} ref={userDetailsRef}>
 
                                 <>
-                                    <div id='menu' onClick={() => setdeletePopUp(true)}>Delete</div>
+                                    <div id='menu' style={{color: 'black'}} onClick={() => setdeletePopUp(true)}>Delete</div>
                                 </>
                             </div>
                         </div>
