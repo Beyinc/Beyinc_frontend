@@ -31,6 +31,8 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
     const [search, setSearch] = useState("");
     const [filteredusers, setFilteredUsers] = useState([]);
     const [userPitchId, setUserPitchid] = useState(null)
+    const [link, setlink] = useState('')
+
 
     useEffect(() => {
         if (post || EditPostCount) {
@@ -39,6 +41,8 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
             setposttype(post?.type)
             setuserTags(post?.tags)
             setUserPitchid(post?.pitchId)
+            setlink(post?.link)
+
         }
     }, [post, EditPostCount])
 
@@ -69,9 +73,10 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
 
     const updatePost = async (e) => {
         e.target.disabled = true
-        await ApiServices.updatePost({ description, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, id: post?._id }).then(res => {
+        await ApiServices.updatePost({ description, link, tags: usertags, pitchId: userPitchId?._id, image: image, createdBy: { _id: user_id, userName: userName, email: email }, type: posttype, id: post?._id }).then(res => {
             setDescription('')
             setUserPitchid(null)
+            setlink('')
             setuserTags([])
             setImage('')
             setposttype('')
@@ -103,6 +108,7 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
             onClose={() => {
                 setDescription('')
                 setUserPitchid(null)
+                setlink('')
                 setuserTags([])
                 setImage('')
                 setposttype('')
@@ -132,6 +138,7 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
                     <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => {
                         setDescription('')
                         setUserPitchid(null)
+                        setlink('')
                         setuserTags([])
                         setImage('')
                         setposttype('')
@@ -173,6 +180,19 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
                                 cols={10}
                             ></textarea>
                         </div>
+                        <div>
+                            <label>Link</label>
+                        </div>
+                        <div>
+                            <textarea
+                                type="text" style={{ width: '95%', resize: 'none' }}
+                                name="overViewOfStartup"
+                                value={link}
+                                onChange={(e) => setlink(e.target.value)}
+                                rows={2}
+                                cols={10}
+                            ></textarea>
+                        </div>
                         <div className='postTypeSelector'
                             onClick={() => {
                                 document.getElementsByClassName('postTypeContainer')[0].classList.toggle('show')
@@ -191,6 +211,7 @@ const EditPost = ({ setEditPostpopup, editPostPopup, post, setAllPosts, EditPost
                                     } else {
                                         setposttype(p.value)
                                         setUserPitchid(null)
+                                        setlink('')
                                     }
                                     document.getElementsByClassName('postTypeContainer')[0].classList.remove('show')
                                 }}>{p.value}</div>
