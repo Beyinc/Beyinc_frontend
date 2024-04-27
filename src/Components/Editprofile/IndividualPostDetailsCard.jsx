@@ -229,6 +229,9 @@ const IndividualPostDetailsCard = () => {
                                     <Link to={`/livePitches/${post?.pitchId?._id}`}>View Pitch</Link>
                                 }
                             </div>}
+                            {post?.link && <div>
+                                <b>pitch:</b> <a href={post?.link}>Link</a>
+                            </div>}
                                 <div>
                                     <b>users tagged:</b> {post?.tags?.map(p => p.userName)?.join(', ')}
                                 </div>
