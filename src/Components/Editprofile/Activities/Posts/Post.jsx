@@ -210,7 +210,7 @@ const Post = ({ post, setAllPosts }) => {
               </div>
             </div>
             <div className='commentTotal'>
-              {allComments?.length} Comments
+              {allComments?.length} Reviews
             </div>
 
           </div>
