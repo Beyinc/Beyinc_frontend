@@ -400,7 +400,7 @@ const Navbar = () => {
                   />
                 </svg>
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary="Pitches" />
             </ListItem>
             <ListItem
               button
@@ -1194,7 +1194,7 @@ const Navbar = () => {
                   />
                 </svg>
               )}
-              <div className={`navbar-title${selectedIcon === "dashboard" ? " selected-title" : ""}`}>Dashboard</div>
+              <div className={`navbar-title${selectedIcon === "dashboard" ? " selected-title" : ""}`}>Pitches</div>
             </div>
 
             {/* MENTOR ICON */}

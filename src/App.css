@@ -13,6 +13,10 @@ body[data-theme="dark"] {
   --menubar-txt: #9bf8f4;
   --icons-border: #9bf8f385;
 
+/* BUTTONS */
+--button-color: #072d44;
+--button-background: #9bf8f4;
+
   /* NOTIFICATION SIDEBAR */
   --notification-title: #9bf8f4;
   --notification-head-bg: #072d44;
@@ -82,6 +86,10 @@ body[data-theme="light"] {
   --nav-head-icons-hover: #4f55c75a;
   --menubar-bg: #f6f6fc;
   --menubar-txt: #4f55c7;
+
+  /* BUTTONS */
+--button-color: #f6f6fc;
+--button-background: #4f55c7;
 
   /* NOTIFICATION */
   --notification-title: #4f55c7;

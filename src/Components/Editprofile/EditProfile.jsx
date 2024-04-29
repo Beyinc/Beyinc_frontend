@@ -1401,7 +1401,7 @@ const EditProfile = () => {
                 Note: Mobile number should be verified and image should not be empty to send or update the profile
             </div>}
             <div className='EditProfileImageContainer'>
-                <img src="/Banner-1.png" alt="Image 1" />
+                <img src="/Banner.png" alt="Banner" />
             </div>
             <div className='ProfileContainer'>
                 {/* LEFT PART */}
@@ -2204,10 +2204,10 @@ const EditProfile = () => {
                                                 marginBottom: "15px",
                                             }}
                                         >
-                                            <button style={{ fontSize: "10px" }} onClick={retreiveLocal}>
+                                            <button style={{ fontSize: "10px", background: "var(--button-background)", color: "var(--button-color)" }} onClick={retreiveLocal}>
                                                 Retreive last Save
                                             </button>
-                                            <button style={{ fontSize: "10px" }} onClick={savingLocal}>
+                                            <button style={{ fontSize: "10px", background: "var(--button-background)", color: "var(--button-color)" }} onClick={savingLocal}>
                                                 Save
                                             </button>
                                             <button
@@ -2223,6 +2223,8 @@ const EditProfile = () => {
                                                     whiteSpace: "nowrap",
                                                     position: "relative",
                                                     fontSize: "10px",
+                                                    background: "var(--button-background)",
+                                                    color: "var(--button-color)"
                                                 }}
                                             >
                                                 {isLoading ? (
