@@ -55,6 +55,7 @@ body[data-theme="dark"] {
 --createPost-color:#f6f6fc;
 --light-border:#ffffff8d;
 --empty-img-bg: #072d44;
+--tag-bg:#9bf8f399;
 
 
   /* old themes */
@@ -133,6 +134,7 @@ body[data-theme="light"] {
 --createPost-bg: #f6f6fc;
 --light-border:gray;
 --empty-img-bg: rgba(211, 211, 211, 0.837);
+--tag-bg:#4f55c794;
 
 
   /* old themes */
