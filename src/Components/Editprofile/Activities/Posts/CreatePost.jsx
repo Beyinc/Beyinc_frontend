@@ -17,9 +17,14 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
 
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
-  const { email, role, userName, verification, user_id } = useSelector(
-    (store) => store.auth.loginDetails
-  );
+  const {
+    email,
+    role,
+    userName,
+    verification,
+    user_id,
+    image: loggedImage,
+  } = useSelector((store) => store.auth.loginDetails);
 
   const [image, setImage] = useState("");
   const [posttype, setposttype] = useState("");
@@ -90,6 +95,13 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
         posttype !== "General Post",
     })
       .then((res) => {
+        dispatch(
+          setToast({
+            message: "Your post successfully posted",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
         setDescription("");
         setUserPitchid(null);
         setlink("");
@@ -116,6 +128,13 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
       });
     e.target.disabled = false;
   };
+  const [privacy, setPrivacy] = useState("public"); // Default privacy value
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handlePrivacyChange = (value) => {
+    setPrivacy(value);
+    setShowDropdown(false);
+  };
 
   return (
     <Dialog
@@ -136,9 +155,10 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
       maxWidth="xl"
       sx={{
         ...gridCSS.tabContainer,
-        width: "1100px",
-        height: "740px",
-        marginLeft: "13%",
+        width: "1000px",
+        height: "750px",
+        marginLeft: "15%",
+        paddingRight: "20px",
       }}
     >
       <DialogContent
@@ -153,13 +173,36 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
         }}
       >
         <div className="createPostHeader" style={{ position: "relative" }}>
-          Create Post
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <div>
+              <img
+                id="Profile-img"
+                className="Profile-img"
+                src={
+                  loggedImage !== undefined && loggedImage !== ""
+                    ? loggedImage
+                    : "/profile.png"
+                }
+                alt=""
+              />
+            </div>
+            <div>
+              <div className="createPost-username">{userName}</div>
+              <div className="createPost-role">{role}</div>
+            </div>
+          </div>
           <div
             style={{ position: "absolute", right: "10px", top: "10px" }}
             onClick={() => {
               setDescription("");
               setUserPitchid(null);
-
               setlink("");
               setuserTags([]);
               setImage("");
@@ -172,12 +215,13 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
         </div>
         <div style={{ display: "flex", gap: "30px", flexWrap: "wrap" }}>
           {image !== undefined && image !== "" ? (
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative" ,marginTop: "140px" }}>
               <img
                 style={{
                   cursor: "pointer",
-                  height: "500px",
-                  width: "500px",
+                  height: "200px",
+                  width: "200px",
+                  objectFit: "cover",
                 }}
                 src={image}
                 alt="Profile"
@@ -221,9 +265,10 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 onClick={() => document.getElementById("profilePic").click()}
               >
                 Browse
-              </button>{" "}
+              </button>
             </div>
           )}
+          <div style={{border: '2px solid var(--light-border)'}}></div>
 
           <div
             style={{
@@ -248,8 +293,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 name="overViewOfStartup"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                rows={10}
-                cols={10}
+                rows={7}
+                cols={7}
               ></textarea>
             </div>
             <div>
@@ -272,7 +317,9 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 cols={10}
               ></textarea>
             </div>
-            <div>How do you categorise this post?</div>
+            <div>
+              <label>How do you categorise this post?</label>
+            </div>
             <div
               className="postTypeSelector"
               onClick={() => {
@@ -311,7 +358,9 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 </div>
               ))}
             </div>
-            <div>Add Tags</div>
+            <div>
+              <label>Add Tags</label>
+            </div>
             <div style={{ position: "relative" }}>
               <div
                 className="postTypeSelector"
@@ -413,7 +462,9 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
 
             {posttype !== "General Post" && (
               <>
-                <div>Add Pitch</div>
+                <div>
+                  <label>Add Pitch</label>
+                </div>
                 <div
                   className="postTypeSelector"
                   onClick={() => {
@@ -447,17 +498,13 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
                 </div>
               </>
             )}
-
-            <div className="postButtonsContainer">
-              <button className="draftButton">Save Draft</button>
-              <button
-                className="postButton"
-                onClick={addingpost}
-                disabled={description == "" || image == ""}
-              >
-                Post
-              </button>
-            </div>
+            <button
+              className="postButton"
+              onClick={addingpost}
+              disabled={description == "" || image == ""}
+            >
+              Post
+            </button>
           </div>
         </div>
       </DialogContent>
