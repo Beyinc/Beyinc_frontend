@@ -725,9 +725,60 @@ textarea {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: lightgray;
+  background: var(--createPost-bg);
   font-size: 18px;
 }
+
+.postUploadIcon {
+  border: 1px dashed var(--button-background);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  padding: 10px;
+  position: relative;
+  gap: 15px;
+  width: 150px;
+  height: 150px;
+  color: gray;
+  background: var(--popup-content-bg);
+}
+.postUploadIcon:hover {
+  color: #0b57d0;
+}
+
+.browseButton{
+  width: 120px !important;
+  margin: 10px 10px 10px 55px;
+  border-radius: 20px;
+  padding: 10px;
+  color: var(--button-color);
+  background: var(--button-background);
+}
+.postButtonsContainer{
+  display: flex;
+  justify-content: center;
+  align-self: flex-end;
+  padding: 10px;
+}
+button.draftButton{
+  width: 120px !important;
+  margin: 10px 10px 10px 10px;
+  border-radius: 20px;
+  padding: 10px;
+  color: var(--button-color);
+  background: var(--button-background);
+}
+button.postButton{
+  width: 70px !important;
+  margin: 10px 25px 10px 10px;
+  border-radius: 20px;
+  padding: 0px;
+  color: var(--button-color);
+  background: var(--button-background);
+}
+
 
 .wholePostWrapper {
   display: flex;
@@ -747,13 +798,15 @@ textarea {
   bottom: 0%;
 }
 .postTypeSelector {
-  width: 97%;
+  width: 95%;
   margin-left: -2px;
   display: flex;
   justify-content: space-between;
   padding: 10px;
   cursor: pointer;
-  background: lightgray;
+  background: var(--createPost-bg);
+  border: 2px solid var(--light-border);
+  border-radius: 10px;
 }
 
 .postTypeContainer.show {

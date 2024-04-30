@@ -50,6 +50,12 @@ body[data-theme="dark"] {
   --userComment-bg: #3c6d8a;
   --postType-bg: #F4C5C5;
 
+/* CREATE POST  */
+--createPost-bg: #4a7fa0;
+--createPost-color:#f6f6fc;
+--light-border:#ffffff8d;
+
+
   /* old themes */
   --nabar-text: #fff;
   --navbar-profile-hover: #2172e2;
@@ -121,6 +127,11 @@ body[data-theme="light"] {
   --likeAction-bg: #000000;
   --userComment-bg: #4f55c71a;
   --postType-bg: #F4C5C5;
+
+/* CREATE POST */
+--createPost-bg: #f6f6fc;
+--light-border:gray;
+
 
   /* old themes */
   --text: #040316;
@@ -292,7 +303,8 @@ button:disabled {
 button {
   width: auto !important;
   padding: 15px;
-  background-color: var(--button-enabled);
+  color: var(--button-color);
+  background: var(--button-background);
   font-weight: 600;
   transition: background-color 0.3s ease;
   color: #fff;
