@@ -148,7 +148,7 @@ const Post = ({ post, setAllPosts }) => {
           </div>
           <div style={{ position: 'relative', display: 'flex', gap: '10px', alignItems: 'center' }}>
 
-            <div className='postType' style={{ background: 'var(--postType-bg)', padding: '6px 10px', borderRadius: '20px', color: 'black' }}>{post?.type}</div>
+            <div className='postType'>{post?.type}</div>
             <div id='menu'  onClick={() => {
               document.getElementsByClassName(`postSubActions${post?._id}`)[0]?.classList.toggle('show');
             }}>

@@ -49,6 +49,7 @@ body[data-theme="dark"] {
   --likeAction-bg: #ffffff;
   --userComment-bg: #3c6d8a;
   --postType-bg: #F4C5C5;
+  --activity-selected: #72bbca;
 
 /* CREATE POST  */
 --createPost-bg: #4a7fa0;
@@ -56,6 +57,9 @@ body[data-theme="dark"] {
 --light-border:#ffffff8d;
 --empty-img-bg: #072d44;
 --tag-bg:#9bf8f399;
+
+
+
 
 
   /* old themes */
@@ -129,6 +133,7 @@ body[data-theme="light"] {
   --likeAction-bg: #000000;
   --userComment-bg: #4f55c71a;
   --postType-bg: #F4C5C5;
+  --activity-selected:#d3d4f1;
 
 /* CREATE POST */
 --createPost-bg: #f6f6fc;
