@@ -84,6 +84,8 @@ const EditPost = ({
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       id: post?._id,
+      openDiscussion: posttype  == "General Post",
+
     })
       .then((res) => {
         dispatch(

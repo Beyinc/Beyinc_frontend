@@ -84,11 +84,11 @@ const IndividualPostComments = ({ c, postId, deleteComment, setpostTrigger, post
             <div className='IndicommentsSectionDetails'>
                 <div className='IndicommentsSectionDetailsUserName'>
                     <div>{(c?.userName || c?.commentBy?.userName)}
-
                     </div>
-                    <div style={{ fontWeight: '200' }} className='IndicommentsSectionDetailsdate'>
+                    <div style={{ fontWeight: '200'  }} className='IndicommentsSectionDetailsdate'>
                         {format(c?.createdAt)}
                     </div>
+                   
                     {/* <div title={'Delete Comment'} onClick={()=>deleteComment(c._id)}>{(c?.email || c?.commentBy?.email) == email && <i className='fas fa-trash'></i>}</div> */}
                 </div>
                 <div className='IndicommentsSectionDetailscomment'>

@@ -89,10 +89,8 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
       image: image,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
-      openDiscussion:
-        userPitchId !== null &&
-        userPitchId !== undefined &&
-        posttype !== "General Post",
+      openDiscussion: 
+      posttype == "General Post"
     })
       .then((res) => {
         dispatch(
@@ -143,7 +141,6 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
       onClose={() => {
         setDescription("");
         setUserPitchid(null);
-
         setlink("");
         setuserTags([]);
         setImage("");
@@ -155,10 +152,20 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
       maxWidth="xl"
       sx={{
         ...gridCSS.tabContainer,
-        width: "1000px",
-        height: "750px",
-        marginLeft: "15%",
-        paddingRight: "20px",
+        width: "100%",
+        maxWidth: "100%",
+        height: "100%",
+        margin: "0",
+        padding: "0",
+      }}
+      PaperProps={{
+        sx: {
+          width: "100%",
+          height: "100%",
+          margin: "0",
+          padding: "0",
+          borderRadius: "0",
+        },
       }}
     >
       <DialogContent
@@ -213,9 +220,15 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
             <i class="fas fa-times"></i>
           </div>
         </div>
-        <div style={{ display: "flex", gap: "30px", flexWrap: "wrap" }}>
+        <div
+          className="createPost-leftContainer"
+          style={{ display: "flex", gap: "30px", flexWrap: "wrap" }}
+        >
           {image !== undefined && image !== "" ? (
-            <div style={{ position: "relative" ,marginTop: "140px" }}>
+            <div
+              className="createPost-image-container"
+              style={{ position: "relative", marginTop: "140px" }}
+            >
               <img
                 style={{
                   cursor: "pointer",
@@ -254,7 +267,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
               </label>
               <input
                 type="file"
-                accept="image/*,.webp"
+                accept="image/*"
                 name=""
                 id="profilePic"
                 onChange={handleImage}
@@ -268,7 +281,10 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
               </button>
             </div>
           )}
-          <div style={{border: '2px solid var(--light-border)'}}></div>
+          <div
+            className="line-border"
+            style={{ border: "2px solid var(--light-border)" }}
+          ></div>
 
           <div
             style={{
@@ -281,7 +297,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
             <div>
               <label>Description*</label>
             </div>
-            <div>
+            <div className="createPost-textarea">
               <textarea
                 type="text"
                 style={{
@@ -300,7 +316,7 @@ const CreatePost = ({ setCreatePostpopup, createPostPopup, setAllPosts }) => {
             <div>
               <label>Link</label>
             </div>
-            <div>
+            <div className="createPost-textarea">
               <textarea
                 type="text"
                 style={{

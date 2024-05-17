@@ -140,6 +140,10 @@ input[type="checkbox"] {
 
 .IndicommentsSectionDetails {
   flex: 1 0 auto;
+  background: var(--bg-message);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 .IndicommentsSectionImage img {
   height: 40px;
@@ -151,8 +155,21 @@ input[type="checkbox"] {
   font-weight: 600;
   display: flex;
   gap: 10px;
-  align-items: center;
+  flex-direction: row !important;
 }
+
+.IndicommentsSectionDetailsUserName > div:nth-child(1) {
+  align-self: flex-start; /* Align name at flex-start */
+}
+
+.IndicommentsSectionDetailsdate {
+  font-weight: 200;
+  display: flex;
+  align-self: flex-end; /* Align date at flex-end */
+  margin-left: auto; /* Push the date to the end */
+}
+
+
 .totalSubComments {
   display: flex;
   align-items: center;

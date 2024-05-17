@@ -133,6 +133,13 @@
   align-items: center;
   gap: 40px;
   padding-top: 10px;
+  justify-content: space-between;
+}
+.actionsHolder-leftContent{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-top: 10px;
 }
 .likeActionHolder {
   display: flex;
@@ -147,6 +154,10 @@
   line-height: 23.14px;
   text-align: left;
 }
+.join-button-container .join-button{
+border-radius: 20px;
+padding: 10px 20px;
+box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;}
 
 
 .subMenu {

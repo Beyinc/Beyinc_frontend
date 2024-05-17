@@ -1,0 +1,90 @@
+.post-details-main-container{
+    padding: 0 40px 0 40px;
+  }
+  .post-details-container{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+  }
+  .individualPostTotalDetails{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .individualPostTotalDetailsRight{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+   width: 450px;
+   
+  }
+  .IndividualPostDetailsContainer{
+    padding: 0;
+    margin: 0;
+    width: 700px;
+    
+  }
+  
+  
+  .IndividualPostHeaderImageContainer{
+    padding: 0px 0px;
+   
+  }
+  .post-details-content-right{
+    padding: 20px;
+  }
+  .wholePostWrapper {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    background: var(--bg-profile);
+    width: 470px;
+    border-radius: 20px;
+    margin-bottom: 20PX;
+  }
+
+  .membersWrapper {
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    background: var(--bg-profile);
+    width: 470px;
+    border-radius: 20px;
+    margin-bottom: 20PX;
+  }
+  
+  .openDiscussionUser {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .openDiscussionUserContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .openDiscussionUserImage {
+    width: 30px; /* Adjust as needed */
+    height: 30px; /* Adjust as needed */
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .openDiscussionUserName {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .openDiscussionUserrole{
+    font-size: 12px;
+    color: gray;
+  }
+  
+  .openDiscussion-Buttons button{
+white-space: noWrap;
+border-radius: 30px;
+  }
