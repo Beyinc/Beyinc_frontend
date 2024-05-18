@@ -525,7 +525,8 @@ const IndividualPostDetailsCard = () => {
                     </div>
                   )}
                 </div>
-
+                {post?.openDiscussion == false &&
+              post?.openDiscussionTeam.length !== 0 && (
                 <div
                   style={{
                     display: "flex",
@@ -564,7 +565,8 @@ const IndividualPostDetailsCard = () => {
                       }
                     </div>
                   </div>
-                </div>
+                </div>)}
+                
                 <div
                   style={{
                     borderBottom: "2px solid var(--post-outer-border)",
