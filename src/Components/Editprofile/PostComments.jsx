@@ -131,7 +131,8 @@ const PostComments = ({ fetchComments, postId }) => {
     <div className="">
       <div className="postCommentAddSection">
         <div
-          className="writing-review"
+          // className="writing-review"
+          className="CommentPostContainer"
           style={{
             display: "flex",
             gap: "20px",
@@ -147,60 +148,61 @@ const PostComments = ({ fetchComments, postId }) => {
               onChange={(e) => setComment(e.target.value)}
               placeholder="Add a comment..."
               style={{
-                resize: "none",
-                color: "gray",
-                borderRadius: "35px",
-                width: "100%",
-                padding: "30px",
+                resize: "none" 
               }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
+              width="30"
+              height="30"
               viewBox="0 0 24 24"
-              className="sendIcon"
+              className="send-button-svg"
               style={{
                 cursor: comment === "" ? "not-allowed" : "pointer",
                 padding: "10px",
                 position: "absolute",
                 right: "45px",
-                top: "23px",
-                transform: "rotate(45deg)",
+                top: "6px",
+                transform: "rotate(-230deg)",
               }}
             >
               <path
-                fill="black"
+                fill="gray"
                 d="M7.5 18A5.5 5.5 0 0 1 2 12.5A5.5 5.5 0 0 1 7.5 7H18a4 4 0 0 1 4 4a4 4 0 0 1-4 4H9.5A2.5 2.5 0 0 1 7 12.5A2.5 2.5 0 0 1 9.5 10H17v1.5H9.5a1 1 0 0 0-1 1a1 1 0 0 0 1 1H18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 18 8.5H7.5a4 4 0 0 0-4 4a4 4 0 0 0 4 4H17V18z"
               />
             </svg>
             <svg
               onClick={sendText}
-              className="sendIcon"
+              className="send-button-svg"
+              width="30"
+              height="30"
+              viewBox="0 0 34 34"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
               style={{
                 cursor: comment === "" ? "not-allowed" : "pointer",
                 padding: "10px",
                 position: "absolute",
-                right: "5px",
-                top: "23px",
-                transform: "rotate(45deg)", // Added rotation
+                right: "0px",
+                top: "6px",
               }}
             >
-              <path fill="black" d="m2 21l21-9L2 3v7l15 2l-15 2z" />
+              <path
+                d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2"
+                stroke="gray"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </div>
-          <div></div>
         </div>
       </div>
-      {allComments.length > 0 && (
+      {/* {allComments.length > 0 && (
         <div>
           <b>Discussions:</b>
         </div>
-      )}
+      )} */}
       <div
         style={{ height: "500px", overflowY: "scroll", overflowX: "hidden" }}
       >

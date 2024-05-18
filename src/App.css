@@ -58,6 +58,14 @@ body[data-theme="dark"] {
   --empty-img-bg: #072d44;
   --tag-bg: #9bf8f399;
 
+  --tag-bg-right: #9bf8f341;
+  --comment-section-bg: #072d44af;
+
+  --post-details-card-bg: #4a7fa0;
+
+  
+  
+
   /* old themes */
   --nabar-text: #fff;
   --navbar-profile-hover: #2172e2;
@@ -140,6 +148,10 @@ body[data-theme="light"] {
   --bg-message:#4f55c71d;
   --scrollbar-thumb-color: #888; 
   --scrollbar-track-color: #f0f0f0; 
+  --tag-bg-right:#e3e3e361;
+  --comment-section-bg: #f6f6fc;
+
+  --post-details-card-bg: #F0F1F5;
 
 
   /* old themes */

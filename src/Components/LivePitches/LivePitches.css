@@ -112,8 +112,8 @@ input[type="checkbox"] {
 .subcommentsContainer {
   width: 97%;
   margin: auto;
-  background: white;
-
+  background: var( --body-background);
+  color: var( --text-total-color);
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -130,6 +130,7 @@ input[type="checkbox"] {
 .IndicommentsSection {
   display: flex;
   gap: 8px;
+  
 }
 .IndicommentsSectionDetailscomment {
   word-wrap: break-word;
@@ -140,7 +141,7 @@ input[type="checkbox"] {
 
 .IndicommentsSectionDetails {
   flex: 1 0 auto;
-  background: var(--bg-message);
+    background: var( --editprofile-details-card-bg);
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
@@ -148,6 +149,7 @@ input[type="checkbox"] {
 .IndicommentsSectionImage img {
   height: 40px;
   width: 40px;
+  border-radius: 50%;
 }
 
 .IndicommentsSectionDetailsUserName {
