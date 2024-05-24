@@ -13,6 +13,7 @@ import {
 import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
+
 const Post = ({ post, setAllPosts }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
@@ -101,6 +102,8 @@ const Post = ({ post, setAllPosts }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  
   const [deletePop, setdeletePopUp] = useState(false);
   const [reportpopup, setreportpopUp] = useState(false);
   const [reportText, setReportText] = useState("");
@@ -244,6 +247,7 @@ const Post = ({ post, setAllPosts }) => {
 
         {/* post desc */}
         <div className="postDescContainer">
+        <div className="postDesc"><b>{post?.postTitle}</b></div>
           <div className="postDesc">{post?.description}</div>
           <div className="tagsContainer">
             {post?.tags?.map((t) => (

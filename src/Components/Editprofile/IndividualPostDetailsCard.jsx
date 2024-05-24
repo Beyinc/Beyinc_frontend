@@ -91,24 +91,24 @@ const IndividualPostDetailsCard = () => {
 
   const userDetailsRef = useRef(null);
 
-  //   const handleClickOutside = (event) => {
-  //     if (
-  //       userDetailsRef.current &&
-  //       !userDetailsRef.current.contains(event.target) &&
-  //       event.target.id !== "menu"
-  //     ) {
-  //       document
-  //         .getElementsByClassName("postIndiViewer")[0]
-  //         .classList.remove("show");
-  //     }
-  //   };
+    const handleClickOutside = (event) => {
+      if (
+        userDetailsRef.current &&
+        !userDetailsRef.current.contains(event.target) &&
+        event.target.id !== "menu"
+      ) {
+        document
+        .getElementsByClassName(`subMenu postSubActions${post?._id}`)[0]
+          .classList.remove("show");
+      }
+    };
 
-  //   useEffect(() => {
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //     return () => {
-  //       document.removeEventListener("mousedown", handleClickOutside);
-  //     };
-  //   }, []);
+    useEffect(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
   const [deletePop, setDeletePopUp] = useState(false);
   const [reportPopup, setReportPopup] = useState(false);
@@ -212,6 +212,9 @@ const IndividualPostDetailsCard = () => {
     }
   }, [onlineUsers]);
 
+
+  
+
   return (
     <div className="post-details-main-container">
       {post !== null && (
@@ -240,6 +243,7 @@ const IndividualPostDetailsCard = () => {
                     <div className="postCardRole">{post?.createdBy?.role}</div>
                   </div>
                 </div>
+
                 <div
                   style={{
                     position: "relative",
@@ -279,7 +283,7 @@ const IndividualPostDetailsCard = () => {
                       <>
                         <div
                           id="menu"
-                          style={{ color: "black" }}
+                          style={{ color: "black", fontSize: "16px" }}
                           onClick={() => {
                             setEditPostCount((prev) => prev + 1);
                             setEditPostPopup(true);
@@ -289,7 +293,7 @@ const IndividualPostDetailsCard = () => {
                         </div>
                         <div
                           id="menu"
-                          style={{ color: "black" }}
+                          style={{ color: "black" , fontSize: "16px"}}
                           onClick={() => setDeletePopUp(true)}
                         >
                           Delete
@@ -325,6 +329,7 @@ const IndividualPostDetailsCard = () => {
             </div>
             {/* post desc */}
             <div className="postDescContainer">
+            <div className="postDesc"><b>{post?.postTitle}</b></div>
               <div className="postDesc">{post?.description}</div>
               {/* <div className="tagsContainer">
                 {post?.tags?.map((t) => (
@@ -526,47 +531,49 @@ const IndividualPostDetailsCard = () => {
                   )}
                 </div>
                 {post?.openDiscussion == false &&
-              post?.openDiscussionTeam.length !== 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "100px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "5px",
-                  }}
-                >
-                  <div>
-                    Members
+                  post?.openDiscussionTeam.length !== 0 && (
                     <div
                       style={{
                         display: "flex",
+                        flexDirection: "row",
+                        gap: "100px",
                         justifyContent: "center",
                         alignItems: "center",
+                        marginTop: "5px",
                       }}
                     >
-                      {post?.openDiscussionTeam?.length}
+                      <div>
+                        Members
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {post?.openDiscussionTeam?.length}
+                        </div>
+                      </div>
+                      <div>
+                        Online
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {
+                            post?.openDiscussionTeam
+                              ?.map((p) => p._id)
+                              ?.filter((op) => onlineEmails?.includes(op))
+                              .length
+                          }
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    Online
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      {
-                        post?.openDiscussionTeam
-                          ?.map((p) => p._id)
-                          ?.filter((op) => onlineEmails?.includes(op)).length
-                      }
-                    </div>
-                  </div>
-                </div>)}
-                
+                  )}
+
                 <div
                   style={{
                     borderBottom: "2px solid var(--post-outer-border)",
@@ -575,7 +582,7 @@ const IndividualPostDetailsCard = () => {
                   }}
                 ></div>
 
-                <div>
+                <div style={{ fontSize: "12px" }}>
                   <div style={{ marginBottom: "10px" }}>
                     <b>Updated at :</b> {formatedDate(post?.updatedAt)}
                   </div>
@@ -586,7 +593,15 @@ const IndividualPostDetailsCard = () => {
 
                   <div style={{ marginBottom: "10px" }}>
                     <b>Tags :</b>{" "}
-                    <span style={{background: 'var( --tag-bg-right)', padding: "5px 10px", borderRadius: '20px'}}>{post?.tags?.map((p) => p.userName)?.join(", ")}</span>
+                    <span
+                      style={{
+                        background: "var( --tag-bg-right)",
+                        padding: "5px 10px",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      {post?.tags?.map((p) => p.userName)?.join(", ")}
+                    </span>
                   </div>
 
                   {post?.pitchId && (
@@ -598,15 +613,15 @@ const IndividualPostDetailsCard = () => {
                           .includes(user_id) ||
                         post?.createdBy._id === user_id ||
                         role === "Admin") && (
-                        <Link to={`/livePitches/${post?.pitchId?._id}`} >
+                        <Link to={`/livePitches/${post?.pitchId?._id}`}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="1.4em"
                             height="1.4em"
                             viewBox="0 0 24 24"
-                            style={{marginLeft: '10px', position: "absolute"}}
+                            style={{ marginLeft: "10px", position: "absolute" }}
                           >
-                          <title>View Pitch</title>
+                            <title>View Pitch</title>
                             <path
                               fill="var( --button-background)"
                               d="M17 18c.6 0 1 .4 1 1s-.4 1-1 1s-1-.4-1-1s.4-1 1-1m0-3c-2.7 0-5.1 1.7-6 4c.9 2.3 3.3 4 6 4s5.1-1.7 6-4c-.9-2.3-3.3-4-6-4m0 6.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5m-7.9-1.8l-.3-.7H4V8h16v5.6c.7.3 1.4.6 2 1.1V8c0-.5-.2-1-.6-1.4S20.6 6 20 6h-4V4c0-.6-.2-1-.6-1.4S14.6 2 14 2h-4c-.6 0-1 .2-1.4.6S8 3.4 8 4v2H4c-.6 0-1 .2-1.4.6S2 7.5 2 8v11c0 .5.2 1 .6 1.4s.8.6 1.4.6h5.8c-.3-.4-.5-.8-.7-1.3M10 4h4v2h-4z"
@@ -617,8 +632,6 @@ const IndividualPostDetailsCard = () => {
                     </div>
                   )}
 
-                  
-
                   {post?.link && (
                     <div style={{ marginBottom: "10px" }}>
                       <b>Link :</b>{" "}
@@ -627,7 +640,6 @@ const IndividualPostDetailsCard = () => {
                       </a>
                     </div>
                   )}
-                 
                 </div>
               </div>
             </div>
@@ -652,7 +664,16 @@ const IndividualPostDetailsCard = () => {
                           />
 
                           <div>
-                            <div className="openDiscussionUserName">
+                            <div
+                              className="openDiscussionUserName"
+                              onClick={() => {
+                                if (p._id == user_id) {
+                                  navigate("/editProfile");
+                                } else {
+                                  navigate(`/user/${p._id}`);
+                                }
+                              }}
+                            >
                               {p?.userName}
                             </div>
                             <div className="openDiscussionUserrole">

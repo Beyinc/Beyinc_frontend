@@ -35,6 +35,7 @@ import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
 import EditProfile from "./Components/Editprofile/EditProfile";
+import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePostPage";
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
@@ -291,6 +292,8 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
           <Route path="/posts" Component={AuthHoc(Posts)} />
+          <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
+
 
           <Route path="*" element={<NoMatch />} />
 

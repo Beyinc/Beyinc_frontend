@@ -85,7 +85,16 @@ const IndividualPostComments = ({
   return (
     <>
       <div className="IndicommentsSection">
-        <div className="IndicommentsSectionImage">
+        <div
+          className="IndicommentsSectionImage"
+          onClick={() => {
+            if (c?.commentBy?._id == user_id) {
+              navigate("/editProfile");
+            } else {
+              navigate(`/user/${c?.commentBy?._id}`);
+            }
+          }}
+        >
           <img
             src={c?.profile_pic || c?.commentBy?.image?.url || "/profile.png"}
             alt=""
@@ -206,7 +215,6 @@ const IndividualPostComments = ({
           <div
             // className="writing-review"
             className="CommentPostContainer"
-
             style={{
               display: "flex",
               gap: "20px",
@@ -224,7 +232,7 @@ const IndividualPostComments = ({
                 }}
                 placeholder="Add a comment..."
                 style={{
-                  resize: "none"
+                  resize: "none",
                 }}
               />
               <svg

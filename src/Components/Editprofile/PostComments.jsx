@@ -13,7 +13,7 @@ import "./PostComments.css";
 const PostComments = ({ fetchComments, postId }) => {
   console.log(postId);
   const [pitch, setpitch] = useState("");
-  const { user_id } = useSelector((state) => state.auth.loginDetails);
+  const { user_id, image } = useSelector((state) => state.auth.loginDetails);
   const [comment, setComment] = useState("");
   const [postTrigger, setpostTrigger] = useState(false);
   const dispatch = useDispatch();
@@ -130,6 +130,16 @@ const PostComments = ({ fetchComments, postId }) => {
   return (
     <div className="">
       <div className="postCommentAddSection">
+      <div style={{display:'flex', flexDirection: 'row'}}>
+      <div
+        >
+          <img
+            id="Profile-img"
+            className="Profile-img"
+            src={image !== undefined && image !== "" ? image : "/profile.png"}
+            alt=""
+          />
+        </div>
         <div
           // className="writing-review"
           className="CommentPostContainer"
@@ -148,7 +158,7 @@ const PostComments = ({ fetchComments, postId }) => {
               onChange={(e) => setComment(e.target.value)}
               placeholder="Add a comment..."
               style={{
-                resize: "none" 
+                resize: "none",
               }}
             />
             <svg
@@ -197,6 +207,7 @@ const PostComments = ({ fetchComments, postId }) => {
             </svg>
           </div>
         </div>
+      </div>
       </div>
       {/* {allComments.length > 0 && (
         <div>

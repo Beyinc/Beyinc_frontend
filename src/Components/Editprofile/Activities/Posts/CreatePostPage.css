@@ -1,0 +1,106 @@
+.createPost-main-container {
+  padding: 10px 30px;
+  margin: 10px;
+}
+.createPost-container {
+  width: 60%;
+}
+.createPostHeader {
+  font-size: 24px;
+  font-weight: 600;
+}
+.createPost-privacy-setting {
+  margin: 40px 20px 20px 20px;
+}
+.createPost-privacy-setting #accessSetting {
+  width: 140px !important;
+  background: rgba(211, 211, 211, 0.452);
+  border: 1px solid black;
+}
+.dropdown-container {
+  position: relative;
+  width: 140px;
+}
+
+.dropdown-container .dropdown-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+}
+
+.createPost-tab-section {
+  display: flex;
+  flex-direction: row;
+  gap: 80px;
+  margin: 40px 40px;
+  font-weight: 600;
+  color: gray;
+  font-family: 'Gentium Book Basic', serif !important;
+
+}
+/* Tabs */
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+  font-size: 1rem !important;
+  letter-spacing: 0.02857em;
+  text-transform:none !important;
+  max-width: 360px;
+  font-family: 'Gentium Book Basic', serif !important;
+  font-weight: 600 !important ;
+  min-width: 160px !important;
+}
+.css-1aquho2-MuiTabs-indicator {
+    display: none !important;
+    font-family: 'Gentium Book Basic', serif !important;
+
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: black !important;
+    font-family: 'Gentium Book Basic', serif !important;
+
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+    color: gray !important;
+    font-family: 'Gentium Book Basic', serif !important;
+
+}
+.createPost-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+.createPost-labels{
+    font-size: 16px;
+    color: var(  --text-total-color);
+    margin-left: 10px;
+    font-family: 'Gentium Book Basic', serif !important;
+
+}
+button.cancelButton {
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+  width: 70px !important;
+  margin: -35px 0px 0px 60px;
+  padding: 8px;
+  border-radius: 20px;
+  color: gray;
+  border: 2px solid gray !important;
+  background: none;
+}
+button.createPost-Button {
+  display: flex;
+  justify-content: center;
+  align-self: flex-end;
+  width: 70px !important;
+  margin: -35px 60px 0px 0px;
+  padding: 8px;
+  border-radius: 20px;
+  color: var(--button-color);
+  background: var(--button-background);
+}

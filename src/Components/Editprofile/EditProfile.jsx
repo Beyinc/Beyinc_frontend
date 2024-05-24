@@ -43,7 +43,6 @@ import ReviewStars from "../LivePitches/ReviewStars";
 import AddReviewStars from "../LivePitches/AddReviewStars";
 import IndividualUserReview from "../AllUsers/IndividualUserReview";
 import ShowingFollowers from "./ShowingFollowers";
-import CreatePost from "./Activities/Posts/CreatePost";
 import './EditProfile.css'
 import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
@@ -1397,7 +1396,7 @@ const EditProfile = () => {
     };
     return (
         <div className="EditProfileContainer">
-            {(mobileVerified == false || image == '') && <div className='mobilenote'>
+            {(mobileVerified == false || image == '') && id == undefined && userpage == false && <div className='mobilenote'>
                 Note: Mobile number should be verified and image should not be empty to send or update the profile
             </div>}
             <div className='EditProfileImageContainer'>
@@ -2305,7 +2304,7 @@ const EditProfile = () => {
                     {editPostToggler == 'posts' &&
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {id == undefined && <section className="createPostContainer">
-                                <button onClick={() => setCreatePostpopup(true)}
+                                <button onClick={() => navigate("/createPostPage")}
                                     className="createPostbtn"
                                 >
                                     Create Post
@@ -3964,7 +3963,6 @@ const EditProfile = () => {
 
 
             </div>
-            <CreatePost setCreatePostpopup={setCreatePostpopup} createPostPopup={createPostPopup} setAllPosts={setAllPosts} />
             <AddConversationPopup receiverId={pitchSendTo}
                 setReceiverId={setPitchSendTo}
                 receiverRole={receiverRole}

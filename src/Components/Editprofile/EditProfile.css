@@ -710,10 +710,14 @@ textarea {
 }
 
 .postTypeContainer {
+  width: 60%;
+  height: 15px;
+  border-radius: 10px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-  display: none;
+  display:none;
+  position: absolute;
 }
+
 
 .createPostHeader {
   display: flex;
@@ -746,35 +750,23 @@ textarea {
   padding: 10px;
   position: relative;
   gap: 15px;
-  width: 150px;
-  height: 150px;
-  color: gray;
-  background: var(--empty-img-bg);
+  width: 100%;
+  height: 100px;
+  color: black;
 }
 .postUploadIcon:hover {
   color: #0b57d0;
 }
 
 .browseButton {
-  width: 120px !important;
-  margin: 10px 10px 10px 55px;
+  width: 110px !important;
   border-radius: 20px;
   padding: 10px;
   color: var(--button-color);
   background: var(--button-background);
 }
 
-button.postButton {
-  display: flex;
-  justify-content: center;
-  align-self: flex-end;
-  width: 70px !important;
-  margin: 10px 25px 10px 10px;
-  padding: 10px;
-  border-radius: 20px;
-  color: var(--button-color);
-  background: var(--button-background);
-}
+
 
 
 .rightPostWrapper {
@@ -791,7 +783,8 @@ button.postButton {
   bottom: 0%;
 }
 .postTypeSelector {
-  width: 95%;
+  width: 100%;
+  height: 15px;
   margin-left: -2px;
   display: flex;
   justify-content: space-between;
@@ -1114,10 +1107,10 @@ button.postButton {
     display: none;
   }
 
-  .createPost-image-container,
+  /* .createPost-image-container,
   .postUploadIcon {
     margin-top: 10px !important;
-  }
+  } */
   .postUploadIcon {
     height: 100px;
     width: 100px;
@@ -1129,6 +1122,9 @@ button.postButton {
   }
   .createPost-textarea {
     width: 310px;
+    margin-bottom: 10px;
+    font-family: 'Gentium Book Basic', serif !important;
+
   }
   .postTypeSelector {
     width: 300px;

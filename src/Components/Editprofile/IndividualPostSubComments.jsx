@@ -56,11 +56,17 @@ const IndividualPostSubComments = ({ c, onLike, onDisLike, setReplyBox, replyBox
         }
         onDisLike(id, !c.Dislikes?.includes(user_id));
     };
-
+const navigate = useNavigate()
     return (
         <>
             <div className='IndicommentsSection'>
-                <div className='IndicommentsSectionImage'>
+                <div className='IndicommentsSectionImage'  onClick={() => {
+            if (c?.commentBy?._id == user_id) {
+              navigate("/editProfile");
+            } else {
+              navigate(`/user/${c?.commentBy?._id}`);
+            }
+          }}>
                     <img src={(c?.profile_pic || c?.commentBy?.image?.url) || '/profile.png'} alt="" />
                 </div>
                 <div className='IndicommentsSectionDetails'>
