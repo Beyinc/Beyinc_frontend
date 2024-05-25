@@ -12,6 +12,7 @@ import { ToastColors } from "../../../Toast/ToastColors";
 import { io } from "socket.io-client";
 
 const EditPost = ({
+  accessSetting,
   setEditPostpopup,
   editPostPopup,
   post,
@@ -84,7 +85,7 @@ const EditPost = ({
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       id: post?._id,
-      openDiscussion: posttype  == "General Post",
+      openDiscussion: accessSetting === "public",
 
     })
       .then((res) => {
@@ -102,16 +103,17 @@ const EditPost = ({
         setImage("");
         setposttype("");
         setEditPostpopup(false);
-        setAllPosts((prev) => [
-          ...prev.map((p) => (p._id == post._id ? res.data : p)),
-        ]);
 
-        for (let i = 0; i < usertags.length; i++) {
-          socket.current.emit("sendNotification", {
-            senderId: user_id,
-            receiverId: usertags[i]._id,
-          });
-        }
+        // setAllPosts((prev) => [
+        //   ...prev.map((p) => (p._id == post._id ? res.data : p)),
+        // ]);
+
+        // for (let i = 0; i < usertags.length; i++) {
+        //   socket.current.emit("sendNotification", {
+        //     senderId: user_id,
+        //     receiverId: usertags[i]._id,
+        //   });
+        // }
       })
       .catch((err) => {
         dispatch(

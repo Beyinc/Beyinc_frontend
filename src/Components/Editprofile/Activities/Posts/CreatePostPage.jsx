@@ -15,6 +15,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import EditPost from "./EditPost";
 
 const CreatePostPage = () => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
@@ -97,7 +98,7 @@ const CreatePostPage = () => {
       image: image,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
-      openDiscussion: posttype == "General Post",
+      openDiscussion: accessSetting === "public",
     })
       .then((res) => {
         dispatch(
@@ -256,7 +257,7 @@ const CreatePostPage = () => {
                       .classList.toggle("show");
                   }}
                 >
-                  <div>{posttype}</div>
+                  <div style={{color: 'var(--text-total-color)'}}>{posttype}</div>
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -447,7 +448,6 @@ const CreatePostPage = () => {
                         .classList.toggle("show");
                     }}
                   >
-                    <div></div>
                     <div>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -608,7 +608,7 @@ const CreatePostPage = () => {
                     </div>
                     <div
                       className="postTypeContainer createPostPitchContainer"
-                      style={{ width: "97%", borderRadius: "10px" }}
+                      style={{ width: "61%", borderRadius: "10px" }}
                     >
                       {userPitches.map((p) => (
                         <div
@@ -639,7 +639,9 @@ const CreatePostPage = () => {
             flexDirection: "column",
           }}
         >
-          <button className="cancelButton">Cancel</button>
+          <button className="cancelButton" onClick={() => {
+            navigate("/editProfile")
+          }}>Cancel</button>
           <button
             className="createPost-Button"
             onClick={addingpost}
@@ -649,6 +651,8 @@ const CreatePostPage = () => {
           </button>
         </div>
       </div>
+      <EditPost  accessSetting = {accessSetting}
+ />
     </main>
   );
 };

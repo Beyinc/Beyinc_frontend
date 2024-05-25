@@ -236,10 +236,12 @@ input[type="checkbox"] {
 .selected-skill {
   display: inline-block;
   background-color: var(--tag-bg);
+  color: black;
   border-radius: 5px;
   padding: 5px 10px;
   margin-right: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+
 }
 
 .selected-domain span,

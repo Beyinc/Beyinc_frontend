@@ -91,24 +91,24 @@ const IndividualPostDetailsCard = () => {
 
   const userDetailsRef = useRef(null);
 
-    const handleClickOutside = (event) => {
-      if (
-        userDetailsRef.current &&
-        !userDetailsRef.current.contains(event.target) &&
-        event.target.id !== "menu"
-      ) {
-        document
-        .getElementsByClassName(`subMenu postSubActions${post?._id}`)[0]
-          .classList.remove("show");
-      }
-    };
+  const handleClickOutside = (event) => {
+    if (
+      userDetailsRef.current &&
+      !userDetailsRef.current.contains(event.target) &&
+      event.target.id !== "menu"
+    ) {
+      document
+        .getElementsByClassName(`postSubActions${post?._id}`)[0]
+        ?.classList.remove("show");
+    }
+  };
 
-    useEffect(() => {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const [deletePop, setDeletePopUp] = useState(false);
   const [reportPopup, setReportPopup] = useState(false);
@@ -253,6 +253,7 @@ const IndividualPostDetailsCard = () => {
                   }}
                 >
                   <div
+                  className="postSubActions"
                     id="menu"
                     onClick={() => {
                       document
@@ -320,11 +321,6 @@ const IndividualPostDetailsCard = () => {
                   color: "black",
                 }}
               >
-                {/* <div style={{ cursor: 'pointer' }} onClick={() => {
-                      navigate(-1);
-                  }}>
-                      <CloseIcon />
-                  </div> */}
               </div>
             </div>
             {/* post desc */}
@@ -353,6 +349,7 @@ const IndividualPostDetailsCard = () => {
                   alt=""
                 />
               </div>
+              {post?.openDiscussion !== true &&(<div className="postDesc">{post?.fullDetails}</div>)}
               <div className="likeCommentDetails">
                 <div className="likeTotal">
                   <div>
@@ -603,6 +600,10 @@ const IndividualPostDetailsCard = () => {
                       {post?.tags?.map((p) => p.userName)?.join(", ")}
                     </span>
                   </div>
+                  {post?.openDiscussion !== true &&
+                  (<div style={{ marginBottom: "10px" }}>
+                    <b>Group Discussion :</b> {post?.description}
+                  </div>)}
 
                   {post?.pitchId && (
                     <div style={{ marginBottom: "10px" }}>

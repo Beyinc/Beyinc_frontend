@@ -55,6 +55,7 @@
 .css-1aquho2-MuiTabs-indicator {
     display: none !important;
     font-family: 'Gentium Book Basic', serif !important;
+    color: var(--text-total-color) !important;
 
 }
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
@@ -81,6 +82,42 @@
     font-family: 'Gentium Book Basic', serif !important;
 
 }
+
+.individualPostTypes {
+  padding: 10px;
+  width: 79% !important;
+  background: whitesmoke;
+}
+.individualPostTypes:hover {
+  background: rgb(204, 201, 201);
+  cursor: pointer;
+  color: black;
+}
+
+.searchedUsers {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  border: var(--border-colors);
+  max-height: 60vh;
+  background: var(--searchmenu-bg);
+  width: 100%;
+  border-radius: 0 0 10px 10px;
+  overflow: scroll;
+}
+.individuals {
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
+  padding: 10px 10px;
+  transition: all ease 0.2s;
+  margin: 0px 0px 5px 0px;
+  width: 95% !important;
+  font-size: 12px;
+  position: relative;
+}
+
 button.cancelButton {
   display: flex;
   justify-content: center;

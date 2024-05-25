@@ -28,7 +28,7 @@ body[data-theme="dark"] {
 
   /* OVERALL BODY */
   --body-background: #17171e;
-  --text-total-color: #fff;
+ --text-total-color : #fff;
 
   /* LANDING PAGE TEXTS */
   --landingpage-h1: #4f55c7;
