@@ -43,7 +43,6 @@ import ReviewStars from "../LivePitches/ReviewStars";
 import AddReviewStars from "../LivePitches/AddReviewStars";
 import IndividualUserReview from "../AllUsers/IndividualUserReview";
 import ShowingFollowers from "./ShowingFollowers";
-import CreatePost from "./Activities/Posts/CreatePost";
 import './EditProfile.css'
 import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
@@ -1397,11 +1396,11 @@ const EditProfile = () => {
     };
     return (
         <div className="EditProfileContainer">
-            {(mobileVerified == false || image == '') && <div className='mobilenote'>
+            {(mobileVerified == false || image == '') && id == undefined && userpage == false && <div className='mobilenote'>
                 Note: Mobile number should be verified and image should not be empty to send or update the profile
             </div>}
             <div className='EditProfileImageContainer'>
-                <img src="/Banner-1.png" alt="Image 1" />
+                <img src="/Banner.png" alt="Banner" />
             </div>
             <div className='ProfileContainer'>
                 {/* LEFT PART */}
@@ -1423,9 +1422,6 @@ const EditProfile = () => {
                             ></i>
                         )}
                     </div>
-                    {id !== undefined && <div><ReviewStars avg={averagereview} />
-                    </div>
-                    }
                     <div className="EditProfileUsername">
                         {salutation}
                         {salutation && <span>.</span>} {name && name[0]?.toUpperCase() + name?.slice(1)}
@@ -1452,6 +1448,9 @@ const EditProfile = () => {
                     <div className='personaDetails'>
                         {role} {role == "Mentor" && mentorCategories}
                     </div>
+                    {id !== undefined && <div className="editProfile-stars"><ReviewStars avg={averagereview} />
+                    </div>
+                    }
                     {id == undefined && <div className='personaDetails'>{email}</div>}
                     {id == undefined && <div className='personaDetails'>{mobile}</div>}
 
@@ -1480,7 +1479,7 @@ const EditProfile = () => {
 
 
                     {userpage == true && <button onClick={followerController} className="profileFollowBtn">
-                        {followers.map(f => f._id).includes(user_id) ? 'Un Follow' : 'Follow'}
+                        {followers.map(f => f._id).includes(user_id) ? 'Unfollow' : 'Follow'}
                     </button>}
 
                     {userpage == true && connectStatus &&
@@ -2204,10 +2203,10 @@ const EditProfile = () => {
                                                 marginBottom: "15px",
                                             }}
                                         >
-                                            <button style={{ fontSize: "10px" }} onClick={retreiveLocal}>
+                                            <button style={{ fontSize: "10px", background: "var(--button-background)", color: "var(--button-color)" }} onClick={retreiveLocal}>
                                                 Retreive last Save
                                             </button>
-                                            <button style={{ fontSize: "10px" }} onClick={savingLocal}>
+                                            <button style={{ fontSize: "10px", background: "var(--button-background)", color: "var(--button-color)" }} onClick={savingLocal}>
                                                 Save
                                             </button>
                                             <button
@@ -2223,6 +2222,8 @@ const EditProfile = () => {
                                                     whiteSpace: "nowrap",
                                                     position: "relative",
                                                     fontSize: "10px",
+                                                    background: "var(--button-background)",
+                                                    color: "var(--button-color)"
                                                 }}
                                             >
                                                 {isLoading ? (
@@ -2303,7 +2304,7 @@ const EditProfile = () => {
                     {editPostToggler == 'posts' &&
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             {id == undefined && <section className="createPostContainer">
-                                <button onClick={() => setCreatePostpopup(true)}
+                                <button onClick={() => navigate("/createPostPage")}
                                     className="createPostbtn"
                                 >
                                     Create Post
@@ -2351,7 +2352,7 @@ const EditProfile = () => {
                                                         onChange={(e) => setComment(e.target.value)} />
                                                 </div>
                                                 <div onClick={sendText} style={{ cursor: comment == '' && 'not-allowed' }}>
-                                                    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <svg className="send-button-svg" width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2" stroke="var(--post-outer-border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                                                     </svg>
 
@@ -3962,7 +3963,6 @@ const EditProfile = () => {
 
 
             </div>
-            <CreatePost setCreatePostpopup={setCreatePostpopup} createPostPopup={createPostPopup} setAllPosts={setAllPosts} />
             <AddConversationPopup receiverId={pitchSendTo}
                 setReceiverId={setPitchSendTo}
                 receiverRole={receiverRole}

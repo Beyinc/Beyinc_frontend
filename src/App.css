@@ -13,6 +13,10 @@ body[data-theme="dark"] {
   --menubar-txt: #9bf8f4;
   --icons-border: #9bf8f385;
 
+  /* BUTTONS */
+  --button-color: #072d44;
+  --button-background: #9bf8f4;
+
   /* NOTIFICATION SIDEBAR */
   --notification-title: #9bf8f4;
   --notification-head-bg: #072d44;
@@ -24,7 +28,7 @@ body[data-theme="dark"] {
 
   /* OVERALL BODY */
   --body-background: #17171e;
-  --text-total-color: #fff;
+ --text-total-color : #fff;
 
   /* LANDING PAGE TEXTS */
   --landingpage-h1: #4f55c7;
@@ -44,7 +48,23 @@ body[data-theme="dark"] {
   --post-outer-border: #ffffff80;
   --likeAction-bg: #ffffff;
   --userComment-bg: #3c6d8a;
-  --postType-bg: #F4C5C5;
+  --postType-bg: #f4c5c5;
+  --activity-selected: #72bbca;
+
+  /* CREATE POST  */
+  --createPost-bg: #4a7fa0;
+  --createPost-color: #f6f6fc;
+  --light-border: #ffffff8d;
+  --empty-img-bg: #072d44;
+  --tag-bg: #9bf8f399;
+
+  --tag-bg-right: #9bf8f341;
+  --comment-section-bg: #072d44af;
+
+  --post-details-card-bg: #4a7fa0;
+
+  
+  
 
   /* old themes */
   --nabar-text: #fff;
@@ -83,6 +103,10 @@ body[data-theme="light"] {
   --menubar-bg: #f6f6fc;
   --menubar-txt: #4f55c7;
 
+  /* BUTTONS */
+  --button-color: #f6f6fc;
+  --button-background: #4f55c7;
+
   /* NOTIFICATION */
   --notification-title: #4f55c7;
   --notification-head-bg: #f6f6fc;
@@ -112,7 +136,23 @@ body[data-theme="light"] {
   --skills-color: #4f55c7;
   --likeAction-bg: #000000;
   --userComment-bg: #4f55c71a;
-  --postType-bg: #F4C5C5;
+  --postType-bg: #f4c5c5;
+  --activity-selected: #d3d4f1;
+
+  /* CREATE POST */
+  --createPost-bg: #f6f6fc;
+  --light-border: gray;
+  --empty-img-bg: rgba(211, 211, 211, 0.837);
+  --tag-bg: #4f55c794;
+  --bg-profile:#F0F1F5;
+  --bg-message:#4f55c71d;
+  --scrollbar-thumb-color: #888; 
+  --scrollbar-track-color: #f0f0f0; 
+  --tag-bg-right:#e3e3e361;
+  --comment-section-bg: #f6f6fc;
+
+  --post-details-card-bg: #F0F1F5;
+
 
   /* old themes */
   --text: #040316;
@@ -284,7 +324,8 @@ button:disabled {
 button {
   width: auto !important;
   padding: 15px;
-  background-color: var(--button-enabled);
+  color: var(--button-color);
+  background: var(--button-background);
   font-weight: 600;
   transition: background-color 0.3s ease;
   color: #fff;

@@ -94,15 +94,15 @@
   color: var(--followBtn-color);
 }
 .createPostContainer {
-  width: 920px;
+  width: 850px;
+  margin-left: 30px;
   height: auto;
   padding: 30px 40px;
   border-radius: 20px;
-  
+
   box-shadow: 1px 4px 4px 0px #00000040;
   background: var(--editprofile-details-card-bg);
   cursor: pointer;
-
 }
 .CommentPostContainer {
   padding: 0px;
@@ -111,17 +111,17 @@
   display: flex;
   gap: 10px;
   align-items: center;
-   width: 920px;
+  width: 850px;
+  
 }
 
 .addingCommentImageShow img {
   width: 50px;
-height: 50px;
-border-radius: 50%;
-
+  height: 50px;
+  border-radius: 50%;
 }
 .CommentPostContainer textarea {
-  width: 770px;
+  width: 700px;
   /* padding: 20px !important; */
   padding-left: 20px !important;
   border-radius: 30px;
@@ -133,6 +133,7 @@ border-radius: 50%;
   background-color: var(--editprofile-details-card-bg);
   outline: 0;
   color: var(--post-outer-border);
+ margin-left: 4px !important;
 }
 
 .CommentPostContainer textarea::placeholder {
@@ -204,7 +205,7 @@ border-radius: 50%;
   top: 844px;
   left: 128px;
   gap: 0px;
-  
+
   font-family: Gentium Book Basic;
   font-size: 16px;
   font-weight: 700;
@@ -272,16 +273,14 @@ border-radius: 50%;
 .ActivtyDetailsCardToggle {
   cursor: pointer;
   color: var(--editProfile-toggler-bottom);
-
   font-family: Gentium Book Basic;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 28.93px;
   width: 187px;
   text-align: center;
   padding: 10px;
   gap: 10px;
-  
 }
 
 .ActivtyDetailsCardToggleSelected {
@@ -294,18 +293,19 @@ border-radius: 50%;
 }
 
 .EditProfileOuterCard {
-  width: 920px;
+  width: 850px;
   height: auto;
   padding: 40px;
   border-radius: 20px;
-  
+  font-size: 14px;
   box-shadow: 1px 4px 4px 0px #00000040;
   cursor: pointer;
+  margin-left: 30px;
   background: var(--editprofile-details-card-bg);
 }
 .commentHeader {
   font-family: Gentium Book Basic;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 23.14px;
   color: var(--followBtn-bg);
@@ -331,12 +331,12 @@ border-radius: 50%;
 }
 .bioText {
   font-family: Gentium Book Basic;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 20.83px;
-  text-align: left;
   background: var(--popup-content-bg);
   color: var(--text-total-color);
+  text-align: justify;
 }
 
 .indiSkillsContainer {
@@ -348,12 +348,11 @@ border-radius: 50%;
 
 .indiSkills {
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   font-family: Roboto;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 23.44px;
   background: var(--skills-bg) !important;
-
   color: var(--skills-color);
 }
 
@@ -370,21 +369,21 @@ border-radius: 50%;
 
 .collegeName {
   font-family: Gentium Book Basic;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 23.14px;
   color: var(--followBtn-bg);
 }
 .gradeDetails {
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 20.83px;
   text-align: left;
 }
 .timeDetails {
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 20.83px;
   text-align: left;
@@ -428,7 +427,7 @@ border-radius: 50%;
 }
 
 .Input-Label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--followBtn-bg);
   font-family: Gentium Book Basic;
@@ -684,7 +683,7 @@ textarea {
   padding: 10px;
 }
 .writing-review .sendIcon {
-  width: 262px !important;
+  width: 262px ;
   margin-right: 0px !important;
   transform: translateY(-20px) !important;
 }
@@ -709,30 +708,67 @@ textarea {
   background: white;
   margin: auto;
 }
-.postCommentAddSection {
-  position: fixed;
-  bottom: 30px;
-  width: 100%;
-}
-.postTypeContainer {
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-  display: none;
+.postTypeContainer {
+  width: 60%;
+  height: 15px;
+  border-radius: 10px;
+  display:none;
+  position: absolute;
+  background: none;
 }
+
 
 .createPostHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: lightgray;
+  margin: 5px 10px -20px 10px;
+  /* background: var(--createPost-bg); */
   font-size: 18px;
 }
-
-.wholePostWrapper {
-  display: flex;
-  gap: 10px;
+.createPostHeader img {
+  width: 50px;
+  height: 50px;
 }
+.createPost-username {
+  font-size: 14px;
+  font-weight: 600;
+}
+.createPost-role {
+  font-size: 12px;
+}
+
+.postUploadIcon {
+  border: 1px dashed var(--button-background);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  padding: 10px;
+  position: relative;
+  gap: 15px;
+  width: 100%;
+  height: 100px;
+  color: black;
+}
+.postUploadIcon:hover {
+  color: #0b57d0;
+}
+
+.browseButton {
+  width: 110px !important;
+  border-radius: 20px;
+  padding: 10px;
+  color: var(--button-color);
+  background: var(--button-background);
+}
+
+
+
+
 .rightPostWrapper {
   flex: 1;
 }
@@ -747,13 +783,16 @@ textarea {
   bottom: 0%;
 }
 .postTypeSelector {
-  width: 97%;
+  width: 100%;
+  height: 15px;
   margin-left: -2px;
   display: flex;
   justify-content: space-between;
   padding: 10px;
   cursor: pointer;
-  background: lightgray;
+  background: var(--createPost-bg);
+  border: 2px solid var(--light-border);
+  border-radius: 10px;
 }
 
 .postTypeContainer.show {
@@ -842,22 +881,85 @@ textarea {
   margin-bottom: 10px;
   position: relative;
 }
+
+
 @media (max-width: 768px) {
+  .EditProfileImageContainer {
+    width: 100%;
+  }
+  .EditProfileImageContainer img {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  .ProfileDetailsCard {
+    width: 355px;
+    margin-top: 100px;
+    height: auto;
+    max-height: 750px;
+    padding: 10px;
+    box-shadow: -1px -1px 7px 1px #00000040;
+    transform: translateY(-150px);
+    background: var(--editprofile-details-card-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 25px 25px 5px 5px;
+  }
+
+  .ProfileDetailsCard .EditProfileImage img {
+    width: 100px;
+    height: 100px;
+    margin-top: -60px;
+    border-radius: 50%;
+    border: 10px solid white;
+  }
+
   .ProfileContainer {
     display: flex;
     gap: 20px;
     flex-direction: column;
-    width: 350px;
+    width: 250px;
+    margin: 0;
   }
   .EditProfileOuterCard {
-    width: 350px;
+    width: 310px;
     height: auto;
-    padding: 50px;
+    padding: 20px;
     border-radius: 20px;
-    
-    box-shadow: 1px 4px 4px 0px #00000040;
+    box-shadow: 0px 0px 2px 2px #00000040;
     cursor: pointer;
+    margin: 12px;
   }
+  .ActivtyDetailsCard {
+    flex: 1;
+    margin-top: -150px;
+  }
+  .toggleContainer {
+    margin: 10px;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .ActivtyDetailsCardToggle {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .ActivtyDetailsCardToggleSelected {
+    border-bottom: none;
+    background: var(--activity-selected);
+    width: 187px;
+    color: var(--editProfile-toggler-bottom);
+    text-align: center;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 50px;
+  }
+
   .EditProfile-personal-Container,
   .Banner,
   .EditProfile-About-Section,
@@ -933,5 +1035,127 @@ textarea {
 
   .close-icon {
     margin-right: 0px;
+  }
+  .upload-files-container {
+    width: 350px;
+  }
+  .EditProfile-Buttons-Section {
+    width: 360px;
+  }
+  .createPostContainer {
+    width: 310px;
+    margin-left: 0px;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .CommentPostContainer {
+    width: 310px;
+  }
+
+  .addingCommentImageShow img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  .CommentPostContainer textarea {
+    width: 180px;
+    height: 4vh;
+  }
+
+  .CommentPostContainer textarea::placeholder {
+    font-size: 12px;
+    line-height: 23.14px;
+  }
+  .createComment {
+    font-family: Gentium Book Basic;
+    align-self: flex-end !important;
+    white-space: noWrap;
+    width: 200px !important;
+    height: 43px;
+    padding: 10px 50px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .createPostbtn {
+    font-family: Gentium Book Basic;
+    box-shadow: 1px 3px 4px 0px #00000040;
+    background: var(--followBtn-bg);
+    color: var(--followBtn-color);
+    width: 180px;
+    height: 43px;
+    padding: 10px 50px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .send-button-svg {
+    width: 20px;
+    height: 20px;
+    margin: 20px;
+  }
+  .MuiDialog-paperWidthXl {
+    width: 90% !important;
+    maxwidth: 90% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 10px !important;
+    padding: 10px !important;
+  }
+  .line-border {
+    display: none;
+  }
+
+  /* .createPost-image-container,
+  .postUploadIcon {
+    margin-top: 10px !important;
+  } */
+  .postUploadIcon {
+    height: 100px;
+    width: 100px;
+  }
+  .browseButton {
+    width: 100px !important;
+    margin: 10px 10px 10px 40px;
+   font-size: 10px;
+  }
+  .createPost-textarea {
+    width: 310px;
+    margin-bottom: 10px;
+    font-family: 'Gentium Book Basic', serif !important;
+
+  }
+  .postTypeSelector {
+    width: 300px;
+    margin-left: 0;
+  }
+  .createPost-leftContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .MuiDialog-paperWidthXl {
+    scrollbar-width: thin; /* Necessary for Firefox compatibility */
+    scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* For Chrome, Edge, and Safari */
+  }
+  
+  .MuiDialog-paperWidthXl::-webkit-scrollbar {
+    width: 8px; /* Adjust as needed */
+  }
+  
+  .MuiDialog-paperWidthXl::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track-color); /* Track color */
+    border-radius: 50px; /* Rounded corners */
+  }
+  
+  .MuiDialog-paperWidthXl::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color); /* Thumb color */
+    border-radius: 50px; /* Rounded corners */
+  }
+  
+  /* Define custom scrollbar colors */
+  :root {
+    
   }
 }
