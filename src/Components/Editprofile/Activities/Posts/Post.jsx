@@ -103,7 +103,6 @@ const Post = ({ post, setAllPosts }) => {
     };
   }, []);
 
-  
   const [deletePop, setdeletePopUp] = useState(false);
   const [reportpopup, setreportpopUp] = useState(false);
   const [reportText, setReportText] = useState("");
@@ -219,7 +218,7 @@ const Post = ({ post, setAllPosts }) => {
                     onClick={() => {
                       setEditPostCount((prev) => prev + 1);
                       // setEditPostpopup(true);
-                      navigate(`/editPostPage/${post?._id}`)
+                      navigate(`/editPostPage/${post?._id}`);
                     }}
                   >
                     Edit
@@ -248,8 +247,18 @@ const Post = ({ post, setAllPosts }) => {
 
         {/* post desc */}
         <div className="postDescContainer">
-        <div className="postDesc"><b>{post?.postTitle}</b></div>
-          <div className="postDesc">{post?.description}</div>
+          <div
+            className="postDesc"
+            onClick={() => navigate(`/posts/${post?._id}`)}
+          >
+            <b>{post?.postTitle}</b>
+          </div>
+          <div
+            className="postDesc"
+            onClick={() => navigate(`/posts/${post?._id}`)}
+          >
+            {post?.description}
+          </div>
           <div className="tagsContainer">
             {post?.tags?.map((t) => (
               <div
@@ -269,7 +278,7 @@ const Post = ({ post, setAllPosts }) => {
                   ? post?.image?.url
                   : "/profile.png"
               }
-              style={{objectFit: 'contain'}}
+              style={{ objectFit: "contain" }}
               alt=""
               onClick={() => navigate(`/posts/${post?._id}`)}
             />
@@ -393,14 +402,14 @@ const Post = ({ post, setAllPosts }) => {
                 <div className="actionText">Comment</div>
               </div>
             </div>
-            <div className="join-button-container">
+            {/* <div className="join-button-container">
               <button
                 className="join-button"
                 onClick={() => navigate(`/posts/${post?._id}`)}
               >
                 Join
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
         <Dialog
@@ -508,7 +517,6 @@ const Post = ({ post, setAllPosts }) => {
             </div>
           </DialogContent>
         </Dialog>
-        
       </div>
     </section>
   );

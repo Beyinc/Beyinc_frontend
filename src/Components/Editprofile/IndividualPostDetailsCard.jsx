@@ -214,9 +214,6 @@ const IndividualPostDetailsCard = () => {
     }
   }, [onlineUsers]);
 
-
-  
-
   return (
     <div className="post-details-main-container">
       {post !== null && (
@@ -255,7 +252,8 @@ const IndividualPostDetailsCard = () => {
                   }}
                 >
                   <div
-                  className="editpostSubActions"
+                    className="editpostSubActions"
+                    style={{ cursor: "pointer" }}
                     id="menu"
                     onClick={() => {
                       document
@@ -286,18 +284,26 @@ const IndividualPostDetailsCard = () => {
                       <>
                         <div
                           id="menu"
-                          style={{ color: "black", fontSize: "16px" }}
+                          style={{
+                            color: "black",
+                            fontSize: "16px",
+                            cursor: "pointer",
+                          }}
                           onClick={() => {
                             setEditPostCount((prev) => prev + 1);
                             // setEditPostPopup(true);
-                            navigate(`/editPostPage/${post?._id}`)
+                            navigate(`/editPostPage/${post?._id}`);
                           }}
                         >
                           Edit
                         </div>
                         <div
                           id="menu"
-                          style={{ color: "black" , fontSize: "16px"}}
+                          style={{
+                            color: "black",
+                            fontSize: "16px",
+                            cursor: "pointer",
+                          }}
                           onClick={() => setDeletePopUp(true)}
                         >
                           Delete
@@ -323,12 +329,13 @@ const IndividualPostDetailsCard = () => {
                   gap: "10px",
                   color: "black",
                 }}
-              >
-              </div>
+              ></div>
             </div>
             {/* post desc */}
             <div className="postDescContainer">
-            <div className="postDesc"><b>{post?.postTitle}</b></div>
+              <div className="postDesc">
+                <b>{post?.postTitle}</b>
+              </div>
               <div className="postDesc">{post?.description}</div>
               {/* <div className="tagsContainer">
                 {post?.tags?.map((t) => (
@@ -349,12 +356,13 @@ const IndividualPostDetailsCard = () => {
                       ? post?.image?.url
                       : "/profile.png"
                   }
-                  
-              style={{objectFit: 'contain'}}
+                  style={{ objectFit: "contain", objectPosition: 'left' }}
                   alt=""
                 />
               </div>
-              {post?.openDiscussion !== true &&(<div className="postDesc">{post?.fullDetails}</div>)}
+              {post?.openDiscussion !== true && (
+                <div className="postDesc">{post?.fullDetails}</div>
+              )}
               <div className="likeCommentDetails">
                 <div className="likeTotal">
                   <div>
@@ -454,7 +462,9 @@ const IndividualPostDetailsCard = () => {
                   </div>
                   {/* COMMENT ACTION */}
                   <div className="likeActionHolder">
-                    <div className="actionText"><ShareButton /></div>
+                    <div className="actionText">
+                      <ShareButton />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -592,10 +602,11 @@ const IndividualPostDetailsCard = () => {
                       {post?.tags?.map((p) => p.userName)?.join(", ")}
                     </span>
                   </div>
-                  {post?.openDiscussion !== true &&
-                  (<div style={{ marginBottom: "10px" }}>
-                    <b>Group Discussion :</b> {post?.description}
-                  </div>)}
+                  {post?.openDiscussion !== true && (
+                    <div style={{ marginBottom: "10px" }}>
+                      <b>Group Discussion :</b> {post?.description}
+                    </div>
+                  )}
 
                   {post?.pitchId && (
                     <div style={{ marginBottom: "10px" }}>
@@ -788,8 +799,6 @@ const IndividualPostDetailsCard = () => {
           </div>
         </div>
       )}
-
-      
     </div>
   );
 };

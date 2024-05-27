@@ -153,6 +153,7 @@
   font-weight: 700;
   line-height: 23.14px;
   text-align: left;
+  cursor: pointer;
 }
 .join-button-container .join-button{
 border-radius: 20px;

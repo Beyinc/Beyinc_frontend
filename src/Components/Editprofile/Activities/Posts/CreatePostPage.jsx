@@ -191,7 +191,7 @@ const CreatePostPage = () => {
     e.target.disabled = true;
     await ApiServices.updatePost({
       description,
-      link,
+      link, postTitle,
       tags: usertags,
       pitchId: userPitchId?._id,
       image: image,
@@ -256,7 +256,7 @@ const CreatePostPage = () => {
           setDescription(res.data.description)
           setposttype(res.data.type)
           setuserTags(res.data.tags)
-          setImage(res.data.image.url)
+          setImage(res.data.image)
           setlink(res.data.link)
           setAccessSetting(res.data.openDiscussion?'public': 'members')
           setFullDetails(res.data.fullDetails)
@@ -489,7 +489,7 @@ const CreatePostPage = () => {
                           width: "200px",
                           objectFit: "cover",
                         }}
-                        src={image}
+                        src={image?.public_id!==undefined? image?.url : image}
                         alt="Profile"
                       />
 
