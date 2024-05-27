@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Dialog, DialogContent } from "@mui/material";
 import useWindowDimensions from "../../../Common/WindowSize";
 import { gridCSS } from "../../../CommonStyles";
 import { useNavigate } from "react-router";
@@ -15,73 +16,44 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import {  useParams } from "react-router";
-// import EditPost from "./EditPost";
 
-const CreatePostPage = () => {
-  const {postId} = useParams()
+const EditPost = ({
+  setEditPostpopup,
+  editPostPopup,
+  post,
+  setAllPosts,
+  EditPostCount,
+}) => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
 
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
-  const {
-    email,
-    role,
-    userName,
-    verification,
-    user_id,
-    image: loggedImage,
-  } = useSelector((store) => store.auth.loginDetails);
-  const userDetailsRef = useRef(null);
+  const { email, role, userName, verification, user_id } = useSelector(
+    (store) => store.auth.loginDetails
+  );
 
-  const handleClickOutside = (event) => {
-    if (
-      userDetailsRef.current &&
-      !userDetailsRef.current.contains(event.target) &&
-      event.target.id !== "menu"
-    ) {
-      document
-        .getElementsByClassName(`postTypeContainer`)[0]
-        ?.classList.remove("show");
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
   const [image, setImage] = useState("");
   const [posttype, setposttype] = useState("");
   const [description, setDescription] = useState("");
-  const [link, setlink] = useState("");
-  
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (file.size > 4 * 1024 * 1024) {
-      alert(
-        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
-      );
-      e.target.value = null; // Clear the selected file
-      return;
-    }
-    setFileBase(file);
-  };
-  const setFileBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-  };
 
   const [allUsers, setAllusers] = useState([]);
   const [usertags, setuserTags] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredusers, setFilteredUsers] = useState([]);
   const [userPitchId, setUserPitchid] = useState(null);
+  const [link, setlink] = useState("");
+
+  useEffect(() => {
+    if (post || EditPostCount) {
+      setImage(post?.image);
+      setDescription(post?.description);
+      setposttype(post?.type);
+      setuserTags(post?.tags);
+      setUserPitchid(post?.pitchId);
+      setlink(post?.link);
+    }
+  }, [post, EditPostCount]);
 
   useEffect(() => {
     ApiServices.getAllUsers({ type: "" }).then((res) => {
@@ -107,86 +79,6 @@ const CreatePostPage = () => {
     socket.current = io(socket_io);
   }, []);
 
-  const addingpost = async (e) => {
-    e.target.disabled = true;
-    await ApiServices.createPost({
-      description,
-      link,
-      fullDetails,
-      groupDiscussion,
-      postTitle,
-      tags: usertags,
-      pitchId: userPitchId?._id,
-      image: image,
-      createdBy: { _id: user_id, userName: userName, email: email },
-      type: posttype,
-      openDiscussion: accessSetting === "public",
-    })
-      .then((res) => {
-        dispatch(
-          setToast({
-            message: "Your post successfully posted",
-            bgColor: ToastColors.success,
-            visible: "yes",
-          })
-        );
-        setDescription("");
-        setUserPitchid(null);
-        setlink("");
-        setuserTags([]);
-        setImage("");
-        setposttype("");
-        setAccessSetting("public");
-        setFullDetails("");
-        setGroupDiscussion("");
-        setPostTitle("");
-        
-        for (let i = 0; i < usertags.length; i++) {
-          socket.current.emit("sendNotification", {
-            senderId: user_id,
-            receiverId: usertags[i]._id,
-          });
-        }
-        navigate("/editProfile");
-      })
-      .catch((err) => {
-        dispatch(
-          setToast({
-            message: "Error Occured!",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      });
-    e.target.disabled = false;
-  };
-  const [privacy, setPrivacy] = useState("public"); // Default privacy value
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const handlePrivacyChange = (value) => {
-    setPrivacy(value);
-    setShowDropdown(false);
-  };
-
-  const [value, setValue] = React.useState("1");
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const [accessSetting, setAccessSetting] = useState("public");
-
-  const handleAccessChange = (e) => {
-    setAccessSetting(e.target.value);
-    setFullDetails("");
-    setGroupDiscussion("");
-  };
-
-  const [fullDetails, setFullDetails] = useState("");
-  const [groupDiscussion, setGroupDiscussion] = useState("");
-  const [postTitle, setPostTitle] = useState("");
-
-
   const updatePost = async (e) => {
     e.target.disabled = true;
     await ApiServices.updatePost({
@@ -197,30 +89,30 @@ const CreatePostPage = () => {
       image: image,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
-      id: postId,
+      id: post?._id,
       openDiscussion: accessSetting === "public",
-
     })
       .then((res) => {
         dispatch(
-            setToast({
-              message: "Your post updated successfully",
-              bgColor: ToastColors.success,
-              visible: "yes",
-            })
-          );
-          setDescription("");
-          setUserPitchid(null);
-          setlink("");
-          setuserTags([]);
-          setImage("");
-          setposttype("");
-          setAccessSetting("public");
-          setFullDetails("");
-          setGroupDiscussion("");
-          setPostTitle("");
-          navigate("/editProfile");
-
+          setToast({
+            message: "Your post updated successfully",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+        setDescription("");
+        setUserPitchid(null);
+        setlink("");
+        setuserTags([]);
+        setImage("");
+        setposttype("");
+        // new
+        setAccessSetting("public");
+        setFullDetails("");
+        setGroupDiscussion("");
+        setPostTitle("");
+        navigate("/editProfile");
+        // setEditPostpopup(false);
 
         // setAllPosts((prev) => [
         //   ...prev.map((p) => (p._id == post._id ? res.data : p)),
@@ -245,42 +137,31 @@ const CreatePostPage = () => {
     e.target.disabled = false;
   };
 
+  // new
+  const [fullDetails, setFullDetails] = useState("");
+  const [groupDiscussion, setGroupDiscussion] = useState("");
+  const [postTitle, setPostTitle] = useState("");
+  const [accessSetting, setAccessSetting] = useState("public");
 
-  // getting existing post details
-  useEffect(()=>{
-  if(postId!==undefined){
-    ApiServices.getPost({ id: postId })
-        .then((res) => {
-          console.log(res.data)
-          setPostTitle(res.data.postTitle)
-          setDescription(res.data.description)
-          setposttype(res.data.type)
-          setuserTags(res.data.tags)
-          setImage(res.data.image.url)
-          setlink(res.data.link)
-          setAccessSetting(res.data.openDiscussion?'public': 'members')
-          setFullDetails(res.data.fullDetails)
-          setGroupDiscussion(res.data.groupDiscussion)
-          setUserPitchid(res.data.pitchId)
-        })
-        .catch((err) => {
-          dispatch(
-            setToast({
-              message: "Error occured when updating Pitch",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        });
-  }
-  }, [postId])
+  const handleAccessChange = (e) => {
+    setAccessSetting(e.target.value);
+    setFullDetails("");
+    setGroupDiscussion("");
+  };
 
-  
+  const [value, setValue] = React.useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
     <main className="createPost-main-container">
       <div className="createPost-container">
-        <div className="createPostHeader">{postId==undefined?'Create Post': 'Update Post'}</div>
+        <div className="createPostHeader" style={{ position: "relative" }}>
+          Update Post
+        </div>
+
         <div className="createPost-privacy-setting">
           <div class="dropdown-container">
             <svg
@@ -368,7 +249,7 @@ const CreatePostPage = () => {
                       .classList.toggle("show");
                   }}
                 >
-                  <div style={{color: 'var(--text-total-color)'}}>{posttype}</div>
+                  <div>{posttype}</div>
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -383,7 +264,7 @@ const CreatePostPage = () => {
                     </svg>{" "}
                   </div>
                 </div>
-                <div className="postTypeContainer"  ref={userDetailsRef}>
+                <div className="postTypeContainer">
                   {postTypes.map((p) => (
                     <div
                       className="individualPostTypes"
@@ -393,7 +274,6 @@ const CreatePostPage = () => {
                         } else {
                           setposttype(p.value);
                           setUserPitchid(null);
-
                           setlink("");
                         }
                         document
@@ -408,10 +288,11 @@ const CreatePostPage = () => {
 
                 <div>
                   <label className="createPost-labels">
-                    Post{" "}
+                    Post
                     <span style={{ color: "red", marginLeft: "5px" }}> *</span>
                   </label>
                 </div>
+
                 <div className="createPost-textarea">
                   <textarea
                     type="text"
@@ -439,14 +320,14 @@ const CreatePostPage = () => {
                         type="text"
                         style={{
                           width: "100%",
-                          height: "45px",
                           borderRadius: "10px",
+                          color: "var( --text-total-color)",
                           background: "var(--createPost-bg)",
                           border: "2px solid var(--light-border)",
                         }}
                         name="overViewOfStartup"
-                        value={fullDetails}
-                        onChange={(e) => setFullDetails(e.target.value)}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                         rows={7}
                         cols={7}
                       ></textarea>
@@ -480,7 +361,7 @@ const CreatePostPage = () => {
 
               <TabPanel value="2">
                 <div>
-                  {image !== undefined && image !== "" ? (
+                  {image !== undefined && image.url !== "" && image !== "" ? (
                     <div className="createPost-image-container">
                       <img
                         style={{
@@ -489,7 +370,7 @@ const CreatePostPage = () => {
                           width: "200px",
                           objectFit: "cover",
                         }}
-                        src={image}
+                        src={image.url}
                         alt="Profile"
                       />
 
@@ -540,7 +421,7 @@ const CreatePostPage = () => {
                         accept="image/*"
                         name=""
                         id="profilePic"
-                        onChange={handleImage}
+                        // onChange={handleImage}
                         style={{ display: "none" }}
                       />
                     </div>
@@ -550,6 +431,7 @@ const CreatePostPage = () => {
                 <div>
                   <label className="createPost-labels">Add Tags</label>
                 </div>
+
                 <div style={{ position: "relative" }}>
                   <div
                     className="postTypeSelector"
@@ -648,23 +530,22 @@ const CreatePostPage = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="selected-domains">
-                    {usertags?.map((u, i) => (
-                      <div key={u} className="selected-domain">
-                        <span>{u.userName}</span>
-                        <button
-                          className="domain-delete-button"
-                          onClick={() => {
-                            setuserTags(
-                              usertags.filter((f) => f._id !== u._id)
-                            );
-                          }}
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                </div>
+
+                <div className="selected-domains">
+                  {usertags?.map((u, i) => (
+                    <div key={u} className="selected-domain">
+                      <span>{u.userName}</span>
+                      <button
+                        className="domain-delete-button"
+                        onClick={() => {
+                          setuserTags(usertags.filter((f) => f._id !== u._id));
+                        }}
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </TabPanel>
               <TabPanel value="3">
@@ -680,6 +561,7 @@ const CreatePostPage = () => {
                       resize: "none",
                       borderRadius: "10px",
                       background: "var(--createPost-bg)",
+                      color: "var( --text-total-color)",
                       border: "2px solid var(--light-border)",
                     }}
                     name="overViewOfStartup"
@@ -689,11 +571,13 @@ const CreatePostPage = () => {
                     cols={10}
                   ></textarea>
                 </div>
-                
+
+                {posttype !== "General Post" && (
                   <>
                     <div>
                       <label className="createPost-labels">Add Pitch</label>
                     </div>
+
                     <div
                       className="postTypeSelector"
                       onClick={() => {
@@ -717,6 +601,7 @@ const CreatePostPage = () => {
                         </svg>{" "}
                       </div>
                     </div>
+
                     <div
                       className="postTypeContainer createPostPitchContainer"
                       style={{ width: "61%", borderRadius: "10px" }}
@@ -738,7 +623,7 @@ const CreatePostPage = () => {
                       ))}
                     </div>
                   </>
-                
+                )}
               </TabPanel>
             </TabContext>
           </Box>
@@ -750,15 +635,20 @@ const CreatePostPage = () => {
             flexDirection: "column",
           }}
         >
-          <button className="cancelButton" onClick={() => {
-            navigate("/editProfile")
-          }}>Cancel</button>
+          <button
+            className="cancelButton"
+            onClick={() => {
+              navigate("/editProfile");
+            }}
+          >
+            Cancel
+          </button>
           <button
             className="createPost-Button"
-            onClick={postId==undefined?addingpost:updatePost}
+            onClick={updatePost}
             disabled={description == "" || image == ""}
           >
-           {postId==undefined? 'Post' : 'Update'}
+            Update
           </button>
         </div>
       </div>
@@ -766,4 +656,4 @@ const CreatePostPage = () => {
   );
 };
 
-export default CreatePostPage;
+export default EditPost;

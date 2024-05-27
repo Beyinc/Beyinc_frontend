@@ -218,7 +218,8 @@ const Post = ({ post, setAllPosts }) => {
                     style={{ color: "black" }}
                     onClick={() => {
                       setEditPostCount((prev) => prev + 1);
-                      setEditPostpopup(true);
+                      // setEditPostpopup(true);
+                      navigate(`/editPostPage/${post?._id}`)
                     }}
                   >
                     Edit
@@ -268,6 +269,7 @@ const Post = ({ post, setAllPosts }) => {
                   ? post?.image?.url
                   : "/profile.png"
               }
+              style={{objectFit: 'contain'}}
               alt=""
               onClick={() => navigate(`/posts/${post?._id}`)}
             />
@@ -506,13 +508,7 @@ const Post = ({ post, setAllPosts }) => {
             </div>
           </DialogContent>
         </Dialog>
-        <EditPost
-          EditPostCount={EditPostCount}
-          setEditPostpopup={setEditPostpopup}
-          editPostPopup={editPostPopup}
-          post={post}
-          setAllPosts={setAllPosts}
-        />
+        
       </div>
     </section>
   );

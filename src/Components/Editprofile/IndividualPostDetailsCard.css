@@ -12,6 +12,25 @@
     gap: 0px;
     align-items: center;
   }
+  .subMenu {
+    position: absolute;
+    width: 160px;
+    right: 100%;
+    display: none;
+    height: auto;
+    background: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subMenu div {
+    padding: 5px;
+  }
+  .subMenu.show {
+    display: block !important;
+  }
+  .subMenu div:hover {
+    background: lightgray;
+  }
   .individualPostTotalDetailsRight{
     display: flex;
     /* gap: 10px; */
@@ -98,3 +117,5 @@ border-radius: 30px;
 color: var( --button-color);
 background: var( --button-background);
   }
+
+  
