@@ -35,14 +35,14 @@
 
 .postCardUserName {
   font-family: Gentium Book Basic;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 23.14px;
   text-align: left;
 }
 .postCardRole {
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 23.14px;
   text-align: left;
@@ -63,13 +63,13 @@
 }
 .postDescContainer .postType {
   font-family: Gentium Book Basic;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 23.14px;
 }
 .postDescContainer .postDesc {
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 23.14px;
   text-align: left;
@@ -81,7 +81,7 @@
   flex-wrap: wrap;
   color: var(--posttags-color);
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -98,11 +98,12 @@
   align-items: center;
   border-bottom: 1px solid var(--post-outer-border);
   padding-bottom: 13px;
+  font-size: 14px !important;
 }
 
 .commentTotal {
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 23.14px;
   color: var(--post-outer-border);
@@ -112,7 +113,7 @@
   align-items: center;
   gap: 20px;
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 23.14px;
   color: #838282;
@@ -122,7 +123,7 @@
   align-items: center;
   gap: 5px;
   font-family: Gentium Book Basic;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 23.14px;
   color: #838282;
