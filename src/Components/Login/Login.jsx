@@ -462,7 +462,7 @@ const Login = () => {
               <a href="">LANGUAGE</a>
             </li>
           </ul>
-          <p>© 2024 BeyInc</p>
+          <p>© 2024 BeyInc Entrepreneurship Venture Private Limited</p>
         </div> */}
       </main>
     </>
