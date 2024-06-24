@@ -163,6 +163,7 @@ const Post = ({ post, setAllPosts }) => {
                 alt=""
               />
             </div>
+            
             <div className="PostDetailsContainer">
               <div className="postCardUserName">
                 {post?.createdBy?.userName[0]?.toUpperCase() +
