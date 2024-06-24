@@ -169,6 +169,19 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  saveFollowers: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/followerControl`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   login: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -788,6 +801,19 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  deleteUserComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/deleteUserComment`, obj)
+        .then((res) => {
+          if (res) {
+            // console.log(res);
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   dislikeComment: (obj) => {
     return new Promise((resolve, reject) => {
@@ -806,6 +832,243 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/pitch/getPitchComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+
+
+
+  createPost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/createPost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  updatePost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/editPost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  getUsersPost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/getUsersPost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  
+  getPost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/getPost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  likePost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/likePost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  dislikePost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/disLikePost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  requestIntoOpenDiscussion: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/requestIntoOpenDiscussion`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  updaterequestIntoOpenDiscussion: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/updaterequestIntoOpenDiscussion`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  
+
+ getPostRequestDiscussion: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/getPostRequestDiscussion`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  deletepost: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/deletePost`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+
+
+
+  getPostComments: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/post/getPostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  addPostComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/post/addPostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  likePostComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch(`/post/likePostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  DislikePostComment: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch(`/post/DislikePostComment`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  getReportedPosts: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/posts/getReportedPosts`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  addReport: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/addReport`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  updateReport: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/updateReport`, obj)
         .then((res) => {
           if (res) {
             resolve(res);

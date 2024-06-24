@@ -41,19 +41,19 @@ const SinglePitchDetails = ({ d }) => {
             <img
               alt="user-pic"
               src={
-                d.userInfo.image !== "" &&
-                d.userInfo.image !== undefined &&
-                d.userInfo.image.url !== ""
-                  ? d.userInfo.image.url
+                d.userInfo?.image !== "" &&
+                d.userInfo?.image !== undefined &&
+                d.userInfo?.image.url !== ""
+                  ? d.userInfo?.image.url
                   : "/profile.png"
               }
             />
           </div>
           <div>
             <div style={{ fontSize: "12px", fontWeight: "600" }}>
-              {d.userInfo.userName}
+              {d.userInfo?.userName}
             </div>
-            <div>{d.userInfo.role}</div>
+            <div>{d.userInfo?.role}</div>
           </div>
           <div
             style={{
@@ -78,7 +78,7 @@ const SinglePitchDetails = ({ d }) => {
             <ReviewStars avg={averagereview} />
           </span>
           <span style={{ fontSize: "12px" }}>
-            Posted on <b>{moment(d.userInfo.createdAt).format("MMM Do YY")}</b>
+            Posted on <b>{moment(d.userInfo?.createdAt).format("MMM Do YY")}</b>
           </span>
         </div>
 

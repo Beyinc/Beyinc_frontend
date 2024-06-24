@@ -3,18 +3,79 @@
 }
 
 body[data-theme="dark"] {
+  /* LATEST COLOR PALETTE */
+  /* NAVBAR */
+  --nav-head-bg: #072d44;
+  --nav-head-icons: #9bf8f4;
+  --searchbar-bg: #9bf8f3c4;
+  --nav-head-icons-hover: #9bf8f382;
+  --menubar-bg: #072d44;
+  --menubar-txt: #9bf8f4;
+  --icons-border: #9bf8f385;
+
+  /* BUTTONS */
+  --button-color: #072d44;
+  --button-background: #9bf8f4;
+
+  /* NOTIFICATION SIDEBAR */
+  --notification-title: #9bf8f4;
+  --notification-head-bg: #072d44;
+  --notification-head-icon-selected: #9bf8f4;
+
+  /* OVERALL BUTTONS */
+  --button-enabled: #4f55c7;
+  --button-disabled: #4f55c73f;
+
+  /* OVERALL BODY */
   --body-background: #17171e;
+ --text-total-color : #fff;
+
+  /* LANDING PAGE TEXTS */
+  --landingpage-h1: #4f55c7;
+
+  /* editProfile */
+  --editprofile-details-card-bg: #4a7fa0;
+  --popup-content-bg: #072d44;
+  --popup-content-text-color: #072d44;
+  --itemsSelect-bg: #1b6390;
+  --posttags-color: #072d44;
+  --editProfile-toggler-bottom: #9bf8f4;
+  --personalDetails-color: #ffffffb2;
+  --followBtn-bg: #9bf8f4;
+  --followBtn-color: #072d44;
+  --skills-bg: #9bf8f4;
+  --skills-color: #072d44;
+  --post-outer-border: #ffffff80;
+  --likeAction-bg: #ffffff;
+  --userComment-bg: #3c6d8a;
+  --postType-bg: #f4c5c5;
+  --activity-selected: #72bbca;
+
+  /* CREATE POST  */
+  --createPost-bg: #4a7fa0;
+  --createPost-color: #f6f6fc;
+  --light-border: #ffffff8d;
+  --empty-img-bg: #072d44;
+  --tag-bg: #9bf8f399;
+
+  --tag-bg-right: #9bf8f341;
+  --comment-section-bg: #072d44af;
+
+  --post-details-card-bg: #4a7fa0;
+
+  
+  
+
+  /* old themes */
   --nabar-text: #fff;
-  --text-total-color: #fff;
   --navbar-profile-hover: #2172e2;
   /* --nav-head-bg: #212130; */
-  --nav-head-bg: #032036dd;
-  --nav-head-icons: #fff;
+
   --landingPage-working-container-bg: #212130;
   --chatcontainer-bg: #212130;
   --user-details-container-bg: #212130;
   --menubar-bg: #212130;
-  --menubar-txt: #fff;
+
   --menubar-hover-txt: #6a73fa;
   --users-bg: #212130;
   --newchat-button: #48abec;
@@ -32,7 +93,68 @@ body[data-theme="dark"] {
 }
 
 body[data-theme="light"] {
-  /* LATEST THEME BASED COLORS */
+  /* LATEST COLOR PALETTE */
+  /*NAVBAR*/
+  --nav-head-bg: #f6f6fc;
+  --nav-head-icons: #4f55c7;
+  --searchbar-bg: #9a979796;
+  --icons-border: #4f55c785;
+  --nav-head-icons-hover: #4f55c75a;
+  --menubar-bg: #f6f6fc;
+  --menubar-txt: #4f55c7;
+
+  /* BUTTONS */
+  --button-color: #f6f6fc;
+  --button-background: #4f55c7;
+
+  /* NOTIFICATION */
+  --notification-title: #4f55c7;
+  --notification-head-bg: #f6f6fc;
+  --notification-head-icon-selected: #4e54c7;
+
+  /* OVERALL BODY */
+  --body-background: #fbfbfe;
+  --text-total-color: #040316;
+  --button-enabled: #4f55c7;
+  --button-disabled: #4f55c73f;
+
+  /* LANDING PAGE */
+  --landingpage-h1: #4f55c7;
+
+  /* editProfile */
+  --editprofile-details-card-bg: #f6f6fc;
+  --popup-content-bg: #f6f6fc;
+  --popup-content-text-color: #f6f6fc;
+  --itemsSelect-bg: #aeaeb1;
+  --posttags-color: #4f55c7;
+  --editProfile-toggler-bottom: #4f55c7;
+  --personalDetails-color: #656262;
+  --followBtn-bg: #4f55c7;
+  --followBtn-color: #ffffff;
+  --skills-bg: #4f55c733;
+  --post-outer-border: #838282;
+  --skills-color: #4f55c7;
+  --likeAction-bg: #000000;
+  --userComment-bg: #4f55c71a;
+  --postType-bg: #f4c5c5;
+  --activity-selected: #d3d4f1;
+
+  /* CREATE POST */
+  --createPost-bg: #f6f6fc;
+  --light-border: gray;
+  --empty-img-bg: rgba(211, 211, 211, 0.837);
+  --tag-bg: #4f55c794;
+  --bg-profile:#F0F1F5;
+  --bg-message:#4f55c71d;
+  --scrollbar-thumb-color: #888; 
+  --scrollbar-track-color: #f0f0f0; 
+  --tag-bg-right:#e3e3e361;
+  --comment-section-bg: #f6f6fc;
+
+  --post-details-card-bg: #F0F1F5;
+
+
+  /* old themes */
   --text: #040316;
   --background: #fbfbfe;
   --primary: #4e54c7;
@@ -45,21 +167,15 @@ body[data-theme="light"] {
   --white-text: #fff;
   --light-transparent: #4e54c748;
 
-  /* Nav bar */
-  --nav-head-bg: #ffffffdd;
-  --nav-head-icons: #4e54c7;
   --nav-head-icons-border: #dddbff;
   --nav-head-selected-icons-border: #4e54c7;
   --nav-head-icons-hover: #4449ad;
   --navbar-profile-hover: #eaf1fb;
 
-  --body-background: #fbfbfe;
-  --text-total-color: #040316;
   --singleUserCard-bg: #fff;
   --landingPage-working-container-bg: #f1f1f1;
   --user-details-container-bg: #eaf1fb;
-  --menubar-bg: #fbfbfe;
-  --menubar-txt: #212130;
+
   --menubar-hover-txt: #6a73fa;
   --chatcontainer-bg: #fff;
   --searchmenu-bg: #fff;
@@ -76,8 +192,8 @@ body[data-theme="light"] {
 }
 
 body {
-  background: var(--body-background);
-  color: var(--text-total-color);
+  background: var(--body-background) !important;
+  color: var(--text-total-color) !important;
 }
 i {
   cursor: pointer;
@@ -201,14 +317,15 @@ input.invalid {
 }
 
 button:disabled {
-  background-color: var(--button) !important;
+  background-color: var(--button-disabled) !important;
   cursor: not-allowed;
 }
 
 button {
   width: auto !important;
   padding: 15px;
-  background-color: var(--button);
+  color: var(--button-color);
+  background: var(--button-background);
   font-weight: 600;
   transition: background-color 0.3s ease;
   color: #fff;

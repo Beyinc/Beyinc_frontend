@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageRequest from "./MessageRequest";
 import { getAllNotifications, setNotification, setNotificationData } from "../../../redux/Conversationreducer/ConversationReducer";
 import AllNotifications from "./AllNotifications";
+import PostDiscussionRequest from "../../Editprofile/PostDiscussionRequestNotifications";
 
 const Notifications = () => {
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
@@ -24,6 +25,17 @@ const Notifications = () => {
     }, 2000);
   };
 
+  const [postDiscussionRequest, setpostDiscussionRequest] = useState([]);
+
+
+  const getPostDiscussionRequest = async () => {
+    await ApiServices.getPostRequestDiscussion({ user_id: user_id }).then((res) => {
+      setpostDiscussionRequest(res.data);
+    });
+    dispatch(getAllNotifications(user_id));
+  };
+
+
   const getNotifys = async () => {
     await ApiServices.getUserRequest({ userId: user_id }).then((res) => {
       setMessageRequest(res.data);
@@ -33,6 +45,7 @@ const Notifications = () => {
 
   useEffect(() => {
     getNotifys()
+    getPostDiscussionRequest()
   }, [email, notificationTrigger]);
 
 
@@ -56,8 +69,17 @@ const Notifications = () => {
         />
       </div> */}
 
-      {(messageRequest.length > 0 || notifications.length > 0) ? (
+      {(postDiscussionRequest.length > 0 || notifications.length > 0) ? (
         <div>
+          <div>
+            {postDiscussionRequest.length > 0 && <>
+              <div className="NotyHeader">Post Discussion Requests</div>
+              <div>{postDiscussionRequest?.map((m) => (
+                <PostDiscussionRequest m={m} setpostDiscussionRequest={setpostDiscussionRequest} />
+              ))}
+              </div>
+            </>}
+          </div>
           <div>
             {messageRequest.length > 0 && <>
               <div className="NotyHeader">Message Requests</div>

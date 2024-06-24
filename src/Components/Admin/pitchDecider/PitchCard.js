@@ -91,11 +91,11 @@ export default function PitchCard({ d }) {
       <div
         className={
           "user-card-main-container " +
-          (d?.userInfo.role === "Entrepreneur"
+          (d?.userInfo?.role === "Entrepreneur"
             ? "margin-entrepreneur"
-            : d?.userInfo.role === "Mentor"
-              ? "margin-mentor"
-              : "")
+            : d?.userInfo?.role === "Mentor"
+            ? "margin-mentor"
+            : "")
         }
       >
         <div className="user-card-details">
@@ -104,26 +104,31 @@ export default function PitchCard({ d }) {
               <img
                 alt="user-pic"
                 src={
-                  d.userInfo?.image?.url !== undefined &&
-                    d.userInfo?.image?.url !== ""
-                    ? d.userInfo?.image?.url
+                  d?.userInfo?.image?.url !== undefined &&
+                  d?.userInfo?.image?.url !== ""
+                    ? d?.userInfo?.image?.url
                     : "/profile.png"
                 }
               />
-              {d.userInfo.verification === "approved" && (
+              {d?.userInfo?.verification === "approved" && (
                 <img
                   src="/verify.png"
                   alt=""
-                  style={{ width: "15px", height: "15px", position: 'absolute', right: '0' }}
+                  style={{
+                    width: "15px",
+                    height: "15px",
+                    position: "absolute",
+                    right: "0",
+                  }}
                 />
               )}
             </div>
           </div>
           <div className="user-card-details-text">
             <span className="user-name" onClick={openUser}>
-              {d?.userInfo.userName}
+              {d?.userInfo?.userName}
             </span>
-            <span className="user-name" style={{color: 'black'}}>
+            <span className="user-name" style={{ color: "black" }}>
               {d?.title}
             </span>
             <span>
@@ -136,19 +141,20 @@ export default function PitchCard({ d }) {
                     d.status == "approved"
                       ? "green"
                       : d.status == "pending"
-                        ? "orange"
-                        : "red",
-                  border: `1px dotted ${d.status == "approved"
+                      ? "orange"
+                      : "red",
+                  border: `1px dotted ${
+                    d.status == "approved"
                       ? "green"
                       : d.status == "pending"
-                        ? "orange"
-                        : "red"
-                    }`,
+                      ? "orange"
+                      : "red"
+                  }`,
                   borderRadius: 5,
                   padding: "3px",
                 }}
               >
-                {d.status ? capitalizeFirstLetter(d.status) : d.status}
+                {d?.status ? capitalizeFirstLetter(d.status) : d?.status}
               </span>
             </span>
           </div>
@@ -162,8 +168,7 @@ export default function PitchCard({ d }) {
               justifyContent: "space-between",
             }}
           >
-            <span>{d?.userInfo.role}</span>
-           
+            <span>{d?.userInfo?.role}</span>
           </div>
           <button onClick={() => setOpen(true)}>View</button>
           {open && (

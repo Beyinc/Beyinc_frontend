@@ -51,18 +51,10 @@ export const apicallloginDetails = () => async (dispatch) => {
       axiosInstance.customFnAddTokenInHeader(JSON.parse(localStorage.getItem('user')).accessToken);
       dispatch(setLoading({ visible: 'no' }))
     }).catch(async (err) => {
-      
-      await ApiServices.refreshToken({ refreshToken: JSON.parse(localStorage.getItem('user')).refreshToken }).then((res) => {
-        localStorage.setItem('user', JSON.stringify(res.data))
-        dispatch(setLoginData(jwtDecode(res.data.accessToken)))
-        axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        dispatch(setLoading({ visible: 'no' }))
+      localStorage.removeItem('user')
 
-      }).catch(err => {
-        localStorage.removeItem('user')
-        window.location.href = '/login'
-        dispatch(setLoading({ visible: 'no' }))
-      })
+      window.location.href = '/login'
+      dispatch(setLoading({ visible: 'no' }))
 
     })
     dispatch(setLoading({visible: 'no'}))

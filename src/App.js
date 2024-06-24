@@ -18,6 +18,7 @@ import { ApiServices } from "./Services/ApiServices";
 import UserRequests from "./Components/Admin/UserRequests/UserRequests";
 import { Socket, io } from "socket.io-client";
 import {
+  setFollowerNotification,
   setLastMessageRead,
   setLiveMessage,
   setMessageCount,
@@ -33,7 +34,20 @@ import AllUsers from "./Components/AllUsers/AllUsers";
 import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
+import EditProfile from "./Components/Editprofile/EditProfile";
+import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePostPage";
 
+
+const Posts = React.lazy(() =>
+  import("./Components/Posts/Posts")
+);
+
+const IndividualPostDetailsCard = React.lazy(() =>
+  import("./Components/Editprofile/IndividualPostDetailsCard")
+);
+const PostReports =React.lazy(() =>
+  import("./Components/Admin/PostReports/PostReports")
+);
 const LandingPage = React.lazy(() =>
   import("./Components/LandingPage/LandingPage")
 );
@@ -51,10 +65,6 @@ const Home = React.lazy(() =>
   import("./Components/Home/Home")
 );
 
-
-const EditProfileUI = React.lazy(() =>
-  import("./Components/Editprofile/EditProfileUI")
-);
 
 const Conversations = React.lazy(() =>
   import("./Components/Conversation/Conversations")
@@ -141,15 +151,15 @@ const App = () => {
   }, []);
 
   // DONT REMOVE THIS IT IS FOR DARK AND WHITE THEME
-  //   useEffect(() => {
-  //     if (!localStorage.getItem('theme')) {
-  //       localStorage.setItem('theme', 'light')
-  //       document.body.setAttribute('data-theme', 'light')
-  //     } else {
-  //       document.body.setAttribute('data-theme', localStorage.getItem('theme'))
+    useEffect(() => {
+      if (!localStorage.getItem('theme')) {
+        localStorage.setItem('theme', 'light')
+        document.body.setAttribute('data-theme', 'light')
+      } else {
+        document.body.setAttribute('data-theme', localStorage.getItem('theme'))
 
-  //    }
-  //  }, [])
+     }
+   }, [])
   useEffect(() => {
     socket.current.on("sendseenMessage", (data) => {
       // console.log(data);
@@ -200,6 +210,12 @@ const App = () => {
     socket.current.on("getNotification", (data) => {
       // console.log(data);
       dispatch(setNotification(true));
+      // setMessages(prev => [...prev, data])
+    });
+
+    socket.current.on("getFollowerNotification", (data) => {
+      // console.log(data);
+      dispatch(setFollowerNotification(data))
       // setMessages(prev => [...prev, data])
     });
   }, []);
@@ -276,11 +292,18 @@ const App = () => {
           <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/posts" Component={AuthHoc(Posts)} />
+          <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
+          <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
+
+
+
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
           {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
-          <Route path="/editProfile" Component={AuthHoc(EditProfileUI)} />
+          <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
+
 
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
@@ -291,12 +314,14 @@ const App = () => {
           <Route path="/notifications" Component={AuthHoc(Notifications)} />
           <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
           <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
+          <Route path="/posts/:id" Component={AuthHoc(IndividualPostDetailsCard)} />
+
           <Route
             path="/livePitches/:pitchId"
             Component={AuthHoc(IndividualPitch)}
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
-          <Route path="/user/:id" Component={AuthHoc(EditProfileUI)} />
+          <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
@@ -309,7 +334,13 @@ const App = () => {
           /> */}
           <Route
             path="/singleProfileRequest/:id"
-            Component={AdminDeciderHoc(EditProfileUI)}
+            Component={AdminDeciderHoc(EditProfile)}
+          />
+
+
+          <Route
+            path="/postReports"
+            Component={AdminDeciderHoc(PostReports)}
           />
         </Routes>
       </Suspense>

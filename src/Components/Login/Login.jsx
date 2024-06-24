@@ -184,7 +184,7 @@ const Login = () => {
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        window.location.href = "/dashboard";
+        window.location.href = "/posts";
       })
       .catch((err) => {
         setLoading(false);
@@ -222,7 +222,7 @@ const Login = () => {
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        window.location.href = "/dashboard";
+        window.location.href = "/posts";
       })
       .catch((err) => {
         e.target.disabled = false;
@@ -462,7 +462,7 @@ const Login = () => {
               <a href="">LANGUAGE</a>
             </li>
           </ul>
-          <p>© 2024 BeyInc</p>
+          <p>© 2024 BeyInc Entrepreneurship Venture Private Limited</p>
         </div> */}
       </main>
     </>

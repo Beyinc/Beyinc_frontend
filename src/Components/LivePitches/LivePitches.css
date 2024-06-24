@@ -88,7 +88,7 @@ input[type="checkbox"] {
 
 .star {
   font-size: 34px;
-  color: #F77D0E;
+  color: var(--editProfile-toggler-bottom);
   margin-right: 5px;
 }
 
@@ -98,22 +98,22 @@ input[type="checkbox"] {
 
 .star.half-filled {
   position: relative;
-  color: #F77D0E;
+  color: var(--editProfile-toggler-bottom);
 }
 
 .star.half-filled::before {
   content: "★";
   position: absolute;
   left: 0;
-  top: -2.5px;
-  mask: linear-gradient(to left, #F77D0E 50%, transparent 50%);
+  top: -2px;
+  mask: linear-gradient(to left, var(--editProfile-toggler-bottom) 50%, transparent 50%);
   color: #ccc;
 }
 .subcommentsContainer {
   width: 97%;
   margin: auto;
-  background: white;
-
+  background: var( --body-background);
+  color: var( --text-total-color);
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -130,6 +130,7 @@ input[type="checkbox"] {
 .IndicommentsSection {
   display: flex;
   gap: 8px;
+  
 }
 .IndicommentsSectionDetailscomment {
   word-wrap: break-word;
@@ -140,10 +141,15 @@ input[type="checkbox"] {
 
 .IndicommentsSectionDetails {
   flex: 1 0 auto;
+    background: var( --editprofile-details-card-bg);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 .IndicommentsSectionImage img {
   height: 40px;
   width: 40px;
+  border-radius: 50%;
 }
 
 .IndicommentsSectionDetailsUserName {
@@ -151,8 +157,21 @@ input[type="checkbox"] {
   font-weight: 600;
   display: flex;
   gap: 10px;
-  align-items: center;
+  flex-direction: row !important;
 }
+
+.IndicommentsSectionDetailsUserName > div:nth-child(1) {
+  align-self: flex-start; /* Align name at flex-start */
+}
+
+.IndicommentsSectionDetailsdate {
+  font-weight: 200;
+  display: flex;
+  align-self: flex-end; /* Align date at flex-end */
+  margin-left: auto; /* Push the date to the end */
+}
+
+
 .totalSubComments {
   display: flex;
   align-items: center;

@@ -107,9 +107,9 @@ export default function BasicTable() {
                 <TableCell>
                   <strong>Title</strong>
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <strong>Heading</strong>
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <strong>stage</strong>
                 </TableCell>
@@ -141,13 +141,13 @@ export default function BasicTable() {
                     >
                       {row.title}
                     </TableCell>
-                    <TableCell
+                    {/* <TableCell
                       style={{ whiteSpace: "nowrap", fontSize: "13px" }}
                     >
-                      {row.heading.length > 20
-                        ? `${row.heading.slice(0, 20)}...`
+                      {row.heading?.length > 20
+                        ? `${row.heading?.slice(0, 20)}...`
                         : row.heading}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       style={{ whiteSpace: "nowrap", fontSize: "13px" }}
                     >

@@ -96,8 +96,8 @@ export default function ReceivedPitches() {
                                         {row.title}
                                     </TableCell>
                                     <TableCell style={{ whiteSpace: "nowrap", fontSize: '13px' }}>
-                                        {row.heading.length > 20
-                                            ? `${row.heading.slice(0, 20)}...`
+                                        {row.heading?.length > 20
+                                            ? `${row.heading?.slice(0, 20)}...`
                                             : row.heading}
                                     </TableCell>
                                     <TableCell style={{ whiteSpace: "nowrap", fontSize: '13px' }}>

@@ -478,6 +478,30 @@ export const convertToDate = (inputDate) => {
 }
 
 
+
+export const postTypes = [
+    { 'value': 'Idea Discussion', 'color': '#0d2c52' },
+    { 'value': 'Co-founder Needed', 'color': '#af1dd8' },
+    { 'value': 'Tech Partner Needed', 'color': '#60d441' },
+    { 'value': 'Mentor Needed', 'color': '#9f1f04' },
+    { 'value': 'General Post', 'color': '#05eb1b' },
+    { 'value': 'Question and Answer', 'color': '#6920a9' },
+    { 'value': 'Announcement', 'color': '#70b9d5' },
+    { 'value': 'News', 'color': '#f14edf' },
+    { 'value': 'Hiring', 'color': '#e1265d' },
+    { 'value': 'Opportunities', 'color': '#5e8d7c' },
+    { 'value': 'Investment', 'color': '#207b6a' }
+]
+
+
+// January 15, 2024
+export const MMDDYYFormat = (date) => {
+    const formattedDate = moment(date).format('MMMM D, YYYY'); // "January 15, 2024"
+
+    return formattedDate;
+}
+
+
 // gives in format 2024-jan-08
 export const formatedDate = (inputDate) => {
     const months = [
@@ -515,12 +539,13 @@ export const userColor = {
 const heirarchy = {
 
 
-    Investor: 0,
-    Incubation_Cell: 1,
-    Accelerator: 2,
-    Mentor: 3,
-    Entrepreneur: 4,
-    Technology_Partner: 5,
+    'Investor': 0,
+    'Incubation_Cell': 1,
+    'Individual/Entrepreneur': 1,
+    'Accelerator': 2,
+    'Mentor': 3,
+    'Entrepreneur': 4,
+    'Technology_Partner': 5,
 
 };
 

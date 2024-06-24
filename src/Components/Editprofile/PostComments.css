@@ -1,0 +1,32 @@
+.postCommentAddSection {
+    /* position: fixed; */
+    /* bottom: 30px; */
+    width: 100%;
+  }
+  .sendIcon {
+    cursor: pointer;
+    width: 25px !important;
+    height: 25px !important;
+    padding: 10px;
+  
+  }
+
+  .writing-review .sendIcon {
+    margin-right: 0px !important;
+    
+  }
+  .sendIcon {
+    margin-top: 0px;
+    margin-right: 50px;
+   
+  }
+  .CommentPostContainer {
+      padding: 0px;
+  border: 1px solid var(--post-outer-border);
+  border-radius: 30px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 800px;
+  margin-bottom: 20px;
+  }

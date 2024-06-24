@@ -559,9 +559,9 @@ const UserDetails = () => {
         );
       });
   
-     
-      
-      navigate("/dashboard");
+      if (isDraft !== true) {
+        window.location.href='/posts'
+      }
     } catch (error) {
       console.log(error);
       
@@ -5359,26 +5359,26 @@ const UserDetails = () => {
               documentation.
             </p>
             <p>
-              2) BeyInc does not guarantee the accuracy or completeness of the
+              2&#41; BeyInc does not guarantee the accuracy or completeness of the
               information, text, graphics, links, or other elements found within
               the BeyInc web portal. Due to updates and corrections, the web
               content is subject to regular changes.
             </p>
             <p>
-              3) The information on this website may contain links to content
+              3&#41; The information on this website may contain links to content
               from non-governmental or private organizations, provided by BeyInc
               for your convenience. Clicking on these links redirects you away
               from the ‘BeyInc’ wesite, subjecting you to the privacy and
               security policies of the external website owners.
             </p>
             <p>
-              4) BeyInc serves as a connectivity platform for stakeholders and
+              4&#41; BeyInc serves as a connectivity platform for stakeholders and
               is not liable for any idea copying, product infringement, or of
               any kind and not limited to monetary loss between connecting
               parties.
             </p>
             <p>
-              5) These terms and conditions are governed by Indian laws and any
+              5&#41; These terms and conditions are governed by Indian laws and any
               dispute arising from them is subject to the jurisdiction of the
               courts of Chennai, India.
             </p>
@@ -5417,7 +5417,7 @@ const UserDetails = () => {
             <button
       className={`steps-button ${isLoading ? 'loading' : ''}`}
       onClick={handleSubmit}
-      disabled={isLoading}
+      disabled={isLoading || !agreeToTerms}
     >
       {isLoading ? (
         <>

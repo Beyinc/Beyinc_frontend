@@ -55,11 +55,11 @@ const MessageRequest = ({ m, setMessageRequest }) => {
                 });
 
             }).catch(err => {
-                setToast({
+                dispatch(setToast({
                     message: 'Error occured when updating request',
                     bgColor: ToastColors.failure,
                     visible: "yes",
-                })
+                }))
                 e.target.disabled = false
 
             })
@@ -91,7 +91,7 @@ const MessageRequest = ({ m, setMessageRequest }) => {
                     navigate(`/user/${m.members?.filter((f) => f.user?.userName !== userName)[0]?._id}`)
                 }}>
                     <div>
-                        <img style={{ height: '50px', width: '50px', borderRadius: '50%' }} src={m.members?.filter((f) => f.user?.userName !== userName)[0]?.image?.url == undefined ? '/profile.png' : m.members?.filter((f) => f.user?.userName !== userName)[0]?.image?.url} alt="" srcset="" />
+                        <img style={{ height: '30px', width: '30px', borderRadius: '50%' }} src={m.members?.filter((f) => f.user?.userName !== userName)[0]?.image?.url == undefined ? '/profile.png' : m.members?.filter((f) => f.user?.userName !== userName)[0]?.image?.url} alt="" srcset="" />
                     </div>
                     <div className='message'><b>{m.members?.filter((f) => f.user?.userName !== userName)[0]?.userName}</b> sent you a message request</div>
 
