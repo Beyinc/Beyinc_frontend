@@ -1,10 +1,12 @@
 .ProfilepostContainer {
   border: 1px solid var(--post-outer-border);
   border-radius: 10px;
-  padding: 30px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: #ffffff;
+
 }
 .allPostShowContainer {
   display: flex;

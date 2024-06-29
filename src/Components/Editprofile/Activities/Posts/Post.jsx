@@ -14,7 +14,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 
-const Post = ({ post, setAllPosts }) => {
+const Post = ({ post, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
@@ -147,7 +147,7 @@ const Post = ({ post, setAllPosts }) => {
       });
   };
   return (
-    <section className="EditProfileOuterCard">
+    <section className={`EditProfileOuterCard ${screenDecider == "home" && "homeEditProfileOuterCard " }` } >
       <div className="ProfilepostContainer">
         <div className="PostHeaderContainer">
           <div className="postTotaldetails">
