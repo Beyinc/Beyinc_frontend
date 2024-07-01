@@ -10,12 +10,13 @@ import AllNotifications from "../Conversation/Notification/AllNotifications";
 import { getAllNotifications } from "../../redux/Conversationreducer/ConversationReducer";
 import { socket_io } from "../../Utils";
 import { io } from "socket.io-client";
+import RecommendedConnectButton from "./RecommendedConnectButton";
 
 const Posts = () => {
   const { role, userName, image, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
-  const notifications = useSelector(state => state.conv.notifications);
+  const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const dispatch = useDispatch();
@@ -31,20 +32,19 @@ const Posts = () => {
         console.log(err);
         dispatch(setLoading({ visible: "no" }));
       });
-
   }, []);
 
   const [allPosts, setAllPosts] = useState([]);
   const [loadingTrigger, setLoadingTrigger] = useState(false);
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
 
-const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const [recommendedUsers, setRecommendedUsers] = useState([]);
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
 
-    ApiServices.getAllPosts({ page:page, pageSize:pageSize })
+    ApiServices.getAllPosts({ page: page, pageSize: pageSize })
       .then((res) => {
-        setAllPosts(prev => [...prev,...res.data]);
+        setAllPosts((prev) => [...prev, ...res.data]);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
@@ -56,91 +56,88 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
           })
         );
         dispatch(setLoading({ visible: "no" }));
-
       });
-
   }, [loadingTrigger]);
 
-
   useEffect(() => {
-    ApiServices.getRecommendedUsers({userId: user_id})
-    .then((res) =>{
-      setRecommendedUsers(res.data);
-    })
-    .catch((err) => {
-      dispatch(
-        setToast({
-          message: "Error Occured!",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
-    });
-  },[recommendedUserTrigger])
+    ApiServices.getRecommendedUsers({ userId: user_id })
+      .then((res) => {
+        setRecommendedUsers(res.data);
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occured!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  }, [recommendedUserTrigger]);
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(2);
 
   const handleLoadMore = () => {
     setPage(pageSize);
-    setPageSize(pageSize+2);
-    setLoadingTrigger(!loadingTrigger)
+    setPageSize(pageSize + 2);
+    setLoadingTrigger(!loadingTrigger);
   };
-
 
   const socket = useRef();
   useEffect(() => {
-      socket.current = io(socket_io);
+    socket.current = io(socket_io);
   }, []);
   const followerController = async (e, id) => {
-    e.target.disabled = true
-    await ApiServices.saveFollowers({ followerReqBy: user_id, followerReqTo: id }).then(res => {
-        if (res.data.followers.map(f => f._id).includes(user_id)) {
-            socket.current.emit("sendNotification", {
-                senderId: user_id,
-                receiverId: id,
-            });
-            socket.current.emit("sendFollowerNotification", {
-                senderId: user_id,
-                receiverId: id,
-                type: 'adding',
-                image: image,
-                role: role,
-                _id: id,
-                userName: userName
-            });
-
+    e.target.disabled = true;
+    await ApiServices.saveFollowers({
+      followerReqBy: user_id,
+      followerReqTo: id,
+    })
+      .then((res) => {
+        if (res.data.followers.map((f) => f._id).includes(user_id)) {
+          socket.current.emit("sendNotification", {
+            senderId: user_id,
+            receiverId: id,
+          });
+          socket.current.emit("sendFollowerNotification", {
+            senderId: user_id,
+            receiverId: id,
+            type: "adding",
+            image: image,
+            role: role,
+            _id: id,
+            userName: userName,
+          });
         } else {
-            socket.current.emit("sendFollowerNotification", {
-                senderId: user_id,
-                receiverId: id,
-                type: 'removing', _id: id
-            });
+          socket.current.emit("sendFollowerNotification", {
+            senderId: user_id,
+            receiverId: id,
+            type: "removing",
+            _id: id,
+          });
         }
         setRecommendedUserTrigger(!recommendedUserTrigger);
-
-
-    }).catch((err) => {
+      })
+      .catch((err) => {
         dispatch(
-            setToast({
-                message: "Error in update status",
-                bgColor: ToastColors.failure,
-                visible: "yes",
-            })
+          setToast({
+            message: "Error in update status",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
         );
-    });
-    e.target.disabled = false
-}
-  
+      });
+    e.target.disabled = false;
+  };
 
   const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {
-    });
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
     dispatch(getAllNotifications(user_id));
   };
 
   useEffect(() => {
-    getNotifys()
+    getNotifys();
   }, []);
 
   return (
@@ -286,7 +283,7 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
 
         <div class="filter-sidebar">
           <div class="filter-section">
-          <h3 className="label">Filter</h3>
+            <h3 className="label">Filter</h3>
 
             <h5>People</h5>
             <input type="text" placeholder="Search people" />
@@ -297,7 +294,9 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
             <h5>Location</h5>
             <div className="checkbox">
               <input type="checkbox" id="delhi" name="location" value="Delhi" />
-              <label className="checkbox-label"  for="delhi">Delhi</label>
+              <label className="checkbox-label" for="delhi">
+                Delhi
+              </label>
             </div>
 
             <div className="checkbox">
@@ -308,7 +307,9 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
                 name="location"
                 value="Mumbai"
               />
-              <label className="checkbox-label"  for="mumbai">Mumbai</label>
+              <label className="checkbox-label" for="mumbai">
+                Mumbai
+              </label>
             </div>
 
             <div className="checkbox">
@@ -319,34 +320,47 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
                 name="location"
                 value="Chennai"
               />
-              <label className="checkbox-label" for="chennai">Chennai</label>
+              <label className="checkbox-label" for="chennai">
+                Chennai
+              </label>
             </div>
 
             <h5>Category</h5>
             <div className="checkbox">
-            <input
-              type="checkbox"
-              id="general"
-              name="category"
-              value="General post"
-            />
-            <label className="checkbox-label"  for="general">General post</label></div>
+              <input
+                type="checkbox"
+                id="general"
+                name="category"
+                value="General post"
+              />
+              <label className="checkbox-label" for="general">
+                General post
+              </label>
+            </div>
 
             <div className="checkbox">
-              
               <input
                 type="checkbox"
                 id="idea"
                 name="category"
                 value="Idea discussion"
               />
-              <label className="checkbox-label"  for="idea">Idea discussion</label>
+              <label className="checkbox-label" for="idea">
+                Idea discussion
+              </label>
             </div>
 
             <div className="checkbox">
-              <input type="checkbox" id="mentor" name="category" value="Mentor
-              needed"/>
-              <label className="checkbox-label"  for="mentor">Mentor needed</label>
+              <input
+                type="checkbox"
+                id="mentor"
+                name="category"
+                value="Mentor
+              needed"
+              />
+              <label className="checkbox-label" for="mentor">
+                Mentor needed
+              </label>
             </div>
 
             <div className="checkbox">
@@ -356,7 +370,9 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
                 name="category"
                 value="Announcement"
               />
-              <label className="checkbox-label"  for="announcement">Announcement</label>
+              <label className="checkbox-label" for="announcement">
+                Announcement
+              </label>
             </div>
 
             <span class="see-all">See All</span>
@@ -408,29 +424,50 @@ const [recommendedUsers, setRecommendedUsers] = useState([]);
 
         <div className="suggestions-section">
           <h3 className="label">Suggestions for you</h3>
-          {recommendedUsers?.map(rec => (
-            <div className="suggestion-item">
-            <img src={rec?.image?.url}/>
-            <h4>{rec?.userName}</h4>
-            <button className="follow" onClick={(e)=>{
-              followerController(e, rec._id);
-            }}>Follow</button>
-            <button className="connect">Connect</button>
-          </div>
+          {recommendedUsers?.map((rec) => (
+            <div className="suggestion-item" key={rec._id}>
+              <div className="left-section">
+                <img
+                  src={
+                    rec?.image?.url == undefined
+                      ? "/profile.png"
+                      : rec?.image?.url
+                  }
+                  alt="User Image"
+                  className="user-image"
+                />
+              </div>
+              <div className="right-section">
+                <h4 >{rec?.userName}</h4>
+                <p>{rec?.role}</p>
+                <div className="button-container">
+                  <button
+                    className="follow"
+                    onClick={(e) => {
+                      followerController(e, rec._id);
+                    }}
+                  >
+                    Follow
+                  </button>
+                  <RecommendedConnectButton id={rec._id} />
+                </div>
+              </div>
+            </div>
           ))}
-         
         </div>
 
         <div className="activity-section">
           <h3 className="label">Latest Activities</h3>
           <div className="activity-item">
-          <div className="activity-single-item">
-            {notifications.length > 0 && <div>
-              {notifications?.map((n) => (
-                <AllNotifications n={n} />
-              ))}
-            </div>}
-          </div>
+            <div className="activity-single-item">
+              {notifications?.length > 0 && (
+                <div>
+                  {notifications?.slice(0, 5).map((n) => (
+                    <AllNotifications n={n} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
