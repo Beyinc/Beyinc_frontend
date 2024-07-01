@@ -1,45 +1,147 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
-import { setToast } from "../../redux/AuthReducers/AuthReducer";
+import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
+import AllNotifications from "../Conversation/Notification/AllNotifications";
+import { getAllNotifications } from "../../redux/Conversationreducer/ConversationReducer";
+import { socket_io } from "../../Utils";
+import { io } from "socket.io-client";
 
 const Posts = () => {
-  const { role, userName, image, user_id  } = useSelector(
+  const { role, userName, image, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
+  const notifications = useSelector(state => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(setLoading({ visible: "yes" }));
     ApiServices.getDashboardDetails()
       .then((res) => {
         // console.log(res.data);
         setData(res.data);
+        dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setLoading({ visible: "no" }));
       });
+
   }, []);
 
-  const [allPosts, setAllPosts] = useState([])
-  useEffect(() =>{
-    ApiServices.getUsersPost({ user_id }).then(res => {
-      setAllPosts(res.data)
-  }).catch(err => {
-      dispatch(
-          setToast({
-              message: 'Error Occured!',
-              bgColor: ToastColors.failure,
-              visible: "yes",
-          })
-      );
-  })
-  },[]);
+  const [allPosts, setAllPosts] = useState([]);
+  const [loadingTrigger, setLoadingTrigger] = useState(false);
+  const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
 
+const [recommendedUsers, setRecommendedUsers] = useState([]);
+  useEffect(() => {
+    dispatch(setLoading({ visible: "yes" }));
+
+    ApiServices.getAllPosts({ page:page, pageSize:pageSize })
+      .then((res) => {
+        setAllPosts(prev => [...prev,...res.data]);
+        dispatch(setLoading({ visible: "no" }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occured!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+        dispatch(setLoading({ visible: "no" }));
+
+      });
+
+  }, [loadingTrigger]);
+
+
+  useEffect(() => {
+    ApiServices.getRecommendedUsers({userId: user_id})
+    .then((res) =>{
+      setRecommendedUsers(res.data);
+    })
+    .catch((err) => {
+      dispatch(
+        setToast({
+          message: "Error Occured!",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    });
+  },[recommendedUserTrigger])
+
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(2);
+
+  const handleLoadMore = () => {
+    setPage(pageSize);
+    setPageSize(pageSize+2);
+    setLoadingTrigger(!loadingTrigger)
+  };
+
+
+  const socket = useRef();
+  useEffect(() => {
+      socket.current = io(socket_io);
+  }, []);
+  const followerController = async (e, id) => {
+    e.target.disabled = true
+    await ApiServices.saveFollowers({ followerReqBy: user_id, followerReqTo: id }).then(res => {
+        if (res.data.followers.map(f => f._id).includes(user_id)) {
+            socket.current.emit("sendNotification", {
+                senderId: user_id,
+                receiverId: id,
+            });
+            socket.current.emit("sendFollowerNotification", {
+                senderId: user_id,
+                receiverId: id,
+                type: 'adding',
+                image: image,
+                role: role,
+                _id: id,
+                userName: userName
+            });
+
+        } else {
+            socket.current.emit("sendFollowerNotification", {
+                senderId: user_id,
+                receiverId: id,
+                type: 'removing', _id: id
+            });
+        }
+        setRecommendedUserTrigger(!recommendedUserTrigger);
+
+
+    }).catch((err) => {
+        dispatch(
+            setToast({
+                message: "Error in update status",
+                bgColor: ToastColors.failure,
+                visible: "yes",
+            })
+        );
+    });
+    e.target.disabled = false
+}
+  
+
+  const getNotifys = async () => {
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {
+    });
+    dispatch(getAllNotifications(user_id));
+  };
+
+  useEffect(() => {
+    getNotifys()
+  }, []);
 
   return (
     <div className="Homepage-Container">
@@ -182,17 +284,107 @@ const Posts = () => {
           </div>
         </div>
 
-        <div className="filter-section">
+        <div class="filter-sidebar">
+          <div class="filter-section">
           <h3 className="label">Filter</h3>
+
+            <h5>People</h5>
+            <input type="text" placeholder="Search people" />
+
+            <h5>Tags</h5>
+            <input type="text" placeholder="Search tags" />
+
+            <h5>Location</h5>
+            <div className="checkbox">
+              <input type="checkbox" id="delhi" name="location" value="Delhi" />
+              <label className="checkbox-label"  for="delhi">Delhi</label>
+            </div>
+
+            <div className="checkbox">
+              {" "}
+              <input
+                type="checkbox"
+                id="mumbai"
+                name="location"
+                value="Mumbai"
+              />
+              <label className="checkbox-label"  for="mumbai">Mumbai</label>
+            </div>
+
+            <div className="checkbox">
+              {" "}
+              <input
+                type="checkbox"
+                id="chennai"
+                name="location"
+                value="Chennai"
+              />
+              <label className="checkbox-label" for="chennai">Chennai</label>
+            </div>
+
+            <h5>Category</h5>
+            <div className="checkbox">
+            <input
+              type="checkbox"
+              id="general"
+              name="category"
+              value="General post"
+            />
+            <label className="checkbox-label"  for="general">General post</label></div>
+
+            <div className="checkbox">
+              
+              <input
+                type="checkbox"
+                id="idea"
+                name="category"
+                value="Idea discussion"
+              />
+              <label className="checkbox-label"  for="idea">Idea discussion</label>
+            </div>
+
+            <div className="checkbox">
+              <input type="checkbox" id="mentor" name="category" value="Mentor
+              needed"/>
+              <label className="checkbox-label"  for="mentor">Mentor needed</label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                type="checkbox"
+                id="announcement"
+                name="category"
+                value="Announcement"
+              />
+              <label className="checkbox-label"  for="announcement">Announcement</label>
+            </div>
+
+            <span class="see-all">See All</span>
+
+            <h5>Sort by</h5>
+            <select>
+              <option value="relevance">Relevance</option>
+            </select>
+          </div>
         </div>
       </div>
 
       <div className="main-content">
-      <div className="allPostShowContainer">
-                                {allPosts?.map(post => (
-                                    <Post post={post} setAllPosts={setAllPosts} screenDecider = {"home"} />
-                                ))}
-                            </div>
+        <div className="allPostShowContainer">
+          {allPosts?.map((post) => (
+            <Post
+              post={post}
+              setAllPosts={setAllPosts}
+              screenDecider={"home"}
+            />
+          ))}
+        </div>
+
+        <div className="loadMore-Container">
+          <button className="loadMore" onClick={handleLoadMore}>
+            Load More
+          </button>
+        </div>
       </div>
 
       <div className="sidebar-right">
@@ -216,40 +408,29 @@ const Posts = () => {
 
         <div className="suggestions-section">
           <h3 className="label">Suggestions for you</h3>
-          <div className="suggestion-item">
-            <h4>Alexander Clark</h4>
-            <button className="follow">Follow</button>
+          {recommendedUsers?.map(rec => (
+            <div className="suggestion-item">
+            <img src={rec?.image?.url}/>
+            <h4>{rec?.userName}</h4>
+            <button className="follow" onClick={(e)=>{
+              followerController(e, rec._id);
+            }}>Follow</button>
             <button className="connect">Connect</button>
           </div>
-          <div className="suggestion-item">
-            <h4>Jacob Thompson</h4>
-            <button className="follow">Follow</button>
-            <button className="connect">Connect</button>{" "}
-          </div>
-          <div className="suggestion-item">
-            <h4>Elena Gorobets</h4>
-            <button className="follow">Follow</button>
-            <button className="connect">Connect</button>{" "}
-          </div>
+          ))}
+         
         </div>
 
         <div className="activity-section">
           <h3 className="label">Latest Activities</h3>
           <div className="activity-item">
-            <p>Lucas Rodriguez posted an update</p>
-            <span>18 hours ago</span>
+          <div className="activity-single-item">
+            {notifications.length > 0 && <div>
+              {notifications?.map((n) => (
+                <AllNotifications n={n} />
+              ))}
+            </div>}
           </div>
-          <div className="activity-item">
-            <p>Mia Taylor reacted to your post</p>
-            <span>1 day ago</span>
-          </div>
-          <div className="activity-item">
-            <p>Mia Taylor commented on your post</p>
-            <span>1 day ago</span>
-          </div>
-          <div className="activity-item">
-            <p>Annette Black followed you</p>
-            <span>5 days ago</span>
           </div>
         </div>
       </div>

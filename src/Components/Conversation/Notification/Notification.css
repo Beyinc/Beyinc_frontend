@@ -76,6 +76,12 @@
   padding: 0px;
   transition: all ease 0.3s;
 }
+.format{
+ margin-left: 50px;
+}
+.format div{
+  color: grey;
+}
 .reloadNotification {
   justify-content: flex-end;
 }
