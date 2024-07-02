@@ -40,7 +40,7 @@ const Posts = () => {
 
   const [recommendedUsers, setRecommendedUsers] = useState([]);
   useEffect(() => {
-    dispatch(setLoading({ visible: "yes" }));
+    // dispatch(setLoading({ visible: "yes" }));
 
     ApiServices.getAllPosts({ page: page, pageSize: pageSize })
       .then((res) => {
@@ -55,7 +55,7 @@ const Posts = () => {
             visible: "yes",
           })
         );
-        dispatch(setLoading({ visible: "no" }));
+        // dispatch(setLoading({ visible: "no" }));
       });
   }, [loadingTrigger]);
 
@@ -423,7 +423,10 @@ const Posts = () => {
         </div>
 
         <div className="suggestions-section">
-          <h3 className="label">Suggestions for you</h3>
+        <div style={{display: 'flex',flexDirection: 'row', gap: '60px'}}>  <h3 className="label">Suggestions for you</h3>
+        <span style={{color: 'gray', fontSize: '14px', cursor: 'pointer'}} onClick={() => {
+                                  navigate("/searchusers");
+                              }}>See all</span></div>
           {recommendedUsers?.map((rec) => (
             <div className="suggestion-item" key={rec._id}>
               <div className="left-section">
@@ -438,7 +441,13 @@ const Posts = () => {
                 />
               </div>
               <div className="right-section">
-                <h4 >{rec?.userName}</h4>
+                <h4  onClick={() => {
+                                if (rec._id == user_id) {
+                                  navigate("/editProfile");
+                                } else {
+                                  navigate(`/user/${rec._id}`);
+                                }
+                              }}>{rec?.userName}</h4>
                 <p>{rec?.role}</p>
                 <div className="button-container">
                   <button
