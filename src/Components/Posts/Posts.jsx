@@ -35,6 +35,8 @@ const Posts = () => {
   }, []);
 
   const [allPosts, setAllPosts] = useState([]);
+  const [topTrendingPosts, setTopTrendingPosts] = useState([]);
+
   const [loadingTrigger, setLoadingTrigger] = useState(false);
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
 
@@ -58,6 +60,28 @@ const Posts = () => {
         // dispatch(setLoading({ visible: "no" }));
       });
   }, [loadingTrigger]);
+
+  useEffect(() => {
+    ApiServices.getTopTrendingPosts()
+      .then((res) => {
+        setTopTrendingPosts(res.data);
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occurred!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  }, [dispatch]);
+
+  const truncateDescription = (description, maxLength = 100) => {
+    if (description.length <= maxLength) return description;
+    const truncated = description.slice(0, maxLength);
+    return truncated.slice(0, truncated.lastIndexOf(" ")) + "...";
+  };
 
   useEffect(() => {
     ApiServices.getRecommendedUsers({ userId: user_id })
@@ -404,29 +428,35 @@ const Posts = () => {
       </div>
 
       <div className="sidebar-right">
-        <div className="trending-section">
-          <h3 className="label">Top Trending</h3>
-          <div className="trending-item">
-            <h4>Introducing the revolutionary 'EchoSphere'</h4>
-            <p>
-              The ultimate productivity solution for the modern professional...
-            </p>
+      <div className="trending-section">
+      <h3 className="label">Top Trending</h3>
+      <div className="trending-item">
+        {topTrendingPosts?.map((post, index) => (
+          <div key={post?._id}>
+            <h5>{post?.type}</h5>
+            <h4>
+              <b>{post?.postTitle}</b>
+            </h4>
+            <p>{truncateDescription(post?.description)}</p>
+            {index === topTrendingPosts.length - 1 ? null : <div className="line"></div>}
           </div>
-
-          <div className="trending-item">
-            <h4>Embrace Innovation: The Key to a Thriving Future!</h4>
-            <p>
-              Innovation isn't just about creating something new; it's about
-              transforming ideas into reality...
-            </p>
-          </div>
-        </div>
+        ))}
+      </div>
+    </div>
 
         <div className="suggestions-section">
-        <div style={{display: 'flex',flexDirection: 'row', gap: '60px'}}>  <h3 className="label">Suggestions for you</h3>
-        <span style={{color: 'gray', fontSize: '14px', cursor: 'pointer'}} onClick={() => {
-                                  navigate("/searchusers");
-                              }}>See all</span></div>
+          <div style={{ display: "flex", flexDirection: "row", gap: "60px" }}>
+            {" "}
+            <h3 className="label">Suggestions for you</h3>
+            <span
+              style={{ color: "gray", fontSize: "14px", cursor: "pointer" }}
+              onClick={() => {
+                navigate("/searchusers");
+              }}
+            >
+              See all
+            </span>
+          </div>
           {recommendedUsers?.map((rec) => (
             <div className="suggestion-item" key={rec._id}>
               <div className="left-section">
@@ -441,13 +471,17 @@ const Posts = () => {
                 />
               </div>
               <div className="right-section">
-                <h4  onClick={() => {
-                                if (rec._id == user_id) {
-                                  navigate("/editProfile");
-                                } else {
-                                  navigate(`/user/${rec._id}`);
-                                }
-                              }}>{rec?.userName}</h4>
+                <h4
+                  onClick={() => {
+                    if (rec._id == user_id) {
+                      navigate("/editProfile");
+                    } else {
+                      navigate(`/user/${rec._id}`);
+                    }
+                  }}
+                >
+                  {rec?.userName}
+                </h4>
                 <p>{rec?.role}</p>
                 <div className="button-container">
                   <button

@@ -900,6 +900,20 @@ export const ApiServices = {
   },
 
 
+  getTopTrendingPosts: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/getTopTrendingPosts`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
   getRecommendedUsers: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance

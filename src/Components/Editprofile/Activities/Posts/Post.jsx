@@ -13,6 +13,7 @@ import {
 import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
+import ShareButton from "../../ShareButton";
 
 const Post = ({ post, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
@@ -416,6 +417,13 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                   </svg>
                 </div>
                 <div className="actionText">Comment</div>
+              </div>
+
+               {/* SHARE ACTION */}
+               <div
+                className="likeActionHolder"
+              >
+                <ShareButton url={`${window.location.href}/${post._id}`}/>
               </div>
              
             </div>

@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 
-const ShareButton = () => {
+const ShareButton = ({url}) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
-  const urlToShare = window.location.href;
   const textToShare = "Check out this amazing post!";
-  const encodedUrlToShare = encodeURIComponent(urlToShare);
+  const encodedUrlToShare = encodeURIComponent(url);
   const encodedTextToShare = encodeURIComponent(textToShare);
 
   const shareData = {
     title: textToShare,
     text: textToShare,
-    url: urlToShare,
+    url
   };
 
   const handleShare = async () => {
@@ -37,7 +36,7 @@ const ShareButton = () => {
   };
 
   const copyLink = () => {
-    const clickableLink = `${urlToShare}`;
+    const clickableLink = `${url}`;
     navigator.clipboard
       .writeText(clickableLink)
       .then(() => {

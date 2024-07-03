@@ -463,7 +463,7 @@ const IndividualPostDetailsCard = () => {
                   {/* COMMENT ACTION */}
                   <div className="likeActionHolder">
                     <div className="actionText">
-                      <ShareButton />
+                      <ShareButton url={window.location.href}/>
                     </div>
                   </div>
                 </div>
