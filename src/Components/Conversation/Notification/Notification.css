@@ -64,6 +64,7 @@
   border-radius: 50px;
   /* border: 1px solid gray; */
   transition: all ease 0.3s;
+  cursor: pointer;
 }
 .individualrequestWrapper,
 .reloadNotification {

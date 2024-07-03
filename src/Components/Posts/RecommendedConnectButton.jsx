@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import "./Posts.css";
 
-const RecommendedConnectButton = ({ id }) => {
+const RecommendedConnectButton = ({ id, handleFollower }) => {
   const [connectStatus, setConnectStatus] = useState(null);
   const [receiverRole, setreceiverRole] = useState("");
   const [pitchSendTo, setPitchSendTo] = useState("");
@@ -71,10 +71,12 @@ const RecommendedConnectButton = ({ id }) => {
           </button>
         ))}
 
-        <AddConversationPopup receiverId={pitchSendTo}
+        <AddConversationPopup receiverId={pitchSendTo} 
                 setReceiverId={setPitchSendTo}
                 receiverRole={receiverRole}
-                IsAdmin={IsAdmin} />
+                IsAdmin={IsAdmin}
+                handleFollower = {handleFollower}
+                 />
     </div>
   );
 };

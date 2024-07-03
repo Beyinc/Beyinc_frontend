@@ -163,6 +163,11 @@
   border-bottom: 2px solid lightgray;
   margin: 10px 0 10px 0;
 }
+
+.notification-border{
+  border-bottom: 2px solid lightgray;
+  margin-left: 20px;
+}
 .trending-item h5{
   color: gray;
 }

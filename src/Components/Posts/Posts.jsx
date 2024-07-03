@@ -428,21 +428,23 @@ const Posts = () => {
       </div>
 
       <div className="sidebar-right">
-      <div className="trending-section">
-      <h3 className="label">Top Trending</h3>
-      <div className="trending-item">
-        {topTrendingPosts?.map((post, index) => (
-          <div key={post?._id}>
-            <h5>{post?.type}</h5>
-            <h4>
-              <b>{post?.postTitle}</b>
-            </h4>
-            <p>{truncateDescription(post?.description)}</p>
-            {index === topTrendingPosts.length - 1 ? null : <div className="line"></div>}
+        <div className="trending-section">
+          <h3 className="label">Top Trending</h3>
+          <div className="trending-item">
+            {topTrendingPosts?.map((post, index) => (
+              <div key={post?._id}>
+                <h5>{post?.type}</h5>
+                <h4>
+                  <b>{post?.postTitle}</b>
+                </h4>
+                <p>{truncateDescription(post?.description)}</p>
+                {index === topTrendingPosts.length - 1 ? null : (
+                  <div className="line"></div>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
 
         <div className="suggestions-section">
           <div style={{ display: "flex", flexDirection: "row", gap: "60px" }}>
@@ -492,7 +494,12 @@ const Posts = () => {
                   >
                     Follow
                   </button>
-                  <RecommendedConnectButton id={rec._id} />
+                  <RecommendedConnectButton
+                    id={rec._id}
+                    handleFollower={() => {
+                      setRecommendedUserTrigger(!recommendedUserTrigger);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -505,8 +512,13 @@ const Posts = () => {
             <div className="activity-single-item">
               {notifications?.length > 0 && (
                 <div>
-                  {notifications?.slice(0, 5).map((n) => (
-                    <AllNotifications n={n} />
+                  {notifications?.slice(0, 5).map((n, index) => (
+                    <div key={n.id}>
+                      <AllNotifications n={n} />
+                      {index < notifications.slice(0, 5).length - 1 && (
+                        <div className="notification-border"></div>
+                      )}
+                    </div>
                   ))}
                 </div>
               )}
