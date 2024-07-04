@@ -45,10 +45,10 @@ export const handlePayment = async (amount, currency, name, email, contact, user
 };
 
 
-export const addingBenificiaryAccount = async (accountNumber, ifsc, phone, email, userName) => {
-    await PaymentServices.addingBenificiary({ accountNumber, ifsc, phone, email, userName }).then((res) => {
+export const addingBenificiaryAccount = async (accountNumber, ifsc, phone, email, userName, userId) => {
+    await PaymentServices.addingBenificiary({ accountNumber, ifsc, phone, email, userName, userId }).then((res) => {
         console.log(res.data)
     }).catch(err => {
-        console.log(err)
+        alert(err.response.data)
     })
 }

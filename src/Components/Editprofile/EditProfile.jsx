@@ -2447,7 +2447,7 @@ const EditProfile = () => {
                                 value={ifsc}
                                 placeholder="Enter your ifsc"
                             ></textarea>
-                            <button onClick={()=>addingBenificiaryAccount(accountNumber, ifsc, mobile, email, userName)}>addingBenificiary</button>
+                            <button onClick={()=>addingBenificiaryAccount(accountNumber, ifsc, mobile, email, userName, user_id)}>addingBenificiary</button>
                             <textarea
                                 className="bioText"
                                 onChange={(e) => {
