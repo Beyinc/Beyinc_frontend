@@ -70,10 +70,6 @@ const Home = React.lazy(() =>
 );
 
 
-const EditProfileUI = React.lazy(() =>
-  import("./Components/Editprofile/EditProfileUI")
-);
-
 const Conversations = React.lazy(() =>
   import("./Components/Conversation/Conversations")
 );
@@ -159,15 +155,15 @@ const App = () => {
   }, []);
 
   // DONT REMOVE THIS IT IS FOR DARK AND WHITE THEME
-  //   useEffect(() => {
-  //     if (!localStorage.getItem('theme')) {
-  //       localStorage.setItem('theme', 'light')
-  //       document.body.setAttribute('data-theme', 'light')
-  //     } else {
-  //       document.body.setAttribute('data-theme', localStorage.getItem('theme'))
+    useEffect(() => {
+      if (!localStorage.getItem('theme')) {
+        localStorage.setItem('theme', 'light')
+        document.body.setAttribute('data-theme', 'light')
+      } else {
+        document.body.setAttribute('data-theme', localStorage.getItem('theme'))
 
-  //    }
-  //  }, [])
+     }
+   }, [])
   useEffect(() => {
     socket.current.on("sendseenMessage", (data) => {
       // console.log(data);
@@ -301,12 +297,17 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
           <Route path="/posts" Component={AuthHoc(Posts)} />
+          <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
+          <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
+
+
 
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
           {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
-          <Route path="/editProfile" Component={AuthHoc(EditProfileUI)} />
+          <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
+
 
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
@@ -324,7 +325,7 @@ const App = () => {
             Component={AuthHoc(IndividualPitch)}
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
-          <Route path="/user/:id" Component={AuthHoc(EditProfileUI)} />
+          <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
@@ -337,7 +338,7 @@ const App = () => {
           /> */}
           <Route
             path="/singleProfileRequest/:id"
-            Component={AdminDeciderHoc(EditProfileUI)}
+            Component={AdminDeciderHoc(EditProfile)}
           />
 
 

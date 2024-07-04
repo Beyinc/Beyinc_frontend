@@ -17,7 +17,7 @@ import {
 
 } from "../../Utils";
 import useWindowDimensions from './WindowSize';
-const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin }) => {
+const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin, handleFollower }) => {
     const dispatch = useDispatch();
     const {width} = useWindowDimensions()
     const socket = useRef();
@@ -45,6 +45,9 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
                             visible: "yes",
                         })
                     );
+                    if(handleFollower != undefined){
+                        handleFollower()
+                    }
                     setOpen(false);
                     setReceiverId("");
                     socket.current.emit("sendNotification", {
@@ -83,6 +86,9 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
                                 visible: "yes",
                             })
                         );
+                        if(handleFollower != undefined){
+                            handleFollower()
+                        }
                         setOpen(false);
                         setReceiverId("");
                         socket.current.emit("sendNotification", {
@@ -140,6 +146,9 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
                             senderId: user_id,
                             receiverId: receiverId,
                         });
+                        if(handleFollower != undefined){
+                            handleFollower()
+                        }
                         setOpen(false);
                         setReceiverId("");
                         document

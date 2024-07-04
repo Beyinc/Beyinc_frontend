@@ -33,7 +33,7 @@ const ReviewStars = ({ avg }) => {
   return (
     <div title="Average review">
       <div className="Star-rating">
-        <span style={{background: '#F77D0E', color: 'white', padding: '3px 6px', borderRadius: '5px', fontSize: '12px', marginRight: '5px'}}>
+        <span style={{ background: 'var(--editProfile-toggler-bottom)', color: 'white', padding: '3px 6px', borderRadius: '5px', fontSize: '12px', marginRight: '5px'}}>
           {avg.toFixed(1).split(".")[1] != "0"
             ? avg.toFixed(1)
             : avg.toFixed(0)}

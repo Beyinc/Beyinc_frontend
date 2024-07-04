@@ -1,0 +1,270 @@
+.ProfilepostContainer {
+  border: 1px solid var(--post-outer-border);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #ffffff;
+
+}
+.allPostShowContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.indiTag{
+    color: var(--followBtn-bg);
+}
+
+.PostheaderimageContainer img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.PostHeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.postTotaldetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.postCardUserName {
+  font-family: Gentium Book Basic;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 23.14px;
+  text-align: left;
+}
+.postCardRole {
+  font-family: Gentium Book Basic;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 23.14px;
+  text-align: left;
+  color: var(--personalDetails-color);
+}
+.postType{
+  background: var(--postType-bg);
+  padding: 6px 10px;
+  border-radius: 20px;
+  color: black;
+}
+
+.postDescContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.postDescContainer .postType {
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 23.14px;
+}
+.postDescContainer .postDesc {
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23.14px;
+  text-align: left;
+}
+
+
+.postDesc .seeMore{
+ display: flex;
+ justify-content: flex-end;
+ align-items: flex-end;
+}
+.postDesc .seeMore:hover{
+  text-decoration: underline;
+  color: var(--primary);
+}
+
+.tagsContainer {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: var(--posttags-color);
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.PostimageContainer img {
+  width: 100%;
+  height: 421px;
+  border-radius: 0 !important;
+  margin-left: 0;
+}
+
+.likeCommentDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--post-outer-border);
+  padding-bottom: 13px;
+  font-size: 14px !important;
+}
+
+.commentTotal {
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23.14px;
+  color: var(--post-outer-border);
+}
+.likeTotal {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23.14px;
+  color: #838282;
+}
+.likeTotal div{
+     display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23.14px;
+  color: #838282;
+}
+
+.actionsHolder {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  /* padding-top: 10px; */
+  justify-content: space-between;
+}
+.actionsHolder-leftContent{
+  display: flex;
+  align-items: center;
+  /* padding-top: 10px; */
+}
+.likeActionHolder {
+  display: flex;
+  align-items: center;
+   padding: 10px 15px;
+  gap: 5px;
+}
+.likeActionHolder:hover {
+ background-color: #f5f5f5;
+ border-radius: 5px;
+}
+
+.actionText {
+  font-family: Gentium Book Basic;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 23.14px;
+  text-align: left;
+  cursor: pointer;
+}
+.join-button-container .join-button{
+border-radius: 20px;
+padding: 10px 20px;
+color: var(--button-color);
+background: var( --button-background);
+}
+.join-button-container .join-button:hover{
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;}
+
+.subMenu {
+  position: absolute;
+  width: 160px;
+  right: 100%;
+  display: none;
+  height: auto;
+  background: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.subMenu div {
+  padding: 5px;
+}
+.subMenu.show {
+  display: block !important;
+}
+.subMenu div:hover {
+  background: lightgray;
+}
+@media(max-width : 768px){
+  .ProfilepostContainer {  
+    padding: 0px;
+    gap: 2px;
+    border: none;
+
+  }
+  .PostheaderimageContainer img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  .postCardUserName {
+    font-size: 14px;
+    line-height: 15px;
+  }
+  .postCardRole {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .postType{
+    background: var(--postType-bg);
+    padding: 6px 10px;
+    border-radius: 20px;
+    color: black;
+    font-size: 10px;
+  }
+  .PostDetailsContainer{
+    padding: 0;
+    margin: 0;
+    width: 100px;
+  }
+  .postTotaldetails {
+    gap: 10px;
+  }
+
+  .actionsHolder {
+    gap: 18px;
+  }
+  .actionText {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .likeTotal {
+    font-size: 12px;
+  }
+  .likeTotal div{
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .likeCommentDetails {
+    display: flex;
+    justify-content:flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  
+  .commentTotal {
+    font-size: 14px;
+  }
+  .tagsContainer {
+  
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}

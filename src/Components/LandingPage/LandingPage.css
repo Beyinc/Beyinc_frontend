@@ -42,7 +42,7 @@ body {
 }
 
 .signup-button {
-  background: linear-gradient(35deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(35deg, #ff6824 0%, var(--landingpage-h1) 100%);
   /* background-color: var(--button) !important; */
   border-radius: 15px;
   width: 100px;
@@ -50,7 +50,7 @@ body {
 }
 
 .signup-button:hover {
-  background: linear-gradient(35deg, var(--primary) 0%, #ff6824 100%);
+  background: linear-gradient(35deg, var(--landingpage-h1) 0%, #ff6824 100%);
   /* background: var(--button-hover) !important; */
 }
 
@@ -67,7 +67,7 @@ body {
 }
 .content-1 h1 {
   font-size: 3rem;
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -75,7 +75,7 @@ body {
   font-size: 2rem;
 }
 .starting-button {
-  background: linear-gradient(35deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(35deg, #ff6824 0%, var(--landingpage-h1) 100%);
   border-radius: 30px;
   width: auto;
   margin-top: 10px;
@@ -83,7 +83,7 @@ body {
   transition: background-color 0.3s ease;
 }
 .starting-button:hover {
-  background: linear-gradient(35deg, var(--primary) 0%, #ff6824 100%);
+  background: linear-gradient(35deg, var(--landingpage-h1) 0%, #ff6824 100%);
 }
 .image-1-dummy {
   display: none;
@@ -110,7 +110,7 @@ body {
 
 .content-2 h1 {
   font-size: 3rem;
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -121,21 +121,21 @@ body {
 
 .fa-user-tie {
   color: var(--white-text);
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   padding: 15px 16px;
   border-radius: 50%;
   margin-bottom: 10px;
 }
 .section-2-users {
   color: var(--white-text);
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   padding: 15px 13px;
   border-radius: 50%;
   margin-bottom: 10px;
 }
 .fa-lightbulb {
   color: var(--white-text);
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   padding: 15px 18px;
   border-radius: 50%;
 }
@@ -146,7 +146,7 @@ body {
 }
 .section-3 h1 {
   font-size: 3rem;
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   -webkit-background-clip: text;
   color: transparent;
   text-align: center;
@@ -171,7 +171,7 @@ body {
   cursor: pointer;
 }
 .box:hover {
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   color: var(--white-text);
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -202,7 +202,7 @@ body {
 }
 .content-4 h1 {
   font-size: 3rem;
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   -webkit-background-clip: text;
   color: transparent;
   margin-left: 150px;
@@ -273,7 +273,7 @@ body {
   transform: translateX(-50%);
 }
 .card-icon {
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   padding: 20px;
   border-radius: 20px;
 } */
@@ -297,7 +297,7 @@ body {
   justify-content: center;
 }
 .content-6 h2 {
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   -webkit-background-clip: text;
   color: transparent;
   font-size: 3rem;
@@ -309,7 +309,7 @@ body {
   padding: 20px;
   margin-left: 80px;
   border: 1px solid #ddd;
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   border-radius: 5px;
   text-align: center;
   position: relative;
@@ -500,7 +500,7 @@ body {
   transform: translateX(-50%);
 }
 .card-icon {
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   padding: 20px;
   border-radius: 20px;
 }
@@ -516,7 +516,7 @@ body {
 
 }
 .box:hover {
-  background: linear-gradient(75deg, #ff6824 0%, var(--primary) 100%);
+  background: linear-gradient(75deg, #ff6824 0%, var(--landingpage-h1) 100%);
   color: var(--white-text);
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;

@@ -235,11 +235,13 @@ input[type="checkbox"] {
 .selected-domain,
 .selected-skill {
   display: inline-block;
-  background-color: var(--primary-light);
+  background-color: var(--tag-bg);
+  color: black;
   border-radius: 5px;
   padding: 5px 10px;
   margin-right: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+
 }
 
 .selected-domain span,
@@ -253,9 +255,9 @@ input[type="checkbox"] {
   color: #fff;
   border: none;
   border-radius: 50%;
-  padding: 5px;
+  padding: 7px 8px;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1;
 }
 

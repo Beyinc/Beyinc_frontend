@@ -65,10 +65,10 @@ const PrivacyPolicy = () => {
             <img src="/About.png"/>
         </div>
           <p>
-            BeyInc is  a social entrepreneurship platform bringing entrepreneurs,
+          BeyInc Entrepreneurship Venture Private Limited is  a social entrepreneurship platform bringing entrepreneurs,
             mentors, investors and other stakeholders at one place and catering
             early-stage startup to increase their success rate from 10 % to
-            potentially 50%. At BeyInc, we pride ourselves on providing
+            potentially 50%. At BeyInc Entrepreneurship Venture Private Limited, we pride ourselves on providing
             unmatched collaboration opportunities that stand apart from any
             other.
           </p>
@@ -145,7 +145,7 @@ const PrivacyPolicy = () => {
           </div>
           <h2>Privacy Policy</h2>
           <p>
-            Beyinc is committed to protecting the privacy of our users. This
+          BeyInc Entrepreneurship Venture Private Limited is committed to protecting the privacy of our users. This
             Privacy Policy describes how we collect, use, and disclose
             information when you use our website{" "}
             <a href="https://www.beyinc.org/">https://www.beyinc.org/</a> and

@@ -1,0 +1,121 @@
+.post-details-main-container{
+    padding: 0 40px 0 40px;
+    /* background: var( --comment-section-bg); */
+  }
+  .post-details-container{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+  .individualPostTotalDetails{
+    display: flex;
+    gap: 0px;
+    align-items: center;
+  }
+  .subMenu {
+    position: absolute;
+    width: 160px;
+    right: 100%;
+    display: none;
+    height: auto;
+    background: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subMenu div {
+    padding: 5px;
+  }
+  .subMenu.show {
+    display: block !important;
+  }
+  .subMenu div:hover {
+    background: lightgray;
+  }
+  .individualPostTotalDetailsRight{
+    display: flex;
+    /* gap: 10px; */
+    align-items: center;
+   width: 450px;
+   margin-top: -20px;
+   
+  }
+  .IndividualPostDetailsContainer{
+    padding: 0;
+    margin: 0;
+    width: 700px;
+  }
+  
+  .IndividualPostHeaderImageContainer{
+   padding: 20px;
+   margin-left: -40px;
+  }
+  .post-details-content-right{
+    padding: 20px;
+  }
+  .wholePostWrapper {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    background: var( --post-details-card-bg);
+    color: var( --text-total-color);
+    width: 470px;
+    border-radius: 20px;
+    margin-bottom: 20PX;
+    margin-top: 20px;
+  }
+
+  .membersWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background: var(  --post-details-card-bg);
+    width: 470px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+   
+   
+  }
+  .openDiscussionUsers{
+    overflow-y: auto; 
+    max-height: 700px; 
+  }
+  
+  
+  .openDiscussionUser {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .openDiscussionUserContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .openDiscussionUserImage {
+    width: 30px; /* Adjust as needed */
+    height: 30px; /* Adjust as needed */
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .openDiscussionUserName {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .openDiscussionUserrole{
+    font-size: 12px;
+    color: var(--text-total-color);
+  }
+  
+  .openDiscussion-Buttons button{
+white-space: noWrap;
+border-radius: 30px;
+color: var( --button-color);
+background: var( --button-background);
+  }
+
+  
