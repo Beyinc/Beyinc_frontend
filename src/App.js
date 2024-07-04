@@ -34,13 +34,10 @@ import AllUsers from "./Components/AllUsers/AllUsers";
 import IndividualUser from "./Components/AllUsers/individualUser";
 import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
-<<<<<<< Updated upstream
-=======
 import EditProfile from "./Components/Editprofile/EditProfile";
 import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePostPage";
 import BuyCoins from "./Components/Razorpay/BuyCoins";
 import PaymentSuccess from "./Components/Razorpay/PaymentSuccess";
->>>>>>> Stashed changes
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
