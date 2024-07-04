@@ -778,7 +778,7 @@ const Navbar = () => {
           </div>
         </div>
         {/* DARK AND WHITE THEME */}
-        <ListItem
+        {/* <ListItem
           button
           key="themeIcon"
           onClick={(e) => {
@@ -832,13 +832,6 @@ const Navbar = () => {
             e.currentTarget.title = `${mode} Mode`;
           }}
         >
-          {/* <i
-            id="themeIcon"
-            class={`fas fa-${
-              localStorage.getItem("theme") == "light" ? "moon" : "sun"
-            }`}
-          >
-            </i> */}
           <ListItemIcon>
             {localStorage.getItem("theme") === "light" ? (
               <svg
@@ -879,7 +872,7 @@ const Navbar = () => {
             primary={`${localStorage.getItem("theme") === "light" ? "Dark" : "Light"
               } Mode`}
           />
-        </ListItem>
+        </ListItem> */}
 
         <ListItem
           button

@@ -100,11 +100,11 @@ const Posts = () => {
   }, [recommendedUserTrigger]);
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleLoadMore = () => {
     setPage(pageSize);
-    setPageSize(pageSize + 2);
+    setPageSize(pageSize + 10);
     setLoadingTrigger(!loadingTrigger);
   };
 

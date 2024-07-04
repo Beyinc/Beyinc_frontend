@@ -416,7 +416,7 @@ const EditPost = ({
             <button
                className="postButton"
               onClick={updatePost}
-              disabled={description == "" || image == ""}
+              disabled={description == ""}
             >
               Update
             </button>

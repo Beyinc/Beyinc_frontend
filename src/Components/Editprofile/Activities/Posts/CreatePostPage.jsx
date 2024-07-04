@@ -147,7 +147,7 @@ const CreatePostPage = () => {
             receiverId: usertags[i]._id,
           });
         }
-        navigate("/editProfile");
+        navigate("/posts");
       })
       .catch((err) => {
         dispatch(
@@ -219,7 +219,7 @@ const CreatePostPage = () => {
           setFullDetails("");
           setGroupDiscussion("");
           setPostTitle("");
-          navigate("/editProfile");
+          navigate("/posts");
 
 
         // setAllPosts((prev) => [
@@ -301,8 +301,8 @@ const CreatePostPage = () => {
               value={accessSetting}
               onChange={handleAccessChange}
             >
-              <option value="public">Public Forum</option>
-              <option value="members">Members only</option>
+              <option value="public">Public Post</option>
+              <option value="members">Private Post</option>
             </select>
           </div>
         </div>
@@ -756,7 +756,7 @@ const CreatePostPage = () => {
           <button
             className="createPost-Button"
             onClick={postId==undefined?addingpost:updatePost}
-            disabled={description == "" || image == ""}
+            disabled={description == ""}
           >
            {postId==undefined? 'Post' : 'Update'}
           </button>

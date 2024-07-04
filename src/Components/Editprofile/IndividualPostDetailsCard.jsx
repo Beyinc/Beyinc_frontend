@@ -222,7 +222,12 @@ const IndividualPostDetailsCard = () => {
             <div className="createPostHeader" style={{ position: "relative" }}>
               <div className="PostHeaderContainer">
                 <div className="individualPostTotalDetails">
-                  <div className="IndividualPostHeaderImageContainer">
+                  <div
+                    className="IndividualPostHeaderImageContainer"
+                    onClick={() => {
+                      navigate(`/user/${post?.createdBy?._id}`);
+                    }}
+                  >
                     <img
                       src={
                         post?.createdBy?.image !== "" &&
@@ -235,7 +240,12 @@ const IndividualPostDetailsCard = () => {
                     />
                   </div>
                   <div className="IndividualPostDetailsContainer">
-                    <div className="postCardUserName">
+                    <div
+                      className="postCardUserName"
+                      onClick={() => {
+                        navigate(`/user/${post?.createdBy?._id}`);
+                      }}
+                    >
                       {post?.createdBy?.userName[0]?.toUpperCase() +
                         post?.createdBy?.userName?.slice(1)}
                     </div>
@@ -336,7 +346,15 @@ const IndividualPostDetailsCard = () => {
               <div className="postDesc">
                 <b>{post?.postTitle}</b>
               </div>
-              <div className="postDesc">{post?.description}</div>
+              <div
+                className="postDesc"
+                style={{
+                  whiteSpace: "pre-wrap",
+                  padding: "0 0 0 10px",
+                }}
+              >
+                {post?.description}
+              </div>
               {/* <div className="tagsContainer">
                 {post?.tags?.map((t) => (
                   <div
@@ -356,12 +374,14 @@ const IndividualPostDetailsCard = () => {
                       ? post?.image?.url
                       : "/profile.png"
                   }
-                  style={{ objectFit: "contain", objectPosition: 'left' }}
+                  style={{ objectFit: "contain", objectPosition: "center" }}
                   alt=""
                 />
               </div>
               {post?.openDiscussion !== true && (
-                <div className="postDesc">{post?.fullDetails}</div>
+                <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
+                  {post?.fullDetails}
+                </div>
               )}
               <div className="likeCommentDetails">
                 <div className="likeTotal">
@@ -463,7 +483,7 @@ const IndividualPostDetailsCard = () => {
                   {/* COMMENT ACTION */}
                   <div className="likeActionHolder">
                     <div className="actionText">
-                      <ShareButton url={window.location.href}/>
+                      <ShareButton url={window.location.href} />
                     </div>
                   </div>
                 </div>
@@ -492,7 +512,12 @@ const IndividualPostDetailsCard = () => {
             <div className="wholePostWrapper">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight">
-                  <div className="IndividualPostHeaderImageContainer">
+                  <div
+                    className="IndividualPostHeaderImageContainer"
+                    onClick={() => {
+                      navigate(`/user/${post?.createdBy?._id}`);
+                    }}
+                  >
                     <img
                       src={
                         post?.createdBy?.image !== "" &&
@@ -506,7 +531,12 @@ const IndividualPostDetailsCard = () => {
                   </div>
 
                   <div className="IndividualPostDetailsContainer">
-                    <div className="postCardUserName">
+                    <div
+                      className="postCardUserName"
+                      onClick={() => {
+                        navigate(`/user/${post?.createdBy?._id}`);
+                      }}
+                    >
                       {post?.createdBy?.userName[0]?.toUpperCase() +
                         post?.createdBy?.userName?.slice(1)}
                     </div>
@@ -590,9 +620,10 @@ const IndividualPostDetailsCard = () => {
                     <span className="postType"> {post?.type}</span>
                   </div>
 
-                  <div style={{ marginBottom: "10px" }}>
+                  {/* <div style={{ marginBottom: "10px" }}>
                     <b>Tags :</b>{" "}
-                    <span
+                    <span 
+                    
                       style={{
                         background: "var( --tag-bg-right)",
                         padding: "5px 10px",
@@ -601,10 +632,37 @@ const IndividualPostDetailsCard = () => {
                     >
                       {post?.tags?.map((p) => p.userName)?.join(", ")}
                     </span>
+                  </div> */}
+                  <div style={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
+                    <b style={{ padding: "5px 0px"}}>Tags:</b>
+                    <div className="tagsContainer">
+                      {post?.tags?.map((t) => (
+                        <div
+                        style={{
+                        background: "var( --tag-bg-right)",
+                        padding: "5px 10px",
+                        borderRadius: "20px",
+                      }}
+                          className="indiTag"
+                          onClick={() => navigate(`/user/${t._id}`)}
+                        >
+                          {/* {`@${t?.userName}`} */}
+                          {t?.userName}
+
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
                   {post?.openDiscussion !== true && (
-                    <div style={{ marginBottom: "10px" }}>
-                      <b>Group Discussion :</b> {post?.description}
+                    <div
+                      style={{
+                        marginBottom: "10px",
+                        whiteSpace: "pre-wrap",
+                        textAlign: "justify",
+                      }}
+                    >
+                      <b>Group Discussion :</b> {post?.groupDiscussion}
                     </div>
                   )}
 
