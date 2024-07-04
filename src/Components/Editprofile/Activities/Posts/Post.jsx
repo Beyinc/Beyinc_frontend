@@ -13,8 +13,9 @@ import {
 import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
+import ShareButton from "../../ShareButton";
 
-const Post = ({ post, setAllPosts }) => {
+const Post = ({ post, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
@@ -146,8 +147,19 @@ const Post = ({ post, setAllPosts }) => {
         });
       });
   };
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <section className="EditProfileOuterCard">
+    <section
+      className={`EditProfileOuterCard ${
+        screenDecider == "home" && "homeEditProfileOuterCard "
+      }`}
+    >
       <div className="ProfilepostContainer">
         <div className="PostHeaderContainer">
           <div className="postTotaldetails">
@@ -163,7 +175,7 @@ const Post = ({ post, setAllPosts }) => {
                 alt=""
               />
             </div>
-            
+
             <div className="PostDetailsContainer">
               <div className="postCardUserName">
                 {post?.createdBy?.userName[0]?.toUpperCase() +
@@ -175,12 +187,14 @@ const Post = ({ post, setAllPosts }) => {
               </div>
             </div>
           </div>
+
           <div
             style={{
               position: "relative",
               display: "flex",
               gap: "10px",
               alignItems: "center",
+              marginTop: "-40px",
             }}
           >
             <div className="postType">{post?.type}</div>
@@ -254,11 +268,13 @@ const Post = ({ post, setAllPosts }) => {
           >
             <b>{post?.postTitle}</b>
           </div>
-          <div
-            className="postDesc"
-            onClick={() => navigate(`/posts/${post?._id}`)}
-          >
-            {post?.description}
+          <div className="postDesc">
+            {isExpanded
+              ? post?.description
+              : post?.description.slice(0, 100) + "..."}
+            <span className="seeMore" onClick={toggleExpanded}>
+              {isExpanded ? "" : "...See more"}
+            </span>
           </div>
           <div className="tagsContainer">
             {post?.tags?.map((t) => (
@@ -289,8 +305,8 @@ const Post = ({ post, setAllPosts }) => {
               <div>
                 <div>
                   <svg
-                    width="30"
-                    height="30"
+                    width="20"
+                    height="20"
                     viewBox="0 0 30 30"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -311,8 +327,8 @@ const Post = ({ post, setAllPosts }) => {
               <div>
                 <div>
                   <svg
-                    width="30"
-                    height="30"
+                    width="20"
+                    height="20"
                     viewBox="0 0 40 40"
                     fill={"none"}
                     xmlns="http://www.w3.org/2000/svg"
@@ -334,12 +350,12 @@ const Post = ({ post, setAllPosts }) => {
           </div>
           <div className="actionsHolder">
             <div className="actionsHolder-leftContent">
-              <div className="likeActionHolder">
+              <div className="likeActionHolder" onClick={likingpost}>
                 {/* LIKE ACTION */}
-                <div onClick={likingpost}>
+                <div >
                   <svg
-                    width="30"
-                    height="30"
+                    width="20"
+                    height="20"
                     viewBox="0 0 40 40"
                     fill={"none"}
                     xmlns="http://www.w3.org/2000/svg"
@@ -357,11 +373,11 @@ const Post = ({ post, setAllPosts }) => {
                 <div className="actionText">upvote</div>
               </div>
               {/* DISLIKE ACTION */}
-              <div className="likeActionHolder">
-                <div onClick={dislikePost}>
+              <div className="likeActionHolder" onClick={dislikePost}>
+                <div >
                   <svg
-                    width="30"
-                    height="30"
+                    width="20"
+                    height="20"
                     viewBox="0 0 40 40"
                     fill={"none"}
                     xmlns="http://www.w3.org/2000/svg"
@@ -385,8 +401,8 @@ const Post = ({ post, setAllPosts }) => {
               >
                 <div>
                   <svg
-                    width="26"
-                    height="26"
+                    width="20"
+                    height="20"
                     viewBox="0 0 34 34"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -402,7 +418,16 @@ const Post = ({ post, setAllPosts }) => {
                 </div>
                 <div className="actionText">Comment</div>
               </div>
+
+               {/* SHARE ACTION */}
+               <div
+                className="likeActionHolder"
+              >
+                <ShareButton url={`${window.location.href}/${post._id}`}/>
+              </div>
+             
             </div>
+            
             {/* <div className="join-button-container">
               <button
                 className="join-button"
@@ -412,7 +437,10 @@ const Post = ({ post, setAllPosts }) => {
               </button>
             </div> */}
           </div>
+          
         </div>
+
+        
         <Dialog
           open={deletePop}
           onClose={() => {
@@ -520,6 +548,7 @@ const Post = ({ post, setAllPosts }) => {
         </Dialog>
       </div>
     </section>
+    
   );
 };
 
