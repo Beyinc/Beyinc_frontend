@@ -48,7 +48,7 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
-import { handlePayment } from "../Common/helperFunctions";
+import { addingBenificiaryAccount, handlePayment } from "../Common/helperFunctions";
 
 const EditProfile = () => {
     const { id } = useParams();
@@ -2447,6 +2447,7 @@ const EditProfile = () => {
                                 value={ifsc}
                                 placeholder="Enter your ifsc"
                             ></textarea>
+                            <button onClick={()=>addingBenificiaryAccount(accountNumber, ifsc, mobile, email, userName)}>addingBenificiary</button>
                             <textarea
                                 className="bioText"
                                 onChange={(e) => {

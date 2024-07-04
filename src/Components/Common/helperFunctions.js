@@ -43,3 +43,12 @@ export const handlePayment = async (amount, currency, name, email, contact, user
     const rzp = new window.Razorpay(options);
     rzp.open();
 };
+
+
+export const addingBenificiaryAccount = async (accountNumber, ifsc, phone, email, userName) => {
+    await PaymentServices.addingBenificiary({ accountNumber, ifsc, phone, email, userName }).then((res) => {
+        console.log(res.data)
+    }).catch(err => {
+        console.log(err)
+    })
+}
