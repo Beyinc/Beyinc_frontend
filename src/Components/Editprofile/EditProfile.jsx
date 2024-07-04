@@ -48,6 +48,7 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
+import { handlePayment } from "../Common/helperFunctions";
 
 const EditProfile = () => {
     const { id } = useParams();
@@ -119,9 +120,11 @@ const EditProfile = () => {
         isEmailValid: null,
         isMobileValid: null,
         isNameValid: null,
+        freeMoney: 0,
+        realMoney: 0,
     });
 
-    const {
+    const { freeMoney, realMoney,
         review,
         verification,
         // email,
@@ -192,6 +195,8 @@ const EditProfile = () => {
     });
     const [fee, setFee] = useState("");
     const [bio, setBio] = useState("");
+    const [accountNumber, setaccountNumber] = useState("");
+    const [ifsc, setifsc] = useState("");
     const [skills, setSkills] = useState([]);
     const [singleSkill, setSingleSkill] = useState("");
     const [editOwnProfile, setEditOwnProfile] = useState(false);
@@ -474,6 +479,7 @@ const EditProfile = () => {
     const [convExits, setConvExists] = useState(false);
     const [averagereview, setAverageReview] = useState(0);
     const [emailTrigger, setemailTrigger] = useState(false);
+    
 
     useEffect(() => {
         if (userpage === true) {
@@ -487,7 +493,7 @@ const EditProfile = () => {
         }
     }, [userpage, user_id]);
     const onLike = async (commentId, isLike) => {
-        await ApiServices.likeComment({ comment_id: commentId, comment_owner: id==undefined?user_id:id })
+        await ApiServices.likeComment({ comment_id: commentId, comment_owner: id == undefined ? user_id : id })
             .then((res) => {
                 setAllComments(res.data)
             })
@@ -527,13 +533,13 @@ const EditProfile = () => {
     };
 
     const onDisLike = async (commentId, isLike) => {
-       await ApiServices.dislikeComment({
+        await ApiServices.dislikeComment({
             comment_id: commentId,
-            comment_owner: id==undefined?user_id:id,
+            comment_owner: id == undefined ? user_id : id,
         })
-           .then((res) => {
-            setAllComments(res.data)
-           })
+            .then((res) => {
+                setAllComments(res.data)
+            })
             .catch((err) => {
                 dispatch(
                     setToast({
@@ -660,6 +666,8 @@ const EditProfile = () => {
                         setEditOwnProfile(true);
                         setInputs((prev) => ({
                             ...prev,
+                            freeMoney: res.data.freeMoney,
+                            realMoney: res.data.realMoney,
                             twitter: res.data.twitter,
                             linkedin: res.data.linkedin,
                             review: res.data.review,
@@ -696,6 +704,8 @@ const EditProfile = () => {
                             setTotalExperienceData(res.data.experienceDetails || []);
                             setFee(res.data.fee || "");
                             setBio(res.data.bio || "");
+                            setifsc(res.data?.ifsc || "");
+                            setaccountNumber(res.data?.accountNumber || "");
                             setSkills(res.data.skills || []);
                             setlanguagesKnown(res.data.languagesKnown || []);
 
@@ -1080,6 +1090,8 @@ const EditProfile = () => {
             documents: changeResume,
             experienceDetails: totalExperienceData,
             educationdetails: totalEducationData,
+            accountNumber: accountNumber,
+            ifsc: ifsc
         })
             .then((res) => {
                 dispatch(
@@ -1591,6 +1603,10 @@ const EditProfile = () => {
                             }`} onClick={() => seteditPostToggler('comment')}>
                             Reviews
                         </div>
+                        {id == undefined && <div className={`ActivtyDetailsCardToggle ${editPostToggler == 'comment' && "ActivtyDetailsCardToggleSelected"
+                            }`} onClick={() => seteditPostToggler('wallet')}>
+                            Wallet
+                        </div>}
                     </div>
                     {editPostToggler == 'profile' &&
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -1928,7 +1944,7 @@ const EditProfile = () => {
                             </section>
 
                             {userpage === false && <section className="EditProfileOuterCard">
-                                
+
                                 <section >
                                     <div >
                                         <div className="aboutHeadings">
@@ -2185,7 +2201,7 @@ const EditProfile = () => {
                                         </form>
                                     </div>
                                 </section>
-                                
+
                             </section>}
 
 
@@ -2336,7 +2352,7 @@ const EditProfile = () => {
                                     {(convExits || id == undefined ||
                                         jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
                                             .role == "Admin") ?
-                                        <div style={{ display: 'flex',  gap: '5px', alignItems: 'center', marginLeft: '-15px' }}>
+                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center', marginLeft: '-15px' }}>
                                             <div className='addingCommentImageShow'>
                                                 <img
                                                     src={
@@ -2357,14 +2373,14 @@ const EditProfile = () => {
                                                     </svg>
 
                                                 </div>
-                                               
+
                                             </section>
                                         </div>
                                         : <div style={{ fontSize: "20px", marginBottom: "20px", textAlign: 'center' }}>
                                             Conversation with this user should exist to add reviews
                                         </div>
                                     }
-                                    <div style={{display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '40px'}}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '40px' }}>
                                         {allComments?.map((comment, index) => (
                                             <UserComment onLike={onLike}
                                                 key={index}
@@ -2378,6 +2394,65 @@ const EditProfile = () => {
                         </div>
                     }
 
+                    {/* wallet section */}
+                    {editPostToggler == 'wallet' &&
+                        <div>
+                            <textarea
+                                className="bioText"
+                                onChange={(e) => {
+                                    const inputText = e.target.value;
+                                    if (inputText.length <= 1000) {
+                                        setaccountNumber(inputText);
+                                    } else {
+                                        setaccountNumber(inputText.slice(0, 1000));
+                                    }
+                                }}
+                                style={{
+                                    resize: "none",
+                                    border: "none",
+                                    // padding: '20px',
+                                    textAlign: "justify",
+                                    fontFamily: "poppins",
+                                }}
+                                id=""
+                                cols="25"
+                                rows="2"
+                                name="message"
+                                value={accountNumber}
+                                placeholder="Enter your accountNumber"
+                            ></textarea>
+                            <textarea
+                                className="bioText"
+                                onChange={(e) => {
+                                    const inputText = e.target.value;
+                                    if (inputText.length <= 1000) {
+                                        setifsc(inputText);
+                                    } else {
+                                        setifsc(inputText.slice(0, 1000));
+                                    }
+                                }}
+                                style={{
+                                    resize: "none",
+                                    border: "none",
+                                    // padding: '20px',
+                                    textAlign: "justify",
+                                    fontFamily: "poppins",
+                                }}
+                                id=""
+                                cols="25"
+                                rows="2"
+                                name="message"
+                                value={ifsc}
+                                placeholder="Enter your ifsc"
+                            ></textarea>
+                            <div>Free Coins: {freeMoney}</div>
+                            <div>Real Coins: {realMoney}</div>
+                            <button onClick={() => {
+                                handlePayment(100, 'INR', userName, email, mobile, user_id)
+                            }}>Add coins</button>
+                        </div>
+
+                    }
 
                 </div>
                 {isInputPopupVisible && (
