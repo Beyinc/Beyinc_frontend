@@ -268,7 +268,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
           >
             <b>{post?.postTitle}</b>
           </div>
-          <div className="postDesc">
+          <div className="postDesc" style={{whiteSpace: 'pre-wrap'}}>
             {isExpanded
               ? post?.description
               : post?.description.slice(0, 100) + "..."}
