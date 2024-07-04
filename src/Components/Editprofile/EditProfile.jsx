@@ -197,6 +197,8 @@ const EditProfile = () => {
     const [bio, setBio] = useState("");
     const [accountNumber, setaccountNumber] = useState("");
     const [ifsc, setifsc] = useState("");
+    const [addingMoney, setaddingMoney] = useState("");
+
     const [skills, setSkills] = useState([]);
     const [singleSkill, setSingleSkill] = useState("");
     const [editOwnProfile, setEditOwnProfile] = useState(false);
@@ -2445,10 +2447,32 @@ const EditProfile = () => {
                                 value={ifsc}
                                 placeholder="Enter your ifsc"
                             ></textarea>
+                            <textarea
+                                className="bioText"
+                                onChange={(e) => {
+                                    const inputText = e.target.value;
+                                    if (!isNaN(inputText)) {
+                                        setaddingMoney(inputText);
+                                    } 
+                                }}
+                                style={{
+                                    resize: "none",
+                                    border: "none",
+                                    // padding: '20px',
+                                    textAlign: "justify",
+                                    fontFamily: "poppins",
+                                }}
+                                id=""
+                                cols="25"
+                                rows="2"
+                                name="message"
+                                value={addingMoney}
+                                placeholder="Enter your amount"
+                            ></textarea>
                             <div>Free Coins: {freeMoney}</div>
                             <div>Real Coins: {realMoney}</div>
-                            <button onClick={() => {
-                                handlePayment(100, 'INR', userName, email, mobile, user_id)
+                            <button disabled={addingMoney==''} onClick={() => {
+                                handlePayment(+addingMoney, 'INR', userName, email, mobile, user_id)
                             }}>Add coins</button>
                         </div>
 
