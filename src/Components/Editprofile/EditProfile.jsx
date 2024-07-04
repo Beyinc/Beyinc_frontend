@@ -1603,7 +1603,7 @@ const EditProfile = () => {
                             }`} onClick={() => seteditPostToggler('comment')}>
                             Reviews
                         </div>
-                        {id == undefined && <div className={`ActivtyDetailsCardToggle ${editPostToggler == 'comment' && "ActivtyDetailsCardToggleSelected"
+                        {id == undefined && <div className={`ActivtyDetailsCardToggle ${editPostToggler == 'wallet' && "ActivtyDetailsCardToggleSelected"
                             }`} onClick={() => seteditPostToggler('wallet')}>
                             Wallet
                         </div>}

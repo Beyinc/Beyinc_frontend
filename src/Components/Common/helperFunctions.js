@@ -1,6 +1,6 @@
 import { PaymentServices } from "../../Services/PaymentServices";
 
-export const handlePayment = async ({ amount, currency, name, email, contact, userId }) => {
+export const handlePayment = async (amount, currency, name, email, contact, userId ) => {
     const { data: order } = await PaymentServices.paymentOrder({ amount, currency, email });
 
     const options = {
