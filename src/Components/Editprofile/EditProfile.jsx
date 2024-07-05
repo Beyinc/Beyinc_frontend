@@ -1590,7 +1590,7 @@ const EditProfile = () => {
                                 </button>
                                 {role?.indexOf('Mentor') !== -1 && <button onClick={(e) => {
                                     if (window.confirm(`Do you want to book the session withe this mentor. He charges fee ${fee} rupees/min`)) {
-                                        transferringMoney(e, user_id, id, fee);
+                                        alert('Session Booked')
                                     }
                                 }}>Book Session</button>}
                             </>}
