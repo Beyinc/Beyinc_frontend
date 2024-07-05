@@ -2481,7 +2481,7 @@ const EditProfile = () => {
                             <div>Free Coins: {freeMoney}</div>
                             <div>Real Coins: {realMoney}</div>
                             <button disabled={addingMoney==''} onClick={() => {
-                                handlePayment(+addingMoney, 'INR', userName, email, mobile, user_id)
+                                handlePayment(+addingMoney, 'INR', userName, email, mobile, user_id, setInputs)
                             }}>Add coins</button>
                         </div>
 

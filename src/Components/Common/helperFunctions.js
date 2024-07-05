@@ -1,6 +1,6 @@
 import { PaymentServices } from "../../Services/PaymentServices";
 
-export const handlePayment = async (amount, currency, name, email, contact, userId ) => {
+export const handlePayment = async (amount, currency, name, email, contact, userId, setInputs ) => {
     const { data: order } = await PaymentServices.paymentOrder({ amount, currency, email });
 
     const options = {
@@ -19,6 +19,9 @@ export const handlePayment = async (amount, currency, name, email, contact, user
                     userId
                 });
                 if (result.data.success) {
+                    if (setInputs !== undefined) {
+                        setInputs(prev => +prev + +order.amount)
+                    }
                     alert('Payment successful and balance updated!');
                 } else {
                     alert('Payment verification failed.');
