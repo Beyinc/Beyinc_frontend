@@ -4162,7 +4162,8 @@ const EditProfile = () => {
                     <button
                         type="submit"
                         onClick={(e) => {
-                            addingBenificiaryAccount(e, accountNumber, ifsc, mobile, email, userName, user_id);
+                            addingBenificiaryAccount(e, accountNumber, ifsc, mobile, email, loggedUserName, user_id);
+                            settermsBenificiary(false)
                         }}
                     >
                         Ok
