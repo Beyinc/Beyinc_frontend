@@ -48,7 +48,7 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
-import { addingBenificiaryAccount, handlePayment } from "../Common/helperFunctions";
+import { addingBenificiaryAccount, handlePayment, transferringMoney } from "../Common/helperFunctions";
 
 const EditProfile = () => {
     const { id } = useParams();
@@ -1588,6 +1588,11 @@ const EditProfile = () => {
                                 >
                                     Post
                                 </button>
+                                {role?.indexOf('Mentor') !== -1 && <button onClick={(e) => {
+                                    if (window.confirm(`Do you want to book the session withe this mentor. He charges fee ${fee} rupees/min`)) {
+                                        transferringMoney(e, user_id, id, fee);
+                                    }
+                                }}>Book Session</button>}
                             </>}
                     </div>
                 </div>
