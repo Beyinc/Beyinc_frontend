@@ -470,6 +470,7 @@ const EditProfile = () => {
     }, [totalEducationData, totalExperienceData]);
 
     const [reasonPop, setReasonPop] = useState(false);
+    const [termsBenificiary,settermsBenificiary] = useState(false)
     const [reason, setReason] = useState("");
     const [requestUserId, setRequestedUserId] = useState("");
 
@@ -668,8 +669,8 @@ const EditProfile = () => {
                         setEditOwnProfile(true);
                         setInputs((prev) => ({
                             ...prev,
-                            freeMoney: res.data.freeMoney,
-                            realMoney: res.data.realMoney,
+                            freeMoney: res.data.freeMoney||0,
+                            realMoney: res.data.realMoney||0,
                             twitter: res.data.twitter,
                             linkedin: res.data.linkedin,
                             review: res.data.review,
@@ -2403,10 +2404,8 @@ const EditProfile = () => {
                                 className="bioText"
                                 onChange={(e) => {
                                     const inputText = e.target.value;
-                                    if (inputText.length <= 1000) {
+                                    if (!isNaN(inputText)) {
                                         setaccountNumber(inputText);
-                                    } else {
-                                        setaccountNumber(inputText.slice(0, 1000));
                                     }
                                 }}
                                 style={{
@@ -2447,7 +2446,11 @@ const EditProfile = () => {
                                 value={ifsc}
                                 placeholder="Enter your ifsc"
                             ></textarea>
-                            <button onClick={()=>addingBenificiaryAccount(accountNumber, ifsc, mobile, email, userName, user_id)}>addingBenificiary</button>
+                            <button disabled={accountNumber == '' || ifsc == ''} onClick={() => {
+                                if (accountNumber !== '' && ifsc !== '') {
+                                    settermsBenificiary(true)
+                                }
+                            }}>addingBenificiary</button>
                             <textarea
                                 className="bioText"
                                 onChange={(e) => {
@@ -4117,6 +4120,49 @@ const EditProfile = () => {
                         disabled={reason == ""}
                         onClick={(e) => {
                             adminupdate(e, "rejected");
+                        }}
+                    >
+                        Ok
+                    </button>
+                </DialogContent>
+            </Dialog>
+            {/* Bank adding terms */}
+            <Dialog
+                open={termsBenificiary}
+                onClose={() => settermsBenificiary(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="xl"
+                sx={gridCSS.tabContainer}
+            >
+                <DialogContent
+                    style={{
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                    }}
+                >
+                    <Box>
+                        <b>Terms and conditions</b>
+                    </Box>
+                    <Box>
+                        <p>If you click submit you cant change your bank account later</p>
+                    </Box>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "5px",
+                            right: "10px",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => settermsBenificiary(false)}
+                    >
+                        <CloseIcon />
+                    </Box>
+                    <button
+                        type="submit"
+                        onClick={(e) => {
+                            addingBenificiaryAccount(e, accountNumber, ifsc, mobile, email, userName, user_id);
                         }}
                     >
                         Ok
