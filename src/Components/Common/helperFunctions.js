@@ -58,7 +58,7 @@ export const addingBenificiaryAccount = async (e, accountNumber, ifsc, phone, em
 
 export const transferringMoney = async (e, user_id, id, fee) => {
     e.target.disabled = true;
-    await PaymentServices.addingBenificiary({ senderId: user_id, receiverId: id, amount: fee }).then((res) => {
+    await PaymentServices.transferMoney({ senderId: user_id, receiverId: id, amount: fee }).then((res) => {
         console.log(res.data)
         e.target.disabled = false;
     }).catch(err => {
