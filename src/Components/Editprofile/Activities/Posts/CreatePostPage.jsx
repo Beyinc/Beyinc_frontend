@@ -756,7 +756,7 @@ const CreatePostPage = () => {
           <button
             className="createPost-Button"
             onClick={postId==undefined?addingpost:updatePost}
-            disabled={description == ""}
+            disabled={description == "" || image == ""}
           >
            {postId==undefined? 'Post' : 'Update'}
           </button>
