@@ -48,6 +48,7 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
+import { addingBenificiaryAccount, handlePayment, transferringMoney } from "../Common/helperFunctions";
 
 const EditProfile = () => {
     const { id } = useParams();
@@ -119,9 +120,11 @@ const EditProfile = () => {
         isEmailValid: null,
         isMobileValid: null,
         isNameValid: null,
+        freeMoney: 0,
+        realMoney: 0,
     });
 
-    const {
+    const { freeMoney, realMoney,
         review,
         verification,
         // email,
@@ -192,6 +195,10 @@ const EditProfile = () => {
     });
     const [fee, setFee] = useState("");
     const [bio, setBio] = useState("");
+    const [accountNumber, setaccountNumber] = useState("");
+    const [ifsc, setifsc] = useState("");
+    const [addingMoney, setaddingMoney] = useState("");
+
     const [skills, setSkills] = useState([]);
     const [singleSkill, setSingleSkill] = useState("");
     const [editOwnProfile, setEditOwnProfile] = useState(false);
@@ -463,6 +470,7 @@ const EditProfile = () => {
     }, [totalEducationData, totalExperienceData]);
 
     const [reasonPop, setReasonPop] = useState(false);
+    const [termsBenificiary,settermsBenificiary] = useState(false)
     const [reason, setReason] = useState("");
     const [requestUserId, setRequestedUserId] = useState("");
 
@@ -474,6 +482,7 @@ const EditProfile = () => {
     const [convExits, setConvExists] = useState(false);
     const [averagereview, setAverageReview] = useState(0);
     const [emailTrigger, setemailTrigger] = useState(false);
+    
 
     useEffect(() => {
         if (userpage === true) {
@@ -487,7 +496,7 @@ const EditProfile = () => {
         }
     }, [userpage, user_id]);
     const onLike = async (commentId, isLike) => {
-        await ApiServices.likeComment({ comment_id: commentId, comment_owner: id==undefined?user_id:id })
+        await ApiServices.likeComment({ comment_id: commentId, comment_owner: id == undefined ? user_id : id })
             .then((res) => {
                 setAllComments(res.data)
             })
@@ -527,13 +536,13 @@ const EditProfile = () => {
     };
 
     const onDisLike = async (commentId, isLike) => {
-       await ApiServices.dislikeComment({
+        await ApiServices.dislikeComment({
             comment_id: commentId,
-            comment_owner: id==undefined?user_id:id,
+            comment_owner: id == undefined ? user_id : id,
         })
-           .then((res) => {
-            setAllComments(res.data)
-           })
+            .then((res) => {
+                setAllComments(res.data)
+            })
             .catch((err) => {
                 dispatch(
                     setToast({
@@ -660,6 +669,8 @@ const EditProfile = () => {
                         setEditOwnProfile(true);
                         setInputs((prev) => ({
                             ...prev,
+                            freeMoney: res.data.freeMoney||0,
+                            realMoney: res.data.realMoney||0,
                             twitter: res.data.twitter,
                             linkedin: res.data.linkedin,
                             review: res.data.review,
@@ -696,6 +707,8 @@ const EditProfile = () => {
                             setTotalExperienceData(res.data.experienceDetails || []);
                             setFee(res.data.fee || "");
                             setBio(res.data.bio || "");
+                            setifsc(res.data?.ifsc || "");
+                            setaccountNumber(res.data?.accountNumber || "");
                             setSkills(res.data.skills || []);
                             setlanguagesKnown(res.data.languagesKnown || []);
 
@@ -1080,6 +1093,8 @@ const EditProfile = () => {
             documents: changeResume,
             experienceDetails: totalExperienceData,
             educationdetails: totalEducationData,
+            accountNumber: accountNumber,
+            ifsc: ifsc
         })
             .then((res) => {
                 dispatch(
@@ -1573,6 +1588,11 @@ const EditProfile = () => {
                                 >
                                     Post
                                 </button>
+                                {role?.indexOf('Mentor') !== -1 && <button onClick={(e) => {
+                                    if (window.confirm(`Do you want to book the session withe this mentor. He charges fee ${fee} rupees/min`)) {
+                                        alert('Session Booked')
+                                    }
+                                }}>Book Session</button>}
                             </>}
                     </div>
                 </div>
@@ -1591,6 +1611,10 @@ const EditProfile = () => {
                             }`} onClick={() => seteditPostToggler('comment')}>
                             Reviews
                         </div>
+                        {id == undefined && <div className={`ActivtyDetailsCardToggle ${editPostToggler == 'wallet' && "ActivtyDetailsCardToggleSelected"
+                            }`} onClick={() => seteditPostToggler('wallet')}>
+                            Wallet
+                        </div>}
                     </div>
                     {editPostToggler == 'profile' &&
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -1928,7 +1952,7 @@ const EditProfile = () => {
                             </section>
 
                             {userpage === false && <section className="EditProfileOuterCard">
-                                
+
                                 <section >
                                     <div >
                                         <div className="aboutHeadings">
@@ -2185,7 +2209,7 @@ const EditProfile = () => {
                                         </form>
                                     </div>
                                 </section>
-                                
+
                             </section>}
 
 
@@ -2336,7 +2360,7 @@ const EditProfile = () => {
                                     {(convExits || id == undefined ||
                                         jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken)
                                             .role == "Admin") ?
-                                        <div style={{ display: 'flex',  gap: '5px', alignItems: 'center', marginLeft: '-15px' }}>
+                                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center', marginLeft: '-15px' }}>
                                             <div className='addingCommentImageShow'>
                                                 <img
                                                     src={
@@ -2357,14 +2381,14 @@ const EditProfile = () => {
                                                     </svg>
 
                                                 </div>
-                                               
+
                                             </section>
                                         </div>
                                         : <div style={{ fontSize: "20px", marginBottom: "20px", textAlign: 'center' }}>
                                             Conversation with this user should exist to add reviews
                                         </div>
                                     }
-                                    <div style={{display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '40px'}}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '40px' }}>
                                         {allComments?.map((comment, index) => (
                                             <UserComment onLike={onLike}
                                                 key={index}
@@ -2378,6 +2402,90 @@ const EditProfile = () => {
                         </div>
                     }
 
+                    {/* wallet section */}
+                    {editPostToggler == 'wallet' &&
+                        <div>
+                            <textarea
+                                className="bioText"
+                                onChange={(e) => {
+                                    const inputText = e.target.value;
+                                    if (!isNaN(inputText)) {
+                                        setaccountNumber(inputText);
+                                    }
+                                }}
+                                style={{
+                                    resize: "none",
+                                    border: "none",
+                                    // padding: '20px',
+                                    textAlign: "justify",
+                                    fontFamily: "poppins",
+                                }}
+                                id=""
+                                cols="25"
+                                rows="2"
+                                name="message"
+                                value={accountNumber}
+                                placeholder="Enter your accountNumber"
+                            ></textarea>
+                            <textarea
+                                className="bioText"
+                                onChange={(e) => {
+                                    const inputText = e.target.value;
+                                    if (inputText.length <= 1000) {
+                                        setifsc(inputText);
+                                    } else {
+                                        setifsc(inputText.slice(0, 1000));
+                                    }
+                                }}
+                                style={{
+                                    resize: "none",
+                                    border: "none",
+                                    // padding: '20px',
+                                    textAlign: "justify",
+                                    fontFamily: "poppins",
+                                }}
+                                id=""
+                                cols="25"
+                                rows="2"
+                                name="message"
+                                value={ifsc}
+                                placeholder="Enter your ifsc"
+                            ></textarea>
+                            <button disabled={accountNumber == '' || ifsc == ''} onClick={() => {
+                                if (accountNumber !== '' && ifsc !== '') {
+                                    settermsBenificiary(true)
+                                }
+                            }}>addingBenificiary</button>
+                            <textarea
+                                className="bioText"
+                                onChange={(e) => {
+                                    const inputText = e.target.value;
+                                    if (!isNaN(inputText)) {
+                                        setaddingMoney(inputText);
+                                    } 
+                                }}
+                                style={{
+                                    resize: "none",
+                                    border: "none",
+                                    // padding: '20px',
+                                    textAlign: "justify",
+                                    fontFamily: "poppins",
+                                }}
+                                id=""
+                                cols="25"
+                                rows="2"
+                                name="message"
+                                value={addingMoney}
+                                placeholder="Enter your amount"
+                            ></textarea>
+                            <div>Free Coins: {freeMoney}</div>
+                            <div>Real Coins: {realMoney}</div>
+                            <button disabled={addingMoney==''} onClick={() => {
+                                handlePayment(+addingMoney, 'INR', userName, email, mobile, user_id, setInputs)
+                            }}>Add coins</button>
+                        </div>
+
+                    }
 
                 </div>
                 {isInputPopupVisible && (
@@ -4017,6 +4125,50 @@ const EditProfile = () => {
                         disabled={reason == ""}
                         onClick={(e) => {
                             adminupdate(e, "rejected");
+                        }}
+                    >
+                        Ok
+                    </button>
+                </DialogContent>
+            </Dialog>
+            {/* Bank adding terms */}
+            <Dialog
+                open={termsBenificiary}
+                onClose={() => settermsBenificiary(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="xl"
+                sx={gridCSS.tabContainer}
+            >
+                <DialogContent
+                    style={{
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                    }}
+                >
+                    <Box>
+                        <b>Terms and conditions</b>
+                    </Box>
+                    <Box>
+                        <p>If you click submit you cant change your bank account later</p>
+                    </Box>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "5px",
+                            right: "10px",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => settermsBenificiary(false)}
+                    >
+                        <CloseIcon />
+                    </Box>
+                    <button
+                        type="submit"
+                        onClick={(e) => {
+                            addingBenificiaryAccount(e, accountNumber, ifsc, mobile, email, loggedUserName, user_id);
+                            settermsBenificiary(false)
                         }}
                     >
                         Ok
