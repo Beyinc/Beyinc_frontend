@@ -1,10 +1,12 @@
 .ProfilepostContainer {
   border: 1px solid var(--post-outer-border);
   border-radius: 10px;
-  padding: 30px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: #ffffff;
+
 }
 .allPostShowContainer {
   display: flex;
@@ -75,6 +77,17 @@
   text-align: left;
 }
 
+
+.postDesc .seeMore{
+ display: flex;
+ justify-content: flex-end;
+ align-items: flex-end;
+}
+.postDesc .seeMore:hover{
+  text-decoration: underline;
+  color: var(--primary);
+}
+
 .tagsContainer {
   display: flex;
   gap: 20px;
@@ -133,19 +146,23 @@
   display: flex;
   align-items: center;
   gap: 40px;
-  padding-top: 10px;
+  /* padding-top: 10px; */
   justify-content: space-between;
 }
 .actionsHolder-leftContent{
   display: flex;
   align-items: center;
-  gap: 40px;
-  padding-top: 10px;
+  /* padding-top: 10px; */
 }
 .likeActionHolder {
   display: flex;
   align-items: center;
+   padding: 10px 15px;
   gap: 5px;
+}
+.likeActionHolder:hover {
+ background-color: #f5f5f5;
+ border-radius: 5px;
 }
 
 .actionText {

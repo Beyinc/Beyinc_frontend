@@ -293,15 +293,26 @@
 }
 
 .EditProfileOuterCard {
-  width: 850px;
+  width: 880px;
   height: auto;
-  padding: 40px;
-  border-radius: 20px;
+  padding: 20px;
+  border-radius: 10px;
   font-size: 14px;
   box-shadow: 1px 4px 4px 0px #00000040;
   cursor: pointer;
   margin-left: 30px;
-  background: var(--editprofile-details-card-bg);
+  /* background: var(--editprofile-details-card-bg); */
+      background-color: #ffffff;
+
+}
+
+.homeEditProfileOuterCard{
+  margin-left: -10px !important;
+  width: 725px !important;
+  padding: 0px !important;
+}
+.homeEditProfileOuterCard .ProfilepostContainer{
+border: none !important;
 }
 .commentHeader {
   font-family: Gentium Book Basic;
