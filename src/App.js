@@ -36,9 +36,9 @@ import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
 import EditProfile from "./Components/Editprofile/EditProfile";
 import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePostPage";
-import BuyCoins from "./Components/Razorpay/BuyCoins";
-import PaymentSuccess from "./Components/Razorpay/PaymentSuccess";
-
+import Book from "./Components/Razorpay/Book";
+import Proffesional from "./Components/Razorpay/Proffesional";
+import Bank from "./Components/Razorpay/Bank";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -343,8 +343,9 @@ const App = () => {
             path="/postReports"
             Component={AdminDeciderHoc(PostReports)}
           />
-           <Route path="/buycoins" element={< BuyCoins/>} />
-           <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+           <Route path="/book" element={< Book/>} />
+           <Route path="/proffesional" element={<Proffesional />} />
+           <Route path="/bank" element={<Bank />} />
 
         </Routes>
       </Suspense>
