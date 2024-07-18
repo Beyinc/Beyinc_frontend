@@ -1,5 +1,5 @@
 .createPost-main-container {
-  padding: 10px 30px;
+  padding: 0px 100px;
   margin: 10px;
 }
 .createPost-container {
@@ -47,24 +47,25 @@
   font-size: 1rem !important;
   letter-spacing: 0.02857em;
   text-transform:none !important;
-  max-width: 360px;
+  max-width: 300px;
   font-family: 'Gentium Book Basic', serif !important;
   font-weight: 600 !important ;
   min-width: 160px !important;
+  
 }
 .css-1aquho2-MuiTabs-indicator {
     display: none !important;
     font-family: 'Gentium Book Basic', serif !important;
-    color: var(--text-total-color) !important;
+    /* color: var(--text-total-color) !important; */
 
 }
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-    color: black !important;
+    /* color: black !important; */
     font-family: 'Gentium Book Basic', serif !important;
 
 }
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
-    color: gray !important;
+    /* color: gray !important; */
     font-family: 'Gentium Book Basic', serif !important;
 
 }
