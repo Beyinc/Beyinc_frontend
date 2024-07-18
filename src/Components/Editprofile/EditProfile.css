@@ -720,15 +720,27 @@ textarea {
 }
 
 .postTypeContainer {
-  width: 60%;
-  height: 15px;
+  width: 64%;
+  height: 250px;
   border-radius: 10px;
-  display:none;
+  display: none;
   position: absolute;
+  background: none;
+  overflow: auto; /* Enable scrolling */
+}
+
+.postTypeContainer::-webkit-scrollbar {
+  width: 0; 
+  height: 0; 
+}
+
+.postTypeContainer::-webkit-scrollbar-track {
   background: none;
 }
 
-
+.postTypeContainer::-webkit-scrollbar-thumb {
+  background-color: transparent; 
+}
 .createPostHeader {
   display: flex;
   justify-content: space-between;

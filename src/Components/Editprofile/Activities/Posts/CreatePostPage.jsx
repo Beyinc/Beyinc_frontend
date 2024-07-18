@@ -559,19 +559,20 @@ const CreatePostPage = () => {
                         .classList.toggle("show");
                     }}
                   >
-                    <div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="black"
-                          d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6z"
-                        />
-                      </svg>
-                    </div>
+                    <div></div>
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill="black"
+                            d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6z"
+                          />
+                        </svg>{" "}
+                      </div>
                     <div className="newConversation userTags">
                       <div>
                         {/* <input
@@ -666,6 +667,8 @@ const CreatePostPage = () => {
                     ))}
                   </div>
                 </div>
+                
+
               </TabPanel>
               <TabPanel value="3">
                 <div>
@@ -756,7 +759,7 @@ const CreatePostPage = () => {
           <button
             className="createPost-Button"
             onClick={postId==undefined?addingpost:updatePost}
-            disabled={description == "" || image == ""}
+            disabled={description == "" || postTitle == "" || posttype == ""}
           >
            {postId==undefined? 'Post' : 'Update'}
           </button>
