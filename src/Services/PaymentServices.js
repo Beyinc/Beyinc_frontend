@@ -84,4 +84,19 @@ export const PaymentServices = {
         })
     },
 
+
+    deleteAccount: (obj) => {
+        console.log('deleteAccount payment service working')
+        return new Promise((resolve, reject) => {
+            axiosInstance.post(`/payment/deleteFundAccount`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+
 }

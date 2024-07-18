@@ -57,6 +57,20 @@ const AddBankAccountForm = () => {
     };
 
 
+    const handleDeleteAccount = async () => {
+        setIsSubmitting(true);
+        try {
+            console.log("Deleting account");
+            await PaymentServices.deleteAccount({registeredName});
+            // Navigate to another page or show success message if needed
+        } catch (error) {
+            console.error("Error occurred while deleting account:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+
     return (
         <Container maxWidth="sm">
             <Box sx={{ mt: 4, mb: 2 }}>
@@ -170,6 +184,16 @@ const AddBankAccountForm = () => {
                         sx={{ ml: 2 }}
                     >
                         {isSubmitting ? 'Submitting...' : 'Add Fund Account'}
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDeleteAccount}
+                        disabled={isSubmitting}
+                        sx={{ ml: 2 }}
+                    >
+                        {isSubmitting ? 'Deleting...' : 'Delete Account'}
                     </Button>
                   
                 </Box>
