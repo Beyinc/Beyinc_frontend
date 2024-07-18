@@ -17,7 +17,7 @@ export const handlePayment = async (amount, currency, name, email, contact, user
             currency: currency,
             name: "BEYINC",
             description: "Testing payment",
-            image: "https://avatars.githubusercontent.com/u/25058652?v=4",
+            image: "/logo.png",
             order_id: order.id,
             handler: async function (response) {
               
