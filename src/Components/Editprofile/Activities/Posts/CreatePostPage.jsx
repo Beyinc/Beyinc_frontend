@@ -15,11 +15,13 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import {  useParams } from "react-router";
+import { useParams } from "react-router";
 // import EditPost from "./EditPost";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const CreatePostPage = () => {
-  const {postId} = useParams()
+  const { postId } = useParams();
   const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
 
@@ -57,7 +59,7 @@ const CreatePostPage = () => {
   const [posttype, setposttype] = useState("");
   const [description, setDescription] = useState("");
   const [link, setlink] = useState("");
-  
+
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (file.size > 4 * 1024 * 1024) {
@@ -140,7 +142,7 @@ const CreatePostPage = () => {
         setFullDetails("");
         setGroupDiscussion("");
         setPostTitle("");
-        
+
         for (let i = 0; i < usertags.length; i++) {
           socket.current.emit("sendNotification", {
             senderId: user_id,
@@ -186,12 +188,12 @@ const CreatePostPage = () => {
   const [groupDiscussion, setGroupDiscussion] = useState("");
   const [postTitle, setPostTitle] = useState("");
 
-
   const updatePost = async (e) => {
     e.target.disabled = true;
     await ApiServices.updatePost({
       description,
-      link, postTitle,
+      link,
+      postTitle,
       tags: usertags,
       pitchId: userPitchId?._id,
       image: image,
@@ -199,28 +201,26 @@ const CreatePostPage = () => {
       type: posttype,
       id: postId,
       openDiscussion: accessSetting === "public",
-
     })
       .then((res) => {
         dispatch(
-            setToast({
-              message: "Your post updated successfully",
-              bgColor: ToastColors.success,
-              visible: "yes",
-            })
-          );
-          setDescription("");
-          setUserPitchid(null);
-          setlink("");
-          setuserTags([]);
-          setImage("");
-          setposttype("");
-          setAccessSetting("public");
-          setFullDetails("");
-          setGroupDiscussion("");
-          setPostTitle("");
-          navigate("/posts");
-
+          setToast({
+            message: "Your post updated successfully",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+        setDescription("");
+        setUserPitchid(null);
+        setlink("");
+        setuserTags([]);
+        setImage("");
+        setposttype("");
+        setAccessSetting("public");
+        setFullDetails("");
+        setGroupDiscussion("");
+        setPostTitle("");
+        navigate("/posts");
 
         // setAllPosts((prev) => [
         //   ...prev.map((p) => (p._id == post._id ? res.data : p)),
@@ -245,23 +245,22 @@ const CreatePostPage = () => {
     e.target.disabled = false;
   };
 
-
   // getting existing post details
-  useEffect(()=>{
-  if(postId!==undefined){
-    ApiServices.getPost({ id: postId })
+  useEffect(() => {
+    if (postId !== undefined) {
+      ApiServices.getPost({ id: postId })
         .then((res) => {
-          console.log(res.data)
-          setPostTitle(res.data.postTitle)
-          setDescription(res.data.description)
-          setposttype(res.data.type)
-          setuserTags(res.data.tags)
-          setImage(res.data.image)
-          setlink(res.data.link)
-          setAccessSetting(res.data.openDiscussion?'public': 'members')
-          setFullDetails(res.data.fullDetails)
-          setGroupDiscussion(res.data.groupDiscussion)
-          setUserPitchid(res.data.pitchId)
+          console.log(res.data);
+          setPostTitle(res.data.postTitle);
+          setDescription(res.data.description);
+          setposttype(res.data.type);
+          setuserTags(res.data.tags);
+          setImage(res.data.image);
+          setlink(res.data.link);
+          setAccessSetting(res.data.openDiscussion ? "public" : "members");
+          setFullDetails(res.data.fullDetails);
+          setGroupDiscussion(res.data.groupDiscussion);
+          setUserPitchid(res.data.pitchId);
         })
         .catch((err) => {
           dispatch(
@@ -272,15 +271,30 @@ const CreatePostPage = () => {
             })
           );
         });
-  }
-  }, [postId])
+    }
+  }, [postId]);
 
-  
+  const modules = {
+    toolbar: [
+      // [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+      // [{size: []}],
+      ["bold", "italic", "underline"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      // ['clean']
+    ],
+  };
 
   return (
     <main className="createPost-main-container">
       <div className="createPost-container">
-        <div className="createPostHeader">{postId==undefined?'Create Post': 'Update Post'}</div>
+        <div className="createPostHeader">
+          {postId == undefined ? "Create Post" : "Update Post"}
+        </div>
         <div className="createPost-privacy-setting">
           <div class="dropdown-container">
             <svg
@@ -368,7 +382,9 @@ const CreatePostPage = () => {
                       .classList.toggle("show");
                   }}
                 >
-                  <div style={{color: 'var(--text-total-color)'}}>{posttype}</div>
+                  <div style={{ color: "var(--text-total-color)" }}>
+                    {posttype}
+                  </div>
                   <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -383,7 +399,7 @@ const CreatePostPage = () => {
                     </svg>{" "}
                   </div>
                 </div>
-                <div className="postTypeContainer"  ref={userDetailsRef}>
+                <div className="postTypeContainer" ref={userDetailsRef}>
                   {postTypes.map((p) => (
                     <div
                       className="individualPostTypes"
@@ -412,21 +428,24 @@ const CreatePostPage = () => {
                     <span style={{ color: "red", marginLeft: "5px" }}> *</span>
                   </label>
                 </div>
-                <div className="createPost-textarea">
-                  <textarea
-                    type="text"
-                    style={{
-                      width: "100%",
-                      borderRadius: "10px",
-                      background: "var(--createPost-bg)",
-                      border: "2px solid var(--light-border)",
-                    }}
-                    name="overViewOfStartup"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={7}
-                    cols={7}
-                  ></textarea>
+                <div>
+                  <div
+                    className="createPost-textarea"
+                    style={{ width: "100%" }}
+                  >
+                    <ReactQuill
+                      theme="snow"
+                      value={description}
+                      onChange={setDescription}
+                      modules={modules}
+                      style={{
+                        height: "200px",
+                        borderRadius: "10px",
+                        background: "var(--createPost-bg)",
+                        border: "2px solid var(--light-border)",
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {accessSetting !== "public" && (
@@ -489,7 +508,9 @@ const CreatePostPage = () => {
                           width: "200px",
                           objectFit: "cover",
                         }}
-                        src={image?.public_id!==undefined? image?.url : image}
+                        src={
+                          image?.public_id !== undefined ? image?.url : image
+                        }
                         alt="Profile"
                       />
 
@@ -560,19 +581,19 @@ const CreatePostPage = () => {
                     }}
                   >
                     <div></div>
-                      <div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="black"
-                            d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6z"
-                          />
-                        </svg>{" "}
-                      </div>
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="black"
+                          d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6z"
+                        />
+                      </svg>{" "}
+                    </div>
                     <div className="newConversation userTags">
                       <div>
                         {/* <input
@@ -667,8 +688,6 @@ const CreatePostPage = () => {
                     ))}
                   </div>
                 </div>
-                
-
               </TabPanel>
               <TabPanel value="3">
                 <div>
@@ -692,56 +711,55 @@ const CreatePostPage = () => {
                     cols={10}
                   ></textarea>
                 </div>
-                
-                  <>
+
+                <>
+                  <div>
+                    <label className="createPost-labels">Add Pitch</label>
+                  </div>
+                  <div
+                    className="postTypeSelector"
+                    onClick={() => {
+                      document
+                        .getElementsByClassName("createPostPitchContainer")[0]
+                        .classList.toggle("show");
+                    }}
+                  >
+                    <div>{userPitchId?.title}</div>
                     <div>
-                      <label className="createPost-labels">Add Pitch</label>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="black"
+                          d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6z"
+                        />
+                      </svg>{" "}
                     </div>
-                    <div
-                      className="postTypeSelector"
-                      onClick={() => {
-                        document
-                          .getElementsByClassName("createPostPitchContainer")[0]
-                          .classList.toggle("show");
-                      }}
-                    >
-                      <div>{userPitchId?.title}</div>
-                      <div>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="black"
-                            d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6z"
-                          />
-                        </svg>{" "}
+                  </div>
+                  <div
+                    className="postTypeContainer createPostPitchContainer"
+                    style={{ width: "61%", borderRadius: "10px" }}
+                  >
+                    {userPitches.map((p) => (
+                      <div
+                        className="individualPostTypes"
+                        onClick={() => {
+                          setUserPitchid(p);
+                          document
+                            .getElementsByClassName(
+                              "createPostPitchContainer"
+                            )[0]
+                            .classList.remove("show");
+                        }}
+                      >
+                        {p.title}
                       </div>
-                    </div>
-                    <div
-                      className="postTypeContainer createPostPitchContainer"
-                      style={{ width: "61%", borderRadius: "10px" }}
-                    >
-                      {userPitches.map((p) => (
-                        <div
-                          className="individualPostTypes"
-                          onClick={() => {
-                            setUserPitchid(p);
-                            document
-                              .getElementsByClassName(
-                                "createPostPitchContainer"
-                              )[0]
-                              .classList.remove("show");
-                          }}
-                        >
-                          {p.title}
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                
+                    ))}
+                  </div>
+                </>
               </TabPanel>
             </TabContext>
           </Box>
@@ -753,15 +771,20 @@ const CreatePostPage = () => {
             flexDirection: "column",
           }}
         >
-          <button className="cancelButton" onClick={() => {
-            navigate("/editProfile")
-          }}>Cancel</button>
+          <button
+            className="cancelButton"
+            onClick={() => {
+              navigate("/editProfile");
+            }}
+          >
+            Cancel
+          </button>
           <button
             className="createPost-Button"
-            onClick={postId==undefined?addingpost:updatePost}
+            onClick={postId == undefined ? addingpost : updatePost}
             disabled={description == "" || postTitle == "" || posttype == ""}
           >
-           {postId==undefined? 'Post' : 'Update'}
+            {postId == undefined ? "Post" : "Update"}
           </button>
         </div>
       </div>

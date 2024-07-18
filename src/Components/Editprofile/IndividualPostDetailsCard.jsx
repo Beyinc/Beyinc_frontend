@@ -214,6 +214,10 @@ const IndividualPostDetailsCard = () => {
     }
   }, [onlineUsers]);
 
+  const createMarkup = (html) => {
+    return { __html: html };
+  };
+
   return (
     <div className="post-details-main-container">
       {post !== null && (
@@ -343,18 +347,22 @@ const IndividualPostDetailsCard = () => {
             </div>
             {/* post desc */}
             <div className="postDescContainer">
-              <div className="postDesc">
-                <b>{post?.postTitle}</b>
+              <div>
+                <div className="postDesc">
+                  <b
+                    dangerouslySetInnerHTML={createMarkup(post?.postTitle)}
+                  ></b>
+                </div>
+                <div
+                  className="postDesc"
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    padding: "0 0 0 10px",
+                  }}
+                  dangerouslySetInnerHTML={createMarkup(post?.description)}
+                ></div>
               </div>
-              <div
-                className="postDesc"
-                style={{
-                  whiteSpace: "pre-wrap",
-                  padding: "0 0 0 10px",
-                }}
-              >
-                {post?.description}
-              </div>
+
               {/* <div className="tagsContainer">
                 {post?.tags?.map((t) => (
                   <div
@@ -633,22 +641,27 @@ const IndividualPostDetailsCard = () => {
                       {post?.tags?.map((p) => p.userName)?.join(", ")}
                     </span>
                   </div> */}
-                  <div style={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
-                    <b style={{ padding: "5px 0px"}}>Tags:</b>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "5px",
+                    }}
+                  >
+                    <b style={{ padding: "5px 0px" }}>Tags:</b>
                     <div className="tagsContainer">
                       {post?.tags?.map((t) => (
                         <div
-                        style={{
-                        background: "var( --tag-bg-right)",
-                        padding: "5px 10px",
-                        borderRadius: "20px",
-                      }}
+                          style={{
+                            background: "var( --tag-bg-right)",
+                            padding: "5px 10px",
+                            borderRadius: "20px",
+                          }}
                           className="indiTag"
                           onClick={() => navigate(`/user/${t._id}`)}
                         >
                           {/* {`@${t?.userName}`} */}
                           {t?.userName}
-
                         </div>
                       ))}
                     </div>

@@ -154,6 +154,20 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
     setIsExpanded(!isExpanded);
   };
 
+  const createMarkup = (html) => {
+    return { __html: html };
+  };
+
+  const getDescription = () => {
+    if (isExpanded) {
+      return post?.description;
+    } else {
+      return post?.description.length > 100
+        ? post?.description.slice(0, 100) + "..."
+        : post?.description;
+    }
+  };
+
   return (
     <section
       className={`EditProfileOuterCard ${
@@ -163,7 +177,9 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
       <div className="ProfilepostContainer">
         <div className="PostHeaderContainer">
           <div className="postTotaldetails">
-            <div className="PostheaderimageContainer">
+            <div className="PostheaderimageContainer" onClick={() => {
+                    navigate(`/user/${post?.createdBy?._id}`)
+                  }}>
               <img
                 src={
                   post?.createdBy?.image !== "" &&
@@ -177,7 +193,9 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
             </div>
 
             <div className="PostDetailsContainer">
-              <div className="postCardUserName">
+              <div className="postCardUserName" onClick={() => {
+                    navigate(`/user/${post?.createdBy?._id}`)
+                  }}>
                 {post?.createdBy?.userName[0]?.toUpperCase() +
                   post?.createdBy?.userName?.slice(1)}
               </div>
@@ -268,14 +286,14 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
           >
             <b>{post?.postTitle}</b>
           </div>
-          <div className="postDesc" style={{whiteSpace: 'pre-wrap'}}>
-            {isExpanded
-              ? post?.description
-              : post?.description.slice(0, 100) + "..."}
-            <span className="seeMore" onClick={toggleExpanded}>
-              {isExpanded ? "" : "...See more"}
-            </span>
-          </div>
+          <div className="postDesc" style={{ whiteSpace: 'pre-wrap' }}>
+      <div dangerouslySetInnerHTML={createMarkup(getDescription())}></div>
+      {!isExpanded && post?.description.length > 100 && (
+        <span className="seeMore" onClick={toggleExpanded}>
+          ...See more
+        </span>
+      )}
+    </div>
           <div className="tagsContainer">
             {post?.tags?.map((t) => (
               <div

@@ -349,6 +349,38 @@ border: none !important;
   text-align: justify;
 }
 
+.skillInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.skillInput:focus {
+  outline: none;
+  border-color: #66afe9;
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.addButton {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--button);
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.addButton:hover {
+  background-color: var(--button-hover);
+}
+
+
 .indiSkillsContainer {
   display: flex;
   flex-wrap: wrap;
@@ -486,7 +518,7 @@ border: none !important;
 }
 
 .singleMember {
-  background: var(--itemsSelect-bg);
+  background: var( --skills-bg);
   padding: 5px !important;
   display: flex;
   font-size: 12px;

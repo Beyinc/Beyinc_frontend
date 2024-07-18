@@ -298,11 +298,30 @@ img {
   justify-content: space-evenly;
   align-items: center;
   padding: 5px;
-  margin-left: -20px;
+ 
 }
-.menu-profile-content{
-  margin-left: -20px;
+
+
+.menu-profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
+
+.menu-profile-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: calc(100% - 60px); /* Adjust based on image size and margin */
+}
+
+.menu-profile-content > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 
 .css-9mgopn-MuiDivider-root {

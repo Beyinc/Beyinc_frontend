@@ -113,7 +113,7 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
             } else {
                 dispatch(
                     setToast({
-                        message: `Please Verify Yourself first to create conversation`,
+                        message: `Please verify yourself first to create conversation! Go to editProfile and verify now`,
                         bgColor: ToastColors.failure,
                         visible: "yes",
                     })
@@ -170,7 +170,7 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
                 setReceiverId("");
                 dispatch(
                     setToast({
-                        message: `Please Verify Yourself first to create conversation`,
+                        message: `Please verify yourself first to create conversation! Go to editProfile and verify now`,
                         bgColor: ToastColors.failure,
                         visible: "yes",
                     })

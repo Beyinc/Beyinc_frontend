@@ -301,7 +301,7 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div>Activity</div>
+            <div onClick={() => navigate("/editProfile?editPostToggler=posts")}>Activity</div>
           </div>
         </div>
 
