@@ -753,13 +753,18 @@ textarea {
 
 .postTypeContainer {
   width: 64%;
-  height: 250px;
+  height: 240px;
   border-radius: 10px;
   display: none;
   position: absolute;
+  z-index: 1000; 
   background: none;
-  overflow: auto; /* Enable scrolling */
+  overflow: auto;
+  font-family: 'Gentium Book Basic', serif !important;
+
+ 
 }
+
 
 .postTypeContainer::-webkit-scrollbar {
   width: 0; 
@@ -804,7 +809,7 @@ textarea {
   padding: 10px;
   position: relative;
   gap: 15px;
-  width: 100%;
+  width: 96%;
   height: 100px;
   color: black;
 }
@@ -837,7 +842,7 @@ textarea {
   bottom: 0%;
 }
 .postTypeSelector {
-  width: 100%;
+  width: 96%;
   height: 15px;
   margin-left: -2px;
   display: flex;

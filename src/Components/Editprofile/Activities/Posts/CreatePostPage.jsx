@@ -354,12 +354,14 @@ const CreatePostPage = () => {
                   <textarea
                     type="text"
                     style={{
-                      width: "100%",
+                      width: "96%",
                       height: "15px",
                       resize: "none",
                       borderRadius: "10px",
                       background: "var(--createPost-bg)",
                       border: "2px solid var(--light-border)",
+                       
+
                     }}
                     name="overViewOfStartup"
                     value={postTitle}
@@ -374,6 +376,7 @@ const CreatePostPage = () => {
                     <span style={{ color: "red", marginLeft: "5px" }}> *</span>
                   </label>
                 </div>
+
                 <div
                   className="postTypeSelector"
                   onClick={() => {
@@ -382,7 +385,7 @@ const CreatePostPage = () => {
                       .classList.toggle("show");
                   }}
                 >
-                  <div style={{ color: "var(--text-total-color)" }}>
+                  <div style={{ color: "var(--text-total-color)",  fontFamily: "'Gentium Book Basic', serif" }}>
                     {posttype}
                   </div>
                   <div>
@@ -409,7 +412,6 @@ const CreatePostPage = () => {
                         } else {
                           setposttype(p.value);
                           setUserPitchid(null);
-
                           setlink("");
                         }
                         document
@@ -439,10 +441,9 @@ const CreatePostPage = () => {
                       onChange={setDescription}
                       modules={modules}
                       style={{
-                        height: "200px",
+                        height: "150px",
                         borderRadius: "10px",
-                        background: "var(--createPost-bg)",
-                        border: "2px solid var(--light-border)",
+                        border: "none",
                       }}
                     />
                   </div>
@@ -451,17 +452,20 @@ const CreatePostPage = () => {
                 {accessSetting !== "public" && (
                   <div>
                     <div>
-                      <label className="createPost-labels">Full Detail </label>
+                      <label className="createPost-labels" style={{
+                           marginTop: '60px'
+                        }}>Full Detail </label>
                     </div>
-                    <div className="createPost-textarea">
+                    <div className="createPost-textarea" >
                       <textarea
                         type="text"
                         style={{
-                          width: "100%",
+                          width: "96%",
                           height: "45px",
                           borderRadius: "10px",
                           background: "var(--createPost-bg)",
                           border: "2px solid var(--light-border)",
+                           fontFamily: "'Gentium Book Basic', serif",
                         }}
                         name="overViewOfStartup"
                         value={fullDetails}
@@ -480,11 +484,12 @@ const CreatePostPage = () => {
                       <textarea
                         type="text"
                         style={{
-                          width: "100%",
+                          width: "96%",
                           height: "45px",
                           borderRadius: "10px",
                           background: "var(--createPost-bg)",
                           border: "2px solid var(--light-border)",
+                           fontFamily: "'Gentium Book Basic', serif"
                         }}
                         name="overViewOfStartup"
                         value={groupDiscussion}
@@ -609,7 +614,7 @@ const CreatePostPage = () => {
                       </div>
                       <div
                         className="searchedUsers"
-                        style={{ height: "150px" }}
+                        style={{ height: "350px" }}
                       >
                         {filteredusers.length > 0 &&
                           filteredusers
@@ -697,7 +702,7 @@ const CreatePostPage = () => {
                   <textarea
                     type="text"
                     style={{
-                      width: "100%",
+                      width: "96%",
                       height: "15px",
                       resize: "none",
                       borderRadius: "10px",
@@ -724,7 +729,7 @@ const CreatePostPage = () => {
                         .classList.toggle("show");
                     }}
                   >
-                    <div>{userPitchId?.title}</div>
+                    <div style={{  fontFamily: "'Gentium Book Basic', serif"}}>{userPitchId?.title}</div>
                     <div>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
