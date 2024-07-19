@@ -19,17 +19,47 @@
 }
 
 .ProfileDetailsCard {
-  width: 350px;
-  height: auto;
-  max-height: 680px;
-  padding: 10px;
-  box-shadow: -1px -1px 7px 1px #00000040;
-  transform: translateY(-150px);
-  background: var(--editprofile-details-card-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 5px;
+  justify-content: flex-start;
+  padding: 20px;
+  max-width: 400px;
+  height: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transform: translateY(-150px);
+  background: var(--editprofile-details-card-bg);
+}
+.FreeSessionCard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  max-width: 400px;
+  height: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: radial-gradient(circle, rgba(78, 84, 198, 0.6) 0%, rgba(78, 84, 198, 1) 100%);  transform: translateY(-120px);
+}
+.FreeSessionCard p{
+  margin-top: 10px;
+  color: #fff;
+}
+.Session-button{
+  color: #fff;
+  padding: 5px 10px;
+  border: 2px solid white;
+  border-radius: 30px;
+  background: transparent;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.Session-button:hover{
+  background: none;
 }
 
 .ProfileDetailsCard .EditProfileImage img {
@@ -57,8 +87,8 @@
 }
 
 .EditProfileUsername {
-  font-family: Gentium Book Basic;
-  font-size: 28px;
+  /* font-family: Gentium Book Basic; */
+  font-size: 18px;
   font-weight: 700;
   line-height: 40.5px;
   cursor: pointer;
@@ -68,7 +98,7 @@
 }
 
 .personaDetails {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 16px;
   font-weight: 700;
   line-height: 20.83px;
@@ -86,7 +116,7 @@
   padding: 10px 100px 10px 100px;
   border-radius: 20px;
   font-family: Roboto;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 23.44px;
   box-shadow: 1px 3px 4px 0px #00000040;
@@ -112,7 +142,6 @@
   gap: 10px;
   align-items: center;
   width: 850px;
-  
 }
 
 .addingCommentImageShow img {
@@ -133,29 +162,29 @@
   background-color: var(--editprofile-details-card-bg);
   outline: 0;
   color: var(--post-outer-border);
- margin-left: 4px !important;
+  margin-left: 4px !important;
 }
 
 .CommentPostContainer textarea::placeholder {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 20px;
   font-weight: 400;
   line-height: 23.14px;
   color: var(--post-outer-border);
 }
 .createComment {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   align-self: flex-end !important;
   white-space: noWrap;
   width: 200px !important;
   height: 43px;
   padding: 10px 50px;
   border-radius: 20px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
 }
 .createPostbtn {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   box-shadow: 1px 3px 4px 0px #00000040;
   background: var(--followBtn-bg);
   color: var(--followBtn-color);
@@ -163,19 +192,18 @@
   height: 43px;
   padding: 10px 50px;
   border-radius: 20px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
 }
 .profileMessageBtn {
   box-shadow: 1px 3px 4px 0px #00000040;
-
   margin-top: 10px;
   width: 282px;
   height: 43px;
   padding: 10px 100px 10px 100px;
   border-radius: 20px;
   font-family: Roboto;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,7 +234,7 @@
   left: 128px;
   gap: 0px;
 
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 16px;
   font-weight: 700;
   line-height: 20.83px;
@@ -226,7 +254,7 @@
   align-items: center;
   width: 283px;
   height: 21px;
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 14px;
   font-weight: 700;
   line-height: 20.83px;
@@ -240,11 +268,18 @@
 
 .reviewText {
   margin-top: 20px;
-  font-family: Gentium Book Basic;
-  font-size: 20px;
+  /* font-family: Gentium Book Basic; */
+  font-size: 16px;
   font-weight: 700;
   line-height: 34.72px;
   text-align: left;
+}
+
+.reviewSessionText {
+  /* font-family: Gentium Book Basic; */
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 34.72px;
 }
 
 .reviewPostButton {
@@ -256,7 +291,7 @@
   padding: 10px 100px 10px 100px;
   border-radius: 20px;
   font-family: Roboto;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 23.44px;
 }
@@ -273,8 +308,8 @@
 .ActivtyDetailsCardToggle {
   cursor: pointer;
   color: var(--editProfile-toggler-bottom);
-  font-family: Gentium Book Basic;
-  font-size: 22px;
+  /* font-family: Gentium Book Basic; */
+  font-size: 18px;
   font-weight: 700;
   line-height: 28.93px;
   width: 187px;
@@ -302,21 +337,20 @@
   cursor: pointer;
   margin-left: 30px;
   /* background: var(--editprofile-details-card-bg); */
-      background-color: #ffffff;
-
+  background-color: #ffffff;
 }
 
-.homeEditProfileOuterCard{
+.homeEditProfileOuterCard {
   margin-left: -10px !important;
   width: 725px !important;
   padding: 0px !important;
 }
-.homeEditProfileOuterCard .ProfilepostContainer{
-border: none !important;
+.homeEditProfileOuterCard .ProfilepostContainer {
+  border: none !important;
 }
 .commentHeader {
-  font-family: Gentium Book Basic;
-  font-size: 22px;
+  /* font-family: Gentium Book Basic; */
+  font-size: 18px;
   font-weight: 700;
   line-height: 23.14px;
   color: var(--followBtn-bg);
@@ -324,7 +358,7 @@ border: none !important;
   margin-bottom: 30px;
 }
 .commentLengthHeader {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 18px;
   font-weight: 700;
   line-height: 23.14px;
@@ -334,20 +368,51 @@ border: none !important;
   border-bottom: 2px solid var(--post-outer-border);
 }
 .EditProfileOuterCard .aboutHeadings {
-  font-family: Gentium Book Basic;
-  font-size: 25px;
+  /* font-family: Gentium Book Basic; */
+  font-size: 18px;
   font-weight: 700;
   line-height: 28.93px;
   color: var(--editProfile-toggler-bottom);
 }
 .bioText {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 14px;
   font-weight: 400;
   line-height: 20.83px;
   background: var(--popup-content-bg);
   color: var(--text-total-color);
   text-align: justify;
+}
+
+.skillInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.skillInput:focus {
+  outline: none;
+  border-color: #66afe9;
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.addButton {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--button);
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.addButton:hover {
+  background-color: var(--button-hover);
 }
 
 .indiSkillsContainer {
@@ -379,21 +444,21 @@ border: none !important;
 }
 
 .collegeName {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 14px;
   font-weight: 700;
   line-height: 23.14px;
   color: var(--followBtn-bg);
 }
 .gradeDetails {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 14px;
   font-weight: 400;
   line-height: 20.83px;
   text-align: left;
 }
 .timeDetails {
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
   font-size: 14px;
   font-weight: 400;
   line-height: 20.83px;
@@ -441,7 +506,7 @@ border: none !important;
   font-size: 14px;
   font-weight: 600;
   color: var(--followBtn-bg);
-  font-family: Gentium Book Basic;
+  /* font-family: Gentium Book Basic; */
 }
 .Input_Fields input {
   width: 270px;
@@ -487,7 +552,7 @@ border: none !important;
 }
 
 .singleMember {
-  background: var(--itemsSelect-bg);
+  background: var(--skills-bg);
   padding: 5px !important;
   display: flex;
   font-size: 12px;
@@ -694,7 +759,7 @@ textarea {
   padding: 10px;
 }
 .writing-review .sendIcon {
-  width: 262px ;
+  width: 262px;
   margin-right: 0px !important;
   transform: translateY(-20px) !important;
 }
@@ -721,15 +786,29 @@ textarea {
 }
 
 .postTypeContainer {
-  width: 60%;
-  height: 15px;
+  width: 64%;
+  height: 240px;
   border-radius: 10px;
-  display:none;
+  display: none;
   position: absolute;
+  z-index: 1000;
+  background: none;
+  overflow: auto;
+  font-family: "Gentium Book Basic", serif !important;
+}
+
+.postTypeContainer::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.postTypeContainer::-webkit-scrollbar-track {
   background: none;
 }
 
-
+.postTypeContainer::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
 .createPostHeader {
   display: flex;
   justify-content: space-between;
@@ -761,7 +840,7 @@ textarea {
   padding: 10px;
   position: relative;
   gap: 15px;
-  width: 100%;
+  width: 96%;
   height: 100px;
   color: black;
 }
@@ -777,9 +856,6 @@ textarea {
   background: var(--button-background);
 }
 
-
-
-
 .rightPostWrapper {
   flex: 1;
 }
@@ -794,7 +870,7 @@ textarea {
   bottom: 0%;
 }
 .postTypeSelector {
-  width: 100%;
+  width: 96%;
   height: 15px;
   margin-left: -2px;
   display: flex;
@@ -893,7 +969,6 @@ textarea {
   position: relative;
 }
 
-
 @media (max-width: 768px) {
   .EditProfileImageContainer {
     width: 100%;
@@ -920,6 +995,8 @@ textarea {
     align-items: center;
     border-radius: 25px 25px 5px 5px;
   }
+
+
 
   .ProfileDetailsCard .EditProfileImage img {
     width: 100px;
@@ -1079,7 +1156,7 @@ textarea {
     line-height: 23.14px;
   }
   .createComment {
-    font-family: Gentium Book Basic;
+    /* font-family: Gentium Book Basic; */
     align-self: flex-end !important;
     white-space: noWrap;
     width: 200px !important;
@@ -1090,7 +1167,7 @@ textarea {
     font-weight: 700;
   }
   .createPostbtn {
-    font-family: Gentium Book Basic;
+    /* font-family: Gentium Book Basic; */
     box-shadow: 1px 3px 4px 0px #00000040;
     background: var(--followBtn-bg);
     color: var(--followBtn-color);
@@ -1123,22 +1200,24 @@ textarea {
     margin-top: 10px !important;
   } */
   .postUploadIcon {
-    height: 100px;
-    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 120px;
   }
   .browseButton {
     width: 100px !important;
-    margin: 10px 10px 10px 40px;
-   font-size: 10px;
+    margin: 0px;
+    font-size: 10px;
   }
   .createPost-textarea {
-    width: 310px;
+    width: 260px;
     margin-bottom: 10px;
-    font-family: 'Gentium Book Basic', serif !important;
-
+    font-family: "Gentium Book Basic", serif !important;
   }
   .postTypeSelector {
-    width: 300px;
+    width: 250px;
     margin-left: 0;
   }
   .createPost-leftContainer {
@@ -1150,23 +1229,22 @@ textarea {
     scrollbar-width: thin; /* Necessary for Firefox compatibility */
     scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* For Chrome, Edge, and Safari */
   }
-  
+
   .MuiDialog-paperWidthXl::-webkit-scrollbar {
     width: 8px; /* Adjust as needed */
   }
-  
+
   .MuiDialog-paperWidthXl::-webkit-scrollbar-track {
     background-color: var(--scrollbar-track-color); /* Track color */
     border-radius: 50px; /* Rounded corners */
   }
-  
+
   .MuiDialog-paperWidthXl::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb-color); /* Thumb color */
     border-radius: 50px; /* Rounded corners */
   }
-  
+
   /* Define custom scrollbar colors */
   :root {
-    
   }
 }
