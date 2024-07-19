@@ -19,17 +19,47 @@
 }
 
 .ProfileDetailsCard {
-  width: 350px;
-  height: auto;
-  max-height: 680px;
-  padding: 10px;
-  box-shadow: -1px -1px 7px 1px #00000040;
-  transform: translateY(-150px);
-  background: var(--editprofile-details-card-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 5px;
+  justify-content: flex-start;
+  padding: 20px;
+  max-width: 400px;
+  height: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transform: translateY(-150px);
+  background: var(--editprofile-details-card-bg);
+}
+.FreeSessionCard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  max-width: 400px;
+  height: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: radial-gradient(circle, rgba(78, 84, 198, 0.6) 0%, rgba(78, 84, 198, 1) 100%);  transform: translateY(-120px);
+}
+.FreeSessionCard p{
+  margin-top: 10px;
+  color: #fff;
+}
+.Session-button{
+  color: #fff;
+  padding: 5px 10px;
+  border: 2px solid white;
+  border-radius: 30px;
+  background: transparent;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.Session-button:hover{
+  background: none;
 }
 
 .ProfileDetailsCard .EditProfileImage img {
@@ -112,7 +142,6 @@
   gap: 10px;
   align-items: center;
   width: 850px;
-  
 }
 
 .addingCommentImageShow img {
@@ -133,7 +162,7 @@
   background-color: var(--editprofile-details-card-bg);
   outline: 0;
   color: var(--post-outer-border);
- margin-left: 4px !important;
+  margin-left: 4px !important;
 }
 
 .CommentPostContainer textarea::placeholder {
@@ -246,6 +275,13 @@
   text-align: left;
 }
 
+.reviewSessionText {
+  /* font-family: Gentium Book Basic; */
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 34.72px;
+}
+
 .reviewPostButton {
   background: var(--followBtn-bg);
   color: var(--followBtn-color);
@@ -301,17 +337,16 @@
   cursor: pointer;
   margin-left: 30px;
   /* background: var(--editprofile-details-card-bg); */
-      background-color: #ffffff;
-
+  background-color: #ffffff;
 }
 
-.homeEditProfileOuterCard{
+.homeEditProfileOuterCard {
   margin-left: -10px !important;
   width: 725px !important;
   padding: 0px !important;
 }
-.homeEditProfileOuterCard .ProfilepostContainer{
-border: none !important;
+.homeEditProfileOuterCard .ProfilepostContainer {
+  border: none !important;
 }
 .commentHeader {
   /* font-family: Gentium Book Basic; */
@@ -379,7 +414,6 @@ border: none !important;
 .addButton:hover {
   background-color: var(--button-hover);
 }
-
 
 .indiSkillsContainer {
   display: flex;
@@ -518,7 +552,7 @@ border: none !important;
 }
 
 .singleMember {
-  background: var( --skills-bg);
+  background: var(--skills-bg);
   padding: 5px !important;
   display: flex;
   font-size: 12px;
@@ -725,7 +759,7 @@ textarea {
   padding: 10px;
 }
 .writing-review .sendIcon {
-  width: 262px ;
+  width: 262px;
   margin-right: 0px !important;
   transform: translateY(-20px) !important;
 }
@@ -757,18 +791,15 @@ textarea {
   border-radius: 10px;
   display: none;
   position: absolute;
-  z-index: 1000; 
+  z-index: 1000;
   background: none;
   overflow: auto;
-  font-family: 'Gentium Book Basic', serif !important;
-
- 
+  font-family: "Gentium Book Basic", serif !important;
 }
 
-
 .postTypeContainer::-webkit-scrollbar {
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
 }
 
 .postTypeContainer::-webkit-scrollbar-track {
@@ -776,7 +807,7 @@ textarea {
 }
 
 .postTypeContainer::-webkit-scrollbar-thumb {
-  background-color: transparent; 
+  background-color: transparent;
 }
 .createPostHeader {
   display: flex;
@@ -824,9 +855,6 @@ textarea {
   color: var(--button-color);
   background: var(--button-background);
 }
-
-
-
 
 .rightPostWrapper {
   flex: 1;
@@ -941,7 +969,6 @@ textarea {
   position: relative;
 }
 
-
 @media (max-width: 768px) {
   .EditProfileImageContainer {
     width: 100%;
@@ -968,6 +995,8 @@ textarea {
     align-items: center;
     border-radius: 25px 25px 5px 5px;
   }
+
+
 
   .ProfileDetailsCard .EditProfileImage img {
     width: 100px;
@@ -1180,13 +1209,12 @@ textarea {
   .browseButton {
     width: 100px !important;
     margin: 0px;
-   font-size: 10px;
+    font-size: 10px;
   }
   .createPost-textarea {
     width: 260px;
     margin-bottom: 10px;
-    font-family: 'Gentium Book Basic', serif !important;
-
+    font-family: "Gentium Book Basic", serif !important;
   }
   .postTypeSelector {
     width: 250px;
@@ -1201,23 +1229,22 @@ textarea {
     scrollbar-width: thin; /* Necessary for Firefox compatibility */
     scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* For Chrome, Edge, and Safari */
   }
-  
+
   .MuiDialog-paperWidthXl::-webkit-scrollbar {
     width: 8px; /* Adjust as needed */
   }
-  
+
   .MuiDialog-paperWidthXl::-webkit-scrollbar-track {
     background-color: var(--scrollbar-track-color); /* Track color */
     border-radius: 50px; /* Rounded corners */
   }
-  
+
   .MuiDialog-paperWidthXl::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb-color); /* Thumb color */
     border-radius: 50px; /* Rounded corners */
   }
-  
+
   /* Define custom scrollbar colors */
   :root {
-    
   }
 }
