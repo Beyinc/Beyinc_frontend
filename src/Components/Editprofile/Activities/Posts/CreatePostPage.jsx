@@ -24,6 +24,7 @@ const CreatePostPage = () => {
   const { postId } = useParams();
   const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ const CreatePostPage = () => {
 
   const addingpost = async (e) => {
     e.target.disabled = true;
+    setLoading(true);
     await ApiServices.createPost({
       description,
       link,
@@ -125,6 +127,7 @@ const CreatePostPage = () => {
       openDiscussion: accessSetting === "public",
     })
       .then((res) => {
+        setLoading(false);
         dispatch(
           setToast({
             message: "Your post successfully posted",
@@ -152,6 +155,7 @@ const CreatePostPage = () => {
         navigate("/posts");
       })
       .catch((err) => {
+        setLoading(false);
         dispatch(
           setToast({
             message: "Error Occured!",
@@ -190,6 +194,7 @@ const CreatePostPage = () => {
 
   const updatePost = async (e) => {
     e.target.disabled = true;
+    setLoading(true);
     await ApiServices.updatePost({
       description,
       link,
@@ -203,6 +208,7 @@ const CreatePostPage = () => {
       openDiscussion: accessSetting === "public",
     })
       .then((res) => {
+        setLoading(false);
         dispatch(
           setToast({
             message: "Your post updated successfully",
@@ -234,6 +240,7 @@ const CreatePostPage = () => {
         // }
       })
       .catch((err) => {
+        setLoading(false);
         dispatch(
           setToast({
             message: "Error Occured!",
@@ -360,8 +367,6 @@ const CreatePostPage = () => {
                       borderRadius: "10px",
                       background: "var(--createPost-bg)",
                       border: "2px solid var(--light-border)",
-                       
-
                     }}
                     name="overViewOfStartup"
                     value={postTitle}
@@ -385,7 +390,12 @@ const CreatePostPage = () => {
                       .classList.toggle("show");
                   }}
                 >
-                  <div style={{ color: "var(--text-total-color)",  fontFamily: "'Gentium Book Basic', serif" }}>
+                  <div
+                    style={{
+                      color: "var(--text-total-color)",
+                      fontFamily: "'Gentium Book Basic', serif",
+                    }}
+                  >
                     {posttype}
                   </div>
                   <div>
@@ -452,11 +462,16 @@ const CreatePostPage = () => {
                 {accessSetting !== "public" && (
                   <div>
                     <div>
-                      <label className="createPost-labels" style={{
-                           marginTop: '60px'
-                        }}>Full Detail </label>
+                      <label
+                        className="createPost-labels"
+                        style={{
+                          marginTop: "60px",
+                        }}
+                      >
+                        Full Detail{" "}
+                      </label>
                     </div>
-                    <div className="createPost-textarea" >
+                    <div className="createPost-textarea">
                       <textarea
                         type="text"
                         style={{
@@ -465,7 +480,7 @@ const CreatePostPage = () => {
                           borderRadius: "10px",
                           background: "var(--createPost-bg)",
                           border: "2px solid var(--light-border)",
-                           fontFamily: "'Gentium Book Basic', serif",
+                          fontFamily: "'Gentium Book Basic', serif",
                         }}
                         name="overViewOfStartup"
                         value={fullDetails}
@@ -489,7 +504,7 @@ const CreatePostPage = () => {
                           borderRadius: "10px",
                           background: "var(--createPost-bg)",
                           border: "2px solid var(--light-border)",
-                           fontFamily: "'Gentium Book Basic', serif"
+                          fontFamily: "'Gentium Book Basic', serif",
                         }}
                         name="overViewOfStartup"
                         value={groupDiscussion}
@@ -539,7 +554,7 @@ const CreatePostPage = () => {
                       </svg>
                     </div>
                   ) : (
-                    <div>
+                    <div className="postUploadContainer">
                       <label htmlFor="profilePic" className="postUploadIcon">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -729,7 +744,9 @@ const CreatePostPage = () => {
                         .classList.toggle("show");
                     }}
                   >
-                    <div style={{  fontFamily: "'Gentium Book Basic', serif"}}>{userPitchId?.title}</div>
+                    <div style={{ fontFamily: "'Gentium Book Basic', serif" }}>
+                      {userPitchId?.title}
+                    </div>
                     <div>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -786,10 +803,34 @@ const CreatePostPage = () => {
           </button>
           <button
             className="createPost-Button"
-            onClick={postId == undefined ? addingpost : updatePost}
-            disabled={description == "" || postTitle == "" || posttype == ""}
+            onClick={postId === undefined ? addingpost : updatePost}
+            disabled={
+              description === "" ||
+              postTitle === "" ||
+              posttype === "" ||
+              loading
+            }
           >
-            {postId == undefined ? "Post" : "Update"}
+            {loading ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3px",
+                }}
+              >
+                <div className="button-loader"></div>
+                <div>
+                  <span style={{ marginLeft: "10px" }}>
+                    {postId === undefined ? "Posting..." : "Updating..."}
+                  </span>
+                </div>
+              </div>
+            ) : postId === undefined ? (
+              "Post"
+            ) : (
+              "Update"
+            )}
           </button>
         </div>
       </div>

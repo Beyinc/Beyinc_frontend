@@ -1171,22 +1171,25 @@ textarea {
     margin-top: 10px !important;
   } */
   .postUploadIcon {
-    height: 100px;
-    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 120px;
   }
   .browseButton {
     width: 100px !important;
-    margin: 10px 10px 10px 40px;
+    margin: 0px;
    font-size: 10px;
   }
   .createPost-textarea {
-    width: 310px;
+    width: 260px;
     margin-bottom: 10px;
     font-family: 'Gentium Book Basic', serif !important;
 
   }
   .postTypeSelector {
-    width: 300px;
+    width: 250px;
     margin-left: 0;
   }
   .createPost-leftContainer {

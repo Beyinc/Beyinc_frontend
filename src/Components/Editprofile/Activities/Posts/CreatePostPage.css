@@ -87,6 +87,7 @@
 .css-1aquho2-MuiTabs-indicator {
   display: none !important;
   font-family: 'Gentium Book Basic', serif !important;
+
 }
 
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
@@ -96,6 +97,11 @@
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
   font-family: 'Gentium Book Basic', serif !important;
   scroll-behavior: smooth !important;
+  transition: color 0.3s ease, background-color 0.3s ease !important;
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root:hover {
+  border-radius: 30px !important;
+
 }
 
 /* .MuiTabPanel-root.css-13xfq8m-MuiTabPanel-root {
@@ -215,12 +221,12 @@ button.createPost-Button {
 /* Responsive design for mobile */
 @media (max-width: 768px) {
   .createPost-main-container {
-    padding: 0px 5%;
+    padding: 0px 0px;
   }
 
   .createPost-container {
     width: 100%;
-    padding: 0 10px;
+    padding: 0 0px;
   }
 
   .createPostHeader {
@@ -237,7 +243,16 @@ button.createPost-Button {
     font-size: 0.9rem !important;
     letter-spacing: 0.02857em;
     max-width: 100%;
-    min-width: 160px !important;
+    min-width: 110px !important;
+    padding: 2px !important;
+    margin-left: -10px !important;
+    background: none !important;
+  }
+
+  .postUploadContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
  
 
@@ -258,9 +273,15 @@ button.createPost-Button {
     font-size: 11px;
   }
 
-  button.cancelButton,
+  button.cancelButton{
+    width: 60px;
+    font-size: 12px;
+    margin-top: 0px;
+  }
+  
   button.createPost-Button {
     width: 60px;
     font-size: 12px;
+    margin-top: -30px;
   }
 }
