@@ -21,6 +21,7 @@ const EditPost = ({
 }) => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
@@ -76,6 +77,7 @@ const EditPost = ({
 
   const updatePost = async (e) => {
     e.target.disabled = true;
+    setLoading(true);
     await ApiServices.updatePost({
       description,
       link,
@@ -89,6 +91,7 @@ const EditPost = ({
 
     })
       .then((res) => {
+        setLoading(false);
         dispatch(
             setToast({
               message: "Your post updated successfully",
@@ -116,6 +119,7 @@ const EditPost = ({
         // }
       })
       .catch((err) => {
+        setLoading(false);
         dispatch(
           setToast({
             message: "Error Occured!",
@@ -414,12 +418,30 @@ const EditPost = ({
             )}
 
             <button
-               className="postButton"
-              onClick={updatePost}
-              disabled={description == "" || image == ""}
-            >
-              Update
-            </button>
+  className="postButton"
+  onClick={updatePost}
+  disabled={description === "" || image === "" || loading}
+>
+  {loading ? (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "3px",
+      }}
+    >
+      <div className="button-loader"></div>
+      <div>
+        <span style={{ marginLeft: "10px" }}>
+          Updating...
+        </span>
+      </div>
+    </div>
+  ) : (
+    "Update"
+  )}
+</button>
+
           </div>
         </div>
       </DialogContent>

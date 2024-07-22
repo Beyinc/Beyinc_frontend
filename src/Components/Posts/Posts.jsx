@@ -100,11 +100,11 @@ const Posts = () => {
   }, [recommendedUserTrigger]);
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleLoadMore = () => {
     setPage(pageSize);
-    setPageSize(pageSize + 2);
+    setPageSize(pageSize + 10);
     setLoadingTrigger(!loadingTrigger);
   };
 
@@ -301,11 +301,11 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div>Activity</div>
+            <div onClick={() => navigate("/editProfile?editPostToggler=posts")}>Activity</div>
           </div>
         </div>
 
-        <div class="filter-sidebar">
+        {/* <div class="filter-sidebar">
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
@@ -406,7 +406,7 @@ const Posts = () => {
               <option value="relevance">Relevance</option>
             </select>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="main-content">
