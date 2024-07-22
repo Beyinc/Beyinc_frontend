@@ -336,7 +336,7 @@ const CreatePostPage = () => {
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Information" value="1" />
+                  <Tab label="Information" value="1"  className="Testing-Tab"/>
                   <Tab label="File Upload" value="2" />
                   <Tab label="Pitches / Links" value="3" />
                 </TabList>
