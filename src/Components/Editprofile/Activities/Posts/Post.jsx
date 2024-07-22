@@ -305,6 +305,9 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
             ))}
           </div>
           <div className="PostimageContainer">
+          { post?.image !== "" &&
+                post?.image !== undefined &&
+                post?.image?.url !== "" && 
             <img
               src={
                 post?.image !== "" &&
@@ -316,7 +319,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
               style={{ objectFit: "contain" }}
               alt=""
               onClick={() => navigate(`/posts/${post?._id}`)}
-            />
+            />}
           </div>
           <div className="likeCommentDetails">
             <div className="likeTotal">
