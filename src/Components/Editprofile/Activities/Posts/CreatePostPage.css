@@ -92,12 +92,17 @@
 
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
   font-family: 'Gentium Book Basic', serif !important;
+  border-bottom: none !important;
 }
 
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+
+
+.Testing-Tab {
   font-family: 'Gentium Book Basic', serif !important;
   scroll-behavior: smooth !important;
   transition: color 0.3s ease, background-color 0.3s ease !important;
+  color: var(--text-total-color);
+  background: var(--button-background);
 }
  .Testing-Tab:hover {
   border-radius: 30px !important;

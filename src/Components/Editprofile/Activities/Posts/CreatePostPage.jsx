@@ -337,8 +337,8 @@ const CreatePostPage = () => {
                   aria-label="lab API tabs example"
                 >
                   <Tab label="Information" value="1"  className="Testing-Tab"/>
-                  <Tab label="File Upload" value="2" />
-                  <Tab label="Pitches / Links" value="3" />
+                  <Tab label="File Upload" value="2" className="Testing-Tab"/>
+                  <Tab label="Pitches / Links" value="3" className="Testing-Tab"/>
                 </TabList>
               </Box>
               <TabPanel
