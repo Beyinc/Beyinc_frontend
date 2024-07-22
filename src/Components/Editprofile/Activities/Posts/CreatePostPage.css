@@ -85,7 +85,7 @@
 }
 
 .css-1aquho2-MuiTabs-indicator {
-  display: none !important;
+  /* display: none !important; */
   font-family: 'Gentium Book Basic', serif !important;
 
 }
@@ -93,6 +93,11 @@
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
   font-family: 'Gentium Book Basic', serif !important;
   border-bottom: none !important;
+  background: none !important;
+}
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected:hover, .Testing-Tab.Mui-selected:hover {
+  color: var(--primary) !important;
+  background: none !important;
 }
 
 
@@ -101,11 +106,11 @@
   font-family: 'Gentium Book Basic', serif !important;
   scroll-behavior: smooth !important;
   transition: color 0.3s ease, background-color 0.3s ease !important;
-  color: var(--text-total-color);
-  background: var(--button-background);
 }
  .Testing-Tab:hover {
   border-radius: 30px !important;
+  color: var(--primary) !important;
+  background: none !important;
 
 }
 
