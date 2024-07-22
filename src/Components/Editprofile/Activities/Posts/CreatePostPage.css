@@ -99,7 +99,7 @@
   scroll-behavior: smooth !important;
   transition: color 0.3s ease, background-color 0.3s ease !important;
 }
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root:hover {
+ .Testing-Tab:hover {
   border-radius: 30px !important;
 
 }
