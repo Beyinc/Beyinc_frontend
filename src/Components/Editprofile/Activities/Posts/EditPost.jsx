@@ -420,7 +420,9 @@ const EditPost = ({
             <button
   className="postButton"
   onClick={updatePost}
-  disabled={description === "" || image === "" || loading}
+  disabled={ description === "" ||
+              posttype === "" ||
+              loading}
 >
   {loading ? (
     <div
