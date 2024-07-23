@@ -49,6 +49,8 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
+import BookSession from "./BookSession/BookSession";
+import TabsAndInvestment from "./TabsAndInvestment/TabsAndInvestment";
 
 const EditProfile = () => {
   const { id } = useParams();
@@ -1681,13 +1683,23 @@ const EditProfile = () => {
               <b>{review?.length}</b> Reviews / 0 Sessions
             </div>
           </div>
-          <div className="FreeSessionCard">
-            <p>Unlock Your Free Session</p>
-            <button className="Session-button">Start Free Session</button>
-          </div>
+          {role === "Mentor" && (
+            <div className="FreeSessionCard">
+              <p>Unlock Your Free Session</p>
+              <button className="Session-button">Start Free Session</button>
+            </div>
+          )}
+          {role === "Mentor" && (
+            <div className="BookSessionCard">
+              <BookSession name={name} />
+            </div>
+          )}
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
+          <div>
+            <TabsAndInvestment />
+          </div>
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${
@@ -2617,9 +2629,13 @@ const EditProfile = () => {
               {/* post cards */}
 
               <div className="allPostShowContainer">
-                {allPosts?.map((post) => (
-                  <Post post={post} setAllPosts={setAllPosts} />
-                ))}
+                {allPosts && allPosts.length > 0 ? (
+                  allPosts.map((post) => (
+                    <Post key={post.id} post={post} setAllPosts={setAllPosts} />
+                  ))
+                ) : (
+                  <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '100px'}}>There is no activity found for this user</div>
+                )}
               </div>
             </div>
           )}
