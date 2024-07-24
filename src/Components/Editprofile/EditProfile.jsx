@@ -342,6 +342,10 @@ const EditProfile = () => {
     setIsEducationPopupVisible(true);
   };
 
+  const formatBio = (text) => {
+    return text.replace(/\n/g, '<br />');
+  };
+
   useEffect(() => {
     if (country == "" && state == "" && town == "") {
       setPlaces({
@@ -1754,9 +1758,14 @@ const EditProfile = () => {
                     </span>
                   )}
                 </div>
-                <div className="">
-                  {bio?.length > 0 ? bio : <div>No bio data found</div>}
-                </div>
+                <div className="bioDisplay">
+        {bio?.length > 0 ? (
+          <div dangerouslySetInnerHTML={{ __html: formatBio(bio) }} />
+        ) : (
+          <div>No bio data found</div>
+        )}
+      </div>
+
               </section>
 
               {/* SKILLS */}
@@ -3130,79 +3139,75 @@ const EditProfile = () => {
 
         {isAboutPopupVisible && (
           <div className="popup-container">
-            <div className="popup-content">
-              <div>
-                <div
-                  className="popup-header"
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <h3>Edit About</h3>
-                  <div
-                    className="close-icon"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
-                      setIsAboutPopupVisible(false);
-                    }}
-                  >
-                    <i
-                      style={{ color: "var(--followBtn-bg)" }}
-                      class="fas fa-times"
-                    ></i>
-                  </div>
-                </div>
-                <textarea
-                  className="bioText"
-                  onChange={(e) => {
-                    const inputText = e.target.value;
-                    if (inputText.length <= 1000) {
-                      setBio(inputText);
-                    } else {
-                      setBio(inputText.slice(0, 1000));
-                    }
-                  }}
-                  style={{
-                    resize: "none",
-                    border: "none",
-                    // padding: '20px',
-                    textAlign: "justify",
-                    fontFamily: "poppins",
-                  }}
-                  id=""
-                  cols="155"
-                  rows="13"
-                  name="message"
-                  value={bio}
-                  placeholder="Enter your bio"
-                ></textarea>
-                <p style={{ fontSize: "10px", marginTop: "0px" }}>
-                  {1000 - bio.length}/1000 characters left
-                </p>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "10px",
-                  }}
-                >
-                  <button
-                    className="add-button"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
-                      setIsAboutPopupVisible(false);
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
+          <div className="popup-content">
+          <div>
+            <div
+              className="popup-header"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <h3>Edit About</h3>
+              <div
+                className="close-icon"
+                onClick={() => {
+                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                  setIsAboutPopupVisible(false);
+                }}
+              >
+                <i
+                  style={{ color: "var(--followBtn-bg)" }}
+                  className="fas fa-times"
+                ></i>
               </div>
             </div>
+            <textarea
+              className="bioText"
+              onChange={(e) => {
+                const inputText = e.target.value;
+                if (inputText.length <= 1000) {
+                  setBio(inputText);
+                } else {
+                  setBio(inputText.slice(0, 1000));
+                }
+              }}
+              style={{
+                resize: "none",
+                border: "none",
+                textAlign: "justify",
+                fontFamily: "poppins",
+              }}
+              cols="155"
+              rows="13"
+              name="message"
+              value={bio}
+              placeholder="Enter your bio"
+            ></textarea>
+            <p style={{ fontSize: "10px", marginTop: "0px" }}>
+              {1000 - bio.length}/1000 characters left
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "10px",
+              }}
+            >
+              <button
+                className="add-button"
+                onClick={() => {
+                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                  setIsAboutPopupVisible(false);
+                }}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
           </div>
         )}
 
