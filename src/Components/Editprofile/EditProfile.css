@@ -638,6 +638,12 @@
   margin-top: 10px;
 }
 
+              
+.bioDisplay{
+  display: flex;
+  flex-wrap: wrap;
+}
+
 /* SECTION-3 */
 .EditProfile-Experience-Container,
 .EditProfile-Education-Container,
