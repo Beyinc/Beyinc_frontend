@@ -49,6 +49,8 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
+import BookSession from "./BookSession/BookSession";
+import TabsAndInvestment from "./TabsAndInvestment/TabsAndInvestment";
 
 const EditProfile = () => {
   const { id } = useParams();
@@ -338,6 +340,10 @@ const EditProfile = () => {
     });
     document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     setIsEducationPopupVisible(true);
+  };
+
+  const formatBio = (text) => {
+    return text.replace(/\n/g, '<br />');
   };
 
   useEffect(() => {
@@ -1681,13 +1687,24 @@ const EditProfile = () => {
               <b>{review?.length}</b> Reviews / 0 Sessions
             </div>
           </div>
-          <div className="FreeSessionCard">
-            <p>Unlock Your Free Session</p>
-            <button className="Session-button">Start Free Session</button>
-          </div>
+          {role === "Mentor" && (
+            <div className="FreeSessionCard">
+              <p>Unlock Your Free Session</p>
+              <button className="Session-button">Start Free Session</button>
+            </div>
+          )}
+          {role === "Mentor" && (
+            <div className="BookSessionCard">
+              <BookSession name={name} />
+            </div>
+          )}
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
+        {(role?.toLowerCase() === "mentor" || role?.toLowerCase() === "investor") && (
+          <div>
+            <TabsAndInvestment />
+          </div>)}
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${
@@ -1741,9 +1758,14 @@ const EditProfile = () => {
                     </span>
                   )}
                 </div>
-                <div className="">
-                  {bio?.length > 0 ? bio : <div>No bio data found</div>}
-                </div>
+                <div className="bioDisplay">
+        {bio?.length > 0 ? (
+          <div dangerouslySetInnerHTML={{ __html: formatBio(bio) }} />
+        ) : (
+          <div>No bio data found</div>
+        )}
+      </div>
+
               </section>
 
               {/* SKILLS */}
@@ -2617,9 +2639,13 @@ const EditProfile = () => {
               {/* post cards */}
 
               <div className="allPostShowContainer">
-                {allPosts?.map((post) => (
-                  <Post post={post} setAllPosts={setAllPosts} />
-                ))}
+                {allPosts && allPosts.length > 0 ? (
+                  allPosts.map((post) => (
+                    <Post key={post.id} post={post} setAllPosts={setAllPosts} />
+                  ))
+                ) : (
+                  <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '100px'}}>There is no activity found for this user</div>
+                )}
               </div>
             </div>
           )}
@@ -3113,79 +3139,75 @@ const EditProfile = () => {
 
         {isAboutPopupVisible && (
           <div className="popup-container">
-            <div className="popup-content">
-              <div>
-                <div
-                  className="popup-header"
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <h3>Edit About</h3>
-                  <div
-                    className="close-icon"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
-                      setIsAboutPopupVisible(false);
-                    }}
-                  >
-                    <i
-                      style={{ color: "var(--followBtn-bg)" }}
-                      class="fas fa-times"
-                    ></i>
-                  </div>
-                </div>
-                <textarea
-                  className="bioText"
-                  onChange={(e) => {
-                    const inputText = e.target.value;
-                    if (inputText.length <= 1000) {
-                      setBio(inputText);
-                    } else {
-                      setBio(inputText.slice(0, 1000));
-                    }
-                  }}
-                  style={{
-                    resize: "none",
-                    border: "none",
-                    // padding: '20px',
-                    textAlign: "justify",
-                    fontFamily: "poppins",
-                  }}
-                  id=""
-                  cols="155"
-                  rows="13"
-                  name="message"
-                  value={bio}
-                  placeholder="Enter your bio"
-                ></textarea>
-                <p style={{ fontSize: "10px", marginTop: "0px" }}>
-                  {1000 - bio.length}/1000 characters left
-                </p>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "10px",
-                  }}
-                >
-                  <button
-                    className="add-button"
-                    onClick={() => {
-                      document.getElementsByTagName("body")[0].style.overflowY =
-                        "scroll";
-                      setIsAboutPopupVisible(false);
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
+          <div className="popup-content">
+          <div>
+            <div
+              className="popup-header"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <h3>Edit About</h3>
+              <div
+                className="close-icon"
+                onClick={() => {
+                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                  setIsAboutPopupVisible(false);
+                }}
+              >
+                <i
+                  style={{ color: "var(--followBtn-bg)" }}
+                  className="fas fa-times"
+                ></i>
               </div>
             </div>
+            <textarea
+              className="bioText"
+              onChange={(e) => {
+                const inputText = e.target.value;
+                if (inputText.length <= 1000) {
+                  setBio(inputText);
+                } else {
+                  setBio(inputText.slice(0, 1000));
+                }
+              }}
+              style={{
+                resize: "none",
+                border: "none",
+                textAlign: "justify",
+                fontFamily: "poppins",
+              }}
+              cols="155"
+              rows="13"
+              name="message"
+              value={bio}
+              placeholder="Enter your bio"
+            ></textarea>
+            <p style={{ fontSize: "10px", marginTop: "0px" }}>
+              {1000 - bio.length}/1000 characters left
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "10px",
+              }}
+            >
+              <button
+                className="add-button"
+                onClick={() => {
+                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+                  setIsAboutPopupVisible(false);
+                }}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
           </div>
         )}
 

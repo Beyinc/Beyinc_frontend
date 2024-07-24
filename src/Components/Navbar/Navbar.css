@@ -325,7 +325,7 @@ img {
 
 
 .css-9mgopn-MuiDivider-root {
-  border-color:var(--nav-head-icons) !important;
+  /* border-color:var(--nav-head-icons) !important; */
 }
 .css-bshv44-MuiButtonBase-root-MuiListItem-root:hover {
   /* background-color: var(--menubar-hover-color) !important;
