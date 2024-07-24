@@ -1,9 +1,10 @@
 .BookSession-Container {
   padding: 20px;
-  max-width: 400px;
+  max-width: 350px;
   margin: auto;
   border-radius: 12px;
-  background-color: #fff;
+  /* background-color: #fff; */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .title {
@@ -32,14 +33,45 @@
   background-color: #fafafa;
 }
 
-.custom-calendar{
-width: 300px;
-}
-.react-datepicker__month-container {
-  float: center !important;
-  width: 300px !important;
+.custom-calendar {
+  width: 92%;
 }
 
+.react-datepicker__month-container {
+  width: 100% !important;
+}
+
+.date-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.nav-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+  background-color: #3d43a8;
+}
+
+.datepicker-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.datepicker-header .select-year{
+  width: 100px !important;
+}
 .time-slot-container {
   display: flex;
   justify-content: space-between;
@@ -65,7 +97,7 @@ width: 300px;
   background-color: #e0e0e0;
 }
 
-.book-button-container{
+.book-button-container {
   display: flex;
   justify-content: center;
   align-items: center;

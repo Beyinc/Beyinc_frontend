@@ -1697,9 +1697,10 @@ const EditProfile = () => {
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
+        {(role?.toLowerCase() === "mentor" || role?.toLowerCase() === "investor") && (
           <div>
             <TabsAndInvestment />
-          </div>
+          </div>)}
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${
