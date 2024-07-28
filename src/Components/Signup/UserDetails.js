@@ -126,7 +126,7 @@ const Stepper = ({ currentStep }) => {
       <div className="stepper-content">
         <div>Details</div>
         <div>Additional Information</div>
-        <div>Profile</div>
+        <div>BeyInc Profile</div>
       </div>
     </div>
   );
@@ -745,12 +745,12 @@ const UserDetails = () => {
             </div>
           </div>
 
-          <Divider />
+          {/* <Divider />
 
           <div className="userDetails-primary-container">
             <h1>Use our platform as</h1>
             <div className="primary-dropdown">
-              {/* <div>
+              <div>
                 <label htmlFor="investorTypes">Primary *</label>
                 <select
                   id="investorTypes"
@@ -764,7 +764,7 @@ const UserDetails = () => {
                     </option>
                   ))}
                 </select>
-              </div> */}
+              </div>
 
               <div>
                 <label htmlFor="investorTypes">Secondary (optional)</label>
@@ -784,7 +784,7 @@ const UserDetails = () => {
             </div>
           </div>
 
-          <Divider />
+          <Divider /> */}
 
           <div className="userDetails-checkbox-container">
             <h1>Follow others and see relevant post </h1>
@@ -875,7 +875,7 @@ const UserDetails = () => {
 
           <div className="skills-selection">
             <h1 className="heading">
-              Select Skills*{" "}
+              Your Expertise and Skills* {" "}
               <span
                 style={{
                   fontSize: "10px",
@@ -926,11 +926,11 @@ const UserDetails = () => {
       )}
 
       {/* step-2 */}
-      {currentStep === 2 && (
+      {currentStep === 3 && (
         <div className="step2-content">
-          <h1>Additional Information</h1>
+          <h1>Do you want to become a BEYINC Proffesional</h1>
           <div>
-            <h2>Want to become on this platform *</h2>
+            <h2>Upgrade your profile as a: *</h2>
             <p>
               <input
                 type="radio"
@@ -976,7 +976,7 @@ const UserDetails = () => {
                   setSelectedBecomePlatform(e.target.value);
                 }}
               />
-              Not Interested
+              Institutional Investor
             </p>
           </div>
 
@@ -984,7 +984,7 @@ const UserDetails = () => {
           {selectedBecomePlatform !== "Not Interested" && (
             <div>
               <h2>
-                Select the approx. price (Rs.) per minute for each session *
+                Investment Range (Rs)
               </h2>
               <input
                 type="number"
@@ -1021,7 +1021,7 @@ const UserDetails = () => {
           </div> */}
 
           {/* If yes, make profile same as */}
-          {selectedBecomePlatform !== "Not Interested" && (
+          {/* {selectedBecomePlatform !== "Not Interested" && (
             <div>
               <h2>Make profile same as *</h2>
               <p>
@@ -1045,7 +1045,7 @@ const UserDetails = () => {
                 Secondary
               </p>
             </div>
-          )}
+          )} */}
 
           {/* Want to have one-to-one session */}
           {/* {selectedBecomePlatform !== "Not Interested" && (
@@ -1097,7 +1097,7 @@ const UserDetails = () => {
       )}
 
       {/* step-3 */}
-      {currentStep === 3 && (
+      {currentStep === 2 && (
         <div className="step3-content">
           <h1>Profile</h1>
       
@@ -1166,7 +1166,7 @@ const UserDetails = () => {
                     <div className="Work-exp">
                       <form className="update-form">
                         <div className="popup-header">
-                          <h3>Experience *</h3>
+                          <h3>Experience </h3>
                           <div
                             className="close-icon"
                             onClick={() => {
@@ -1189,7 +1189,7 @@ const UserDetails = () => {
                             <div>
                               <div>
                                 <label className="Input-Label">
-                                  Company Name*
+                                  Company Name
                                 </label>
                               </div>
                               <div className="Exp_Input_Fields">
@@ -1198,7 +1198,7 @@ const UserDetails = () => {
                                   name="company"
                                   className={
                                     experienceDetails.company == ""
-                                      ? "editErrors"
+                                      ? ""
                                       : "editSuccess"
                                   }
                                   value={experienceDetails.company}
@@ -1212,7 +1212,7 @@ const UserDetails = () => {
                             <div>
                               <div>
                                 <label className="Input-Label">
-                                  Current Designation*
+                                  Current Designation
                                 </label>
                               </div>
                               <div className="Exp_Input_Fields">
@@ -1220,7 +1220,7 @@ const UserDetails = () => {
                                   name="designation"
                                   className={
                                     experienceDetails.designation == ""
-                                      ? "editErrors"
+                                      ? ""
                                       : "editSuccess"
                                   }
                                   value={experienceDetails.designation}
@@ -1243,7 +1243,7 @@ const UserDetails = () => {
                               >
                                 <div>
                                   <label className="Input-Label">
-                                    Start Date*
+                                    Start Date
                                   </label>
                                 </div>
                                 <div className="Exp_Input_Fields">
@@ -1251,7 +1251,7 @@ const UserDetails = () => {
                                     type="date"
                                     className={
                                       experienceDetails.start == ""
-                                        ? "editErrors"
+                                        ? ""
                                         : "editSuccess"
                                     }
                                     value={experienceDetails.start}
@@ -1398,7 +1398,7 @@ const UserDetails = () => {
                             >
                               <div>
                                 <div>
-                                  <label className="Input-Label">Grade*</label>
+                                  <label className="Input-Label">Grade</label>
                                 </div>
                                 <div className="Ed_Input_Fields">
                                   <select
@@ -1426,7 +1426,7 @@ const UserDetails = () => {
                               <div>
                                 <div>
                                   <label className="Input-Label">
-                                    College/University*{" "}
+                                    College/University{" "}
                                     {EducationDetails.grade !== "SSC" &&
                                       EducationDetails.grade !== "" &&
                                       "(Type 3 characters)"}
@@ -1474,7 +1474,7 @@ const UserDetails = () => {
 
                               <div>
                                 <label className="Input-Label">
-                                  Start Date*
+                                  Start Date
                                 </label>
                               </div>
                               <div className="Ed_Input_Fields">
