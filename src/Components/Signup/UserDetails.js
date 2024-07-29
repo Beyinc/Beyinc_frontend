@@ -392,7 +392,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           )}
         </div>
       </div>
-      <div>
+      {/* <div>
         <h2>Location *</h2>
         <input
           type="text"
@@ -401,7 +401,7 @@ const AboutStartup = ({ step3Data, setStep3Data }) => {
           }
           value={step3Data?.location}
         />
-      </div>
+      </div> */}
     </>
   );
 };
@@ -786,6 +786,18 @@ const UserDetails = () => {
 
           <Divider /> */}
 
+              <div>
+                <h3>Location*</h3>
+                <input
+                style={{width: '28%'}}
+                  type="text"
+                  onChange={(e) =>
+                    setStep3Data((p) => ({ ...p, location: e.target.value }))
+                  }
+                  value={step3Data?.location}
+                />
+              </div>
+
           <div className="userDetails-checkbox-container">
             <h1>Follow others and see relevant post </h1>
             <label>
@@ -888,7 +900,7 @@ const UserDetails = () => {
               </span>
             </h1>
             <div className="dropdown-container">
-              <label htmlFor="skillSelect">Select Skill:</label>
+              {/* <label htmlFor="skillSelect">Select Skill:</label> */}
               <select
                 id="skillSelect"
                 value={newSkill}
@@ -928,9 +940,9 @@ const UserDetails = () => {
       {/* step-2 */}
       {currentStep === 3 && (
         <div className="step2-content">
-          <h1>Do you want to become a BEYINC Proffesional</h1>
+          <h1>Do you want to become a BEYINC Proffesional ?</h1>
           <div>
-            <h2>Upgrade your profile as a: *</h2>
+            <h2>Upgrade your profile as a: </h2>
             <p>
               <input
                 type="radio"
@@ -981,7 +993,7 @@ const UserDetails = () => {
           </div>
 
           {/* If yes, select approx. price per minute */}
-          {selectedBecomePlatform !== "Not Interested" && (
+          {selectedBecomePlatform !== "Cofounder" && (
             <div>
               <h2>
                 Investment Range (Rs)
@@ -994,6 +1006,7 @@ const UserDetails = () => {
                 onChange={(e) => setFee(e.target.value)}
               />
             </div>
+            
           )}
 
           {/* If yes, time availability */}
@@ -1580,7 +1593,7 @@ const UserDetails = () => {
                 /> */}
               </div>
 
-              <div>
+              {/* <div>
                 <h2>Location *</h2>
                 <input
                   type="text"
@@ -1589,7 +1602,7 @@ const UserDetails = () => {
                   }
                   value={step3Data?.location}
                 />
-              </div>
+              </div> */}
               <div>
                 <h2>LinkedIn Link</h2>
                 <input
