@@ -167,6 +167,28 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
         : post?.description;
     }
   };
+ 
+  // const addingRequestDiscussion = async (e) => {
+  //   e.target.disabled = true;
+  //   await ApiServices.requestIntoOpenDiscussion({ id: post?._id, user_id })
+  //     .then((res) => {
+  //       setPost(res.data);
+        // socket.current.emit("sendNotification", {
+        //   senderId: user_id,
+        //   receiverId: post?.createdBy._id,
+        // });
+  //     })
+  //     .catch((err) => {
+  //       dispatch(
+  //         setToast({
+  //           message: "Error occured when updating Pitch",
+  //           bgColor: ToastColors.failure,
+  //           visible: "yes",
+  //         })
+  //       );
+  //       e.target.disabled = false;
+  //     });
+  // };
 
   return (
     <section
@@ -449,14 +471,33 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
              
             </div>
             
-            {/* <div className="join-button-container">
-              <button
+            <div className="join-button-container">
+              {/* <button
                 className="join-button"
                 onClick={() => navigate(`/posts/${post?._id}`)}
               >
                 Join
-              </button>
-            </div> */}
+              </button> */}
+
+              {/* {!(post?.createdBy._id == user_id) && (
+                    <div className="openDiscussion-Buttons">
+                      {post?.openDiscussionRequests
+                        .map((o) => o._id)
+                        .includes(user_id) ? (
+                        <button>Discussion Request Pending</button>
+                      ) : post?.openDiscussionTeam
+                          .map((o) => o._id)
+                          .includes(user_id) ? (
+                        <button>Joined</button>
+                      ) : (
+                        <button onClick={addingRequestDiscussion}>
+                          Join for discussion
+                        </button>
+                      )}
+                    </div>
+                  )} */}
+
+            </div>
           </div>
           
         </div>
