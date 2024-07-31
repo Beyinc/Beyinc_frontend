@@ -715,7 +715,7 @@ const EditProfile = () => {
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              mobileVerified: res.data.phone.length > 0 ? true : false,
+              mobileVerified: res.data.phone?.length > 0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
               salutation: res.data.salutation,
