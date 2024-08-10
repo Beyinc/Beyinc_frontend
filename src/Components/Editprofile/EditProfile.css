@@ -356,7 +356,7 @@
 
 .homeEditProfileOuterCard {
   margin-left: -10px !important;
-  width: 725px !important;
+  width: 100%;
   padding: 0px !important;
 }
 .homeEditProfileOuterCard .ProfilepostContainer {
@@ -1034,9 +1034,9 @@ textarea {
     margin: 0;
   }
   .EditProfileOuterCard {
-    width: 310px;
+    width: 100%;
     height: auto;
-    padding: 20px;
+    padding-left: 10px;
     border-radius: 20px;
     box-shadow: 0px 0px 2px 2px #00000040;
     cursor: pointer;

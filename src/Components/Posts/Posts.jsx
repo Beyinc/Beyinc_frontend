@@ -305,7 +305,7 @@ const Posts = () => {
           </div>
         </div>
 
-        {/* <div class="filter-sidebar">
+        <div class="filter-sidebar">
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
@@ -406,7 +406,7 @@ const Posts = () => {
               <option value="relevance">Relevance</option>
             </select>
           </div>
-        </div> */}
+        </div>
       </div>
 
       <div className="main-content">
