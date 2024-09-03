@@ -49,7 +49,7 @@ import AddConversationPopup from "../Common/AddConversationPopup";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
-import BookSession from "./BookSession/BookSession";
+import BookSession from "./BookSession/BookSession2";
 import TabsAndInvestment from "./TabsAndInvestment/TabsAndInvestment";
 
 const EditProfile = () => {
@@ -463,7 +463,10 @@ const EditProfile = () => {
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
   const location = useLocation();
-
+  const pathSegments = location.pathname.split('/');
+  const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
+  console.log('mentorId', mentorId);
+  
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
@@ -864,7 +867,7 @@ const EditProfile = () => {
               name: res.data.userName,
               mobile: res.data.phone,
               role: res.data.role,
-              mobileVerified: res.data.phone.length > 0 ? true : false,
+              mobileVerified: res.data.phone?.length > 0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
               salutation: res.data.salutation,
@@ -1695,7 +1698,7 @@ const EditProfile = () => {
           )}
           {role === "Mentor" && (
             <div className="BookSessionCard">
-              <BookSession name={name} />
+              <BookSession name={name}  mentorId={mentorId} />
             </div>
           )}
         </div>
@@ -2851,12 +2854,12 @@ const EditProfile = () => {
                         <input
                           type="text"
                           className={
-                            mobile !== null &&
+                            mobile  &&
                             (mobile.length === 10 ? "valid" : "invalid")
                           }
                           name="mobile"
                           id="mobile"
-                          value={mobile}
+                          value={mobile }
                           onChange={handleChanges}
                           placeholder="Mobile Number"
                         />

@@ -1,0 +1,55 @@
+.time-slot-container {
+    padding: 8px;              /* Padding inside the box */
+    margin-top: 4px;           /* Margin at the top */
+    display: flex;
+    flex-wrap: wrap;           /* Allow items to wrap to the next line */
+    gap: 8px;                  /* Space between time slots */
+}
+
+.time-slot-box {
+    background-color: #F2F2F2;
+    color: black;
+    border-radius: 3px;
+    padding-top: 10px;
+    text-align: center;
+    width: calc(40% - 8px);    
+    box-sizing: border-box;   
+    font-size: 13px;
+    margin-top: 15px;  
+    height: 40px; ;
+    font-size: 0.8vw; 
+
+}
+
+
+.custom-divider {
+    height: 1px;               /* Divider height */
+    background-color:grey; /* Light grey color for the divider */
+    margin: 16px 0;           /* Margin for spacing around the divider */
+}
+
+
+.delete-slot {
+    position: relative;
+    /* top: -15px; */
+    right: -15px;
+    width: 15px; 
+    height: 10px; 
+    padding: 0;
+    font-size: 15px;
+    background-color: black !important;
+    color: white !important;
+    border-radius: 20px; /* Ensure the button is circular */
+    line-height: 24px; /* Centers the text vertically */
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-width: unset !important;
+}
+
+.delete-slot:hover {
+    background-color: lightgray !important;
+    border-color: lightgray;
+}

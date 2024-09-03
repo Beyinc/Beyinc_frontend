@@ -1,0 +1,31 @@
+/* customStyles.css */
+.available-tab-active {
+    color: black !important; /* Replace with your desired color */
+}
+
+/* Optional: Ensure default styles for inactive tabs */
+.available-tab {
+    color: #000000; /* Replace with your desired default color */
+}
+
+.available-tab:hover {
+    background-color: grey !important /* Hover color */
+}
+
+.custom-tabs .MuiTabs-indicator {
+    background-color: black !important; /* Change indicator color to black */
+}
+
+
+
+.available-box {
+    border: 1px solid  ;  
+    border-radius: 8px;      
+    padding: 16px;          
+    border-color: lightgrey !important;
+}
+
+.default-description {
+    color: grey;
+    font-size: 0.875rem;
+  }
