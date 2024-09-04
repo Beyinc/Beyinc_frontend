@@ -123,8 +123,9 @@ const handleTimezoneChange = (event) => {
                 
 
       
-        const availableDayTimeUtc = data.availabilityData.availableDayTimeUtc;
+        const {availableDayTimeUtc} = data.availabilityData;
 
+        console.log('availableDayTimeUtc', availableDayTimeUtc)
 
         const timeSlotsLocal = convertToLocalTimeSlots(availableDayTimeUtc, selectedTimezone);
         console.log('Time slots local:', JSON.stringify(timeSlotsLocal), duration);
@@ -355,12 +356,12 @@ const handleDurationChange = (selectedId) => {
              mentorId={mentorId}
             />
 
-        <WebinarModal
+        {/* <WebinarModal
         
         mentorData={mentorData}
         mentorId={mentorId}
         
-        />
+        /> */}
 
   
     </div>

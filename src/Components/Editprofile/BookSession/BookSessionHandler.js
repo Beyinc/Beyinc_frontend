@@ -227,7 +227,7 @@ const endDateTimeUTC = dayjs(localEndDateTime).utc().format();
                 <strong>Duration:</strong> {selectedSession.duration} minutes
               </Typography>
               <Typography variant="body1">
-                <strong>Amount:</strong> ${selectedSession.amount}
+                <strong>Amount:</strong> Rs {selectedSession.amount}
               </Typography>
 
               <Button variant="contained" color="primary" onClick={handleConfirmBooking}>
