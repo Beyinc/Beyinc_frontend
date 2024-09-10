@@ -269,3 +269,38 @@ export function generateTimeSlots(availableSlots, selectedDate, durationInMinute
   
   return result;
 }
+
+
+
+
+
+
+
+
+
+
+export function convertToLocalTimeZone(dateObject, selectedTime, timeZone, durationInMinutes)  {
+  const localDate = dayjs(dateObject.$d);
+  const [time, period] = selectedTime.split(/(am|pm)/i);
+  const [hour, minute] = time.split(':').map(Number);
+
+  let adjustedHour = hour;
+  if (period.toLowerCase() === 'pm' && hour !== 12) {
+    adjustedHour += 12;
+  } else if (period.toLowerCase() === 'am' && hour === 12) {
+    adjustedHour = 0;
+  }
+
+  const localDateTime = localDate
+    .set('hour', adjustedHour)
+    .set('minute', minute)
+    .set('second', 0)
+    .tz(timeZone);
+
+  const endDateTime = localDateTime.add(durationInMinutes, 'minute');
+
+  return {
+    localStartDateTime: localDateTime.format(), // Return the local date-time in ISO 8601 format
+    localEndDateTime: endDateTime.format()      // Return the end date-time in ISO 8601 format
+  };
+};

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const ENV = process.env;
 
-export const handlePayment = async (amount, currency, name, email, contact, userId, onPaymentSuccessCallbacks) => {
+export const handlePayment = async (amount, currency, name, email, contact, onPaymentSuccessCallbacks) => {
     // Ensure Razorpay script is loaded
     if (!window.Razorpay) {
         console.error("Razorpay script is not loaded.");

@@ -202,9 +202,6 @@ const handleTimezoneChange = (event) => {
 
 
 
-
-
-
   const formatDate = (date) => {
 
 
@@ -356,12 +353,12 @@ const handleDurationChange = (selectedId) => {
              mentorId={mentorId}
             />
 
-        {/* <WebinarModal
+        <WebinarModal
         
         mentorData={mentorData}
         mentorId={mentorId}
         
-        /> */}
+        />
 
   
     </div>

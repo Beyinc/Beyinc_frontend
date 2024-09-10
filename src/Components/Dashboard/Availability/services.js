@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Tabs, Tab, Box, TextField, Button, Grid } from '@mui/material';
+import { Tabs, Tab, Box, TextField, Button, Grid, FormControlLabel, Switch } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { CalendarServices } from '../../../Services/CalendarServices.js'; // Adjust the import path as needed
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-
-export default function ServicesTab({selectedTimezone}) {
+export default function ServicesTab({ selectedTimezone }) {
   const [activeSubTab, setActiveSubTab] = useState(0);
+  const [isFreeSession, setIsFreeSession] = useState(false); // State for the toggle
   const [data, setData] = useState({
     title: '',
     description: '',
@@ -24,15 +25,27 @@ export default function ServicesTab({selectedTimezone}) {
     responseTime: '', // For Priority DM
   });
 
-  const {
-    email : userEmail,
-   user_id: mentorId,
-   userName,
-   
- } = useSelector((store) => store.auth.loginDetails);
+  const { email: userEmail, user_id: mentorId, userName } = useSelector((store) => store.auth.loginDetails);
 
   const handleSubTabChange = (event, newValue) => {
     setActiveSubTab(newValue);
+  };
+
+  const handleToggleChange = () => {
+    setIsFreeSession(!isFreeSession);
+    if (isFreeSession) {
+      setData({
+        ...data,
+        amount: '',
+        title: activeSubTab === 0 ? (isFreeSession ? '' : 'Free Demo Session') : (isFreeSession ? '' : 'Free Webinar'),
+      });
+    } else {
+      setData({
+        ...data,
+        amount: '0',
+        title: activeSubTab === 0 ? (isFreeSession ? '' : 'Demo Session') : (isFreeSession ? '' : 'Webinar'),
+      });
+    }
   };
 
   const handleChange = (field) => (event) => {
@@ -45,10 +58,10 @@ export default function ServicesTab({selectedTimezone}) {
 
   const handleSaveOneToOne = () => {
     const formattedData = {
-      title: data.title,
+      title: isFreeSession ? 'Free Demo Session' : data.title,
       description: data.description,
       timeDuration: Number(data.timeDuration),
-      amount: Number(data.amount),
+      amount: isFreeSession ? 0 : Number(data.amount),
       hostingLink: data.hostingLink,
     };
 
@@ -65,68 +78,60 @@ export default function ServicesTab({selectedTimezone}) {
       });
   };
 
-  const handleCreateWebinar = async() => {
+  const handleCreateWebinar = async () => {
     const localStartTime = dayjs(data.startTime);
     const localEndTime = dayjs(data.endTime);
     const localWebinarDate = dayjs(data.webinarDate);
-  
-    // Convert local date and time to UTC
-    const startDateTimeUtc = localStartTime
+
+    const startDateTimeUTC = localStartTime
       .set('year', localWebinarDate.year())
       .set('month', localWebinarDate.month())
       .set('date', localWebinarDate.date())
       .utc()
-      .format('YYYY-MM-DDTHH:mm:ss[Z]'); // Format for Google Calendar API
+      .format('YYYY-MM-DDTHH:mm:ss[Z]');
 
-    const endDateTimeUtc = localEndTime
+    const endDateTimeUTC = localEndTime
       .set('year', localWebinarDate.year())
       .set('month', localWebinarDate.month())
       .set('date', localWebinarDate.date())
       .utc()
-      .format('YYYY-MM-DDTHH:mm:ss[Z]'); // Format for Google Calendar API
-
+      .format('YYYY-MM-DDTHH:mm:ss[Z]');
 
     const eventDetails = {
-      summary: data.title,
+      title: isFreeSession ? 'Free Webinar' : data.title,
       description: data.description,
-      startTime: startDateTimeUtc,// Ensure this is in ISO date-time format
-      endTime: endDateTimeUtc,    // Ensure this is in ISO date-time format
-      timeZone:'UTC',
+      startDateTimeUTC,
+      endDateTimeUTC,
       attendees: [],
     };
+
     try {
       const { data: bookingResponse } = await CalendarServices.bookSession({ eventDetails, mentorId });
-  
-      console.log('Booking Response:', bookingResponse); // Log the full response for debugging
-  
+
       const bookingId = bookingResponse.id;
       if (bookingId) {
         alert('Event created successfully!');
       } else {
         alert('Event created successfully, but no session ID found.');
       }
-  
+
       const webinarData = {
-        title: data.title,
+        title: isFreeSession ? 'Free Webinar' : data.title,
         description: data.description,
-        amount: Number(data.amount),
+        amount: isFreeSession ? 0 : Number(data.amount),
         hostingLink: data.hostingLink,
-        startDateTime: data.startTime, // Adjusted field names
-        endDateTime: data.endTime, // Adjusted field names
-        eventId:bookingId, //
+        startDateTime: data.startTime,
+        endDateTime: data.endTime,
+        eventId: bookingId,
       };
-  
-      console.log('Saving Webinar Data:', webinarData);
-  
-      // Send request to backend to save webinar
-      await CalendarServices.saveWebinarService({webinarData})
+
+      await CalendarServices.saveWebinarService({ webinarData });
       alert('Webinar service data saved successfully!');
     } catch (error) {
       console.error('Error creating session or saving webinar service data:', error);
       alert('Error creating event or saving webinar service data. Please try again.');
     }
   };
-
 
   const handleCreateDM = () => {
     const formattedData = {
@@ -140,7 +145,6 @@ export default function ServicesTab({selectedTimezone}) {
 
     CalendarServices.createDm(formattedData)
       .then((response) => {
-        console.log('Priority DM successfully saved:', response);
         alert('Priority DM service data saved successfully!');
       })
       .catch((error) => {
@@ -150,7 +154,6 @@ export default function ServicesTab({selectedTimezone}) {
   };
 
   const handleCancel = () => {
-    // Reset form fields
     setData({
       title: '',
       description: '',
@@ -208,6 +211,7 @@ export default function ServicesTab({selectedTimezone}) {
               onChange={handleChange('title')}
               fullWidth
               margin="normal"
+              InputProps={{ readOnly: isFreeSession }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -232,50 +236,76 @@ export default function ServicesTab({selectedTimezone}) {
               />
             </Grid>
           )}
+          {activeSubTab === 0 && (
+            <>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Time Duration (minutes)"
+                  value={data.timeDuration}
+                  onChange={handleChange('timeDuration')}
+                  type="number"
+                  fullWidth
+                  margin="normal"
+                />
+              </Grid>
+              {!isFreeSession && (
+                <Grid item xs={6}>
+                  <TextField
+                    label="Amount"
+                    value={data.amount}
+                    onChange={handleChange('amount')}
+                    type="number"
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+              )}
+            </>
+          )}
           {activeSubTab === 1 && (
             <>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12}>
                 <DatePicker
                   label="Webinar Date"
                   value={data.webinarDate}
                   onChange={handleDateChange('webinarDate')}
-                  fullWidth
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <TimePicker
                   label="Start Time"
                   value={data.startTime}
                   onChange={handleDateChange('startTime')}
-                  fullWidth
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <TimePicker
                   label="End Time"
                   value={data.endTime}
                   onChange={handleDateChange('endTime')}
-                  fullWidth
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
               </Grid>
+              {!isFreeSession && (
+                <Grid item xs={12}>
+                  <TextField
+                    label="Amount"
+                    value={data.amount}
+                    onChange={handleChange('amount')}
+                    type="number"
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+              )}
             </>
           )}
-          {activeSubTab === 0 && (
-            <Grid item xs={6}>
-              <TextField
-                label="Time Duration (in minutes)"
-                value={data.timeDuration}
-                onChange={handleChange('timeDuration')}
-                type="number"
-                fullWidth
-                margin="normal"
-              />
-            </Grid>
-          )}
           {activeSubTab === 2 && (
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
-                label="Response Time (in days)"
+                label="Response Time (in hours)"
                 value={data.responseTime}
                 onChange={handleChange('responseTime')}
                 type="number"
@@ -284,24 +314,20 @@ export default function ServicesTab({selectedTimezone}) {
               />
             </Grid>
           )}
-          <Grid item xs={6}>
-            <TextField
-              label="Amount"
-              value={data.amount}
-              onChange={handleChange('amount')}
-              type="number"
-              fullWidth
-              margin="normal"
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={<Switch checked={isFreeSession} onChange={handleToggleChange} />}
+              label="Free Session"
             />
           </Grid>
         </Grid>
+      </Box>
 
-        <Box mt={3} display="flex" justifyContent="flex-end">
-          <Button variant="outlined" color="secondary" onClick={handleCancel} style={{ marginRight: '10px' }}>
-            Cancel
-          </Button>
-          {renderSaveButton()}
-        </Box>
+      <Box display="flex" justifyContent="flex-end" mt={3}>
+        <Button variant="contained" color="secondary" onClick={handleCancel}>
+          Cancel
+        </Button>
+        {renderSaveButton()}
       </Box>
     </Box>
   );

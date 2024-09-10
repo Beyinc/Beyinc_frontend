@@ -1119,4 +1119,39 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  getCoupons: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/referral/getCoupons`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  updateCoupon: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/referral/updateCoupon`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+
+
+
+
 };
+
+
+

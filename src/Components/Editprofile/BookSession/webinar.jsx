@@ -35,7 +35,7 @@ const WebinarModal = ({ mentorId, mentorData }) => {
     };
 
     const onPaymentSuccessCallbacks = [saveWebinarData];
-    await handlePayment(amount, 'INR', userName, userEmail, userContact, user_id, onPaymentSuccessCallbacks);
+    await handlePayment(amount, 'INR', userName, userEmail, userContact, onPaymentSuccessCallbacks);
   };
 
   return (
