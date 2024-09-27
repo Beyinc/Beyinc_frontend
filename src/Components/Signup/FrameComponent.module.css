@@ -1,0 +1,123 @@
+.frameChild,
+.graphicElementIcon {
+  border-radius: var(--br-xl);
+  max-width: 100%;
+}
+.frameChild {
+  width: 541px;
+  height: 692px;
+  position: relative;
+  background-color: var(--color-black);
+  border: 2px solid var(--color-black);
+  box-sizing: border-box;
+  display: none;
+  z-index: 0;
+}
+.graphicElementIcon {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  max-height: 100%;
+  object-fit: cover;
+  z-index: 2;
+}
+.welcomeToSocial {
+  margin-block-start: 0;
+  margin-block-end: 1px;
+  color: white
+}
+.entrepreneurshipPlatform {
+  margin: 0;
+  color: white
+}
+.welcomeToSocialEntrepreneurContainer {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  line-height: 45px;
+  font-weight: 700;
+  font-family: inherit;
+  display: inline-block;
+  max-width: 100%;
+  z-index: 3;
+  
+}
+.mainContent {
+  width: 414px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 var(--padding-7xs);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.increasingTheSuccess {
+  
+  margin: 0;
+  width: 408px;
+  position: relative;
+  font-size: var(--font-size-11xl);
+  line-height: 40px;
+  font-weight: 700;
+  font-family: inherit;
+  display: inline-block;
+  max-width: 100%;
+  z-index: 3;
+  color: white;
+}
+.rectangleParent {
+  flex: 1;
+  border-radius: var(--br-xl);
+  background-color: var(--color-black);
+  border: 2px solid var(--color-black);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-131xl) var(--padding-33xl) var(--padding-278xl);
+  position: relative;
+  gap: var(--gap-5xl);
+  min-width: 352px;
+  max-width: 100%;
+  z-index: 1;
+  text-align: left;
+  font-size: var(--font-size-21xl);
+  color: var(--color-white);
+  font-family: var(--font-gentium-book-basic);
+}
+@media screen and (max-width: 1050px) {
+  .welcomeToSocialEntrepreneurContainer {
+    font-size: var(--font-size-13xl);
+    line-height: 36px;
+  }
+  .increasingTheSuccess {
+    font-size: var(--font-size-5xl);
+    line-height: 32px;
+  }
+}
+@media screen and (max-width: 750px) {
+  .rectangleParent {
+    padding: var(--padding-78xl) var(--padding-7xl) var(--padding-174xl);
+    box-sizing: border-box;
+    min-width: 100%;
+  }
+}
+@media screen and (max-width: 450px) {
+  .welcomeToSocialEntrepreneurContainer {
+    font-size: var(--font-size-5xl);
+    line-height: 27px;
+  }
+  .increasingTheSuccess {
+    font-size: var(--font-size-lg);
+    line-height: 24px;
+  }
+}

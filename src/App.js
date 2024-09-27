@@ -36,8 +36,12 @@ import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
 import EditProfile from "./Components/Editprofile/EditProfile";
 import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePostPage";
-
-
+import Book from "./Components/Razorpay/Book";
+import Proffesional from "./Components/Razorpay/Proffesional";
+import Bank from "./Components/Razorpay/Bank";
+import Calendar from "./Components/Calendar/Calender";
+import Schedule from "./Components/Dashboard/Availability/Schedule";
+import OAuthPopupHandler from "./Components/Calendar/calendarAuth" ;
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -342,6 +346,12 @@ const App = () => {
             path="/postReports"
             Component={AdminDeciderHoc(PostReports)}
           />
+           <Route path="/book" element={< Book/>} />
+           <Route path="/proffesional" element={<Proffesional />} />
+           <Route path="/bank" element={<Bank />} />
+           <Route path="/calendar" element={<Calendar />} />
+           <Route path="/dashboard/availability" element={<Schedule />} />
+           <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
         </Routes>
       </Suspense>
     </div>
