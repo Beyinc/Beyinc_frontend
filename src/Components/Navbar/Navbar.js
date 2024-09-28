@@ -19,6 +19,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import EventIcon from "@mui/icons-material/Event";
 import {
   getAllNotifications,
   setMessageCount,
@@ -915,7 +916,40 @@ const Navbar = () => {
               />
             </svg>
           </ListItemIcon>
-          <ListItemText primary="Calendar" />
+          <ListItemText primary="Services" />
+        </ListItem>
+      )}
+
+
+         {/* User Bookings */}
+      <ListItem
+        button
+        key="userBookings"
+        onClick={() => navigate("/dashboard/userBookings")}
+      >
+        <ListItemIcon>
+          <EventIcon
+            className="menu-icon"
+            sx={{ width: "0.8em", height: "0.8em", color: "var(--nav-head-icons)" }}
+          />
+        </ListItemIcon>
+        <ListItemText primary="User Bookings" />
+      </ListItem>
+
+      {/* Mentor Bookings - Render only if role === "Mentor" */}
+      {role === "Mentor" && (
+        <ListItem
+          button
+          key="mentorBookings"
+          onClick={() => navigate("/dashboard/mentorBookings")}
+        >
+          <ListItemIcon>
+            <EventIcon
+              className="menu-icon"
+              sx={{ width: "0.8em", height: "0.8em", color: "blue" }} // Different color for Mentor
+            />
+          </ListItemIcon>
+          <ListItemText primary="Mentor Bookings" />
         </ListItem>
       )}
 

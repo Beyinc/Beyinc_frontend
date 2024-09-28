@@ -15,9 +15,11 @@ import WebinarModal from './webinar.jsx'; // Adjust the import path as needed
 
 
 
-const BookSession = ({ name, mentorId }) => {
+const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
 
- 
+  console.log('mentorId', mentorId)
+ console.log('reschedule', reschedule);
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [duration, setDuration] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
@@ -38,8 +40,12 @@ const BookSession = ({ name, mentorId }) => {
 
   const [durationId, setDurationId] = useState({ duration: null, id: '' });
 
+  if (reschedule) {
+    console.log('rescheduling',rescheduleBooking)
+  }
 
  useEffect(() => {
+ 
   // Get the user's current timezone
   const defaultTimezone = dayjs.tz.guess();
   console.log('Guessed default timezone:', defaultTimezone);
@@ -98,20 +104,19 @@ const handleTimezoneChange = (event) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('mentorid',mentorId)
         const { data } = await CalendarServices.getAvailabilityData({mentorId});
         console.log('Availability data:', JSON.stringify(data.availability));
         const availabilityData = data.availability;
         setMentorData(availabilityData)
 
 
-        // const durations = Object.values(availabilityData.sessions).map(session => session.duration);
-
-        // console.log('Session duration:', durations)
-       
+     
+       console.log('set duration:', duration)
 
         const durationsWithIds = availabilityData.sessions.map(session => ({
           duration: session.duration,
-          id: session._id // Access the _id directly from the session object
+          id: session._id 
         }));
         
         // Log the array to check its structure
@@ -138,20 +143,13 @@ const handleTimezoneChange = (event) => {
         const availableLocalSlots = convertSlotsToFormat(timeSlotsLocal, startDate, endDate);
         console.log('Available local slots:', JSON.stringify(availableLocalSlots));
 
-        const {bookings} = await CalendarServices.getBooking();
+        const {bookings} = await CalendarServices.mentorBookings({mentorId});
         console.log('Booking:', bookings)
 
         const finalAvailSlots = getFinalAvailableSlots(bookings, availableLocalSlots, selectedTimezone);
         console.log('Final Available Slots:', finalAvailSlots);
 
 
-      
-
-        // const mapSavedTimeSlots = mapTimeSlotsToDates(availabilityData.sessions, timeZone);
-        // console.log('Map saved time slots:', JSON.stringify(mapSavedTimeSlots));
-
-        // const finalAvailSlots = getAvailableSlots(availableLocalSlots, mapSavedTimeSlots);
-        // console.log('Final available slots:', JSON.stringify(finalAvailSlots));
 
         // Set final available slots
         setFinalAvailableSlots(finalAvailSlots);
@@ -175,9 +173,9 @@ const handleTimezoneChange = (event) => {
     };
 
     fetchData();
-  }, [selectedTimezone])
+  }, [selectedTimezone,mentorId,reschedule,rescheduleBooking])
 
-
+// splitting slots
 
   useEffect(() => {
     if (selectedDate && durationId && finalAvailableSlots) {
@@ -186,11 +184,21 @@ const handleTimezoneChange = (event) => {
         const {bufferTime} = mentorData
         console.log(bufferTime)
         let selDate = dayjs(selectedDate).format('YYYY-MM-DD');
-        const timeSlots = generateTimeSlots(finalAvailableSlots, selDate, durationId.duration, bufferTime);
+
+        let timeSlots
+        if (reschedule) {
+          console.log('reschedule booking',rescheduleBooking.duration,selDate,finalAvailableSlots)
+        
+           timeSlots = generateTimeSlots(finalAvailableSlots, selDate, rescheduleBooking.duration, bufferTime);
+         
+         }
+        else  {
+           timeSlots = generateTimeSlots(finalAvailableSlots, selDate, durationId.duration, bufferTime);
+        }
         console.log('timeslots', timeSlots);
         setTimeSlots(timeSlots);
     }
-}, [selectedDate, durationId]);
+}, [selectedDate, durationId,rescheduleBooking, reschedule]);
 
 
 
@@ -285,9 +293,9 @@ const handleDurationChange = (selectedId) => {
             ))}
           </select>
 
-      <label className="label">Duration</label>
 
-
+       {!reschedule &&   (<>
+         <label className="label">Duration</label>
                   <select
                         className="select"
                         value={durationId.id}
@@ -300,7 +308,8 @@ const handleDurationChange = (selectedId) => {
                             </option>
                         ))}
                   </select>
-
+                  </>)
+}
 
 
       <label className="label">Availability</label>
@@ -351,14 +360,17 @@ const handleDurationChange = (selectedId) => {
               mentorData={mentorData}
              selectedTimezone={selectedTimezone}
              mentorId={mentorId}
+             reschedule={reschedule}
+            rescheduleBooking={rescheduleBooking}
+
             />
 
-        <WebinarModal
+        {/* <WebinarModal
         
         mentorData={mentorData}
         mentorId={mentorId}
         
-        />
+        /> */}
 
   
     </div>

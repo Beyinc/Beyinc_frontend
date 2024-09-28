@@ -39,9 +39,12 @@ import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePost
 import Book from "./Components/Razorpay/Book";
 import Proffesional from "./Components/Razorpay/Proffesional";
 import Bank from "./Components/Razorpay/Bank";
-import Calendar from "./Components/Calendar/Calender";
+import Calendar from "./Components/Dashboard/Bookings/UserBooking/Calendar";
 import Schedule from "./Components/Dashboard/Availability/Schedule";
 import OAuthPopupHandler from "./Components/Calendar/calendarAuth" ;
+import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBookings";
+import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
+
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -349,8 +352,10 @@ const App = () => {
            <Route path="/book" element={< Book/>} />
            <Route path="/proffesional" element={<Proffesional />} />
            <Route path="/bank" element={<Bank />} />
-           <Route path="/calendar" element={<Calendar />} />
+           <Route path="/rescheduleCalendar" element={<Calendar />} />
            <Route path="/dashboard/availability" element={<Schedule />} />
+           <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
+           <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
         </Routes>
       </Suspense>

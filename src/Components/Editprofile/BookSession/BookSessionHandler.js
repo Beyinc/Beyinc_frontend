@@ -6,9 +6,9 @@ import { handlePayment } from '../../Razorpay/Payment.js';
 import { ApiServices } from '../../../Services/ApiServices.js';
 import { convertToLocalTimeZone } from './helper.js';
 import dayjs from 'dayjs';
+import './BookSession.css'; 
 
-
-export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData, selectedTimezone, mentorId }) => {
+export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData, selectedTimezone, mentorId, reschedule, rescheduleBooking }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
   const [readableStartDateTime, setReadableStartDateTime] = useState('');
@@ -29,33 +29,54 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  console.log('reshedule', reschedule)
+   console.log(' reschedule booking', rescheduleBooking, selectedDate,selectedTime)
+
+
+
+
+
+
   useEffect(() => {
-    if (durationId && mentorData.sessions) {
-      const { id } = durationId;
-      if (id && mentorData.sessions) {
+    if (reschedule) {
+      setSelectedSession(rescheduleBooking);
+      updateSessionTimeDetails();
+    } else {
+      if (durationId && mentorData.sessions) {
+        const { id } = durationId;
         const curSession = mentorData.sessions.find(session => session._id === id);
-        if (curSession) {
-          setSelectedSession(curSession);
-          updateSessionTimeDetails(curSession);
-        }
+          if (curSession) {
+            setSelectedSession(curSession);
+            updateSessionTimeDetails(curSession);
+          }
       }
     }
+    
+
+
+
+
 
     // Fetch coupons
     ApiServices.getCoupons()
       .then(couponData => setCoupons(couponData.data))
       .catch(error => console.error('Error fetching coupons:', error));
-  }, [durationId, mentorData, selectedDate, selectedTime, selectedTimezone]);
+  }, [durationId, mentorData, selectedDate, selectedTime, selectedTimezone,reschedule]);
 
-  const updateSessionTimeDetails = (session) => {
+
+  const updateSessionTimeDetails = () => {
+    
     if (selectedDate && selectedTime) {
-      const { localStartDateTime, localEndDateTime } = convertToLocalTimeZone(selectedDate, selectedTime, selectedTimezone, duration);
+      const durationTime = reschedule ? rescheduleBooking.duration : duration;
+      const { localStartDateTime, localEndDateTime } = convertToLocalTimeZone(selectedDate, selectedTime, selectedTimezone, durationTime);
       setLocalStartDateTime(localStartDateTime);
       setLocalEndDateTime(localEndDateTime);
       setReadableStartDateTime(dayjs(localStartDateTime).format('h:mm A, D MMMM YYYY'));
       setReadableEndDateTime(dayjs(localEndDateTime).format('h:mm A, D MMMM YYYY'));
     }
   };
+
+
 
   const applyCoupon = () => {
     if (!selectedSession || selectedSession.amount === null) {
@@ -86,7 +107,13 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
     setError('');
   };
 
+
   const handleConfirmBooking = async () => {
+    if (reschedule) {
+      // Directly save booking if it's a rescheduled booking
+      saveBookingDataCallback();
+      return;
+    }
     if (!selectedSession || selectedSession.amount === null) {
       setError("Amount information is missing. Unable to proceed.");
       return;
@@ -94,12 +121,10 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
 
     if (selectedSession.amount === 0) {
       // Directly save booking without payment if amount is 0
+      console.log('normal booking is also being called')
       saveBookingDataCallback();
     } else {
-      // Proceed to payment if amount is not zero
-      // Payment logic removed as per request
      
-    
 
       const currency= 'INR';
       const contact = 7522966416
@@ -157,12 +182,14 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
 
 
     try {
-      const bookingResponse = await CalendarServices.bookSession({ eventDetails, mentorId });
-      console.log('Booking successful:', bookingResponse);
 
-      const saveResponse = await CalendarServices.saveBookData({ bookingData });
-      console.log('Saved booking data:', saveResponse);
-
+      if (!reschedule) {
+        const bookingResponse = await CalendarServices.bookSession({ eventDetails, mentorId, bookingData });
+        console.log('Booking successful:', bookingResponse);
+      } else {
+        const rescheduleResponse = await CalendarServices.reschedule({ eventDetails, mentorId, bookingData, rescheduleBooking });
+        console.log('Rescheduling response:', rescheduleResponse);
+      }
      // Update coupon status if a coupon is selected
      console.log('coupon found:', coupon)
       if (coupon) {
@@ -180,9 +207,9 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
 
   return (
     <div className="book-button-container">
-    <Button variant="contained" color="primary" onClick={handleOpenModal}>
+    <button className="book-button"  onClick={handleOpenModal}>
       Book Session Now
-    </Button>
+    </button>
   
     <Modal
       open={isModalOpen}
@@ -318,7 +345,7 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="outlined" color="secondary" onClick={handleCloseModal} sx={{ mx: 2 }}>
+            <Button variant="contained"  color="secondary" onClick={handleCloseModal} sx={{ mx: 2 }}>
               Cancel
             </Button>
           </Grid>

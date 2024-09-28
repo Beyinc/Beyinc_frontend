@@ -1698,7 +1698,7 @@ const EditProfile = () => {
           )}
           {role === "Mentor" && (
             <div className="BookSessionCard">
-              <BookSession name={name}  mentorId={mentorId} />
+              <BookSession name={name}  mentorId={mentorId} reschedule={false} />
             </div>
           )}
         </div>
