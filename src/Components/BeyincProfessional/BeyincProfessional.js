@@ -50,7 +50,9 @@ const BeyincProfessional = () => {
         <Typography variant="h5" mb={2} align="center">
           Select your role
         </Typography>
-
+      
+      <h1 className="text-4xl font-bold text-blue-500">Hello, Tailwind CSS!</h1>
+   
         <FormControl component="fieldset">
           <RadioGroup value={selectedRole} onChange={handleRoleChange}>
             <FormControlLabel value="Mentor" control={<Radio />} label="Mentor" />
