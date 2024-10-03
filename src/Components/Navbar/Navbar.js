@@ -1184,6 +1184,19 @@ const Navbar = () => {
       <div className="menuIcons">
         {width > 770 && (
           <>
+          <div
+            className={`navbar-item ${
+              selectedIcon === "beyinc" ? "selected" : ""
+            }`}
+            onClick={() => {
+              navigate("/beyincProfesional");
+              handleItemClick("beyinc");
+            }}
+          >
+            <button className="navbar-btn">
+              Become Professional
+            </button>
+          </div>
             {/* HOME ICON */}
 
             <div

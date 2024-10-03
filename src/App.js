@@ -44,6 +44,7 @@ import Schedule from "./Components/Dashboard/Availability/Schedule";
 import OAuthPopupHandler from "./Components/Calendar/calendarAuth" ;
 import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBookings";
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
+import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
@@ -302,9 +303,7 @@ const App = () => {
           <Route path="/posts" Component={AuthHoc(Posts)} />
           <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
           <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
-
-
-
+          <Route path="/beyincProfesional" Component={AuthHoc(BeyincProfessional)} />
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />

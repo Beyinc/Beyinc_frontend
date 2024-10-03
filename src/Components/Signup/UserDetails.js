@@ -940,7 +940,7 @@ const UserDetails = () => {
       {/* step-2 */}
       {currentStep === 3 && (
         <div className="step2-content">
-          <h1>Do you want to become a BEYINC Proffesional ?</h1>
+          <h1>Do you want to become a Proffesional at Beyinc ?</h1>
           <div>
             <h2>Upgrade your profile as a: </h2>
             <p>

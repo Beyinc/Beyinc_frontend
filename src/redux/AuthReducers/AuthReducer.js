@@ -5,11 +5,13 @@ import { jwtDecode } from 'jwt-decode';
 import axiosInstance from '../../Components/axiosInstance';
 import { ApiServices } from '../../Services/ApiServices';
 
+
 export const apiCallSlice = createSlice(
   {
     name: 'apiCall',
     initialState: {
       loginDetails: {},
+      userDetails: {}, 
 
       ToastDetails: {
         message: '',
@@ -25,6 +27,9 @@ export const apiCallSlice = createSlice(
       setLoginData: (state, action) => {
         state.loginDetails = action.payload;
       },
+      setUserDetails: (state, action) => {   // Adding the setUserDetails reducer
+        state.userDetails = action.payload;
+      },
       setToast: (state, action) => {
         state.ToastDetails = action.payload;
       },
@@ -37,31 +42,51 @@ export const apiCallSlice = createSlice(
     }
   });
 
-
-export const apicallloginDetails = () => async (dispatch) => {
-  if (localStorage.getItem('user')) {
-  axiosInstance.customFnAddTokenInHeader(JSON.parse(localStorage.getItem('user')).accessToken);
-  }
+  export const apicallloginDetails = () => (dispatch) => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const accessToken = JSON.parse(user).accessToken;
   
-  if (localStorage.getItem('user')) {
-    dispatch(setLoading({visible: 'yes'}))
-    await ApiServices.verifyAccessToken({ accessToken: JSON.parse(localStorage.getItem('user')).accessToken }).then((res) => {
-      localStorage.setItem('user', JSON.stringify(res.data))
-      dispatch(setLoginData(jwtDecode(JSON.parse(localStorage.getItem('user')).accessToken)))
-      axiosInstance.customFnAddTokenInHeader(JSON.parse(localStorage.getItem('user')).accessToken);
-      dispatch(setLoading({ visible: 'no' }))
-    }).catch(async (err) => {
-      localStorage.removeItem('user')
+      // Add token to headers
+      axiosInstance.customFnAddTokenInHeader(accessToken);
+  
+      dispatch(setLoading({ visible: 'yes' }));
+  
+      // Verify access token
+      ApiServices.verifyAccessToken({ accessToken })
+        .then((res) => {
+          // Update user details in local storage
+          localStorage.setItem('user', JSON.stringify(res.data));
+  
+          // Decode and dispatch user data
+          const decodedUser = jwtDecode(accessToken);
+          dispatch(setLoginData(decodedUser));
+  
+          // Update token in headers after verification
+          axiosInstance.customFnAddTokenInHeader(accessToken);
+  
+          // Fetch user profile data
+          return ApiServices.getProfile();
+        })
+        .then((userData) => {
+          console.log('API call login successful', userData);
+  
+          dispatch(setUserDetails(userData.data));
+         dispatch(setLoading({ visible: 'no' }));
+        })
+        .catch((err) => {
+          console.log('Error during login details API call:', err);
+  
+          // If token verification fails or any error occurs
+          localStorage.removeItem('user');
+          window.location.href = '/login';
+          dispatch(setLoading({ visible: 'no' }));
+        });
+    }
+  };
+  
 
-      window.location.href = '/login'
-      dispatch(setLoading({ visible: 'no' }))
-
-    })
-    dispatch(setLoading({visible: 'no'}))
-  }
-}
-
-export const { setLoginData, setToast, setLoading, setTotalRoles } = apiCallSlice.actions;
+export const { setLoginData, setToast, setLoading, setTotalRoles, setUserDetails } = apiCallSlice.actions;
 
 // this is for configureStore
 export default apiCallSlice.reducer;
