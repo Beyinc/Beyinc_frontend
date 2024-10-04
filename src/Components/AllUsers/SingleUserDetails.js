@@ -7,13 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 // import CardMedia from "@mui/material/CardMedia";
 // import Button from "@mui/material/Button";
 
-
 // import Typography from "@mui/material/Typography";
 // import AddPitch from "../Common/AddPitch";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
+import { CiGlobe } from "react-icons/ci";
+import { BsCircleFill } from "react-icons/bs";
 
 const SingleUserDetails = ({
-  d, setIsAdmin,
+  d,
+  setIsAdmin,
   connectStatus,
   setPitchSendTo,
   pitchSendTo,
@@ -40,113 +42,218 @@ const SingleUserDetails = ({
 
   const openUser = () => {
     if (user_id == d._id) {
-      navigate(`/editProfile`)
+      navigate(`/editProfile`);
     } else {
-      navigate(`/user/${d._id}`)
+      navigate(`/user/${d._id}`);
     }
   };
 
   const isCurrentUser = email === d.email;
+
   const openChat = async (e) => {
     // await ApiServices.getProfile({ email: a.members.filter((f) => f.email !== email)[0].email }).then((res) => {
     dispatch(setReceiverId(d));
     // })
     navigate(`/conversations/${connectStatus[d._id]?.id}`);
   };
+
+  const introText =
+    "Hello! I’m [Your Name], a passionate freelancer specializing in [Your Specialization, e.g., web development, graphic design, content writing, etc.]. With over [X years] of experience in the industry, I have honed my skills to deliver high-quality solutions that meet the unique needs of each client. My approach combines creativity and technical expertise, allowing me to tackle projects with a fresh perspective and a commitment to excellence. Whether you’re looking for [specific services you offer, e.g., stunning websites, engaging content, or eye-catching graphics], I’m here to bring your vision to life. Let’s collaborate and create something extraordinary together!";
+
+  const [activeTab, setActiveTab] = useState("Expertise");
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
-      <div
-        className={
-          "user-card-main-container " +
-          (d.role === "Entrepreneur"
-            ? "margin-entrepreneur"
-            : d.role === "Mentor"
-              ? "margin-mentor"
-              : d.role === "Investor" ? 'margin-investor' : "")
-        }
-      >
+      <div className={"user-card-main-container"}>
         <div className="user-card-details">
           <div className="user-card-img-rating-container">
             <div className="user-card-image" onClick={openUser}>
               <img
                 alt="user-pic"
                 src={
-                  d.image !== '' && d.image !== undefined && d.image.url !== ""
+                  d.image !== "" && d.image !== undefined && d.image.url !== ""
                     ? d.image.url
                     : "/profile.png"
                 }
-                
               />
-              {d.verification === "approved" && (
-                <img
-                  src="/verify.png"
-                  alt=""
-                  style={{ width: "15px", height: "15px", position: 'absolute', right: '0' }}
-                />
-              )}
             </div>
-            <div className="user-card-rating">
-              <div className="rating-content">
-                <i className="far fa-comment"></i>
-                <span style={{ marginLeft: "3px" }}>{d.comments?.length}</span>
-              </div>
-              <div className="rating-content">
-                <i className="far fa-star"></i>
+            <div className="user-card-rating space-y-2">
+              <div cla  ssName="rating-content">
+                <i className="fas fa-star" style={{ color: "#4f55c7" }}></i>
                 <span style={{ marginLeft: "3px" }}>
                   {averagereview.toFixed(1).split(".")[1] != "0"
                     ? averagereview.toFixed(1)
                     : averagereview.toFixed(0)}
                 </span>
+                <span className="ml-2 font-bold">Ratings</span>
+              </div>
+              <div className="rating-content">
+                <i className="fas fa-comment" style={{ color: "#4f55c7" }}></i>
+                <span style={{ marginLeft: "3px" }}>
+                  {/*d.comments?.length*/}5
+                </span>
+              </div>
+              <div>
+                <span className="text-xs">62 Reviews/47 Sessions</span>
               </div>
             </div>
           </div>
-          <div className="user-card-details-text">
-            <span className="user-name" onClick={openUser}>
-              {d.userName}
-            </span>
-            {d.educationDetails.length > 0 ? <span>
-              {d.educationDetails[0]?.grade} @ {d.educationDetails[0]?.college}
-            </span> : <span style={{color: 'orange', border: '1px dashed orange', padding: '5px', width: '123px', whiteSpace: 'noWrap'}}>
-                Profile not updated
-            </span>}
-            
-            <span className="skills">{d.skills?.join(", ")}</span>
-          </div>
-        </div>
-        <div className="user-card-actions">
-          <div
-            style={{
-              fontWeight: "400",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <span style={{ fontWeight: "600", fontSize: '12px' }}>{d.role}</span>
-            <span>
+          <div className="flex flex-col h-auto">
+            <div className="user-card-details-text">
+              <div className="flex">
+                <span className="user-name" onClick={openUser}>
+                  {d.userName}
+                </span>
+                <span>
+                  {/* {d.verification === "approved" && ( */}
+                  <img
+                    src="/verify.png"
+                    alt=""
+                    style={{
+                      width: "15px",
+                      height: "15px",
+                      position: "absolute",
+                      marginTop: "10px",
+                    }}
+                  />
+                  {/* )} */}
+                </span>
+              </div>
+              <div className="flex space-x-12 ">
+                <span className="text-gray-500 font-semibold">{d.role}</span>
+                <span className="text-gray-500 font-semibold flex">
+                  <CiGlobe className="mr-3 text-lg" /> English,French
+                </span>
+              </div>
 
-            </span>
-          </div>
-
-          {!isCurrentUser &&
-            (connectStatus[d._id]?.status === "pending" ? (
-              <button className="pending-color">Pending</button>
-            ) : connectStatus[d._id]?.status === "approved" ? (
-              <button className="approved-color" onClick={openChat}>
-                Chat
-              </button>
+              {/* {d.educationDetails.length > 0 ? (
+              <span>
+                {d.educationDetails[0]?.grade} @{" "}
+                {d.educationDetails[0]?.college}
+              </span>
             ) : (
-              <button
-                className="connect-color"
-                onClick={() => {
-                  setPitchSendTo(d._id);
-                  setreceiverRole(d.role);
-                  setIsAdmin(d.email == process.env.REACT_APP_ADMIN_MAIL)
+              <span
+                style={{
+                  color: "orange",
+                  border: "1px dashed orange",
+                  padding: "5px",
+                  width: "136px",
+                  whiteSpace: "noWrap",
                 }}
               >
-                Connect
-              </button>
-            ))}
+                Profile not updated
+              </span>
+            )} */}
+              <span className="skills">
+                {/*d.skills?.join(", ")*/} Freelance at abc | Full satck
+                developer
+              </span>
+              <span className="mt-2"> {introText.slice(0, 140)}...</span>
+            </div>
+
+            <div className=" ml-6 mt-4  tabsandinvestement">
+              <div>
+                <div className="tabs-container">
+                  <div
+                    className={`Ttab ${
+                      activeTab === "Expertise" ? "Tactive" : ""
+                    }`}
+                    onClick={() => handleTabClick("Expertise")}
+                  >
+                    Expertise
+                  </div>
+                  <div
+                    className={`Ttab ${
+                      activeTab === "Industries" ? "Tactive" : ""
+                    }`}
+                    onClick={() => handleTabClick("Industries")}
+                  >
+                    Industries
+                  </div>
+                  <div
+                    className={`Ttab ${
+                      activeTab === "Stages" ? "Tactive" : ""
+                    }`}
+                    onClick={() => handleTabClick("Stages")}
+                  >
+                    Stages
+                  </div>
+                </div>
+                <div className="content-container">
+                  {activeTab === "Expertise" && (
+                    <p>B2C Sales • Growth Marketing • Product Marketing</p>
+                  )}
+                  {activeTab === "Industries" && (
+                    <p>Industry details go here.</p>
+                  )}
+                  {activeTab === "Stages" && <p>Stages details go here.</p>}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-px h-72 bg-neutral-300 relative right-10 "></div>
+
+        <div className="user-card-actions">
+          <div className="mt-10">
+            <div className="font-bold text-lg">Book a session</div>
+            <div className="mt-5">
+              <div className="flex">
+                <BsCircleFill
+                  className="mr-4 mt-1"
+                  style={{ fontSize: "7px" }}
+                />
+                Introduction
+              </div>
+              <div className="mt-3 text-neutral-500 ml-5">
+                <span className="mr-3">45 minutes</span>{" "}
+                {/* Adds margin-right */}
+                <span>$200 per month</span>
+              </div>
+            </div>
+            <hr className="border-gray-300 my-4" />
+
+            <div className="mt-5">
+              <div className="flex">
+                <BsCircleFill
+                  className="mr-4 mt-1"
+                  style={{ fontSize: "7px" }}
+                />
+                Introduction
+              </div>
+              <div className="mt-3 text-neutral-500 ml-5">
+                <span className="mr-3">45 minutes</span>{" "}
+                {/* Adds margin-right */}
+                <span>$200 per month</span>
+              </div>
+            </div>
+          </div>
+
+          {
+            /* !isCurrentUser */ true &&
+              (connectStatus[d._id]?.status === "pending" ? (
+                <button className="pending-color">Pending</button>
+              ) : connectStatus[d._id]?.status === "approved" ? (
+                <button className="approved-color" onClick={openChat}>
+                  Chat
+                </button>
+              ) : (
+                <button
+                  className="connect-color"
+                  onClick={() => {
+                    setPitchSendTo(d._id);
+                    setreceiverRole(d.role);
+                    setIsAdmin(d.email == process.env.REACT_APP_ADMIN_MAIL);
+                  }}
+                >
+                  Connect
+                </button>
+              ))
+          }
         </div>
       </div>
     </>
