@@ -14,7 +14,8 @@ import { CiGlobe } from "react-icons/ci";
 import { BsCircleFill } from "react-icons/bs";
 
 const SingleUserDetails = ({
-  d,
+  // d,
+  user,
   setIsAdmin,
   connectStatus,
   setPitchSendTo,
@@ -31,34 +32,32 @@ const SingleUserDetails = ({
 
   useEffect(() => {
     setAverageReview(0);
-    if (d.review !== undefined && d.review.length > 0) {
+    if (user.review !== undefined && user.review.length > 0) {
       let avgR = 0;
-      d.review?.map((rev) => {
+      user.review?.map((rev) => {
         avgR += rev.review;
       });
-      setAverageReview(avgR / d.review.length);
+      setAverageReview(avgR / user.review.length);
     }
-  }, [d]);
+  }, [user]);
 
   const openUser = () => {
-    if (user_id == d._id) {
+    if (user_id === user._id) {
       navigate(`/editProfile`);
     } else {
-      navigate(`/user/${d._id}`);
+      navigate(`/user/${user._id}`);
     }
   };
 
-  const isCurrentUser = email === d.email;
+  const isCurrentUser = email === user.email;
 
   const openChat = async (e) => {
     // await ApiServices.getProfile({ email: a.members.filter((f) => f.email !== email)[0].email }).then((res) => {
-    dispatch(setReceiverId(d));
+    dispatch(setReceiverId(user));
     // })
-    navigate(`/conversations/${connectStatus[d._id]?.id}`);
+    navigate(`/conversations/${connectStatus[user._id]?.id}`);
   };
 
-  const introText =
-    "Hello! I’m [Your Name], a passionate freelancer specializing in [Your Specialization, e.g., web development, graphic design, content writing, etc.]. With over [X years] of experience in the industry, I have honed my skills to deliver high-quality solutions that meet the unique needs of each client. My approach combines creativity and technical expertise, allowing me to tackle projects with a fresh perspective and a commitment to excellence. Whether you’re looking for [specific services you offer, e.g., stunning websites, engaging content, or eye-catching graphics], I’m here to bring your vision to life. Let’s collaborate and create something extraordinary together!";
 
   const [activeTab, setActiveTab] = useState("Expertise");
 
@@ -75,14 +74,14 @@ const SingleUserDetails = ({
               <img
                 alt="user-pic"
                 src={
-                  d.image !== "" && d.image !== undefined && d.image.url !== ""
-                    ? d.image.url
+                  user.image !== "" && user.image !== undefined && user.image.url !== ""
+                    ? user.image.url
                     : "/profile.png"
                 }
               />
             </div>
             <div className="user-card-rating space-y-2">
-              <div cla  ssName="rating-content">
+              <div cla ssName="rating-content">
                 <i className="fas fa-star" style={{ color: "#4f55c7" }}></i>
                 <span style={{ marginLeft: "3px" }}>
                   {averagereview.toFixed(1).split(".")[1] != "0"
@@ -106,7 +105,7 @@ const SingleUserDetails = ({
             <div className="user-card-details-text">
               <div className="flex">
                 <span className="user-name" onClick={openUser}>
-                  {d.userName}
+                  {user.userName}
                 </span>
                 <span>
                   {/* {d.verification === "approved" && ( */}
@@ -124,7 +123,7 @@ const SingleUserDetails = ({
                 </span>
               </div>
               <div className="flex space-x-12 ">
-                <span className="text-gray-500 font-semibold">{d.role}</span>
+                <span className="text-gray-500 font-semibold">{user.role}</span>
                 <span className="text-gray-500 font-semibold flex">
                   <CiGlobe className="mr-3 text-lg" /> English,French
                 </span>
@@ -148,11 +147,8 @@ const SingleUserDetails = ({
                 Profile not updated
               </span>
             )} */}
-              <span className="skills">
-                {/*d.skills?.join(", ")*/} Freelance at abc | Full satck
-                developer
-              </span>
-              <span className="mt-2"> {introText.slice(0, 140)}...</span>
+              <span className="skills">{user.skills?.join(", ")}</span>
+              <span className="mt-2"> {user.bio.slice(0, 140)}...</span>
             </div>
 
             <div className=" ml-6 mt-4  tabsandinvestement">
@@ -185,12 +181,12 @@ const SingleUserDetails = ({
                 </div>
                 <div className="content-container">
                   {activeTab === "Expertise" && (
-                    <p>B2C Sales • Growth Marketing • Product Marketing</p>
+                    <p>{user.expertise?.join(", ")}</p>
                   )}
                   {activeTab === "Industries" && (
-                    <p>Industry details go here.</p>
+                    <p>{user.industries?.join(", ")}</p>
                   )}
-                  {activeTab === "Stages" && <p>Stages details go here.</p>}
+                  {activeTab === "Stages" && <p>{user.stages?.join(", ")}</p>}
                 </div>
               </div>
             </div>
@@ -233,11 +229,11 @@ const SingleUserDetails = ({
             </div>
           </div>
 
-          {
-            /* !isCurrentUser */ true &&
-              (connectStatus[d._id]?.status === "pending" ? (
+          {/* {
+             !isCurrentUser  &&
+              (connectStatus[user._id]?.status === "pending" ? (
                 <button className="pending-color">Pending</button>
-              ) : connectStatus[d._id]?.status === "approved" ? (
+              ) : connectStatus[user._id]?.status === "approved" ? (
                 <button className="approved-color" onClick={openChat}>
                   Chat
                 </button>
@@ -245,15 +241,15 @@ const SingleUserDetails = ({
                 <button
                   className="connect-color"
                   onClick={() => {
-                    setPitchSendTo(d._id);
-                    setreceiverRole(d.role);
-                    setIsAdmin(d.email == process.env.REACT_APP_ADMIN_MAIL);
+                    setPitchSendTo(user._id);
+                    setreceiverRole(user.role);
+                    setIsAdmin(user.email == process.env.REACT_APP_ADMIN_MAIL);
                   }}
                 >
                   Connect
                 </button>
               ))
-          }
+          } */}
         </div>
       </div>
     </>

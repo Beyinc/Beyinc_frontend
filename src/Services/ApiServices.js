@@ -1160,9 +1160,31 @@ export const ApiServices = {
   },
 
 
+  SaveBio: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/savebio`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
-
-
+  FilterData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/filterdata`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
 };
 

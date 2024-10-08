@@ -53,6 +53,7 @@ import BookSession from "./BookSession/BookSession2";
 import TabsAndInvestment from "./TabsAndInvestment/TabsAndInvestment";
 
 const EditProfile = () => {
+
   const { id } = useParams();
   const {
     user_id,
@@ -268,8 +269,28 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    // Delay changing the overflowY to ensure the scroll completes first
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
     setIsAboutPopupVisible(true);
+  };
+
+  const handleBioSubmitAndClose = async () => {
+    console.log(bio);
+    
+    // Close the popup and scroll to the top
+    document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+    setIsAboutPopupVisible(false);
+
+    const data = { bio }; 
+    try {
+      await ApiServices.SaveBio(data);
+      alert("Bio saved successfully!");
+    } catch (error) {
+      console.error("Error saving bio:", error);
+      alert("There was an error saving your bio. Please try again.");
+    }
   };
 
   const handleSkillButtonClick = () => {
@@ -343,7 +364,7 @@ const EditProfile = () => {
   };
 
   const formatBio = (text) => {
-    return text.replace(/\n/g, '<br />');
+    return text.replace(/\n/g, "<br />");
   };
 
   useEffect(() => {
@@ -463,10 +484,10 @@ const EditProfile = () => {
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
   const location = useLocation();
-  const pathSegments = location.pathname.split('/');
+  const pathSegments = location.pathname.split("/");
   const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
-  console.log('mentorId', mentorId);
-  
+  console.log("mentorId", mentorId);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
@@ -1698,16 +1719,18 @@ const EditProfile = () => {
           )}
           {role === "Mentor" && (
             <div className="BookSessionCard">
-              <BookSession name={name}  mentorId={mentorId} reschedule={false} />
+              <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )}
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-        {(role?.toLowerCase() === "mentor" || role?.toLowerCase() === "investor") && (
-          <div>
-            <TabsAndInvestment />
-          </div>)}
+          {(role?.toLowerCase() === "mentor" ||
+            role?.toLowerCase() === "investor") && (
+            <div>
+              <TabsAndInvestment />
+            </div>
+          )}
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${
@@ -1752,7 +1775,7 @@ const EditProfile = () => {
                   }}
                 >
                   <div>About</div>
-                  {id == undefined && (
+                  {id === undefined && (
                     <span>
                       <i
                         onClick={handleAboutButtonClick}
@@ -1762,13 +1785,12 @@ const EditProfile = () => {
                   )}
                 </div>
                 <div className="bioDisplay">
-        {bio?.length > 0 ? (
-          <div dangerouslySetInnerHTML={{ __html: formatBio(bio) }} />
-        ) : (
-          <div>No bio data found</div>
-        )}
-      </div>
-
+                  {bio?.length > 0 ? (
+                    <div dangerouslySetInnerHTML={{ __html: formatBio(bio) }} />
+                  ) : (
+                    <div>No bio data found</div>
+                  )}
+                </div>
               </section>
 
               {/* SKILLS */}
@@ -2647,7 +2669,16 @@ const EditProfile = () => {
                     <Post key={post.id} post={post} setAllPosts={setAllPosts} />
                   ))
                 ) : (
-                  <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '100px'}}>There is no activity found for this user</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      marginTop: "100px",
+                    }}
+                  >
+                    There is no activity found for this user
+                  </div>
                 )}
               </div>
             </div>
@@ -2854,12 +2885,12 @@ const EditProfile = () => {
                         <input
                           type="text"
                           className={
-                            mobile  &&
+                            mobile &&
                             (mobile.length === 10 ? "valid" : "invalid")
                           }
                           name="mobile"
                           id="mobile"
-                          value={mobile }
+                          value={mobile}
                           onChange={handleChanges}
                           placeholder="Mobile Number"
                         />
@@ -3142,75 +3173,70 @@ const EditProfile = () => {
 
         {isAboutPopupVisible && (
           <div className="popup-container">
-          <div className="popup-content">
-          <div>
-            <div
-              className="popup-header"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <h3>Edit About</h3>
-              <div
-                className="close-icon"
-                onClick={() => {
-                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-                  setIsAboutPopupVisible(false);
-                }}
-              >
-                <i
-                  style={{ color: "var(--followBtn-bg)" }}
-                  className="fas fa-times"
-                ></i>
+            <div className="popup-content">
+              <div>
+                <div
+                  className="popup-header"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h3>Edit About</h3>
+                  <div
+                    className="close-icon"
+                    onClick={() => {
+                      document.getElementsByTagName("body")[0].style.overflowY =
+                        "scroll";
+                      setIsAboutPopupVisible(false);
+                    }}
+                  >
+                    <i
+                      style={{ color: "var(--followBtn-bg)" }}
+                      className="fas fa-times"
+                    ></i>
+                  </div>
+                </div>
+                <textarea
+                  className="bioText"
+                  onChange={(e) => {
+                    const inputText = e.target.value;
+                    if (inputText.length <= 1000) {
+                      setBio(inputText);
+                    } else {
+                      setBio(inputText.slice(0, 1000));
+                    }
+                  }}
+                  style={{
+                    resize: "none",
+                    border: "none",
+                    textAlign: "justify",
+                    fontFamily: "poppins",
+                  }}
+                  cols="155"
+                  rows="13"
+                  name="message"
+                  value={bio}
+                  placeholder="Enter your bio"
+                ></textarea>
+                <p style={{ fontSize: "10px", marginTop: "0px" }}>
+                  {1000 - bio.length}/1000 characters left
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "10px",
+                  }}
+                >
+                  <button className="add-button" onClick={handleBioSubmitAndClose}>
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
-            <textarea
-              className="bioText"
-              onChange={(e) => {
-                const inputText = e.target.value;
-                if (inputText.length <= 1000) {
-                  setBio(inputText);
-                } else {
-                  setBio(inputText.slice(0, 1000));
-                }
-              }}
-              style={{
-                resize: "none",
-                border: "none",
-                textAlign: "justify",
-                fontFamily: "poppins",
-              }}
-              cols="155"
-              rows="13"
-              name="message"
-              value={bio}
-              placeholder="Enter your bio"
-            ></textarea>
-            <p style={{ fontSize: "10px", marginTop: "0px" }}>
-              {1000 - bio.length}/1000 characters left
-            </p>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "10px",
-              }}
-            >
-              <button
-                className="add-button"
-                onClick={() => {
-                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-                  setIsAboutPopupVisible(false);
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
           </div>
         )}
 

@@ -327,6 +327,7 @@ const App = () => {
             Component={AuthHoc(IndividualPitch)}
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
+           
           <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />

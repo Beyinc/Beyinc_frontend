@@ -31,6 +31,7 @@ import { Search } from "@mui/icons-material";
 import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
 import AddPitch from "../Common/AddPitch";
 import AddConversationPopup from "../Common/AddConversationPopup";
+import FilterSidebar from "./FilterSidebar";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -85,18 +86,18 @@ const AllUsers = () => {
   const [search, setSearch] = useState("");
   const [receiverRole, setreceiverRole] = useState("");
   const [pitchSendTo, setPitchSendTo] = useState("");
-  const [filters, setFilters] = useState({
-    role: [],
-    languagesKnown: [],
-    skills: [],
-    email: [],
-    state: [],
-    country: [],
-    userColleges: [],
-    verification: false,
-    userName: [],
-    review: 0,
-  });
+  // const [filters, setFilters] = useState({
+  //   role: [],
+  //   languagesKnown: [],
+  //   skills: [],
+  //   email: [],
+  //   state: [],
+  //   country: [],
+  //   userColleges: [],
+  //   verification: false,
+  //   userName: [],
+  //   review: 0,
+  // });
   useEffect(() => {
     setFilters((prev) => ({ ...prev, review: filledStars }));
   }, [filledStars]);
@@ -115,85 +116,85 @@ const AllUsers = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      filterUsers();
-    }
-  }, [data, filters]);
+  // useEffect(() => {
+  //   if (data.length > 0) {
+  //     filterUsers();
+  //   }
+  // }, [data, filters]);
 
-  const filterUsers = () => {
-    let filteredData = [...data];
-    // console.log(filters);
-    if (Object.keys(filters).length > 0) {
-      Object.keys(filters).map((ob) => {
-        if (filters[ob].length > 0 || ob == "verification" || ob == "review") {
-          if (
-            ob !== "tags" &&
-            ob !== "verification" &&
-            ob !== "email" &&
-            ob !== "userName" &&
-            ob !== "industry2" &&
-            ob !== "userColleges" &&
-            ob !== "country" &&
-            ob !== "state" &&
-            ob !== "skills" &&
-            ob !== "languagesKnown" &&
-            ob !== "review" &&
-            ob !== "role"
-          ) {
-            filteredData = filteredData.filter((f) =>
-              filters[ob].includes(f[ob])
-            );
-          } else if (
-            ob === "tags" ||
-            ob == "skills" ||
-            ob == "languagesKnown"
-          ) {
-            filteredData = filteredData.filter((item) => {
-              const itemdata = item[ob].map((t) => t.toLowerCase()) || [];
-              return filters[ob].some((tag) =>
-                itemdata.includes(tag.toLowerCase())
-              );
-            });
-          } else if (ob == "userColleges") {
-            filteredData = filteredData.filter((item) => {
-              const itemdata =
-                item["educationDetails"]?.map((t) => t.college) || [];
-              return filters[ob].some((tag) => itemdata.includes(tag));
-            });
-          } else if (ob == "verification") {
-            if (filters[ob]) {
-              filteredData = filteredData.filter((item) => {
-                return item.verification == "approved";
-              });
-            }
-          } else if (
-            ob == "userName" ||
-            ob == "industry2" ||
-            ob == "country" ||
-            ob == "state" ||
-            ob == "email" ||
-            ob == "role"
-          ) {
-            filteredData = filteredData.filter((f) => {
-              return filters[ob].some((fs) => fs === f[ob]);
-            });
-          } else if (ob == "review") {
-            if (filters[ob] !== 0) {
-              filteredData = filteredData.filter((f) => {
-                return fetchRating(f) <= filters[ob];
-              });
-            }
-          }
+  // const filterUsers = () => {
+  //   let filteredData = [...data];
+  //   // console.log(filters);
+  //   if (Object.keys(filters).length > 0) {
+  //     Object.keys(filters).map((ob) => {
+  //       if (filters[ob].length > 0 || ob === "verification" || ob === "review") {
+  //         if (
+  //           ob !== "tags" &&
+  //           ob !== "verification" &&
+  //           ob !== "email" &&
+  //           ob !== "userName" &&
+  //           ob !== "industry2" &&
+  //           ob !== "userColleges" &&
+  //           ob !== "country" &&
+  //           ob !== "state" &&
+  //           ob !== "skills" &&
+  //           ob !== "languagesKnown" &&
+  //           ob !== "review" &&
+  //           ob !== "role"
+  //         ) {
+  //           filteredData = filteredData.filter((f) =>
+  //             filters[ob].includes(f[ob])
+  //           );
+  //         } else if (
+  //           ob === "tags" ||
+  //           ob == "skills" ||
+  //           ob == "languagesKnown"
+  //         ) {
+  //           filteredData = filteredData.filter((item) => {
+  //             const itemdata = item[ob].map((t) => t.toLowerCase()) || [];
+  //             return filters[ob].some((tag) =>
+  //               itemdata.includes(tag.toLowerCase())
+  //             );
+  //           });
+  //         } else if (ob == "userColleges") {
+  //           filteredData = filteredData.filter((item) => {
+  //             const itemdata =
+  //               item["educationDetails"]?.map((t) => t.college) || [];
+  //             return filters[ob].some((tag) => itemdata.includes(tag));
+  //           });
+  //         } else if (ob == "verification") {
+  //           if (filters[ob]) {
+  //             filteredData = filteredData.filter((item) => {
+  //               return item.verification == "approved";
+  //             });
+  //           }
+  //         } else if (
+  //           ob == "userName" ||
+  //           ob == "industry2" ||
+  //           ob == "country" ||
+  //           ob == "state" ||
+  //           ob == "email" ||
+  //           ob == "role"
+  //         ) {
+  //           filteredData = filteredData.filter((f) => {
+  //             return filters[ob].some((fs) => fs === f[ob]);
+  //           });
+  //         } else if (ob == "review") {
+  //           if (filters[ob] !== 0) {
+  //             filteredData = filteredData.filter((f) => {
+  //               return fetchRating(f) <= filters[ob];
+  //             });
+  //           }
+  //         }
 
-        }
-      });
-    }
-    filteredData.sort((a, b) => {
-      return fetchRating(b) - fetchRating(a);
-    });
-    setFilteredData(filteredData);
-  };
+  //       }
+  //     });
+  //   }
+  //   filteredData.sort((a, b) => {
+  //     return fetchRating(b) - fetchRating(a);
+  //   });
+  //   setFilteredData(filteredData);
+  // };
 
   const [isSpinning, setSpinning] = useState(false);
   const handleReloadClick = () => {
@@ -246,6 +247,45 @@ const AllUsers = () => {
       )
     );
   }, [historicalConversations]);
+
+
+
+// iqra
+
+const [users, setUsers] = useState([]);
+const [filters, setFilters] = useState({
+  expertise: [],  
+  userName: '',    
+  stages: [],      
+  industries: []   
+});
+
+// Function to fetch user data from backend based on filters
+const fetchUsers = async () => {
+  console.log("Current filters:", filters); 
+  try {
+      const response = await ApiServices.FilterData(filters);
+      setUsers(response.data);
+
+  } catch (error) {
+      console.error('Error fetching users:', error);
+  }
+};
+
+  useEffect(() => {
+    fetchUsers();
+}, [filters]);
+
+ // Function to update filters based on user input
+  const updateFilters = (newFilters) => {
+    setFilters((prevFilters) => ({
+        ...prevFilters,
+        ...newFilters,
+    }));
+};
+
+
+
   return (
     <>
       <Dialog
@@ -304,7 +344,7 @@ const AllUsers = () => {
                 />
               ))}
             </Tabs>
-            <TabPanel value={value} index={0}>
+            {/* <TabPanel value={value} index={0}>
               <FilterPanel
                 rawData={totalRoles}
                 dataKey={"role"}
@@ -345,7 +385,7 @@ const AllUsers = () => {
                 filters={filters}
                 setFilters={setFilters}
               />
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel value={value} index={5}>
               <div
                 style={{
@@ -464,8 +504,9 @@ const AllUsers = () => {
                   />
                 </div>
               </div>
+              <FilterSidebar updateFilters={updateFilters}/>
               {/* Role */}
-              <div className="tagFilter">
+              {/* <div className="tagFilter">
                 <div className="filter-header">
                   <b>Role</b>
                 </div>
@@ -477,10 +518,10 @@ const AllUsers = () => {
                   filters={filters}
                 />
               </div>
-              <hr />
+              <hr /> */}
 
               {/* Domain */}
-              <div className="tagFilter">
+              {/* <div className="tagFilter">
                 <div className="filter-header">
                   <b>User Names</b>
                 </div>
@@ -491,8 +532,8 @@ const AllUsers = () => {
                   setFilters={setFilters}
                   filters={filters}
                 />
-              </div>
-              <hr />
+              </div> */}
+              {/* <hr />
               <div className="tagFilter">
                 <div className="filter-header">
                   <b>Skills</b>
@@ -506,9 +547,9 @@ const AllUsers = () => {
                   filters={filters}
                 />
               </div>
-              <hr />
+              <hr /> */}
               {/* country */}
-              <div className="tagFilter">
+              {/* <div className="tagFilter">
                 <div className="filter-header">
                   <b>Country</b>
                 </div>
@@ -519,9 +560,9 @@ const AllUsers = () => {
                   setFilters={setFilters}
                   filters={filters}
                 />
-              </div>
+              </div> */}
 
-              <hr />
+              {/* <hr />
               <div className="tagFilter">
                 <div className="filter-header">
                   <b>Languages known</b>
@@ -535,7 +576,7 @@ const AllUsers = () => {
                   filters={filters}
                 />
               </div>
-              <hr />
+              <hr /> */}
               {/* Rating */}
               <div
                 style={{
@@ -618,17 +659,20 @@ const AllUsers = () => {
               </Box>
             )}
             <div className="userscontainer">
-              {filteredData.length > 0 ? (
-                filteredData?.map((d) => (
-                  <SingleUserDetails
-                    d={d} setIsAdmin={setIsAdmin}
-                    connectStatus={connectStatus}
-                    setPitchSendTo={setPitchSendTo}
-                    pitchSendTo={pitchSendTo}
-                    receiverRole={receiverRole}
-                    setreceiverRole={setreceiverRole}
-                  />
-                ))
+              {users.length > 0 ? (
+                // filteredData?.map((user) => (
+                //   <SingleUserDetails
+                //     d={d} setIsAdmin={setIsAdmin}
+                //     connectStatus={connectStatus}
+                //     setPitchSendTo={setPitchSendTo}
+                //     pitchSendTo={pitchSendTo}
+                //     receiverRole={receiverRole}
+                //     setreceiverRole={setreceiverRole}
+                //   />
+                // ))
+                users.map((user) => (
+                  <SingleUserDetails key={user.id} user={user} />
+              ))
               ) : (
                 <div className="no-users"
                   style={{
