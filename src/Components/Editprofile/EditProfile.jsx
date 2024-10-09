@@ -60,6 +60,13 @@ const EditProfile = () => {
     userName: loggedUserName,
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
+
+
+  const {
+    beyincProfile
+  } = useSelector((store) => store.auth.userDetails);
+
+console.log(beyincProfile)
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -1711,13 +1718,18 @@ const EditProfile = () => {
               <b>{review?.length}</b> Reviews / 0 Sessions
             </div>
           </div>
-          {role === "Mentor" && (
+          {/* {role === "Mentor" && (
             <div className="FreeSessionCard">
               <p>Unlock Your Free Session</p>
               <button className="Session-button">Start Free Session</button>
             </div>
-          )}
-          {role === "Mentor" && (
+          )} */}
+          {/* {role === "Mentor" && (
+            <div className="BookSessionCard">
+              <BookSession name={name} mentorId={mentorId} reschedule={false} />
+            </div>
+          )} */}
+          {beyincProfile === "mentor" ||"cofounder" && (
             <div className="BookSessionCard">
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
@@ -1725,12 +1737,14 @@ const EditProfile = () => {
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-          {(role?.toLowerCase() === "mentor" ||
-            role?.toLowerCase() === "investor") && (
-            <div>
-              <TabsAndInvestment />
-            </div>
+        {(beyincProfile === "mentor" ||
+            beyincProfile === "cofounder" ||
+            beyincProfile === "investor") && (
+              <div>
+                <TabsAndInvestment />
+              </div>
           )}
+
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${

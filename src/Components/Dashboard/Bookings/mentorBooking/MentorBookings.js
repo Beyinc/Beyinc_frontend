@@ -81,6 +81,10 @@ const MentorBooking = () => {
     handleCloseDialog();
   };
 
+  const {
+    beyincProfile
+  } = useSelector((store) => store.auth.userDetails);
+
   return (
     <Box px={4} py={3}>
       <Box p={8} bgcolor={'white'} borderRadius={3} boxShadow={2}>
