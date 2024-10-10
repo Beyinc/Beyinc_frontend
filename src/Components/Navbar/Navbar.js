@@ -65,6 +65,10 @@ const Navbar = () => {
   const { email, role, userName, image, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
+  const {
+    beyincProfile
+  } = useSelector((store) => store.auth.userDetails);
+
   console.log(role, userName)
   const [logoutOpen, setLogoutOpen] = useState(false);
   const socket = useRef();
@@ -895,7 +899,7 @@ const Navbar = () => {
         </ListItem> */}
 
         {/* Conditional rendering of the Calendar button */}
-      {role === "Mentor" && (
+      {beyincProfile === "mentor" ||"cofounder" && (
         <ListItem
           button
           key="calendar"
@@ -937,21 +941,22 @@ const Navbar = () => {
       </ListItem>
 
       {/* Mentor Bookings - Render only if role === "Mentor" */}
-      {role === "Mentor" && (
+      {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
         <ListItem
           button
-          key="mentorBookings"
-          onClick={() => navigate("/dashboard/mentorBookings")}
+          key={beyincProfile === "mentor" ? "mentorBookings" : "cofounderBookings"}
+          onClick={() => navigate(`/dashboard/mentorBookings`)}
         >
           <ListItemIcon>
             <EventIcon
               className="menu-icon"
-              sx={{ width: "0.8em", height: "0.8em", color: "blue" }} // Different color for Mentor
+              sx={{ width: "0.8em", height: "0.8em", color: beyincProfile === "mentor" ? "blue" : "green" }} // Different color for Mentor and Cofounder
             />
           </ListItemIcon>
-          <ListItemText primary="Mentor Bookings" />
+          <ListItemText primary={beyincProfile === "mentor" ? "Mentor Bookings" : "Cofounder Bookings"} />
         </ListItem>
       )}
+
 
         <ListItem
           button
