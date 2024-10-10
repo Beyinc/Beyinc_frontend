@@ -100,7 +100,7 @@ const BeyincProfessional = () => {
       // Call the API service and await the response
 
       // await ApiServices.saveBeyincProfessional({ beyincProfile: selectedRole });
-      await ApiServices.saveBeyincProfessional(data);
+      await ApiServices.saveBeyincProfessional({data});
 
       // Optionally handle any additional logic after a successful API call
       alert("Role submitted successfully");
