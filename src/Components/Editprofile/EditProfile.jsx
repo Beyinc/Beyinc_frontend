@@ -1557,14 +1557,14 @@ const EditProfile = () => {
 
   return (
     <div className="EditProfileContainer">
-      {(mobileVerified == false || image == "") &&
+      {/* {(mobileVerified == false || image == "") &&
         id == undefined &&
         userpage == false && (
           <div className="mobilenote">
             Note: Mobile number should be verified and image should not be empty
             to send or update the profile
           </div>
-        )}
+        )} */}
       <div className="EditProfileImageContainer">
         <img src="/Banner.png" alt="Banner" />
       </div>
