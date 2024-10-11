@@ -185,9 +185,9 @@ const BeyincProfessional = () => {
               marginTop: "16px",
             }}
           >
-            <MenuItem value="cofounder">Co-founder</MenuItem>
-            <MenuItem value="mentor">Mentor</MenuItem>
-            <MenuItem value="investor">Investor</MenuItem>
+            <MenuItem value="Co-founder">Co-founder</MenuItem>
+            <MenuItem value="Mentor">Mentor</MenuItem>
+            <MenuItem value="Investor">Investor</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>

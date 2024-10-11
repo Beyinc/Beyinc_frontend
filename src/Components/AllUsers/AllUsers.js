@@ -254,10 +254,11 @@ const AllUsers = () => {
 
 const [users, setUsers] = useState([]);
 const [filters, setFilters] = useState({
-  expertise: [],  
-  userName: '',    
-  stages: [],      
-  industries: []   
+  expertise: [],
+  userName: '',
+  stages: [],
+  industries: [],
+  categories: [],  // Added categories filter
 });
 
 // Function to fetch user data from backend based on filters
@@ -625,40 +626,8 @@ const fetchUsers = async () => {
             </div>
           )}
           <div className="user-cards-panel">
-            {width > 770 && (
-              <Box
-                className="search-box"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: 3,
-                  width: "100%",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Search sx={{ color: "action.active", width: 20, mx: 1 }} />
-                <input
-                  className="search-input"
-                  style={{ height: 10, padding: 10, margin: 0 }}
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setFilteredData(
-                      e.target.value !== ""
-                        ? filteredData.filter((f) =>
-                          f.userName
-                            .toLowerCase()
-                            .includes(e.target.value.toLowerCase())
-                        )
-                        : data
-                    );
-                  }}
-                  placeholder="Search Users.."
-                  variant="standard"
-                />
-              </Box>
-            )}
-            <div className="userscontainer">
+           
+            <div className="mt-4 userscontainer">
               {users.length > 0 ? (
                 // filteredData?.map((user) => (
                 //   <SingleUserDetails
