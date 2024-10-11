@@ -154,7 +154,7 @@ const SearchBox = () => {
                       alt=""
                       srcset=""
                     />
-                    {a.verification === "approved" && (
+                    {/* {a.verification === "approved" && (
                       <div
                         style={{
                           right: "8px",
@@ -174,7 +174,7 @@ const SearchBox = () => {
                           />
                         </abbr>
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                   <div>

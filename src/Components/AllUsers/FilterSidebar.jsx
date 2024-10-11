@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { stages, allskills, domain_subdomain } from '../../Utils';
+import React, { useState, useEffect } from "react";
+import { stages, allskills, domain_subdomain } from "../../Utils";
 
 const FilterSidebar = ({ updateFilters }) => {
-  const [userName, setUserName] = useState('');
-  const [expertise, setExpertise] = useState('');
-  const [industries, setIndustries] = useState('');
-  const [stage, setStage] = useState('');
+  const [userName, setUserName] = useState("");
+  const [expertise, setExpertise] = useState("");
+  const [industries, setIndustries] = useState("");
+  const [stage, setStage] = useState("");
 
   const subdomains = Object.values(domain_subdomain).flat();
 
@@ -64,6 +64,7 @@ const FilterSidebar = ({ updateFilters }) => {
       <h2>Filter</h2>
 
       <input
+        className="w-72"
         type="text"
         placeholder="Enter username"
         value={userName}
@@ -72,63 +73,79 @@ const FilterSidebar = ({ updateFilters }) => {
 
       <input
         type="text"
+        className="w-72"
         placeholder="Search Expertise"
         value={expertise}
         onChange={(e) => setExpertise(e.target.value)}
       />
-      {filteredExpertiseOptions.map((option) => (
-        <div key={option}>
-          <label>
-            <input
-              type="checkbox"
-              value={option}
-              checked={selectedExpertise.includes(option)}
-              onChange={handleExpertiseChange}
-            />
-            {option}
-          </label>
-        </div>
-      ))}
+
+      {/* Expertise checkboxes with vertical scroll */}
+      <div className="max-h-48 overflow-y-scroll overflow-x-hidden">
+        {filteredExpertiseOptions.map((option) => (
+          <div key={option}>
+            <label>
+              <input
+                type="checkbox"
+                value={option}
+                checked={selectedExpertise.includes(option)}
+                onChange={handleExpertiseChange}
+              />
+              {option}
+            </label>
+          </div>
+        ))}
+      </div>
 
       <input
         type="text"
+        className="w-72 mt-3"
         placeholder="Search Industry"
         value={industries}
         onChange={(e) => setIndustries(e.target.value)}
       />
-      {filteredIndustryOptions.map((option) => (
-        <div key={option}>
-          <label>
-            <input
-              type="checkbox"
-              value={option}
-              checked={selectedIndustry.includes(option)}
-              onChange={handleIndustryChange}
-            />
-            {option}
-          </label>
-        </div>
-      ))}
+
+      {/* Industry checkboxes with vertical scroll */}
+      <div className="max-h-48 overflow-y-scroll overflow-x-hidden">
+        {filteredIndustryOptions.map((option) => (
+          <div key={option}>
+            <label>
+              <input
+                type="checkbox"
+                value={option}
+                checked={selectedIndustry.includes(option)}
+                onChange={handleIndustryChange}
+              />
+              {option}
+            </label>
+          </div>
+        ))}
+      </div>
 
       <input
+        className="w-72 mt-3"
         type="text"
         placeholder="Search Stage"
         value={stage}
         onChange={(e) => setStage(e.target.value)}
       />
-      {filteredStageOptions.map((option) => (
-        <div key={option}>
-          <label>
-            <input
-              type="checkbox"
-              value={option}
-              checked={selectedStage.includes(option)}
-              onChange={handleStageChange}
-            />
-            {option}
-          </label>
-        </div>
-      ))}
+
+      {/* Stage checkboxes with vertical scroll */}
+      <div className="max-h-48 overflow-y-scroll overflow-x-hidden">
+        {filteredStageOptions.map((option) => (
+          <div key={option}>
+            <label>
+              <input
+                className="w-72"
+                type="checkbox"
+                value={option}
+                checked={selectedStage.includes(option)}
+                onChange={handleStageChange}
+              />
+              {option}
+            </label>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

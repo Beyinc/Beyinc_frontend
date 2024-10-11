@@ -58,7 +58,6 @@ const SingleUserDetails = ({
     navigate(`/conversations/${connectStatus[user._id]?.id}`);
   };
 
-
   const [activeTab, setActiveTab] = useState("Expertise");
 
   const handleTabClick = (tab) => {
@@ -74,7 +73,9 @@ const SingleUserDetails = ({
               <img
                 alt="user-pic"
                 src={
-                  user.image !== "" && user.image !== undefined && user.image.url !== ""
+                  user.image !== "" &&
+                  user.image !== undefined &&
+                  user.image.url !== ""
                     ? user.image.url
                     : "/profile.png"
                 }
@@ -148,7 +149,9 @@ const SingleUserDetails = ({
               </span>
             )} */}
               <span className="skills">{user.skills?.join(", ")}</span>
-              <span className="mt-2"> {user.bio.slice(0, 140)}...</span>
+              <span className="mt-2">
+                {user.bio ? user.bio.slice(0, 140) : "No bio available"}
+              </span>
             </div>
 
             <div className=" ml-6 mt-4  tabsandinvestement">
