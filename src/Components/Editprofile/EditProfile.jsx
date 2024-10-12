@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import { Link as RouterLink, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
+import { CiGlobe } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import {
   setLoginData,
@@ -53,7 +54,6 @@ import BookSession from "./BookSession/BookSession2";
 import TabsAndInvestment from "./TabsAndInvestment/TabsAndInvestment";
 
 const EditProfile = () => {
-
   const { id } = useParams();
   const {
     user_id,
@@ -61,12 +61,34 @@ const EditProfile = () => {
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
 
-
   const {
-    beyincProfile
+    beyincProfile,
+    bio: dbbio,
+    userName: dbuserName,
+    educationDetails: dbEducation,
+    experienceDetails: dbExperience,
+    skills: dbSkills,
+    country: dbcountry,
+    languagesKnown: languages,
+    beyincProfile: dbProfile,
   } = useSelector((store) => store.auth.userDetails);
 
-console.log(beyincProfile)
+  const [dbCountry, setDbCountry] = useState("");
+  const [dblanguages, setDblanguages] = useState([]);
+  const [dbbeyincProfile, setBeyincProfile] = useState("");
+  useEffect(() => {
+    if (dbbio) setBio(dbbio);
+    // if (userName) setName(userName);
+    if (dbEducation) setEducationDetails(dbEducation);
+    if (dbExperience) setExperience(dbExperience);
+    if (dbSkills) setSkills(dbSkills);
+    if (dbcountry) setDbCountry(dbcountry);
+    if (languages) setDblanguages(languages);
+    if (dbProfile) setBeyincProfile(dbProfile);
+    setTotalEducationData(dbEducation);
+    setTotalExperienceData(dbExperience);
+  }, [dbbio, dbEducation, dbExperience, dbSkills]);
+
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -86,8 +108,8 @@ console.log(beyincProfile)
 
   const handleSkillChange = (e) => {
     const selectedSkill = e.target.value;
-    if (selectedSkill !== "" && !skills.includes(selectedSkill)) {
-      setSkills((prevSkills) => [...prevSkills, selectedSkill]);
+    if (selectedSkill !== "" && !tempSkills.includes(selectedSkill)) {
+      setTempSkills((prevSkills) => [...prevSkills, selectedSkill]); // Update tempSkills
       setSelectKey(Date.now()); // Reset select element
     }
   };
@@ -105,20 +127,48 @@ console.log(beyincProfile)
   };
 
   useEffect(() => {
-    if (id !== undefined) {
-      ApiServices.getUsersPost({ user_id: id })
-        .then((res) => {
-          setAllPosts(res.data);
-        })
-        .catch((err) => {
-          dispatch(
-            setToast({
-              message: "Error Occured!",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        });
+    // Fetch the user data on which profile is clicked
+    const fetchUserData = async () => {
+      try {
+        const response = await ApiServices.getProfile({ id });
+        const {
+          bio,
+          skills,
+          experienceDetails,
+          educationDetails,
+          languagesKnown,
+          country,
+          beyincProfile,
+        } = response.data;
+
+        // Set state if data exists
+        if (bio) setBio(bio);
+        if (country) setDbCountry(country);
+        if (beyincProfile) setBeyincProfile(beyincProfile);
+        if (languagesKnown) setDblanguages(languagesKnown);
+        if (educationDetails) setEducationDetails(educationDetails);
+        if (experienceDetails) setExperience(experienceDetails);
+        if (skills) setSkills(skills);
+        setTotalEducationData(educationDetails);
+        setTotalExperienceData(experienceDetails);
+
+        // Fetch user's posts
+        const postsResponse = await ApiServices.getUsersPost({ user_id: id });
+        setAllPosts(postsResponse.data);
+      } catch (error) {
+        dispatch(
+          setToast({
+            message: "Error occurred!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      }
+    };
+
+    if (id) {
+      // Check if id is truthy
+      fetchUserData();
     } else {
       ApiServices.getUsersPost({ user_id })
         .then((res) => {
@@ -127,14 +177,15 @@ console.log(beyincProfile)
         .catch((err) => {
           dispatch(
             setToast({
-              message: "Error Occured!",
+              message: "Error Occurred!",
               bgColor: ToastColors.failure,
               visible: "yes",
             })
           );
         });
     }
-  }, [user_id]);
+  }, [id, user_id]); // Add id to dependencies
+
   const [inputs, setInputs] = useState({
     verification: null,
     twitter: null,
@@ -194,7 +245,9 @@ console.log(beyincProfile)
   const [isLoading, setIsLoading] = useState(false);
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
-  const [experienceDetails, setExperience] = useState({
+  const [experienceDetails, setExperience] = useState([]);
+  // Temporary state to hold user input
+  const [tempExperienceDetails, setTempExperienceDetails] = useState({
     business: "",
     company: "",
     institute: "",
@@ -221,7 +274,9 @@ console.log(beyincProfile)
     workingStatus: "",
   });
 
-  const [EducationDetails, setEducationDetails] = useState({
+  const [educationDetails, setEducationDetails] = useState([]); // Initialize as an array
+
+  const [tempEducationDetails, setTempEducationDetails] = useState({
     year: "",
     grade: "",
     college: "",
@@ -230,7 +285,9 @@ console.log(beyincProfile)
   });
   const [fee, setFee] = useState("");
   const [bio, setBio] = useState("");
+  const [tempBio, setTempBio] = useState("");
   const [skills, setSkills] = useState([]);
+  const [tempSkills, setTempSkills] = useState([]);
   const [singleSkill, setSingleSkill] = useState("");
   const [editOwnProfile, setEditOwnProfile] = useState(false);
   const [languagesKnown, setlanguagesKnown] = useState([]);
@@ -265,7 +322,9 @@ console.log(beyincProfile)
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
     if (id === undefined) {
       setIsInputPopupVisible(true);
     }
@@ -283,21 +342,20 @@ console.log(beyincProfile)
     setIsAboutPopupVisible(true);
   };
 
-  const handleBioSubmitAndClose = async () => {
-    console.log(bio);
-    
+  const handleBioSaveAndClose = async () => {
+    setBio(tempBio);
     // Close the popup and scroll to the top
     document.getElementsByTagName("body")[0].style.overflowY = "scroll";
     setIsAboutPopupVisible(false);
 
-    const data = { bio }; 
-    try {
-      await ApiServices.SaveBio(data);
-      alert("Bio saved successfully!");
-    } catch (error) {
-      console.error("Error saving bio:", error);
-      alert("There was an error saving your bio. Please try again.");
-    }
+    // const data = { bio };
+    // try {
+    //   await ApiServices.SaveBio(data);
+    //   alert("Bio saved successfully!");
+    // } catch (error) {
+    //   console.error("Error saving bio:", error);
+    //   alert("There was an error saving your bio. Please try again.");
+    // }
   };
 
   const handleSkillButtonClick = () => {
@@ -305,7 +363,12 @@ console.log(beyincProfile)
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+
+    // Delay changing the overflowY to ensure the scroll completes first
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
+
     setisSkillsPopupVisibile(true);
   };
 
@@ -358,7 +421,9 @@ console.log(beyincProfile)
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500);
     setIsExperiencePopupVisible(true);
   };
   const handleEducationButtonClick = () => {
@@ -366,35 +431,15 @@ console.log(beyincProfile)
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500);
     setIsEducationPopupVisible(true);
   };
 
   const formatBio = (text) => {
     return text.replace(/\n/g, "<br />");
   };
-
-  useEffect(() => {
-    if (country == "" && state == "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: [],
-        town: [],
-      });
-    } else if (country !== "" && state == "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: State.getStatesOfCountry(country.split("-")[1]),
-        town: [],
-      });
-    } else if (country !== "" && state !== "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: State.getStatesOfCountry(country.split("-")[1]),
-        town: City.getCitiesOfState(country.split("-")[1], state.split("-")[1]),
-      });
-    }
-  }, [country, state, town]);
 
   const addExperience = (e) => {
     e.preventDefault();
@@ -440,28 +485,29 @@ console.log(beyincProfile)
       Services: "",
     });
   };
-  const addEducation = (e) => {
-    e.preventDefault();
-    if (editingEducationId == "") {
-      setTotalEducationData((prev) => [...prev, EducationDetails]);
-    } else {
-      setTotalEducationData(
-        totalEducationData.map((t, i) => {
-          return i + 1 === editingEducationId ? EducationDetails : t;
-        })
-      );
-      setIsEducationPopupVisible(false);
-      seteditingEducationId("");
-      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-    }
-    setEducationDetails({
-      year: "",
-      grade: "",
-      college: "",
-      Edstart: "",
-      Edend: "",
-    });
-  };
+
+  // const addEducation = (e) => {
+  //   e.preventDefault();
+  //   if (editingEducationId == "") {
+  //     setTotalEducationData((prev) => [...prev, EducationDetails]);
+  //   } else {
+  //     setTotalEducationData(
+  //       totalEducationData.map((t, i) => {
+  //         return i + 1 === editingEducationId ? EducationDetails : t;
+  //       })
+  //     );
+  //     setIsEducationPopupVisible(false);
+  //     seteditingEducationId("");
+  //     document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+  //   }
+  //   setEducationDetails({
+  //     year: "",
+  //     grade: "",
+  //     college: "",
+  //     Edstart: "",
+  //     Edend: "",
+  //   });
+  // };
 
   const [changeResume, setchangeDocuments] = useState({
     resume: "",
@@ -504,16 +550,26 @@ console.log(beyincProfile)
   }, [location, seteditPostToggler]);
 
   const handleChange = (e) => {
-    setExperience((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setTempExperienceDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleEducationChange = (e, isCollege) => {
-    setEducationDetails((prev) => ({
-      ...prev,
-      [isCollege ? "college" : e.target.name]: isCollege
-        ? universities[e.target.getAttribute("data-option-index")]?.name
-        : e.target.value,
-    }));
+  const handleEducationChange = (e, isAutocomplete = false) => {
+    const { name, value } = e.target;
+    if (isAutocomplete) {
+      setTempEducationDetails((prevDetails) => ({
+        ...prevDetails,
+        college: value,
+      }));
+    } else {
+      setTempEducationDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,
+      }));
+    }
   };
 
   const handleResume = (e) => {
@@ -1284,39 +1340,39 @@ console.log(beyincProfile)
     autoplaySpeed: 2000,
   };
 
-  const savingLocal = () => {
-    localStorage.setItem(
-      "editProfile",
-      JSON.stringify({
-        twitter: twitter,
-        linkedin: linkedin,
-        salutation: salutation,
-        mentorCategories: mentorCategories,
-        email: email,
-        userId: user_id,
-        state: state,
-        town: town,
-        country: country,
-        userName: name,
-        phone: mobile,
-        role: role,
-        fee: fee,
-        bio: bio,
-        skills: skills,
-        languagesKnown: languagesKnown,
-        documents: changeResume,
-        experienceDetails: totalExperienceData,
-        educationDetails: totalEducationData,
-      })
-    );
-    dispatch(
-      setToast({
-        message: "Data Saved Locally",
-        bgColor: ToastColors.success,
-        visible: "yes",
-      })
-    );
-  };
+  // const savingLocal = () => {
+  //   localStorage.setItem(
+  //     "editProfile",
+  //     JSON.stringify({
+  //       twitter: twitter,
+  //       linkedin: linkedin,
+  //       salutation: salutation,
+  //       mentorCategories: mentorCategories,
+  //       email: email,
+  //       userId: user_id,
+  //       state: state,
+  //       town: town,
+  //       country: country,
+  //       userName: name,
+  //       phone: mobile,
+  //       role: role,
+  //       fee: fee,
+  //       bio: bio,
+  //       skills: skills,
+  //       languagesKnown: languagesKnown,
+  //       documents: changeResume,
+  //       experienceDetails: totalExperienceData,
+  //       educationDetails: totalEducationData,
+  //     })
+  //   );
+  //   dispatch(
+  //     setToast({
+  //       message: "Data Saved Locally",
+  //       bgColor: ToastColors.success,
+  //       visible: "yes",
+  //     })
+  //   );
+  // };
 
   const retreiveLocal = () => {
     console.log(JSON.parse(localStorage.getItem("editProfile")));
@@ -1478,6 +1534,179 @@ console.log(beyincProfile)
   const openChat = async (e) => {
     navigate(`/conversations/${connectStatus[id]?.id}`);
   };
+
+  ///////////////////////////////////////////////////////////////
+
+  const saveEducationDetails = () => {
+    // Check if the required fields are filled
+    if (
+      tempEducationDetails.Edstart !== "" &&
+      tempEducationDetails.grade !== "" &&
+      tempEducationDetails.college !== ""
+    ) {
+      // Save tempEducationDetails to educationDetails
+      setEducationDetails((prev) => [
+        ...prev,
+        { ...tempEducationDetails }, // Add the new details
+      ]);
+
+      // Reset tempEducationDetails if needed
+      setTempEducationDetails({
+        year: "",
+        grade: "",
+        college: "",
+        Edstart: "",
+        Edend: "",
+      });
+    } else {
+      alert("Please fill all required fields.");
+    }
+  };
+  // Save changes from temp to main state
+  const saveExperienceDetails = (event) => {
+    event.preventDefault();
+    //  setIsExperiencePopupVisible(false);
+    setExperience(tempExperienceDetails);
+    // Reset temporary details after saving
+    setTempExperienceDetails({ ...tempExperienceDetails });
+  };
+
+  const submitAllData = async () => {
+    console.log(experienceDetails, educationDetails, skills, bio);
+
+    const allData = {
+      experience: experienceDetails,
+      education: educationDetails,
+      skills: skills,
+      bio: bio,
+    };
+    try {
+      await ApiServices.SaveData(allData);
+      alert("Data saved successfully!");
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("There was an error saving your data. Please try again.");
+    }
+  };
+
+  const [formState, setFormState] = useState({
+    salutation: "",
+    fullName: "",
+    mentorCategories: "",
+    mobileNumber: "",
+    twitter: "",
+    linkedin: "",
+    country: "",
+    state: "",
+    town: "",
+    languages: [],
+  });
+
+  // Handle input changes for text fields
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      [name]: value,
+    }));
+  };
+
+  const handleCountryChange = (e) => {
+    const selectedCountry = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      country: selectedCountry, // Update the selected country
+      state: "", // Reset state
+      town: "", // Reset town
+    }));
+    // No need to set `places` directly here, the `useEffect` will handle fetching states.
+  };
+
+  // Handle state change
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      state: selectedState,
+      town: "",
+    }));
+    setPlaces((prev) => ({ ...prev, town: [] }));
+  };
+
+  // Handle town change
+  const handleTownChange = (e) => {
+    const selectedTown = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      town: selectedTown,
+    }));
+    setPlaces((prevPlaces) => ({
+      ...prevPlaces,
+      // Here, modify if you want to store or update any town-related info in `places`
+      town: [selectedTown], // Or update town array as per your logic
+    }));
+  };
+
+  // Handle language selection
+  const handleAddLanguage = () => {
+    if (
+      singlelanguagesKnown &&
+      !formState.languages.includes(singlelanguagesKnown)
+    ) {
+      setFormState((prevFormState) => ({
+        ...prevFormState,
+        languages: [...prevFormState.languages, singlelanguagesKnown],
+      }));
+      setSinglelanguagesKnown("");
+    }
+  };
+
+  // Remove selected language
+  const removeLanguage = (index) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      languages: prevFormState.languages.filter((_, i) => i !== index),
+    }));
+  };
+
+  useEffect(() => {
+    const { country, state, town } = formState;
+    if (country === "" && state === "" && town === "") {
+      setPlaces({
+        country: Country.getAllCountries(),
+        state: [],
+        town: [],
+      });
+    } else if (country !== "" && state === "" && town === "") {
+      setPlaces((prevPlaces) => ({
+        ...prevPlaces,
+        state: State.getStatesOfCountry(country.split("-")[1]), // Fetch states for the selected country
+        town: [], // Reset town
+      }));
+    } else if (country !== "" && state !== "" && town === "") {
+      setPlaces((prevPlaces) => ({
+        ...prevPlaces,
+        town: City.getCitiesOfState(country.split("-")[1], state.split("-")[1]), // Fetch towns for the selected state
+      }));
+    }
+  }, [formState.country, formState.state, formState.town, formState]);
+
+  const handleFormSubmit = async (e) => {
+    console.log(formState);
+    e.preventDefault();
+
+    try {
+      await ApiServices.InputFormData(formState);
+      alert("Data saved successfully!");
+
+      //   // Fetch updated data after saving
+      // const updatedProfile = await ApiServices.GetProfileData();
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("There was an error saving your data. Please try again.");
+    }
+  };
+
   return (
     <div className="EditProfileContainer">
       {/* {(mobileVerified == false || image == "") &&
@@ -1540,11 +1769,16 @@ console.log(beyincProfile)
             <div className="personaDetails">
               {role} {role == "Mentor" && mentorCategories}
             </div>
-            {id !== undefined && (
+
+            <div className="font-bold text-customPurple mt-3 mb-1">
+              {dbbeyincProfile} at beyinc
+            </div>
+
+            {/* {id !== undefined && (
               <div className="editProfile-stars">
                 <ReviewStars avg={averagereview} />
               </div>
-            )}
+            )} */}
             {id == undefined && <div className="personaDetails">{email}</div>}
             {id == undefined && (
               <div className="personaDetails">
@@ -1579,14 +1813,17 @@ console.log(beyincProfile)
             )}
 
             {userpage == true && (
-              <button onClick={followerController} className="profileFollowBtn">
+              <button
+                onClick={followerController}
+                className="mb-5 profileFollowBtn"
+              >
                 {followers.map((f) => f._id).includes(user_id)
                   ? "Unfollow"
                   : "Follow"}
               </button>
             )}
 
-            {userpage == true &&
+            {/* {userpage === true &&
               connectStatus &&
               (connectStatus[id]?.status === "pending" ? (
                 <button className="profileMessageBtn">Pending</button>
@@ -1600,12 +1837,12 @@ console.log(beyincProfile)
                   onClick={() => {
                     setPitchSendTo(id);
                     setreceiverRole(role);
-                    setIsAdmin(email == process.env.REACT_APP_ADMIN_MAIL);
+                    setIsAdmin(email === process.env.REACT_APP_ADMIN_MAIL);
                   }}
                 >
                   Connect
                 </button>
-              ))}
+              ))} */}
 
             <div
               className="followDetails"
@@ -1634,9 +1871,14 @@ console.log(beyincProfile)
               <div>Following</div>
               <div>{followering.length}</div>
             </div>
+            <div className="mr-36 mt-3 font-bold flex">
+              <CiGlobe className="mr-3 text-lg" /> {dblanguages.join(", ")}
+            </div>
+
             <div className="locationdetails">
               <div>
                 <svg
+                  className="mt-3"
                   width="25"
                   height="25"
                   viewBox="0 0 25 25"
@@ -1649,7 +1891,7 @@ console.log(beyincProfile)
                   />
                 </svg>
               </div>
-              <div>{country}</div>
+              <div className="mt-2">{dbCountry}</div>
             </div>
 
             {twitter && (
@@ -1729,20 +1971,25 @@ console.log(beyincProfile)
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-          {beyincProfile === "mentor" ||"cofounder" && (
-            <div className="BookSessionCard">
-              <BookSession name={name} mentorId={mentorId} reschedule={false} />
-            </div>
-          )}
+          {beyincProfile === "mentor" ||
+            ("cofounder" && (
+              <div className="BookSessionCard">
+                <BookSession
+                  name={name}
+                  mentorId={mentorId}
+                  reschedule={false}
+                />
+              </div>
+            ))}
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-        {(beyincProfile === "mentor" ||
+          {(beyincProfile === "mentor" ||
             beyincProfile === "cofounder" ||
             beyincProfile === "investor") && (
-              <div>
-                <TabsAndInvestment />
-              </div>
+            <div>
+              <TabsAndInvestment />
+            </div>
           )}
 
           <div className="toggleContainer">
@@ -1900,7 +2147,7 @@ console.log(beyincProfile)
                           </div>
                         </div>
 
-                        {id == undefined && (
+                        {id === undefined && (
                           <div
                             style={{
                               display: "flex",
@@ -2562,7 +2809,8 @@ console.log(beyincProfile)
                           background: "var(--button-background)",
                           color: "var(--button-color)",
                         }}
-                        onClick={savingLocal}
+                        // onClick={savingLocal}
+                        onClick={submitAllData}
                       >
                         Save
                       </button>
@@ -2841,13 +3089,8 @@ console.log(beyincProfile)
                       <select
                         name="salutation"
                         id=""
-                        value={salutation}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            salutation: e.target.value,
-                          }));
-                        }}
+                        value={formState.salutation}
+                        onChange={handleInputChange}
                       >
                         <option value="">Select</option>
                         {allsalutations.map((op) => (
@@ -2860,13 +3103,9 @@ console.log(beyincProfile)
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={name}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }));
-                      }}
+                      name="fullName"
+                      value={formState.fullName}
+                      onChange={handleInputChange}
                     />
                   </div>
 
@@ -2876,13 +3115,8 @@ console.log(beyincProfile)
                       <select
                         name="mentorCategories"
                         id=""
-                        value={mentorCategories}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            mentorCategories: e.target.value,
-                          }));
-                        }}
+                        value={formState.mentorCategories}
+                        onChange={handleInputChange}
                       >
                         <option value="">Select</option>
                         {mentorcategories.map((op) => (
@@ -2902,16 +3136,16 @@ console.log(beyincProfile)
                             mobile &&
                             (mobile.length === 10 ? "valid" : "invalid")
                           }
-                          name="mobile"
+                          name="mobileNumber"
                           id="mobile"
-                          value={mobile}
-                          onChange={handleChanges}
+                          value={formState.mobileNumber}
+                          onChange={handleInputChange}
                           placeholder="Mobile Number"
                         />
                         {mobileVerified === true}
                       </div>
 
-                      <div>
+                      {/* <div>
                         {!isMobileOtpSent && isMobileValid && (
                           <button
                             type="button"
@@ -2921,8 +3155,8 @@ console.log(beyincProfile)
                             Get OTP
                           </button>
                         )}
-                      </div>
-                      <div>
+                      </div> */}
+                      {/* <div>
                         {isMobileOtpSent && mobileVerified !== true && (
                           <>
                             <div>
@@ -2955,33 +3189,25 @@ console.log(beyincProfile)
                             </div>
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <label className="Input-Label">Twitter</label>
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={twitter}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          twitter: e.target.value,
-                        }));
-                      }}
+                      name="twitter"
+                      value={formState.twitter}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <label className="Input-Label">Linkedin</label>
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={linkedin}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          linkedin: e.target.value,
-                        }));
-                      }}
+                      name="linkedin"
+                      value={formState.linkedin}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="Location-details">
@@ -2995,22 +3221,15 @@ console.log(beyincProfile)
                           <select
                             name="country"
                             id=""
-                            onChange={(e) => {
-                              setCountry(e.target.value);
-                              setState("");
-                              settown("");
-                              setPlaces((prev) => ({
-                                ...prev,
-                                state: [],
-                                town: [],
-                              }));
-                            }}
+                            value={formState.country}
+                            onChange={handleCountryChange}
                           >
                             <option value="">Select</option>
                             {places.country?.map((op) => (
                               <option
+                                key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                selected={country?.split("-")[0] == op.name}
+                                // selected={country?.split("-")[0] == op.name}
                               >
                                 {op.name}
                               </option>
@@ -3024,17 +3243,15 @@ console.log(beyincProfile)
                           <select
                             name="state"
                             id=""
-                            onChange={(e) => {
-                              setState(e.target.value);
-                              settown("");
-                              setPlaces((prev) => ({ ...prev, town: [] }));
-                            }}
+                            value={formState.state}
+                            onChange={handleStateChange}
                           >
                             <option value="">Select</option>
                             {places.state?.map((op) => (
                               <option
+                                key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                selected={state?.split("-")[0] == op.name}
+                                // selected={state?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3049,14 +3266,15 @@ console.log(beyincProfile)
                           <select
                             name="town"
                             id=""
-                            value={town}
-                            onChange={(e) => settown(e.target.value)}
+                            value={formState.town}
+                            onChange={handleTownChange}
                           >
                             <option value="">Select</option>
                             {places.town?.map((op) => (
                               <option
+                                key={op.name}
                                 value={op.name}
-                                selected={town?.split("-")[0] == op.name}
+                                // selected={town?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3065,8 +3283,8 @@ console.log(beyincProfile)
                         </div>
                       </div>
                     </form>
-                    <div>
-                      {role == "Mentor" && (
+                    {/* <div>
+                      {role === "Mentor" && (
                         <div>
                           <div>
                             <h4>Fee request</h4>
@@ -3092,25 +3310,19 @@ console.log(beyincProfile)
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
 
                     <div>
                       <div>
                         <label className="Input-Label">Languages Known</label>
                       </div>
                       <div>
-                        {languagesKnown?.length > 0 && (
+                        {formState.languages?.length > 0 && (
                           <div className="listedTeam">
-                            {languagesKnown?.map((t, i) => (
-                              <div className="singleMember">
+                            {formState.languages?.map((t, i) => (
+                              <div className="singleMember" key={i}>
                                 <div>{t}</div>
-                                <div
-                                  onClick={(e) => {
-                                    setlanguagesKnown(
-                                      languagesKnown.filter((f, j) => i !== j)
-                                    );
-                                  }}
-                                >
+                                <div onClick={() => removeLanguage(i)}>
                                   <CloseIcon className="deleteMember" />
                                 </div>
                               </div>
@@ -3128,19 +3340,29 @@ console.log(beyincProfile)
                         <div className="skillsSelectBox">
                           <select
                             name="languagesKnown"
-                            id=""
+                            value={singlelanguagesKnown}
                             onChange={(e) =>
                               setSinglelanguagesKnown(e.target.value)
                             }
                           >
                             <option value="">Select</option>
-                            {allLanguages.map((d) => (
-                              <option value={d}>{d}</option>
+                            {allLanguages.map((language) => (
+                              <option key={language} value={language}>
+                                {language}
+                              </option>
                             ))}
                           </select>
                         </div>
 
-                        <div>
+                        <button
+                          type="button"
+                          className="add-button"
+                          onClick={handleAddLanguage}
+                        >
+                          Add Language
+                        </button>
+
+                        {/* <div>
                           <button
                             className="add-button"
                             onClick={() => {
@@ -3157,7 +3379,7 @@ console.log(beyincProfile)
                           >
                             Add
                           </button>
-                        </div>
+                        </div> */}
                         <div
                           style={{
                             display: "flex",
@@ -3166,12 +3388,7 @@ console.log(beyincProfile)
                         >
                           <button
                             className="add-button"
-                            onClick={() => {
-                              document.getElementsByTagName(
-                                "body"
-                              )[0].style.overflowY = "scroll";
-                              setIsInputPopupVisible(false);
-                            }}
+                            onClick={handleFormSubmit}
                           >
                             Save
                           </button>
@@ -3217,35 +3434,36 @@ console.log(beyincProfile)
                   onChange={(e) => {
                     const inputText = e.target.value;
                     if (inputText.length <= 1000) {
-                      setBio(inputText);
+                      setTempBio(inputText);
                     } else {
-                      setBio(inputText.slice(0, 1000));
+                      setTempBio(inputText.slice(0, 1000));
                     }
                   }}
                   style={{
-                    resize: "none",
-                    border: "none",
                     textAlign: "justify",
                     fontFamily: "poppins",
                   }}
                   cols="155"
                   rows="13"
                   name="message"
-                  value={bio}
+                  value={tempBio}
                   placeholder="Enter your bio"
                 ></textarea>
-                <p style={{ fontSize: "10px", marginTop: "0px" }}>
-                  {1000 - bio.length}/1000 characters left
+                <p style={{ fontSize: "10px", marginTop: "11px" }}>
+                  {1000 - tempBio.length}/1000 characters left
                 </p>
 
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    marginTop: "10px",
+                    marginTop: "9px",
                   }}
                 >
-                  <button className="add-button" onClick={handleBioSubmitAndClose}>
+                  <button
+                    className="add-button"
+                    onClick={handleBioSaveAndClose}
+                  >
                     Save
                   </button>
                 </div>
@@ -3269,7 +3487,7 @@ console.log(beyincProfile)
                           justifyContent: "space-between",
                         }}
                       >
-                        <h3>Edit Skills</h3>
+                        <h3 className="m-3">Edit Skills</h3>
                         <div
                           className="close-icon"
                           onClick={() => {
@@ -3285,14 +3503,16 @@ console.log(beyincProfile)
                           ></i>
                         </div>
                       </div>
-                      {skills?.length > 0 && (
+                      {tempSkills?.length > 0 && (
                         <div className="listedTeam">
-                          {skills?.map((t, i) => (
+                          {tempSkills?.map((t, i) => (
                             <div className="singleMember">
                               <div>{t}</div>
                               <div
                                 onClick={(e) => {
-                                  setSkills(skills.filter((f, j) => i !== j));
+                                  setTempSkills(
+                                    tempSkills.filter((f, j) => i !== j)
+                                  );
                                 }}
                               >
                                 <CloseIcon className="deleteMember" />
@@ -3325,7 +3545,7 @@ console.log(beyincProfile)
                           ))}
                         </select>
                       </div>
-                      <Divider>or</Divider>
+                      <Divider className="mt-2 mb-2">or</Divider>
                       <div
                         className="skillsSelectBox"
                         style={{ display: "flex", gap: "5px" }}
@@ -3360,6 +3580,7 @@ console.log(beyincProfile)
                       document.getElementsByTagName("body")[0].style.overflowY =
                         "scroll";
                       setisSkillsPopupVisibile(false);
+                      setSkills(tempSkills);
                     }}
                   >
                     Save
@@ -3384,13 +3605,13 @@ console.log(beyincProfile)
 
                       setIsEducationPopupVisible(false);
                       seteditingEducationId("");
-                      setEducationDetails({
-                        year: "",
-                        grade: "",
-                        college: "",
-                        Edstart: "",
-                        Edend: "",
-                      });
+                      // setTempEducationDetails({
+                      //   year: "",
+                      //   grade: "",
+                      //   college: "",
+                      //   Edstart: "",
+                      //   Edend: "",
+                      // });
                     }}
                   >
                     <i
@@ -3410,7 +3631,7 @@ console.log(beyincProfile)
                         <select
                           name="grade"
                           id=""
-                          value={EducationDetails.grade}
+                          value={tempEducationDetails.grade}
                           onChange={handleEducationChange}
                         >
                           <option value="">Select</option>
@@ -3420,7 +3641,7 @@ console.log(beyincProfile)
                           <option value="PG">PG</option>
                           <option value="Medical">Medical</option>
                           <option value="Business">Business</option>
-                          <option value="LAW">Law</option>
+                          <option value="Law">Law</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
@@ -3429,18 +3650,18 @@ console.log(beyincProfile)
                       <div>
                         <label className="Input-Label">
                           College/University*{" "}
-                          {EducationDetails.grade !== "SSC" &&
-                            EducationDetails.grade !== "" &&
+                          {tempEducationDetails.grade !== "SSC" &&
+                            tempEducationDetails.grade !== "" &&
                             "(Type 3 characters)"}
                         </label>
                       </div>
                       <div className="Ed_Input_Fields">
-                        {EducationDetails.grade == "SSC" ||
-                        EducationDetails.grade == "" ? (
+                        {tempEducationDetails.grade == "SSC" ||
+                        tempEducationDetails.grade == "" ? (
                           <input
                             type="text"
                             name="college"
-                            value={EducationDetails.college}
+                            value={tempEducationDetails.college}
                             id=""
                             onChange={handleEducationChange}
                             placeholder="Enter Your College/School/University"
@@ -3498,7 +3719,7 @@ console.log(beyincProfile)
                     <div className="Ed_Input_Fields">
                       <input
                         type="date"
-                        value={EducationDetails.Edstart}
+                        value={tempEducationDetails.Edstart}
                         name="Edstart"
                         id=""
                         onChange={handleEducationChange}
@@ -3512,7 +3733,7 @@ console.log(beyincProfile)
                     <div className="Ed_Input_Fields">
                       <input
                         type="date"
-                        value={EducationDetails.Edend}
+                        value={tempEducationDetails.Edend}
                         name="Edend"
                         id=""
                         onChange={handleEducationChange}
@@ -3523,11 +3744,12 @@ console.log(beyincProfile)
                   <div>
                     <button
                       className="add-button"
-                      onClick={addEducation}
+                      // onClick={addEducation}
+                      onClick={saveEducationDetails}
                       disabled={
-                        EducationDetails.Edstart == "" ||
-                        EducationDetails.grade == "" ||
-                        EducationDetails.college == ""
+                        tempEducationDetails.Edstart == "" ||
+                        tempEducationDetails.grade == "" ||
+                        tempEducationDetails.college == ""
                       }
                     >
                       {editingEducationId !== "" ? "Update" : "Add"}
@@ -3541,10 +3763,10 @@ console.log(beyincProfile)
         )}
 
         {isExperiencePopupVisible && (
-          <div className="popup-container">
+          <div className=" popup-container">
             <div className="popup-content">
               <div className="Work-exp">
-                <form className="update-form">
+                <form className=" update-form-edu">
                   <div className="popup-header">
                     <h3>Experience</h3>
                     <div
@@ -3556,33 +3778,33 @@ console.log(beyincProfile)
 
                         setIsExperiencePopupVisible(false);
                         seteditingExperienceId("");
-                        setExperience({
-                          areaOfBusiness: "",
-                          business: "",
-                          institute: "",
-                          startupName: "",
-                          workingStatus: "",
-                          company: "",
-                          designation: "",
-                          Department: "",
-                          Research: "",
-                          year: "",
-                          start: "",
-                          end: "",
-                          Achievements: "",
-                          Published: "",
-                          StartupExperience: "",
-                          Consultancy: "",
-                          Profession: "",
-                          TotalWorkExperience: "",
-                          Description: "",
-                          // Technology Partner
-                          Customers: "",
-                          CompanyLocation: "",
-                          Banner: "",
-                          Logo: "",
-                          Services: "",
-                        });
+                        // setExperience({
+                        //   areaOfBusiness: "",
+                        //   business: "",
+                        //   institute: "",
+                        //   startupName: "",
+                        //   workingStatus: "",
+                        //   company: "",
+                        //   designation: "",
+                        //   Department: "",
+                        //   Research: "",
+                        //   year: "",
+                        //   start: "",
+                        //   end: "",
+                        //   Achievements: "",
+                        //   Published: "",
+                        //   StartupExperience: "",
+                        //   Consultancy: "",
+                        //   Profession: "",
+                        //   TotalWorkExperience: "",
+                        //   Description: "",
+                        //   // Technology Partner
+                        //   Customers: "",
+                        //   CompanyLocation: "",
+                        //   Banner: "",
+                        //   Logo: "",
+                        //   Services: "",
+                        // });
                       }}
                     >
                       <i
@@ -3593,7 +3815,7 @@ console.log(beyincProfile)
                   </div>
                   <div className="exp-container">
                     {/* Academia Mentor */}
-                    {mentorCategories == "Academia Mentor" && (
+                    {mentorCategories === "Academia Mentor" && (
                       <div>
                         <div>
                           <label className="Input-Label">Institute Name*</label>
@@ -3603,11 +3825,11 @@ console.log(beyincProfile)
                             type="text"
                             name="institute"
                             className={
-                              experienceDetails.institute == ""
+                              tempExperienceDetails.institute === ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.institute}
+                            value={tempExperienceDetails.institute}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your institute name"
@@ -3627,11 +3849,11 @@ console.log(beyincProfile)
                           <select
                             name="designation"
                             className={
-                              experienceDetails.designation == ""
+                              tempExperienceDetails.designation == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.designation}
+                            value={tempExperienceDetails.designation}
                             onChange={handleChange}
                           >
                             <option value="">Select</option>
@@ -3653,11 +3875,11 @@ console.log(beyincProfile)
                             type="text"
                             name="Department"
                             className={
-                              experienceDetails.Department == ""
+                              tempExperienceDetails.Department == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Department}
+                            value={tempExperienceDetails.Department}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Department name"
@@ -3678,11 +3900,11 @@ console.log(beyincProfile)
                             type="text"
                             name="Research"
                             className={
-                              experienceDetails.Research == ""
+                              tempExperienceDetails.Research == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Research}
+                            value={tempExperienceDetails.Research}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Research name"
@@ -3702,11 +3924,11 @@ console.log(beyincProfile)
                             <input
                               type="date"
                               className={
-                                experienceDetails.start == ""
+                                tempExperienceDetails.start == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.start}
+                              value={tempExperienceDetails.start}
                               name="start"
                               id=""
                               onChange={handleChange}
@@ -3722,7 +3944,7 @@ console.log(beyincProfile)
                           <div className="Exp_Input_Fields">
                             <input
                               type="date"
-                              value={experienceDetails.end}
+                              value={tempExperienceDetails.end}
                               name="end"
                               id=""
                               onChange={handleChange}
@@ -3744,11 +3966,11 @@ console.log(beyincProfile)
                             type="text"
                             name="Achievements"
                             className={
-                              experienceDetails.Achievements == ""
+                              tempExperienceDetails.Achievements == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Achievements}
+                            value={tempExperienceDetails.Achievements}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Achievements name"
@@ -3769,11 +3991,11 @@ console.log(beyincProfile)
                             type="text"
                             name="Published"
                             className={
-                              experienceDetails.Published == ""
+                              tempExperienceDetails.Published == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Published}
+                            value={tempExperienceDetails.Published}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Paper/Patent Published"
@@ -3793,7 +4015,7 @@ console.log(beyincProfile)
                           <input
                             type="text"
                             name="StartupExperience"
-                            value={experienceDetails.StartupExperience}
+                            value={tempExperienceDetails.StartupExperience}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your StartupExperience"
@@ -3813,7 +4035,7 @@ console.log(beyincProfile)
                           <input
                             type="text"
                             name="Consultancy"
-                            value={experienceDetails.Consultancy}
+                            value={tempExperienceDetails.Consultancy}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Consultancy"
@@ -3835,12 +4057,12 @@ console.log(beyincProfile)
                           <select
                             name="workingStatus"
                             className={
-                              experienceDetails.workingStatus == ""
+                              tempExperienceDetails.workingStatus == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
                             id=""
-                            value={experienceDetails.workingStatus}
+                            value={tempExperienceDetails.workingStatus}
                             onChange={handleChange}
                           >
                             <option value="">Select</option>
@@ -3852,7 +4074,7 @@ console.log(beyincProfile)
                       </div>
                     )}
 
-                    {experienceDetails.workingStatus == "Job" && (
+                    {tempExperienceDetails.workingStatus == "Job" && (
                       <>
                         <div>
                           <div>
@@ -3863,11 +4085,11 @@ console.log(beyincProfile)
                               type="text"
                               name="company"
                               className={
-                                experienceDetails.company == ""
+                                tempExperienceDetails.company == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.company}
+                              value={tempExperienceDetails.company}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Company name"
@@ -3885,11 +4107,11 @@ console.log(beyincProfile)
                             <select
                               name="designation"
                               className={
-                                experienceDetails.designation == ""
+                                tempExperienceDetails.designation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.designation}
+                              value={tempExperienceDetails.designation}
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
@@ -3911,11 +4133,11 @@ console.log(beyincProfile)
                               <input
                                 type="date"
                                 className={
-                                  experienceDetails.start == ""
+                                  tempExperienceDetails.start == ""
                                     ? "editErrors"
                                     : "editSuccess"
                                 }
-                                value={experienceDetails.start}
+                                value={tempExperienceDetails.start}
                                 name="start"
                                 id=""
                                 onChange={handleChange}
@@ -3931,7 +4153,7 @@ console.log(beyincProfile)
                             <div className="Exp_Input_Fields">
                               <input
                                 type="date"
-                                value={experienceDetails.end}
+                                value={tempExperienceDetails.end}
                                 name="end"
                                 id=""
                                 onChange={handleChange}
@@ -3949,11 +4171,11 @@ console.log(beyincProfile)
                               type="text"
                               name="Profession"
                               className={
-                                experienceDetails.Profession == ""
+                                tempExperienceDetails.Profession == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Profession}
+                              value={tempExperienceDetails.Profession}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Profession"
@@ -3973,11 +4195,11 @@ console.log(beyincProfile)
                               min={0}
                               name="TotalWorkExperience"
                               className={
-                                experienceDetails.TotalWorkExperience == ""
+                                tempExperienceDetails.TotalWorkExperience == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.TotalWorkExperience}
+                              value={tempExperienceDetails.TotalWorkExperience}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Total Work Experience"
@@ -3987,7 +4209,7 @@ console.log(beyincProfile)
                       </>
                     )}
 
-                    {(experienceDetails.workingStatus == "Self Employed" ||
+                    {(tempExperienceDetails.workingStatus == "Self Employed" ||
                       role === "Technology Partner") && (
                       <>
                         <div>
@@ -4001,11 +4223,11 @@ console.log(beyincProfile)
                               type="text"
                               name="startupName"
                               className={
-                                experienceDetails.startupName == ""
+                                tempExperienceDetails.startupName == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.startupName}
+                              value={tempExperienceDetails.startupName}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Business name"
@@ -4024,11 +4246,11 @@ console.log(beyincProfile)
                               type="text"
                               name="Description"
                               className={
-                                experienceDetails.Description == ""
+                                tempExperienceDetails.Description == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Description}
+                              value={tempExperienceDetails.Description}
                               id=""
                               onChange={handleChange}
                             />
@@ -4045,11 +4267,11 @@ console.log(beyincProfile)
                             <select
                               name="designation"
                               className={
-                                experienceDetails.designation == ""
+                                tempExperienceDetails.designation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.designation}
+                              value={tempExperienceDetails.designation}
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
@@ -4069,11 +4291,11 @@ console.log(beyincProfile)
                               type="text"
                               name="Profession"
                               className={
-                                experienceDetails.Profession == ""
+                                tempExperienceDetails.Profession == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Profession}
+                              value={tempExperienceDetails.Profession}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Profession"
@@ -4092,12 +4314,12 @@ console.log(beyincProfile)
                               type="number"
                               min={0}
                               className={
-                                experienceDetails.TotalWorkExperience == ""
+                                tempExperienceDetails.TotalWorkExperience == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
                               name="TotalWorkExperience"
-                              value={experienceDetails.TotalWorkExperience}
+                              value={tempExperienceDetails.TotalWorkExperience}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Total Work Experience"
@@ -4120,11 +4342,11 @@ console.log(beyincProfile)
                               type="number"
                               name="Customers"
                               className={
-                                experienceDetails.Customers == ""
+                                tempExperienceDetails.Customers == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Customers}
+                              value={tempExperienceDetails.Customers}
                               id=""
                               onChange={handleChange}
                               placeholder="Total Number of Customers "
@@ -4143,11 +4365,11 @@ console.log(beyincProfile)
                               type="text"
                               name="CompanyLocation"
                               className={
-                                experienceDetails.CompanyLocation == ""
+                                tempExperienceDetails.CompanyLocation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.CompanyLocation}
+                              value={tempExperienceDetails.CompanyLocation}
                               id=""
                               onChange={handleChange}
                               placeholder="Company Location "
@@ -4166,11 +4388,11 @@ console.log(beyincProfile)
                               type="text"
                               name="areaOfBusiness"
                               className={
-                                experienceDetails.areaOfBusiness == ""
+                                tempExperienceDetails.areaOfBusiness == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.areaOfBusiness}
+                              value={tempExperienceDetails.areaOfBusiness}
                               id=""
                               onChange={handleChange}
                               placeholder="Area of Business"
@@ -4185,7 +4407,7 @@ console.log(beyincProfile)
                           <label
                             htmlFor="Banner"
                             className={`resume ${
-                              experienceDetails.Banner == ""
+                              tempExperienceDetails.Banner == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }`}
@@ -4213,7 +4435,7 @@ console.log(beyincProfile)
                           <label
                             htmlFor="Logo"
                             className={`resume ${
-                              experienceDetails.Logo == ""
+                              tempExperienceDetails.Logo == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }`}
@@ -4241,11 +4463,11 @@ console.log(beyincProfile)
                               type="text"
                               name="Services"
                               className={
-                                experienceDetails.Services == ""
+                                tempExperienceDetails.Services == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Services}
+                              value={tempExperienceDetails.Services}
                               id=""
                               onChange={handleChange}
                               placeholder="Services"
@@ -4266,11 +4488,11 @@ console.log(beyincProfile)
                               type="text"
                               name="company"
                               className={
-                                experienceDetails.company == ""
+                                tempExperienceDetails.company == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.company}
+                              value={tempExperienceDetails.company}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Company name"
@@ -4287,11 +4509,11 @@ console.log(beyincProfile)
                             <select
                               name="designation"
                               className={
-                                experienceDetails.designation == ""
+                                tempExperienceDetails.designation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.designation}
+                              value={tempExperienceDetails.designation}
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
@@ -4315,11 +4537,11 @@ console.log(beyincProfile)
                               <input
                                 type="date"
                                 className={
-                                  experienceDetails.start == ""
+                                  tempExperienceDetails.start == ""
                                     ? "editErrors"
                                     : "editSuccess"
                                 }
-                                value={experienceDetails.start}
+                                value={tempExperienceDetails.start}
                                 name="start"
                                 id=""
                                 onChange={handleChange}
@@ -4338,7 +4560,7 @@ console.log(beyincProfile)
                             <div className="Exp_Input_Fields">
                               <input
                                 type="date"
-                                value={experienceDetails.end}
+                                value={tempExperienceDetails.end}
                                 name="end"
                                 id=""
                                 onChange={handleChange}
@@ -4352,59 +4574,66 @@ console.log(beyincProfile)
                     <div>
                       <button
                         className="add-button"
-                        onClick={addExperience}
+                        type="button"
+                        // onClick={addExperience}
+                        onClick={saveExperienceDetails}
                         disabled={
                           (role === "Technology Partner" &&
-                            (experienceDetails.startupName == "" ||
-                              experienceDetails.Description == "" ||
-                              experienceDetails.designation == "" ||
-                              experienceDetails.Profession == "" ||
-                              experienceDetails.TotalWorkExperience == "" ||
-                              experienceDetails.Customers == "" ||
-                              experienceDetails.CompanyLocation == "" ||
-                              experienceDetails.business == "" ||
-                              experienceDetails.Banner == "" ||
-                              experienceDetails.Logo == "" ||
-                              experienceDetails.Services == "")) ||
+                            (tempExperienceDetails.startupName === "" ||
+                              tempExperienceDetails.Description === "" ||
+                              tempExperienceDetails.designation === "" ||
+                              tempExperienceDetails.Profession === "" ||
+                              tempExperienceDetails.TotalWorkExperience ===
+                                "" ||
+                              tempExperienceDetails.Customers === "" ||
+                              tempExperienceDetails.CompanyLocation === "" ||
+                              tempExperienceDetails.business === "" ||
+                              tempExperienceDetails.Banner === "" ||
+                              tempExperienceDetails.Logo === "" ||
+                              tempExperienceDetails.Services === "")) ||
                           (role === "Entrepreneur" &&
-                            ((experienceDetails.workingStatus == "Job" &&
-                              (experienceDetails.company == "" ||
-                                experienceDetails.designation == "" ||
-                                experienceDetails.start == "" ||
-                                experienceDetails.TotalWorkExperience == "" ||
-                                experienceDetails.Profession == "")) ||
-                              (experienceDetails.workingStatus ==
+                            ((tempExperienceDetails.workingStatus === "Job" &&
+                              (tempExperienceDetails.company === "" ||
+                                tempExperienceDetails.designation === "" ||
+                                tempExperienceDetails.start === "" ||
+                                tempExperienceDetails.TotalWorkExperience ===
+                                  "" ||
+                                tempExperienceDetails.Profession === "")) ||
+                              (tempExperienceDetails.workingStatus ===
                                 "Self Employed" &&
-                                (experienceDetails.startupName == "" ||
-                                  experienceDetails.Description == "" ||
-                                  experienceDetails.designation == "" ||
-                                  experienceDetails.Profession == "" ||
-                                  experienceDetails.TotalWorkExperience ==
+                                (tempExperienceDetails.startupName === "" ||
+                                  tempExperienceDetails.Description === "" ||
+                                  tempExperienceDetails.designation === "" ||
+                                  tempExperienceDetails.Profession === "" ||
+                                  tempExperienceDetails.TotalWorkExperience ===
                                     "")))) ||
-                          (role == "Mentor" &&
-                            ((mentorCategories == "Academia Mentor" &&
-                              (experienceDetails.institute == "" ||
-                                experienceDetails.designation == "" ||
-                                experienceDetails.Department == "" ||
-                                experienceDetails.start == "" ||
-                                experienceDetails.Research == "" ||
-                                experienceDetails.Achievements == "" ||
-                                experienceDetails.Published == "")) ||
-                              (mentorCategories == "Industry Expert Mentor" &&
-                                ((experienceDetails.workingStatus == "Job" &&
-                                  (experienceDetails.company == "" ||
-                                    experienceDetails.designation == "" ||
-                                    experienceDetails.start == "" ||
-                                    experienceDetails.TotalWorkExperience ==
+                          (role === "Mentor" &&
+                            ((mentorCategories === "Academia Mentor" &&
+                              (tempExperienceDetails.institute === "" ||
+                                tempExperienceDetails.designation === "" ||
+                                tempExperienceDetails.Department === "" ||
+                                tempExperienceDetails.start === "" ||
+                                tempExperienceDetails.Research === "" ||
+                                tempExperienceDetails.Achievements === "" ||
+                                tempExperienceDetails.Published === "")) ||
+                              (mentorCategories === "Industry Expert Mentor" &&
+                                ((tempExperienceDetails.workingStatus ===
+                                  "Job" &&
+                                  (tempExperienceDetails.company === "" ||
+                                    tempExperienceDetails.designation === "" ||
+                                    tempExperienceDetails.start === "" ||
+                                    tempExperienceDetails.TotalWorkExperience ===
                                       "" ||
-                                    experienceDetails.Profession == "")) ||
-                                  (experienceDetails.workingStatus ==
+                                    tempExperienceDetails.Profession === "")) ||
+                                  (tempExperienceDetails.workingStatus ===
                                     "Self Employed" &&
-                                    (experienceDetails.startupName == "" ||
-                                      experienceDetails.Description == "" ||
-                                      experienceDetails.designation == "" ||
-                                      experienceDetails.Profession == "" ||
-                                      experienceDetails.TotalWorkExperience ==
+                                    (tempExperienceDetails.startupName === "" ||
+                                      tempExperienceDetails.Description ===
+                                        "" ||
+                                      tempExperienceDetails.designation ===
+                                        "" ||
+                                      tempExperienceDetails.Profession === "" ||
+                                      tempExperienceDetails.TotalWorkExperience ===
                                         ""))))))
                         }
                       >

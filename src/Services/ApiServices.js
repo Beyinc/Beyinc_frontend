@@ -1160,10 +1160,23 @@ export const ApiServices = {
   },
 
 
-  SaveBio: (obj) => {
+  SaveData: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post(`/savebio`, obj)
+        .post(`/savedata`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  InputFormData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/inputFormData`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
@@ -1187,8 +1200,6 @@ export const ApiServices = {
   },
 
   getFilterPosts: (obj) => {
-    
-    
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/posts/filterPosts`, obj)
