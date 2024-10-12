@@ -1173,6 +1173,19 @@ export const ApiServices = {
     });
   },
 
+  InputFormData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/inputFormData`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   FilterData: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1187,8 +1200,6 @@ export const ApiServices = {
   },
 
   getFilterPosts: (obj) => {
-    
-    
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/posts/filterPosts`, obj)

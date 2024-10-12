@@ -61,9 +61,34 @@ const EditProfile = () => {
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
 
-  const { beyincProfile } = useSelector((store) => store.auth.userDetails);
+  const {
+    beyincProfile,
+    bio: dbbio,
+    userName: dbuserName,
+    educationDetails: dbEducation,
+    experienceDetails: dbExperience,
+    skills: dbSkills,
+    country: dbcountry,
+    languagesKnown: languages,
+    beyincProfile: dbProfile,
+  } = useSelector((store) => store.auth.userDetails);
 
-  console.log(beyincProfile);
+  const [dbCountry, setDbCountry] = useState("");
+  const [dblanguages, setDblanguages] = useState([]);
+  const [dbbeyincProfile, setBeyincProfile] = useState("");
+  useEffect(() => {
+    if (dbbio) setBio(dbbio);
+    // if (userName) setName(userName);
+    if (dbEducation) setEducationDetails(dbEducation);
+    if (dbExperience) setExperience(dbExperience);
+    if (dbSkills) setSkills(dbSkills);
+    if (dbcountry) setDbCountry(dbcountry);
+    if (languages) setDblanguages(languages);
+    if (dbProfile) setBeyincProfile(dbProfile);
+    setTotalEducationData(dbEducation);
+    setTotalExperienceData(dbExperience);
+  }, [dbbio, dbEducation, dbExperience, dbSkills]);
+
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -102,20 +127,48 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (id !== undefined) {
-      ApiServices.getUsersPost({ user_id: id })
-        .then((res) => {
-          setAllPosts(res.data);
-        })
-        .catch((err) => {
-          dispatch(
-            setToast({
-              message: "Error Occured!",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        });
+    // Fetch the user data on which profile is clicked
+    const fetchUserData = async () => {
+      try {
+        const response = await ApiServices.getProfile({ id });
+        const {
+          bio,
+          skills,
+          experienceDetails,
+          educationDetails,
+          languagesKnown,
+          country,
+          beyincProfile,
+        } = response.data;
+
+        // Set state if data exists
+        if (bio) setBio(bio);
+        if (country) setDbCountry(country);
+        if (beyincProfile) setBeyincProfile(beyincProfile);
+        if (languagesKnown) setDblanguages(languagesKnown);
+        if (educationDetails) setEducationDetails(educationDetails);
+        if (experienceDetails) setExperience(experienceDetails);
+        if (skills) setSkills(skills);
+        setTotalEducationData(educationDetails);
+        setTotalExperienceData(experienceDetails);
+
+        // Fetch user's posts
+        const postsResponse = await ApiServices.getUsersPost({ user_id: id });
+        setAllPosts(postsResponse.data);
+      } catch (error) {
+        dispatch(
+          setToast({
+            message: "Error occurred!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      }
+    };
+
+    if (id) {
+      // Check if id is truthy
+      fetchUserData();
     } else {
       ApiServices.getUsersPost({ user_id })
         .then((res) => {
@@ -124,14 +177,15 @@ const EditProfile = () => {
         .catch((err) => {
           dispatch(
             setToast({
-              message: "Error Occured!",
+              message: "Error Occurred!",
               bgColor: ToastColors.failure,
               visible: "yes",
             })
           );
         });
     }
-  }, [user_id]);
+  }, [id, user_id]); // Add id to dependencies
+
   const [inputs, setInputs] = useState({
     verification: null,
     twitter: null,
@@ -268,7 +322,9 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
     if (id === undefined) {
       setIsInputPopupVisible(true);
     }
@@ -384,28 +440,6 @@ const EditProfile = () => {
   const formatBio = (text) => {
     return text.replace(/\n/g, "<br />");
   };
-
-  useEffect(() => {
-    if (country == "" && state == "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: [],
-        town: [],
-      });
-    } else if (country !== "" && state == "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: State.getStatesOfCountry(country.split("-")[1]),
-        town: [],
-      });
-    } else if (country !== "" && state !== "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: State.getStatesOfCountry(country.split("-")[1]),
-        town: City.getCitiesOfState(country.split("-")[1], state.split("-")[1]),
-      });
-    }
-  }, [country, state, town]);
 
   const addExperience = (e) => {
     e.preventDefault();
@@ -1501,7 +1535,7 @@ const EditProfile = () => {
     navigate(`/conversations/${connectStatus[id]?.id}`);
   };
 
-  ////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////
 
   const saveEducationDetails = () => {
     // Check if the required fields are filled
@@ -1549,6 +1583,124 @@ const EditProfile = () => {
     try {
       await ApiServices.SaveData(allData);
       alert("Data saved successfully!");
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("There was an error saving your data. Please try again.");
+    }
+  };
+
+  const [formState, setFormState] = useState({
+    salutation: "",
+    fullName: "",
+    mentorCategories: "",
+    mobileNumber: "",
+    twitter: "",
+    linkedin: "",
+    country: "",
+    state: "",
+    town: "",
+    languages: [],
+  });
+
+  // Handle input changes for text fields
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      [name]: value,
+    }));
+  };
+
+  const handleCountryChange = (e) => {
+    const selectedCountry = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      country: selectedCountry, // Update the selected country
+      state: "", // Reset state
+      town: "", // Reset town
+    }));
+    // No need to set `places` directly here, the `useEffect` will handle fetching states.
+  };
+
+  // Handle state change
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      state: selectedState,
+      town: "",
+    }));
+    setPlaces((prev) => ({ ...prev, town: [] }));
+  };
+
+  // Handle town change
+  const handleTownChange = (e) => {
+    const selectedTown = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      town: selectedTown,
+    }));
+    setPlaces((prevPlaces) => ({
+      ...prevPlaces,
+      // Here, modify if you want to store or update any town-related info in `places`
+      town: [selectedTown], // Or update town array as per your logic
+    }));
+  };
+
+  // Handle language selection
+  const handleAddLanguage = () => {
+    if (
+      singlelanguagesKnown &&
+      !formState.languages.includes(singlelanguagesKnown)
+    ) {
+      setFormState((prevFormState) => ({
+        ...prevFormState,
+        languages: [...prevFormState.languages, singlelanguagesKnown],
+      }));
+      setSinglelanguagesKnown("");
+    }
+  };
+
+  // Remove selected language
+  const removeLanguage = (index) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      languages: prevFormState.languages.filter((_, i) => i !== index),
+    }));
+  };
+
+  useEffect(() => {
+    const { country, state, town } = formState;
+    if (country === "" && state === "" && town === "") {
+      setPlaces({
+        country: Country.getAllCountries(),
+        state: [],
+        town: [],
+      });
+    } else if (country !== "" && state === "" && town === "") {
+      setPlaces((prevPlaces) => ({
+        ...prevPlaces,
+        state: State.getStatesOfCountry(country.split("-")[1]), // Fetch states for the selected country
+        town: [], // Reset town
+      }));
+    } else if (country !== "" && state !== "" && town === "") {
+      setPlaces((prevPlaces) => ({
+        ...prevPlaces,
+        town: City.getCitiesOfState(country.split("-")[1], state.split("-")[1]), // Fetch towns for the selected state
+      }));
+    }
+  }, [formState.country, formState.state, formState.town, formState]);
+
+  const handleFormSubmit = async (e) => {
+    console.log(formState);
+    e.preventDefault();
+
+    try {
+      await ApiServices.InputFormData(formState);
+      alert("Data saved successfully!");
+
+      //   // Fetch updated data after saving
+      // const updatedProfile = await ApiServices.GetProfileData();
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");
@@ -1619,7 +1771,7 @@ const EditProfile = () => {
             </div>
 
             <div className="font-bold text-customPurple mt-3 mb-1">
-              Investor at beyinc
+              {dbbeyincProfile} at beyinc
             </div>
 
             {/* {id !== undefined && (
@@ -1720,9 +1872,9 @@ const EditProfile = () => {
               <div>{followering.length}</div>
             </div>
             <div className="mr-36 mt-3 font-bold flex">
-              <CiGlobe className="mr-3 text-lg" /> English,French
+              <CiGlobe className="mr-3 text-lg" /> {dblanguages.join(", ")}
             </div>
-            
+
             <div className="locationdetails">
               <div>
                 <svg
@@ -1739,9 +1891,9 @@ const EditProfile = () => {
                   />
                 </svg>
               </div>
-              <div className="mt-2">{country}England</div>
+              <div className="mt-2">{dbCountry}</div>
             </div>
-           
+
             {twitter && (
               <div className="locationdetails">
                 <div>
@@ -2937,13 +3089,8 @@ const EditProfile = () => {
                       <select
                         name="salutation"
                         id=""
-                        value={salutation}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            salutation: e.target.value,
-                          }));
-                        }}
+                        value={formState.salutation}
+                        onChange={handleInputChange}
                       >
                         <option value="">Select</option>
                         {allsalutations.map((op) => (
@@ -2956,13 +3103,9 @@ const EditProfile = () => {
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={name}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }));
-                      }}
+                      name="fullName"
+                      value={formState.fullName}
+                      onChange={handleInputChange}
                     />
                   </div>
 
@@ -2972,13 +3115,8 @@ const EditProfile = () => {
                       <select
                         name="mentorCategories"
                         id=""
-                        value={mentorCategories}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            mentorCategories: e.target.value,
-                          }));
-                        }}
+                        value={formState.mentorCategories}
+                        onChange={handleInputChange}
                       >
                         <option value="">Select</option>
                         {mentorcategories.map((op) => (
@@ -2998,16 +3136,16 @@ const EditProfile = () => {
                             mobile &&
                             (mobile.length === 10 ? "valid" : "invalid")
                           }
-                          name="mobile"
+                          name="mobileNumber"
                           id="mobile"
-                          value={mobile}
-                          onChange={handleChanges}
+                          value={formState.mobileNumber}
+                          onChange={handleInputChange}
                           placeholder="Mobile Number"
                         />
                         {mobileVerified === true}
                       </div>
 
-                      <div>
+                      {/* <div>
                         {!isMobileOtpSent && isMobileValid && (
                           <button
                             type="button"
@@ -3017,8 +3155,8 @@ const EditProfile = () => {
                             Get OTP
                           </button>
                         )}
-                      </div>
-                      <div>
+                      </div> */}
+                      {/* <div>
                         {isMobileOtpSent && mobileVerified !== true && (
                           <>
                             <div>
@@ -3051,33 +3189,25 @@ const EditProfile = () => {
                             </div>
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <label className="Input-Label">Twitter</label>
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={twitter}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          twitter: e.target.value,
-                        }));
-                      }}
+                      name="twitter"
+                      value={formState.twitter}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <label className="Input-Label">Linkedin</label>
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={linkedin}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          linkedin: e.target.value,
-                        }));
-                      }}
+                      name="linkedin"
+                      value={formState.linkedin}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="Location-details">
@@ -3091,22 +3221,15 @@ const EditProfile = () => {
                           <select
                             name="country"
                             id=""
-                            onChange={(e) => {
-                              setCountry(e.target.value);
-                              setState("");
-                              settown("");
-                              setPlaces((prev) => ({
-                                ...prev,
-                                state: [],
-                                town: [],
-                              }));
-                            }}
+                            value={formState.country}
+                            onChange={handleCountryChange}
                           >
                             <option value="">Select</option>
                             {places.country?.map((op) => (
                               <option
+                                key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                selected={country?.split("-")[0] == op.name}
+                                // selected={country?.split("-")[0] == op.name}
                               >
                                 {op.name}
                               </option>
@@ -3120,17 +3243,15 @@ const EditProfile = () => {
                           <select
                             name="state"
                             id=""
-                            onChange={(e) => {
-                              setState(e.target.value);
-                              settown("");
-                              setPlaces((prev) => ({ ...prev, town: [] }));
-                            }}
+                            value={formState.state}
+                            onChange={handleStateChange}
                           >
                             <option value="">Select</option>
                             {places.state?.map((op) => (
                               <option
+                                key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                selected={state?.split("-")[0] == op.name}
+                                // selected={state?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3145,14 +3266,15 @@ const EditProfile = () => {
                           <select
                             name="town"
                             id=""
-                            value={town}
-                            onChange={(e) => settown(e.target.value)}
+                            value={formState.town}
+                            onChange={handleTownChange}
                           >
                             <option value="">Select</option>
                             {places.town?.map((op) => (
                               <option
+                                key={op.name}
                                 value={op.name}
-                                selected={town?.split("-")[0] == op.name}
+                                // selected={town?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3161,8 +3283,8 @@ const EditProfile = () => {
                         </div>
                       </div>
                     </form>
-                    <div>
-                      {role == "Mentor" && (
+                    {/* <div>
+                      {role === "Mentor" && (
                         <div>
                           <div>
                             <h4>Fee request</h4>
@@ -3188,25 +3310,19 @@ const EditProfile = () => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
 
                     <div>
                       <div>
                         <label className="Input-Label">Languages Known</label>
                       </div>
                       <div>
-                        {languagesKnown?.length > 0 && (
+                        {formState.languages?.length > 0 && (
                           <div className="listedTeam">
-                            {languagesKnown?.map((t, i) => (
-                              <div className="singleMember">
+                            {formState.languages?.map((t, i) => (
+                              <div className="singleMember" key={i}>
                                 <div>{t}</div>
-                                <div
-                                  onClick={(e) => {
-                                    setlanguagesKnown(
-                                      languagesKnown.filter((f, j) => i !== j)
-                                    );
-                                  }}
-                                >
+                                <div onClick={() => removeLanguage(i)}>
                                   <CloseIcon className="deleteMember" />
                                 </div>
                               </div>
@@ -3224,19 +3340,29 @@ const EditProfile = () => {
                         <div className="skillsSelectBox">
                           <select
                             name="languagesKnown"
-                            id=""
+                            value={singlelanguagesKnown}
                             onChange={(e) =>
                               setSinglelanguagesKnown(e.target.value)
                             }
                           >
                             <option value="">Select</option>
-                            {allLanguages.map((d) => (
-                              <option value={d}>{d}</option>
+                            {allLanguages.map((language) => (
+                              <option key={language} value={language}>
+                                {language}
+                              </option>
                             ))}
                           </select>
                         </div>
 
-                        <div>
+                        <button
+                          type="button"
+                          className="add-button"
+                          onClick={handleAddLanguage}
+                        >
+                          Add Language
+                        </button>
+
+                        {/* <div>
                           <button
                             className="add-button"
                             onClick={() => {
@@ -3253,7 +3379,7 @@ const EditProfile = () => {
                           >
                             Add
                           </button>
-                        </div>
+                        </div> */}
                         <div
                           style={{
                             display: "flex",
@@ -3262,12 +3388,7 @@ const EditProfile = () => {
                         >
                           <button
                             className="add-button"
-                            onClick={() => {
-                              document.getElementsByTagName(
-                                "body"
-                              )[0].style.overflowY = "scroll";
-                              setIsInputPopupVisible(false);
-                            }}
+                            onClick={handleFormSubmit}
                           >
                             Save
                           </button>
