@@ -333,49 +333,97 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
     const [selectedpitchId, setselectedpitchId] = useState('');
     
     const decidingRolesMessage = async (receiverId) => {
-        if (role === "Admin" || isParent(role, receiverRole)) {
-            await ApiServices.directConversationCreation({
-                userId: user_id,
-                receiverId: receiverId,
-                senderId: user_id,
-                status: role === "Admin" ? "approved" : "pending",
-            })
-                .then((res) => {
-                    dispatch(getAllHistoricalConversations(user_id));
-                    dispatch(
-                        setToast({
-                            message: res.data,
-                            bgColor: ToastColors.success,
-                            visible: "yes",
-                        })
-                    );
-                    if (handleFollower) {
-                        handleFollower();
-                    }
-                    setOpen(false);
-                    setReceiverId("");
-                    socket.current.emit("sendNotification", {
-                        senderId: user_id,
-                        receiverId: receiverId,
-                    });
-                    document
-                        .getElementsByClassName("newConversation")[0]
-                        ?.classList?.remove("show");
-                })
-                .catch((err) => {
-                    dispatch(
-                        setToast({
-                            message: `Error Occured`,
-                            bgColor: ToastColors.failure,
-                            visible: "yes",
-                        })
-                    );
-                    setReceiverId("");
+        // Automatically approve the conversation for all roles
+        await ApiServices.directConversationCreation({
+            userId: user_id,
+            receiverId: receiverId,
+            senderId: user_id,
+            status: "approved", // Directly setting status to "approved" for everyone
+        })
+            .then((res) => {
+                dispatch(getAllHistoricalConversations(user_id));
+                dispatch(
+                    setToast({
+                        message: res.data,
+                        bgColor: ToastColors.success,
+                        visible: "yes",
+                    })
+                );
+                if (handleFollower) {
+                    handleFollower();
+                }
+                setOpen(false);
+                setReceiverId("");
+                socket.current.emit("sendNotification", {
+                    senderId: user_id,
+                    receiverId: receiverId,
                 });
-        } else {
-            setOpen(true);
-        }
+                document
+                    .getElementsByClassName("newConversation")[0]
+                    ?.classList?.remove("show");
+            })
+            .catch((err) => {
+                dispatch(
+                    setToast({
+                        message: `Error Occured`,
+                        bgColor: ToastColors.failure,
+                        visible: "yes",
+                    })
+                );
+                setReceiverId("");
+            });
+        
+     
     };
+    
+
+    
+    // const decidingRolesMessage = async (receiverId) => {
+    //     if (role === "Admin" || isParent(role, receiverRole)) {
+    //         await ApiServices.directConversationCreation({
+    //             userId: user_id,
+    //             receiverId: receiverId,
+    //             senderId: user_id,
+    //             status: role === "Admin" ? "approved" : "pending",
+    //         })
+    //             .then((res) => {
+    //                 dispatch(getAllHistoricalConversations(user_id));
+    //                 dispatch(
+    //                     setToast({
+    //                         message: res.data,
+    //                         bgColor: ToastColors.success,
+    //                         visible: "yes",
+    //                     })
+    //                 );
+    //                 if (handleFollower) {
+    //                     handleFollower();
+    //                 }
+    //                 setOpen(false);
+    //                 setReceiverId("");
+    //                 socket.current.emit("sendNotification", {
+    //                     senderId: user_id,
+    //                     receiverId: receiverId,
+    //                 });
+    //                 document
+    //                     .getElementsByClassName("newConversation")[0]
+    //                     ?.classList?.remove("show");
+    //             })
+    //             .catch((err) => {
+    //                 dispatch(
+    //                     setToast({
+    //                         message: `Error Occured`,
+    //                         bgColor: ToastColors.failure,
+    //                         visible: "yes",
+    //                     })
+    //                 );
+    //                 setReceiverId("");
+    //             });
+    //     } 
+        
+    //     else {
+    //         setOpen(true);
+    //     }
+    // };
 
     useEffect(() => {
         if (receiverId !== "") {

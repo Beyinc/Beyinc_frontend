@@ -73,6 +73,8 @@ const EditProfile = () => {
     beyincProfile: dbProfile,
   } = useSelector((store) => store.auth.userDetails);
 
+  console.log('beyincProfile', beyincProfile, dbProfile)
+
   const [dbCountry, setDbCountry] = useState("");
   const [dblanguages, setDblanguages] = useState([]);
   const [dbbeyincProfile, setBeyincProfile] = useState("");
@@ -1971,16 +1973,16 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-          {beyincProfile === "mentor" ||
-            ("cofounder" && (
-              <div className="BookSessionCard">
-                <BookSession
-                  name={name}
-                  mentorId={mentorId}
-                  reschedule={false}
-                />
-              </div>
-            ))}
+        {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
+            <div className="BookSessionCard">
+              <BookSession
+                name={name}
+                mentorId={mentorId}
+                reschedule={false}
+              />
+            </div>
+          )}
+
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
