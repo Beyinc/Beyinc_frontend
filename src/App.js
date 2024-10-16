@@ -45,6 +45,7 @@ import OAuthPopupHandler from "./Components/Calendar/calendarAuth" ;
 import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBookings";
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
+import EntryDetails from "./Components/EntryDetails/EntryDetails";
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
@@ -310,7 +311,7 @@ const App = () => {
           {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
 
-
+        <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
           <Route
