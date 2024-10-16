@@ -263,6 +263,7 @@
 }
 
 .locationdetails {
+  margin-top: 30px;
   display: flex;
   gap: 5px;
   align-items: center;
@@ -391,8 +392,12 @@
 .bioText {
   /* font-family: Gentium Book Basic; */
   font-size: 14px;
+  width: 600px;
+  margin-top: 10px;
   font-weight: 400;
   line-height: 20.83px;
+  border: 1px solid #404040;  /* Adjust the width, style, and color of the border */
+  border-radius: 10px;   
   background: var(--popup-content-bg);
   color: var(--text-total-color);
   text-align: justify;
@@ -496,7 +501,7 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--popup-content-bg);
-  width: auto;
+  /* width: auto; */
   overflow-y: scroll;
   padding: 20px;
   border-radius: 5px;
@@ -554,7 +559,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  width: 900px;
+  width: 700px;
   gap: 10px;
 }
 
@@ -594,6 +599,7 @@
 .add-button {
   width: 300px !important;
   padding: 8px;
+  margin-top: 15px;
   margin-bottom: 20px;
 }
 .close-icon {
@@ -1133,12 +1139,7 @@ textarea {
     /* justify-content: center; */
     align-items: center;
     margin: auto;
-    width: 330px;
     height: 100vh;
-  }
-
-  .bioText {
-    width: 320px;
   }
 
   .close-icon {

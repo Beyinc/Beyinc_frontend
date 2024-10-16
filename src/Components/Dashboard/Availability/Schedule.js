@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button,  Tabs,InputLabel, FormControl, Select, MenuItem, Grid, TextField } from '@mui/material';
+import {Button,Switch,  Tabs,InputLabel, FormControl, Select, MenuItem, Grid, TextField, FormControlLabel } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import MultiDatePicker from './MultiDateCalendar.js'; // Adjust the import path accordingly
 import { CalendarServices } from '../../../Services/CalendarServices.js'; // Adjust the import path as needed
@@ -14,9 +14,8 @@ import { Autocomplete } from '@mui/material';
 import timezones from 'timezones-list';              // A popular package to provide timezones list.
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-// import { CalendarServices } from '../../../Services/CalendarServices';
 import ServicesTab from './services.js';
-
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -34,8 +33,8 @@ export default function AvailabilityForm() {
   const [noticePeriod, setNoticePeriod] = useState('');
   const [selectedTimezone, setSelectedTimezone] = useState('');
   const [bufferTime, setBufferTime] = useState('');
-
-
+  const [isRescheduleAllowed, setRescheduleAllowed] = useState(false);
+  const [rescheduleNotice, setRescheduleNotice] = useState('');
 
 
   const handleAuth = async () => {
@@ -137,6 +136,7 @@ export default function AvailabilityForm() {
 
     CalendarServices.saveSettingsData(obj)
       .then((response) => {
+        alert("saved shedule data")
         console.log('Availability data successfully sent:', response);
       })
       .catch((error) => {
@@ -154,6 +154,8 @@ export default function AvailabilityForm() {
 
 
   const handleSaveSettings = () => {
+    console.log('reschedule',rescheduleNotice)
+    console.log('reschedule allowed', isRescheduleAllowed)
     const obj = {
        unavailableDates,
        selectedDayTimeUtc,
@@ -161,7 +163,8 @@ export default function AvailabilityForm() {
        startDate,
        endDate,
        noticePeriod,
-       bufferTime
+       bufferTime,
+       reschedulePolicy: [isRescheduleAllowed, rescheduleNotice],
     };
   
     CalendarServices.saveSettingsData(obj)
@@ -223,11 +226,35 @@ export default function AvailabilityForm() {
                 Sync your personal and work calendar to avoid any clashes with your schedule
               </Typography>
     
-              <Box mt={2}>
-                <Button variant="contained" color="primary" onClick={handleAuth}>
-                  Authorize Google Calendar
-                </Button>
+            
+                 <Box mt={2} onClick={handleAuth} 
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          backgroundColor: 'transparent', // Background color can be transparen
+                          width: '41%', // Set your desired width here
+                          padding: '10px 0px', // Padding to make it button-like
+                          cursor: 'pointer', // Change cursor to pointer
+                          borderRadius: '30px',
+                          '&:hover': {
+                            backgroundColor: 'lightgrey', // Optional hover effect
+                          },
+                        }}
+            >
+                <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft:'0px' }}>
+                  <img 
+                    src="/GcalendarIcon.png" 
+                    alt="Calendar Icon" 
+                    style={{ width: '50px', height: '50px', padding:'0px' }} // Adjust size as needed
+                  />
+                  <Typography variant="body1" sx={{ marginLeft: '20px', color: 'black' }}>
+                    Google Calendar
+                  </Typography>
+                </Box>
+                <ArrowForwardIosIcon sx={{ color: 'black', paddingRight:'10px' }} />
               </Box>
+                    
     
               <Grid mt={2} container spacing={2} alignItems="center">
                 {/* Timezone Title */}
@@ -240,12 +267,12 @@ export default function AvailabilityForm() {
     
                 {/* Timezone Dropdown */}
                 <Grid item xs={7}>
-                  <TextField
+                <TextField
                     select
-                    label="Select Timezone"
                     value={selectedTimezone}
                     onChange={handleTimezoneChange}
-                    fullWidth
+                    className='outline'
+                   
                   >
                     {timezones.map((tz) => (
                       <MenuItem key={tz.tzCode} value={tz.tzCode}>
@@ -266,7 +293,7 @@ export default function AvailabilityForm() {
                 </Grid>
                 <Grid item xs={3}>
                   <DatePicker
-                    label="Start Date"
+                     className='outline'
                     value={startDate}
                     onChange={(newValue) => setStartDate(newValue)}
                     disablePast
@@ -275,7 +302,7 @@ export default function AvailabilityForm() {
                 </Grid>
                 <Grid item xs={3}>
                   <DatePicker
-                    label="End Date"
+                    className='outline'
                     value={endDate}
                     onChange={(newValue) => setEndDate(newValue)}
                     disablePast
@@ -295,7 +322,8 @@ export default function AvailabilityForm() {
                 </Grid>
                 <Grid item xs={7}>
                   <TextField
-                    label="Days"
+                 className='outline'
+                style={{width: '37%'}}
                     type="number"
                     inputProps={{ min: 1 }}
                     fullWidth
@@ -314,20 +342,55 @@ export default function AvailabilityForm() {
                 </Grid>
                 <Grid item xs={7}>
                   <TextField
-                    label="Minutes"
+                   className='outline'
+                    style={{width: '37%'}}
                     type="number"
                     inputProps={{ min: 1 }}
-                    fullWidth
+                 
                     onChange={(e) => setBufferTime(e.target.value)}
                   />
                 </Grid>
               </Grid>
+
+                {/* Reschedule Policy Section */}
+                <Grid item xs={12} container spacing={2} alignItems="center" style={{ marginTop: '24px' }}>
+                  <Grid item xs={5}>
+                    <Typography variant="h5">Reschedule Policy</Typography>
+                    <Typography className="default-description" variant="body2">
+                      Notice days for rescheduling 
+                    </Typography>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={isRescheduleAllowed}
+                          onChange={(e) => setRescheduleAllowed(e.target.checked)}
+                          color="primary"
+                        />
+                      }
+                       
+                      label="Allow Rescheduling"
+                    />
+                  </Grid>
+                  <Grid item xs={7} sx={{ pt: 0, pb: '50px' }}>
+                 
+                    {isRescheduleAllowed && (
+                      <TextField
+                       type="number"
+                        inputProps={{ min: 0 }}
+                        className='outline'
+                        onChange={(e) => setRescheduleNotice(e.target.value)} // fixed typo here
+                        style={{ marginTop: 0 ,width: '37%'}} // aligned with title
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+
     
               {/* Save Button */}
-              <Box mt={3} textAlign="right">
-                <Button variant="contained" color="primary" onClick={handleSaveSettings}>
+              <Box mt={8} textAlign="left">
+                <button className='saveSettings' onClick={handleSaveSettings}>
                   Save Settings
-                </Button>
+                </button>
               </Box>
             </Box>
           </Box>

@@ -9,6 +9,9 @@ import Badge from '@mui/material/Badge';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './FormControlStyles.css';
+
+
+
 // Styled Badge for selected dates
 const StyledBadge = styled(Badge)(({ isSelected }) => ({
   '& .MuiPickersDay-root': {

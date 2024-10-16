@@ -164,6 +164,53 @@ const Posts = () => {
     getNotifys();
   }, []);
 
+  ////////////////////////////////
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    // Update selected categories based on checkbox state
+    if (checked) {
+      setSelectedCategories((prev) => [...prev, value]);
+    } else {
+      setSelectedCategories((prev) =>
+        prev.filter((category) => category !== value)
+      );
+    }
+  };
+
+  useEffect(() => {
+    console.log(selectedCategories);
+
+    const fetchFilteredPosts = async () => {
+      try {
+        // Send data to the backend
+        const response = await ApiServices.getFilterPosts({
+          categories: selectedCategories, // Send selected categories
+        });
+
+        // Handle successful fetching of posts
+        console.log("Filtered posts:", response.data); // Log the filtered posts
+
+        setFilteredPosts(response.data);
+      } catch (error) {
+        // Handle error
+        console.error("Error filtering posts:", error);
+      }
+    };
+
+    // Call the fetchFilteredPosts function
+    if (selectedCategories.length > 0) {
+      // Ensure there are selected categories before fetching
+      fetchFilteredPosts();
+    } else {
+      setFilteredPosts([]);
+    }
+  }, [selectedCategories]); // Add selectedCategories as a dependency
+
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -301,7 +348,9 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div onClick={() => navigate("/editProfile?editPostToggler=posts")}>Activity</div>
+            <div onClick={() => navigate("/editProfile?editPostToggler=posts")}>
+              Activity
+            </div>
           </div>
         </div>
 
@@ -352,6 +401,7 @@ const Posts = () => {
             <h5>Category</h5>
             <div className="checkbox">
               <input
+                onChange={handleCheckboxChange}
                 type="checkbox"
                 id="general"
                 name="category"
@@ -364,6 +414,7 @@ const Posts = () => {
 
             <div className="checkbox">
               <input
+                onChange={handleCheckboxChange}
                 type="checkbox"
                 id="idea"
                 name="category"
@@ -376,6 +427,20 @@ const Posts = () => {
 
             <div className="checkbox">
               <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="Hiring"
+                name="category"
+                value="Hiring"
+              />
+              <label className="checkbox-label" for="hiring">
+                Hiring
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
                 type="checkbox"
                 id="mentor"
                 name="category"
@@ -389,6 +454,7 @@ const Posts = () => {
 
             <div className="checkbox">
               <input
+                onChange={handleCheckboxChange}
                 type="checkbox"
                 id="announcement"
                 name="category"
@@ -396,6 +462,84 @@ const Posts = () => {
               />
               <label className="checkbox-label" for="announcement">
                 Announcement
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="co-founder"
+                name="category"
+                value="Co-founder Needed"
+              />
+              <label className="checkbox-label" htmlFor="co-founder">
+                Co-founder Needed
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="tech-partner"
+                name="category"
+                value="Tech-partner Needed"
+              />
+              <label className="checkbox-label" htmlFor="tech-partner">
+                Tech-partner Needed
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="question-answer"
+                name="category"
+                value="Question and Answer"
+              />
+              <label className="checkbox-label" htmlFor="question-answer">
+                Question and Answer
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="news"
+                name="category"
+                value="News"
+              />
+              <label className="checkbox-label" htmlFor="news">
+                News
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="opportunities"
+                name="category"
+                value="Opportunities"
+              />
+              <label className="checkbox-label" htmlFor="opportunities">
+                Opportunities
+              </label>
+            </div>
+
+            <div className="checkbox">
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                id="investment"
+                name="category"
+                value="Investment"
+              />
+              <label className="checkbox-label" htmlFor="investment">
+                Investment
               </label>
             </div>
 
@@ -411,7 +555,7 @@ const Posts = () => {
 
       <div className="main-content">
         <div className="allPostShowContainer">
-          {allPosts?.map((post) => (
+          {(filteredPosts.length > 0 ? filteredPosts : allPosts).map((post) => (
             <Post
               post={post}
               setAllPosts={setAllPosts}

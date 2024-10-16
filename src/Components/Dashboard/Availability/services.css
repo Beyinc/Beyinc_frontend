@@ -1,0 +1,155 @@
+.tab-box {
+    padding: 15px 20px;
+    height: 15px;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-right: 10px;
+    background-color: transparent;
+    border: 2px solid black;
+    padding-top: 5px;
+}
+
+
+  
+  .tab-box.active {
+    background-color: #f0f0f0; /* Active state */
+  }
+  
+
+
+
+  .form-container {
+    margin-top: 16px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid black; /* Black border */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+  }
+  
+  .form-input:focus {
+    border-color: #666; /* Slightly lighter border on focus */
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .cancel-button {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .cancel-button:hover {
+    background-color: #d32f2f;
+  }
+  
+
+
+  .form {
+    border: 2px solid grey; /* Default border color */
+    border-radius: 10px;     /* Rounded corners */
+    padding: 8px 12px;      /* Padding for the input text */
+    outline: none;          /* Remove the default outline */
+    width: 50%;            /* Adjust width as needed */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    font-size: 16px;        /* Adjust font size */
+    margin-left: 0; 
+  }
+  
+  .form:focus {
+    border: 2px solid black; /* Change border color to black on focus */
+    outline: none;           /* Prevent the browser default outline */
+  }
+  
+  .form::placeholder {
+    color: #999;             /* Placeholder text color */
+    font-style: italic;      /* Placeholder style */
+  }
+  
+  .form:hover {
+    border-color: black;      /* Keeps border color on hover */
+  }
+  
+ 
+
+  .textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    width: 50%;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .form-container {
+    margin-top: 20px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+
+
+  .cancel {
+    display: flex;
+    justify-content: center;
+    align-self: flex-start;
+    width: 8%;
+    margin: 35px 0px 0px ;
+    padding: 8px;
+    border-radius: 20px;
+    color: gray;
+    border: 2px solid gray;
+    background: none;
+  }
+
+
+  .save {
+    display: flex;
+    justify-content: center;
+    align-self: flex-end;
+    width: 8%;
+    height: 35px;
+    margin: -35px  0px 0px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: var(--button-color);
+    background: var(--button-background);
+    margin-left: 100px;
+  }
+  

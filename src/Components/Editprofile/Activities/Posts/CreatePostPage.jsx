@@ -111,6 +111,8 @@ const CreatePostPage = () => {
   }, []);
 
   const addingpost = async (e) => {
+    console.log(description,postTitle,posttype,accessSetting);
+    
     e.target.disabled = true;
     setLoading(true);
     await ApiServices.createPost({
@@ -119,12 +121,14 @@ const CreatePostPage = () => {
       fullDetails,
       groupDiscussion,
       postTitle,
+      visibility: accessSetting,
       tags: usertags,
       pitchId: userPitchId?._id,
-      image: image,
+      image: image || null,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       openDiscussion: accessSetting === "public",
+     
     })
       .then((res) => {
         setLoading(false);
@@ -180,14 +184,17 @@ const CreatePostPage = () => {
     setValue(newValue);
   };
 
-  const [accessSetting, setAccessSetting] = useState("public");
+  const [accessSetting, setAccessSetting] = useState("");
 
   const handleAccessChange = (e) => {
+    // Logging the selected value for debugging
+    console.log("Selected access setting:", e.target.value);
+  
     setAccessSetting(e.target.value);
     setFullDetails("");
     setGroupDiscussion("");
   };
-
+  
   const [fullDetails, setFullDetails] = useState("");
   const [groupDiscussion, setGroupDiscussion] = useState("");
   const [postTitle, setPostTitle] = useState("");
@@ -300,7 +307,7 @@ const CreatePostPage = () => {
     <main className="createPost-main-container">
       <div className="createPost-container">
         <div className="createPostHeader">
-          {postId == undefined ? "Create Post" : "Update Post"}
+          {postId === undefined ? "Create Post" : "Update Post"}
         </div>
         <div className="createPost-privacy-setting">
           <div class="dropdown-container">
@@ -323,7 +330,7 @@ const CreatePostPage = () => {
               onChange={handleAccessChange}
             >
               <option value="public">Public Post</option>
-              <option value="members">Private Post</option>
+              <option value="private">Private Post</option>
             </select>
           </div>
         </div>
@@ -415,9 +422,10 @@ const CreatePostPage = () => {
                 <div className="postTypeContainer" ref={userDetailsRef}>
                   {postTypes.map((p) => (
                     <div
+                    key={p.value}
                       className="individualPostTypes"
                       onClick={() => {
-                        if (p.value !== "General Post") {
+                        if (p.value !== "General post") {
                           setposttype(p.value);
                         } else {
                           setposttype(p.value);
@@ -492,7 +500,7 @@ const CreatePostPage = () => {
 
                     <div>
                       <label className="createPost-labels">
-                        Group Description{" "}
+                        Group Discussion{" "}
                       </label>
                     </div>
                     <div className="createPost-textarea">

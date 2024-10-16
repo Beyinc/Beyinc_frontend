@@ -103,10 +103,24 @@ export const CalendarServices = {
     },
 
 
-    getBooking: (obj) => {
+    mentorBookings: (obj) => {
         return new Promise((resolve, reject) => {
             console.log("calendar service")
-            axiosInstance.post(`/calendar/getBooking`, obj)
+            axiosInstance.post(`/calendar/mentorBookings`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res.data)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+
+    userBookings: (obj) => {
+        return new Promise((resolve, reject) => {
+            console.log("calendar service")
+            axiosInstance.post(`/calendar/userBookings`, obj)
                 .then((res) => {
                     if (res) {
                         resolve(res.data)
@@ -144,8 +158,77 @@ export const CalendarServices = {
 
         })
     },
+
+    reschedule: (obj) => {
+        return new Promise((resolve, reject) => {
+            console.log("calendar service")
+            axiosInstance.post(`/calendar/reschedule`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res.data)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+
+    mentorReschedule: (obj) => {
+        return new Promise((resolve, reject) => {
+            console.log("calendar service")
+            axiosInstance.post(`/calendar/mentorReschedule`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res.data)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+
+    cancelBooking: (obj) => {
+        return new Promise((resolve, reject) => {
+            console.log("calendar service")
+            axiosInstance.post(`/calendar/cancelBooking`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res.data)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
     
- 
+    addFeedback: (obj) => {
+        return new Promise((resolve, reject) => {
+            console.log("calendar service")
+            axiosInstance.post(`/calendar/addFeedback`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res.data)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+
+    deleteOneToOne: (obj) => {
+        return new Promise((resolve, reject) => {
+            console.log("delete service",obj)
+            axiosInstance.post(`/calendar/deleteSingleService`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res.data)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+    
 
 }
 

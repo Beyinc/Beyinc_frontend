@@ -10,6 +10,9 @@ export function FilterPanel({
   isCountry,
   isFlat,
   isPitch,
+  expertiseOptions, // New prop for expertise options
+  stagesOptions, // New prop for stages options
+  industriesOptions // New prop for industries options
 }) {
   const [data, setData] = useState(rawData);
   const [query, setQuery] = useState("");
@@ -26,6 +29,15 @@ export function FilterPanel({
       );
    }
   }, [query, rawData, dataKey, isCountry, isFlat]);
+  // Function to handle filter changes for expertise, stages, and industries
+  const handleCheckboxChange = (category, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [category]: prev[category].includes(value)
+        ? prev[category].filter((v) => v !== value)
+        : [...prev[category], value],
+    }));
+  };
   return (
     <div
       style={{
@@ -42,6 +54,7 @@ export function FilterPanel({
           variant="standard"
         />
       </Box>
+    
       {!isCountry
         ? isFlat
           ? data.map((h) => {
@@ -109,7 +122,7 @@ export function FilterPanel({
                 }
               />
             }
-            label={<div className="filter-options-label">{h.name}</div>}
+            label={<div className="filter-options-label">{h.name}</div>} 
           />
         ))}
     </div>

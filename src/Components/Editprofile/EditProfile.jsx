@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import { Link as RouterLink, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
+import { CiGlobe } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import {
   setLoginData,
@@ -59,6 +60,37 @@ const EditProfile = () => {
     userName: loggedUserName,
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
+
+  const {
+    beyincProfile,
+    bio: dbbio,
+    userName: dbuserName,
+    educationDetails: dbEducation,
+    experienceDetails: dbExperience,
+    skills: dbSkills,
+    country: dbcountry,
+    languagesKnown: languages,
+    beyincProfile: dbProfile,
+  } = useSelector((store) => store.auth.userDetails);
+
+  console.log('beyincProfile', beyincProfile, dbProfile)
+
+  const [dbCountry, setDbCountry] = useState("");
+  const [dblanguages, setDblanguages] = useState([]);
+  const [dbbeyincProfile, setBeyincProfile] = useState("");
+  useEffect(() => {
+    if (dbbio) setBio(dbbio);
+    // if (userName) setName(userName);
+    if (dbEducation) setEducationDetails(dbEducation);
+    if (dbExperience) setExperience(dbExperience);
+    if (dbSkills) setSkills(dbSkills);
+    if (dbcountry) setDbCountry(dbcountry);
+    if (languages) setDblanguages(languages);
+    if (dbProfile) setBeyincProfile(dbProfile);
+    setTotalEducationData(dbEducation);
+    setTotalExperienceData(dbExperience);
+  }, [dbbio, dbEducation, dbExperience, dbSkills]);
+
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -78,8 +110,8 @@ const EditProfile = () => {
 
   const handleSkillChange = (e) => {
     const selectedSkill = e.target.value;
-    if (selectedSkill !== "" && !skills.includes(selectedSkill)) {
-      setSkills((prevSkills) => [...prevSkills, selectedSkill]);
+    if (selectedSkill !== "" && !tempSkills.includes(selectedSkill)) {
+      setTempSkills((prevSkills) => [...prevSkills, selectedSkill]); // Update tempSkills
       setSelectKey(Date.now()); // Reset select element
     }
   };
@@ -97,20 +129,48 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (id !== undefined) {
-      ApiServices.getUsersPost({ user_id: id })
-        .then((res) => {
-          setAllPosts(res.data);
-        })
-        .catch((err) => {
-          dispatch(
-            setToast({
-              message: "Error Occured!",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        });
+    // Fetch the user data on which profile is clicked
+    const fetchUserData = async () => {
+      try {
+        const response = await ApiServices.getProfile({ id });
+        const {
+          bio,
+          skills,
+          experienceDetails,
+          educationDetails,
+          languagesKnown,
+          country,
+          beyincProfile,
+        } = response.data;
+
+        // Set state if data exists
+        if (bio) setBio(bio);
+        if (country) setDbCountry(country);
+        if (beyincProfile) setBeyincProfile(beyincProfile);
+        if (languagesKnown) setDblanguages(languagesKnown);
+        if (educationDetails) setEducationDetails(educationDetails);
+        if (experienceDetails) setExperience(experienceDetails);
+        if (skills) setSkills(skills);
+        setTotalEducationData(educationDetails);
+        setTotalExperienceData(experienceDetails);
+
+        // Fetch user's posts
+        const postsResponse = await ApiServices.getUsersPost({ user_id: id });
+        setAllPosts(postsResponse.data);
+      } catch (error) {
+        dispatch(
+          setToast({
+            message: "Error occurred!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      }
+    };
+
+    if (id) {
+      // Check if id is truthy
+      fetchUserData();
     } else {
       ApiServices.getUsersPost({ user_id })
         .then((res) => {
@@ -119,14 +179,15 @@ const EditProfile = () => {
         .catch((err) => {
           dispatch(
             setToast({
-              message: "Error Occured!",
+              message: "Error Occurred!",
               bgColor: ToastColors.failure,
               visible: "yes",
             })
           );
         });
     }
-  }, [user_id]);
+  }, [id, user_id]); // Add id to dependencies
+
   const [inputs, setInputs] = useState({
     verification: null,
     twitter: null,
@@ -186,7 +247,9 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
-  const [experienceDetails, setExperience] = useState({
+  const [experienceDetails, setExperience] = useState([]);
+  // Temporary state to hold user input
+  const [tempExperienceDetails, setTempExperienceDetails] = useState({
     business: "",
     company: "",
     institute: "",
@@ -213,7 +276,9 @@ const EditProfile = () => {
     workingStatus: "",
   });
 
-  const [EducationDetails, setEducationDetails] = useState({
+  const [educationDetails, setEducationDetails] = useState([]); // Initialize as an array
+
+  const [tempEducationDetails, setTempEducationDetails] = useState({
     year: "",
     grade: "",
     college: "",
@@ -222,7 +287,9 @@ const EditProfile = () => {
   });
   const [fee, setFee] = useState("");
   const [bio, setBio] = useState("");
+  const [tempBio, setTempBio] = useState("");
   const [skills, setSkills] = useState([]);
+  const [tempSkills, setTempSkills] = useState([]);
   const [singleSkill, setSingleSkill] = useState("");
   const [editOwnProfile, setEditOwnProfile] = useState(false);
   const [languagesKnown, setlanguagesKnown] = useState([]);
@@ -257,7 +324,9 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
     if (id === undefined) {
       setIsInputPopupVisible(true);
     }
@@ -268,8 +337,27 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    // Delay changing the overflowY to ensure the scroll completes first
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
     setIsAboutPopupVisible(true);
+  };
+
+  const handleBioSaveAndClose = async () => {
+    setBio(tempBio);
+    // Close the popup and scroll to the top
+    document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+    setIsAboutPopupVisible(false);
+
+    // const data = { bio };
+    // try {
+    //   await ApiServices.SaveBio(data);
+    //   alert("Bio saved successfully!");
+    // } catch (error) {
+    //   console.error("Error saving bio:", error);
+    //   alert("There was an error saving your bio. Please try again.");
+    // }
   };
 
   const handleSkillButtonClick = () => {
@@ -277,7 +365,12 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+
+    // Delay changing the overflowY to ensure the scroll completes first
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500); // Delay of 500 milliseconds
+
     setisSkillsPopupVisibile(true);
   };
 
@@ -330,7 +423,9 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500);
     setIsExperiencePopupVisible(true);
   };
   const handleEducationButtonClick = () => {
@@ -338,35 +433,15 @@ const EditProfile = () => {
       top: 0,
       behavior: "smooth",
     });
-    document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    setTimeout(() => {
+      document.getElementsByTagName("body")[0].style.overflowY = "hidden";
+    }, 500);
     setIsEducationPopupVisible(true);
   };
 
   const formatBio = (text) => {
-    return text.replace(/\n/g, '<br />');
+    return text.replace(/\n/g, "<br />");
   };
-
-  useEffect(() => {
-    if (country == "" && state == "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: [],
-        town: [],
-      });
-    } else if (country !== "" && state == "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: State.getStatesOfCountry(country.split("-")[1]),
-        town: [],
-      });
-    } else if (country !== "" && state !== "" && town == "") {
-      setPlaces({
-        country: Country.getAllCountries(),
-        state: State.getStatesOfCountry(country.split("-")[1]),
-        town: City.getCitiesOfState(country.split("-")[1], state.split("-")[1]),
-      });
-    }
-  }, [country, state, town]);
 
   const addExperience = (e) => {
     e.preventDefault();
@@ -412,28 +487,29 @@ const EditProfile = () => {
       Services: "",
     });
   };
-  const addEducation = (e) => {
-    e.preventDefault();
-    if (editingEducationId == "") {
-      setTotalEducationData((prev) => [...prev, EducationDetails]);
-    } else {
-      setTotalEducationData(
-        totalEducationData.map((t, i) => {
-          return i + 1 === editingEducationId ? EducationDetails : t;
-        })
-      );
-      setIsEducationPopupVisible(false);
-      seteditingEducationId("");
-      document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-    }
-    setEducationDetails({
-      year: "",
-      grade: "",
-      college: "",
-      Edstart: "",
-      Edend: "",
-    });
-  };
+
+  // const addEducation = (e) => {
+  //   e.preventDefault();
+  //   if (editingEducationId == "") {
+  //     setTotalEducationData((prev) => [...prev, EducationDetails]);
+  //   } else {
+  //     setTotalEducationData(
+  //       totalEducationData.map((t, i) => {
+  //         return i + 1 === editingEducationId ? EducationDetails : t;
+  //       })
+  //     );
+  //     setIsEducationPopupVisible(false);
+  //     seteditingEducationId("");
+  //     document.getElementsByTagName("body")[0].style.overflowY = "scroll";
+  //   }
+  //   setEducationDetails({
+  //     year: "",
+  //     grade: "",
+  //     college: "",
+  //     Edstart: "",
+  //     Edend: "",
+  //   });
+  // };
 
   const [changeResume, setchangeDocuments] = useState({
     resume: "",
@@ -463,10 +539,10 @@ const EditProfile = () => {
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
   const location = useLocation();
-  const pathSegments = location.pathname.split('/');
+  const pathSegments = location.pathname.split("/");
   const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
-  console.log('mentorId', mentorId);
-  
+  console.log("mentorId", mentorId);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
@@ -476,16 +552,26 @@ const EditProfile = () => {
   }, [location, seteditPostToggler]);
 
   const handleChange = (e) => {
-    setExperience((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setTempExperienceDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleEducationChange = (e, isCollege) => {
-    setEducationDetails((prev) => ({
-      ...prev,
-      [isCollege ? "college" : e.target.name]: isCollege
-        ? universities[e.target.getAttribute("data-option-index")]?.name
-        : e.target.value,
-    }));
+  const handleEducationChange = (e, isAutocomplete = false) => {
+    const { name, value } = e.target;
+    if (isAutocomplete) {
+      setTempEducationDetails((prevDetails) => ({
+        ...prevDetails,
+        college: value,
+      }));
+    } else {
+      setTempEducationDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,
+      }));
+    }
   };
 
   const handleResume = (e) => {
@@ -1256,39 +1342,39 @@ const EditProfile = () => {
     autoplaySpeed: 2000,
   };
 
-  const savingLocal = () => {
-    localStorage.setItem(
-      "editProfile",
-      JSON.stringify({
-        twitter: twitter,
-        linkedin: linkedin,
-        salutation: salutation,
-        mentorCategories: mentorCategories,
-        email: email,
-        userId: user_id,
-        state: state,
-        town: town,
-        country: country,
-        userName: name,
-        phone: mobile,
-        role: role,
-        fee: fee,
-        bio: bio,
-        skills: skills,
-        languagesKnown: languagesKnown,
-        documents: changeResume,
-        experienceDetails: totalExperienceData,
-        educationDetails: totalEducationData,
-      })
-    );
-    dispatch(
-      setToast({
-        message: "Data Saved Locally",
-        bgColor: ToastColors.success,
-        visible: "yes",
-      })
-    );
-  };
+  // const savingLocal = () => {
+  //   localStorage.setItem(
+  //     "editProfile",
+  //     JSON.stringify({
+  //       twitter: twitter,
+  //       linkedin: linkedin,
+  //       salutation: salutation,
+  //       mentorCategories: mentorCategories,
+  //       email: email,
+  //       userId: user_id,
+  //       state: state,
+  //       town: town,
+  //       country: country,
+  //       userName: name,
+  //       phone: mobile,
+  //       role: role,
+  //       fee: fee,
+  //       bio: bio,
+  //       skills: skills,
+  //       languagesKnown: languagesKnown,
+  //       documents: changeResume,
+  //       experienceDetails: totalExperienceData,
+  //       educationDetails: totalEducationData,
+  //     })
+  //   );
+  //   dispatch(
+  //     setToast({
+  //       message: "Data Saved Locally",
+  //       bgColor: ToastColors.success,
+  //       visible: "yes",
+  //     })
+  //   );
+  // };
 
   const retreiveLocal = () => {
     console.log(JSON.parse(localStorage.getItem("editProfile")));
@@ -1450,16 +1536,189 @@ const EditProfile = () => {
   const openChat = async (e) => {
     navigate(`/conversations/${connectStatus[id]?.id}`);
   };
+
+  ///////////////////////////////////////////////////////////////
+
+  const saveEducationDetails = () => {
+    // Check if the required fields are filled
+    if (
+      tempEducationDetails.Edstart !== "" &&
+      tempEducationDetails.grade !== "" &&
+      tempEducationDetails.college !== ""
+    ) {
+      // Save tempEducationDetails to educationDetails
+      setEducationDetails((prev) => [
+        ...prev,
+        { ...tempEducationDetails }, // Add the new details
+      ]);
+
+      // Reset tempEducationDetails if needed
+      setTempEducationDetails({
+        year: "",
+        grade: "",
+        college: "",
+        Edstart: "",
+        Edend: "",
+      });
+    } else {
+      alert("Please fill all required fields.");
+    }
+  };
+  // Save changes from temp to main state
+  const saveExperienceDetails = (event) => {
+    event.preventDefault();
+    //  setIsExperiencePopupVisible(false);
+    setExperience(tempExperienceDetails);
+    // Reset temporary details after saving
+    setTempExperienceDetails({ ...tempExperienceDetails });
+  };
+
+  const submitAllData = async () => {
+    console.log(experienceDetails, educationDetails, skills, bio);
+
+    const allData = {
+      experience: experienceDetails,
+      education: educationDetails,
+      skills: skills,
+      bio: bio,
+    };
+    try {
+      await ApiServices.SaveData(allData);
+      alert("Data saved successfully!");
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("There was an error saving your data. Please try again.");
+    }
+  };
+
+  const [formState, setFormState] = useState({
+    salutation: "",
+    fullName: "",
+    mentorCategories: "",
+    mobileNumber: "",
+    twitter: "",
+    linkedin: "",
+    country: "",
+    state: "",
+    town: "",
+    languages: [],
+  });
+
+  // Handle input changes for text fields
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      [name]: value,
+    }));
+  };
+
+  const handleCountryChange = (e) => {
+    const selectedCountry = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      country: selectedCountry, // Update the selected country
+      state: "", // Reset state
+      town: "", // Reset town
+    }));
+    // No need to set `places` directly here, the `useEffect` will handle fetching states.
+  };
+
+  // Handle state change
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      state: selectedState,
+      town: "",
+    }));
+    setPlaces((prev) => ({ ...prev, town: [] }));
+  };
+
+  // Handle town change
+  const handleTownChange = (e) => {
+    const selectedTown = e.target.value;
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      town: selectedTown,
+    }));
+    setPlaces((prevPlaces) => ({
+      ...prevPlaces,
+      // Here, modify if you want to store or update any town-related info in `places`
+      town: [selectedTown], // Or update town array as per your logic
+    }));
+  };
+
+  // Handle language selection
+  const handleAddLanguage = () => {
+    if (
+      singlelanguagesKnown &&
+      !formState.languages.includes(singlelanguagesKnown)
+    ) {
+      setFormState((prevFormState) => ({
+        ...prevFormState,
+        languages: [...prevFormState.languages, singlelanguagesKnown],
+      }));
+      setSinglelanguagesKnown("");
+    }
+  };
+
+  // Remove selected language
+  const removeLanguage = (index) => {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      languages: prevFormState.languages.filter((_, i) => i !== index),
+    }));
+  };
+
+  useEffect(() => {
+    const { country, state, town } = formState;
+    if (country === "" && state === "" && town === "") {
+      setPlaces({
+        country: Country.getAllCountries(),
+        state: [],
+        town: [],
+      });
+    } else if (country !== "" && state === "" && town === "") {
+      setPlaces((prevPlaces) => ({
+        ...prevPlaces,
+        state: State.getStatesOfCountry(country.split("-")[1]), // Fetch states for the selected country
+        town: [], // Reset town
+      }));
+    } else if (country !== "" && state !== "" && town === "") {
+      setPlaces((prevPlaces) => ({
+        ...prevPlaces,
+        town: City.getCitiesOfState(country.split("-")[1], state.split("-")[1]), // Fetch towns for the selected state
+      }));
+    }
+  }, [formState.country, formState.state, formState.town, formState]);
+
+  const handleFormSubmit = async (e) => {
+    console.log(formState);
+    e.preventDefault();
+
+    try {
+      await ApiServices.InputFormData(formState);
+      alert("Data saved successfully!");
+
+      //   // Fetch updated data after saving
+      // const updatedProfile = await ApiServices.GetProfileData();
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("There was an error saving your data. Please try again.");
+    }
+  };
+
   return (
     <div className="EditProfileContainer">
-      {(mobileVerified == false || image == "") &&
+      {/* {(mobileVerified == false || image == "") &&
         id == undefined &&
         userpage == false && (
           <div className="mobilenote">
             Note: Mobile number should be verified and image should not be empty
             to send or update the profile
           </div>
-        )}
+        )} */}
       <div className="EditProfileImageContainer">
         <img src="/Banner.png" alt="Banner" />
       </div>
@@ -1512,11 +1771,16 @@ const EditProfile = () => {
             <div className="personaDetails">
               {role} {role == "Mentor" && mentorCategories}
             </div>
-            {id !== undefined && (
+
+            <div className="font-bold text-customPurple mt-3 mb-1">
+              {dbbeyincProfile} at beyinc
+            </div>
+
+            {/* {id !== undefined && (
               <div className="editProfile-stars">
                 <ReviewStars avg={averagereview} />
               </div>
-            )}
+            )} */}
             {id == undefined && <div className="personaDetails">{email}</div>}
             {id == undefined && (
               <div className="personaDetails">
@@ -1551,14 +1815,17 @@ const EditProfile = () => {
             )}
 
             {userpage == true && (
-              <button onClick={followerController} className="profileFollowBtn">
+              <button
+                onClick={followerController}
+                className="mb-5 profileFollowBtn"
+              >
                 {followers.map((f) => f._id).includes(user_id)
                   ? "Unfollow"
                   : "Follow"}
               </button>
             )}
 
-            {userpage == true &&
+            {/* {userpage === true &&
               connectStatus &&
               (connectStatus[id]?.status === "pending" ? (
                 <button className="profileMessageBtn">Pending</button>
@@ -1572,12 +1839,12 @@ const EditProfile = () => {
                   onClick={() => {
                     setPitchSendTo(id);
                     setreceiverRole(role);
-                    setIsAdmin(email == process.env.REACT_APP_ADMIN_MAIL);
+                    setIsAdmin(email === process.env.REACT_APP_ADMIN_MAIL);
                   }}
                 >
                   Connect
                 </button>
-              ))}
+              ))} */}
 
             <div
               className="followDetails"
@@ -1606,9 +1873,14 @@ const EditProfile = () => {
               <div>Following</div>
               <div>{followering.length}</div>
             </div>
+            <div className="mr-36 mt-3 font-bold flex">
+              <CiGlobe className="mr-3 text-lg" /> {dblanguages.join(", ")}
+            </div>
+
             <div className="locationdetails">
               <div>
                 <svg
+                  className="mt-3"
                   width="25"
                   height="25"
                   viewBox="0 0 25 25"
@@ -1621,7 +1893,7 @@ const EditProfile = () => {
                   />
                 </svg>
               </div>
-              <div>{country}</div>
+              <div className="mt-2">{dbCountry}</div>
             </div>
 
             {twitter && (
@@ -1690,24 +1962,38 @@ const EditProfile = () => {
               <b>{review?.length}</b> Reviews / 0 Sessions
             </div>
           </div>
-          {role === "Mentor" && (
+          {/* {role === "Mentor" && (
             <div className="FreeSessionCard">
               <p>Unlock Your Free Session</p>
               <button className="Session-button">Start Free Session</button>
             </div>
-          )}
-          {role === "Mentor" && (
+          )} */}
+          {/* {role === "Mentor" && (
             <div className="BookSessionCard">
-              <BookSession name={name}  mentorId={mentorId} />
+              <BookSession name={name} mentorId={mentorId} reschedule={false} />
+            </div>
+          )} */}
+        {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
+            <div className="BookSessionCard">
+              <BookSession
+                name={name}
+                mentorId={mentorId}
+                reschedule={false}
+              />
             </div>
           )}
+
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-        {(role?.toLowerCase() === "mentor" || role?.toLowerCase() === "investor") && (
-          <div>
-            <TabsAndInvestment />
-          </div>)}
+          {(beyincProfile === "mentor" ||
+            beyincProfile === "cofounder" ||
+            beyincProfile === "investor") && (
+            <div>
+              <TabsAndInvestment />
+            </div>
+          )}
+
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${
@@ -1752,7 +2038,7 @@ const EditProfile = () => {
                   }}
                 >
                   <div>About</div>
-                  {id == undefined && (
+                  {id === undefined && (
                     <span>
                       <i
                         onClick={handleAboutButtonClick}
@@ -1762,13 +2048,12 @@ const EditProfile = () => {
                   )}
                 </div>
                 <div className="bioDisplay">
-        {bio?.length > 0 ? (
-          <div dangerouslySetInnerHTML={{ __html: formatBio(bio) }} />
-        ) : (
-          <div>No bio data found</div>
-        )}
-      </div>
-
+                  {bio?.length > 0 ? (
+                    <div dangerouslySetInnerHTML={{ __html: formatBio(bio) }} />
+                  ) : (
+                    <div>No bio data found</div>
+                  )}
+                </div>
               </section>
 
               {/* SKILLS */}
@@ -1864,7 +2149,7 @@ const EditProfile = () => {
                           </div>
                         </div>
 
-                        {id == undefined && (
+                        {id === undefined && (
                           <div
                             style={{
                               display: "flex",
@@ -2526,7 +2811,8 @@ const EditProfile = () => {
                           background: "var(--button-background)",
                           color: "var(--button-color)",
                         }}
-                        onClick={savingLocal}
+                        // onClick={savingLocal}
+                        onClick={submitAllData}
                       >
                         Save
                       </button>
@@ -2647,7 +2933,16 @@ const EditProfile = () => {
                     <Post key={post.id} post={post} setAllPosts={setAllPosts} />
                   ))
                 ) : (
-                  <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '100px'}}>There is no activity found for this user</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      marginTop: "100px",
+                    }}
+                  >
+                    There is no activity found for this user
+                  </div>
                 )}
               </div>
             </div>
@@ -2796,13 +3091,8 @@ const EditProfile = () => {
                       <select
                         name="salutation"
                         id=""
-                        value={salutation}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            salutation: e.target.value,
-                          }));
-                        }}
+                        value={formState.salutation}
+                        onChange={handleInputChange}
                       >
                         <option value="">Select</option>
                         {allsalutations.map((op) => (
@@ -2815,13 +3105,9 @@ const EditProfile = () => {
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={name}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }));
-                      }}
+                      name="fullName"
+                      value={formState.fullName}
+                      onChange={handleInputChange}
                     />
                   </div>
 
@@ -2831,13 +3117,8 @@ const EditProfile = () => {
                       <select
                         name="mentorCategories"
                         id=""
-                        value={mentorCategories}
-                        onChange={(e) => {
-                          setInputs((prev) => ({
-                            ...prev,
-                            mentorCategories: e.target.value,
-                          }));
-                        }}
+                        value={formState.mentorCategories}
+                        onChange={handleInputChange}
                       >
                         <option value="">Select</option>
                         {mentorcategories.map((op) => (
@@ -2854,19 +3135,19 @@ const EditProfile = () => {
                         <input
                           type="text"
                           className={
-                            mobile  &&
+                            mobile &&
                             (mobile.length === 10 ? "valid" : "invalid")
                           }
-                          name="mobile"
+                          name="mobileNumber"
                           id="mobile"
-                          value={mobile }
-                          onChange={handleChanges}
+                          value={formState.mobileNumber}
+                          onChange={handleInputChange}
                           placeholder="Mobile Number"
                         />
                         {mobileVerified === true}
                       </div>
 
-                      <div>
+                      {/* <div>
                         {!isMobileOtpSent && isMobileValid && (
                           <button
                             type="button"
@@ -2876,8 +3157,8 @@ const EditProfile = () => {
                             Get OTP
                           </button>
                         )}
-                      </div>
-                      <div>
+                      </div> */}
+                      {/* <div>
                         {isMobileOtpSent && mobileVerified !== true && (
                           <>
                             <div>
@@ -2910,33 +3191,25 @@ const EditProfile = () => {
                             </div>
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <label className="Input-Label">Twitter</label>
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={twitter}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          twitter: e.target.value,
-                        }));
-                      }}
+                      name="twitter"
+                      value={formState.twitter}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <label className="Input-Label">Linkedin</label>
                   <div className="Input_Fields">
                     <input
                       type="text"
-                      value={linkedin}
-                      onChange={(e) => {
-                        setInputs((prev) => ({
-                          ...prev,
-                          linkedin: e.target.value,
-                        }));
-                      }}
+                      name="linkedin"
+                      value={formState.linkedin}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="Location-details">
@@ -2950,22 +3223,15 @@ const EditProfile = () => {
                           <select
                             name="country"
                             id=""
-                            onChange={(e) => {
-                              setCountry(e.target.value);
-                              setState("");
-                              settown("");
-                              setPlaces((prev) => ({
-                                ...prev,
-                                state: [],
-                                town: [],
-                              }));
-                            }}
+                            value={formState.country}
+                            onChange={handleCountryChange}
                           >
                             <option value="">Select</option>
                             {places.country?.map((op) => (
                               <option
+                                key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                selected={country?.split("-")[0] == op.name}
+                                // selected={country?.split("-")[0] == op.name}
                               >
                                 {op.name}
                               </option>
@@ -2979,17 +3245,15 @@ const EditProfile = () => {
                           <select
                             name="state"
                             id=""
-                            onChange={(e) => {
-                              setState(e.target.value);
-                              settown("");
-                              setPlaces((prev) => ({ ...prev, town: [] }));
-                            }}
+                            value={formState.state}
+                            onChange={handleStateChange}
                           >
                             <option value="">Select</option>
                             {places.state?.map((op) => (
                               <option
+                                key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                selected={state?.split("-")[0] == op.name}
+                                // selected={state?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3004,14 +3268,15 @@ const EditProfile = () => {
                           <select
                             name="town"
                             id=""
-                            value={town}
-                            onChange={(e) => settown(e.target.value)}
+                            value={formState.town}
+                            onChange={handleTownChange}
                           >
                             <option value="">Select</option>
                             {places.town?.map((op) => (
                               <option
+                                key={op.name}
                                 value={op.name}
-                                selected={town?.split("-")[0] == op.name}
+                                // selected={town?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3020,8 +3285,8 @@ const EditProfile = () => {
                         </div>
                       </div>
                     </form>
-                    <div>
-                      {role == "Mentor" && (
+                    {/* <div>
+                      {role === "Mentor" && (
                         <div>
                           <div>
                             <h4>Fee request</h4>
@@ -3047,25 +3312,19 @@ const EditProfile = () => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
 
                     <div>
                       <div>
                         <label className="Input-Label">Languages Known</label>
                       </div>
                       <div>
-                        {languagesKnown?.length > 0 && (
+                        {formState.languages?.length > 0 && (
                           <div className="listedTeam">
-                            {languagesKnown?.map((t, i) => (
-                              <div className="singleMember">
+                            {formState.languages?.map((t, i) => (
+                              <div className="singleMember" key={i}>
                                 <div>{t}</div>
-                                <div
-                                  onClick={(e) => {
-                                    setlanguagesKnown(
-                                      languagesKnown.filter((f, j) => i !== j)
-                                    );
-                                  }}
-                                >
+                                <div onClick={() => removeLanguage(i)}>
                                   <CloseIcon className="deleteMember" />
                                 </div>
                               </div>
@@ -3083,19 +3342,29 @@ const EditProfile = () => {
                         <div className="skillsSelectBox">
                           <select
                             name="languagesKnown"
-                            id=""
+                            value={singlelanguagesKnown}
                             onChange={(e) =>
                               setSinglelanguagesKnown(e.target.value)
                             }
                           >
                             <option value="">Select</option>
-                            {allLanguages.map((d) => (
-                              <option value={d}>{d}</option>
+                            {allLanguages.map((language) => (
+                              <option key={language} value={language}>
+                                {language}
+                              </option>
                             ))}
                           </select>
                         </div>
 
-                        <div>
+                        <button
+                          type="button"
+                          className="add-button"
+                          onClick={handleAddLanguage}
+                        >
+                          Add Language
+                        </button>
+
+                        {/* <div>
                           <button
                             className="add-button"
                             onClick={() => {
@@ -3112,7 +3381,7 @@ const EditProfile = () => {
                           >
                             Add
                           </button>
-                        </div>
+                        </div> */}
                         <div
                           style={{
                             display: "flex",
@@ -3121,12 +3390,7 @@ const EditProfile = () => {
                         >
                           <button
                             className="add-button"
-                            onClick={() => {
-                              document.getElementsByTagName(
-                                "body"
-                              )[0].style.overflowY = "scroll";
-                              setIsInputPopupVisible(false);
-                            }}
+                            onClick={handleFormSubmit}
                           >
                             Save
                           </button>
@@ -3142,75 +3406,71 @@ const EditProfile = () => {
 
         {isAboutPopupVisible && (
           <div className="popup-container">
-          <div className="popup-content">
-          <div>
-            <div
-              className="popup-header"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <h3>Edit About</h3>
-              <div
-                className="close-icon"
-                onClick={() => {
-                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-                  setIsAboutPopupVisible(false);
-                }}
-              >
-                <i
-                  style={{ color: "var(--followBtn-bg)" }}
-                  className="fas fa-times"
-                ></i>
+            <div className="popup-content">
+              <div>
+                <div
+                  className="popup-header"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h3>Edit About</h3>
+                  <div
+                    className="close-icon"
+                    onClick={() => {
+                      document.getElementsByTagName("body")[0].style.overflowY =
+                        "scroll";
+                      setIsAboutPopupVisible(false);
+                    }}
+                  >
+                    <i
+                      style={{ color: "var(--followBtn-bg)" }}
+                      className="fas fa-times"
+                    ></i>
+                  </div>
+                </div>
+                <textarea
+                  className="bioText"
+                  onChange={(e) => {
+                    const inputText = e.target.value;
+                    if (inputText.length <= 1000) {
+                      setTempBio(inputText);
+                    } else {
+                      setTempBio(inputText.slice(0, 1000));
+                    }
+                  }}
+                  style={{
+                    textAlign: "justify",
+                    fontFamily: "poppins",
+                  }}
+                  cols="155"
+                  rows="13"
+                  name="message"
+                  value={tempBio}
+                  placeholder="Enter your bio"
+                ></textarea>
+                <p style={{ fontSize: "10px", marginTop: "11px" }}>
+                  {1000 - tempBio.length}/1000 characters left
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "9px",
+                  }}
+                >
+                  <button
+                    className="add-button"
+                    onClick={handleBioSaveAndClose}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
-            <textarea
-              className="bioText"
-              onChange={(e) => {
-                const inputText = e.target.value;
-                if (inputText.length <= 1000) {
-                  setBio(inputText);
-                } else {
-                  setBio(inputText.slice(0, 1000));
-                }
-              }}
-              style={{
-                resize: "none",
-                border: "none",
-                textAlign: "justify",
-                fontFamily: "poppins",
-              }}
-              cols="155"
-              rows="13"
-              name="message"
-              value={bio}
-              placeholder="Enter your bio"
-            ></textarea>
-            <p style={{ fontSize: "10px", marginTop: "0px" }}>
-              {1000 - bio.length}/1000 characters left
-            </p>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "10px",
-              }}
-            >
-              <button
-                className="add-button"
-                onClick={() => {
-                  document.getElementsByTagName("body")[0].style.overflowY = "scroll";
-                  setIsAboutPopupVisible(false);
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
           </div>
         )}
 
@@ -3229,7 +3489,7 @@ const EditProfile = () => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <h3>Edit Skills</h3>
+                        <h3 className="m-3">Edit Skills</h3>
                         <div
                           className="close-icon"
                           onClick={() => {
@@ -3245,14 +3505,16 @@ const EditProfile = () => {
                           ></i>
                         </div>
                       </div>
-                      {skills?.length > 0 && (
+                      {tempSkills?.length > 0 && (
                         <div className="listedTeam">
-                          {skills?.map((t, i) => (
+                          {tempSkills?.map((t, i) => (
                             <div className="singleMember">
                               <div>{t}</div>
                               <div
                                 onClick={(e) => {
-                                  setSkills(skills.filter((f, j) => i !== j));
+                                  setTempSkills(
+                                    tempSkills.filter((f, j) => i !== j)
+                                  );
                                 }}
                               >
                                 <CloseIcon className="deleteMember" />
@@ -3285,7 +3547,7 @@ const EditProfile = () => {
                           ))}
                         </select>
                       </div>
-                      <Divider>or</Divider>
+                      <Divider className="mt-2 mb-2">or</Divider>
                       <div
                         className="skillsSelectBox"
                         style={{ display: "flex", gap: "5px" }}
@@ -3320,6 +3582,7 @@ const EditProfile = () => {
                       document.getElementsByTagName("body")[0].style.overflowY =
                         "scroll";
                       setisSkillsPopupVisibile(false);
+                      setSkills(tempSkills);
                     }}
                   >
                     Save
@@ -3344,13 +3607,13 @@ const EditProfile = () => {
 
                       setIsEducationPopupVisible(false);
                       seteditingEducationId("");
-                      setEducationDetails({
-                        year: "",
-                        grade: "",
-                        college: "",
-                        Edstart: "",
-                        Edend: "",
-                      });
+                      // setTempEducationDetails({
+                      //   year: "",
+                      //   grade: "",
+                      //   college: "",
+                      //   Edstart: "",
+                      //   Edend: "",
+                      // });
                     }}
                   >
                     <i
@@ -3370,7 +3633,7 @@ const EditProfile = () => {
                         <select
                           name="grade"
                           id=""
-                          value={EducationDetails.grade}
+                          value={tempEducationDetails.grade}
                           onChange={handleEducationChange}
                         >
                           <option value="">Select</option>
@@ -3380,7 +3643,7 @@ const EditProfile = () => {
                           <option value="PG">PG</option>
                           <option value="Medical">Medical</option>
                           <option value="Business">Business</option>
-                          <option value="LAW">Law</option>
+                          <option value="Law">Law</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
@@ -3389,18 +3652,18 @@ const EditProfile = () => {
                       <div>
                         <label className="Input-Label">
                           College/University*{" "}
-                          {EducationDetails.grade !== "SSC" &&
-                            EducationDetails.grade !== "" &&
+                          {tempEducationDetails.grade !== "SSC" &&
+                            tempEducationDetails.grade !== "" &&
                             "(Type 3 characters)"}
                         </label>
                       </div>
                       <div className="Ed_Input_Fields">
-                        {EducationDetails.grade == "SSC" ||
-                        EducationDetails.grade == "" ? (
+                        {tempEducationDetails.grade == "SSC" ||
+                        tempEducationDetails.grade == "" ? (
                           <input
                             type="text"
                             name="college"
-                            value={EducationDetails.college}
+                            value={tempEducationDetails.college}
                             id=""
                             onChange={handleEducationChange}
                             placeholder="Enter Your College/School/University"
@@ -3458,7 +3721,7 @@ const EditProfile = () => {
                     <div className="Ed_Input_Fields">
                       <input
                         type="date"
-                        value={EducationDetails.Edstart}
+                        value={tempEducationDetails.Edstart}
                         name="Edstart"
                         id=""
                         onChange={handleEducationChange}
@@ -3472,7 +3735,7 @@ const EditProfile = () => {
                     <div className="Ed_Input_Fields">
                       <input
                         type="date"
-                        value={EducationDetails.Edend}
+                        value={tempEducationDetails.Edend}
                         name="Edend"
                         id=""
                         onChange={handleEducationChange}
@@ -3483,11 +3746,12 @@ const EditProfile = () => {
                   <div>
                     <button
                       className="add-button"
-                      onClick={addEducation}
+                      // onClick={addEducation}
+                      onClick={saveEducationDetails}
                       disabled={
-                        EducationDetails.Edstart == "" ||
-                        EducationDetails.grade == "" ||
-                        EducationDetails.college == ""
+                        tempEducationDetails.Edstart == "" ||
+                        tempEducationDetails.grade == "" ||
+                        tempEducationDetails.college == ""
                       }
                     >
                       {editingEducationId !== "" ? "Update" : "Add"}
@@ -3501,10 +3765,10 @@ const EditProfile = () => {
         )}
 
         {isExperiencePopupVisible && (
-          <div className="popup-container">
+          <div className=" popup-container">
             <div className="popup-content">
               <div className="Work-exp">
-                <form className="update-form">
+                <form className=" update-form-edu">
                   <div className="popup-header">
                     <h3>Experience</h3>
                     <div
@@ -3516,33 +3780,33 @@ const EditProfile = () => {
 
                         setIsExperiencePopupVisible(false);
                         seteditingExperienceId("");
-                        setExperience({
-                          areaOfBusiness: "",
-                          business: "",
-                          institute: "",
-                          startupName: "",
-                          workingStatus: "",
-                          company: "",
-                          designation: "",
-                          Department: "",
-                          Research: "",
-                          year: "",
-                          start: "",
-                          end: "",
-                          Achievements: "",
-                          Published: "",
-                          StartupExperience: "",
-                          Consultancy: "",
-                          Profession: "",
-                          TotalWorkExperience: "",
-                          Description: "",
-                          // Technology Partner
-                          Customers: "",
-                          CompanyLocation: "",
-                          Banner: "",
-                          Logo: "",
-                          Services: "",
-                        });
+                        // setExperience({
+                        //   areaOfBusiness: "",
+                        //   business: "",
+                        //   institute: "",
+                        //   startupName: "",
+                        //   workingStatus: "",
+                        //   company: "",
+                        //   designation: "",
+                        //   Department: "",
+                        //   Research: "",
+                        //   year: "",
+                        //   start: "",
+                        //   end: "",
+                        //   Achievements: "",
+                        //   Published: "",
+                        //   StartupExperience: "",
+                        //   Consultancy: "",
+                        //   Profession: "",
+                        //   TotalWorkExperience: "",
+                        //   Description: "",
+                        //   // Technology Partner
+                        //   Customers: "",
+                        //   CompanyLocation: "",
+                        //   Banner: "",
+                        //   Logo: "",
+                        //   Services: "",
+                        // });
                       }}
                     >
                       <i
@@ -3553,7 +3817,7 @@ const EditProfile = () => {
                   </div>
                   <div className="exp-container">
                     {/* Academia Mentor */}
-                    {mentorCategories == "Academia Mentor" && (
+                    {mentorCategories === "Academia Mentor" && (
                       <div>
                         <div>
                           <label className="Input-Label">Institute Name*</label>
@@ -3563,11 +3827,11 @@ const EditProfile = () => {
                             type="text"
                             name="institute"
                             className={
-                              experienceDetails.institute == ""
+                              tempExperienceDetails.institute === ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.institute}
+                            value={tempExperienceDetails.institute}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your institute name"
@@ -3587,11 +3851,11 @@ const EditProfile = () => {
                           <select
                             name="designation"
                             className={
-                              experienceDetails.designation == ""
+                              tempExperienceDetails.designation == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.designation}
+                            value={tempExperienceDetails.designation}
                             onChange={handleChange}
                           >
                             <option value="">Select</option>
@@ -3613,11 +3877,11 @@ const EditProfile = () => {
                             type="text"
                             name="Department"
                             className={
-                              experienceDetails.Department == ""
+                              tempExperienceDetails.Department == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Department}
+                            value={tempExperienceDetails.Department}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Department name"
@@ -3638,11 +3902,11 @@ const EditProfile = () => {
                             type="text"
                             name="Research"
                             className={
-                              experienceDetails.Research == ""
+                              tempExperienceDetails.Research == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Research}
+                            value={tempExperienceDetails.Research}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Research name"
@@ -3662,11 +3926,11 @@ const EditProfile = () => {
                             <input
                               type="date"
                               className={
-                                experienceDetails.start == ""
+                                tempExperienceDetails.start == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.start}
+                              value={tempExperienceDetails.start}
                               name="start"
                               id=""
                               onChange={handleChange}
@@ -3682,7 +3946,7 @@ const EditProfile = () => {
                           <div className="Exp_Input_Fields">
                             <input
                               type="date"
-                              value={experienceDetails.end}
+                              value={tempExperienceDetails.end}
                               name="end"
                               id=""
                               onChange={handleChange}
@@ -3704,11 +3968,11 @@ const EditProfile = () => {
                             type="text"
                             name="Achievements"
                             className={
-                              experienceDetails.Achievements == ""
+                              tempExperienceDetails.Achievements == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Achievements}
+                            value={tempExperienceDetails.Achievements}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Achievements name"
@@ -3729,11 +3993,11 @@ const EditProfile = () => {
                             type="text"
                             name="Published"
                             className={
-                              experienceDetails.Published == ""
+                              tempExperienceDetails.Published == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
-                            value={experienceDetails.Published}
+                            value={tempExperienceDetails.Published}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Paper/Patent Published"
@@ -3753,7 +4017,7 @@ const EditProfile = () => {
                           <input
                             type="text"
                             name="StartupExperience"
-                            value={experienceDetails.StartupExperience}
+                            value={tempExperienceDetails.StartupExperience}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your StartupExperience"
@@ -3773,7 +4037,7 @@ const EditProfile = () => {
                           <input
                             type="text"
                             name="Consultancy"
-                            value={experienceDetails.Consultancy}
+                            value={tempExperienceDetails.Consultancy}
                             id=""
                             onChange={handleChange}
                             placeholder="Enter Your Consultancy"
@@ -3795,12 +4059,12 @@ const EditProfile = () => {
                           <select
                             name="workingStatus"
                             className={
-                              experienceDetails.workingStatus == ""
+                              tempExperienceDetails.workingStatus == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }
                             id=""
-                            value={experienceDetails.workingStatus}
+                            value={tempExperienceDetails.workingStatus}
                             onChange={handleChange}
                           >
                             <option value="">Select</option>
@@ -3812,7 +4076,7 @@ const EditProfile = () => {
                       </div>
                     )}
 
-                    {experienceDetails.workingStatus == "Job" && (
+                    {tempExperienceDetails.workingStatus == "Job" && (
                       <>
                         <div>
                           <div>
@@ -3823,11 +4087,11 @@ const EditProfile = () => {
                               type="text"
                               name="company"
                               className={
-                                experienceDetails.company == ""
+                                tempExperienceDetails.company == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.company}
+                              value={tempExperienceDetails.company}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Company name"
@@ -3845,11 +4109,11 @@ const EditProfile = () => {
                             <select
                               name="designation"
                               className={
-                                experienceDetails.designation == ""
+                                tempExperienceDetails.designation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.designation}
+                              value={tempExperienceDetails.designation}
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
@@ -3871,11 +4135,11 @@ const EditProfile = () => {
                               <input
                                 type="date"
                                 className={
-                                  experienceDetails.start == ""
+                                  tempExperienceDetails.start == ""
                                     ? "editErrors"
                                     : "editSuccess"
                                 }
-                                value={experienceDetails.start}
+                                value={tempExperienceDetails.start}
                                 name="start"
                                 id=""
                                 onChange={handleChange}
@@ -3891,7 +4155,7 @@ const EditProfile = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="date"
-                                value={experienceDetails.end}
+                                value={tempExperienceDetails.end}
                                 name="end"
                                 id=""
                                 onChange={handleChange}
@@ -3909,11 +4173,11 @@ const EditProfile = () => {
                               type="text"
                               name="Profession"
                               className={
-                                experienceDetails.Profession == ""
+                                tempExperienceDetails.Profession == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Profession}
+                              value={tempExperienceDetails.Profession}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Profession"
@@ -3933,11 +4197,11 @@ const EditProfile = () => {
                               min={0}
                               name="TotalWorkExperience"
                               className={
-                                experienceDetails.TotalWorkExperience == ""
+                                tempExperienceDetails.TotalWorkExperience == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.TotalWorkExperience}
+                              value={tempExperienceDetails.TotalWorkExperience}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Total Work Experience"
@@ -3947,7 +4211,7 @@ const EditProfile = () => {
                       </>
                     )}
 
-                    {(experienceDetails.workingStatus == "Self Employed" ||
+                    {(tempExperienceDetails.workingStatus == "Self Employed" ||
                       role === "Technology Partner") && (
                       <>
                         <div>
@@ -3961,11 +4225,11 @@ const EditProfile = () => {
                               type="text"
                               name="startupName"
                               className={
-                                experienceDetails.startupName == ""
+                                tempExperienceDetails.startupName == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.startupName}
+                              value={tempExperienceDetails.startupName}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Business name"
@@ -3984,11 +4248,11 @@ const EditProfile = () => {
                               type="text"
                               name="Description"
                               className={
-                                experienceDetails.Description == ""
+                                tempExperienceDetails.Description == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Description}
+                              value={tempExperienceDetails.Description}
                               id=""
                               onChange={handleChange}
                             />
@@ -4005,11 +4269,11 @@ const EditProfile = () => {
                             <select
                               name="designation"
                               className={
-                                experienceDetails.designation == ""
+                                tempExperienceDetails.designation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.designation}
+                              value={tempExperienceDetails.designation}
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
@@ -4029,11 +4293,11 @@ const EditProfile = () => {
                               type="text"
                               name="Profession"
                               className={
-                                experienceDetails.Profession == ""
+                                tempExperienceDetails.Profession == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Profession}
+                              value={tempExperienceDetails.Profession}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Profession"
@@ -4052,12 +4316,12 @@ const EditProfile = () => {
                               type="number"
                               min={0}
                               className={
-                                experienceDetails.TotalWorkExperience == ""
+                                tempExperienceDetails.TotalWorkExperience == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
                               name="TotalWorkExperience"
-                              value={experienceDetails.TotalWorkExperience}
+                              value={tempExperienceDetails.TotalWorkExperience}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Total Work Experience"
@@ -4080,11 +4344,11 @@ const EditProfile = () => {
                               type="number"
                               name="Customers"
                               className={
-                                experienceDetails.Customers == ""
+                                tempExperienceDetails.Customers == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Customers}
+                              value={tempExperienceDetails.Customers}
                               id=""
                               onChange={handleChange}
                               placeholder="Total Number of Customers "
@@ -4103,11 +4367,11 @@ const EditProfile = () => {
                               type="text"
                               name="CompanyLocation"
                               className={
-                                experienceDetails.CompanyLocation == ""
+                                tempExperienceDetails.CompanyLocation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.CompanyLocation}
+                              value={tempExperienceDetails.CompanyLocation}
                               id=""
                               onChange={handleChange}
                               placeholder="Company Location "
@@ -4126,11 +4390,11 @@ const EditProfile = () => {
                               type="text"
                               name="areaOfBusiness"
                               className={
-                                experienceDetails.areaOfBusiness == ""
+                                tempExperienceDetails.areaOfBusiness == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.areaOfBusiness}
+                              value={tempExperienceDetails.areaOfBusiness}
                               id=""
                               onChange={handleChange}
                               placeholder="Area of Business"
@@ -4145,7 +4409,7 @@ const EditProfile = () => {
                           <label
                             htmlFor="Banner"
                             className={`resume ${
-                              experienceDetails.Banner == ""
+                              tempExperienceDetails.Banner == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }`}
@@ -4173,7 +4437,7 @@ const EditProfile = () => {
                           <label
                             htmlFor="Logo"
                             className={`resume ${
-                              experienceDetails.Logo == ""
+                              tempExperienceDetails.Logo == ""
                                 ? "editErrors"
                                 : "editSuccess"
                             }`}
@@ -4201,11 +4465,11 @@ const EditProfile = () => {
                               type="text"
                               name="Services"
                               className={
-                                experienceDetails.Services == ""
+                                tempExperienceDetails.Services == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.Services}
+                              value={tempExperienceDetails.Services}
                               id=""
                               onChange={handleChange}
                               placeholder="Services"
@@ -4226,11 +4490,11 @@ const EditProfile = () => {
                               type="text"
                               name="company"
                               className={
-                                experienceDetails.company == ""
+                                tempExperienceDetails.company == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.company}
+                              value={tempExperienceDetails.company}
                               id=""
                               onChange={handleChange}
                               placeholder="Enter Your Company name"
@@ -4247,11 +4511,11 @@ const EditProfile = () => {
                             <select
                               name="designation"
                               className={
-                                experienceDetails.designation == ""
+                                tempExperienceDetails.designation == ""
                                   ? "editErrors"
                                   : "editSuccess"
                               }
-                              value={experienceDetails.designation}
+                              value={tempExperienceDetails.designation}
                               onChange={handleChange}
                             >
                               <option value="">Select</option>
@@ -4275,11 +4539,11 @@ const EditProfile = () => {
                               <input
                                 type="date"
                                 className={
-                                  experienceDetails.start == ""
+                                  tempExperienceDetails.start == ""
                                     ? "editErrors"
                                     : "editSuccess"
                                 }
-                                value={experienceDetails.start}
+                                value={tempExperienceDetails.start}
                                 name="start"
                                 id=""
                                 onChange={handleChange}
@@ -4298,7 +4562,7 @@ const EditProfile = () => {
                             <div className="Exp_Input_Fields">
                               <input
                                 type="date"
-                                value={experienceDetails.end}
+                                value={tempExperienceDetails.end}
                                 name="end"
                                 id=""
                                 onChange={handleChange}
@@ -4312,59 +4576,66 @@ const EditProfile = () => {
                     <div>
                       <button
                         className="add-button"
-                        onClick={addExperience}
+                        type="button"
+                        // onClick={addExperience}
+                        onClick={saveExperienceDetails}
                         disabled={
                           (role === "Technology Partner" &&
-                            (experienceDetails.startupName == "" ||
-                              experienceDetails.Description == "" ||
-                              experienceDetails.designation == "" ||
-                              experienceDetails.Profession == "" ||
-                              experienceDetails.TotalWorkExperience == "" ||
-                              experienceDetails.Customers == "" ||
-                              experienceDetails.CompanyLocation == "" ||
-                              experienceDetails.business == "" ||
-                              experienceDetails.Banner == "" ||
-                              experienceDetails.Logo == "" ||
-                              experienceDetails.Services == "")) ||
+                            (tempExperienceDetails.startupName === "" ||
+                              tempExperienceDetails.Description === "" ||
+                              tempExperienceDetails.designation === "" ||
+                              tempExperienceDetails.Profession === "" ||
+                              tempExperienceDetails.TotalWorkExperience ===
+                                "" ||
+                              tempExperienceDetails.Customers === "" ||
+                              tempExperienceDetails.CompanyLocation === "" ||
+                              tempExperienceDetails.business === "" ||
+                              tempExperienceDetails.Banner === "" ||
+                              tempExperienceDetails.Logo === "" ||
+                              tempExperienceDetails.Services === "")) ||
                           (role === "Entrepreneur" &&
-                            ((experienceDetails.workingStatus == "Job" &&
-                              (experienceDetails.company == "" ||
-                                experienceDetails.designation == "" ||
-                                experienceDetails.start == "" ||
-                                experienceDetails.TotalWorkExperience == "" ||
-                                experienceDetails.Profession == "")) ||
-                              (experienceDetails.workingStatus ==
+                            ((tempExperienceDetails.workingStatus === "Job" &&
+                              (tempExperienceDetails.company === "" ||
+                                tempExperienceDetails.designation === "" ||
+                                tempExperienceDetails.start === "" ||
+                                tempExperienceDetails.TotalWorkExperience ===
+                                  "" ||
+                                tempExperienceDetails.Profession === "")) ||
+                              (tempExperienceDetails.workingStatus ===
                                 "Self Employed" &&
-                                (experienceDetails.startupName == "" ||
-                                  experienceDetails.Description == "" ||
-                                  experienceDetails.designation == "" ||
-                                  experienceDetails.Profession == "" ||
-                                  experienceDetails.TotalWorkExperience ==
+                                (tempExperienceDetails.startupName === "" ||
+                                  tempExperienceDetails.Description === "" ||
+                                  tempExperienceDetails.designation === "" ||
+                                  tempExperienceDetails.Profession === "" ||
+                                  tempExperienceDetails.TotalWorkExperience ===
                                     "")))) ||
-                          (role == "Mentor" &&
-                            ((mentorCategories == "Academia Mentor" &&
-                              (experienceDetails.institute == "" ||
-                                experienceDetails.designation == "" ||
-                                experienceDetails.Department == "" ||
-                                experienceDetails.start == "" ||
-                                experienceDetails.Research == "" ||
-                                experienceDetails.Achievements == "" ||
-                                experienceDetails.Published == "")) ||
-                              (mentorCategories == "Industry Expert Mentor" &&
-                                ((experienceDetails.workingStatus == "Job" &&
-                                  (experienceDetails.company == "" ||
-                                    experienceDetails.designation == "" ||
-                                    experienceDetails.start == "" ||
-                                    experienceDetails.TotalWorkExperience ==
+                          (role === "Mentor" &&
+                            ((mentorCategories === "Academia Mentor" &&
+                              (tempExperienceDetails.institute === "" ||
+                                tempExperienceDetails.designation === "" ||
+                                tempExperienceDetails.Department === "" ||
+                                tempExperienceDetails.start === "" ||
+                                tempExperienceDetails.Research === "" ||
+                                tempExperienceDetails.Achievements === "" ||
+                                tempExperienceDetails.Published === "")) ||
+                              (mentorCategories === "Industry Expert Mentor" &&
+                                ((tempExperienceDetails.workingStatus ===
+                                  "Job" &&
+                                  (tempExperienceDetails.company === "" ||
+                                    tempExperienceDetails.designation === "" ||
+                                    tempExperienceDetails.start === "" ||
+                                    tempExperienceDetails.TotalWorkExperience ===
                                       "" ||
-                                    experienceDetails.Profession == "")) ||
-                                  (experienceDetails.workingStatus ==
+                                    tempExperienceDetails.Profession === "")) ||
+                                  (tempExperienceDetails.workingStatus ===
                                     "Self Employed" &&
-                                    (experienceDetails.startupName == "" ||
-                                      experienceDetails.Description == "" ||
-                                      experienceDetails.designation == "" ||
-                                      experienceDetails.Profession == "" ||
-                                      experienceDetails.TotalWorkExperience ==
+                                    (tempExperienceDetails.startupName === "" ||
+                                      tempExperienceDetails.Description ===
+                                        "" ||
+                                      tempExperienceDetails.designation ===
+                                        "" ||
+                                      tempExperienceDetails.Profession === "" ||
+                                      tempExperienceDetails.TotalWorkExperience ===
                                         ""))))))
                         }
                       >
