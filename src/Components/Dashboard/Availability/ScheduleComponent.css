@@ -1,0 +1,64 @@
+/* customStyles.css */
+.available-tab-active {
+    color: black !important; /* Replace with your desired color */
+}
+
+/* Optional: Ensure default styles for inactive tabs */
+.available-tab {
+    color: #000000; /* Replace with your desired default color */
+}
+
+.available-tab:hover {
+    background-color: grey !important /* Hover color */
+}
+
+.custom-tabs .MuiTabs-indicator {
+    background-color: black !important; /* Change indicator color to black */
+}
+
+
+
+.available-box {
+    border: 1px solid  ;  
+    border-radius: 8px;      
+    padding: 16px;          
+    border-color: lightgrey !important;
+}
+
+.default-description {
+    color: grey;
+    font-size: 0.875rem;
+  }
+
+
+
+  /* .outline .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: black;
+    width: 45%;
+  }
+   */
+
+
+  .outline .MuiOutlinedInput-root {
+    width: 100%; /* Set a consistent width */
+}
+
+.outline .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: black;
+    /* Remove width declaration from here */
+}
+
+
+.saveSettings {
+    display: flex;
+    justify-content: center;
+    align-self: flex-start;
+    width: 15%;
+    height: 35px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: var(--button-color);
+    background: var(--button-background);
+    margin-left: 0px;
+  }
+  

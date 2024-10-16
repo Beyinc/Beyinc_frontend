@@ -322,7 +322,7 @@ button:disabled {
 }
 
 button {
-  width: auto !important;
+  width: auto ;
   padding: 15px;
   color: var(--button-color);
   background: var(--button-background);

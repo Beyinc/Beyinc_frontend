@@ -1119,4 +1119,100 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  getCoupons: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/referral/getCoupons`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  updateCoupon: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/referral/updateCoupon`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  saveBeyincProfessional: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveBeyincProfessional`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+
+  SaveData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/savedata`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  InputFormData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/inputFormData`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  FilterData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/filterdata`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  getFilterPosts: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/posts/filterPosts`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
 };
+
+
+

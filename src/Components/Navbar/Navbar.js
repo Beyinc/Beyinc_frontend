@@ -19,6 +19,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import EventIcon from "@mui/icons-material/Event";
 import {
   getAllNotifications,
   setMessageCount,
@@ -64,7 +65,11 @@ const Navbar = () => {
   const { email, role, userName, image, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
+  const {
+    beyincProfile
+  } = useSelector((store) => store.auth.userDetails);
 
+  console.log(role, userName)
   const [logoutOpen, setLogoutOpen] = useState(false);
   const socket = useRef();
   useEffect(() => {
@@ -893,6 +898,66 @@ const Navbar = () => {
           />
         </ListItem> */}
 
+        {/* Conditional rendering of the Calendar button */}
+      {beyincProfile === "mentor" ||"cofounder" && (
+        <ListItem
+          button
+          key="calendar"
+          onClick={() => navigate("/dashboard/availability")}
+        >
+          <ListItemIcon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1.2em"
+              height="1.2em"
+              viewBox="0 0 24 24"
+              id="calendar"
+              className="menu-icon"
+            >
+              <path
+                fill="var(--nav-head-icons)"
+                d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-1.99.9-1.99 2L3 21c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V10h14v11zm0-13H5V5h14v3z"
+              />
+            </svg>
+          </ListItemIcon>
+          <ListItemText primary="Services" />
+        </ListItem>
+      )}
+
+
+         {/* User Bookings */}
+      <ListItem
+        button
+        key="userBookings"
+        onClick={() => navigate("/dashboard/userBookings")}
+      >
+        <ListItemIcon>
+          <EventIcon
+            className="menu-icon"
+            sx={{ width: "0.8em", height: "0.8em", color: "var(--nav-head-icons)" }}
+          />
+        </ListItemIcon>
+        <ListItemText primary="User Bookings" />
+      </ListItem>
+
+      {/* Mentor Bookings - Render only if role === "Mentor" */}
+      {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
+        <ListItem
+          button
+          key={beyincProfile === "mentor" ? "mentorBookings" : "cofounderBookings"}
+          onClick={() => navigate(`/dashboard/mentorBookings`)}
+        >
+          <ListItemIcon>
+            <EventIcon
+              className="menu-icon"
+              sx={{ width: "0.8em", height: "0.8em", color: beyincProfile === "mentor" ? "blue" : "green" }} // Different color for Mentor and Cofounder
+            />
+          </ListItemIcon>
+          <ListItemText primary={beyincProfile === "mentor" ? "Mentor Bookings" : "Cofounder Bookings"} />
+        </ListItem>
+      )}
+
+
         <ListItem
           button
           key="editProfile"
@@ -1124,6 +1189,19 @@ const Navbar = () => {
       <div className="menuIcons">
         {width > 770 && (
           <>
+          <div
+            className={`navbar-item ${
+              selectedIcon === "beyinc" ? "selected" : ""
+            }`}
+            onClick={() => {
+              navigate("/beyincProfesional");
+              handleItemClick("beyinc");
+            }}
+          >
+            <button className="navbar-btn">
+              Become Professional
+            </button>
+          </div>
             {/* HOME ICON */}
 
             <div

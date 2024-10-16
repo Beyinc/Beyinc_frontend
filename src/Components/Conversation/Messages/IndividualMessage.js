@@ -746,7 +746,7 @@ const IndividualMessage = () => {
                     style={{ display: "none" }}
                   />
                 </div>
-                {isParent(role, receiverId?.role) && (
+                {/* {isParent(role, receiverId?.role) && (
                   <div>
                     <div
                       className="uploadingFileIcon"
@@ -757,7 +757,7 @@ const IndividualMessage = () => {
                       <i class="fas fa-link"></i>
                     </div>
                   </div>
-                )}
+                )} */}
                 <div className="send-container">
                   {sendMessage !== "" || file !== "" ? (
                     <SendIcon
@@ -794,11 +794,11 @@ const IndividualMessage = () => {
       </div>
       {/* <div className="bottom-line"></div> */}
 
-      <GoogleCalenderEvent
+      {/* <GoogleCalenderEvent
         gmeetLinkOpen={gmeetLinkOpen}
         setGmeetLinkOpen={setGmeetLinkOpen}
         receiver={receiverId}
-      />
+      /> */}
     </div>
   );
 };

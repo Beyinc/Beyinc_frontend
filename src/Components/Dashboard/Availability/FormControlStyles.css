@@ -1,0 +1,87 @@
+/* FormControlStyles.css */
+
+.customFormControl {
+  width: 160px !important; /* Custom width */
+  height: 30px; /* Custom height */
+  margin-bottom: 20px !important;
+  padding-left: 10px !important;
+
+}
+
+.customFormControl .MuiOutlinedInput-root {
+  border-color: black !important; /* Black border color */
+  border-width: 2px !important; /* Thick border width */
+  border-radius: 8px; /* Border radius for rounded corners */
+  height: 50px !important;
+ 
+}
+
+.customFormControl .MuiOutlinedInput-root:hover fieldset {
+  border-color: black; /* Black border color on hover */
+ /* Ensure the border width remains thick on hover */
+  padding-bottom: 15px;
+}
+
+.customFormControl .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: black; /* Black border color when focused */
+  border-width: 3px; /* Ensure the border width remains thick when focused */
+}
+
+.customFormControl .MuiInputLabel-root {
+  color: black !important; /* Custom label color */
+  padding-bottom: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+.customFormControl .MuiSelect-select {
+  padding: 15px; /* Custom padding for the select */
+}
+
+
+/* ButtonStyles.css */
+
+.cancelSave {
+  border-radius: 15px !important; /* Rounded edges */
+  background-color: #EAEAEA !important; /* Grey background color */
+  color: black !important; /* Text color */
+  border: none !important;
+  width: 150px !important;
+  
+}
+
+.cancelSave:hover {
+  background-color: #4E54C6 !important; /* Dark grey background color on hover */
+}
+
+/* Optional: To handle the disabled state */
+.cancelSave:disabled {
+  background-color: #EAEAEA !important; /* Light grey for disabled state */
+  color: darkgrey; /* Dark grey text for disabled state */
+}
+
+/* FormControlStyles.css */
+
+/* FormControlStyles.css */
+
+
+/* Ensure the label does not interfere with the Select component */
+.customFormControl .MuiInputLabel-root {
+  color: #555; /* Custom label color */
+  padding-left: 15px;
+}
+
+/* Hide the label when it’s not focused or selected */
+.customFormControl .MuiInputLabel-root.MuiInputLabel-shrink {
+  display: none; /* Hide the label after selection */
+}
+
+/* Add a border to the Select component */
+.customFormControl .MuiOutlinedInput-root {
+  border: 3px solid black; 
+  border-radius: 12px ; 
+  
+}
+
+
+
+

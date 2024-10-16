@@ -36,7 +36,16 @@ import { socket_io } from "./Utils";
 import { ToastColors } from "./Components/Toast/ToastColors";
 import EditProfile from "./Components/Editprofile/EditProfile";
 import CreatePostPage from "./Components/Editprofile/Activities/Posts/CreatePostPage";
-
+import Book from "./Components/Razorpay/Book";
+import Proffesional from "./Components/Razorpay/Proffesional";
+import Bank from "./Components/Razorpay/Bank";
+import Calendar from "./Components/Dashboard/Bookings/UserBooking/Calendar";
+import Schedule from "./Components/Dashboard/Availability/Schedule";
+import OAuthPopupHandler from "./Components/Calendar/calendarAuth" ;
+import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBookings";
+import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
+import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
+import EntryDetails from "./Components/EntryDetails/EntryDetails";
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
@@ -295,16 +304,14 @@ const App = () => {
           <Route path="/posts" Component={AuthHoc(Posts)} />
           <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
           <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
-
-
-
+          <Route path="/beyincProfesional" Component={AuthHoc(BeyincProfessional)} />
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
           {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
 
-
+        <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
           <Route
@@ -321,6 +328,7 @@ const App = () => {
             Component={AuthHoc(IndividualPitch)}
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
+           
           <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
@@ -342,6 +350,14 @@ const App = () => {
             path="/postReports"
             Component={AdminDeciderHoc(PostReports)}
           />
+           <Route path="/book" element={< Book/>} />
+           <Route path="/proffesional" element={<Proffesional />} />
+           <Route path="/bank" element={<Bank />} />
+           <Route path="/rescheduleCalendar" element={<Calendar />} />
+           <Route path="/dashboard/availability" element={<Schedule />} />
+           <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
+           <Route path="/dashboard/userBookings" element={<UserBooking />} />
+           <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
         </Routes>
       </Suspense>
     </div>
