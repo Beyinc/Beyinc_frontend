@@ -112,6 +112,7 @@ const EntryDetails = () => {
         selectedCategory
      } );
       alert("Data saved successfully!");
+      window.location.href = "/posts";
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");

@@ -1973,7 +1973,7 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
+        {(beyincProfile === "Mentor" || beyincProfile === "Cofounder") && (
             <div className="BookSessionCard">
               <BookSession
                 name={name}
@@ -1986,9 +1986,9 @@ const EditProfile = () => {
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-          {(beyincProfile === "mentor" ||
-            beyincProfile === "cofounder" ||
-            beyincProfile === "investor") && (
+          {(beyincProfile === "Mentor" ||
+            beyincProfile === "Cofounder" ||
+            beyincProfile === "Investor") && (
             <div>
               <TabsAndInvestment />
             </div>
