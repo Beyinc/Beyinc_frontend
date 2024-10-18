@@ -22,19 +22,25 @@ const FilterSidebar = ({ updateFilters }) => {
 
   // Update filters in useEffect instead of outside
   useEffect(() => {
-    console.log("fhfhfhfh"+ selectedCategories);
-    
+    // console.log("hello" + selectedCategories);
+
     const filters = {
       userName,
       expertise: selectedExpertise,
       industries: selectedIndustry,
       stages: selectedStage,
-      categories: selectedCategories, 
+      categories: selectedCategories,
     };
 
     // Call the updateFilters function whenever the filters change
     updateFilters(filters);
-  }, [userName, selectedExpertise, selectedIndustry, selectedStage,selectedCategories]);
+  }, [
+    userName,
+    selectedExpertise,
+    selectedIndustry,
+    selectedStage,
+    selectedCategories,
+  ]);
 
   const handleExpertiseChange = (event) => {
     const { value, checked } = event.target;
@@ -52,13 +58,15 @@ const FilterSidebar = ({ updateFilters }) => {
 
   const handleCategoryChange = (e) => {
     const { value, checked } = e.target;
-  
+
     if (checked) {
       // Add the selected category if checked
       setSelectedCategories((prev) => [...prev, value]);
     } else {
       // Remove the unselected category
-      setSelectedCategories((prev) => prev.filter((category) => category !== value));
+      setSelectedCategories((prev) =>
+        prev.filter((category) => category !== value)
+      );
     }
   };
 
@@ -85,9 +93,9 @@ const FilterSidebar = ({ updateFilters }) => {
     option.toLowerCase().includes(category.toLowerCase())
   );
   return (
-    <div className="filter-sidebar">
+    <div className="filter-sidebar h-[600px]">
       <h2>Filter</h2>
-      <hr className="mt-2 mb-4" />
+      <hr className="mt-2 mb-6" />
       <h4 className="mt-3 mb-2">Username</h4>
       <input
         className="w-72"
@@ -97,19 +105,12 @@ const FilterSidebar = ({ updateFilters }) => {
         onChange={(e) => setUserName(e.target.value)}
       />
 
-    
-      <hr className="mt-4 mb-4" />
+      <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Category</h4>
       <div className="relative">
-        <input
-          type="text"
-          className="w-72 mt-3"
-          placeholder="Search Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)} // Update state on change
-        />
+       
         <button
-          className={`absolute right-1 top-1 text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
             isCategoryOpen ? "rotate-180" : "rotate-0"
           }`}
           onClick={() => setIsCategoryOpen(!isCategoryOpen)} // Toggle dropdown visibility
@@ -121,6 +122,13 @@ const FilterSidebar = ({ updateFilters }) => {
       {/* Category checkboxes, shown only if isCategoryOpen is true */}
       {isCategoryOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+           <input
+          type="text"
+          className="w-64 mt-3"
+          placeholder="Search Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)} // Update state on change
+        />
           {filteredCategories.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -138,19 +146,12 @@ const FilterSidebar = ({ updateFilters }) => {
       )}
 
       {/* Expertise Input Field */}
-      <hr className="mt-4 mb-4" />
+      <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Expertise</h4>
 
       <div className="relative">
-        <input
-          type="text"
-          className="w-72 mt-3"
-          placeholder="Search Expertise"
-          value={expertise}
-          onChange={(e) => setExpertise(e.target.value)}
-        />
         <button
-          className={`absolute right-1 top-1 text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
             isExpertiseOpen ? "rotate-180" : "rotate-0"
           }`}
           onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
@@ -162,6 +163,13 @@ const FilterSidebar = ({ updateFilters }) => {
       {/* Expertise checkboxes, shown only if isExpertiseOpen is true */}
       {isExpertiseOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+          <input
+            type="text"
+            className="w-64 mt-3"
+            placeholder="Search Expertise"
+            value={expertise}
+            onChange={(e) => setExpertise(e.target.value)}
+          />
           {filteredExpertiseOptions.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -179,20 +187,14 @@ const FilterSidebar = ({ updateFilters }) => {
       )}
 
       {/* Input field */}
-      <hr className="mt-4 mb-4" />
+      <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Industries</h4>
       <div className="relative">
-        <input
-          type="text"
-          className="w-72 mt-3"
-          placeholder="Search Industry"
-          value={industries}
-          onChange={(e) => setIndustries(e.target.value)}
-        />
+        
 
         {/* Caret icon to toggle the dropdown with rotation */}
         <button
-          className={`absolute right-1 top-1 text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
             isOpen ? "rotate-180" : "rotate-0"
           }`}
           onClick={() => setIsOpen(!isOpen)}
@@ -204,6 +206,13 @@ const FilterSidebar = ({ updateFilters }) => {
       {/* Industry checkboxes with vertical scroll, shown only if isOpen is true */}
       {isOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+          <input
+          type="text"
+          className="w-64 mt-3"
+          placeholder="Search Industry"
+          value={industries}
+          onChange={(e) => setIndustries(e.target.value)}
+        />
           {filteredIndustryOptions.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -221,18 +230,12 @@ const FilterSidebar = ({ updateFilters }) => {
       )}
 
       {/* Stage Input Field */}
-      <hr className="mt-4 mb-4" />
+      <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Stages</h4>
       <div className="relative">
-        <input
-          type="text"
-          className="w-72 mt-3"
-          placeholder="Search Stage"
-          value={stage}
-          onChange={(e) => setStage(e.target.value)}
-        />
+       
         <button
-          className={`absolute right-1 top-1 text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
             isStageOpen ? "rotate-180" : "rotate-0"
           }`}
           onClick={() => setIsStageOpen(!isStageOpen)}
@@ -244,6 +247,13 @@ const FilterSidebar = ({ updateFilters }) => {
       {/* Stage checkboxes, shown only if isStageOpen is true */}
       {isStageOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+           <input
+          type="text"
+          className="w-64 mt-3"
+          placeholder="Search Stage"
+          value={stage}
+          onChange={(e) => setStage(e.target.value)}
+        />
           {filteredStageOptions.map((option) => (
             <div key={option} className="p-0">
               <label>
