@@ -351,8 +351,8 @@ const CreatePostPage = () => {
               <TabPanel
                 value="1"
                 style={{
-                  maxHeight: "330px",
-                  overflow: "scroll",
+                  // maxHeight: "330px",
+                  // overflow: "scroll",
                   overflowX: "hidden",
                   scrollbarWidth: "thin",
                   scrollBehavior: "smooth",

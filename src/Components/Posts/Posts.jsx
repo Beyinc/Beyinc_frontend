@@ -391,7 +391,7 @@ const Posts = () => {
               <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
                 <input
                   type="text"
-                  className="w-64 mt-3"
+                  className="w-60 mt-3"
                   placeholder="Search Stage"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
@@ -644,16 +644,16 @@ const Posts = () => {
         </div>
 
         <div className="suggestions-section">
-          <div style={{ display: "flex", flexDirection: "row", gap: "60px" }}>
+          <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
-            <h3 className="label">Suggestions for you</h3>
+            <h4 className="label">Suggestions for you</h4>
             <span
-              style={{ color: "gray", fontSize: "14px", cursor: "pointer" }}
+              style={{ width:" 90px",  color: "gray", fontSize: "14px", cursor: "pointer" }}
               onClick={() => {
                 navigate("/searchusers");
               }}
             >
-              See all
+              See All
             </span>
           </div>
           {recommendedUsers?.map((rec) => (
