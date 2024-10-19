@@ -1198,9 +1198,10 @@ const Navbar = () => {
               handleItemClick("beyinc");
             }}
           >
-            <button className="navbar-btn">
-              Become Professional
-            </button>
+           <button className="navbar-btn rounded-2xl h-12 w-50 py-1 text-xs font-normal">
+            Become Professional
+          </button>
+
           </div>
             {/* HOME ICON */}
 

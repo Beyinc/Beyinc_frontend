@@ -682,7 +682,7 @@ const Posts = () => {
                   {rec?.userName}
                 </h4>
                 <p>{rec?.role}</p>
-                <div className="button-container">
+                <div className="follow-container">
                   <button
                     className="follow"
                     onClick={(e) => {
