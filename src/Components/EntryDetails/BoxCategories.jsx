@@ -2,13 +2,16 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { dataEntry } from "../../Utils";
 
-const BoxCategories = () => {
+const BoxCategories = ({ onCategoryClick }) => {
+
+  
   return (
     <div className="flex flex-wrap">
       {dataEntry.map((item, i) => (
         <div
-          key={i}
+        key={item.id} 
           className="mx-5 my-2 shadow-[0_3px_12px_rgba(0,0,0,0.1)] mt-6 bg-customWhite w-[259px] h-[223px] rounded-md py-4 px-5 "
+          onClick={() => onCategoryClick(item.title)}
         >
           <div className="relative flex mt-5">
             <div className="bg-lightPurple w-[50px] h-[50px] rounded-full" />

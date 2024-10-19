@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 import { ApiServices } from "./Services/ApiServices";
 import UserDetails from "./Components/Signup/UserDetails";
-
+import EntryDetails from "./Components/EntryDetails/EntryDetails";
 export const LoginAuth = (Component) => {
   return function WithHooks(props) {
     const { email } = useSelector((store) => store.auth.loginDetails);
@@ -61,7 +61,8 @@ const AuthHoc = (Component) => {
     return localStorage.getItem("user") &&
       JSON.parse(localStorage.getItem("user")).accessToken ? (
         firstTime !== null && (firstTime ? (
-          <UserDetails />
+          // <UserDetails />
+          <EntryDetails/>
         ) : (
           <Component />
         )) 

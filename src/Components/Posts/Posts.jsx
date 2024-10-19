@@ -8,9 +8,10 @@ import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import AllNotifications from "../Conversation/Notification/AllNotifications";
 import { getAllNotifications } from "../../redux/Conversationreducer/ConversationReducer";
-import { socket_io } from "../../Utils";
+import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
+import { RxCaretDown } from "react-icons/rx";
 
 const Posts = () => {
   const { role, userName, image, user_id } = useSelector(
@@ -166,30 +167,34 @@ const Posts = () => {
 
   ////////////////////////////////
 
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [people, setPeople] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [tags, setTags] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedSortOption, setSelectedSortOption] = useState("");
 
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-
-    // Update selected categories based on checkbox state
-    if (checked) {
-      setSelectedCategories((prev) => [...prev, value]);
-    } else {
-      setSelectedCategories((prev) =>
-        prev.filter((category) => category !== value)
-      );
-    }
+  const handleTagsChange = (event) => {
+    const { value, checked } = event.target;
+    setSelectedTags((prev) =>
+      checked ? [...prev, value] : prev.filter((option) => option !== value)
+    );
   };
 
+  const filteredTagsOptions = postTypes.filter((option) =>
+    option.value.toLowerCase().includes(tags.toLowerCase())
+  );
+
   useEffect(() => {
-    console.log(selectedCategories);
+    console.log(people, selectedSortOption, selectedTags);
 
     const fetchFilteredPosts = async () => {
       try {
         // Send data to the backend
         const response = await ApiServices.getFilterPosts({
-          categories: selectedCategories, // Send selected categories
+          tags: selectedTags, // Send selected tags
+          sortOption: selectedSortOption, // Send selected sort option
+          people: people, // Send the people filter
         });
 
         // Handle successful fetching of posts
@@ -203,13 +208,13 @@ const Posts = () => {
     };
 
     // Call the fetchFilteredPosts function
-    if (selectedCategories.length > 0) {
+    if (people.length > 0 || selectedTags.length > 0 || selectedSortOption.length > 0) {
       // Ensure there are selected categories before fetching
       fetchFilteredPosts();
     } else {
       setFilteredPosts([]);
     }
-  }, [selectedCategories]); // Add selectedCategories as a dependency
+  }, [people, selectedTags, selectedSortOption]); // Add selectedCategories as a dependency
 
   return (
     <div className="Homepage-Container">
@@ -358,13 +363,56 @@ const Posts = () => {
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
-            <h5>People</h5>
-            <input type="text" placeholder="Search people" />
+            <h4 className="mt-3 mb-2">People</h4>
+            <input
+              type="text"
+              placeholder="Search people"
+              value={people}
+              onChange={(e) => setPeople(e.target.value)}
+            />
 
-            <h5>Tags</h5>
-            <input type="text" placeholder="Search tags" />
+            {/* <h5>Tags</h5>
+            <input type="text" placeholder="Search tags" /> */}
 
-            <h5>Location</h5>
+            <h4 className="mt-3 mb-2">Tags</h4>
+            <div className="relative">
+              <button
+                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+                  isTagsOpen ? "rotate-180" : "rotate-0"
+                }`}
+                onClick={() => setIsTagsOpen(!isTagsOpen)}
+              >
+                <RxCaretDown />
+              </button>
+            </div>
+
+            {/* Stage checkboxes, shown only if isStageOpen is true */}
+            {isTagsOpen && (
+              <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+                <input
+                  type="text"
+                  className="w-60 mt-3"
+                  placeholder="Search Stage"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                />
+
+                {filteredTagsOptions.map((option) => (
+                  <div key={option.value} className="p-0">
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={option.value}
+                        checked={selectedTags.includes(option.value)}
+                        onChange={handleTagsChange}
+                      />
+                      {option.value}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* <h5>Location</h5>
             <div className="checkbox">
               <input type="checkbox" id="delhi" name="location" value="Delhi" />
               <label className="checkbox-label" for="delhi">
@@ -396,10 +444,10 @@ const Posts = () => {
               <label className="checkbox-label" for="chennai">
                 Chennai
               </label>
-            </div>
+            </div> */}
 
-            <h5>Category</h5>
-            <div className="checkbox">
+            {/* <h5>Category</h5> */}
+            {/* <div className="checkbox">
               <input
                 onChange={handleCheckboxChange}
                 type="checkbox"
@@ -410,9 +458,9 @@ const Posts = () => {
               <label className="checkbox-label" for="general">
                 General post
               </label>
-            </div>
+            </div> */}
 
-            <div className="checkbox">
+            {/* <div className="checkbox">
               <input
                 onChange={handleCheckboxChange}
                 type="checkbox"
@@ -541,13 +589,18 @@ const Posts = () => {
               <label className="checkbox-label" htmlFor="investment">
                 Investment
               </label>
-            </div>
+            </div> */}
 
-            <span class="see-all">See All</span>
+            {/* <span class="see-all">See All</span> */}
+            <hr className=" mt-4 mb-6" />
 
-            <h5>Sort by</h5>
-            <select>
-              <option value="relevance">Relevance</option>
+            <h4 className="mt-3 mb-2">Sort by</h4>
+            <select
+            value={selectedSortOption}
+              onChange={(event) => setSelectedSortOption(event.target.value)}
+            >
+               <option value="">Select an option</option>
+              <option value="recent">Recent</option>
             </select>
           </div>
         </div>
@@ -591,16 +644,16 @@ const Posts = () => {
         </div>
 
         <div className="suggestions-section">
-          <div style={{ display: "flex", flexDirection: "row", gap: "60px" }}>
+          <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
-            <h3 className="label">Suggestions for you</h3>
+            <h4 className="label">Suggestions for you</h4>
             <span
-              style={{ color: "gray", fontSize: "14px", cursor: "pointer" }}
+              style={{ width:" 90px",  color: "gray", fontSize: "14px", cursor: "pointer" }}
               onClick={() => {
                 navigate("/searchusers");
               }}
             >
-              See all
+              See All
             </span>
           </div>
           {recommendedUsers?.map((rec) => (
@@ -629,7 +682,7 @@ const Posts = () => {
                   {rec?.userName}
                 </h4>
                 <p>{rec?.role}</p>
-                <div className="button-container">
+                <div className="follow-container">
                   <button
                     className="follow"
                     onClick={(e) => {

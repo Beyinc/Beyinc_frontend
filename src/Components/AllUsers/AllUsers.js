@@ -266,7 +266,17 @@ const fetchUsers = async () => {
   console.log("Current filters:", filters); 
   try {
       const response = await ApiServices.FilterData(filters);
-      setUsers(response.data);
+      // Filter users to only include those with the desired fields
+      const filteredUsers = response.data.filter((user) => {
+        return (
+            user.beyincProfile || // Check if beyincProfile is present
+            (user.industries && user.industries.length > 0) || // Check if industries array is not empty
+            (user.expertise && user.expertise.length > 0) || // Check if expertise array is not empty
+            (user.stages && user.stages.length > 0)  // Check if stages array is not empty
+            // || (user.investmentRange !== undefined) 
+        );
+    });
+    setUsers(filteredUsers);
 
   } catch (error) {
       console.error('Error fetching users:', error);
@@ -411,7 +421,7 @@ const fetchUsers = async () => {
                   </div>
                 </div>
 
-                <div className="verificationFilter">
+                {/* <div className="verificationFilter">
                   <div
                     className="filter-options-label"
                     style={{
@@ -433,7 +443,7 @@ const fetchUsers = async () => {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             </TabPanel>
           </Box>
@@ -579,7 +589,7 @@ const fetchUsers = async () => {
               </div>
               <hr /> */}
               {/* Rating */}
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -596,9 +606,9 @@ const fetchUsers = async () => {
                     setFilledStars={setFilledStars}
                   />
                 </div>
-              </div>
+              </div> */}
 
-              <div className="verificationFilter">
+              {/* <div className="verificationFilter">
                 <div
                   className="filter-options-label"
                   style={{
@@ -622,7 +632,7 @@ const fetchUsers = async () => {
                     }}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
           <div className="user-cards-panel">

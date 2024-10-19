@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./TabsAndInvestment.css";
 
-const TabsAndInvestment = () => {
+const TabsAndInvestment = ({ industries, stages, expertise, investmentRange }) => {
   const [activeTab, setActiveTab] = useState("Expertise");
 
   const handleTabClick = (tab) => {
@@ -33,10 +33,10 @@ const TabsAndInvestment = () => {
         </div>
         <div className="content-container">
           {activeTab === "Expertise" && (
-            <p>B2C Sales • Growth Marketing • Product Marketing</p>
+            <p>{expertise.join(', ')}</p>
           )}
-          {activeTab === "Industries" && <p>Industry details go here.</p>}
-          {activeTab === "Stages" && <p>Stages details go here.</p>}
+          {activeTab === "Industries" && <p>{industries.join(', ')}</p>}
+          {activeTab === "Stages" && <p>{stages.join(', ')}</p>}
         </div>
       </div>
       <div className="investment-range-container">
@@ -59,7 +59,7 @@ const TabsAndInvestment = () => {
         </div>
         <div className="investment-range-text">
           <p className="investment-label">Investment Range</p>
-          <p className="investment-value">₹ 1,00,000 - ₹ 5,00,000</p>
+          <p className="investment-value">₹ {investmentRange}</p>
         </div>
       </div>
     </div>
