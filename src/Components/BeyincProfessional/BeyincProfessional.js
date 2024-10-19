@@ -136,7 +136,7 @@ const BeyincProfessional = () => {
           color: "#333",
         }}
       >
-        Fill this form
+        Become a Professional in our Platform
       </Typography>
 
       {/* Beyinc Profile */}

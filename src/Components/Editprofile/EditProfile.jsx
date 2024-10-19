@@ -77,7 +77,7 @@ const EditProfile = () => {
     stages: dbStages,
   } = useSelector((store) => store.auth.userDetails);
 
-  console.log('beyincProfile', beyincProfile, dbProfile)
+
 
   const [dbCountry, setDbCountry] = useState("");
   const [dblanguages, setDblanguages] = useState([]);
@@ -113,6 +113,7 @@ const EditProfile = () => {
     dbIndustires,
   ]);
 
+  console.log('beyincProfile', dbbeyincProfile)
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -1977,9 +1978,9 @@ const EditProfile = () => {
               </div>
             )}
 
-            <div className="reviewText">
+            {/* <div className="reviewText">
               <b>{review?.length}</b> Reviews
-            </div>
+            </div> */}
             <div>
               {id == undefined ? (
                 <ReviewStars avg={averagereview} />
@@ -1989,9 +1990,9 @@ const EditProfile = () => {
                     filledStars={filledStars}
                     setFilledStars={setFilledStars}
                   />{" "}
-                  <button className="reviewPostButton" onClick={sendReview}>
+                  {/* <button className="reviewPostButton" onClick={sendReview}>
                     Post
-                  </button>
+                  </button> */}
                 </>
               )}
             </div>
@@ -2010,7 +2011,7 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(beyincProfile === "Mentor" || beyincProfile === "Cofounder") && (
+        {(dbbeyincProfile === "Mentor" || dbbeyincProfile === "Cofounder") && (
             <div className="BookSessionCard">
               <BookSession
                 name={name}
@@ -2023,9 +2024,9 @@ const EditProfile = () => {
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-          {(beyincProfile === "Mentor" ||
-            beyincProfile === "Cofounder" ||
-            beyincProfile === "Investor") && (
+          {(dbbeyincProfile === "Mentor" ||
+            dbbeyincProfile === "Cofounder" ||
+            dbbeyincProfile === "Investor") && (
             <div>
               <TabsAndInvestment
                 industries={industries}
