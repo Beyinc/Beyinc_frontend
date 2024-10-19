@@ -94,7 +94,7 @@ const FilterSidebar = ({ updateFilters }) => {
   );
   return (
     <div className="filter-sidebar h-[600px]">
-      <h2>Filter</h2>
+      {/* <h2>Filter</h2> */}
       <hr className="mt-2 mb-6" />
       <h4 className="mt-3 mb-2">Username</h4>
       <input

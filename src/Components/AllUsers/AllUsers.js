@@ -421,7 +421,7 @@ const fetchUsers = async () => {
                   </div>
                 </div>
 
-                <div className="verificationFilter">
+                {/* <div className="verificationFilter">
                   <div
                     className="filter-options-label"
                     style={{
@@ -443,7 +443,7 @@ const fetchUsers = async () => {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             </TabPanel>
           </Box>
@@ -589,7 +589,7 @@ const fetchUsers = async () => {
               </div>
               <hr /> */}
               {/* Rating */}
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -606,9 +606,9 @@ const fetchUsers = async () => {
                     setFilledStars={setFilledStars}
                   />
                 </div>
-              </div>
+              </div> */}
 
-              <div className="verificationFilter">
+              {/* <div className="verificationFilter">
                 <div
                   className="filter-options-label"
                   style={{
@@ -632,7 +632,7 @@ const fetchUsers = async () => {
                     }}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
           <div className="user-cards-panel">
