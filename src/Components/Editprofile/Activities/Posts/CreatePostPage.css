@@ -10,10 +10,12 @@
 .createPost-container {
   width: 100%;
   max-width: 800px; /* Adjust as needed */
+  padding: 0; /* Ensure no padding if not needed */
   margin: 0 auto;
   font-family: 'Gentium Book Basic', serif !important;
-
+  overflow: visible !important; /* Ensure no overflow that could cause scrollbars */
 }
+
 
 /* Header styling */
 .createPostHeader {
@@ -71,6 +73,7 @@
   font-weight: 600;
   color: gray;
   font-family: 'Gentium Book Basic', serif !important;
+  overflow: visible !important;
 }
 
 /* Tabs */
@@ -234,10 +237,7 @@ button.createPost-Button {
     padding: 0px 0px;
   }
 
-  .createPost-container {
-    width: 100%;
-    padding: 0 0px;
-  }
+  
 
   .createPostHeader {
     font-size: 20px;

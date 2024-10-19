@@ -40,7 +40,8 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   transform: translateY(-150px);
-  background: var(--editprofile-details-card-bg);
+  /* background: var(--editprofile-details-card-bg); */
+  background-color: white;
 }
 .FreeSessionCard{
   display: flex;

@@ -71,11 +71,20 @@ const EditProfile = () => {
     country: dbcountry,
     languagesKnown: languages,
     beyincProfile: dbProfile,
+    expertise: dbExpertise,
+    industries: dbIndustires,
+    investmentRange: dbInvestmentRange,
+    stages: dbStages,
   } = useSelector((store) => store.auth.userDetails);
 
   const [dbCountry, setDbCountry] = useState("");
   const [dblanguages, setDblanguages] = useState([]);
   const [dbbeyincProfile, setBeyincProfile] = useState("");
+  const [industries, setIndustries] = useState([]);
+  const [Stages, setStages] = useState([]);
+  const [expertise, setExpertise] = useState([]);
+  const [investmentRange, setInvestmentRange] = useState(0);
+
   useEffect(() => {
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
@@ -85,9 +94,22 @@ const EditProfile = () => {
     if (dbcountry) setDbCountry(dbcountry);
     if (languages) setDblanguages(languages);
     if (dbProfile) setBeyincProfile(dbProfile);
+    if (dbExpertise) setExpertise(dbExpertise);
+    if (dbIndustires) setIndustries(dbIndustires);
+    if (dbInvestmentRange) setInvestmentRange(dbInvestmentRange);
+    if (dbStages) setStages(dbStages);
     setTotalEducationData(dbEducation);
     setTotalExperienceData(dbExperience);
-  }, [dbbio, dbEducation, dbExperience, dbSkills]);
+  }, [
+    dbbio,
+    dbEducation,
+    dbExperience,
+    dbSkills,
+    dbExpertise,
+    dbInvestmentRange,
+    dbStages,
+    dbIndustires,
+  ]);
 
   const socket = useRef();
   useEffect(() => {
@@ -139,6 +161,10 @@ const EditProfile = () => {
           languagesKnown,
           country,
           beyincProfile,
+          expertise,
+          industries,
+          stages,
+          investmentRange,
         } = response.data;
 
         // Set state if data exists
@@ -149,6 +175,10 @@ const EditProfile = () => {
         if (educationDetails) setEducationDetails(educationDetails);
         if (experienceDetails) setExperience(experienceDetails);
         if (skills) setSkills(skills);
+        if (expertise) setExpertise(expertise);
+        if (industries) setIndustries(industries);
+        if (investmentRange) setInvestmentRange(investmentRange);
+        if (stages) setStages(stages);
         setTotalEducationData(educationDetails);
         setTotalExperienceData(experienceDetails);
 
@@ -1779,7 +1809,8 @@ const EditProfile = () => {
                 <ReviewStars avg={averagereview} />
               </div>
             )} */}
-            {id == undefined && <div className="personaDetails">{email}</div>}
+            {/* {id == undefined && <div className="personaDetails">{email}</div>} */}
+            
             {id == undefined && (
               <div className="personaDetails">
                 {mobile}
@@ -1812,7 +1843,7 @@ const EditProfile = () => {
               </>
             )}
 
-            {userpage == true && (
+            {/* {userpage == true && ( */}
               <button
                 onClick={followerController}
                 className="mb-5 profileFollowBtn"
@@ -1821,7 +1852,7 @@ const EditProfile = () => {
                   ? "Unfollow"
                   : "Follow"}
               </button>
-            )}
+            {/* )} */}
 
             {/* {userpage === true &&
               connectStatus &&
@@ -1871,28 +1902,34 @@ const EditProfile = () => {
               <div>Following</div>
               <div>{followering.length}</div>
             </div>
-            <div className="mr-36 mt-3 font-bold flex">
-              <CiGlobe className="mr-3 text-lg" /> {dblanguages.join(", ")}
+            <div className=" mr-20 mt-3 font-bold flex">
+              {dblanguages.length > 0 && (
+                <>
+                  <CiGlobe className="mr-3 text-lg text-customPurple" /> {dblanguages.join(", ")}
+                </>
+              )}
             </div>
 
-            <div className="locationdetails">
-              <div>
-                <svg
-                  className="mt-3"
-                  width="25"
-                  height="25"
-                  viewBox="0 0 25 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20.3204 15.0939C21.0019 13.8147 21.3571 12.3871 21.3542 10.9377C21.3542 6.04756 17.3902 2.0835 12.5001 2.0835C7.60995 2.0835 3.64589 6.04756 3.64589 10.9377C3.64221 13.0264 4.38055 15.0485 5.72922 16.6434L5.73964 16.6564L5.74901 16.6668H5.72922L10.9834 22.245C11.1782 22.4517 11.4132 22.6164 11.6739 22.729C11.9347 22.8416 12.2157 22.8997 12.4998 22.8997C12.7838 22.8997 13.0649 22.8416 13.3257 22.729C13.5864 22.6164 13.8214 22.4517 14.0162 22.245L19.2709 16.6668H19.2511L19.2594 16.6569L19.2605 16.6559C19.298 16.6111 19.3353 16.566 19.3724 16.5205C19.7338 16.0765 20.0513 15.5991 20.3204 15.0939ZM12.5027 14.3226C11.6739 14.3226 10.879 13.9933 10.2929 13.4073C9.7069 12.8212 9.37766 12.0264 9.37766 11.1976C9.37766 10.3688 9.7069 9.5739 10.2929 8.98785C10.879 8.4018 11.6739 8.07256 12.5027 8.07256C13.3315 8.07256 14.1263 8.4018 14.7124 8.98785C15.2984 9.5739 15.6277 10.3688 15.6277 11.1976C15.6277 12.0264 15.2984 12.8212 14.7124 13.4073C14.1263 13.9933 13.3315 14.3226 12.5027 14.3226Z"
-                    fill="var(--followBtn-bg)"
-                  />
-                </svg>
+            {dbCountry && (
+              <div className="locationdetails">
+                <div>
+                  <svg
+                    className="mt-3"
+                    width="25"
+                    height="25"
+                    viewBox="0 0 25 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20.3204 15.0939C21.0019 13.8147 21.3571 12.3871 21.3542 10.9377C21.3542 6.04756 17.3902 2.0835 12.5001 2.0835C7.60995 2.0835 3.64589 6.04756 3.64589 10.9377C3.64221 13.0264 4.38055 15.0485 5.72922 16.6434L5.73964 16.6564L5.74901 16.6668H5.72922L10.9834 22.245C11.1782 22.4517 11.4132 22.6164 11.6739 22.729C11.9347 22.8416 12.2157 22.8997 12.4998 22.8997C12.7838 22.8997 13.0649 22.8416 13.3257 22.729C13.5864 22.6164 13.8214 22.4517 14.0162 22.245L19.2709 16.6668H19.2511L19.2594 16.6569L19.2605 16.6559C19.298 16.6111 19.3353 16.566 19.3724 16.5205C19.7338 16.0765 20.0513 15.5991 20.3204 15.0939ZM12.5027 14.3226C11.6739 14.3226 10.879 13.9933 10.2929 13.4073C9.7069 12.8212 9.37766 12.0264 9.37766 11.1976C9.37766 10.3688 9.7069 9.5739 10.2929 8.98785C10.879 8.4018 11.6739 8.07256 12.5027 8.07256C13.3315 8.07256 14.1263 8.4018 14.7124 8.98785C15.2984 9.5739 15.6277 10.3688 15.6277 11.1976C15.6277 12.0264 15.2984 12.8212 14.7124 13.4073C14.1263 13.9933 13.3315 14.3226 12.5027 14.3226Z"
+                      fill="var(--followBtn-bg)"
+                    />
+                  </svg>
+                </div>
+                <div className="mt-2">{dbCountry}</div>
               </div>
-              <div className="mt-2">{dbCountry}</div>
-            </div>
+            )}
 
             {twitter && (
               <div className="locationdetails">
@@ -1988,7 +2025,12 @@ const EditProfile = () => {
             beyincProfile === "cofounder" ||
             beyincProfile === "investor") && (
             <div>
-              <TabsAndInvestment />
+              <TabsAndInvestment
+                industries={industries}
+                stages={Stages}
+                expertise={expertise}
+                investmentRange={investmentRange}
+              />
             </div>
           )}
 
