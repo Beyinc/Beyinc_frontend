@@ -1224,6 +1224,15 @@ export const ApiServices = {
     });
   },
 
+  searchProfiles: (query) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/searchProfiles?query=${query}`) // Use query param
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  }
+
 };
 
 

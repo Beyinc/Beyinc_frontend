@@ -62,6 +62,16 @@ function TabPanel(props) {
 }
 
 const Navbar = () => {
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate1 = useNavigate();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate1(`/search?query=${searchQuery}`);
+    }
+  };
+
   const { email, role, userName, image, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
@@ -1181,9 +1191,17 @@ const Navbar = () => {
 
       <div class="search-container">
         <div class="search-icon">
-          <i class="fa fa-search"></i>
+          <i style={{cursor:"default"}} class="fa fa-search"></i>
         </div>
-        <input type="text" class="search-input" placeholder="Search" />
+        <form onSubmit={handleSearch}>
+        <input
+        type="text"
+        className="search-input"
+        placeholder="Search"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)} // Update search input value
+      />
+      </form>
       </div>
 
       <div className="menuIcons">
