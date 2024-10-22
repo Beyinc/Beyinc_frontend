@@ -70,7 +70,8 @@ function SearchResults() {
               className="bg-white p-5 mt-8 py-5 w-[250px] shadow-md flex flex-col justify-center items-center space-y-3"
             >
               <img
-                src={user.image.url}
+                // src={user.image.url}
+                src={user.image?.url ? user.image.url : "/profile.png"}
                 style={{
                   objectFit: "cover", 
                   borderRadius: "50%",
