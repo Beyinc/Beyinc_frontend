@@ -2,9 +2,11 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import SearchFilter from "./SearchFilter";
+import { useNavigate } from "react-router";
 
 function SearchResults() {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("query");
   const [users, setUsers] = useState([]);
@@ -59,29 +61,36 @@ function SearchResults() {
   }, [filters]);
 
   return (
-    <div className="flex flex-row space-x-20">
+    <div className="flex flex-row space-x-10">
       <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
-      <div className="mt-4">
+      <div className="mt-6 w-[1100px] bg-white p-8 py-8 rounded-lg" style={{ border: "1px solid lightgray" }}>
         <h1>Search Results for "{searchQuery}"</h1>
-        <ul>
+        <div className="flex space-x-6 ">
           {users.map((user) => (
             <div
-              key={user.id}
-              className="bg-white p-5 mt-8 py-5 w-[250px] shadow-md flex flex-col justify-center items-center space-y-3"
+              key={user._id}
+              style={{ border: "1px solid gainsboro" }}
+              className="bg-white hover:shadow-lg rounded-xl border border-gray-700 p-5 mt-8 py-5 w-[250px] flex flex-col justify-center items-center  "
             >
               <img
                 // src={user.image.url}
                 src={user.image?.url ? user.image.url : "/profile.png"}
+                onClick={() => navigate(`/user/${user?._id}`)}
                 style={{
-                  objectFit: "cover", 
+                  // position:"fixed",
+                  cursor:"pointer",
+                  objectFit: "cover",
                   borderRadius: "50%",
                   height: "150px",
                   width: "150px",
                 }}
                 alt="profile pic"
               />
-              <h2>{user.userName}</h2>
-              <p>{user.description || "I am a full-stack dev"}</p>{" "}
+              <h2 className="mt-3">{user.userName}</h2>
+             
+              {user.role && <h5 className="text-neutral-600 mt-1">{user.role}</h5>}
+              {user.beyincProfile && <h5 className="text-neutral-600 mt-1">{user.beyincProfile} at Beyinc</h5>}
+              <p className="mt-2 mb-2">{user.description || "I am a full-stack dev"}</p>{" "}
               <button
                 type="button"
                 className="flex items-center justify-center h-14 w-36 text-lg text-[#4f55c7] bg-[#4f55c7] px-1 rounded-full"
@@ -92,7 +101,7 @@ function SearchResults() {
               </button>
             </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
