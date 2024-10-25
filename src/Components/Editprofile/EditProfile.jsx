@@ -1810,7 +1810,7 @@ const EditProfile = () => {
               </div>
             )} */}
             {/* {id == undefined && <div className="personaDetails">{email}</div>} */}
-            
+
             {id == undefined && (
               <div className="personaDetails">
                 {mobile}
@@ -1844,14 +1844,14 @@ const EditProfile = () => {
             )}
 
             {/* {userpage == true && ( */}
-              <button
-                onClick={followerController}
-                className="mb-5 profileFollowBtn"
-              >
-                {followers.map((f) => f._id).includes(user_id)
-                  ? "Unfollow"
-                  : "Follow"}
-              </button>
+            <button
+              onClick={followerController}
+              className="mb-5 profileFollowBtn"
+            >
+              {followers.map((f) => f._id).includes(user_id)
+                ? "Unfollow"
+                : "Follow"}
+            </button>
             {/* )} */}
 
             {/* {userpage === true &&
@@ -1905,7 +1905,8 @@ const EditProfile = () => {
             <div className=" mr-20 mt-3 font-bold flex">
               {dblanguages.length > 0 && (
                 <>
-                  <CiGlobe className="mr-3 text-lg text-customPurple" /> {dblanguages.join(", ")}
+                  <CiGlobe className="mr-3 text-lg text-customPurple" />{" "}
+                  {dblanguages.join(", ")}
                 </>
               )}
             </div>
@@ -3693,11 +3694,31 @@ const EditProfile = () => {
                         <label className="Input-Label">
                           College/University*{" "}
                           {tempEducationDetails.grade !== "SSC" &&
-                            tempEducationDetails.grade !== "" &&
-                            "(Type 3 characters)"}
+                            tempEducationDetails.grade !== ""}
                         </label>
                       </div>
-                      <div className="Ed_Input_Fields">
+                      <input
+                        type="text"
+                        name="college"
+                        className="w-[270px]"
+                        value={tempEducationDetails.college} 
+                        onChange={handleEducationChange} 
+                      />
+                      {/* <input
+                            type="text"
+                            name="college/uni"
+                            className={
+                              tempExperienceDetails.institute === ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
+                            value={tempExperienceDetails.institute}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your College/Universtiy name"
+                          /> */}
+
+                      {/* <div className="Ed_Input_Fields">
                         {tempEducationDetails.grade == "SSC" ||
                         tempEducationDetails.grade == "" ? (
                           <input
@@ -3749,10 +3770,10 @@ const EditProfile = () => {
                             <option value={u.name}>{u.name}</option>
                           ))}
                         </select>
-                      )} */}
+                      )} 
                           </>
                         )}
-                      </div>
+                      </div>  */}
                     </div>
 
                     <div>

@@ -35,7 +35,7 @@ const SearchFilter = ({ FilteredSearchProfiles}) => {
       <div className="bg-white ml-5 p-5 mt-5 rounded-lg w-[300px] h-[500px] shadow-md">
         <h2>Filter</h2>
         
-        <h3 className="mt-6 mb-2">Tags</h3>
+        <h3 className="mt-6 mb-2">Role Type</h3>
         <div className="relative">
           <button
             className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
@@ -53,7 +53,7 @@ const SearchFilter = ({ FilteredSearchProfiles}) => {
             <input
               type="text"
               className="w-60 mt-3"
-              placeholder="Search Stage"
+              placeholder="Search Role"
               value={entityTitles}
               onChange={(e) => setEntityTitles(e.target.value)} // Update state with string input
             />

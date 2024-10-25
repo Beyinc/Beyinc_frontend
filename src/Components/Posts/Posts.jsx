@@ -173,6 +173,19 @@ const Posts = () => {
   const [tags, setTags] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState("");
+  const [checkedValues, setCheckedValues] = useState({
+    public: false,
+    private: false,
+  });
+
+  // Handle checkbox change
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setCheckedValues((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
 
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
@@ -186,36 +199,34 @@ const Posts = () => {
   );
 
   useEffect(() => {
-    console.log(people, selectedSortOption, selectedTags);
+    console.log(people, selectedSortOption, selectedTags, checkedValues);
 
     const fetchFilteredPosts = async () => {
       try {
-        // Send data to the backend
-        const response = await ApiServices.getFilterPosts({
-          tags: selectedTags, // Send selected tags
-          sortOption: selectedSortOption, // Send selected sort option
-          people: people, // Send the people filter
-        });
+        const filterData = {
+          tags: selectedTags, // Selected tags
+          sortOption: selectedSortOption, // Selected sort option
+          people: people, // People filter
+        };
 
-        // Handle successful fetching of posts
-        console.log("Filtered posts:", response.data); // Log the filtered posts
+        // Add filters based on checkbox states
+        if (checkedValues.public) {
+          filterData.public = true; // Include public filter if checked
+        }
+        if (checkedValues.private) {
+          filterData.private = true; // Include private filter if checked
+        }
 
+        const response = await ApiServices.getFilterPosts(filterData);
+        console.log("Filtered posts:", response.data);
         setFilteredPosts(response.data);
       } catch (error) {
-        // Handle error
         console.error("Error filtering posts:", error);
       }
     };
 
-    // Call the fetchFilteredPosts function
-    if (people.length > 0 || selectedTags.length > 0 || selectedSortOption.length > 0) {
-      // Ensure there are selected categories before fetching
-      fetchFilteredPosts();
-    } else {
-      setFilteredPosts([]);
-    }
-  }, [people, selectedTags, selectedSortOption]); // Add selectedCategories as a dependency
-
+    fetchFilteredPosts(); // Call the function
+  }, [people, selectedSortOption, selectedTags, checkedValues]);
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -412,6 +423,7 @@ const Posts = () => {
                 ))}
               </div>
             )}
+
             {/* <h5>Location</h5>
             <div className="checkbox">
               <input type="checkbox" id="delhi" name="location" value="Delhi" />
@@ -594,12 +606,37 @@ const Posts = () => {
             {/* <span class="see-all">See All</span> */}
             <hr className=" mt-4 mb-6" />
 
+            <h4 className="mt-3 mb-2">Post Type</h4>
+
+            <label>
+              <input
+                type="checkbox"
+                name="public"
+                className="mt-1 w-4 h-4"
+                checked={checkedValues.public}
+                onChange={handleCheckboxChange}
+              />
+              <span className="text-sm mt-1">Public Post</span>
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="private"
+                className="mt-1 w-4 h-4"
+                checked={checkedValues.private}
+                onChange={handleCheckboxChange}
+              />
+              <span className="text-sm mt-1">Private Post</span>
+            </label>
+            <hr className=" mt-4 mb-6" />
+
             <h4 className="mt-3 mb-2">Sort by</h4>
             <select
-            value={selectedSortOption}
+              value={selectedSortOption}
               onChange={(event) => setSelectedSortOption(event.target.value)}
             >
-               <option value="">Select an option</option>
+              <option value="">Select an option</option>
               <option value="recent">Recent</option>
             </select>
           </div>
@@ -648,7 +685,12 @@ const Posts = () => {
             {" "}
             <h4 className="label">Suggestions for you</h4>
             <span
-              style={{ width:" 90px",  color: "gray", fontSize: "14px", cursor: "pointer" }}
+              style={{
+                width: " 90px",
+                color: "gray",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
               onClick={() => {
                 navigate("/searchusers");
               }}

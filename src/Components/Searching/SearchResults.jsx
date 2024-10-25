@@ -64,7 +64,7 @@ function SearchResults() {
     <div className="flex flex-row space-x-10">
       <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
       <div className="mt-6 w-[1100px] bg-white p-8 py-8 rounded-lg" style={{ border: "1px solid lightgray" }}>
-        <h1>Search Results for "{searchQuery}"</h1>
+        <h3>Search Results for "{searchQuery}"</h3>
         <div className="flex space-x-6 ">
           {users.map((user) => (
             <div
