@@ -1613,6 +1613,24 @@ const EditProfile = () => {
     try {
       await ApiServices.SaveData(allData);
       alert("Data saved successfully!");
+      // Check if any document fields are provided
+      const { resume, achievements, expertise, working, degree } = changeResume;
+
+      if (resume || achievements || expertise || working || degree) {
+        const documentData = {
+          userId: user_id,
+          resume: resume,
+          achievements: achievements,
+          expertise: expertise,
+          working: working,
+          degree: degree,
+        };
+        console.log("saving document with id " + user_id);
+
+        // Call the SaveDocuments API
+        await ApiServices.SaveDocuments(documentData);
+        alert("Documents saved successfully!");
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");
@@ -3701,8 +3719,8 @@ const EditProfile = () => {
                         type="text"
                         name="college"
                         className="w-[270px]"
-                        value={tempEducationDetails.college} 
-                        onChange={handleEducationChange} 
+                        value={tempEducationDetails.college}
+                        onChange={handleEducationChange}
                       />
                       {/* <input
                             type="text"

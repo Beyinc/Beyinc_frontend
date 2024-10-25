@@ -1222,4 +1222,17 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  SaveDocuments: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveDocuments`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };

@@ -331,10 +331,13 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
         </div>
 
         {/* post desc */}
-        <div className="postDescContainer">
+        <div className="postDescContainer"
+         onClick={() => navigate(`/posts/${post?._id}`)}
+        >
+          
           <div
             className="postDesc"
-            onClick={() => navigate(`/posts/${post?._id}`)}
+           
           >
             <b>{post?.postTitle}</b>
           </div>
