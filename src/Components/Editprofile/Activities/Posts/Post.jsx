@@ -205,16 +205,14 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                 navigate(`/user/${post?.createdBy?._id}`);
               }}
             >
-              <img
-                src={
-                  post?.createdBy?.image !== "" &&
-                  post?.createdBy?.image !== undefined &&
-                  post?.createdBy?.image?.url !== ""
-                    ? post?.createdBy?.image?.url
-                    : "/profile.png"
-                }
-                alt=""
-              />
+          
+                {post?.createdBy?.image?.url ? (
+                      <img
+                        src={post.createdBy.image.url}
+                        alt=""
+                      />
+                    ) : null}
+
             </div>
 
             <div className="PostDetailsContainer">
@@ -360,22 +358,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
             ))}
           </div>
           <div className="PostimageContainer">
-            {/* {post?.image !== "" &&
-              post?.image !== undefined &&
-              post?.image?.url !== "" && (
-                <img
-                  src={
-                    post?.image !== "" &&
-                    post?.image !== undefined &&
-                    post?.image?.url !== ""
-                      ? post?.image?.url
-                      : "/profile.png"
-                  }
-                  style={{ objectFit: "contain" }}
-                  alt=""
-                  onClick={() => navigate(`/posts/${post?._id}`)}
-                />
-              )} */}
+          
 
             {post?.image?.url && ( // Check if the image URL is available
               <img
