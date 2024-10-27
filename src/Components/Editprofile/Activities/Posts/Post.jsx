@@ -228,8 +228,27 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                   post?.createdBy?.userName?.slice(1)}
               </div>
               <div className="postCardRole">{post?.createdBy?.role}</div>
-              <div className="postCardRole">
-                {MMDDYYFormat(post?.updatedAt)}
+              <div className="flex flex-row">
+                <div className="postCardRole">
+                  {MMDDYYFormat(post?.updatedAt)}
+                </div>
+                <div>
+                  {post.visibility && (
+                    <div>
+                      {post.visibility === "public" ? (
+                        <Icon
+                          icon="ic:round-people-alt"
+                          className="text-xl ml-3 text-neutral-600"
+                        />
+                      ) : post.visibility === "private" ? (
+                        <Icon
+                          className="text-xl ml-3 text-neutral-600"
+                          icon="ri:chat-private-line"
+                        />
+                      ) : null}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -269,18 +288,6 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                   </svg>
                 </div>
               </div>
-              {post.visibility && (
-                <div>
-                  {post.visibility === "public" ? (
-                    <Icon
-                      icon="material-symbols:public"
-                      className="text-xl ml-5"
-                    />
-                  ) : post.visibility === "private" ? (
-                    <Icon className="text-xl ml-5" icon="uil:lock" />
-                  ) : null}
-                </div>
-              )}
             </div>
 
             <div
@@ -324,10 +331,13 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
         </div>
 
         {/* post desc */}
-        <div className="postDescContainer">
+        <div className="postDescContainer"
+         onClick={() => navigate(`/posts/${post?._id}`)}
+        >
+          
           <div
             className="postDesc"
-            onClick={() => navigate(`/posts/${post?._id}`)}
+           
           >
             <b>{post?.postTitle}</b>
           </div>
@@ -350,7 +360,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
             ))}
           </div>
           <div className="PostimageContainer">
-            {post?.image !== "" &&
+            {/* {post?.image !== "" &&
               post?.image !== undefined &&
               post?.image?.url !== "" && (
                 <img
@@ -365,7 +375,16 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                   alt=""
                   onClick={() => navigate(`/posts/${post?._id}`)}
                 />
-              )}
+              )} */}
+
+            {post?.image?.url && ( // Check if the image URL is available
+              <img
+                src={post.image.url}
+                style={{ objectFit: "contain" }}
+                alt=""
+                onClick={() => navigate(`/posts/${post?._id}`)}
+              />
+            )}
           </div>
           <div className="likeCommentDetails">
             <div className="likeTotal">
