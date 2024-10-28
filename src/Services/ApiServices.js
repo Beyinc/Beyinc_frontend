@@ -841,10 +841,6 @@ export const ApiServices = {
     });
   },
 
-
-
-
-
   createPost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -871,7 +867,6 @@ export const ApiServices = {
     });
   },
 
-
   getUsersPost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -884,7 +879,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   getAllPosts: (obj) => {
     return new Promise((resolve, reject) => {
@@ -899,7 +893,6 @@ export const ApiServices = {
     });
   },
 
-
   getTopTrendingPosts: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -912,7 +905,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   getRecommendedUsers: (obj) => {
     return new Promise((resolve, reject) => {
@@ -927,7 +919,6 @@ export const ApiServices = {
     });
   },
 
-  
   getPost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -940,7 +931,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   likePost: (obj) => {
     return new Promise((resolve, reject) => {
@@ -955,7 +945,6 @@ export const ApiServices = {
     });
   },
 
-
   dislikePost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -968,7 +957,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   requestIntoOpenDiscussion: (obj) => {
     return new Promise((resolve, reject) => {
@@ -983,7 +971,6 @@ export const ApiServices = {
     });
   },
 
-
   updaterequestIntoOpenDiscussion: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -997,9 +984,7 @@ export const ApiServices = {
     });
   },
 
-  
-
- getPostRequestDiscussion: (obj) => {
+  getPostRequestDiscussion: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/posts/getPostRequestDiscussion`, obj)
@@ -1024,10 +1009,6 @@ export const ApiServices = {
     });
   },
 
-
-
-
-
   getPostComments: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1040,7 +1021,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   addPostComment: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1092,7 +1072,6 @@ export const ApiServices = {
     });
   },
 
-
   addReport: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1105,7 +1084,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   updateReport: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1158,7 +1136,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   SaveData: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1224,7 +1201,38 @@ export const ApiServices = {
     });
   },
 
+  searchProfiles: (query) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/searchProfiles?query=${query}`) // Use query param
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  },
+
+  FilterSearchProfiles: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/filterSearchProfiles`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  SaveDocuments: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveDocuments`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };
-
-
-

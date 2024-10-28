@@ -1616,6 +1616,24 @@ const EditProfile = () => {
     try {
       await ApiServices.SaveData(allData);
       alert("Data saved successfully!");
+      // Check if any document fields are provided
+      const { resume, achievements, expertise, working, degree } = changeResume;
+
+      if (resume || achievements || expertise || working || degree) {
+        const documentData = {
+          userId: user_id,
+          resume: resume,
+          achievements: achievements,
+          expertise: expertise,
+          working: working,
+          degree: degree,
+        };
+        console.log("saving document with id " + user_id);
+
+        // Call the SaveDocuments API
+        await ApiServices.SaveDocuments(documentData);
+        alert("Documents saved successfully!");
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");
@@ -1813,7 +1831,7 @@ const EditProfile = () => {
               </div>
             )} */}
             {/* {id == undefined && <div className="personaDetails">{email}</div>} */}
-            
+
             {id == undefined && (
               <div className="personaDetails">
                 {mobile}
@@ -1847,14 +1865,14 @@ const EditProfile = () => {
             )}
 
             {/* {userpage == true && ( */}
-              <button
-                onClick={followerController}
-                className="mb-5 profileFollowBtn"
-              >
-                {followers.map((f) => f._id).includes(user_id)
-                  ? "Unfollow"
-                  : "Follow"}
-              </button>
+            <button
+              onClick={followerController}
+              className="mb-5 profileFollowBtn"
+            >
+              {followers.map((f) => f._id).includes(user_id)
+                ? "Unfollow"
+                : "Follow"}
+            </button>
             {/* )} */}
 
             {/* {userpage === true &&
@@ -1908,7 +1926,8 @@ const EditProfile = () => {
             <div className=" mr-20 mt-3 font-bold flex">
               {dblanguages.length > 0 && (
                 <>
-                  <CiGlobe className="mr-3 text-lg text-customPurple" /> {dblanguages.join(", ")}
+                  <CiGlobe className="mr-3 text-lg text-customPurple" />{" "}
+                  {dblanguages.join(", ")}
                 </>
               )}
             </div>
@@ -3696,11 +3715,31 @@ const EditProfile = () => {
                         <label className="Input-Label">
                           College/University*{" "}
                           {tempEducationDetails.grade !== "SSC" &&
-                            tempEducationDetails.grade !== "" &&
-                            "(Type 3 characters)"}
+                            tempEducationDetails.grade !== ""}
                         </label>
                       </div>
-                      <div className="Ed_Input_Fields">
+                      <input
+                        type="text"
+                        name="college"
+                        className="w-[270px]"
+                        value={tempEducationDetails.college}
+                        onChange={handleEducationChange}
+                      />
+                      {/* <input
+                            type="text"
+                            name="college/uni"
+                            className={
+                              tempExperienceDetails.institute === ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
+                            value={tempExperienceDetails.institute}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your College/Universtiy name"
+                          /> */}
+
+                      {/* <div className="Ed_Input_Fields">
                         {tempEducationDetails.grade == "SSC" ||
                         tempEducationDetails.grade == "" ? (
                           <input
@@ -3752,10 +3791,10 @@ const EditProfile = () => {
                             <option value={u.name}>{u.name}</option>
                           ))}
                         </select>
-                      )} */}
+                      )} 
                           </>
                         )}
-                      </div>
+                      </div>  */}
                     </div>
 
                     <div>

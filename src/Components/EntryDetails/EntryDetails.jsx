@@ -91,6 +91,14 @@ const EntryDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!selectedCategory || !username || !skills || skills.length === 0) {
+      alert(
+        "Please fill in the required fields: Category, Username, and Skills."
+      );
+      return;
+    }
+
     console.log(selectedCategory, username, headline, skills, interests, image);
     try {
       await ApiServices.updateuserProfileImage({
@@ -109,8 +117,8 @@ const EntryDetails = () => {
         headline,
         skills,
         interests,
-        selectedCategory
-     } );
+        selectedCategory,
+      });
       alert("Data saved successfully!");
       window.location.href = "/posts";
     } catch (error) {
@@ -123,7 +131,10 @@ const EntryDetails = () => {
     <div className="bg-customWhite my-5 mx-20 shadow-[0_3px_12px_rgba(0,0,0,0.1)]">
       <div className="flex flex-col py-10 px-20">
         <h2 className="font-bold mb-5 pl-6">Tell us who you are?</h2>
-        <BoxCategories onCategoryClick={onCategoryClick} />
+        <BoxCategories
+          onCategoryClick={onCategoryClick}
+          selectedCategory={selectedCategory}
+        />
         <h2 className="font-bold mb-5 pl-6 mt-11">User Name*</h2>
         <input
           type="text"
@@ -132,7 +143,7 @@ const EntryDetails = () => {
           value={username}
           onChange={handleUsernameChange}
         />
-        <h2 className="font-bold mb-5 pl-6 mt-11">Headline*</h2>
+        <h2 className="font-bold mb-5 pl-6 mt-11">Headline</h2>
         <input
           type="text"
           className="ml-6 w-[840px] h-[20px] p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"

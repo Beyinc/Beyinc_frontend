@@ -46,6 +46,7 @@ import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBooking
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
+import SearchResults from "./Components/Searching/SearchResults";
 
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
@@ -312,6 +313,9 @@ const App = () => {
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
+
+        <Route path="/search" Component={AuthHoc(SearchResults)} />
+
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
           <Route
