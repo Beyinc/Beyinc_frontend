@@ -110,8 +110,15 @@ const AllUsers = () => {
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
     ApiServices.getAllUsers({ type: "" }).then((res) => {
-      // console.log(res.data);
-      setData(res.data);
+      console.log(JSON.stringify(res.data));
+      const filteredUsers = res.data.filter(user => 
+        user.beyincProfile && user.beyincProfile.some(profile => profile.trim() !== '')
+      );
+       
+      console.log(filteredUsers);
+      
+
+      setData(filteredUsers);
       dispatch(setLoading({ visible: "no" }));
     });
   }, []);
@@ -269,14 +276,16 @@ const fetchUsers = async () => {
       // Filter users to only include those with the desired fields
       const filteredUsers = response.data.filter((user) => {
         return (
-            user.beyincProfile || // Check if beyincProfile is present
+            (user.beyincProfile && user.beyincProfile.some(profile => profile.trim() !== '')) || // Check if beyincProfile has non-empty values
             (user.industries && user.industries.length > 0) || // Check if industries array is not empty
             (user.expertise && user.expertise.length > 0) || // Check if expertise array is not empty
-            (user.stages && user.stages.length > 0)  // Check if stages array is not empty
-            // || (user.investmentRange !== undefined) 
+            (user.stages && user.stages.length > 0) // Check if stages array is not empty
+            // || (user.investmentRange !== undefined)
         );
     });
+    
     setUsers(filteredUsers);
+    
 
   } catch (error) {
       console.error('Error fetching users:', error);
