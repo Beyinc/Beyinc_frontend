@@ -47,7 +47,7 @@ import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/Mentor
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
 import SearchResults from "./Components/Searching/SearchResults";
-
+import payOut from "./Components/PayOut/payOut";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -309,7 +309,7 @@ const App = () => {
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
-          {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
+       
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
@@ -349,6 +349,7 @@ const App = () => {
             Component={AdminDeciderHoc(EditProfile)}
           />
 
+          <Route path="/payout" Component={AdminDeciderHoc(payOut)} />
 
           <Route
             path="/postReports"
