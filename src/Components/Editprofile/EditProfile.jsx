@@ -1823,9 +1823,11 @@ const EditProfile = () => {
               {role} {role == "Mentor" && mentorCategories}
             </div>
 
-            <div className="font-bold text-customPurple mt-3 mb-1">
-              {dbbeyincProfile} at beyinc
-            </div>
+            {dbbeyincProfile && (
+              <div className="font-bold text-customPurple mt-3 mb-1">
+                {dbbeyincProfile} at Beyinc
+              </div>
+            )}
 
             {/* {id !== undefined && (
               <div className="editProfile-stars">
@@ -2032,7 +2034,7 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(dbbeyincProfile[0] === "Mentor" || dbbeyincProfile[0] === "Cofounder") && (
+        {(dbbeyincProfile === "Mentor" || dbbeyincProfile === "Co-Founder") && (
             <div className="BookSessionCard">
               <BookSession
                 name={name}
@@ -2045,9 +2047,9 @@ const EditProfile = () => {
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-          {(dbbeyincProfile[0] === "Mentor" ||
-            dbbeyincProfile[0] === "Cofounder" ||
-            dbbeyincProfile[0] === "Investor") && (
+          {(dbbeyincProfile === "Mentor" ||
+            dbbeyincProfile === "Co-Founder" ||
+            dbbeyincProfile === "Investor") && (
             <div>
               <TabsAndInvestment
                 industries={industries}
