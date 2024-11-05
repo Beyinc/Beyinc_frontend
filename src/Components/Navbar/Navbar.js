@@ -951,7 +951,7 @@ const Navbar = () => {
       </ListItem>
 
       {/* Mentor Bookings - Render only if role === "Mentor" */}
-      {(beyincProfile === "Mentor" || beyincProfile === "Cofounder") && (
+      {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
         <ListItem
           button
           key={beyincProfile === "Mentor" ? "mentorBookings" : "cofounderBookings"}
