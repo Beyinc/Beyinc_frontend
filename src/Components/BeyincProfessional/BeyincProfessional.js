@@ -95,7 +95,7 @@ const BeyincProfessional = () => {
 
     // Prepare the data to send to the API
     const data = {
-      beyincProfile: formValues.beyincProfile,
+      beyincProfile: formValues.beyincProfile[0],
       expertise: formValues.expertise.flat(), 
       industries: formValues.industries,
       stages: formValues.stages,
@@ -274,7 +274,7 @@ const BeyincProfessional = () => {
           </List>
         </Collapse>
       </FormControl>
-      <h3 className="mb-6 mt-10 font-serif text-xl">Stages*</h3>
+      <h3 className="mb-6 mt-10 font-serif text-xl">Stage*</h3>
       <FormControl fullWidth>
         
         <TextField
@@ -316,7 +316,7 @@ const BeyincProfessional = () => {
           </List>
         </Collapse>
       </FormControl>
-      <h3 className="mb-6 mt-10 font-serif text-xl">Investment Range*</h3>
+      <h3 className="mb-6 mt-10 font-serif text-xl">Investment Range</h3>
       <FormControl fullWidth>
     <TextField
       // label="Investment Range"

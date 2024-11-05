@@ -62,7 +62,7 @@ const EditProfile = () => {
   } = useSelector((store) => store.auth.loginDetails);
 
   const {
-    beyincProfile,
+
     bio: dbbio,
     userName: dbuserName,
     educationDetails: dbEducation,
@@ -86,6 +86,8 @@ const EditProfile = () => {
   const [Stages, setStages] = useState([]);
   const [expertise, setExpertise] = useState([]);
   const [investmentRange, setInvestmentRange] = useState(0);
+
+   console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
     if (dbbio) setBio(dbbio);
@@ -1821,9 +1823,11 @@ const EditProfile = () => {
               {role} {role == "Mentor" && mentorCategories}
             </div>
 
-            <div className="font-bold text-customPurple mt-3 mb-1">
-              {dbbeyincProfile} at beyinc
-            </div>
+            {dbbeyincProfile && (
+              <div className="font-bold text-customPurple mt-3 mb-1">
+                {dbbeyincProfile} at Beyinc
+              </div>
+            )}
 
             {/* {id !== undefined && (
               <div className="editProfile-stars">
@@ -2030,7 +2034,7 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(dbbeyincProfile === "Mentor" || dbbeyincProfile === "Cofounder") && (
+        {(dbbeyincProfile === "Mentor" || dbbeyincProfile === "Co-Founder") && (
             <div className="BookSessionCard">
               <BookSession
                 name={name}
@@ -2044,7 +2048,7 @@ const EditProfile = () => {
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
           {(dbbeyincProfile === "Mentor" ||
-            dbbeyincProfile === "Cofounder" ||
+            dbbeyincProfile === "Co-Founder" ||
             dbbeyincProfile === "Investor") && (
             <div>
               <TabsAndInvestment
