@@ -67,6 +67,7 @@ const SingleUserDetails = ({
   return (
     <>
       <div className={"user-card-main-container"}>
+        <div className="flex flex-col xl:flex-row justify-center items-center">
         <div className="user-card-details">
           <div className="user-card-img-rating-container">
             <div className="user-card-image" onClick={openUser}>
@@ -123,10 +124,10 @@ const SingleUserDetails = ({
                   {/* )} */}
                 </span>
               </div>
-              <div className="flex space-x-12 ">
+              <div className="flex flex-col md:flex-row md:space-x-12 ">
                 <span className="text-gray-500 font-semibold">{user.role}</span>
                 <span className="text-gray-500 font-semibold flex">
-                  <CiGlobe className="mr-3 text-lg" /> English,French
+                  <CiGlobe className="md:mr-3 text-lg" /> English,French
                 </span>
               </div>
 
@@ -148,15 +149,15 @@ const SingleUserDetails = ({
                 Profile not updated
               </span>
             )} */}
-              <span className="skills">{user.skills?.join(", ")}</span>
-              <span className="mt-2">
-                {user.bio ? user.bio.slice(0, 140) : "No bio available"}
+              <span className="skills ">{user.skills?.join(", ")}</span>
+              <span className="mt-2 2xl:w-[100%] lg:w-[60%] md:[60%] sm:[50%] w-[30%]">
+                {user.bio ? user.bio.slice(0, 100) + " . . ." : "No bio available"}
               </span>
             </div>
 
-            <div className=" ml-6 mt-4  tabsandinvestement">
+            <div className="mt-4  tabsandinvestement">
               <div>
-                <div className="tabs-container">
+                <div className=" tabs-container">
                   <div
                     className={`Ttab ${
                       activeTab === "Expertise" ? "Tactive" : ""
@@ -195,7 +196,7 @@ const SingleUserDetails = ({
             </div>
           </div>
         </div>
-        <div class="w-px h-72 bg-neutral-300 relative right-10 "></div>
+        <div class="w-px h-72 bg-neutral-300 relative right-10 hidden md:hidden lg:hidden xl:hidden 2xl:block"></div>
 
         <div className="user-card-actions">
           <div className="mt-10">
@@ -253,6 +254,7 @@ const SingleUserDetails = ({
                 </button>
               ))
           } */}
+        </div>
         </div>
       </div>
     </>
