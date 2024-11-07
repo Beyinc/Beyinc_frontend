@@ -111,8 +111,16 @@ const AllUsers = () => {
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
     ApiServices.getAllUsers({ type: "" }).then((res) => {
-      // console.log(res.data);
-      setData(res.data);
+      console.log(JSON.stringify(res.data));
+      const filteredUsers = res.data.filter(user => 
+        user.beyincProfile && user.beyincProfile.trim() !== ''
+    );
+    
+       
+      console.log(filteredUsers);
+      
+
+      setData(filteredUsers);
       dispatch(setLoading({ visible: "no" }));
     });
   }, []);
@@ -268,6 +276,7 @@ const AllUsers = () => {
       // Filter users to only include those with the desired fields
       const filteredUsers = response.data.filter((user) => {
         return (
+<<<<<<< HEAD
           user.beyincProfile || // Check if beyincProfile is present
           (user.industries && user.industries.length > 0) || // Check if industries array is not empty
           (user.expertise && user.expertise.length > 0) || // Check if expertise array is not empty
@@ -280,6 +289,24 @@ const AllUsers = () => {
       console.error("Error fetching users:", error);
     }
   };
+=======
+          (user.beyincProfile && user.beyincProfile.trim() !== '') || // Check if beyincProfile is a non-empty string
+          (user.industries && user.industries.length > 0) || // Check if industries array is not empty
+          (user.expertise && user.expertise.length > 0) || // Check if expertise array is not empty
+          (user.stages && user.stages.length > 0) // Check if stages array is not empty
+          // || (user.investmentRange !== undefined) // Uncomment if needed
+      );
+      
+    });
+    
+    setUsers(filteredUsers);
+    
+
+  } catch (error) {
+      console.error('Error fetching users:', error);
+  }
+};
+>>>>>>> 1f0b764da5f5c75371189beb062debd51d6e827b
 
   useEffect(() => {
     fetchUsers();
