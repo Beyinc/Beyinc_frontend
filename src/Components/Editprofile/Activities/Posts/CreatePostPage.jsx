@@ -428,7 +428,7 @@ const CreatePostPage = () => {
                       key={p.value}
                       className="individualPostTypes"
                       onClick={() => {
-                        if (p.value !== "General post") {
+                        if (p.value !== "General Post") {
                           setposttype(p.value);
                         } else {
                           setposttype(p.value);

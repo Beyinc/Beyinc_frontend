@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
 
-const Post = ({ post, setAllPosts, screenDecider }) => {
+const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
@@ -48,24 +48,47 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
     }
   }, [post?._id]);
 
-  const likingpost = async () => {
-    // dispatch(setLoading({ visible: "yes" }));
+  // useEffect(() => {
+  //   console.log("Updated posts:", post);
+  // }, [post,allPosts]);
+  
 
-    await ApiServices.likePost({ id: post?._id })
-      .then((res) => {
-        setAllPosts((prev) => [
-          ...prev.map((p) => (p._id == post?._id ? res.data : p)),
-        ]);
-      })
-      .catch((err) => {
+  const likingpost = async () => {
+    
+    try {
+      const res = await ApiServices.likePost({ id: post?._id });
+  
+      setAllPosts((prev) => {
+        // Ensure we're not mutating the state directly
+        const updatedPosts = prev.map((p) => {
+          // Log the post before updating
+          if (p._id === post?._id) {
+            console.log("Liked Post:", res.data); // Log only the post that is being liked
+            return { ...p, ...res.data }; // Ensure a new object is returned (immutability)
+          }
+          return p; // Return other posts unchanged
+        });
+  
+        // Log updated posts after mapping
+        console.log("Updated Posts After Map:", updatedPosts);
+        return updatedPosts; // Return the updated posts list
+      });
+   
+      // setAllPosts((prev) =>
+      //   prev.map((p) => (p._id === post?._id ? res.data : p))
+      // );
+      
+    } catch (err) {
+      dispatch(
         setToast({
-          message: "Error occured when updating Pitch",
+          message: "Error occurred when liking the post",
           bgColor: ToastColors.failure,
           visible: "yes",
-        });
-      });
-    // dispatch(setLoading({ visible: "no" }));
+        })
+      );
+    }
   };
+
   const dislikePost = async () => {
     // dispatch(setLoading({ visible: "yes" }));
 
@@ -205,13 +228,23 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                 navigate(`/user/${post?.createdBy?._id}`);
               }}
             >
+                            <img
+                src={
+                  post?.createdBy?.image !== "" &&
+                  post?.createdBy?.image !== undefined &&
+                  post?.createdBy?.image?.url !== ""
+                    ? post?.createdBy?.image?.url
+                    : "/profile.png"
+                }
+                />
+
           
-                {post?.createdBy?.image?.url ? (
+                {/* {post?.createdBy?.image?.url ? (
                       <img
                         src={post.createdBy.image.url}
                         alt=""
                       />
-                    ) : null}
+                    ) : null} */}
 
             </div>
 
@@ -330,8 +363,14 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
 
         {/* post desc */}
         <div className="postDescContainer"
-         onClick={() => navigate(`/posts/${post?._id}`)}
+        //  onClick={() => navigate(`/posts/${post?._id}`)}
         >
+
+              {/* Post container */}
+          <div        onClick={() => navigate(`/posts/${post?._id}`)} >  
+                 
+
+       
           
           <div
             className="postDesc"
@@ -358,8 +397,24 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
             ))}
           </div>
           <div className="PostimageContainer">
-          
+                      {post?.image !== "" &&
+              post?.image !== undefined &&
+              post?.image?.url !== "" && (
+                <img
+                  src={
+                    post?.image !== "" &&
+                    post?.image !== undefined &&
+                    post?.image?.url !== ""
+                      ? post?.image?.url
+                      : "/profile.png"
+                  }
+                  style={{ objectFit: "contain" }}
+                  alt=""
+                  onClick={() => navigate(`/posts/${post?._id}`)}
+                />
+              )}
 
+{/* 
             {post?.image?.url && ( // Check if the image URL is available
               <img
                 src={post.image.url}
@@ -367,7 +422,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
                 alt=""
                 onClick={() => navigate(`/posts/${post?._id}`)}
               />
-            )}
+            )} */}
           </div>
           <div className="likeCommentDetails">
             <div className="likeTotal">
@@ -416,6 +471,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
               </div>
             </div>
             <div className="commentTotal">{allComments?.length} comments</div>
+          </div>
           </div>
           <div className="actionsHolder">
             <div className="actionsHolder-leftContent">
@@ -466,7 +522,7 @@ const Post = ({ post, setAllPosts, screenDecider }) => {
               {/* COMMENT ACTION */}
               <div
                 className="likeActionHolder"
-                onClick={() => navigate(`/posts/${post?._id}`)}
+                // onClick={() => navigate(`/posts/${post?._id}`)}
               >
                 <div>
                   <svg

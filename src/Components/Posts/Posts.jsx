@@ -647,6 +647,7 @@ const Posts = () => {
         <div className="allPostShowContainer">
           {(filteredPosts.length > 0 ? filteredPosts : allPosts).map((post) => (
             <Post
+              allPosts={allPosts}
               post={post}
               setAllPosts={setAllPosts}
               screenDecider={"home"}
