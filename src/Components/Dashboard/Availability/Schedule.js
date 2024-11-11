@@ -208,14 +208,7 @@ export default function AvailabilityForm() {
             label="Schedule"
             className={`available-tab ${activeTab === 2 ? 'available-tab-active' : ''}`}
           />
-           <Tab
-              label="Transactions"
-              className={`available-tab ${activeTab === 0 ? 'available-tab-active' : ''}`}
-            />
-            <Tab
-              label="WithDrawals"
-              className={`available-tab ${activeTab === 0 ? 'available-tab-active' : ''}`}
-            />
+        
         </Tabs>
 
         {/* Divider Below Tabs */}
@@ -439,46 +432,12 @@ export default function AvailabilityForm() {
                         unavailableDates={unavailableDates}
                         setUnavailableDates={setUnavailableDates}
                       />
-
                   </Box>
                 </Box>
               </Grid>
-         
             </Grid>
-
-        
           </Box>
-        )}
-        {activeTab === 3 && (
-         <TableContainer component={Paper}>
-         <Table>
-           <TableHead>
-             <TableRow style={{ backgroundColor: '#fafafa' }}> {/* Gray background for header */}
-               {columns.map((column) => (
-                 <TableCell key={column} style={{ color: 'black', fontWeight: 'bold',fontSize:'15px' }}>
-                   {column}
-                 </TableCell>
-               ))}
-             </TableRow>
-           </TableHead>
-    
-
-           <TableBody>
-             {rows.map((row, index) => (
-               <TableRow key={index} >
-                 <TableCell style={{ color: 'black', fontSize:'15px' }}>{row.type}</TableCell>
-                 <TableCell  style={{ color: 'black', fontSize:'15px' }}>{row.transactionDate}</TableCell>
-                 <TableCell  style={{ color: 'black', fontSize:'15px' }}>{row.customer}</TableCell>
-                 <TableCell  style={{ color: 'black', fontSize:'15px' }}>{row.Amount}</TableCell>
-               </TableRow>
-             ))}
-           </TableBody>
-         </Table>
-       </TableContainer>
-        )}
-        {activeTab === 4 && (
-         <div>hello</div>
-        )}
+        )} 
       </Box>
     </Box>
   );

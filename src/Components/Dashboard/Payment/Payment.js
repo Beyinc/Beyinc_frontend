@@ -1,0 +1,179 @@
+import React, { useState, useEffect } from "react";
+import { Checkbox, Tabs } from "@mui/material";
+
+import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import { useSelector } from "react-redux";
+import { CalendarServices } from "../../../Services/CalendarServices";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+export default function Payment() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [mentorBookings, setMentorBookings] = useState([]);
+  const [selectedAmounts, setSelectedAmounts] = useState([]);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  const columns = [
+    "DateTime",
+    "Duration",
+    "UserName",
+    "Title",
+    "Amount",
+    "Withdraw",
+  ];
+
+  const {
+    email: userEmail,
+    user_id,
+    userName,
+  } = useSelector((store) => store.auth.loginDetails);
+
+  useEffect(() => {
+    const fetchBookingData = async () => {
+      try {
+        const { mentorBookings } = await CalendarServices.mentorBookings({
+          mentorId: user_id,
+        });
+        console.log("mentor Bookings:", mentorBookings);
+        setMentorBookings(mentorBookings);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBookingData();
+  }, [user_id]);
+
+  const handleCheckboxChange = (amount, isChecked) => {
+    setSelectedAmounts((prevSelectedAmounts) => {
+      if (isChecked) {
+        // Add amount if checkbox is checked
+        return [...prevSelectedAmounts, amount];
+      } else {
+        // Remove amount if checkbox is unchecked
+        return prevSelectedAmounts.filter((item) => item !== amount);
+      }
+    });
+  };
+
+  const totalAmount = selectedAmounts.reduce((acc, curr) => acc + curr, 0);
+
+  const commission = totalAmount * 0.1;
+
+  const remainingAmount = totalAmount - commission;
+
+  return (
+    <Box px={4} py={3}>
+      <Box p={8} bgcolor={"white"} borderRadius={3} boxShadow={2}>
+        <Typography variant="h5" align="left" style={{ fontFamily: "Roboto" }}>
+          Availability
+        </Typography>
+
+        {/* Tab selection */}
+        <Tabs value={activeTab} onChange={handleTabChange}>
+          <Tab
+            label="WithDrawals"
+            className={`available-tab ${
+              activeTab === 0 ? "available-tab-active" : ""
+            }`}
+          />
+
+          <Tab
+            label="Transactions"
+            className={`available-tab ${
+              activeTab === 1 ? "availabe-tab-active" : ""
+            }`}
+          />
+        </Tabs>
+
+        {/* Divider Below Tabs */}
+        <Box
+          mt={2}
+          mb={3}
+          bgcolor="grey.300"
+          height=".5px"
+          width="100%"
+          marginTop={"0px"}
+        />
+
+        {activeTab === 0 && (
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow style={{ backgroundColor: "#fafafa" }}>
+                  {" "}
+                  {/* Gray background for header */}
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column}
+                      style={{
+                        color: "black",
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                      }}
+                    >
+                      {column}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {mentorBookings.map((booking) => (
+                  <TableRow key={booking._id}>
+                    <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      {new Date(booking.startDateTime).toLocaleString()}
+                    </TableCell>
+                    <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      {booking.duration}
+                    </TableCell>
+                    <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      {booking.mentorId.userName}
+                    </TableCell>
+                    <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      {booking.title}
+                    </TableCell>
+                    <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      {booking.amount} {booking.currency}
+                    </TableCell>
+                    <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <Checkbox
+                        onChange={(e) =>
+                          handleCheckboxChange(booking.amount, e.target.checked)
+                        }
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+        <div className="flex justify-around mt-20">
+          <div className="font-bold"> Charge: {commission} %</div>
+          <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
+          <div className="font-bold"> Total Amount: {totalAmount}</div>
+        </div>
+      </Box>
+    </Box>
+  );
+}
