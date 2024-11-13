@@ -20,13 +20,14 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { CalendarServices } from "../../../Services/CalendarServices";
+// import { saveWithdrawData } from "../../../Services/PaymentServices";
+import { PaymentServices } from "../../../Services/PaymentServices";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function Payment() {
   const [activeTab, setActiveTab] = useState(0);
   const [mentorBookings, setMentorBookings] = useState([]);
-  const [selectedAmounts, setSelectedAmounts] = useState([]);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -63,23 +64,55 @@ export default function Payment() {
     fetchBookingData();
   }, [user_id]);
 
-  const handleCheckboxChange = (amount, isChecked) => {
+  const [selectedAmounts, setSelectedAmounts] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  const handleCheckboxChange = (id, amount, isChecked) => {
     setSelectedAmounts((prevSelectedAmounts) => {
       if (isChecked) {
-        // Add amount if checkbox is checked
         return [...prevSelectedAmounts, amount];
       } else {
-        // Remove amount if checkbox is unchecked
         return prevSelectedAmounts.filter((item) => item !== amount);
+      }
+    });
+
+    setSelectedIds((prevSelectedIds) => {
+      if (isChecked) {
+        return [...prevSelectedIds, id];
+      } else {
+        return prevSelectedIds.filter((itemId) => itemId !== id);
       }
     });
   };
 
   const totalAmount = selectedAmounts.reduce((acc, curr) => acc + curr, 0);
-
   const commission = totalAmount * 0.1;
-
   const remainingAmount = totalAmount - commission;
+
+  // Example function to send data to backend
+  useEffect(() => {
+    const saveToDatabase = () => {
+      const data = {
+        selectedIds,
+        totalAmount,
+        commission,
+        remainingAmount,
+      };
+      console.log("Sending data to backend:", data);
+      if (totalAmount !== 0) {
+        // Call the saveWithdrawl API function
+        PaymentServices.saveWithdrawData(data)
+          .then((response) => {
+            console.log("Data saved successfully:", response);
+          })
+          .catch((error) => {
+            console.error("Error saving data:", error);
+          });
+      }
+    };
+
+    saveToDatabase();
+  }, [selectedAmounts, selectedIds]);
 
   return (
     <Box px={4} py={3}>
@@ -158,7 +191,11 @@ export default function Payment() {
                     <TableCell style={{ color: "black", fontSize: "15px" }}>
                       <Checkbox
                         onChange={(e) =>
-                          handleCheckboxChange(booking.amount, e.target.checked)
+                          handleCheckboxChange(
+                            booking._id,
+                            booking.amount,
+                            e.target.checked
+                          )
                         }
                       />
                     </TableCell>

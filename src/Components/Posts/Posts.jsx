@@ -177,6 +177,7 @@ const Posts = () => {
     public: false,
     private: false,
   });
+  const [selectedPostType, setSelectedPostType] = useState("");
 
   // Handle checkbox change
   const handleCheckboxChange = (event) => {
@@ -186,6 +187,11 @@ const Posts = () => {
       [name]: checked,
     }));
   };
+  const handleRadioChange = (event) => {
+    const value = event.target.value;
+    setSelectedPostType(value);
+  };
+  
 
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
@@ -199,7 +205,7 @@ const Posts = () => {
   );
 
   useEffect(() => {
-    console.log(people, selectedSortOption, selectedTags, checkedValues);
+    console.log(people, selectedSortOption,selectedPostType, selectedTags);
 
     const fetchFilteredPosts = async () => {
       try {
@@ -207,15 +213,8 @@ const Posts = () => {
           tags: selectedTags, // Selected tags
           sortOption: selectedSortOption, // Selected sort option
           people: people, // People filter
+          selectedPostType
         };
-
-        // Add filters based on checkbox states
-        if (checkedValues.public) {
-          filterData.public = true; // Include public filter if checked
-        }
-        if (checkedValues.private) {
-          filterData.private = true; // Include private filter if checked
-        }
 
         const response = await ApiServices.getFilterPosts(filterData);
         console.log("Filtered posts:", response.data);
@@ -226,7 +225,7 @@ const Posts = () => {
     };
 
     fetchFilteredPosts(); // Call the function
-  }, [people, selectedSortOption, selectedTags, checkedValues]);
+  }, [people, selectedSortOption, selectedTags, checkedValues,selectedPostType]);
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -610,22 +609,25 @@ const Posts = () => {
 
             <label>
               <input
-                type="checkbox"
-                name="public"
+                type="radio"
+                name="postType" // Same name for both radio buttons to ensure only one is selected
+                value="public" // Value for the public post
                 className="mt-1 w-4 h-4"
-                checked={checkedValues.public}
-                onChange={handleCheckboxChange}
+                checked={selectedPostType === "public"} // Checked if selectedPostType is "public"
+                onChange={handleRadioChange} // Update state on change
               />
               <span className="text-sm mt-1">Public Post</span>
             </label>
 
+            {/* Private Post Radio Button */}
             <label>
               <input
-                type="checkbox"
-                name="private"
+                type="radio"
+                name="postType" // Same name for both radio buttons
+                value="private" // Value for the private post
                 className="mt-1 w-4 h-4"
-                checked={checkedValues.private}
-                onChange={handleCheckboxChange}
+                checked={selectedPostType === "private"} // Checked if selectedPostType is "private"
+                onChange={handleRadioChange} // Update state on change
               />
               <span className="text-sm mt-1">Private Post</span>
             </label>
@@ -645,13 +647,16 @@ const Posts = () => {
 
       <div className="main-content">
         <div className="allPostShowContainer">
-          {(filteredPosts.length > 0 ? filteredPosts : allPosts).map((post) => (
-            <Post
-              post={post}
-              setAllPosts={setAllPosts}
-              screenDecider={"home"}
-            />
-          ))}
+          {(filteredPosts.length > 0 ? filteredPosts : allPosts)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
+            .map((post) => (
+              <Post
+                key={post.id}
+                post={post}
+                setAllPosts={setAllPosts}
+                screenDecider={"home"}
+              />
+            ))}
         </div>
 
         <div className="loadMore-Container">

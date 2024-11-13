@@ -11,12 +11,17 @@
 .EditProfileImageContainer {
   /* width: 100%;  */
   width: 1600px;
-  overflow: hidden; 
+  /* overflow: hidden;  */
   margin: auto;
+ 
 } 
 .EditProfileImageContainer img {
   width: 100%;
+  border: 2px solid red;  
+  border-top-right-radius: 20px;  /* Adjust the radius value */
+  border-bottom-right-radius: 20px; /* Adjust the radius value */
   height: 350px;
+  
   /* object-fit: contain; */
 }
 
@@ -1015,6 +1020,8 @@ textarea {
     width: 100%;
     margin: 0;
     border-radius: 0;
+    border-top-right-radius: 20px;  /* Round the top-right corner for smaller screens */
+    border-bottom-right-radius: 20px; /* Round t
     height: 150px;
     object-fit: cover;
   }

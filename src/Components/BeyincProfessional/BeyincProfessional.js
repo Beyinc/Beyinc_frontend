@@ -29,7 +29,7 @@ const BeyincProfessional = () => {
     expertise: [],
     industries: [],
     stages: [],
-    beyincProfile: [],
+    beyincProfile: "",
     investmentRange: "",
   });
 
@@ -78,6 +78,12 @@ const BeyincProfessional = () => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
+
+  const handleRadioChange = (event) => {
+    const { value } = event.target;
+    setFormValues({ ...formValues, beyincProfile: value });
+  };
+
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
     const updatedProfile = checked
@@ -94,7 +100,7 @@ const BeyincProfessional = () => {
 
     // Prepare the data to send to the API
     const data = {
-      beyincProfile: formValues.beyincProfile[0],
+      beyincProfile: formValues.beyincProfile,
       expertise: formValues.expertise.flat(),
       industries: formValues.industries,
       stages: formValues.stages,
@@ -130,53 +136,53 @@ const BeyincProfessional = () => {
       </h2>
       <h3 className="mb-6 font-serif text-xl">BeyInc Profile*</h3>
       <div className="flex space-x-28 mb-10">
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Mentor"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Mentor")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Mentor</span>
-        </label>
+         <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Mentor"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Mentor"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Mentor</span>
+      </label>
 
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Co-Founder"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Co-Founder")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Co-Founder</span>
-        </label>
+      <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Co-Founder"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Co-Founder"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Co-Founder</span>
+      </label>
 
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Investor"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Investor")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Investor</span>
-        </label>
+      <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Investor"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Investor"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Investor</span>
+      </label>
 
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Other"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Other")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Other</span>
-        </label>
+      <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Other"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Other"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Other</span>
+      </label>
       </div>
       <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>
 
