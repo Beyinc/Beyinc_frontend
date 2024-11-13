@@ -14,9 +14,11 @@ import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
 
 const Posts = () => {
-  const { role, userName, image, user_id } = useSelector(
-    (store) => store.auth.loginDetails
-  );
+  // const { role, userName, image, user_id } = useSelector(
+  //   (store) => store.auth.loginDetails
+  // );
+  const { role, userName, image, user_id } = useSelector((store) => store.auth.userDetails);
+  console.log(role, userName, image)
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -237,7 +239,7 @@ const Posts = () => {
                 id="Profile-img"
                 className="Homepage-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image : "/profile.png"
+                  image !== undefined && image !== "" ? image.url : "/profile.png"
                 }
                 alt=""
               />

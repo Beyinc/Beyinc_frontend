@@ -72,14 +72,15 @@ const Navbar = () => {
     }
   };
 
-  const { email, role, userName, image, verification, user_id } = useSelector(
+  const {  verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
   const {
-    beyincProfile
+    beyincProfile,
+    email, role, userName, image
   } = useSelector((store) => store.auth.userDetails);
 
-  console.log(beyincProfile)
+  // console.log(beyincProfile,image.url)
   const [logoutOpen, setLogoutOpen] = useState(false);
   const socket = useRef();
   useEffect(() => {
@@ -230,7 +231,7 @@ const Navbar = () => {
                 id="Profile-img"
                 className="menu-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image : "/profile.png"
+                  image !== undefined && image !== "" ? image.url : "/profile.png"
                 }
                 alt=""
               />
@@ -787,7 +788,7 @@ const Navbar = () => {
           <img
             id="Profile-img"
             className="menu-profile-img"
-            src={image !== undefined && image !== "" ? image : "/profile.png"}
+            src={image !== undefined && image !== "" ? image.url : "/profile.png"}
             alt=""
             onClick={() => navigate("/editProfile")}
             style={{ cursor: "pointer" }}
@@ -1618,7 +1619,7 @@ const Navbar = () => {
                     className="Profile-img"
                     src={
                       image !== undefined && image !== ""
-                        ? image
+                        ? image.url
                         : "/profile.png"
                     }
                     alt=""
@@ -1659,7 +1660,7 @@ const Navbar = () => {
                   id="Profile-img"
                   className="Profile-img"
                   src={
-                    image !== undefined && image !== "" ? image : "/profile.png"
+                    image !== undefined && image !== "" ? image.url : "/profile.png"
                   }
                   alt=""
                 />
