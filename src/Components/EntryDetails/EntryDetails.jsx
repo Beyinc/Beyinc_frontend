@@ -135,7 +135,7 @@ const EntryDetails = () => {
           onCategoryClick={onCategoryClick}
           selectedCategory={selectedCategory}
         />
-        <h2 className="font-bold mb-5 pl-6 mt-11">User Name*</h2>
+        <h2 className="font-bold mb-5 pl-6 mt-11">Name*</h2>
         <input
           type="text"
           className="ml-6 w-[840px] h-[20px] p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
@@ -189,7 +189,7 @@ const EntryDetails = () => {
           ))}
         </div>
         <div className="flex items-center pl-6 mt-11 mb-5">
-          <h2 className="font-bold">Choose your interest*</h2>
+          <h2 className="font-bold">Choose your interest</h2>
           <span className="ml-2">(Maximum 5 selections)</span>
         </div>
         <div className="flex flex-row flex-wrap mt-4 ml-6">
