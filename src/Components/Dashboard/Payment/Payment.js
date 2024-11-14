@@ -90,29 +90,26 @@ export default function Payment() {
   const remainingAmount = totalAmount - commission;
 
   // Example function to send data to backend
-  useEffect(() => {
-    const saveToDatabase = () => {
-      const data = {
-        selectedIds,
-        totalAmount,
-        commission,
-        remainingAmount,
-      };
-      console.log("Sending data to backend:", data);
-      if (totalAmount !== 0) {
-        // Call the saveWithdrawl API function
-        PaymentServices.saveWithdrawData(data)
-          .then((response) => {
-            console.log("Data saved successfully:", response);
-          })
-          .catch((error) => {
-            console.error("Error saving data:", error);
-          });
-      }
-    };
 
-    saveToDatabase();
-  }, [selectedAmounts, selectedIds]);
+  const saveToDatabase = () => {
+    const data = {
+      selectedIds,
+      totalAmount,
+      commission,
+      remainingAmount,
+    };
+    console.log("Sending data to backend:", data);
+    if (totalAmount !== 0) {
+      // Call the saveWithdrawl API function
+      PaymentServices.saveWithdrawData(data)
+        .then((response) => {
+          console.log("Data saved successfully:", response);
+        })
+        .catch((error) => {
+          console.error("Error saving data:", error);
+        });
+    }
+  };
 
   return (
     <Box px={4} py={3}>
@@ -209,6 +206,15 @@ export default function Payment() {
           <div className="font-bold"> Charge: {commission} %</div>
           <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
           <div className="font-bold"> Total Amount: {totalAmount}</div>
+        </div>
+        <div>
+        <button
+            type="button"
+            className="mt-10 ml-[650px] flex justify-center items-center h-14 w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full"
+            onClick={saveToDatabase}
+          >
+           {`Withdraw ${remainingAmount}`}
+          </button>
         </div>
       </Box>
     </Box>

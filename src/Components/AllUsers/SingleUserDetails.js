@@ -126,9 +126,9 @@ const SingleUserDetails = ({
               </div>
               <div className="flex flex-col md:flex-row md:space-x-12 ">
                 <span className="text-gray-500 font-semibold">{user.role}</span>
-                <span className="text-gray-500 font-semibold flex">
-                  <CiGlobe className="md:mr-3 text-lg" /> English,French
-                </span>
+               {user.languagesKnown.length > 0 && ( <span className="text-gray-500 font-semibold flex">
+                  <CiGlobe className="md:mr-3 text-lg" /> {user.languagesKnown?.join(", ")}
+                </span>)}
               </div>
 
               {/* {d.educationDetails.length > 0 ? (

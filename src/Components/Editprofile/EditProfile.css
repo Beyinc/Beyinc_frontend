@@ -17,7 +17,6 @@
 } 
 .EditProfileImageContainer img {
   width: 100%;
-  border: 2px solid red;  
   border-top-right-radius: 20px;  /* Adjust the radius value */
   border-bottom-right-radius: 20px; /* Adjust the radius value */
   height: 350px;

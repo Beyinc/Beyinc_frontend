@@ -275,7 +275,7 @@ const Posts = () => {
           </div>
 
           <div className="sidebar-menu-items">
-            <div>
+            {/* <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="25"
@@ -288,7 +288,7 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div>Newsfeed</div>
+            <div>Newsfeed</div> */}
           </div>
 
           <div
@@ -333,7 +333,7 @@ const Posts = () => {
           </div>
 
           <div className="sidebar-menu-items">
-            <div>
+            {/* <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="25"
@@ -346,7 +346,7 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div>Expertise</div>
+            <div>Expertise</div> */}
           </div>
 
           <div className="sidebar-menu-items">
