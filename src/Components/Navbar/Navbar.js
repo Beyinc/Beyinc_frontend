@@ -396,7 +396,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem
+            {/* <ListItem
               button
               key="dashboard"
               onClick={() => navigate("/dashboard")}
@@ -420,7 +420,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Pitches" />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key="searchUsers"
@@ -538,7 +538,7 @@ const Navbar = () => {
               <ListItemText primary="Profile Requests" />
             </ListItem>
 
-            <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
+            {/* <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -555,7 +555,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Pitch Request" />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key="postReports"
@@ -1273,7 +1273,7 @@ const Navbar = () => {
 
             {/* DASHBOARD ICON */}
 
-            <div
+            {/* <div
               className={`navbar-item ${
                 selectedIcon === "dashboard" ? "selected" : ""
               }`}
@@ -1318,7 +1318,7 @@ const Navbar = () => {
               >
                 Pitches
               </div>
-            </div>
+            </div> */}
 
             {/* MENTOR ICON */}
             <div
