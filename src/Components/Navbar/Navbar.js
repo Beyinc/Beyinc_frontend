@@ -72,14 +72,15 @@ const Navbar = () => {
     }
   };
 
-  const { email, role, userName, image, verification, user_id } = useSelector(
+  const {  verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
   const {
-    beyincProfile
+    beyincProfile,
+    email, role, userName, image
   } = useSelector((store) => store.auth.userDetails);
 
-  console.log(beyincProfile)
+  // console.log(beyincProfile,image.url)
   const [logoutOpen, setLogoutOpen] = useState(false);
   const socket = useRef();
   useEffect(() => {
@@ -230,7 +231,7 @@ const Navbar = () => {
                 id="Profile-img"
                 className="menu-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image : "/profile.png"
+                  image !== undefined && image !== "" ? image.url : "/profile.png"
                 }
                 alt=""
               />
@@ -395,7 +396,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem
+            {/* <ListItem
               button
               key="dashboard"
               onClick={() => navigate("/dashboard")}
@@ -419,7 +420,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Pitches" />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key="searchUsers"
@@ -537,7 +538,7 @@ const Navbar = () => {
               <ListItemText primary="Profile Requests" />
             </ListItem>
 
-            <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
+            {/* <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -554,7 +555,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Pitch Request" />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key="postReports"
@@ -787,7 +788,7 @@ const Navbar = () => {
           <img
             id="Profile-img"
             className="menu-profile-img"
-            src={image !== undefined && image !== "" ? image : "/profile.png"}
+            src={image !== undefined && image !== "" ? image.url : "/profile.png"}
             alt=""
             onClick={() => navigate("/editProfile")}
             style={{ cursor: "pointer" }}
@@ -1272,7 +1273,7 @@ const Navbar = () => {
 
             {/* DASHBOARD ICON */}
 
-            <div
+            {/* <div
               className={`navbar-item ${
                 selectedIcon === "dashboard" ? "selected" : ""
               }`}
@@ -1317,7 +1318,7 @@ const Navbar = () => {
               >
                 Pitches
               </div>
-            </div>
+            </div> */}
 
             {/* MENTOR ICON */}
             <div
@@ -1618,7 +1619,7 @@ const Navbar = () => {
                     className="Profile-img"
                     src={
                       image !== undefined && image !== ""
-                        ? image
+                        ? image.url
                         : "/profile.png"
                     }
                     alt=""
@@ -1659,7 +1660,7 @@ const Navbar = () => {
                   id="Profile-img"
                   className="Profile-img"
                   src={
-                    image !== undefined && image !== "" ? image : "/profile.png"
+                    image !== undefined && image !== "" ? image.url : "/profile.png"
                   }
                   alt=""
                 />
