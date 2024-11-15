@@ -17,7 +17,8 @@ const Posts = () => {
   // const { role, userName, image, user_id } = useSelector(
   //   (store) => store.auth.loginDetails
   // );
-  const { role, userName, image, user_id } = useSelector((store) => store.auth.userDetails);
+  const { role, userName, image, _id: user_id } = useSelector((store) => store.auth.userDetails);
+
   console.log(role, userName, image)
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
@@ -116,6 +117,8 @@ const Posts = () => {
     socket.current = io(socket_io);
   }, []);
   const followerController = async (e, id) => {
+    console.log('following to', id)
+    console.log('userId', user_id);
     e.target.disabled = true;
     await ApiServices.saveFollowers({
       followerReqBy: user_id,
