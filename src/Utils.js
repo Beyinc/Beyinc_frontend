@@ -485,7 +485,7 @@ export const postTypes = [
     { 'value': 'Co-founder Needed', 'color': '#af1dd8' },
     { 'value': 'Tech Partner Needed', 'color': '#60d441' },
     { 'value': 'Mentor Needed', 'color': '#9f1f04' },
-    { 'value': 'General post', 'color': '#05eb1b' },
+    { 'value': 'General Post', 'color': '#05eb1b' },
     { 'value': 'Question and Answer', 'color': '#6920a9' },
     { 'value': 'Announcement', 'color': '#70b9d5' },
     { 'value': 'News', 'color': '#f14edf' },

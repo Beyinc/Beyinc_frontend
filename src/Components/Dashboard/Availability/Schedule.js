@@ -16,7 +16,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import ServicesTab from './services.js';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -179,7 +179,12 @@ export default function AvailabilityForm() {
   
   };
 
-
+  const columns = ['Type', 'Transaction Date', 'Customer','Amount']; // Define column names
+  const rows = [
+    { type: '1:1 Call', transactionDate: '24 sep 2024', customer: 'John',Amount:'$0' },
+    { type: 'Priority DM', transactionDate: '24 sep 2024', customer: 'abc',Amount:'$0' },
+    { type: '1:1 Call', transactionDate: '24 sep 2024',customer: 'aliza',Amount:'$0' },
+  ];
   
   return (
     <Box px={4} py={3}>
@@ -194,6 +199,7 @@ export default function AvailabilityForm() {
               label="Services"
               className={`available-tab ${activeTab === 0 ? 'available-tab-active' : ''}`}
             />
+           
           <Tab
             label="Settings"
             className={`available-tab ${activeTab === 1 ? 'availabe-tab-active' : ''}`}
@@ -202,6 +208,7 @@ export default function AvailabilityForm() {
             label="Schedule"
             className={`available-tab ${activeTab === 2 ? 'available-tab-active' : ''}`}
           />
+        
         </Tabs>
 
         {/* Divider Below Tabs */}
@@ -425,16 +432,12 @@ export default function AvailabilityForm() {
                         unavailableDates={unavailableDates}
                         setUnavailableDates={setUnavailableDates}
                       />
-
                   </Box>
                 </Box>
               </Grid>
-         
             </Grid>
-
-        
           </Box>
-        )}
+        )} 
       </Box>
     </Box>
   );

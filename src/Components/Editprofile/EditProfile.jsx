@@ -62,7 +62,6 @@ const EditProfile = () => {
   } = useSelector((store) => store.auth.loginDetails);
 
   const {
-
     bio: dbbio,
     userName: dbuserName,
     educationDetails: dbEducation,
@@ -77,8 +76,6 @@ const EditProfile = () => {
     stages: dbStages,
   } = useSelector((store) => store.auth.userDetails);
 
-
-
   const [dbCountry, setDbCountry] = useState("");
   const [dblanguages, setDblanguages] = useState([]);
   const [dbbeyincProfile, setBeyincProfile] = useState("");
@@ -87,9 +84,11 @@ const EditProfile = () => {
   const [expertise, setExpertise] = useState([]);
   const [investmentRange, setInvestmentRange] = useState(0);
 
-   console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
+  //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
+   
+
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
     if (dbEducation) setEducationDetails(dbEducation);
@@ -115,7 +114,7 @@ const EditProfile = () => {
     dbIndustires,
   ]);
 
-  console.log('beyincProfile', dbbeyincProfile)
+  console.log("beyincProfile", dbbeyincProfile);
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -129,10 +128,9 @@ const EditProfile = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
-
+  const location = useLocation();
   const [manualSkill, setManualSkill] = useState("");
   const [selectKey, setSelectKey] = useState(Date.now());
-
   const handleSkillChange = (e) => {
     const selectedSkill = e.target.value;
     if (selectedSkill !== "" && !tempSkills.includes(selectedSkill)) {
@@ -318,6 +316,7 @@ const EditProfile = () => {
     Edstart: "",
     Edend: "",
   });
+
   const [fee, setFee] = useState("");
   const [bio, setBio] = useState("");
   const [tempBio, setTempBio] = useState("");
@@ -571,7 +570,6 @@ const EditProfile = () => {
   const [followering, setFollowering] = useState([]);
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
-  const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
   console.log("mentorId", mentorId);
@@ -1770,7 +1768,7 @@ const EditProfile = () => {
             to send or update the profile
           </div>
         )} */}
-      <div className="EditProfileImageContainer">
+      <div className="EditProfileImageContainer ">
         <img src="/Banner.png" alt="Banner" />
       </div>
       <div className="ProfileContainer">
@@ -1868,15 +1866,17 @@ const EditProfile = () => {
               </>
             )}
 
-            {/* {userpage == true && ( */}
-            <button
-              onClick={followerController}
-              className="mb-5 profileFollowBtn"
-            >
-              {followers.map((f) => f._id).includes(user_id)
-                ? "Unfollow"
-                : "Follow"}
-            </button>
+            {userpage === true && (
+           
+              <button
+                onClick={followerController}
+                className="mb-5 profileFollowBtn"
+              >
+                {followers.map((f) => f._id).includes(user_id)
+                  ? "Unfollow"
+                  : "Follow"}
+              </button>
+            )}
             {/* )} */}
 
             {/* {userpage === true &&
@@ -2034,16 +2034,12 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(dbbeyincProfile === "Mentor" || dbbeyincProfile === "Co-Founder") && (
+          {(dbbeyincProfile === "Mentor" ||
+            dbbeyincProfile === "Co-Founder") && (
             <div className="BookSessionCard">
-              <BookSession
-                name={name}
-                mentorId={mentorId}
-                reschedule={false}
-              />
+              <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )}
-
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">

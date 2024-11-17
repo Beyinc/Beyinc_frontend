@@ -47,7 +47,8 @@ import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/Mentor
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
 import SearchResults from "./Components/Searching/SearchResults";
-
+import payOut from "./Components/PayOut/payOut";
+import Payment from "./Components/Dashboard/Payment/Payment";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -309,7 +310,7 @@ const App = () => {
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
-          {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
+       
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
@@ -349,6 +350,7 @@ const App = () => {
             Component={AdminDeciderHoc(EditProfile)}
           />
 
+          <Route path="/payout" Component={AdminDeciderHoc(payOut)} />
 
           <Route
             path="/postReports"
@@ -359,6 +361,7 @@ const App = () => {
            <Route path="/bank" element={<Bank />} />
            <Route path="/rescheduleCalendar" element={<Calendar />} />
            <Route path="/dashboard/availability" element={<Schedule />} />
+           <Route path="/dashboard/payment" element={<Payment />} />
            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
            <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
