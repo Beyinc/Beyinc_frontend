@@ -1020,7 +1020,7 @@ textarea {
   }
 
   .ProfileDetailsCard {
-    width: 355px;
+    width: 390px;
     margin-top: 100px;
     height: auto;
     max-height: 750px;
@@ -1034,7 +1034,19 @@ textarea {
     border-radius: 25px 25px 5px 5px;
   }
 
-
+  .BookSessionCard{
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 370px;
+    height: fit-content;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transform: translateY(-80px);
+  }
 
   .ProfileDetailsCard .EditProfileImage img {
     width: 100px;
@@ -1051,15 +1063,17 @@ textarea {
     width: 250px;
     margin: 0;
   }
+  
   .EditProfileOuterCard {
-    width: 100%;
+    width: 375px;
     height: auto;
     padding-left: 10px;
     border-radius: 20px;
     box-shadow: 0px 0px 2px 2px #00000040;
     cursor: pointer;
-    margin: 12px;
+    margin: 5px;
   }
+
   .ActivtyDetailsCard {
     flex: 1;
     margin-top: -150px;
@@ -1157,9 +1171,21 @@ textarea {
   .close-icon {
     margin-right: 0px;
   }
+
   .upload-files-container {
     width: 350px;
+    margin-left: 40px;
   }
+
+  /* 
+  .upload-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 700px;
+    gap: 10px;
+  } */
+
   .EditProfile-Buttons-Section {
     width: 360px;
   }
