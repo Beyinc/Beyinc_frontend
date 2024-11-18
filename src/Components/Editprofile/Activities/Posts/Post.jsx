@@ -15,11 +15,11 @@ import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
 
-const Post = ({allPosts, p, setAllPosts, screenDecider }) => {
+const Post = ({allPosts,post: initialPost, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
-  const [post, setPost] = useState(p);
+  const [post, setPost] = useState(initialPost ||{});
   const { email, role, userName, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
@@ -28,6 +28,8 @@ const Post = ({allPosts, p, setAllPosts, screenDecider }) => {
   // const [post, setPost] = useState(null);
 
   const dispatch = useDispatch();
+
+
 console.log('post',post)
   useEffect(() => {
     if (post?._id) {

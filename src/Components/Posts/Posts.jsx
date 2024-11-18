@@ -652,10 +652,10 @@ const Posts = () => {
         <div className="allPostShowContainer">
         {(filteredPosts.length > 0 ? filteredPosts : allPosts)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
-            .map((p) => (
+            .map((post) => (
               <Post
-                key={p.id}
-                p={p}
+                key={post.id}
+                post={post}
                 setAllPosts={setAllPosts}
                 screenDecider={"home"}
               />
