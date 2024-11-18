@@ -508,7 +508,7 @@ const Post = ({allPosts, p, setAllPosts, screenDecider }) => {
               {/* COMMENT ACTION */}
               <div
                 className="likeActionHolder"
-                // onClick={() => navigate(`/posts/${post?._id}`)}
+                onClick={() => navigate(`/posts/${post?._id}`)}
               >
                 <div>
                   <svg
