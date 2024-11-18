@@ -28,7 +28,7 @@ const Post = ({allPosts, p, setAllPosts, screenDecider }) => {
   // const [post, setPost] = useState(null);
 
   const dispatch = useDispatch();
-
+console.log('post',post)
   useEffect(() => {
     if (post?._id) {
       ApiServices.getPostComments({ postId: post?._id })
@@ -253,7 +253,7 @@ const Post = ({allPosts, p, setAllPosts, screenDecider }) => {
                   {MMDDYYFormat(post?.updatedAt)}
                 </div>
                 <div>
-                  {post.visibility && (
+                  {post?.visibility && (
                     <div>
                       {post.visibility === "public" ? (
                         <Icon
@@ -532,7 +532,7 @@ const Post = ({allPosts, p, setAllPosts, screenDecider }) => {
 
               {/* SHARE ACTION */}
               <div className="likeActionHolder">
-                <ShareButton url={`${window.location.href}/${post._id}`} />
+                <ShareButton url={`${window.location.href}/${post?._id}`} />
               </div>
             </div>
 

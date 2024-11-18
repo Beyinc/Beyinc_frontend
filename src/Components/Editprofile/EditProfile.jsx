@@ -2865,130 +2865,31 @@ const EditProfile = () => {
               )}
 
               {/* Buttons for save data */}
-              {userpage === false &&
-                (id == undefined ? (
-                  <section className="EditProfile-Buttons-Section">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "10px",
-                        marginTop: "15px",
-                        marginBottom: "15px",
-                      }}
-                    >
-                      <button
-                        style={{
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                        onClick={retreiveLocal}
-                      >
-                        Retreive last Save
-                      </button>
-                      <button
-                        style={{
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                        // onClick={savingLocal}
-                        onClick={submitAllData}
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={
-                          isLoading ||
-                          !isFormValid ||
-                          image === undefined ||
-                          image === ""
-                        }
-                        onClick={update}
-                        style={{
-                          whiteSpace: "nowrap",
-                          position: "relative",
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                      >
-                        {isLoading ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              alignItems: "center",
-                            }}
-                          >
-                            <div className="button-loader"></div>
-                            <div style={{}}>Updating...</div>
-                          </div>
-                        ) : (
-                          <>
-                            {/* <i
-                      className="fas fa-address-card"
-                      style={{ marginRight: "5px" }}
-                    ></i> */}
-                            Update
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </section>
-                ) : (
-                  <div className="button-container">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "25%",
-                        gap: "10px",
-                        marginTop: "15px",
-                      }}
-                    >
-                      {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+              {userpage === false && id === undefined && (
+              <section className="EditProfile-Buttons-Section">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "15px",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <button
+                    style={{
+                      fontSize: "10px",
+                      background: "var(--button-background)",
+                      color: "var(--button-color)",
+                    }}
+                    onClick={submitAllData}
+                  >
+                    Save
+                  </button>
+                </div>
+              </section>
+            )}
 
-                      <button
-                        type="submit"
-                        className="reject-button"
-                        onClick={(e) => adminupdate(e, "rejected")}
-                        style={{ whiteSpace: "nowrap", position: "relative" }}
-                        disabled={inputs.status === "rejected"}
-                      >
-                        {/* {isLoading ? (
-                                    <>
-                                                             <div className="button-loader"></div>
-                                        <span style={{ marginLeft: "12px" }}>Rejecting...</span>
-                                    </>
-                                ) : ( */}
-                        <>Reject</>
-                        {/* )} */}
-                      </button>
-                      <button
-                        type="submit"
-                        onClick={(e) => adminupdate(e, "approved")}
-                        style={{ whiteSpace: "nowrap", position: "relative" }}
-                        disabled={inputs.status === "approved"}
-                      >
-                        {isLoading ? (
-                          <>
-                            <div className="button-loader"></div>
-                            <span style={{ marginLeft: "12px" }}>
-                              Approving...
-                            </span>
-                          </>
-                        ) : (
-                          <>Approve</>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                ))}
             </div>
           )}
 
