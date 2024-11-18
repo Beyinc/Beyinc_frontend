@@ -68,11 +68,11 @@ function AvailabilityDay(props) {
   );
 }
 
-export default function DateCalendarServerRequest({ onDateChange, period, daysOfWeekToHighlight, unavailableDates, finalAvailableSlots}) {
+export default function DateCalendarServerRequest({selectedDate, onDateChange, period, daysOfWeekToHighlight, unavailableDates, finalAvailableSlots}) {
   const requestAbortController = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [availableDays, setAvailableDays] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedDate, setSelectedDate] = useState(null);
   const [startDate] = useState(initialValue);
 
 
@@ -93,13 +93,8 @@ export default function DateCalendarServerRequest({ onDateChange, period, daysOf
     fetchAvailableDays();
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    if (onDateChange) {
-      onDateChange(date);
-    }
-  };
 
+  
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
@@ -119,7 +114,7 @@ export default function DateCalendarServerRequest({ onDateChange, period, daysOf
             startDate: dayjs(),
           },
         }}
-        onChange={handleDateChange}
+        onChange={onDateChange}
         sx={{ border: '1px solid lightgrey', borderRadius: '10px' }}
       />
     </LocalizationProvider>

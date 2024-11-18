@@ -24,7 +24,7 @@ import { Country, State, City } from "country-state-city";
 import { AdminServices } from "../../Services/AdminServices";
 import { jwtDecode } from "jwt-decode";
 import { format } from "timeago.js";
-
+import { CalendarServices } from '../../../src/Services/CalendarServices';
 import { Box, Dialog, DialogContent, Divider } from "@mui/material";
 import {
   allLanguages,
@@ -83,7 +83,7 @@ const EditProfile = () => {
   const [Stages, setStages] = useState([]);
   const [expertise, setExpertise] = useState([]);
   const [investmentRange, setInvestmentRange] = useState(0);
-
+  const [service, setService] = useState([])
   //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
@@ -152,6 +152,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
+  
     // Fetch the user data on which profile is clicked
     const fetchUserData = async () => {
       try {
@@ -571,16 +572,35 @@ const EditProfile = () => {
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
   const pathSegments = location.pathname.split("/");
-  const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
+  const mentorId = pathSegments[pathSegments.length - 1]; 
   console.log("mentorId", mentorId);
 
   useEffect(() => {
+    const fetchAvailabilityData = async () => {
+        try {
+            const { data } = await CalendarServices.getAvailabilityData({ mentorId });
+            // Logging the availability data
+            console.log('Availability data:', JSON.stringify(data.availability));
+            setService(data.availability.sessions)
+            const availabilityData = data.availability;
+            // Perform additional operations with availabilityData here
+        } catch (error) {
+            console.error("Error fetching availability data:", error);
+        }
+    };
+
+    fetchAvailabilityData();
+}, []); // Add dependencies if required
+
+
+  useEffect(() => {
+
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
     if (toggler) {
       seteditPostToggler(toggler);
     }
-  }, [location, seteditPostToggler]);
+  }, [location, seteditPostToggler, mentorId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -2034,12 +2054,13 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-          {(dbbeyincProfile === "Mentor" ||
-            dbbeyincProfile === "Co-Founder") && (
-            <div className="BookSessionCard">
-              <BookSession name={name} mentorId={mentorId} reschedule={false} />
-            </div>
-          )}
+      {(dbbeyincProfile === "Mentor" || mentorId !== 'editProfile' || dbbeyincProfile === "Co-Founder") && 
+ service.length > 0 && (
+  <div className="BookSessionCard">
+    <BookSession name={name} mentorId={mentorId} reschedule={false} />
+  </div>
+)}
+
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
