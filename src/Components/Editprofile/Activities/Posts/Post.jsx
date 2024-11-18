@@ -372,10 +372,7 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
 
        
           
-          <div
-            className="postDesc"
-           
-          >
+          <div  className="postDesc">
             <b>{post?.postTitle}</b>
           </div>
           <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>

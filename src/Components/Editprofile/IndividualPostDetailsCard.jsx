@@ -387,11 +387,16 @@ const IndividualPostDetailsCard = () => {
               )}
 
               </div>
-              {post?.openDiscussion !== true && (
-                <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
-                  {post?.fullDetails}
-                </div>
+              {(post?.openDiscussion === true ||
+                post?.openDiscussionTeam.map((o) => o._id).includes(user_id) ||
+                post?.createdBy._id === user_id ||
+                role === "Admin") && (
+                  <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
+                    {post?.fullDetails}
+                  </div>
+                
               )}
+
               <div className="likeCommentDetails">
                 <div className="likeTotal">
                   <div>
