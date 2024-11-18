@@ -24,7 +24,7 @@ import { Country, State, City } from "country-state-city";
 import { AdminServices } from "../../Services/AdminServices";
 import { jwtDecode } from "jwt-decode";
 import { format } from "timeago.js";
-
+import { CalendarServices } from '../../../src/Services/CalendarServices';
 import { Box, Dialog, DialogContent, Divider } from "@mui/material";
 import {
   allLanguages,
@@ -62,7 +62,6 @@ const EditProfile = () => {
   } = useSelector((store) => store.auth.loginDetails);
 
   const {
-
     bio: dbbio,
     userName: dbuserName,
     educationDetails: dbEducation,
@@ -77,8 +76,6 @@ const EditProfile = () => {
     stages: dbStages,
   } = useSelector((store) => store.auth.userDetails);
 
-
-
   const [dbCountry, setDbCountry] = useState("");
   const [dblanguages, setDblanguages] = useState([]);
   const [dbbeyincProfile, setBeyincProfile] = useState("");
@@ -86,10 +83,12 @@ const EditProfile = () => {
   const [Stages, setStages] = useState([]);
   const [expertise, setExpertise] = useState([]);
   const [investmentRange, setInvestmentRange] = useState(0);
-
-   console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
+  const [service, setService] = useState([])
+  //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
+   
+
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
     if (dbEducation) setEducationDetails(dbEducation);
@@ -115,7 +114,7 @@ const EditProfile = () => {
     dbIndustires,
   ]);
 
-  console.log('beyincProfile', dbbeyincProfile)
+  console.log("beyincProfile", dbbeyincProfile);
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -129,10 +128,9 @@ const EditProfile = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
-
+  const location = useLocation();
   const [manualSkill, setManualSkill] = useState("");
   const [selectKey, setSelectKey] = useState(Date.now());
-
   const handleSkillChange = (e) => {
     const selectedSkill = e.target.value;
     if (selectedSkill !== "" && !tempSkills.includes(selectedSkill)) {
@@ -154,6 +152,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
+  
     // Fetch the user data on which profile is clicked
     const fetchUserData = async () => {
       try {
@@ -318,6 +317,7 @@ const EditProfile = () => {
     Edstart: "",
     Edend: "",
   });
+
   const [fee, setFee] = useState("");
   const [bio, setBio] = useState("");
   const [tempBio, setTempBio] = useState("");
@@ -571,18 +571,36 @@ const EditProfile = () => {
   const [followering, setFollowering] = useState([]);
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
-  const location = useLocation();
   const pathSegments = location.pathname.split("/");
-  const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
+  const mentorId = pathSegments[pathSegments.length - 1]; 
   console.log("mentorId", mentorId);
 
   useEffect(() => {
+    const fetchAvailabilityData = async () => {
+        try {
+            const { data } = await CalendarServices.getAvailabilityData({ mentorId });
+            // Logging the availability data
+            console.log('Availability data:', JSON.stringify(data.availability));
+            setService(data.availability.sessions)
+            const availabilityData = data.availability;
+            // Perform additional operations with availabilityData here
+        } catch (error) {
+            console.error("Error fetching availability data:", error);
+        }
+    };
+
+    fetchAvailabilityData();
+}, []); // Add dependencies if required
+
+
+  useEffect(() => {
+
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
     if (toggler) {
       seteditPostToggler(toggler);
     }
-  }, [location, seteditPostToggler]);
+  }, [location, seteditPostToggler, mentorId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -1770,7 +1788,7 @@ const EditProfile = () => {
             to send or update the profile
           </div>
         )} */}
-      <div className="EditProfileImageContainer">
+      <div className="EditProfileImageContainer ">
         <img src="/Banner.png" alt="Banner" />
       </div>
       <div className="ProfileContainer">
@@ -1868,15 +1886,17 @@ const EditProfile = () => {
               </>
             )}
 
-            {/* {userpage == true && ( */}
-            <button
-              onClick={followerController}
-              className="mb-5 profileFollowBtn"
-            >
-              {followers.map((f) => f._id).includes(user_id)
-                ? "Unfollow"
-                : "Follow"}
-            </button>
+            {userpage === true && (
+           
+              <button
+                onClick={followerController}
+                className="mb-5 profileFollowBtn"
+              >
+                {followers.map((f) => f._id).includes(user_id)
+                  ? "Unfollow"
+                  : "Follow"}
+              </button>
+            )}
             {/* )} */}
 
             {/* {userpage === true &&
@@ -2034,15 +2054,12 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(dbbeyincProfile === "Mentor" || dbbeyincProfile === "Co-Founder") && (
-            <div className="BookSessionCard">
-              <BookSession
-                name={name}
-                mentorId={mentorId}
-                reschedule={false}
-              />
-            </div>
-          )}
+      {(dbbeyincProfile === "Mentor" || mentorId !== 'editProfile' || dbbeyincProfile === "Co-Founder") && 
+ service.length > 0 && (
+  <div className="BookSessionCard">
+    <BookSession name={name} mentorId={mentorId} reschedule={false} />
+  </div>
+)}
 
         </div>
         {/* RIGHT PART */}
@@ -2848,130 +2865,31 @@ const EditProfile = () => {
               )}
 
               {/* Buttons for save data */}
-              {userpage === false &&
-                (id == undefined ? (
-                  <section className="EditProfile-Buttons-Section">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "10px",
-                        marginTop: "15px",
-                        marginBottom: "15px",
-                      }}
-                    >
-                      <button
-                        style={{
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                        onClick={retreiveLocal}
-                      >
-                        Retreive last Save
-                      </button>
-                      <button
-                        style={{
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                        // onClick={savingLocal}
-                        onClick={submitAllData}
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={
-                          isLoading ||
-                          !isFormValid ||
-                          image === undefined ||
-                          image === ""
-                        }
-                        onClick={update}
-                        style={{
-                          whiteSpace: "nowrap",
-                          position: "relative",
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                      >
-                        {isLoading ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              alignItems: "center",
-                            }}
-                          >
-                            <div className="button-loader"></div>
-                            <div style={{}}>Updating...</div>
-                          </div>
-                        ) : (
-                          <>
-                            {/* <i
-                      className="fas fa-address-card"
-                      style={{ marginRight: "5px" }}
-                    ></i> */}
-                            Update
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </section>
-                ) : (
-                  <div className="button-container">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "25%",
-                        gap: "10px",
-                        marginTop: "15px",
-                      }}
-                    >
-                      {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+              {userpage === false && id === undefined && (
+              <section className="EditProfile-Buttons-Section">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "15px",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <button
+                    style={{
+                      fontSize: "10px",
+                      background: "var(--button-background)",
+                      color: "var(--button-color)",
+                    }}
+                    onClick={submitAllData}
+                  >
+                    Save
+                  </button>
+                </div>
+              </section>
+            )}
 
-                      <button
-                        type="submit"
-                        className="reject-button"
-                        onClick={(e) => adminupdate(e, "rejected")}
-                        style={{ whiteSpace: "nowrap", position: "relative" }}
-                        disabled={inputs.status === "rejected"}
-                      >
-                        {/* {isLoading ? (
-                                    <>
-                                                             <div className="button-loader"></div>
-                                        <span style={{ marginLeft: "12px" }}>Rejecting...</span>
-                                    </>
-                                ) : ( */}
-                        <>Reject</>
-                        {/* )} */}
-                      </button>
-                      <button
-                        type="submit"
-                        onClick={(e) => adminupdate(e, "approved")}
-                        style={{ whiteSpace: "nowrap", position: "relative" }}
-                        disabled={inputs.status === "approved"}
-                      >
-                        {isLoading ? (
-                          <>
-                            <div className="button-loader"></div>
-                            <span style={{ marginLeft: "12px" }}>
-                              Approving...
-                            </span>
-                          </>
-                        ) : (
-                          <>Approve</>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                ))}
             </div>
           )}
 

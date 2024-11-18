@@ -40,6 +40,7 @@ const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
 
   const [durationId, setDurationId] = useState({ duration: null, id: '' });
 
+  console.log('selected date', selectedDate)
   if (reschedule) {
     // console.log('rescheduling',rescheduleBooking)
   }
@@ -204,8 +205,13 @@ const handleTimezoneChange = (event) => {
 
   const handleDateChange = async (date) => {
 
-      setSelectedDate(date); // Continue with other logic if needed
-    
+       // If the selected date is clicked again, unselect it
+    if (selectedDate && date.isSame(selectedDate, 'day')) {
+      setSelectedDate(null);
+    } else {
+      setSelectedDate(date);
+    }
+
   };
 
 
@@ -240,10 +246,14 @@ const handleTimezoneChange = (event) => {
   
 
   const handleSelectedTime = (time) => {
-  
-    setSelectedTime(time);
-    
+    // If the same time is selected again, unselect it
+    if (selectedTime === time) {
+      setSelectedTime(null);
+    } else {
+      setSelectedTime(time);
+    }
   };
+  
 
 // If you want to log the updated `selectedTime` after the state has been set:
 useEffect(() => {
@@ -294,36 +304,45 @@ const handleDurationChange = (selectedId) => {
           </select>
 
 
-       {!reschedule &&   (<>
-         <label className="label">Duration</label>
-                  <select
-                        className="select"
-                        value={durationId.id}
-                        onChange={(e) => handleDurationChange(e.target.value)}
-                    >
-                        <option value="" disabled>Select Duration</option>
-                        {durationList.map((item) => (
-                            <option key={item.id} value={item.id}>
-                                {item.duration} Minutes
-                            </option>
-                        ))}
-                  </select>
-                  </>)
-}
+                    {!reschedule &&   (<>
+                      <label className="label">Duration</label>
+                                <select
+                                      className="select"
+                                      value={durationId.id}
+                                      onChange={(e) => handleDurationChange(e.target.value)}
+                                  >
+                                      <option value="" disabled>Select Duration</option>
+                                      {durationList.map((item) => (
+                                          <option key={item.id} value={item.id}>
+                                              {item.duration} Minutes
+                                          </option>
+                                      ))}
+                                </select>
+                                </>)
+              }
 
+{/* {durationId && durationId.length > 0 && ( */}
+{(durationId.id && durationId.id.length > 0) || (durationId.duration !== null) ? (
+  <div>
 
-      <label className="label">Availability</label>
       
-      <DateCalendarServerRequest 
-        onDateChange={handleDateChange}
-        period={period} // Use the fetched period
-        daysOfWeekToHighlight={daysOfWeekToHighlight} // Use the fetched days of the week to highlight
-        unavailableDates={unavailableDates}
-        finalAvailableSlots = {finalAvailableSlots}
-      />
+        <label className="label">Availability</label>
+   
+
+                <DateCalendarServerRequest 
+                selectedDate={selectedDate}
+                  durationId={durationId}
+                  onDateChange={handleDateChange}
+                  period={period} // Use the fetched period
+                  daysOfWeekToHighlight={daysOfWeekToHighlight} // Use the fetched days of the week to highlight
+                  unavailableDates={unavailableDates}
+                  finalAvailableSlots = {finalAvailableSlots}
+                />
+
+              
 
 
-          {selectedDate && (
+                 {selectedDate && (
                           <Box sx={{ marginTop: 2 }}>
                               <Typography variant="body1" className="label">
                                   {formatDate(selectedDate)}
@@ -353,17 +372,25 @@ const handleDurationChange = (selectedId) => {
 
       
 
-      <BookButton
-              selectedDate={selectedDate}
-              selectedTime={selectedTime}
-              durationId={durationId}
-              mentorData={mentorData}
-             selectedTimezone={selectedTimezone}
-             mentorId={mentorId}
-             reschedule={reschedule}
+      {
+        mentorId && selectedDate && selectedTime ? (
+          <BookButton
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            durationId={durationId}
+            mentorData={mentorData}
+            selectedTimezone={selectedTimezone}
+            mentorId={mentorId}
+            reschedule={reschedule}
             rescheduleBooking={rescheduleBooking}
+          />
+        ) : (
+          <button className="grey">
+            Book Session Now
+          </button>
+        )
+      }
 
-            />
 
         {/* <WebinarModal
         
@@ -371,8 +398,9 @@ const handleDurationChange = (selectedId) => {
         mentorId={mentorId}
         
         /> */}
-
-  
+    </div>
+     
+    ) : null}
     </div>
   );
 };

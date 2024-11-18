@@ -24,12 +24,12 @@ const TabsAndInvestment = ({ industries, stages, expertise, investmentRange }) =
           >
             Industries
           </div>
-          <div
+          {/* <div
             className={`Ttab ${activeTab === "Stages" ? "Tactive" : ""}`}
             onClick={() => handleTabClick("Stages")}
           >
             Stages
-          </div>
+          </div> */}
         </div>
         <div className="content-container">
           {activeTab === "Expertise" && (
@@ -39,7 +39,7 @@ const TabsAndInvestment = ({ industries, stages, expertise, investmentRange }) =
           {activeTab === "Stages" && <p>{stages.join(', ')}</p>}
         </div>
       </div>
-      <div className="investment-range-container">
+      {/* <div className="investment-range-container">
         <div className="investment-range-icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ const TabsAndInvestment = ({ industries, stages, expertise, investmentRange }) =
           <p className="investment-label">Investment Range</p>
           <p className="investment-value">₹ {investmentRange}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

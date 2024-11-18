@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { stages, allskills, domain_subdomain, categories } from "../../Utils";
 import { RxCaretDown } from "react-icons/rx";
-const FilterSidebar = ({ updateFilters }) => {
+const FilterSidebar = ({ updateFilters, open }) => {
   const [userName, setUserName] = useState("");
   const [expertise, setExpertise] = useState("");
   const [industries, setIndustries] = useState("");
@@ -93,12 +93,14 @@ const FilterSidebar = ({ updateFilters }) => {
     option.toLowerCase().includes(category.toLowerCase())
   );
   return (
-    <div className="filter-sidebar h-[600px]">
+    <div
+      className={`filter-sidebar `}
+    >
       {/* <h2>Filter</h2> */}
-      <hr className="mt-2 mb-6" />
+      <hr className={`mt-2 mb-6 ${open ? "hidden" : "w-full"}`} />
       <h4 className="mt-3 mb-2">Username</h4>
       <input
-        className="w-72"
+        className="2xl:w-72 xl:w-72 lg:w-40 md:w-40 "
         type="text"
         placeholder="Enter username"
         value={userName}
@@ -108,7 +110,6 @@ const FilterSidebar = ({ updateFilters }) => {
       <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Category</h4>
       <div className="relative">
-       
         <button
           className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
             isCategoryOpen ? "rotate-180" : "rotate-0"
@@ -122,13 +123,13 @@ const FilterSidebar = ({ updateFilters }) => {
       {/* Category checkboxes, shown only if isCategoryOpen is true */}
       {isCategoryOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
-           <input
-          type="text"
-          className="w-64 mt-3"
-          placeholder="Search Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)} // Update state on change
-        />
+          <input
+            type="text"
+            className="w-64 mt-3"
+            placeholder="Search Category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)} // Update state on change
+          />
           {filteredCategories.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -190,8 +191,6 @@ const FilterSidebar = ({ updateFilters }) => {
       <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Industries</h4>
       <div className="relative">
-        
-
         {/* Caret icon to toggle the dropdown with rotation */}
         <button
           className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
@@ -207,12 +206,12 @@ const FilterSidebar = ({ updateFilters }) => {
       {isOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
           <input
-          type="text"
-          className="w-64 mt-3"
-          placeholder="Search Industry"
-          value={industries}
-          onChange={(e) => setIndustries(e.target.value)}
-        />
+            type="text"
+            className="w-64 mt-3"
+            placeholder="Search Industry"
+            value={industries}
+            onChange={(e) => setIndustries(e.target.value)}
+          />
           {filteredIndustryOptions.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -230,10 +229,9 @@ const FilterSidebar = ({ updateFilters }) => {
       )}
 
       {/* Stage Input Field */}
-      <hr className="mt-4 mb-6" />
+      {/* <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Stages</h4>
       <div className="relative">
-       
         <button
           className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
             isStageOpen ? "rotate-180" : "rotate-0"
@@ -242,18 +240,18 @@ const FilterSidebar = ({ updateFilters }) => {
         >
           <RxCaretDown />
         </button>
-      </div>
+      </div> */}
 
       {/* Stage checkboxes, shown only if isStageOpen is true */}
-      {isStageOpen && (
+      {/* {isStageOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
-           <input
-          type="text"
-          className="w-64 mt-3"
-          placeholder="Search Stage"
-          value={stage}
-          onChange={(e) => setStage(e.target.value)}
-        />
+          <input
+            type="text"
+            className="w-64 mt-3"
+            placeholder="Search Stage"
+            value={stage}
+            onChange={(e) => setStage(e.target.value)}
+          />
           {filteredStageOptions.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -268,7 +266,7 @@ const FilterSidebar = ({ updateFilters }) => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

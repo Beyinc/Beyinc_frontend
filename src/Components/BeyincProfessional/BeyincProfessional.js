@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography } from '@mui/material';
 import {
   TextField,
@@ -29,7 +30,7 @@ const BeyincProfessional = () => {
     expertise: [],
     industries: [],
     stages: [],
-    beyincProfile: [],
+    beyincProfile: "",
     investmentRange: "",
   });
 
@@ -37,13 +38,12 @@ const BeyincProfessional = () => {
   // const handleRoleChange = (e) => {
   //   setSelectedRole(e.target.value);
   // };
-
-  const handleMultiSelectChange = (value, name) => {
+  const navigate = useNavigate();
+  const handleMultiSelectChange = (event, name) => {
+    const selectedValues = event.target.value; // Get the array of selected values
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: prevValues[name].includes(value)
-        ? prevValues[name].filter((item) => item !== value) // Remove if already selected
-        : [...prevValues[name], value], // Add if not selected
+      [name]: selectedValues, // Update the state with the array of selected values
     }));
   };
 
@@ -76,9 +76,15 @@ const BeyincProfessional = () => {
   };
 
   const handleChange = (e) => {
-    const { name,value} = e.target;
-    setFormValues({...formValues,[name]:value})
-  }
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleRadioChange = (event) => {
+    const { value } = event.target;
+    setFormValues({ ...formValues, beyincProfile: value });
+  };
+
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
     const updatedProfile = checked
@@ -95,8 +101,8 @@ const BeyincProfessional = () => {
 
     // Prepare the data to send to the API
     const data = {
-      beyincProfile: formValues.beyincProfile[0],
-      expertise: formValues.expertise.flat(), 
+      beyincProfile: formValues.beyincProfile,
+      expertise: formValues.expertise.flat(),
       industries: formValues.industries,
       stages: formValues.stages,
       investmentRange: formValues.investmentRange,
@@ -116,7 +122,9 @@ const BeyincProfessional = () => {
       await ApiServices.saveBeyincProfessional({ data });
 
       // Optionally handle any additional logic after a successful API call
-      alert("Role submitted successfully");
+      alert("Profile created successfully");
+      navigate("/posts", { replace: true }); // Redirect without history stack addition
+      window.location.reload(); // Refresh the /posts page
     } catch (error) {
       // Handle any error that occurs during the API call
       console.error("Error submitting role:", error);
@@ -125,69 +133,57 @@ const BeyincProfessional = () => {
   };
 
   return (
-
-
     <div className="bg-white my-5 mx-24 py-20 px-20 shadow-md">
       <h2 className="mb-10 font-serif text-2xl">
         Advance as a Professional on Our Platform
       </h2>
       <h3 className="mb-6 font-serif text-xl">BeyInc Profile*</h3>
       <div className="flex space-x-28 mb-10">
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Mentor"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Mentor")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Mentor</span>
-        </label>
+         <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Mentor"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Mentor"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Mentor</span>
+      </label>
 
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Co-Founder"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Co-Founder")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Co-Founder</span>
-        </label>
+      <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Co-Founder"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Co-Founder"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Co-Founder</span>
+      </label>
 
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Investor"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Investor")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Investor</span>
-        </label>
+      {/* <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Investor"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Investor"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Investor</span>
+      </label> */}
 
-        <label>
-          <input
-            type="checkbox"
-            name="beyincProfile"
-            value="Other"
-            className="mt-1 w-4 h-4"
-            checked={formValues.beyincProfile.includes("Other")}
-            onChange={handleCheckboxChange}
-          />
-          <span className="font-normal text-base">Other</span>
-        </label>
+
       </div>
       <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>
 
       <Select
         multiple
         name="expertise"
-        value={formValues.expertise}
-        onChange={(event) => handleMultiSelectChange(event.target.value, "expertise")}
+        value={formValues.expertise} // This is the array of selected values
+        onChange={(event) => handleMultiSelectChange(event, "expertise")} // Pass event to handleMultiSelectChange
         input={<OutlinedInput label="Expertise" />}
         renderValue={(selected) => selected.join(", ")}
         sx={{
@@ -196,13 +192,13 @@ const BeyincProfessional = () => {
           "& .MuiOutlinedInput-notchedOutline": {
             borderWidth: "2px",
             borderColor: "gray.400",
-            // Static dark gray border color
           },
         }}
       >
         {allskills.map((option) => (
           <MenuItem key={option} value={option}>
-            <Checkbox checked={formValues.expertise.indexOf(option) > -1} />
+            <Checkbox checked={formValues.expertise.includes(option)} />{" "}
+            {/* This ensures checkbox ticks correctly */}
             <ListItemText primary={option} />
           </MenuItem>
         ))}
@@ -274,9 +270,9 @@ const BeyincProfessional = () => {
           </List>
         </Collapse>
       </FormControl>
-      <h3 className="mb-6 mt-10 font-serif text-xl">Stage*</h3>
+
+      {/* <h3 className="mb-6 mt-10 font-serif text-xl">Stage*</h3>
       <FormControl fullWidth>
-        
         <TextField
           sx={{
             marginTop: "10px",
@@ -306,7 +302,6 @@ const BeyincProfessional = () => {
             {stages.map((option) => (
               <ListItem
                 key={option}
-                button
                 onClick={() => handleMultiSelectChange(option, "stages")}
               >
                 <Checkbox checked={formValues.stages.indexOf(option) > -1} />
@@ -318,28 +313,28 @@ const BeyincProfessional = () => {
       </FormControl>
       <h3 className="mb-6 mt-10 font-serif text-xl">Investment Range</h3>
       <FormControl fullWidth>
-    <TextField
-      // label="Investment Range"
-      name="investmentRange"
-      type="number"
-      value={formValues.investmentRange}
-      onChange={handleChange}
-      variant="outlined"
-      sx={{
-        marginTop:"20px",
-        width: "840px",
-        height: "40px",
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderWidth: "2px",
-          borderColor: "gray.400",
-          // Static dark gray border color
-        },
-      }}
-    />
-  </FormControl>
-  <button 
-  onClick={handleSubmit}
-  className="mt-10 rounded-full w-32 ml-4"><span className="text-md font-bold">Submit</span></button>
+        <TextField
+          // label="Investment Range"
+          name="investmentRange"
+          type="number"
+          value={formValues.investmentRange}
+          onChange={handleChange}
+          variant="outlined"
+          sx={{
+            marginTop: "20px",
+            width: "840px",
+            height: "40px",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderWidth: "2px",
+              borderColor: "gray.400",
+              // Static dark gray border color
+            },
+          }}
+        />
+      </FormControl> */}
+      <button onClick={handleSubmit} className="mt-10 rounded-full w-32 ml-4">
+        <span className="text-md font-bold">Submit</span>
+      </button>
     </div>
   );
 };
