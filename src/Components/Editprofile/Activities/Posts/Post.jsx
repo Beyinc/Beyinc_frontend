@@ -53,32 +53,60 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
   // }, [post,allPosts]);
   
 
-  const likingpost = async () => {
+  // const likingpost = async () => {
     
-    try {
-      const res = await ApiServices.likePost({ id: post?._id });
+  //   try {
+  //     const res = await ApiServices.likePost({ id: post?._id });
   
-      setAllPosts((prev) => {
-        // Ensure we're not mutating the state directly
-        const updatedPosts = prev.map((p) => {
-          // Log the post before updating
-          if (p._id === post?._id) {
-            console.log("Liked Post:", res.data); // Log only the post that is being liked
-            return { ...p, ...res.data }; // Ensure a new object is returned (immutability)
-          }
-          return p; // Return other posts unchanged
-        });
+  //     setAllPosts((prev) => {
+  //       // Ensure we're not mutating the state directly
+  //       const updatedPosts = prev.map((p) => {
+  //         // Log the post before updating
+  //         if (p._id === post?._id) {
+  //           console.log("Liked Post:", res.data); // Log only the post that is being liked
+  //           return { ...p, ...res.data }; // Ensure a new object is returned (immutability)
+  //         }
+  //         return p; // Return other posts unchanged
+  //       });
   
-        // Log updated posts after mapping
-        console.log("Updated Posts After Map:", updatedPosts);
-        return updatedPosts; // Return the updated posts list
-      });
+  //       // Log updated posts after mapping
+  //       console.log("Updated Posts After Map:", updatedPosts);
+  //       return updatedPosts; // Return the updated posts list
+  //     });
    
-      // setAllPosts((prev) =>
-      //   prev.map((p) => (p._id === post?._id ? res.data : p))
-      // );
+  //     // setAllPosts((prev) =>
+  //     //   prev.map((p) => (p._id === post?._id ? res.data : p))
+  //     // );
       
+  //   } catch (err) {
+  //     dispatch(
+  //       setToast({
+  //         message: "Error occurred when liking the post",
+  //         bgColor: ToastColors.failure,
+  //         visible: "yes",
+  //       })
+  //     );
+  //   }
+  // };
+
+  // Assuming this is inside your Post component
+  const likingpost = async () => {
+    try {
+      // Send API request to like the post
+      const res = await ApiServices.likePost({ id: post._id });
+
+      // Update the state immutably to avoid mutating the previous state
+      setAllPosts((prevPosts) =>
+        prevPosts.map((p) =>
+          p._id === post._id ? { ...p, ...res.data } : p  // Update the specific post
+        )
+      );
+      
+      console.log("Post liked successfully:", res.data);  // Optional: for debugging
+
     } catch (err) {
+      console.error("Error occurred when liking the post:", err);
+      
       dispatch(
         setToast({
           message: "Error occurred when liking the post",
@@ -368,9 +396,6 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
 
               {/* Post container */}
           <div        onClick={() => navigate(`/posts/${post?._id}`)} >  
-                 
-
-       
           
           <div
             className="postDesc"
@@ -475,6 +500,29 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
           </div>
           <div className="actionsHolder">
             <div className="actionsHolder-leftContent">
+              {/* <div className="likeActionHolder" onClick={likingpost}>
+                LIKE ACTION
+                <div>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 40 40"
+                    fill={"none"}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M34.6055 20.8477C35.2617 19.9805 35.625 18.918 35.625 17.8125C35.625 16.0586 34.6445 14.3985 33.0664 13.4727C32.6601 13.2344 32.1976 13.109 31.7266 13.1094H22.3594L22.5938 8.30862C22.6484 7.14847 22.2383 6.0469 21.4414 5.20706C21.0503 4.79311 20.5785 4.46375 20.0551 4.23935C19.5318 4.01494 18.9679 3.90025 18.3984 3.90237C16.3672 3.90237 14.5703 5.26956 14.0312 7.22659L10.6758 19.375H5.625C4.93359 19.375 4.375 19.9336 4.375 20.625V34.8438C4.375 35.5352 4.93359 36.0938 5.625 36.0938H29.1133C29.4727 36.0938 29.8242 36.0235 30.1484 35.8828C32.0078 35.0899 33.207 33.2735 33.207 31.2578C33.207 30.7657 33.1367 30.2813 32.9961 29.8125C33.6523 28.9453 34.0156 27.8828 34.0156 26.7774C34.0156 26.2852 33.9453 25.8008 33.8047 25.3321C34.4609 24.4649 34.8242 23.4024 34.8242 22.2969C34.8164 21.8047 34.7461 21.3164 34.6055 20.8477ZM7.1875 33.2813V22.1875H10.3516V33.2813H7.1875ZM32.0469 19.4922L31.1914 20.2344L31.7344 21.2266C31.9133 21.5534 32.006 21.9204 32.0039 22.293C32.0039 22.9375 31.7227 23.5508 31.2383 23.9727L30.3828 24.7149L30.9258 25.7071C31.1047 26.0339 31.1974 26.4009 31.1953 26.7735C31.1953 27.418 30.9141 28.0313 30.4297 28.4532L29.5742 29.1953L30.1172 30.1875C30.2961 30.5144 30.3888 30.8814 30.3867 31.2539C30.3867 32.1289 29.8711 32.918 29.0742 33.2774H12.8516V22.0625L16.7383 7.9805C16.8385 7.61956 17.0536 7.30113 17.3511 7.07345C17.6486 6.84577 18.0121 6.72126 18.3867 6.71878C18.6836 6.71878 18.9766 6.80472 19.2109 6.9805C19.5977 7.26956 19.8047 7.70706 19.7812 8.1719L19.4062 15.9219H31.6875C32.3828 16.3477 32.8125 17.0664 32.8125 17.8125C32.8125 18.4571 32.5312 19.0664 32.0469 19.4922Z"
+                      fill={
+                        post?.likes?.map((l) => l._id).includes(user_id)
+                          ? "var(--followBtn-bg)"
+                          : "var(--likeAction-bg)"
+                      }
+                    />
+                  </svg>
+                </div>
+                <div className="actionText">upvote</div>
+              </div> */}
+
               <div className="likeActionHolder" onClick={likingpost}>
                 {/* LIKE ACTION */}
                 <div>
@@ -497,6 +545,8 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
                 </div>
                 <div className="actionText">upvote</div>
               </div>
+
+
               {/* DISLIKE ACTION */}
               <div className="likeActionHolder" onClick={dislikePost}>
                 <div>
