@@ -15,16 +15,22 @@ import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
 
-const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
+const Post = ({allPosts,post: initialPost, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
+  const [post, setPost] = useState(initialPost ||{});
   const { email, role, userName, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
   const navigate = useNavigate();
   const [allComments, setAllComments] = useState([]);
+  // const [post, setPost] = useState(null);
+
   const dispatch = useDispatch();
+
+
+console.log('post',post)
   useEffect(() => {
     if (post?._id) {
       ApiServices.getPostComments({ postId: post?._id })
@@ -48,65 +54,50 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
     }
   }, [post?._id]);
 
-  // useEffect(() => {
-  //   console.log("Updated posts:", post);
-  // }, [post,allPosts]);
+  useEffect(() => {
+    console.log("Updated posts:", post);
+  }, [post,allPosts]);
   
 
   const likingpost = async () => {
-    
-    try {
-      const res = await ApiServices.likePost({ id: post?._id });
-  
-      setAllPosts((prev) => {
-        // Ensure we're not mutating the state directly
-        const updatedPosts = prev.map((p) => {
-          // Log the post before updating
-          if (p._id === post?._id) {
-            console.log("Liked Post:", res.data); // Log only the post that is being liked
-            return { ...p, ...res.data }; // Ensure a new object is returned (immutability)
-          }
-          return p; // Return other posts unchanged
-        });
-  
-        // Log updated posts after mapping
-        console.log("Updated Posts After Map:", updatedPosts);
-        return updatedPosts; // Return the updated posts list
+    dispatch(setLoading({ visible: "yes" }));
+
+    await ApiServices.likePost({ id: post?._id })
+      .then((res) => {
+        setPost(res.data);
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error occured when updating Pitch",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
       });
-   
-      // setAllPosts((prev) =>
-      //   prev.map((p) => (p._id === post?._id ? res.data : p))
-      // );
-      
-    } catch (err) {
-      dispatch(
-        setToast({
-          message: "Error occurred when liking the post",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
-    }
+    dispatch(setLoading({ visible: "no" }));
   };
 
+
   const dislikePost = async () => {
-    // dispatch(setLoading({ visible: "yes" }));
+    dispatch(setLoading({ visible: "yes" }));
 
     await ApiServices.dislikePost({ id: post?._id })
       .then((res) => {
-        setAllPosts((prev) => [
-          ...prev.map((p) => (p._id == post?._id ? res.data : p)),
-        ]);
+        setPost(res.data);
       })
       .catch((err) => {
-        setToast({
-          message: "Error occured when updating Pitch",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        });
+        dispatch(
+          setToast({
+            message: "Error occured when updating Pitch",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
       });
-    // dispatch(setLoading({ visible: "no" }));
+    dispatch(setLoading({ visible: "no" }));
   };
+
 
   const handleClickOutside = (event) => {
     if (
@@ -264,7 +255,7 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
                   {MMDDYYFormat(post?.updatedAt)}
                 </div>
                 <div>
-                  {post.visibility && (
+                  {post?.visibility && (
                     <div>
                       {post.visibility === "public" ? (
                         <Icon
@@ -372,10 +363,7 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
 
        
           
-          <div
-            className="postDesc"
-           
-          >
+          <div  className="postDesc">
             <b>{post?.postTitle}</b>
           </div>
           <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
@@ -522,7 +510,7 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
               {/* COMMENT ACTION */}
               <div
                 className="likeActionHolder"
-                // onClick={() => navigate(`/posts/${post?._id}`)}
+                onClick={() => navigate(`/posts/${post?._id}`)}
               >
                 <div>
                   <svg
@@ -546,7 +534,7 @@ const Post = ({allPosts, post, setAllPosts, screenDecider }) => {
 
               {/* SHARE ACTION */}
               <div className="likeActionHolder">
-                <ShareButton url={`${window.location.href}/${post._id}`} />
+                <ShareButton url={`${window.location.href}/${post?._id}`} />
               </div>
             </div>
 

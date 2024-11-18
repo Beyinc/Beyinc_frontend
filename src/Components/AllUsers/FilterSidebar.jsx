@@ -94,7 +94,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
   );
   return (
     <div
-      className={`filter-sidebar  ${open ? "h-[400px] px-20" : "h-[600px]"}`}
+      className={`filter-sidebar `}
     >
       {/* <h2>Filter</h2> */}
       <hr className={`mt-2 mb-6 ${open ? "hidden" : "w-full"}`} />
@@ -229,7 +229,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
       )}
 
       {/* Stage Input Field */}
-      <hr className="mt-4 mb-6" />
+      {/* <hr className="mt-4 mb-6" />
       <h4 className="mt-3 mb-2">Stages</h4>
       <div className="relative">
         <button
@@ -240,10 +240,10 @@ const FilterSidebar = ({ updateFilters, open }) => {
         >
           <RxCaretDown />
         </button>
-      </div>
+      </div> */}
 
       {/* Stage checkboxes, shown only if isStageOpen is true */}
-      {isStageOpen && (
+      {/* {isStageOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
           <input
             type="text"
@@ -266,7 +266,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

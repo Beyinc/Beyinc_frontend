@@ -92,12 +92,7 @@ const SingleUserDetails = ({
                 </span>
                 <span className="ml-2 font-bold">Ratings</span>
               </div>
-              <div className="rating-content">
-                <i className="fas fa-comment" style={{ color: "#4f55c7" }}></i>
-                <span style={{ marginLeft: "3px" }}>
-                  {/*d.comments?.length*/}5
-                </span>
-              </div>
+            
               <div>
                 <span className="text-xs">62 Reviews/47 Sessions</span>
               </div>
@@ -174,14 +169,14 @@ const SingleUserDetails = ({
                   >
                     Industries
                   </div>
-                  <div
+                  {/* <div
                     className={`Ttab ${
                       activeTab === "Stages" ? "Tactive" : ""
                     }`}
                     onClick={() => handleTabClick("Stages")}
                   >
                     Stages
-                  </div>
+                  </div> */}
                 </div>
                 <div className="content-container">
                   {activeTab === "Expertise" && (
@@ -199,7 +194,7 @@ const SingleUserDetails = ({
         <div class="w-px h-72 bg-neutral-300 relative right-10 hidden md:hidden lg:hidden xl:hidden 2xl:block"></div>
 
         <div className="user-card-actions">
-          <div className="mt-10">
+          <div >
             <div className="font-bold text-lg">Book a session</div>
             <div className="mt-5">
               <div className="flex">

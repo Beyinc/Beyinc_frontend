@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography } from '@mui/material';
 import {
   TextField,
@@ -37,7 +38,7 @@ const BeyincProfessional = () => {
   // const handleRoleChange = (e) => {
   //   setSelectedRole(e.target.value);
   // };
-
+  const navigate = useNavigate();
   const handleMultiSelectChange = (event, name) => {
     const selectedValues = event.target.value; // Get the array of selected values
     setFormValues((prevValues) => ({
@@ -121,7 +122,9 @@ const BeyincProfessional = () => {
       await ApiServices.saveBeyincProfessional({ data });
 
       // Optionally handle any additional logic after a successful API call
-      alert("Role submitted successfully");
+      alert("Profile created successfully");
+      navigate("/posts", { replace: true }); // Redirect without history stack addition
+      window.location.reload(); // Refresh the /posts page
     } catch (error) {
       // Handle any error that occurs during the API call
       console.error("Error submitting role:", error);
@@ -160,7 +163,7 @@ const BeyincProfessional = () => {
         <span className="font-normal text-base">Co-Founder</span>
       </label>
 
-      <label>
+      {/* <label>
         <input
           type="radio"
           name="beyincProfile"
@@ -170,19 +173,9 @@ const BeyincProfessional = () => {
           onChange={handleRadioChange}
         />
         <span className="font-normal text-base">Investor</span>
-      </label>
+      </label> */}
 
-      <label>
-        <input
-          type="radio"
-          name="beyincProfile"
-          value="Other"
-          className="mt-1 w-4 h-4"
-          checked={formValues.beyincProfile === "Other"}
-          onChange={handleRadioChange}
-        />
-        <span className="font-normal text-base">Other</span>
-      </label>
+
       </div>
       <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>
 
@@ -277,7 +270,8 @@ const BeyincProfessional = () => {
           </List>
         </Collapse>
       </FormControl>
-      <h3 className="mb-6 mt-10 font-serif text-xl">Stage*</h3>
+
+      {/* <h3 className="mb-6 mt-10 font-serif text-xl">Stage*</h3>
       <FormControl fullWidth>
         <TextField
           sx={{
@@ -337,7 +331,7 @@ const BeyincProfessional = () => {
             },
           }}
         />
-      </FormControl>
+      </FormControl> */}
       <button onClick={handleSubmit} className="mt-10 rounded-full w-32 ml-4">
         <span className="text-md font-bold">Submit</span>
       </button>

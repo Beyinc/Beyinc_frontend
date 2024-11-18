@@ -116,6 +116,25 @@
   transition: background-color 0.3s;
 }
 
+.grey {
+  width: 100%;
+  padding: 10px 30px;
+  background-color: grey;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: not-allowed; /* Indicates non-clickable state */
+  transition: background-color 0.3s;
+  pointer-events: none; /* Disables hover and click interactions */
+}
+
+.grey:hover {
+  background-color: grey; /* Keeps the same color on hover */
+}
+
+
 .book-button:hover {
   background-color: #3d43a8;
 }
