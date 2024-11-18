@@ -15,7 +15,7 @@
   background-color: #6a73fa !important;
 }
 .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  color: #6a73fa ;
+  color: #6a73fa;
   font-weight: 600 !important;
 }
 
@@ -63,6 +63,7 @@
 .usersWrapper {
   display: flex;
   gap: 1%;
+
   background: var(--body-background);
   flex-direction: row;
   justify-content: space-around;
@@ -77,6 +78,12 @@
   height: fit-content;
   margin-bottom: 20px;
   width: 300px;
+}
+
+@media (max-width: 1200px) {
+  .usersWrapper .filterContainer {
+    width: 200px;
+  }
 }
 /* .fas.fa-trash:hover {
   color: red;
@@ -142,6 +149,7 @@
   .user-card-main-container {
     /* display: flex;
     flex-direction: row; */
+
     justify-content: space-between;
     padding: 13px;
     border-radius: 10px;
@@ -175,15 +183,28 @@
   margin: 0;
 }
 
+@media (max-width: 668px) {
+  .user-card-image img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
 .user-card-details-text .user-name {
   cursor: pointer;
   display: inline-block;
-  font-size: 23px;
+  font-size: 20px;
   font-weight: 600;
   color: black;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+@media (max-width: 668px) {
+  .user-card-details-text .user-name {
+    font-size: 20px;
+  }
 }
 
 .user-nav-bar .nav-bar-buttons {
@@ -235,6 +256,47 @@
   border-radius: 10px;
   height: fit-content;
 }
+@media (max-width: 1500px) {
+  .user-card-main-container {
+    width: 95%;
+    /* padding: 10px; */
+  }
+}
+
+@media (max-width: 1400px) {
+  .user-card-main-container {
+    width: 90%;
+    /* padding: 10px; */
+  }
+}
+@media (max-width: 1300px) {
+  .user-card-main-container {
+    width: 80%;
+    flex-direction: column;
+  }
+}
+@media (max-width: 1200px) {
+  .user-card-main-container {
+    width: 80%;
+  }
+}
+@media (max-width: 1100px) {
+  .user-card-main-container {
+    width: 80%;
+  }
+}
+@media (max-width: 800px) {
+  .user-card-main-container {
+    width: 80%;
+    /* padding: 10px; */
+  }
+}
+@media (max-width: 769px) {
+  .user-card-main-container {
+    width: 100%;
+    /* padding: 10px; */
+  }
+}
 .user-card-details-text {
   width: 600px;
   padding-left: 30px;
@@ -259,6 +321,14 @@
   line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+@media (max-width: 769px) {
+  .user-card-details-text .skills {
+    width: 50%;
+    margin: 10px;
+    /* font-size: 10px; */
+    /* padding: 10px; */
+  }
+}
 .user-card-details-text span {
   margin-bottom: 6px;
   font-size: 13px;
@@ -270,12 +340,17 @@
   display: flex;
   flex-direction: column;
 }
-.user-card-rating {
 
+.user-card-rating {
   margin-top: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+@media (max-width: 768px) {
+  .user-card-rating {
+    margin-top: 15px;
+  }
 }
 .rating-content {
   font-size: 15px;
@@ -318,7 +393,7 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  margin-top: 10px;
+  margin: 20px auto 0 auto;
 }
 .no-users img {
   width: 100%;
@@ -424,7 +499,7 @@
 }
 
 .user-cards-panel {
-  width: 90%;
+  width: 70%;
 }
 
 .user-card-actions .connect-color {
@@ -505,7 +580,6 @@
 .filter-checkbox-label {
   text-wrap: wrap;
 }
-
 
 .tabsandinvestement {
   display: flex;

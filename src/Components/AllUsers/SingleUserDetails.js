@@ -67,6 +67,7 @@ const SingleUserDetails = ({
   return (
     <>
       <div className={"user-card-main-container"}>
+        <div className="flex flex-col xl:flex-row justify-center items-center">
         <div className="user-card-details">
           <div className="user-card-img-rating-container">
             <div className="user-card-image" onClick={openUser}>
@@ -91,12 +92,7 @@ const SingleUserDetails = ({
                 </span>
                 <span className="ml-2 font-bold">Ratings</span>
               </div>
-              <div className="rating-content">
-                <i className="fas fa-comment" style={{ color: "#4f55c7" }}></i>
-                <span style={{ marginLeft: "3px" }}>
-                  {/*d.comments?.length*/}5
-                </span>
-              </div>
+            
               <div>
                 <span className="text-xs">62 Reviews/47 Sessions</span>
               </div>
@@ -123,11 +119,11 @@ const SingleUserDetails = ({
                   {/* )} */}
                 </span>
               </div>
-              <div className="flex space-x-12 ">
+              <div className="flex flex-col md:flex-row md:space-x-12 ">
                 <span className="text-gray-500 font-semibold">{user.role}</span>
-                <span className="text-gray-500 font-semibold flex">
-                  <CiGlobe className="mr-3 text-lg" /> English,French
-                </span>
+               {user.languagesKnown.length > 0 && ( <span className="text-gray-500 font-semibold flex">
+                  <CiGlobe className="md:mr-3 text-lg" /> {user.languagesKnown?.join(", ")}
+                </span>)}
               </div>
 
               {/* {d.educationDetails.length > 0 ? (
@@ -148,15 +144,15 @@ const SingleUserDetails = ({
                 Profile not updated
               </span>
             )} */}
-              <span className="skills">{user.skills?.join(", ")}</span>
-              <span className="mt-2">
-                {user.bio ? user.bio.slice(0, 140) : "No bio available"}
+              <span className="skills ">{user.skills?.join(", ")}</span>
+              <span className="mt-2 2xl:w-[100%] lg:w-[60%] md:[60%] sm:[50%] w-[30%]">
+                {user.bio ? user.bio.slice(0, 100) + " . . ." : "No bio available"}
               </span>
             </div>
 
-            <div className=" ml-6 mt-4  tabsandinvestement">
+            <div className="mt-4  tabsandinvestement">
               <div>
-                <div className="tabs-container">
+                <div className=" tabs-container">
                   <div
                     className={`Ttab ${
                       activeTab === "Expertise" ? "Tactive" : ""
@@ -173,14 +169,14 @@ const SingleUserDetails = ({
                   >
                     Industries
                   </div>
-                  <div
+                  {/* <div
                     className={`Ttab ${
                       activeTab === "Stages" ? "Tactive" : ""
                     }`}
                     onClick={() => handleTabClick("Stages")}
                   >
                     Stages
-                  </div>
+                  </div> */}
                 </div>
                 <div className="content-container">
                   {activeTab === "Expertise" && (
@@ -195,10 +191,10 @@ const SingleUserDetails = ({
             </div>
           </div>
         </div>
-        <div class="w-px h-72 bg-neutral-300 relative right-10 "></div>
+        <div class="w-px h-72 bg-neutral-300 relative right-10 hidden md:hidden lg:hidden xl:hidden 2xl:block"></div>
 
         <div className="user-card-actions">
-          <div className="mt-10">
+          <div >
             <div className="font-bold text-lg">Book a session</div>
             <div className="mt-5">
               <div className="flex">
@@ -253,6 +249,7 @@ const SingleUserDetails = ({
                 </button>
               ))
           } */}
+        </div>
         </div>
       </div>
     </>
