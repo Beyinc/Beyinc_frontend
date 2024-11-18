@@ -174,14 +174,14 @@ const SingleUserDetails = ({
                   >
                     Industries
                   </div>
-                  <div
+                  {/* <div
                     className={`Ttab ${
                       activeTab === "Stages" ? "Tactive" : ""
                     }`}
                     onClick={() => handleTabClick("Stages")}
                   >
                     Stages
-                  </div>
+                  </div> */}
                 </div>
                 <div className="content-container">
                   {activeTab === "Expertise" && (

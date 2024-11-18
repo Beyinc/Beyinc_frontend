@@ -280,7 +280,7 @@ const Posts = () => {
             <div>Create post</div>
           </div>
 
-          <div className="sidebar-menu-items">
+          {/* <div className="sidebar-menu-items">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +295,7 @@ const Posts = () => {
               </svg>
             </div>
             <div>Newsfeed</div>
-          </div>
+          </div> */}
 
           <div
             className="sidebar-menu-items"
@@ -337,7 +337,7 @@ const Posts = () => {
               {data?.connections_approved || 0}
             </div>
           </div>
-
+{/* 
           <div className="sidebar-menu-items">
             <div>
               <svg
@@ -353,7 +353,7 @@ const Posts = () => {
               </svg>
             </div>
             <div>Expertise</div>
-          </div>
+          </div> */}
 
           <div className="sidebar-menu-items">
             <div>
@@ -652,10 +652,10 @@ const Posts = () => {
         <div className="allPostShowContainer">
         {(filteredPosts.length > 0 ? filteredPosts : allPosts)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
-            .map((post) => (
+            .map((p) => (
               <Post
-                key={post.id}
-                post={post}
+                key={p.id}
+                p={p}
                 setAllPosts={setAllPosts}
                 screenDecider={"home"}
               />
