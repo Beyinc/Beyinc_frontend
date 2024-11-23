@@ -2,22 +2,35 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 100%; 
+  width: 100%; 
+  margin: 0 auto; 
+  padding: 10px; 
+  box-sizing: border-box; 
 }
 .EditProfileImageContainer {
-  width: 98%;
-}
+  /* width: 100%;  */
+  width: 1600px;
+  /* overflow: hidden;  */
+  margin: auto;
+ 
+} 
 .EditProfileImageContainer img {
   width: 100%;
   border-top-right-radius: 20px;  /* Adjust the radius value */
   border-bottom-right-radius: 20px; /* Adjust the radius value */
   height: 350px;
+  
+  /* object-fit: contain; */
 }
+
 
 .ProfileContainer {
   display: flex;
   gap: 20px;
   width: 1400px;
-  margin-left: auto;
+  /* margin-left: auto; */
+  margin: auto;
 }
 
 .ProfileDetailsCard {
@@ -31,7 +44,8 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   transform: translateY(-150px);
-  background: var(--editprofile-details-card-bg);
+  /* background: var(--editprofile-details-card-bg); */
+  background-color: white;
 }
 .FreeSessionCard{
   display: flex;
@@ -1012,10 +1026,9 @@ textarea {
   }
 
   .ProfileDetailsCard {
-    width: 380px;
+    width: 355px;
     margin-top: 100px;
     height: auto;
-    margin-left: 8px;
     max-height: 750px;
     padding: 10px;
     box-shadow: -1px -1px 7px 1px #00000040;
@@ -1027,11 +1040,7 @@ textarea {
     border-radius: 25px 25px 5px 5px;
   }
 
-  .BookSessionCard{
-    width: 355px;
-    margin-left: 10px;
-    margin-right: 20px;
-  }
+
 
   .ProfileDetailsCard .EditProfileImage img {
     width: 100px;
@@ -1060,7 +1069,6 @@ textarea {
   .ActivtyDetailsCard {
     flex: 1;
     margin-top: -150px;
-    width: 360px;
   }
   .toggleContainer {
     margin: 10px;
@@ -1159,7 +1167,7 @@ textarea {
     width: 350px;
   }
   .EditProfile-Buttons-Section {
-    width: 400px;
+    width: 360px;
   }
   .createPostContainer {
     width: 310px;

@@ -87,6 +87,7 @@ const EditProfile = () => {
   //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
+   
 
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
@@ -310,7 +311,7 @@ const EditProfile = () => {
   const [educationDetails, setEducationDetails] = useState([]); // Initialize as an array
 
   const [tempEducationDetails, setTempEducationDetails] = useState({
-    // year: "",
+    year: "",
     grade: "",
     college: "",
     Edstart: "",
@@ -347,7 +348,8 @@ const EditProfile = () => {
   const [isAboutPopupVisible, setIsAboutPopupVisible] = useState(false);
   const [isSkillsPopupVisibile, setisSkillsPopupVisibile] = useState(false);
 
-  const [isExperiencePopupVisible, setIsExperiencePopupVisible] = useState(false);
+  const [isExperiencePopupVisible, setIsExperiencePopupVisible] =
+    useState(false);
   const [isEducationPopupVisible, setIsEducationPopupVisible] = useState(false);
 
   const handleEditButtonClick = () => {
@@ -459,7 +461,6 @@ const EditProfile = () => {
     }, 500);
     setIsExperiencePopupVisible(true);
   };
-  
   const handleEducationButtonClick = () => {
     window.scrollTo({
       top: 0,
@@ -629,7 +630,6 @@ const EditProfile = () => {
     setRecentUploadedDocs((prev) => ({ ...prev, [e.target.name]: file?.name }));
     setFileBase(e, file);
   };
-
   const setFileBase = (e, file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -640,7 +640,6 @@ const EditProfile = () => {
       }));
     };
   };
-
   useEffect(() => {
     const hasEducation = totalEducationData.length > 0;
     const hasWorkExperience = totalExperienceData.length > 0;
@@ -671,7 +670,6 @@ const EditProfile = () => {
         });
     }
   }, [userpage, user_id]);
-
   const onLike = async (commentId, isLike) => {
     await ApiServices.likeComment({
       comment_id: commentId,
@@ -1592,21 +1590,6 @@ const EditProfile = () => {
 
   ///////////////////////////////////////////////////////////////
 
-
-  useEffect(() => {
-    setEducationDetails(educationDetails);
-    
-    setTotalEducationData((prev) => [
-      ...prev,
-      educationDetails, // Add the new details
-    ]);
-    
-  }, [educationDetails]);
-
-  useEffect(() => {
-    console.log(totalEducationData);
-  }, [totalEducationData]);
-  
   const saveEducationDetails = () => {
     // Check if the required fields are filled
     if (
@@ -1615,35 +1598,23 @@ const EditProfile = () => {
       tempEducationDetails.college !== ""
     ) {
       // Save tempEducationDetails to educationDetails
-      if(editingEducationId === "") {
-        
-        setEducationDetails((prev) => [
-          ...prev,
-          { ...tempEducationDetails }, // Add the new details
-        ]);
-      } else {
-          setTotalEducationData((prev) => 
-          prev.map((item,index) => 
-            index === editingEducationId - 1 ? tempEducationDetails : item 
-          )
-        );
-      }
+      setEducationDetails((prev) => [
+        ...prev,
+        { ...tempEducationDetails }, // Add the new details
+      ]);
 
       // Reset tempEducationDetails if needed
       setTempEducationDetails({
-        // year: "",
+        year: "",
         grade: "",
         college: "",
         Edstart: "",
         Edend: "",
       });
-      setIsEducationPopupVisible(false);
-      seteditingEducationId("");
     } else {
       alert("Please fill all required fields.");
     }
   };
-  
   // Save changes from temp to main state
   const saveExperienceDetails = (event) => {
     event.preventDefault();
@@ -1654,7 +1625,7 @@ const EditProfile = () => {
   };
 
   const submitAllData = async () => {
-    // console.log(experienceDetails, educationDetails, skills, bio);
+    console.log(experienceDetails, educationDetails, skills, bio);
 
     const allData = {
       experience: experienceDetails,
@@ -2220,7 +2191,6 @@ const EditProfile = () => {
                   <div>
                     {totalEducationData.map((te, i) => (
                       <div
-                        key={i}
                         className="indiEducationCont"
                         style={{
                           display: "flex",
@@ -3070,7 +3040,6 @@ const EditProfile = () => {
             </div>
           )}
         </div>
-
         {isInputPopupVisible && (
           <div className="popup-container">
             <div className="popup-content">
@@ -3100,10 +3069,9 @@ const EditProfile = () => {
                       ></i>
                     </div>
                   </div>
-
                   {role === "Mentor" && (
                     <div>
-                      <label className="Input-Label">Salutation</label>
+                      <label className="Input-Label">salutation</label>
                       <select
                         name="salutation"
                         id=""
@@ -3210,7 +3178,6 @@ const EditProfile = () => {
                       </div> */}
                     </div>
                   </div>
-
                   <label className="Input-Label">Twitter</label>
                   <div className="Input_Fields">
                     <input
@@ -3331,7 +3298,7 @@ const EditProfile = () => {
                       )}
                     </div> */}
 
-                    {/* <div>
+                    <div>
                       <div>
                         <label className="Input-Label">Languages Known</label>
                       </div>
@@ -3399,7 +3366,7 @@ const EditProfile = () => {
                             Add
                           </button>
                         </div> */}
-                        {/* <div
+                        <div
                           style={{
                             display: "flex",
                             justifyContent: "flex-end",
@@ -3413,7 +3380,7 @@ const EditProfile = () => {
                           </button>
                         </div>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3621,15 +3588,16 @@ const EditProfile = () => {
                     onClick={() => {
                       document.getElementsByTagName("body")[0].style.overflowY =
                         "scroll";
+
                       setIsEducationPopupVisible(false);
                       seteditingEducationId("");
-                      setTempEducationDetails({
-                        // year: "",
-                        grade: "",
-                        college: "",
-                        Edstart: "",
-                        Edend: "",
-                      });
+                      // setTempEducationDetails({
+                      //   year: "",
+                      //   grade: "",
+                      //   college: "",
+                      //   Edstart: "",
+                      //   Edend: "",
+                      // });
                     }}
                   >
                     <i
@@ -3781,7 +3749,6 @@ const EditProfile = () => {
 
                   <div>
                     <button
-                      type="button"
                       className="add-button"
                       // onClick={addEducation}
                       onClick={saveEducationDetails}
@@ -3857,7 +3824,7 @@ const EditProfile = () => {
                     {mentorCategories === "Academia Mentor" && (
                       <div>
                         <div>
-                          <label className="Input-Label">Company Name*</label>
+                          <label className="Input-Label">Institute Name*</label>
                         </div>
                         <div className="Exp_Input_Fields">
                           <input
@@ -3871,7 +3838,7 @@ const EditProfile = () => {
                             value={tempExperienceDetails.institute}
                             id=""
                             onChange={handleChange}
-                            placeholder="Enter Your company name"
+                            placeholder="Enter Your institute name"
                           />
                         </div>
                       </div>
@@ -3904,7 +3871,7 @@ const EditProfile = () => {
                       </div>
                     )}
 
-                    {/* {mentorCategories == "Academia Mentor" && (
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
                         <div>
                           <label className="Input-Label">Department*</label>
@@ -3925,9 +3892,9 @@ const EditProfile = () => {
                           />
                         </div>
                       </div>
-                    )} */}
+                    )}
 
-                    {/* {mentorCategories == "Academia Mentor" && (
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
                         <div>
                           <label className="Input-Label">
@@ -3950,8 +3917,7 @@ const EditProfile = () => {
                           />
                         </div>
                       </div>
-                    )} */}
-
+                    )}
                     {mentorCategories == "Academia Mentor" && (
                       <div>
                         <div
@@ -3994,7 +3960,7 @@ const EditProfile = () => {
                       </div>
                     )}
 
-                    {/* {mentorCategories == "Academia Mentor" && (
+                    {mentorCategories == "Academia Mentor" && (
                       <div>
                         <div>
                           <label className="Input-Label">
@@ -4082,7 +4048,7 @@ const EditProfile = () => {
                           />
                         </div>
                       </div>
-                    )} */}
+                    )}
 
                     {/*Industry Expert Mentor  &  Entrepreneur */}
                     {(mentorCategories === "Industry Expert Mentor" ||
@@ -4687,7 +4653,6 @@ const EditProfile = () => {
           </div>
         )}
       </div>
-
       <AddConversationPopup
         receiverId={pitchSendTo}
         setReceiverId={setPitchSendTo}

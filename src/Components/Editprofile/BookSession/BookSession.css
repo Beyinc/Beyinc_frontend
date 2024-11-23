@@ -138,9 +138,3 @@
 .book-button:hover {
   background-color: #3d43a8;
 }
-
-@media(max-width:768px){
-  .book-button-container{
-    margin-top: 30px;
-  }
-}

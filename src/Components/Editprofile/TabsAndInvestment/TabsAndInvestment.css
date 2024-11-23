@@ -5,7 +5,7 @@
   border-radius: 12px;
   gap: 240px;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  margin-bottom: 100px;
 }
 
 .tabs-container {
@@ -79,32 +79,4 @@
   font-size: 12px;
   font-weight: 500;
   color: #333;
-}
-
-@media(max-width:768px){
-  .tabs-container {
-    display: flex;
-    max-width:fit-content;
-    gap: 30px;
-    border-radius: 12px;
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    margin-top: 60px;
-    margin-left: 40px;
-  }
-
-  .content-container {
-    margin-top: 20px;
-    margin-left: 120px;
-    font-size: 14px;
-    color: #333;
-  }
-
-  .tabs-and-investment-container{
-    margin-top: 10px;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
 }
