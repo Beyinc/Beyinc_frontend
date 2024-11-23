@@ -96,7 +96,7 @@ function SearchResults() {
                 className="flex items-center justify-center h-14 w-36 text-lg text-[#4f55c7] bg-[#4f55c7] px-1 rounded-full"
               >
                 <div className=" py-3 flex items-center justify-center rounded-full bg-white h-full w-full">
-                  Connect
+                  Follow
                 </div>
               </button>
             </div>

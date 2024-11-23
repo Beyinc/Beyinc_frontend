@@ -42,6 +42,19 @@ const FilterSidebar = ({ updateFilters, open }) => {
     selectedCategories,
   ]);
 
+
+  const clearAllExpertise = () => {
+    setSelectedExpertise([]);
+  };
+
+  const clearAllCategories = () => {
+    setSelectedCategories([]);
+  };
+
+  const clearAllIndustry = () => {
+    setSelectedIndustry([]);
+  };
+
   const handleExpertiseChange = (event) => {
     const { value, checked } = event.target;
     setSelectedExpertise((prev) =>
@@ -123,6 +136,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
       {/* Category checkboxes, shown only if isCategoryOpen is true */}
       {isCategoryOpen && (
         <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+          
           <input
             type="text"
             className="w-64 mt-3"
@@ -130,6 +144,22 @@ const FilterSidebar = ({ updateFilters, open }) => {
             value={category}
             onChange={(e) => setCategory(e.target.value)} // Update state on change
           />
+
+          {/* Clear All Section */}
+          {selectedCategories.length > 0 && (
+            <div className="flex items-center justify-between mt-3 px-4 mb-4">
+              <a
+                onClick={clearAllCategories} // Call clearAllTags when clicked
+                className="flex items-center cursor-pointer text-sm text-gray-500 hover:text-gray-700"
+              >
+                <div className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 mr-2">
+                  X
+                </div>
+                Clear All
+              </a>
+            </div>
+          )}
+
           {filteredCategories.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -171,6 +201,22 @@ const FilterSidebar = ({ updateFilters, open }) => {
             value={expertise}
             onChange={(e) => setExpertise(e.target.value)}
           />
+
+          {/* Clear All Section */}
+          {selectedExpertise.length > 0 && (
+            <div className="flex items-center justify-between mt-3 px-4 mb-4">
+              <a
+                onClick={clearAllExpertise} // Call clearAllTags when clicked
+                className="flex items-center cursor-pointer text-sm text-gray-500 hover:text-gray-700"
+              >
+                <div className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 mr-2">
+                  X
+                </div>
+                Clear All
+              </a>
+            </div>
+          )}
+
           {filteredExpertiseOptions.map((option) => (
             <div key={option} className="p-0">
               <label>
@@ -212,6 +258,22 @@ const FilterSidebar = ({ updateFilters, open }) => {
             value={industries}
             onChange={(e) => setIndustries(e.target.value)}
           />
+
+          {/* Clear All Section */}
+          {selectedIndustry.length > 0 && (
+            <div className="flex items-center justify-between mt-3 px-4 mb-4">
+              <a
+                onClick={clearAllIndustry} // Call clearAllTags when clicked
+                className="flex items-center cursor-pointer text-sm text-gray-500 hover:text-gray-700"
+              >
+                <div className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 mr-2">
+                  X
+                </div>
+                Clear All
+              </a>
+            </div>
+          )}
+
           {filteredIndustryOptions.map((option) => (
             <div key={option} className="p-0">
               <label>

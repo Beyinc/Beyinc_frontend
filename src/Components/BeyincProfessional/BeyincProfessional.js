@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography } from '@mui/material';
 import {
@@ -17,8 +17,7 @@ import {
   ListItem,
   Collapse,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import { stages, allskills, domain_subdomain } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
 const BeyincProfessional = () => {
@@ -38,6 +37,9 @@ const BeyincProfessional = () => {
   // const handleRoleChange = (e) => {
   //   setSelectedRole(e.target.value);
   // };
+
+  const dropdownRef =  useRef(null);
+
   const navigate = useNavigate();
   const handleMultiSelectChange = (event, name) => {
     const selectedValues = event.target.value; // Get the array of selected values
@@ -48,8 +50,21 @@ const BeyincProfessional = () => {
   };
 
   const handleIndustriesClick = () => {
-    setOpenIndustries(!openIndustries);
+    setOpenIndustries((prev) => !prev);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenIndustries(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleIndustryToggle = (subCategory) => {
     const currentIndex = formValues.industries.indexOf(subCategory);
@@ -71,6 +86,7 @@ const BeyincProfessional = () => {
       [category]: !prev[category],
     }));
   };
+
   const handleStagesClick = () => {
     setOpenStages((prev) => !prev); // Toggle dropdown visibility
   };
@@ -177,8 +193,8 @@ const BeyincProfessional = () => {
 
 
       </div>
+      
       <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>
-
       <Select
         multiple
         name="expertise"
@@ -205,7 +221,7 @@ const BeyincProfessional = () => {
       </Select>
 
       <h3 className="mb-6 mt-10 font-serif text-xl">Industries*</h3>
-      <FormControl fullWidth>
+      <FormControl fullWidth ref={dropdownRef}>
         <TextField
           sx={{
             marginTop: "10px",

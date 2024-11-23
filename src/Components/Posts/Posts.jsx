@@ -199,6 +199,10 @@ const Posts = () => {
     );
   };
 
+  const clearAllTags = () => {
+    setSelectedTags([]);
+  };
+
   const filteredTagsOptions = postTypes.filter((option) =>
     option.value.toLowerCase().includes(tags.toLowerCase())
   );
@@ -232,6 +236,7 @@ const Posts = () => {
 
     fetchFilteredPosts(); // Call the function
   }, [people, selectedSortOption, selectedTags, checkedValues]);
+  
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -413,6 +418,15 @@ const Posts = () => {
                   onChange={(e) => setTags(e.target.value)}
                 />
 
+                {selectedTags.length > 0 && (
+                      <div className="clear-container">
+                        <div className="x-box">X</div>
+                          <a onClick={clearAllTags} className="clear-link">
+                            Clear All
+                          </a>
+                      </div>
+                )}
+
                 {filteredTagsOptions.map((option) => (
                   <div key={option.value} className="p-0">
                     <label>
@@ -426,6 +440,7 @@ const Posts = () => {
                     </label>
                   </div>
                 ))}
+                
               </div>
             )}
 
