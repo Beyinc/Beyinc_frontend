@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
 
-const Post = ({allPosts,post: initialPost, setAllPosts, screenDecider }) => {
+const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
@@ -30,7 +30,8 @@ const Post = ({allPosts,post: initialPost, setAllPosts, screenDecider }) => {
   const dispatch = useDispatch();
 
 
-console.log('post',post)
+ console.log('post',post)
+
   useEffect(() => {
     if (post?._id) {
       ApiServices.getPostComments({ postId: post?._id })
@@ -54,9 +55,9 @@ console.log('post',post)
     }
   }, [post?._id]);
 
-  useEffect(() => {
-    console.log("Updated posts:", post);
-  }, [post,allPosts]);
+  // useEffect(() => {
+  //   console.log("Updated posts:", post);
+  // }, [post,allPosts]);
   
 
   const likingpost = async () => {
@@ -176,7 +177,7 @@ console.log('post',post)
     if (isExpanded) {
       return post?.description;
     } else {
-      return post?.description.length > 100
+      return post?.description?.length > 100
         ? post?.description.slice(0, 100) + "..."
         : post?.description;
     }
@@ -368,7 +369,7 @@ console.log('post',post)
           </div>
           <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
             <div dangerouslySetInnerHTML={createMarkup(getDescription())}></div>
-            {!isExpanded && post?.description.length > 100 && (
+            {!isExpanded && post?.description?.length > 100 && (
               <span className="seeMore" onClick={toggleExpanded}>
                 ...See more
               </span>
