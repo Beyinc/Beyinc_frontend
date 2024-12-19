@@ -43,7 +43,7 @@ const About = () => {
             <div>
                 <AboutCard />
             </div>
-            <div>
+            <div className="">
                 <SkillsCard />
             </div>
         </div>
