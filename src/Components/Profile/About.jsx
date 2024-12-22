@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import EditAboutModal from "./EditAboutModal";
 import AboutCard from "./AboutCard";
 import SkillsCard from "./SkillsCard";
+import EducationCard from "./EducationCard";
+import ExperiencesCard from "./ExperienceCard";
 
 const About = () => {
     const [profileAbout, setProfileAbout] = useState("");
@@ -16,7 +18,7 @@ const About = () => {
             });
             if (response.data && response.data.about) {
                 setProfileAbout(response.data.about);
-                console.log("This is the about from backend: ", response.data.about);
+                // console.log("This is the about from backend: ", response.data.about);
             } else {
                 console.log("No about data found in the response.");
             }
@@ -46,6 +48,13 @@ const About = () => {
             <div className="">
                 <SkillsCard />
             </div>
+            <div className="">
+                <EducationCard />
+            </div>
+            <div>
+                <ExperiencesCard />
+            </div>
+
         </div>
     );
 };

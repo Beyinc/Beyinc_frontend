@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import EditAboutModal from "./EditAboutModal"; // Import the EditAboutModal component
+import EditAboutModal from "./EditAboutModal"; 
 
 const AboutCard = () => {
     const [profileAbout, setProfileAbout] = useState("");
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(""); // New state for error handling
+    const [errorMessage, setErrorMessage] = useState("");
 
     const fetchAbout = async () => {
         try {
@@ -14,7 +14,6 @@ const AboutCard = () => {
             });
             if (response.data && response.data.about) {
                 setProfileAbout(response.data.about);
-                console.log("This is the about from backend: ", response.data.about);
             } else {
                 console.log("No about data found in the response.");
             }
@@ -29,8 +28,8 @@ const AboutCard = () => {
     }, []);
 
     const handleAboutSave = (updatedAbout) => {
-        setProfileAbout(updatedAbout); // Update the profileAbout state with the new text
-        setErrorMessage(""); // Clear any previous error message
+        setProfileAbout(updatedAbout); 
+        setErrorMessage(""); 
     };
 
     return (
@@ -46,7 +45,7 @@ const AboutCard = () => {
                     {profileAbout ? profileAbout : "Loading..."}
                 </div>
                 {errorMessage && (
-                    <div className="text-red-500 mt-4">{errorMessage}</div> // Display error message if any
+                    <div className="text-red-500 mt-4">{errorMessage}</div> 
                 )}
             </div>
             <EditAboutModal 
