@@ -1,0 +1,300 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
+  const options = [
+    "Accounting",
+    "Aerospace Engineering",
+    "AgroTech",
+    "AI Development",
+    "Android Development",
+    "Art",
+    "Biotechnology",
+    "Blockchain",
+    "Chemistry",
+    "Clean Energy",
+    "Clothing Design",
+    "Commercial Property Management",
+    "Communication",
+    "Computer Programming",
+    "Consultancy",
+    "Construction Management",
+    "Consumer Goods",
+    "Content Marketing",
+    "Cryptocurrency",
+    "Data Analysis",
+    "Design Thinking",
+    "Digital Marketing",
+    "Ecommerce",
+    "EdTech",
+    "Electronics",
+    "Energy",
+    "Environmental Science",
+    "Events Management",
+    "Fashion Design",
+    "Finance",
+    "Financial Analysis",
+    "Fintech",
+    "Food and Beverage",
+    "Frontend Development",
+    "Full Stack Development",
+    "Gaming",
+    "GreenTech",
+    "Healthcare",
+    "Hospitality",
+    "Information Technology",
+    "Insurance",
+    "Interior Design",
+    "Investment",
+    "iOS Development",
+    "Java Programming",
+    "JavaScript",
+    "Jewelry Design",
+    "Logistics",
+    "Machine Learning",
+    "Management Consulting",
+    "Manufacturing",
+    "Marine Engineering",
+    "Marketing Strategy",
+    "Material Science",
+    "Mathematics",
+    "Mechanical Engineering",
+    "Medical Technology",
+    "Mining",
+    "Mobile App Development",
+    "Music Composition",
+    "Natural Language Processing",
+    "Neural Networks",
+    "Nutrition",
+    "Oil & Gas",
+    "Organic Farming",
+    "Patent Law",
+    "Pharmaceuticals",
+    "Physics",
+    "Product Design",
+    "Project Management",
+    "Prototyping",
+    "Publishing",
+    "Python Programming",
+    "Real Estate",
+    "Recruitment",
+    "Renewable Energy",
+    "Restaurants",
+    "Robotics",
+    "Ruby Programming",
+    "Sales",
+    "Security",
+    "SEO",
+    "Social Media Management",
+    "Software Development",
+    "Spa Services",
+    "Sports Management",
+    "Supply Chain Management",
+    "Telecommunications",
+    "Tourism",
+    "Translation",
+    "UI/UX Design",
+    "Virtual Reality",
+    "Web Development",
+    "Wholesale",
+    "3D Printing"
+  ];
+
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [displayedSkill, setDisplayedSkill] = useState([]);
+  const [currentSkill, setCurrentSkill] = useState("");
+  const [skillsToDelete, setSkillsToDelete] = useState([]);
+  useEffect(() => {
+    setDisplayedSkill(savedSkills);
+  }, [savedSkills])
+
+  const handleClickCrossIcon = (item) => {
+    // Remove the item from displayedSkill
+    const updatedDisplayedSkills = displayedSkill.filter(skill => skill !== item);
+
+    // Add the item to skillsToDelete
+    const updatedSkillsToDelete = [...skillsToDelete, item];
+
+    // Update the states
+    setDisplayedSkill(updatedDisplayedSkills);
+    setSkillsToDelete(updatedSkillsToDelete);
+  };
+
+
+  const handleSkillSelect = (e) => {
+    // console.log("These are the displayedSkills: ", displayedSkill);
+    // console.log("These are the savedSills: ", savedSkills);
+    const selectedSkill = e.target.value;
+    if (selectedSkill && !selectedSkills.includes(selectedSkill)) {
+      setSelectedSkills((prevSkills) => [...prevSkills, selectedSkill]);
+    }
+    setCurrentSkill("");
+  };
+
+
+
+  const handleAddSkill = async () => {
+    console.log("Skills To Delete: ", skillsToDelete);
+    console.log("Selected Skills: ", selectedSkills);
+    try {
+      let response;
+      if (selectedSkills.length > 0) {
+        response = await axios.post('http://localhost:4000/api/addskills', {
+          userId: "675e7e41e424505620d8faee",
+          skills: selectedSkills
+
+        })
+      }
+
+      if (response && response.status === 200) {
+        setSkills(response.data.skills);
+        setSelectedSkills([]);
+        onClose();
+      }
+
+      if (skillsToDelete.length > 0) {
+        handleDeleteSkill();
+        setSkillsToDelete([])
+      }
+
+      
+
+    } catch (error) {
+      console.log("There was some error while adding skills: ", error);
+    }
+  }
+
+
+  const handleDeleteSkill = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/api/deleteSkill', {
+        userId: "675e7e41e424505620d8faee",
+        skillsToDelete: skillsToDelete
+      });
+      if (response.data.skills) {
+        setSkills(response.data.skills);
+        onClose();
+      }
+    } catch (error) {
+      console.log("There was an error while deleting the skill: ", error);
+    }
+  };
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div>
+      <div
+        className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+        // onClick={onClose}
+      >
+        <div
+          className="bg-white w-1/3 p-6 rounded-lg shadow-lg relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Content */}
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Edit Skills</h2>
+
+          {/* savedSkills */}
+          <div className="mt-4 flex flex-wrap gap-2">{
+            displayedSkill.length > 0 ? (
+              displayedSkill.map((skill, index) => (
+                <span key={index} className="relative group my-2">
+                  <span className="bg-blue-200 py-3 px-4 rounded-lg text-sm cursor-pointer">
+                    {skill}
+                  </span>
+                  <svg
+                    onClick={() => handleClickCrossIcon(skill)}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 text-red-500 absolute -top-1/2 cursor-pointer right-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </span>
+              ))
+            ) : (
+              <p>No skills available</p>
+            )}
+          </div>
+          <hr className="mt-4" />
+
+          {/* Display skills */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {selectedSkills.length > 0 ? (
+              selectedSkills.map((skill, index) => (
+                <span key={index} className="relative group my-2">
+                  <span className="bg-blue-200 py-3 px-4 rounded-lg text-sm cursor-pointer">
+                    {skill}
+                  </span>
+                  <svg
+                    onClick={() => {
+                      // Remove the clicked skill from selectedSkills array
+                      setSelectedSkills((prevSkills) =>
+                        prevSkills.filter((item) => item !== skill)
+                      );
+                    }} xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 text-red-500 absolute -top-1/2 cursor-pointer right-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </span>
+              ))
+            ) : (
+              <p>No skills available</p>
+            )}
+          </div>
+
+          {/* Dropdown to select a new skill */}
+          <div className="mt-4">
+            <select
+              value={currentSkill}
+              onChange={handleSkillSelect}
+              className="border p-2 rounded-md w-full"
+            >
+              <option value="">Select a skill</option>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Button Row */}
+          <div className="flex justify-end space-x-2 mt-4">
+            <button
+              onClick={handleAddSkill}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            >
+              Save
+            </button>
+            <button
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        onClick={onClose}
+                    >Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditSkillsModal;

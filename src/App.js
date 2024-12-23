@@ -49,6 +49,7 @@ import EntryDetails from "./Components/EntryDetails/EntryDetails";
 import SearchResults from "./Components/Searching/SearchResults";
 import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
+import About from "./Components/Profile/About";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -365,6 +366,9 @@ const App = () => {
            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
            <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
+
+            <Route path="/about" element={<About />} />
+           
         </Routes>
       </Suspense>
     </div>
