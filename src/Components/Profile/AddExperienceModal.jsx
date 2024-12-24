@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import aboutService from './aboutPageApi'
 
 const AddExperienceModal = ({ isOpen, onClose, setExperiences }) => {
     const designations = [
@@ -42,6 +43,7 @@ const AddExperienceModal = ({ isOpen, onClose, setExperiences }) => {
     const [endYear, setEndYear] = useState();
     const [isFormComplete, setIsFormComplete] = useState(false);
     const [designation, setDesignation] = useState("");
+    const [location, setLocation] = useState("");
 
     const currentYear = new Date().getFullYear();
 
@@ -55,30 +57,35 @@ const AddExperienceModal = ({ isOpen, onClose, setExperiences }) => {
     }
     const handleAddExperience = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/saveExperienceDetails', {
-                userId: "675e7e41e424505620d8faee",
-                experience: [
-                    {
-                        startYear: startYear,
-                        endYear: endYear,
-                        designation: designation,
-                        company: company
-                    }
-                ]
-            })
-            if (response.data && response.data.success === true) {
-                setExperiences(response.data.experienceDetails);
-                onClose();
+            const experienceData = [
+                {
+                    startYear: startYear,
+                    endYear: endYear,
+                    designation: designation,
+                    company: company,
+                    CompanyLocation: location
+                }
+            ];
+
+            const response = await aboutService.addExperience(experienceData);
+            if (response && response.success === true) {
+                setExperiences(response.experienceDetails); // Update the experiences in parent component
+                setCompany();
+                setEndYear();
+                setStartYear();
+                setDesignation();
+                setLocation();
+                onClose(); // Close the modal
             }
         } catch (error) {
-            console.log("There was some error while adding experience: ", error);
+            console.log("There was an error while adding experience: ", error);
         }
-    }
+    };
 
 
 
     const handleFormCompletion = () => {
-        if (company && designation && startYear && (endYear || endYear === "Currently working")) {
+        if (company && designation && startYear && location && (endYear || endYear === "Currently working")) {
             setIsFormComplete(true);
         } else {
             setIsFormComplete(false);
@@ -87,11 +94,12 @@ const AddExperienceModal = ({ isOpen, onClose, setExperiences }) => {
 
     useEffect(() => {
         handleFormCompletion();
-    }, [company, designation, startYear, endYear]);
+    }, [company, designation, startYear, endYear, location]);
 
     const handleDesignationChange = (e) => setDesignation(e.target.value);
     const handleStartYearChange = (e) => setStartYear(e.target.value);
     const handleEndYearChange = (e) => setEndYear(e.target.value);
+    const handleLocationChange = (e) => setLocation(e.target.value);
 
     if (!isOpen) return null;
 
@@ -175,6 +183,15 @@ const AddExperienceModal = ({ isOpen, onClose, setExperiences }) => {
                             </option>
                         ))}
                     </select>
+                </div>
+                <div className="mt-4">
+                    {/* Company Location Input */}
+                    <div className="text-base text-blue-700 font-bold">Location</div>
+                    <input
+                        className="w-52 mt-2 rounded-md border-gray-300 border p-2"
+                        placeholder="Enter your company location"
+                        onChange={handleLocationChange}
+                    />
                 </div>
 
                 <div className="mt-4 flex justify-end gap-3">

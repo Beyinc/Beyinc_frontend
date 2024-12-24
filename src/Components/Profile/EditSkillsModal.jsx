@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import aboutService from "./aboutPageApi"; // Import the skillsApi
 
 const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
   const options = [
@@ -104,9 +104,10 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
   const [displayedSkill, setDisplayedSkill] = useState([]);
   const [currentSkill, setCurrentSkill] = useState("");
   const [skillsToDelete, setSkillsToDelete] = useState([]);
+
   useEffect(() => {
     setDisplayedSkill(savedSkills);
-  }, [savedSkills])
+  }, [savedSkills]);
 
   const handleClickCrossIcon = (item) => {
     // Remove the item from displayedSkill
@@ -120,10 +121,7 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
     setSkillsToDelete(updatedSkillsToDelete);
   };
 
-
   const handleSkillSelect = (e) => {
-    // console.log("These are the displayedSkills: ", displayedSkill);
-    // console.log("These are the savedSills: ", savedSkills);
     const selectedSkill = e.target.value;
     if (selectedSkill && !selectedSkills.includes(selectedSkill)) {
       setSelectedSkills((prevSkills) => [...prevSkills, selectedSkill]);
@@ -131,53 +129,8 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
     setCurrentSkill("");
   };
 
-
-
-  const handleAddSkill = async () => {
-    console.log("Skills To Delete: ", skillsToDelete);
-    console.log("Selected Skills: ", selectedSkills);
-    try {
-      let response;
-      if (selectedSkills.length > 0) {
-        response = await axios.post('http://localhost:4000/api/addskills', {
-          userId: "675e7e41e424505620d8faee",
-          skills: selectedSkills
-
-        })
-      }
-
-      if (response && response.status === 200) {
-        setSkills(response.data.skills);
-        setSelectedSkills([]);
-        onClose();
-      }
-
-      if (skillsToDelete.length > 0) {
-        handleDeleteSkill();
-        setSkillsToDelete([])
-      }
-
-      
-
-    } catch (error) {
-      console.log("There was some error while adding skills: ", error);
-    }
-  }
-
-
-  const handleDeleteSkill = async () => {
-    try {
-      const response = await axios.post('http://localhost:4000/api/deleteSkill', {
-        userId: "675e7e41e424505620d8faee",
-        skillsToDelete: skillsToDelete
-      });
-      if (response.data.skills) {
-        setSkills(response.data.skills);
-        onClose();
-      }
-    } catch (error) {
-      console.log("There was an error while deleting the skill: ", error);
-    }
+  const handleAddSkill = () => {
+    aboutService.handleAddSkill(setSelectedSkills, selectedSkills, skillsToDelete, setSkills, onClose);
   };
 
   if (!isOpen) {
@@ -188,7 +141,6 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
     <div>
       <div
         className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
-        // onClick={onClose}
       >
         <div
           className="bg-white w-1/3 p-6 rounded-lg shadow-lg relative"
@@ -238,7 +190,6 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
                   </span>
                   <svg
                     onClick={() => {
-                      // Remove the clicked skill from selectedSkills array
                       setSelectedSkills((prevSkills) =>
                         prevSkills.filter((item) => item !== skill)
                       );
@@ -287,9 +238,11 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
               Save
             </button>
             <button
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        onClick={onClose}
-                    >Cancel</button>
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>

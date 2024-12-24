@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import EditSkillsModal from "./EditSkillsModal";
+import aboutService from './aboutPageApi'
 
 const SkillsCard = () => {
     const [skills, setSkills] = useState([]);
@@ -10,36 +11,28 @@ const SkillsCard = () => {
 
     const fetchSkills = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/getSkills', {
-                userId: "675e7e41e424505620d8faee"
-            });
-            if (response.data && response.data.skills) {
-                setSkills(response.data.skills);
-                // console.log("This is the about from backend: ", skills);
-            } else {
-                console.log("No about data found in the response.");
-            }
+            const fetchedSkills = await aboutService.fetchSkills("675e7e41e424505620d8faee");
+            setSkills(fetchedSkills);
         } catch (error) {
-            console.error("There was an error fetching about: ", error);
-            setErrorMessage("Failed to load About data. Please try again.");
+            setErrorMessage("Failed to load Skills data. Please try again.");
         }
     };
 
 
-    const handleSaveSkills = async (skills) => {
-        try{
-            const response = await axios.post('http://localhost:4000/api/addSkills',{
-                skills: skills,
-                userId: "675e7e41e424505620d8faee"
+    // const handleSaveSkills = async (skills) => {
+    //     try{
+    //         const response = await axios.post('http://localhost:4000/api/addSkills',{
+    //             skills: skills,
+    //             userId: "675e7e41e424505620d8faee"
 
-            })
-            return response;
-        }catch(error){
-            console.log("There was an error while adding skills: ", error);
+    //         })
+    //         return response;
+    //     }catch(error){
+    //         console.log("There was an error while adding skills: ", error);
 
-        }
-        setSkills(skills);
-    }
+    //     }
+    //     setSkills(skills);
+    // }
 
     useEffect(() => {
         fetchSkills();

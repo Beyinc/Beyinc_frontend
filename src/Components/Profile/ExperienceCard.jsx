@@ -1,5 +1,6 @@
-import axios from "axios";
+// ExperiencesCard.js
 import { useEffect, useState } from "react";
+import aboutService from "./aboutPageApi";
 import DeleteExperiencesModal from "./DeleteExperienceModal";
 import AddExperienceModal from "./AddExperienceModal";
 import UpdateExperienceModal from "./UpdateExperienceModal";
@@ -10,75 +11,50 @@ const ExperiencesCard = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedForDeletion, setSelectedForDeletion] = useState(false);
 
-
     // Modal variables
     const [isAddExperienceModalOpen, setIsAddExperienceModalOpen] = useState(false);
     const [isUpdateExperienceModalOpen, setIsUpdateExperienceModalOpen] = useState(false);
     const [updateItem, setUpdateItem] = useState();
 
+    const userId = "675e7e41e424505620d8faee"; // User ID (could be dynamic or passed as a prop)
 
     const handleClickAdd = () => {
         setIsAddExperienceModalOpen(true);
-    }
+    };
 
     const handleOpenUpdateModal = (item) => {
         setUpdateItem(item);
         setIsUpdateExperienceModalOpen(true);
+    };
 
-    }
-
-
-    const fetchexperiences = async () => {
+    // Fetch experiences
+    const fetchAllExperiences = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/getExperienceDetails', {
-                userId: "675e7e41e424505620d8faee"
-            });
-
-            if (response.data && response.data.experienceDetails) {
-                setExperiences(response.data.experienceDetails);
-            } else {
-                setExperiences([]);
-            }
+            const fetchedExperiences = await aboutService.fetchExperiences(userId);
+            setExperiences(fetchedExperiences);
         } catch (error) {
-            console.log("There was an error while fetching experiences: ", error);
-            setErrorMessage(error.response?.data || error.message);
+            setErrorMessage("There was an error fetching experiences.");
         }
     };
 
+    // Handle delete experience
     const handleDeleteExperiences = async (eduId) => {
         try {
-            const response = await axios.post('http://localhost:4000/api/deleteExperienceDetails', {
-                userId: "675e7e41e424505620d8faee",
-                _id: eduId
-            })
-
-            fetchexperiences();
-
-
-
+            await aboutService.handleDeleteExperience(eduId);
+            fetchAllExperiences(); // Re-fetch experiences after deletion
         } catch (error) {
-            console.log("There was an error while deleting the experiences: ", error);
+            setErrorMessage("There was an error deleting the experience.");
         }
-    }
+    };
 
     const handleDeleteModalOpen = (item) => {
         setIsDeleteModalOpen(true);
         setSelectedForDeletion(item);
-    }
+    };
 
     useEffect(() => {
-        fetchexperiences(); 
-    }, []); 
-
-    // useEffect(() => {
-    //     console.log("Updated experiences Data:", experiences);
-
-    // }, [experiences, updateItem]);
-    // useEffect(() => {
-    //     console.log("This is the updateItem from useEffect in ExperienceCard: ", updateItem);
-
-
-    // }, [updateItem])
+        fetchAllExperiences(); 
+    }, []); // Run only once when the component mounts
 
     return (
         <div>
@@ -90,7 +66,6 @@ const ExperiencesCard = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                     </span>
-
                 </div>
 
                 {/* Display error message if there is an error */}
@@ -120,7 +95,7 @@ const ExperiencesCard = () => {
                                             height="50"
                                             rx="5"
                                             fill="var(--followBtn-bg)"
-                                            fill-opacity="0.3"
+                                            fillOpacity="0.3"
                                         />
                                         <path
                                             d="M16.6667 28.335H20.0001V31.6683H16.6667V28.335Z"
@@ -139,7 +114,7 @@ const ExperiencesCard = () => {
                                             <div><span className="font-bold">Designation</span> {item.designation}</div>
                                             <div><span className="font-bold">Date</span> {item.startYear} - {item.endYear}</div>
                                             <div><span className="font-bold">Total Work Experience</span> {item.startYear - item.endYear} years </div>
-                                            <div><span className="font-bold">Company Location</span>{item.CompanyLocation}</div>
+                                            <div><span className="font-bold">Company Location</span> {item.CompanyLocation}</div>
                                         </div>
                                         <div className="text-blue-700 flex items-center">
                                             <span onClick={() => {
@@ -153,7 +128,6 @@ const ExperiencesCard = () => {
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                                                 </svg>
                                             </span>
-
                                         </div>
                                     </div>
                                 </div>
@@ -168,11 +142,7 @@ const ExperiencesCard = () => {
                 </div>
             </div>
 
-            {/* Modal that opens when isexperiencesModalOpen is true */}
-            {/* <EditexperiencesModal
-                isOpen={isexperiencesModalOpen}
-                onClose={() => setIsexperiencesModalOpen(false)}
-            /> */}
+            {/* Modals */}
             <AddExperienceModal setExperiences={setExperiences} isOpen={isAddExperienceModalOpen} onClose={() => setIsAddExperienceModalOpen(false)} />
             <UpdateExperienceModal setExperiences={setExperiences} item={updateItem} isOpen={isUpdateExperienceModalOpen} onClose={() => {setIsUpdateExperienceModalOpen(false)}} />
             <DeleteExperiencesModal onDelete={handleDeleteExperiences} isOpen={isDeleteModalOpen} item={selectedForDeletion} onClose={() => setIsDeleteModalOpen(false)} />

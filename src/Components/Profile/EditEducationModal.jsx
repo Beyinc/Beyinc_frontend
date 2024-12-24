@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import aboutService from "./aboutPageApi";
 
 const EditEducationModal = ({ isOpen, onClose, setEducation }) => {
     const grades = [
@@ -22,9 +23,9 @@ const EditEducationModal = ({ isOpen, onClose, setEducation }) => {
 
     const handleIsFormComplete = () => {
         if (selectedGrade && college && startYear && endYear) {
-            setIsFormComplete(true); 
+            setIsFormComplete(true);
         } else {
-            setIsFormComplete(false); 
+            setIsFormComplete(false);
         }
     };
 
@@ -45,69 +46,67 @@ const EditEducationModal = ({ isOpen, onClose, setEducation }) => {
     }
 
     const handleClose = () => {
-        onClose(); 
+        onClose();
     };
 
     useEffect(() => {
         if (isOpen) {
             const modalContent = document.getElementById("education-modal-content");
             if (modalContent) {
-                modalContent.focus(); 
+                modalContent.focus();
             }
         }
     }, [isOpen]);
 
     const handleGradeChange = (e) => {
-        setSelectedGrade(e.target.value); 
+        setSelectedGrade(e.target.value);
     };
 
     const handleCollegeChange = (e) => {
-        setCollege(e.target.value); 
+        setCollege(e.target.value);
     };
 
     const handleStartYearChange = (e) => {
-        setStartYear(e.target.value); 
+        setStartYear(e.target.value);
     };
 
     const handleEndYearChange = (e) => {
-        setEndYear(e.target.value); 
+        setEndYear(e.target.value);
     };
 
-    const saveExperience = async () => {
+    const saveEducation = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/saveEducationDetails', {
-                userId: "675e7e41e424505620d8faee",
-                education: [
-                    {
-                        Edstart: startYear,
-                        Edend: endYear,
-                        grade: selectedGrade,
-                        college: college
-                    }
-                ]
-            });
-            console.log("Response.status: ", response.status);
-            if (response.status === 200) {
-                setEducation(response.data.educationDetails);
-                setSelectedGrade('');
-                setCollege('');
-                setStartYear('');
-                setEndYear('');
-                handleClose();
-            }
+            const educationDetails = [
+                {
+                    Edstart: startYear,
+                    Edend: endYear,
+                    grade: selectedGrade,
+                    college: college
+                }
+            ];
 
+            const userId = "675e7e41e424505620d8faee"; // Example userId, replace with actual one
+
+            const savedEducation = await aboutService.saveEducation(userId, educationDetails);
+
+            setEducation(savedEducation); // Update the education state
+            setSelectedGrade('');
+            setCollege('');
+            setStartYear('');
+            setEndYear('');
+            handleClose();
         } catch (error) {
-            setErrorMessage(error.response.data.message);
-            console.log("There was an error while saving Experience", error.response.data);
+            setErrorMessage(error.message);
+            console.log("There was an error while saving Education", error.message);
         }
     };
 
-    if (!isOpen) return null; 
+    if (!isOpen) return null;
 
     return (
         <div
             className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
-            onClick={handleClose} 
+            onClick={handleClose}
         >
             <div
                 id="education-modal-content"
@@ -207,12 +206,12 @@ const EditEducationModal = ({ isOpen, onClose, setEducation }) => {
                 {/* Button Row */}
                 <div className="flex justify-end mt-4 space-x-2">
                     <button
-                        onClick={saveExperience}
-                        disabled={!isFormComplete} 
+                        onClick={saveEducation}
+                        disabled={!isFormComplete}
                         className={`${!isFormComplete
                             ? "bg-blue-400 cursor-not-allowed text-gray-500"
                             : "bg-blue-500 hover:bg-blue-700 text-white"
-                        }  px-4 py-2 rounded-md`}
+                            }  px-4 py-2 rounded-md`}
                     >
                         Save
                     </button>
