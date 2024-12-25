@@ -1,5 +1,6 @@
-import axios from "axios";
+// EditAboutModal.js
 import { useEffect, useState } from "react";
+import aboutService from './aboutPageApi'; // Import the saveAbout function from aboutApi.js
 
 const EditAboutModal = ({ isOpen, onClose, initialValue, onSave }) => {
     const MAX_CHAR_COUNT = 1000; 
@@ -29,29 +30,17 @@ const EditAboutModal = ({ isOpen, onClose, initialValue, onSave }) => {
     // Handle save logic
     const handleSave = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/createAbout', {
-                userId: '675e7e41e424505620d8faee', 
-                about: aboutText
-            });
-    
-            if (response.status === 200 && response.data.success) {
-                console.log("About saved successfully", response.data.about);
-                onSave(aboutText); 
-                onClose(); 
-            } else {
-                alert(response.data.message || "Something went wrong. Please try again.");
-            }
+            const updatedAbout = await aboutService.saveAbout('675e7e41e424505620d8faee', aboutText); // Pass the user ID and about text
+            console.log("About saved successfully", updatedAbout);
+            onSave(aboutText); // Pass the updated about text to parent component
+            onClose(); // Close the modal after saving
         } catch (error) {
             console.error("Error while saving about:", error);
-            if (error.response) {
-                alert(error.response.data.message || "An error occurred while saving. Please try again.");
-            } else {
-                alert("Network error. Please check your connection.");
-            }
+            alert(error.message); // Show the error message in an alert
         }
     };
 
-    if (!isOpen) return null; 
+    if (!isOpen) return null;
 
     return (
         <div

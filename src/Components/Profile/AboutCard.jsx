@@ -1,35 +1,30 @@
-import axios from "axios";
+// AboutCard.js
 import { useEffect, useState } from "react";
-import EditAboutModal from "./EditAboutModal"; 
+import aboutService from './aboutPageApi';  // Import the fetchAbout function from the api.js file
+import EditAboutModal from "./EditAboutModal";
 
 const AboutCard = () => {
     const [profileAbout, setProfileAbout] = useState("");
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    
 
-    const fetchAbout = async () => {
+    const getAbout = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/getabout', {
-                userId: "675e7e41e424505620d8faee"
-            });
-            if (response.data && response.data.about) {
-                setProfileAbout(response.data.about);
-            } else {
-                console.log("No about data found in the response.");
-            }
+            const about = await aboutService.fetchAbout("675e7e41e424505620d8faee"); // Pass the user ID
+            setProfileAbout(about);
         } catch (error) {
-            console.error("There was an error fetching about: ", error);
-            setErrorMessage("Failed to load About data. Please try again.");
+            setErrorMessage(error.message);
         }
     };
 
     useEffect(() => {
-        fetchAbout();
+        getAbout();
     }, []);
 
     const handleAboutSave = (updatedAbout) => {
-        setProfileAbout(updatedAbout); 
-        setErrorMessage(""); 
+        setProfileAbout(updatedAbout);
+        setErrorMessage("");
     };
 
     return (
@@ -42,7 +37,7 @@ const AboutCard = () => {
                     </span>
                 </div>
                 <div className="mt-4">
-                    {profileAbout ? profileAbout : "Loading..."}
+                    {profileAbout ? profileAbout : ""}
                 </div>
                 {errorMessage && (
                     <div className="text-red-500 mt-4">{errorMessage}</div> 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import aboutService from "./aboutPageApi";
 
 const UpdateExperienceModal = ({ isOpen, onClose, item, setExperiences }) => {
     // Define state variables for the form fields
@@ -7,6 +8,7 @@ const UpdateExperienceModal = ({ isOpen, onClose, item, setExperiences }) => {
     const [designation, setDesignation] = useState(item?.designation || "");
     const [startYear, setStartYear] = useState(item?.startYear || "");
     const [endYear, setEndYear] = useState(item?.endYear || "");
+    const [location, setLocation] = useState(item?.CompanyLocation || "");
 
     // State to manage form completeness
     const [isFormComplete, setIsFormComplete] = useState(false);
@@ -18,8 +20,11 @@ const UpdateExperienceModal = ({ isOpen, onClose, item, setExperiences }) => {
             setDesignation(item.designation);
             setStartYear(item.startYear);
             setEndYear(item.endYear);
+            setLocation(item.CompanyLocation);
         }
     }, [isOpen])
+    // console.log("This is the companyLocation: ", item?.CompanyLocation);
+
 
     const designations = [
         "Lead", "Freelancer", "CEO", "Co Founder", "Software Developer",
@@ -56,28 +61,28 @@ const UpdateExperienceModal = ({ isOpen, onClose, item, setExperiences }) => {
         "Digital Transformation Consultant", "Big Data Engineer", "Customer Support Engineer"
     ];
 
-    const handleUpdateExperience = async () => {
-        try {
-            const response = await axios.post('http://localhost:4000/api/updateExperienceDetails', {
-                userId: "675e7e41e424505620d8faee",
-                experience: {
-                    _id: item._id,
-                    startYear,
-                    endYear,
-                    company,
-                    designation
-                }
-            })
-            console.log("This is the response: ", response);
-            if (response.data && response.data.success === true) {
-                setExperiences(response.data.experienceDetails);
-                onClose();
-            }
+    // const handleUpdateExperience = async () => {
+    //     try {
+    //         const response = await axios.post('http://localhost:4000/api/updateExperienceDetails', {
+    //             userId: "675e7e41e424505620d8faee",
+    //             experience: {
+    //                 _id: item._id,
+    //                 startYear,
+    //                 endYear,
+    //                 company,
+    //                 designation
+    //             }
+    //         })
+    //         console.log("This is the response: ", response);
+    //         if (response.data && response.data.success === true) {
+    //             setExperiences(response.data.experienceDetails);
+    //             onClose();
+    //         }
 
-        } catch (error) {
-            console.log("There was an error Updating the Experience: ", error);
-        }
-    }
+    //     } catch (error) {
+    //         console.log("There was an error Updating the Experience: ", error);
+    //     }
+    // }
 
     const currentYear = new Date().getFullYear();
 
@@ -200,15 +205,25 @@ const UpdateExperienceModal = ({ isOpen, onClose, item, setExperiences }) => {
                         ))}
                     </select>
                 </div>
+                {/* Company Name */}
+                <div className="mt-4">
+                    <div className="text-base text-blue-700 font-bold">Company Location</div>
+                    <input
+                        className="w-52 mt-2 rounded-md border-gray-300 border p-2"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="Enter your company Location"
+                    />
+                </div>
 
                 <div className="flex justify-end mt-4 space-x-2">
                     <button
-                        onClick={handleUpdateExperience}
-                        disabled={!isFormComplete} 
+                        onClick={() => aboutService.handleUpdateExperience(item, startYear, endYear, company, designation, location, setExperiences, onClose)}
+                        disabled={!isFormComplete}
                         className={`${!isFormComplete
                             ? "bg-blue-400 cursor-not-allowed text-gray-500"
                             : "bg-blue-500 hover:bg-blue-700 text-white"
-                        }  px-4 py-2 rounded-md`}
+                            }  px-4 py-2 rounded-md`}
                     >
                         Save
                     </button>

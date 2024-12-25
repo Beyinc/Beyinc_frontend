@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import EditEducationModal from "./EditEducationModal";
 import DeleteEducationModal from "./DeleteEducationModal";
 import UpdateEducationModal from "./UpdateEducationModal";
+import aboutService from './aboutPageApi'
 
 const EducationCard = () => {
     const [education, setEducation] = useState([]);
@@ -13,80 +13,60 @@ const EducationCard = () => {
     const [eduItem, setEduItem] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-
-    const fetchEducation = async () => {
+    const fetchEducationData = async () => {
         try {
-            const response = await axios.post('http://localhost:4000/api/getEducationDetails', {
-                userId: "675e7e41e424505620d8faee"
-            });
-
-            if (response.data && response.data.educationDetails) {
-                setEducation(response.data.educationDetails);
-            } else {
-                setEducation([]);
-            }
+            const userId = "675e7e41e424505620d8faee";  // This could be dynamic
+            const data = await aboutService.fetchEducation(userId);  // Use the service method to fetch education data
+            setEducation(data);
         } catch (error) {
-            console.log("There was an error while fetching education: ", error);
-            setErrorMessage(error.response?.data || error.message); 
+            console.log("Error fetching education data: ", error);
+            setErrorMessage(error.message);
         }
     };
 
     const handleDeleteEducation = async (eduId) => {
         try {
-            const response = await axios.post('http://localhost:4000/api/deleteEducationDetails', {
-                userId: "675e7e41e424505620d8faee",
-                _id: eduId
-            })
+            const userId = "675e7e41e424505620d8faee";  // This could be dynamic
+            const success = await aboutService.handleDeleteEducation(userId, eduId);  // Use the service method to delete the education item
 
-            fetchEducation();
-
-
-
+            if (success) {
+                fetchEducationData();  // Refetch the education data after deletion
+            }
         } catch (error) {
-            console.log("There was an error while deleting the education: ", error);
+            console.log("Error deleting education: ", error);
         }
-    }
+    };
 
     const handleDeleteModalOpen = (item) => {
         setIsDeleteModalOpen(true);
         setSelectedForDeletion(item);
-    }
+    };
 
     const handleOpenUpdateModal = (item) => {
         setEduItem(item);
         setIsUpdateModalOpen(true);
+    };
 
-    }
+    useEffect(() => {
+        fetchEducationData();  // Fetch education data when the component mounts
+    }, []);
 
-    
     useEffect(() => {
         if (eduItem) {
             console.log("Updated eduItem: ", eduItem); 
         }
     }, [eduItem]);
 
-    useEffect(() => {
-        fetchEducation(); 
-    }, []); 
-
-    // useEffect(() => {
-    //     console.log("Updated Education Data:", education);
-    // }, [education]);
-
     return (
         <div>
             <div className="w-[800px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
                 <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
                     Education
-                    <span onClick={() => {
-                        setIsEditEducationModalOpen(true)
-
-                    }}>
+                    <span onClick={() => setIsEditEducationModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                     </span>
-
                 </div>
 
                 {/* error message  */}
@@ -103,7 +83,7 @@ const EducationCard = () => {
                                 {/* Education Item */}
                                 <div className="flex flex-row items-start space-x-4">
                                     {/* SVG Icon */}
-                                    <span >
+                                    <span>
                                         <svg
                                             width="50"
                                             height="50"
@@ -140,7 +120,6 @@ const EducationCard = () => {
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                                                 </svg>
                                             </span>
-
                                         </div>
                                     </div>
                                 </div>
@@ -156,21 +135,24 @@ const EducationCard = () => {
             </div>
 
             <EditEducationModal
-                
                 setEducation={setEducation}
                 isOpen={isEditEducationModalOpen}
                 onClose={() => setIsEditEducationModalOpen(false)}
             />
-            <UpdateEducationModal 
-            isOpen={isUpdateModalOpen}
-            onClose={() => setIsUpdateModalOpen(false)}
-            setEducation={setEducation}
-
-            item={eduItem}
+            <UpdateEducationModal
+                isOpen={isUpdateModalOpen}
+                onClose={() => setIsUpdateModalOpen(false)}
+                setEducation={setEducation}
+                item={eduItem}
             />
             
-            <DeleteEducationModal onDelete={handleDeleteEducation} isOpen={isDeleteModalOpen} item={selectedForDeletion} onClose={() => setIsDeleteModalOpen(false)} />
-        </div >
+            <DeleteEducationModal 
+                onDelete={handleDeleteEducation} 
+                isOpen={isDeleteModalOpen} 
+                item={selectedForDeletion} 
+                onClose={() => setIsDeleteModalOpen(false)} 
+            />
+        </div>
     );
 };
 
