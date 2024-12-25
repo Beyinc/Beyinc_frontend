@@ -7,6 +7,7 @@ const AboutCard = () => {
     const [profileAbout, setProfileAbout] = useState("");
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    
 
     const getAbout = async () => {
         try {
@@ -36,7 +37,7 @@ const AboutCard = () => {
                     </span>
                 </div>
                 <div className="mt-4">
-                    {profileAbout ? profileAbout : "Loading..."}
+                    {profileAbout ? profileAbout : ""}
                 </div>
                 {errorMessage && (
                     <div className="text-red-500 mt-4">{errorMessage}</div> 
