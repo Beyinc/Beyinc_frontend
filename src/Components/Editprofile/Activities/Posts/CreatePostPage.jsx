@@ -807,7 +807,7 @@ const CreatePostPage = () => {
           <button
             className="cancelButton"
             onClick={() => {
-              navigate("/editProfile");
+              navigate("/profile");
             }}
           >
             Cancel

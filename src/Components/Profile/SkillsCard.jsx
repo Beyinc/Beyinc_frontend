@@ -2,8 +2,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import EditSkillsModal from "./EditSkillsModal";
 import aboutService from './aboutPageApi'
+import { useSelector } from "react-redux";
 
 const SkillsCard = () => {
+
+    const {
+        user_id,
+        userName: loggedUserName,
+        image: loggedImage,
+    } = useSelector((store) => store.auth.loginDetails);
+
     const [skills, setSkills] = useState([]);
     const [errorMessage, setErrorMessage] = useState(""); 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,7 +19,7 @@ const SkillsCard = () => {
 
     const fetchSkills = async () => {
         try {
-            const fetchedSkills = await aboutService.fetchSkills("675e7e41e424505620d8faee");
+            const fetchedSkills = await aboutService.fetchSkills(user_id);
             setSkills(fetchedSkills);
         } catch (error) {
             setErrorMessage("Failed to load Skills data. Please try again.");

@@ -50,6 +50,7 @@ import SearchResults from "./Components/Searching/SearchResults";
 import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
 import About from "./Components/Profile/About";
+import Profile from "./Components/Profile/Profile";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -313,6 +314,7 @@ const App = () => {
           <Route path="/dashboard" Component={AuthHoc(Home)} />
        
           <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
+          <Route path="/profile" Component={AuthHoc(Profile)} />
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
 
