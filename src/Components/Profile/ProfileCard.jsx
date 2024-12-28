@@ -103,6 +103,20 @@ const ProfileCard = () => {
           <div className="flex justify-between">
             <span>Following</span> <span>{profileData.following ? profileData.following.length : 0}</span>
           </div>
+          <div>
+              {user_id == undefined ? (
+                <ReviewStars  />
+              ) : (
+                <>
+                  <AddReviewStars
+                    
+                  />{" "}
+                  {/* <button className="reviewPostButton" onClick={sendReview}>
+                    Post
+                  </button> */}
+                </>
+              )}
+            </div>
         </div>
       </div>
       <ProfileImageUpdate open={openEditPfp} setOpen={setOpenEditPfp} />
