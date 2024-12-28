@@ -178,8 +178,8 @@
 }
 .user-card-image img {
   cursor: pointer;
-  width: 150px;
-  height: 150px;
+  width: 110px;
+  height: 110px;
   margin: 0;
 }
 
@@ -193,7 +193,7 @@
 .user-card-details-text .user-name {
   cursor: pointer;
   display: inline-block;
-  font-size: 20px;
+  font-size: 40px;
   font-weight: 600;
   color: black;
   white-space: nowrap;
@@ -247,8 +247,8 @@
 }
 .user-card-main-container {
   background-color: var(--singleUserCard-bg);
-  display: flex;
-  flex-direction: row;
+  /* display: flex;
+  flex-direction: row; */
   justify-content: space-between;
   width: 1100px;
   padding: 13px;
@@ -297,13 +297,13 @@
     /* padding: 10px; */
   }
 }
-.user-card-details-text {
+/* .user-card-details-text {
   width: 600px;
   padding-left: 30px;
   display: flex;
   flex-direction: column;
   margin-left: 11px;
-}
+} */
 .user-card-details {
   padding: 16px;
   width: 80%;
@@ -412,13 +412,15 @@
     width: 80px;
     /* align-items: normal; */
   }
-  .user-card-details-text {
+
+  /* Redundant */
+  /* .user-card-details-text {
     padding-left: 30px;
     width: 135px;
   }
   .user-card-details-text .skills {
     width: 135px;
-  }
+  } */
   .filter-tab-text {
     font-size: 12px;
   }
@@ -584,7 +586,7 @@
 .tabsandinvestement {
   display: flex;
   align-items: center;
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 12px;
   gap: 240px;
   flex-wrap: wrap;
