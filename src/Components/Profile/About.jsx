@@ -6,6 +6,7 @@ import SkillsCard from "./SkillsCard";
 import EducationCard from "./EducationCard";
 import ExperiencesCard from "./ExperienceCard";
 import aboutService from "./aboutPageApi";
+import ProfileCard from "./ProfileCard";
 
 const About = () => {
     const [profileAbout, setProfileAbout] = useState("");
@@ -42,6 +43,9 @@ const About = () => {
         <div className="flex justify-center items-center flex-col">
             <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
+            </div>
+            <div>
+                <ProfileCard />
             </div>
             <div>
                 <AboutCard />
