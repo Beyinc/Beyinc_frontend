@@ -71,7 +71,7 @@ const ProfileCard = () => {
   }, [user_id]); // Adding user_id as dependency in case it changes
 
   return (
-    <div className="h-auto pb-9 w-[500px] flex flex-col items-center rounded-lg shadow-lg">
+    <div className="h-auto pb-9 w-[360px] flex flex-col items-center rounded-lg shadow-lg bg-white">
       <div className="relative group mt-4">
         <img
           className="size-36 rounded-full"
@@ -95,6 +95,15 @@ const ProfileCard = () => {
         ></i>
       </div>
       <div className="font-bold text-xl text-gray-500">{role}</div>
+      <div className='flex flex-col gap-4 mt-2 '>
+        <button className="rounded-full px-20">
+          Follow
+        </button>
+        <button className='rounded-full px-20'>
+          Connect
+        </button>
+
+      </div>
       <div className="flex flex-col mt-4 font-bold w-full ">
         <div className="px-28 gap-4 flex flex-col">
           <div className="flex justify-between">

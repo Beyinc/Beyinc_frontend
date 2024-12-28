@@ -40,24 +40,28 @@ const About = () => {
     };
 
     return (
-        <div className="flex justify-center items-center flex-col">
+        <div className="flex flex-col relative">
             <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
             </div>
-            <div>
-                <ProfileCard />
-            </div>
-            <div>
-                <AboutCard />
-            </div>
-            <div className="">
-                <SkillsCard />
-            </div>
-            <div className="">
-                <EducationCard />
-            </div>
-            <div>
-                <ExperiencesCard />
+            <div className="flex gap-10 absolute top-56 ml-64">
+                <div className="flex-col">
+                    <ProfileCard />
+                </div>
+                <div className="pt-32">
+                    <div className="flex-col ">
+                        <AboutCard />
+                    </div>
+                    <div className="">
+                        <SkillsCard />
+                    </div>
+                    <div className="">
+                        <EducationCard />
+                    </div>
+                    <div>
+                        <ExperiencesCard />
+                    </div>
+                </div>
             </div>
 
         </div>
