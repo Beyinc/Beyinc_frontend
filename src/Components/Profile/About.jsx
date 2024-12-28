@@ -40,9 +40,9 @@ const About = () => {
 
     return (
         <div className="flex justify-center items-center flex-col">
-            <div className="EditProfileImageContainer">
+            {/* <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
-            </div>
+            </div> */}
             <div>
                 <AboutCard />
             </div>
