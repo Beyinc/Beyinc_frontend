@@ -87,7 +87,6 @@ const EditProfile = () => {
   //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
-   
 
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
@@ -280,6 +279,7 @@ const EditProfile = () => {
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
   const [experienceDetails, setExperience] = useState([]);
+  
   // Temporary state to hold user input
   const [tempExperienceDetails, setTempExperienceDetails] = useState({
     business: "",
@@ -461,6 +461,7 @@ const EditProfile = () => {
     }, 500);
     setIsExperiencePopupVisible(true);
   };
+
   const handleEducationButtonClick = () => {
     window.scrollTo({
       top: 0,
@@ -631,6 +632,7 @@ const EditProfile = () => {
     setRecentUploadedDocs((prev) => ({ ...prev, [e.target.name]: file?.name }));
     setFileBase(e, file);
   };
+
   const setFileBase = (e, file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -641,12 +643,20 @@ const EditProfile = () => {
       }));
     };
   };
+
   useEffect(() => {
     const hasEducation = totalEducationData.length > 0;
     const hasWorkExperience = totalExperienceData.length > 0;
     setIsFormValid(hasEducation && hasWorkExperience);
   }, [totalEducationData, totalExperienceData]);
 
+  useEffect(() => {
+    setEducationDetails(totalEducationData);
+  }, [totalEducationData]);
+
+  useEffect(() => {
+      setTotalExperienceData(experienceDetails);
+  }, [experienceDetails])
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
   const [requestUserId, setRequestedUserId] = useState("");
@@ -1612,20 +1622,24 @@ console.log('education details', educationDetails)
         Edstart: "",
         Edend: "",
       });
+      // setIsEducationPopupVisible(false);
     } else {
       alert("Please fill all required fields.");
     }
   };
 
-  console.log('experienceDetails', experienceDetails)
   // Save changes from temp to main state
   const saveExperienceDetails = (event) => {
     event.preventDefault();
     //  setIsExperiencePopupVisible(false);
 
-    setExperience(tempExperienceDetails);
+    setExperience((prev) => [
+      ...prev,
+      { ...tempExperienceDetails }, // Add the new details
+    ]);
     // Reset temporary details after saving
-    setTempExperienceDetails({ ...tempExperienceDetails });
+    setTempExperienceDetails({});
+    setIsExperiencePopupVisible(false);
   };
 
   const submitAllData = async () => {
