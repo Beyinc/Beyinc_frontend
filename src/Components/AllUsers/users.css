@@ -277,7 +277,7 @@
 }
 @media (max-width: 1200px) {
   .user-card-main-container {
-    width: 80%;
+    width: 80%;    
   }
 }
 @media (max-width: 1100px) {
@@ -287,7 +287,7 @@
 }
 @media (max-width: 800px) {
   .user-card-main-container {
-    width: 80%;
+    width: 100%;
     /* padding: 10px; */
   }
 }
@@ -405,7 +405,7 @@
     width: 100%;
   }
   .user-card-actions {
-    align-items: flex-end;
+    align-items: flex-start;
   }
 
   .user-card-actions button {
@@ -500,9 +500,9 @@
   width: 100%;
 }
 
-.user-cards-panel {
+/* .user-cards-panel {
   width: 70%;
-}
+} */
 
 .user-card-actions .connect-color {
   color: var(--white-text);

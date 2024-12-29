@@ -69,7 +69,7 @@ const SingleUserDetails = ({
       <div className="user-card-main-container flex-col">
         <div>
           <div className="flex flex-col xl:flex-row justify-center items-center p-5">
-            <div>
+            <div className="w-full">
               <div className="flex flex-col xl:flex-row xl:gap-7">
                 <div className="user-card-image" onClick={openUser}>
                   <img
@@ -89,32 +89,33 @@ const SingleUserDetails = ({
                       <span className="user-name" onClick={openUser}>
                         {user.userName}
                       </span>
-                      <span>
+                      <span className="">
                         {/* {d.verification === "approved" && ( */}
                         <img
+                          className="size-5 xl:size-8 mt-1 xl:mt-3.5"
                           src="/verify.png"
                           alt=""
-                          style={{
-                            width: "15px",
-                            height: "15px",
-                            position: "absolute",
-                            marginTop: "10px",
-                          }}
+                          // style={{
+                          //   width: "15px",
+                          //   height: "15px",
+                          //   position: "absolute",
+                          //   marginTop: "10px",
+                          // }}
                         />
                         {/* )} */}
                       </span>
                     </div>
-                    <div className="rating-content">
+                    <div className="flex items-center justify-center gap-1 xl:gap-2 text-sm xl:text-2xl">
                       <i
                         className="fas fa-star"
                         style={{ color: "#4f55c7" }}
                       ></i>
-                      <span style={{ marginLeft: "3px" }}>
+                      <p>
                         {averagereview.toFixed(1).split(".")[1] != "0"
                           ? averagereview.toFixed(1)
                           : averagereview.toFixed(0)}
-                      </span>
-                      <span className="ml-2 font-bold">Ratings</span>
+                      </p>
+                      <p className="font-bold">Ratings</p>
                     </div>
                   </div>
                   <div className="flex flex-col md:flex-row md:space-x-12 ">
@@ -205,8 +206,8 @@ const SingleUserDetails = ({
             </div>
             <div class="w-px h-72 bg-neutral-300 relative right-10 hidden md:hidden lg:hidden xl:hidden 2xl:block"></div>
 
-            <div className="user-card-actions">
-              <div>
+            <div className="user-card-actions mt-2 lg:mt-0 w-full">
+              <div className="w-full">
                 <div className="font-bold text-lg">Book a session</div>
                 <div className="mt-5">
                   <div className="flex">
@@ -266,8 +267,8 @@ const SingleUserDetails = ({
         </div>
 
         <div className="user-card-rating space-y-2 mx-9">
-            <span className="text-xs">62 Reviews/47 Sessions</span>
-          </div>
+          <span className="text-xs">62 Reviews/47 Sessions</span>
+        </div>
       </div>
     </>
   );
