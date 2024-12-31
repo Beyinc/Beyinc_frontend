@@ -681,6 +681,7 @@ const EditProfile = () => {
         });
     }
   }, [userpage, user_id]);
+  
   const onLike = async (commentId, isLike) => {
     await ApiServices.likeComment({
       comment_id: commentId,
@@ -1214,6 +1215,7 @@ const EditProfile = () => {
         );
       });
   };
+
   const deleteComment = async (did) => {
     await ApiServices.removeUserComment({ userId: id, commentId: did })
       .then((res) => {
@@ -3058,6 +3060,7 @@ console.log('education details', educationDetails)
             </div>
           )}
         </div>
+
         {isInputPopupVisible && (
           <div className="popup-container">
             <div className="popup-content">

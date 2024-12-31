@@ -45,9 +45,9 @@ const About = () => {
                 <img src="/Banner.png" alt="Banner" />
             </div> */}
             <div className="flex gap-10 absolute top-56 ml-64">
-                <div className="flex-col">
+                {/* <div className="flex-col">
                     <ProfileCard />
-                </div>
+                </div> */}
                 <div className="pt-32">
                     <div className="flex-col ">
                         <AboutCard />

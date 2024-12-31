@@ -190,8 +190,6 @@ const BeyincProfessional = () => {
         />
         <span className="font-normal text-base">Investor</span>
       </label> */}
-
-
       </div>
       
       <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>

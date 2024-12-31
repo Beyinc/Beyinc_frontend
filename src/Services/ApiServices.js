@@ -13,6 +13,7 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  
   SSORegister: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance

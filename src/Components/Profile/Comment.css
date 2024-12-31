@@ -1,0 +1,42 @@
+.EditProfileCard {
+    width: 880px;
+    height: auto;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 1px 4px 4px 0px #00000040;
+    cursor: pointer;
+    margin-left: 30px;
+    margin-top: 20px;
+    /* background: var(--editprofile-details-card-bg); */
+    background-color: #ffffff;
+  }
+
+  .EditProfileCard .aboutHeadings {
+    /* font-family: Gentium Book Basic; */
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 28.93px;
+    color: var(--editProfile-toggler-bottom);
+  }
+
+  .commentheader {
+    /* font-family: Gentium Book Basic; */
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 23.14px;
+    color: var(--followBtn-bg);
+    padding: 10px 0px;
+    margin-bottom: 30px;
+  }
+
+  .commentLengthheader {
+    /* font-family: Gentium Book Basic; */
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 23.14px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    color: var(--followBtn-bg);
+    border-bottom: 2px solid var(--post-outer-border);
+  }

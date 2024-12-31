@@ -11,7 +11,6 @@ const Activity = ({allPosts, setAllPosts}) => {
 
   const navigate = useNavigate();
 
-
   return (
     <div>
       {id === undefined && (

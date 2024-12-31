@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ApiServices } from '../../Services/ApiServices'
 import Comment from './Comment';
+import ProfileCard from './ProfileCard';
 
 const Profile = () => {
   const [value, setValue] = React.useState("1");
@@ -19,6 +20,7 @@ const Profile = () => {
     userName: loggedUserName,
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
+  
   const {
     expertise: dbExpertise,
     industries: dbIndustires,
@@ -74,6 +76,10 @@ const Profile = () => {
     <div>
       <div className="EditProfileImageContainer">
         <img src="/Banner.png" alt="Banner" />
+      </div>
+
+      <div className="flex-col">
+        <ProfileCard />
       </div>
 
       <TabsAndInvestment expertise={expertise} industries={industries} stages={stages}/>
