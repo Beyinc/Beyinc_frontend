@@ -64,15 +64,19 @@ const Profile = () => {
   return (
     <div>
       <div className="relative">
-        <div className="p-4">
-          <img src="/Banner.png" alt="Banner" className="w-full m-0 h-auto" />
+        <div className="lg:p-4">
+          <img
+            src="/Banner.png"
+            alt="Banner"
+            className="w-full h-48 lg:h-80 m-0 object-cover rounded-none lg:rounded-xl"
+          />
         </div>
 
-        <div className="flex gap-5 absolute top-64 left-14 ">
+        <div className="flex flex-col lg:flex-row lg:gap-5 absolute top-20 lg:top-52 lg:left-14 ">
           <div>
             <ProfileCard />
           </div>
-          <div className="mt-36">
+          <div className="lg:mt-32">
             <div>
               <TabsAndInvestment
                 expertise={expertise}
@@ -157,21 +161,15 @@ const Profile = () => {
                 </Box>
 
                 <TabPanel value="1">
-                  <div>
-                    <About />
-                  </div>
+                  <About />
                 </TabPanel>
 
                 <TabPanel value="2">
-                  <div>
-                    <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
-                  </div>
+                  <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
                 </TabPanel>
 
                 <TabPanel value="3">
-                  <div>
-                    <Comment />
-                  </div>
+                  <Comment />
                 </TabPanel>
               </TabContext>
             </div>

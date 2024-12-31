@@ -220,7 +220,7 @@
   color: var(--followBtn-color);
   width: 180px;
   height: 43px;
-  padding: 10px 50px;
+  /* padding: 10px 50px; */
   border-radius: 20px;
   font-size: 16px;
   font-weight: 700;
@@ -1213,7 +1213,7 @@ textarea {
     color: var(--followBtn-color);
     width: 180px;
     height: 43px;
-    padding: 10px 50px;
+    padding: 10px 30px;
     border-radius: 20px;
     font-size: 18px;
     font-weight: 700;

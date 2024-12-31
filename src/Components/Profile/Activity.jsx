@@ -13,7 +13,7 @@ const Activity = ({allPosts, setAllPosts}) => {
 
 
   return (
-    <div className="w-[60vw]">
+    <div className="w-full lg:w-[60vw]">
       {id === undefined && (
         <section className="createPostContainer">
           <button
