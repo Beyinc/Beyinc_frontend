@@ -48,36 +48,40 @@ const SkillsCard = () => {
     }, []);
 
     return (
-        <div>
-            <div className=" w-[800px] shadow-xl mt-6 border-2 border-black p-5 pt-2  rounded-xl">
-                <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
-                    Skills
-                    <span onClick={() => setIsModalOpen(true)} >
-                        <i className="fas fa-pen"></i>
-                    </span>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                    {skills.length > 0 ? (
-                        skills.map((skill, index) => (
-                            <span
-                                key={index}
-                                className="bg-blue-200 py-3 px-4 rounded-lg text-sm cursor-pointer"
-                            >
-                                {skill}
-                            </span>
-                        ))
-                    ) : (
-                        <p>No skills available</p>
-                    )}
-                </div>
-                {errorMessage && (
-                    <div className="text-red-500 mt-4">{errorMessage}</div> 
-                )}
-            </div>
-            <EditSkillsModal setSkills={setSkills} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} savedSkills={skills}/>
-
+      <div lassName=" w-[60vw]">
+        <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2  rounded-xl">
+          <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
+            Skills
+            <span onClick={() => setIsModalOpen(true)}>
+              <i className="fas fa-pen"></i>
+            </span>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {skills.length > 0 ? (
+              skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="bg-blue-200 py-3 px-4 rounded-lg text-sm cursor-pointer"
+                >
+                  {skill}
+                </span>
+              ))
+            ) : (
+              <p>No skills available</p>
+            )}
+          </div>
+          {errorMessage && (
+            <div className="text-red-500 mt-4">{errorMessage}</div>
+          )}
         </div>
-    )
+        <EditSkillsModal
+          setSkills={setSkills}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          savedSkills={skills}
+        />
+      </div>
+    );
 }
 
 export default SkillsCard;

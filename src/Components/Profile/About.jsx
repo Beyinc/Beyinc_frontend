@@ -40,16 +40,16 @@ const About = () => {
     };
 
     return (
-        <div className="flex flex-col relative">
+        <div className="flex flex-col w-full">
             {/* <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
             </div> */}
-            <div className="flex gap-10 absolute top-56 ml-64">
-                <div className="flex-col">
+            <div className="flex gap-10">
+                {/* <div className="flex-col">
                     <ProfileCard />
-                </div>
-                <div className="pt-32">
-                    <div className="flex-col ">
+                </div> */}
+                <div className="flex-col">
+                    <div>
                         <AboutCard />
                     </div>
                     <div className="">

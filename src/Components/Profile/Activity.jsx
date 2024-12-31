@@ -13,11 +13,11 @@ const Activity = ({allPosts, setAllPosts}) => {
 
 
   return (
-    <div>
+    <div className="w-[60vw]">
       {id === undefined && (
         <section className="createPostContainer">
           <button
-            onClick={() => navigate('/createPostPage')}
+            onClick={() => navigate("/createPostPage")}
             className="createPostbtn"
           >
             Create Post
@@ -33,10 +33,10 @@ const Activity = ({allPosts, setAllPosts}) => {
         ) : (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignContent: 'center',
-              marginTop: '100px',
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+              marginTop: "100px",
             }}
           >
             There is no activity found for this user

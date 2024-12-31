@@ -36,29 +36,27 @@ const AboutCard = () => {
     };
 
     return (
-        <div>
-            <div className="h-[100px] w-[800px] shadow-xl mt-6 border-2 border-black p-3 pt-2 rounded-xl">
-                <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
-                    About
-                    <span onClick={() => setAboutModalOpen(true)}>
-                        <i className="fas fa-pen"></i>
-                    </span>
-                </div>
-                <div className="mt-4">
-                    {profileAbout ? profileAbout : ""}
-                </div>
-                {errorMessage && (
-                    <div className="text-red-500 mt-4">{errorMessage}</div> 
-                )}
-            </div>
-            <EditAboutModal 
-                isOpen={aboutModalOpen} 
-                onClose={() => setAboutModalOpen(false)} 
-                initialValue={profileAbout}
-                onSave={handleAboutSave}
-            />
+      <div className="w-[60vw]">
+        <div className="h-[100px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl">
+          <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
+            About
+            <span onClick={() => setAboutModalOpen(true)}>
+              <i className="fas fa-pen"></i>
+            </span>
+          </div>
+          <div className="mt-4">{profileAbout ? profileAbout : ""}</div>
+          {errorMessage && (
+            <div className="text-red-500 mt-4">{errorMessage}</div>
+          )}
         </div>
-    )
+        <EditAboutModal
+          isOpen={aboutModalOpen}
+          onClose={() => setAboutModalOpen(false)}
+          initialValue={profileAbout}
+          onSave={handleAboutSave}
+        />
+      </div>
+    );
 }
 
 export default AboutCard;
