@@ -73,7 +73,6 @@ const ProfileCard = () => {
 
   return (
     <div className="h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
-      
       <div className="absolute lg:relative">
         <div className="relative group mt-4 flex items-center justify-center">
           <img
@@ -82,7 +81,7 @@ const ProfileCard = () => {
           />
           <i
             onClick={() => setOpenEditPfp(true)}
-            className="fas fa-camera absolute top-0 bottom-[10px] left-[13px] p-[68px] opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full"
+            className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full"
           ></i>
         </div>
       </div>
