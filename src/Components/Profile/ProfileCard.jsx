@@ -125,6 +125,7 @@ const ProfileCard = () => {
     useEffect(() => {
         ApiServices.getProfile({ id: user_id })
           .then((res) => {
+            console.log(res.data);
             if (res.data.review !== undefined && res.data.review?.length > 0) {
               let avgR = 0;
               res.data.review?.map((rev) => {
@@ -133,6 +134,8 @@ const ProfileCard = () => {
               setAverageReview(avgR / res.data.review.length);
             }
 
+            const countryCode = res.data.country?.split("-")[1] || "";
+            const stateCode = res.data.state?.split("-")[1] || "";
             setInputs((prev) => ({
               ...prev,
               twitter: res.data.twitter,
@@ -146,8 +149,13 @@ const ProfileCard = () => {
               mobileVerified: res.data.phone?.length > 0 ? true : false,
               image: res.data.image?.url || "",
               email: res.data.email,
-              salutation: res.data.salutation,
-              mentorCategories: res.data.mentorCategories,
+            }));
+
+            setFormState((prevFormState) => ({
+              ...prevFormState,
+              country: res.data.country || "",
+              state: res.data.state || "",
+              town: res.data.town || "",
             }));
 
               setlanguagesKnown(res.data.languagesKnown || []);
@@ -157,14 +165,8 @@ const ProfileCard = () => {
               setState(res.data.state || "");
               setPlaces({
                 country: Country.getAllCountries(),
-                state:
-                  State.getStatesOfCountry(res.data.country?.split("-")[1]) ||
-                  [],
-                town:
-                  City.getCitiesOfState(
-                    res.data.country?.split("-")[1],
-                    res.data.state?.split("-")[1]
-                  ) || [],
+                state: State.getStatesOfCountry(countryCode) || [],
+                town: City.getCitiesOfState(countryCode, stateCode) || [],
               });
           
           })
@@ -201,12 +203,19 @@ const ProfileCard = () => {
 
   const handleCountryChange = (e) => {
     const selectedCountry = e.target.value;
+    const countryCode = selectedCountry.split("-")[1]; // Extract country code
+    const states = State.getStatesOfCountry(countryCode) || [];
     setFormState((prevFormState) => ({
       ...prevFormState,
       country: selectedCountry, // Update the selected country
       state: "", // Reset state
       town: "", // Reset town
     }));
+    setPlaces({
+      ...places,
+      state: states,
+      town: [],
+    });
     // No need to set `places` directly here, the `useEffect` will handle fetching states.
   };
 
@@ -219,12 +228,18 @@ const ProfileCard = () => {
   // Handle state change
   const handleStateChange = (e) => {
     const selectedState = e.target.value;
+    const countryCode = formState.country.split("-")[1]; // Extract country code
+    const stateCode = selectedState.split("-")[1]; // Extract state code
+    const towns = City.getCitiesOfState(countryCode, stateCode) || [];
     setFormState((prevFormState) => ({
       ...prevFormState,
       state: selectedState,
       town: "",
     }));
-    setPlaces((prev) => ({ ...prev, town: [] }));
+    setPlaces({
+      ...places,
+      town: towns,
+    });
   };
 
   // Handle town change
@@ -233,11 +248,6 @@ const ProfileCard = () => {
     setFormState((prevFormState) => ({
       ...prevFormState,
       town: selectedTown,
-    }));
-    setPlaces((prevPlaces) => ({
-      ...prevPlaces,
-      // Here, modify if you want to store or update any town-related info in `places`
-      town: [selectedTown], // Or update town array as per your logic
     }));
   };
 
@@ -267,10 +277,8 @@ const ProfileCard = () => {
     console.log(formState);
     e.preventDefault();
     try {
-      await ApiServices.InputFormData(formState);
+      await ApiServices.InputFormData({...formState, "user_id" : user_id});
       alert("Data saved successfully!");
-      //   // Fetch updated data after saving
-      // const updatedProfile = await ApiServices.GetProfileData();
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");
@@ -307,9 +315,6 @@ const ProfileCard = () => {
       <div className='flex flex-col gap-4 mt-2 '>
         <button className="rounded-full px-20">
           Follow
-        </button>
-        <button className='rounded-full px-20'>
-          Connect
         </button>
 
         {isInputPopupVisible && (

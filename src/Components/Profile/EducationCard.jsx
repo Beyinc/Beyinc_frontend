@@ -128,6 +128,7 @@ const EducationCard = () => {
                                 {index !== education.length - 1 && (
                                     <hr className="my-4 border-t-1 border-gray-700" />
                                 )}
+                                
                             </div>
                         ))
                     )}

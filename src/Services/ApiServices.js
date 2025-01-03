@@ -134,6 +134,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  uploadFile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/uploadFile`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   updateStatusByAdmin: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance

@@ -7,6 +7,7 @@ import EducationCard from "./EducationCard";
 import ExperiencesCard from "./ExperienceCard";
 import aboutService from "./aboutPageApi";
 import ProfileCard from "./ProfileCard";
+import UploadCard from "./UploadCard";
 
 const About = () => {
     const [profileAbout, setProfileAbout] = useState("");
@@ -41,13 +42,7 @@ const About = () => {
 
     return (
         <div className="flex flex-col relative">
-            {/* <div className="EditProfileImageContainer">
-                <img src="/Banner.png" alt="Banner" />
-            </div> */}
             <div className="flex gap-10 absolute top-56 ml-64">
-                {/* <div className="flex-col">
-                    <ProfileCard />
-                </div> */}
                 <div className="pt-32">
                     <div className="flex-col ">
                         <AboutCard />
@@ -60,6 +55,9 @@ const About = () => {
                     </div>
                     <div>
                         <ExperiencesCard />
+                    </div>
+                    <div>
+                        <UploadCard/>
                     </div>
                 </div>
             </div>
