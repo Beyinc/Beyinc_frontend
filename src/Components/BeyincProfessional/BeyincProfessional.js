@@ -178,11 +178,11 @@ const BeyincProfessional = () => {
   };
 
   return (
-    <div className="bg-white my-5 mx-24 py-20 px-20 shadow-md">
+    <div className="bg-white md:my-5 md:mx-24 py-4 md:py-20 px-4 md:px-20 shadow-md">
       <h2 className="mb-10 font-serif text-2xl">
         Advance as a Professional on Our Platform
       </h2>
-      <h3 className="mb-6 font-serif text-xl">BeyInc Profile*</h3>
+      <h3 className=" mb-2 md:mb-6 font-serif text-xl">BeyInc Profile*</h3>
       <div className="flex space-x-28 mb-10">
         <label>
           <input
@@ -221,7 +221,7 @@ const BeyincProfessional = () => {
       </label> */}
       </div>
 
-      <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>
+      <h3 className="mb-2 md:mb-6 mt-5 font-serif text-xl">Expertise*</h3>
       <Select
         multiple
         name="expertise"
@@ -243,6 +243,17 @@ const BeyincProfessional = () => {
             borderColor: "gray.400",
           },
         }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxHeight:{ xs:"100px",
+                sm: "100px",
+                md: "none"
+              },
+              overflowY: "auto",
+            },
+          },
+        }}
       >
         {allskills.map((option) => (
           <MenuItem key={option} value={option}>
@@ -253,7 +264,7 @@ const BeyincProfessional = () => {
         ))}
       </Select>
 
-      <h3 className="mb-6 mt-10 font-serif text-xl">Industries*</h3>
+      <h3 className="mb-2 md:mb-6 mt-10 font-serif text-xl">Industries*</h3>
       <FormControl fullWidth ref={dropdownRef}>
         <TextField
           sx={{
@@ -387,7 +398,10 @@ const BeyincProfessional = () => {
           }}
         />
       </FormControl> */}
-      <button onClick={handleSubmit} className="mt-10 rounded-full w-32 ml-4">
+      <button
+        onClick={handleSubmit}
+        className="mt-3 md:mt-10 rounded-full w-full md:w-32 md:ml-4"
+      >
         <span className="text-md font-bold">{edit ? "Update" : "Submit"}</span>
       </button>
     </div>
