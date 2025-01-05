@@ -8,8 +8,6 @@ import { useParams } from 'react-router-dom';
 import CloseIcon from "@mui/icons-material/Close";
 import {
   allLanguages,
-  allsalutations,
-  mentorcategories,
 } from "../../Utils";
 import { Country, State, City } from "country-state-city";
 import { setToast } from '../../redux/AuthReducers/AuthReducer';
@@ -371,220 +369,182 @@ const ProfileCard = () => {
       <div className="font-bold text-xl text-gray-500">{role}</div>
 
       <div className='flex flex-col gap-4 mt-2 '>
-        <button className="rounded-full px-20">
+        {!isOwnProfile && (<button className="rounded-full px-20">
           Follow
-        </button>
+        </button>)}
 
-        
         {isInputPopupVisible && (
-          <div className="popup-container">
-            <div className="popup-content">
-              <div className="Inputs-Container">
-                <div className="Input_Wrapper">
-                  <div
-                    className="popup-header"
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
+          <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
+            <div className="flex justify-between bg-white rounded-lg shadow-lg p-5 overflow-y-scroll">
+              <div className="flex justify-center mt-2">
+                <div className="flex flex-col">
+                  <div className="flex justify-between items-center">
                     <h3>Personal Information</h3>
                     <div
-                      className="close-icon"
+                      className="text-gray-500 cursor-pointer"
                       onClick={() => {
-                        document.getElementsByTagName(
-                          "body"
-                        )[0].style.overflowY = "scroll";
+                        document.getElementsByTagName("body")[0].style.overflowY =
+                          "scroll";
                         setIsInputPopupVisible(false);
                       }}
                     >
-                      <i
-                        style={{ color: "var(--followBtn-bg)" }}
-                        class="fas fa-times"
-                      ></i>
+                      <i className="fas fa-times text-blue-600"></i>
                     </div>
-                  </div>
-                  
-                  <label className="Input-Label">Full Name</label>
-                  <div className="Input_Fields">
-                    <input
-                      type="text"
-                      name="fullName"
-                      value={formState.fullName}
-                      onChange={handleInputChange}
-                    />
                   </div>
 
-                  <label className="Input-Label">Mobile Number</label>
-                  <div className="Input_Fields">
-                    <div>
-                      <div>
-                        <input
-                          type="text"
-                          className={
-                            mobile &&
-                            (mobile.length === 10 ? "valid" : "invalid")
-                          }
-                          name="mobileNumber"
-                          id="mobile"
-                          value={formState.mobileNumber}
-                          onChange={handleInputChange}
-                          placeholder="Mobile Number"
-                        />
-                        {mobileVerified === true}
-                      </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className='max-w-xs'>
+                      <label className="text-sm font-semibold text-blue-600">Full Name</label>
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={formState.fullName}
+                        onChange={handleInputChange}
+                        className="border border-gray-300 rounded-md p-2 w-full"
+                      />
+                    </div>
+                    <div className='max-w-xs'>
+                      <label className="text-sm font-semibold text-blue-600">Mobile Number</label>
+                      <input
+                        type="text"
+                        className={`${
+                          mobile && mobile.length === 10
+                            ? "border-green-500"
+                            : "border-red-500"
+                        } border rounded-md p-2 w-full`}
+                        name="mobileNumber"
+                        id="mobile"
+                        value={formState.mobileNumber}
+                        onChange={handleInputChange}
+                        placeholder="Mobile Number"
+                      />
+                    </div>
+                    <div className='max-w-xs'>
+                      <label className="text-sm font-semibold text-blue-600">Twitter</label>
+                      <input
+                        type="text"
+                        name="twitter"
+                        value={formState.twitter}
+                        onChange={handleInputChange}
+                        className="border border-gray-300 rounded-md p-2 w-full"
+                      />
+                    </div>
+                    <div className='max-w-xs'>
+                      <label className="text-sm font-semibold text-blue-600">LinkedIn</label>
+                      <input
+                        type="text"
+                        name="linkedin"
+                        value={formState.linkedin}
+                        onChange={handleInputChange}
+                        className="border border-gray-300 rounded-md p-2 w-full"
+                      />
                     </div>
                   </div>
-                  <label className="Input-Label">Twitter</label>
-                  <div className="Input_Fields">
-                    <input
-                      type="text"
-                      name="twitter"
-                      value={formState.twitter}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <label className="Input-Label">Linkedin</label>
-                  <div className="Input_Fields">
-                    <input
-                      type="text"
-                      name="linkedin"
-                      value={formState.linkedin}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="Location-details">
+
+                  <div className="mb-2 mt-2">
                     <h4>Location Info</h4>
-                    <form className="update-form">
-                      <div className="personal-container">
-                        <div>
-                          <div>
-                            <label className="Input-Label">Country</label>
-                          </div>
-                          <select
-                            name="country"
-                            id=""
-                            value={formState.country}
-                            onChange={handleCountryChange}
-                          >
-                            <option value="">Select</option>
-                            {places.country?.map((op) => (
-                              <option
-                                key={op.isoCode}
-                                value={`${op.name}-${op.isoCode}`}
-                              >
-                                {op.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <div>
-                            <label className="Input-Label">State</label>
-                          </div>
-                          <select
-                            name="state"
-                            id=""
-                            value={formState.state}
-                            onChange={handleStateChange}
-                          >
-                            <option value="">Select</option>
-                            {places.state?.map((op) => (
-                              <option
-                                key={op.isoCode}
-                                value={`${op.name}-${op.isoCode}`}
-                              >
-                                {op.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div>
-                          <div>
-                            <label className="Input-Label">Town/city</label>
-                          </div>
-                          <select
-                            name="town"
-                            id=""
-                            value={formState.town}
-                            onChange={handleTownChange}
-                          >
-                            <option value="">Select</option>
-                            {places.town?.map((op) => (
-                              <option
-                                key={op.name}
-                                value={op.name}
-                              >
-                                {op.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                    <form className="flex flex-wrap items-center gap-2 w-[700px]">
+                      <div>
+                        <label className="text-sm font-semibold text-blue-600">Country</label>
+                        <select
+                          name="country"
+                          value={formState.country}
+                          onChange={handleCountryChange}
+                          className="border border-gray-300 rounded-md p-2 w-full"
+                        >
+                          <option value="">Select</option>
+                          {places.country?.map((op) => (
+                            <option
+                              key={op.isoCode}
+                              value={`${op.name}-${op.isoCode}`}
+                            >
+                              {op.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className='ml-10'>
+                        <label className="text-sm font-semibold text-blue-600">State</label>
+                        <select
+                          name="state"
+                          value={formState.state}
+                          onChange={handleStateChange}
+                          className="border border-gray-300 rounded-md p-2 w-full"
+                        >
+                          <option value="">Select</option>
+                          {places.state?.map((op) => (
+                            <option
+                              key={op.isoCode}
+                              value={`${op.name}-${op.isoCode}`}
+                            >
+                              {op.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-semibold text-blue-600">Town/City</label>
+                        <select
+                          name="town"
+                          value={formState.town}
+                          onChange={handleTownChange}
+                          className="border border-gray-300 rounded-md p-2 w-full"
+                        >
+                          <option value="">Select</option>
+                          {places.town?.map((op) => (
+                            <option key={op.name} value={op.name}>
+                              {op.name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </form>
 
                     <div>
-                      <div>
-                        <label className="Input-Label">Languages Known</label>
-                      </div>
-                      <div>
-                        {formState.languages?.length > 0 && (
-                          <div className="listedTeam">
-                            {formState.languages?.map((t, i) => (
-                              <div className="singleMember" key={i}>
-                                <div>{t}</div>
-                                <div onClick={() => removeLanguage(i)}>
-                                  <CloseIcon className="deleteMember" />
-                                </div>
+                      <label className="text-sm font-semibold text-blue-600">Languages Known</label>
+                      {formState.languages?.length > 0 && (
+                        <div className="flex flex-wrap gap-2 w-[300px]">
+                          {formState.languages.map((t, i) => (
+                            <div
+                              key={i}
+                              className="bg-gray-100 px-2 py-1 flex items-center text-sm gap-2 rounded-lg relative"
+                            >
+                              <div>{t}</div>
+                              <div
+                                onClick={() => removeLanguage(i)}
+                                className="absolute top-0 right-0 bg-red-400 text-white text-xs rounded-full cursor-pointer transition-transform transform hover:scale-110"
+                              >
+                                X
                               </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "5px",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <div className="skillsSelectBox">
-                          <select
-                            name="languagesKnown"
-                            value={singlelanguagesKnown}
-                            onChange={(e) =>
-                              setSinglelanguagesKnown(e.target.value)
-                            }
-                          >
-                            <option value="">Select</option>
-                            {allLanguages.map((language) => (
-                              <option key={language} value={language}>
-                                {language}
-                              </option>
-                            ))}
-                          </select>
+                            </div>
+                          ))}
                         </div>
-
-                        <button
-                          type="button"
-                          className="add-button"
-                          onClick={handleAddLanguage}
+                      )}
+                      <div className="flex flex-col gap-2">
+                        <select
+                          name="languagesKnown"
+                          value={singlelanguagesKnown}
+                          onChange={(e) => setSinglelanguagesKnown(e.target.value)}
+                          className="border border-gray-300 rounded-md p-2 w-full"
                         >
-                          Add Language
-                        </button>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                          }}
-                        >
+                          <option value="">Select</option>
+                          {allLanguages.map((language) => (
+                            <option key={language} value={language}>
+                              {language}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="flex gap-4 mt-2">
                           <button
-                            className="add-button"
+                            type="button"
+                            onClick={handleAddLanguage}
+                            className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+                          >
+                            Add Language
+                          </button>
+                          <button
                             onClick={handleFormSubmit}
+                            className="py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
                           >
                             Save
                           </button>

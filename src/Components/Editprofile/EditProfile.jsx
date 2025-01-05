@@ -1652,6 +1652,7 @@ console.log('education details', educationDetails)
       education: educationDetails,
       skills: skills,
       bio: bio,
+      user_id : user_id
     };
     try {
       await ApiServices.SaveData(allData);
