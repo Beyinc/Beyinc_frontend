@@ -369,9 +369,9 @@ const ProfileCard = () => {
       <div className="font-bold text-xl text-gray-500">{role}</div>
 
       <div className='flex flex-col gap-4 mt-2 '>
-        {!isOwnProfile && (<button className="rounded-full px-20">
+        {/* {!isOwnProfile && (<button className="rounded-full px-20">
           Follow
-        </button>)}
+        </button>)} */}
 
         {isInputPopupVisible && (
           <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
