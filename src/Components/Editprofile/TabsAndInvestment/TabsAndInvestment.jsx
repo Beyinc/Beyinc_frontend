@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 import PopupModal from "./PopupModal";
 import "./TabsAndInvestment.css";
+import "../../BeyincProfessional/BeyincProfessional";
+import { Link, useNavigate } from "react-router-dom";
 
 const TabsAndInvestment = ({ industries, stages, expertise }) => {
   const [activeTab, setActiveTab] = useState("Expertise");
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
+
+  const navigate = useNavigate()
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   const handleEditButtonClick = () => {
-    setIsPopupOpen(true); // Show popup
+    navigate("/beyincProfesional", {state: {edit: true}});
+    // setIsPopupOpen(true); // Show popup
   };
 
   const handleClosePopup = () => {
@@ -58,7 +63,6 @@ const TabsAndInvestment = ({ industries, stages, expertise }) => {
       >
         <p>You can edit your details here.</p>
       </PopupModal>
-      
     </div>
   );
 };

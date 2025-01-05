@@ -788,7 +788,7 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-  
+
   dislikePitchComment: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1142,6 +1142,32 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/saveBeyincProfessional`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  saveOrUpdateProfessionalProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .put(`/professionalProfile/update`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  fetchProfessionalProfile: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/professionalProfile/fetch`)
         .then((res) => {
           if (res) {
             resolve(res);
