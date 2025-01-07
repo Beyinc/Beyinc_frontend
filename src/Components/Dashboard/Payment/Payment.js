@@ -9,6 +9,7 @@ import Tab from "@mui/material/Tab";
 
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import connectPayoutModal from './ConnectPayoutModal'
 
 import {
   Table,
@@ -23,12 +24,21 @@ import { useSelector } from "react-redux";
 import { CalendarServices } from "../../../Services/CalendarServices";
 // import { saveWithdrawData } from "../../../Services/PaymentServices";
 import { PaymentServices } from "../../../Services/PaymentServices";
+import ConnectPayoutModal from "./ConnectPayoutModal";
+import UpiandBankModal from "./UpiandBankModal";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function Payment() {
   const [activeTab, setActiveTab] = useState(0);
   const [mentorBookings, setMentorBookings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const chargePerCent = 10;
+  const [currency, setCurrency] = useState();
+
+  const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
+  const [isUpiandBankModalOpen, setIsUpiandBankModalOpen] = useState(false);
+
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -92,7 +102,7 @@ export default function Payment() {
 
   // Example function to send data to backend
 
-  const saveToDatabase = () => {
+  const saveToDatabase = async () => {
     const data = {
       selectedIds,
       totalAmount,
@@ -100,125 +110,143 @@ export default function Payment() {
       remainingAmount,
     };
     console.log("Sending data to backend:", data);
+
     if (totalAmount !== 0) {
-      // Call the saveWithdrawl API function
-      PaymentServices.saveWithdrawData(data)
-        .then((response) => {
-          console.log("Data saved successfully:", response);
-        })
-        .catch((error) => {
-          console.error("Error saving data:", error);
-        });
+      // Set loading to true before making the API call
+      setLoading(true);
+
+      try {
+        // Await the API call to save the withdrawal data
+        const response = await PaymentServices.saveWithdrawData(data);
+        console.log("Data saved successfully:", response);
+      } catch (error) {
+        console.error("Error saving data:", error);
+      } finally {
+        // Set loading to false after the request is complete
+        setLoading(false);
+      }
     }
   };
 
   return (
-    <Box px={4} py={3}>
-      <Box p={8} bgcolor={"white"} borderRadius={3} boxShadow={2}>
-        <Typography variant="h5" align="left" style={{ fontFamily: "Roboto" }}>
-          Availability
-        </Typography>
+    <div>
+      <Box px={4} py={3}>
+        <Box p={8} bgcolor={"white"} borderRadius={3} boxShadow={2}>
+          <div className="flex justify-between items-center">
+            <Typography variant="h5" align="left" style={{ fontFamily: "Roboto" }}>
+              Availability
+            </Typography>
+            <button className="bg-customPurple rounded-md w-40" onClick={() => setIsPayoutModalOpen(true)}>
+              Connect Payout
+            </button>
+          </div>
 
-        {/* Tab selection */}
-        <Tabs value={activeTab} onChange={handleTabChange}>
-          <Tab
-            label="WithDrawals"
-            className={`available-tab ${
-              activeTab === 0 ? "available-tab-active" : ""
-            }`}
+          {/* Tab selection */}
+          <Tabs value={activeTab} onChange={handleTabChange}>
+            <Tab
+              label="WithDrawals"
+              className={`available-tab ${activeTab === 0 ? "available-tab-active" : ""
+                }`}
+            />
+
+            <Tab
+              label="Transactions"
+              className={`available-tab ${activeTab === 1 ? "availabe-tab-active" : ""
+                }`}
+            />
+          </Tabs>
+
+          {/* Divider Below Tabs */}
+          <Box
+            mt={2}
+            mb={3}
+            bgcolor="grey.300"
+            height=".5px"
+            width="100%"
+            marginTop={"0px"}
           />
 
-          <Tab
-            label="Transactions"
-            className={`available-tab ${
-              activeTab === 1 ? "availabe-tab-active" : ""
-            }`}
-          />
-        </Tabs>
-
-        {/* Divider Below Tabs */}
-        <Box
-          mt={2}
-          mb={3}
-          bgcolor="grey.300"
-          height=".5px"
-          width="100%"
-          marginTop={"0px"}
-        />
-
-        {activeTab === 0 && (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow style={{ backgroundColor: "#fafafa" }}>
-                  {" "}
-                  {/* Gray background for header */}
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column}
-                      style={{
-                        color: "black",
-                        fontWeight: "bold",
-                        fontSize: "15px",
-                      }}
-                    >
-                      {column}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {mentorBookings.map((booking) => (
-                  <TableRow key={booking._id}>
-                    <TableCell style={{ color: "black", fontSize: "15px" }}>
-                      {new Date(booking.startDateTime).toLocaleString()}
-                    </TableCell>
-                    <TableCell style={{ color: "black", fontSize: "15px" }}>
-                      {booking.duration}
-                    </TableCell>
-                    <TableCell style={{ color: "black", fontSize: "15px" }}>
-                      {booking.mentorId.userName}
-                    </TableCell>
-                    <TableCell style={{ color: "black", fontSize: "15px" }}>
-                      {booking.title}
-                    </TableCell>
-                    <TableCell style={{ color: "black", fontSize: "15px" }}>
-                      {booking.amount} {booking.currency}
-                    </TableCell>
-                    <TableCell style={{ color: "black", fontSize: "15px" }}>
-                      <Checkbox
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            booking._id,
-                            booking.amount,
-                            e.target.checked
-                          )
-                        }
-                      />
-                    </TableCell>
+          {activeTab === 0 && (
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow style={{ backgroundColor: "#fafafa" }}>
+                    {" "}
+                    {/* Gray background for header */}
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column}
+                        style={{
+                          color: "black",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {column}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-        <div className="flex justify-around mt-20">
-          <div className="font-bold"> Charge: {commission} %</div>
-          <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
-          <div className="font-bold"> Total Amount: {totalAmount}</div>
-        </div>
-        <div>
-        <button
-            type="button"
-            className="mt-10 ml-[650px] flex justify-center items-center h-14 w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full"
-            onClick={saveToDatabase}
-          >
-           {`Withdraw ${remainingAmount}`}
-          </button>
-        </div>
+                </TableHead>
+
+                <TableBody>
+                  {mentorBookings.map((booking) => (
+                    <TableRow key={booking._id}>
+                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                        {new Date(booking.startDateTime).toLocaleString()}
+                      </TableCell>
+                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                        {booking.duration}
+                      </TableCell>
+                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                        {booking.mentorId.userName}
+                      </TableCell>
+                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                        {booking.title}
+                      </TableCell>
+                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                        {booking.amount} {booking.currency}
+                      </TableCell>
+                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                        <Checkbox
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              booking._id,
+                              booking.amount,
+                              e.target.checked
+                            )
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+          <div className="flex justify-around mt-20">
+            <div className="font-bold"> Charge: {chargePerCent} %</div>
+            <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
+            <div className="font-bold"> Total Amount: {totalAmount}</div>
+          </div>
+          <div>
+            <button
+              type="button"
+              className={`mt-10 ml-[650px] flex justify-center items-center h-14 w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full ${loading ? "bg-blue-300" : "bg-customPurple"}`}
+              onClick={saveToDatabase}
+            >
+              {loading ? (
+                <span>Loading...</span>
+              ) : (
+                `Withdraw ${remainingAmount}`
+              )}
+            </button>
+          </div>
+        </Box>
       </Box>
-    </Box>
+      <ConnectPayoutModal setIsUpiandBankModalOpen={setIsUpiandBankModalOpen} currency={currency} setCurrency={setCurrency} isOpen={isPayoutModalOpen} onClose={() => setIsPayoutModalOpen(false)} />
+      <UpiandBankModal currency={currency} isOpen={isUpiandBankModalOpen} onClose={() => setIsUpiandBankModalOpen(false)}/>
+
+    </div>
   );
 }
 
