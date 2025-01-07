@@ -170,6 +170,19 @@ export const ApiServices = {
     });
   },
 
+  getProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/getUser`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   saveFollowers: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
