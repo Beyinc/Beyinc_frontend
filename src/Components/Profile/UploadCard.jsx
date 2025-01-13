@@ -1,9 +1,176 @@
-import React from 'react'
+import { Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { ApiServices } from "../../Services/ApiServices";
+import { useDispatch, useSelector } from "react-redux";
+import { setToast } from "../../redux/AuthReducers/AuthReducer";
+import { ToastColors } from "../Toast/ToastColors";
+import { useParams } from "react-router-dom";
 
 const UploadCard = () => {
-  return (
-    <div>UploadCard</div>
-  )
-}
+  const { id } = useParams();
+  const { user_id } = useSelector((store) => store.auth.loginDetails);
 
-export default UploadCard
+  const [changeResume, setChangeDocuments] = useState({
+    resume: "",
+  });
+  const [oldDocs, setOldDocs] = useState({
+    resume: "",
+  });
+  const [recentUploadedDocs, setRecentUploadedDocs] = useState({
+    resume: "",
+  });
+
+  const handleResume = (e) => {
+    const file = e.target.files[0];
+    setRecentUploadedDocs((prev) => ({ ...prev, [e.target.name]: file?.name }));
+    setFileBase(e, file);
+  };
+
+  const submitAllData = async () => {
+    try {
+      const { resume } = changeResume;
+      if (resume) {
+        const documentData = {
+          userId: user_id,
+          resume: resume,
+        };
+
+        // Call the SaveDocuments API
+        await ApiServices.SaveDocument(documentData);
+
+        dispatch(
+          setToast({
+            message: "Document saved successfully!",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+      } else {
+        dispatch(
+          setToast({
+            message: "No document to save!",
+            bgColor: ToastColors.warning,
+            visible: "yes",
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+      dispatch(
+        setToast({
+          message: "Error saving document. Please try again.",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    }
+  };
+
+  const setFileBase = (e, file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setChangeDocuments((prev) => ({
+        ...prev,
+        [e.target.name]: reader.result,
+      }));
+    };
+  };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    ApiServices.getProfile({ id: user_id })
+      .then((res) => {
+        if (res.data.documents !== undefined) {
+          setOldDocs((prev) => ({
+            ...prev,
+            resume: res.data.documents.resume,
+          }));
+          setChangeDocuments((prev) => ({
+            ...prev,
+            resume: res.data.documents?.resume || "",
+          }));
+        }
+      })
+      .catch((error) => {
+        dispatch(
+          setToast({
+            message: error?.response?.data?.message,
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  }, [id]);
+
+  return (
+    <div className="w-full lg:w-[60vw]">
+      <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
+        <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
+          Documents
+        </div>
+        <div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "2px",
+              justifyContent: "space-between",
+            }}
+          >
+            <label className="Input-Label">File to be pitched</label>
+            {oldDocs.resume && (
+              <a
+                href={oldDocs.resume?.secure_url}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  marginRight: "30px",
+                }}
+              >
+                View Previous Document
+              </a>
+            )}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap:"20px"
+            }}
+          >
+            <>
+              <label htmlFor="resume" className="resume">
+                <CloudUploadIcon />
+                <span className="fileName">
+                  {recentUploadedDocs?.resume || "Upload"}
+                </span>
+              </label>
+              <input
+                className="resume"
+                type="file"
+                name="resume"
+                id="resume"
+                onChange={handleResume}
+                style={{ display: "none" }}
+              />
+            </>
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={submitAllData}
+                disabled={!changeResume.resume}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UploadCard;
