@@ -233,7 +233,8 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
           <div className="flex justify-end space-x-2 mt-4">
             <button
               onClick={handleAddSkill}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              style={{ backgroundColor: "#4e54c7" }}
+              className="text-white px-4 py-2 rounded-md"
             >
               Save
             </button>
