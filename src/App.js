@@ -313,8 +313,8 @@ const App = () => {
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
        
-          <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
-          <Route path="/profile" Component={AuthHoc(Profile)} />
+          <Route path="/editProfile" Component={AuthHoc(Profile)} />
+          {/* <Route path="/profile" Component={AuthHoc(Profile)} /> */}
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
 

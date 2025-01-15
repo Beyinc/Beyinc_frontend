@@ -11,11 +11,23 @@ import { useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
 import Comment from "./Comment";
 import ProfileCard from "./ProfileCard";
+import BookSession from "../Editprofile/BookSession/BookSession2";
+// import '../Editprofile/Editprofile.css'
+import "../Editprofile/EditProfile.css";
+import { CalendarServices } from '../../Services/CalendarServices';
 
 const Profile = () => {
   const [value, setValue] = React.useState("1");
   const { id } = useParams();
   const [selfProfile, setSelfProfile] = useState(true);
+ const [service, setService] = useState([])
+
+ const [industries, setIndustries] = useState([]);
+ const [stages, setStages] = useState([]);
+ const [expertise, setExpertise] = useState([]);
+
+ const [allPosts, setAllPosts] = useState([]);
+const [profileData, setProfileData] = useState({})
 
   useEffect(() => {
     if (id) {
@@ -36,11 +48,6 @@ const Profile = () => {
   //   stages: dbStages,
   // } = useSelector((store) => store.auth.userDetails);
 
-  const [industries, setIndustries] = useState([]);
-  const [stages, setStages] = useState([]);
-  const [expertise, setExpertise] = useState([]);
-
-  const [allPosts, setAllPosts] = useState([]);
 
   // useEffect(() => {
   //   if (dbExpertise) setExpertise(dbExpertise);
@@ -58,7 +65,9 @@ const Profile = () => {
           : await ApiServices.getProfile({ user_id });
   
         const { expertise, industries, stages } = response.data;
-  
+        console.log(response.data);
+        setProfileData(response.data);
+
         if (expertise) setExpertise(expertise);
         if (industries) setIndustries(industries);
         if (stages) setStages(stages);
@@ -81,6 +90,25 @@ const Profile = () => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    const fetchAvailabilityData = async () => {
+        try {
+            const { data } = await CalendarServices.getAvailabilityData({ mentorId:id });
+            // Logging the availability data
+            console.log('Availability data:', JSON.stringify(data.availability));
+            setService(data.availability.sessions)
+            const availabilityData = data.availability;
+            // Perform additional operations with availabilityData here
+        } catch (error) {
+            console.error("Error fetching availability data:", error);
+        }
+    };
+
+    fetchAvailabilityData();
+}, [id]); // Add dependencies if required
+
+
+
   return (
     <div>
       <div className="relative">
@@ -91,7 +119,7 @@ const Profile = () => {
             className="w-full h-48 lg:h-80 m-0 object-cover rounded-none lg:rounded-xl"
           />
         </div>
-
+      
         <div className="flex flex-col lg:flex-row lg:gap-5 absolute top-20 lg:top-52 lg:left-14 ">
           <div>
             <ProfileCard 
@@ -99,8 +127,17 @@ const Profile = () => {
             setSelfProfile ={setSelfProfile} 
             />
 
-          </div>
+        {(profileData.beyincProfile === "Mentor"  || profileData.beyincProfile === "Co-Founder") && 
+                    service.length > 0 && (
+                      <div className="BookSessionCard">
+                        <BookSession name={profileData.name} mentorId={id} reschedule={false} />
+                      </div>
+                    )}
+                </div>
+              
+
           <div className="lg:mt-32">
+          {(profileData.beyincProfile === "Mentor"  || profileData.beyincProfile === "Co-Founder") && 
             <div>
               <TabsAndInvestment
                 selfProfile={selfProfile}
@@ -110,6 +147,7 @@ const Profile = () => {
                 stages={stages}
               />
             </div>
+             }
             <div className="w-full">
               <TabContext value={value}>
                 <Box>
