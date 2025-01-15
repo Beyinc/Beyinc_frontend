@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { useParams } from "react-router-dom";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 
 const UploadCard = ({selfProfile ,setSelfProfile}) => {
  
@@ -123,18 +124,19 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
               justifyContent: "space-between",
             }}
           >
-            <label className="Input-Label">File to be pitched</label>
+            <label className="Input-Label">Pitchdeck</label>
             {oldDocs.resume && (
-              <a
-                href={oldDocs.resume?.secure_url}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  marginRight: "30px",
-                }}
-              >
-                View Previous Document
-              </a>
+         
+           <a
+             href={oldDocs.resume?.secure_url}
+             target="_blank"
+             rel="noreferrer"
+             className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+           >
+             <InsertDriveFileOutlinedIcon />
+             <span className="hidden md:block">Pitchdeck</span>
+           </a>
+           
             )}
           </div>
 

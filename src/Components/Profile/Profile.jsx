@@ -125,12 +125,13 @@ const [profileData, setProfileData] = useState({})
             <ProfileCard 
             selfProfile={selfProfile}
             setSelfProfile ={setSelfProfile} 
+            profileData={profileData}
             />
 
         {(profileData.beyincProfile === "Mentor"  || profileData.beyincProfile === "Co-Founder") && 
                     service.length > 0 && (
                       <div className="BookSessionCard">
-                        <BookSession name={profileData.name} mentorId={id} reschedule={false} />
+                        <BookSession name={profileData.userName} mentorId={id} reschedule={false} />
                       </div>
                     )}
                 </div>
@@ -227,7 +228,8 @@ const [profileData, setProfileData] = useState({})
                 <TabPanel value="1">
                   <About
                       selfProfile={selfProfile}
-                      setSelfProfile ={setSelfProfile}  />
+                      setSelfProfile ={setSelfProfile}
+                      profileData={profileData}  />
                 </TabPanel>
 
                 <TabPanel value="2">

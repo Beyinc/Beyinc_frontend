@@ -9,7 +9,7 @@ import aboutService from "./aboutPageApi";
 import ProfileCard from "./ProfileCard";
 import UploadCard from "./UploadCard";
 
-const About = ( {selfProfile ,setSelfProfile} ) => {
+const About = ( {profileData,selfProfile ,setSelfProfile} ) => {
     const [profileAbout, setProfileAbout] = useState("");
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState(""); // New state for error handling
@@ -22,7 +22,7 @@ const About = ( {selfProfile ,setSelfProfile} ) => {
         setProfileAbout(updatedAbout); // Update the profileAbout state with the new text
         setErrorMessage(""); // Clear any previous error message
     };
-
+console.log('profile role', profileData.role)
     return (
         <div className="flex flex-col w-full">
             {/* <div className="EditProfileImageContainer">
@@ -39,6 +39,8 @@ const About = ( {selfProfile ,setSelfProfile} ) => {
                          setSelfProfile ={setSelfProfile} 
                         />
                     </div>
+               
+                  { profileData.role === 'Mentor' || profileData.role === 'Individual /Entrepreneur' && <div>
                     <div className="">
                         <SkillsCard
                           selfProfile={selfProfile}
@@ -54,6 +56,7 @@ const About = ( {selfProfile ,setSelfProfile} ) => {
                           selfProfile={selfProfile}
                           setSelfProfile ={setSelfProfile} />
                     </div>
+                    </div>}
                     <div>
                         <UploadCard
                           selfProfile={selfProfile}
