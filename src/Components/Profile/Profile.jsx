@@ -15,16 +15,26 @@ import ProfileCard from "./ProfileCard";
 const Profile = () => {
   const [value, setValue] = React.useState("1");
   const { id } = useParams();
+  const [selfProfile, setSelfProfile] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      setSelfProfile(false);
+    }
+  }, [id]); 
+
   const {
     user_id,
     userName: loggedUserName,
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
-  const {
-    expertise: dbExpertise,
-    industries: dbIndustires,
-    stages: dbStages,
-  } = useSelector((store) => store.auth.userDetails);
+
+  console.log('id',id)
+  // const {
+  //   expertise: dbExpertise,
+  //   industries: dbIndustires,
+  //   stages: dbStages,
+  // } = useSelector((store) => store.auth.userDetails);
 
   const [industries, setIndustries] = useState([]);
   const [stages, setStages] = useState([]);
@@ -32,30 +42,40 @@ const Profile = () => {
 
   const [allPosts, setAllPosts] = useState([]);
 
-  useEffect(() => {
-    if (dbExpertise) setExpertise(dbExpertise);
-    if (dbIndustires) setIndustries(dbIndustires);
-    if (dbStages) setStages(dbStages);
-  }, [dbExpertise, dbStages, dbIndustires]);
+  // useEffect(() => {
+  //   if (dbExpertise) setExpertise(dbExpertise);
+  //   if (dbIndustires) setIndustries(dbIndustires);
+  //   if (dbStages) setStages(dbStages);
+  // }, [dbExpertise, dbStages, dbIndustires]);
 
   useEffect(() => {
     // Fetch the user data on which profile is clicked
     const fetchUserData = async () => {
-      const response = await ApiServices.getProfile({ id });
-      const { expertise, industries, stages } = response.data;
-
-      if (expertise) setExpertise(expertise);
-      if (industries) setIndustries(industries);
-      if (stages) setStages(stages);
-      const responsePost = id
-        ? await ApiServices.getUsersPost({ user_id: id })
-        : await ApiServices.getUsersPost({ user_id });
-
-      setAllPosts(responsePost.data);
+      try {
+        // Fetch profile using id or user_id
+        const response = id
+          ? await ApiServices.getProfile({ id })
+          : await ApiServices.getProfile({ user_id });
+  
+        const { expertise, industries, stages } = response.data;
+  
+        if (expertise) setExpertise(expertise);
+        if (industries) setIndustries(industries);
+        if (stages) setStages(stages);
+  
+        // Fetch user's posts using id or user_id
+        const responsePost = id
+          ? await ApiServices.getUsersPost({ user_id: id })
+          : await ApiServices.getUsersPost({ user_id });
+  
+        setAllPosts(responsePost.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
-
+  
     fetchUserData();
-  }, [id, user_id]); // Add id to dependencies
+  }, [id, user_id]); 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -74,11 +94,17 @@ const Profile = () => {
 
         <div className="flex flex-col lg:flex-row lg:gap-5 absolute top-20 lg:top-52 lg:left-14 ">
           <div>
-            <ProfileCard />
+            <ProfileCard 
+            selfProfile={selfProfile}
+            setSelfProfile ={setSelfProfile} 
+            />
+
           </div>
           <div className="lg:mt-32">
             <div>
               <TabsAndInvestment
+                selfProfile={selfProfile}
+                setSelfProfile ={setSelfProfile} 
                 expertise={expertise}
                 industries={industries}
                 stages={stages}
@@ -161,7 +187,9 @@ const Profile = () => {
                 </Box>
 
                 <TabPanel value="1">
-                  <About />
+                  <About
+                      selfProfile={selfProfile}
+                      setSelfProfile ={setSelfProfile}  />
                 </TabPanel>
 
                 <TabPanel value="2">

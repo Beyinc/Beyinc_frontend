@@ -116,6 +116,17 @@ const Posts = () => {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
+  
+  const getNotifys = async () => {
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
+    dispatch(getAllNotifications(user_id));
+  };
+
+  useEffect(() => {
+    getNotifys();
+  }, []);
+
+  
   const followerController = async (e, id) => {
     console.log('following to', id)
     console.log('userId', user_id);
@@ -161,14 +172,6 @@ const Posts = () => {
     e.target.disabled = false;
   };
 
-  const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
-    dispatch(getAllNotifications(user_id));
-  };
-
-  useEffect(() => {
-    getNotifys();
-  }, []);
 
   ////////////////////////////////
 

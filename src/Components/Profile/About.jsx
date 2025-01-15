@@ -9,7 +9,7 @@ import aboutService from "./aboutPageApi";
 import ProfileCard from "./ProfileCard";
 import UploadCard from "./UploadCard";
 
-const About = () => {
+const About = ( {selfProfile ,setSelfProfile} ) => {
     const [profileAbout, setProfileAbout] = useState("");
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState(""); // New state for error handling
@@ -34,19 +34,30 @@ const About = () => {
                 </div> */}
                 <div className="flex-col">
                     <div>
-                        <AboutCard />
+                        <AboutCard
+                         selfProfile={selfProfile}
+                         setSelfProfile ={setSelfProfile} 
+                        />
                     </div>
                     <div className="">
-                        <SkillsCard />
+                        <SkillsCard
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile}  />
                     </div>
                     <div className="">
-                        <EducationCard />
+                        <EducationCard
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile}  />
                     </div>
                     <div>
-                        <ExperiencesCard />
+                        <ExperiencesCard 
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile} />
                     </div>
                     <div>
-                        <UploadCard/>
+                        <UploadCard
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile} />
                     </div>
                 </div>
             </div>
