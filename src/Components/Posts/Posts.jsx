@@ -253,6 +253,7 @@ console.log('filteredposts: ', filteredPosts)
     );
   };
 
+  console.log("Tags changed",selectedTags);
   const clearAllTags = () => {
     setSelectedTags([]);
   };

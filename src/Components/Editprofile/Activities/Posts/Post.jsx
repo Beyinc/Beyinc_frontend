@@ -30,7 +30,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider }) => 
   const dispatch = useDispatch();
 
 
- console.log('post',post)
+//  console.log('post',post)
 
   useEffect(() => {
     if (post?._id) {
