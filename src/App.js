@@ -49,6 +49,8 @@ import EntryDetails from "./Components/EntryDetails/EntryDetails";
 import SearchResults from "./Components/Searching/SearchResults";
 import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
+import About from "./Components/Profile/About";
+import Profile from "./Components/Profile/Profile";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -311,7 +313,8 @@ const App = () => {
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
        
-          <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
+          <Route path="/editProfile" Component={AuthHoc(Profile)} />
+          {/* <Route path="/profile" Component={AuthHoc(Profile)} /> */}
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
 
@@ -334,7 +337,7 @@ const App = () => {
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
            
-          <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
+          <Route path="/user/:id" Component={AuthHoc(Profile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
@@ -365,6 +368,9 @@ const App = () => {
            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
            <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
+
+            <Route path="/about" element={<About />} />
+           
         </Routes>
       </Suspense>
     </div>

@@ -531,7 +531,7 @@ const AllUsers = () => {
               </div> */}
             </div>
           )}
-          <div className="user-cards-panel">
+          <div className="user-cards-panel w-[95%] lg:w-[80%]">
             <div className="mt-4 userscontainer">
               {users.length > 0 ? (
                 // filteredData?.map((user) => (

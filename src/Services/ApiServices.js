@@ -170,6 +170,19 @@ export const ApiServices = {
     });
   },
 
+  getProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/getUser`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   saveFollowers: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -182,6 +195,20 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  unfollowUser: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/unfollow`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   login: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -775,6 +802,7 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
   dislikePitchComment: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1137,6 +1165,32 @@ export const ApiServices = {
     });
   },
 
+  saveOrUpdateProfessionalProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .put(`/professionalProfile/update`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  fetchProfessionalProfile: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/professionalProfile/fetch`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   SaveData: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1235,4 +1289,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  SaveDocument: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveDocument`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  }
+  
 };

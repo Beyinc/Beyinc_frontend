@@ -19,7 +19,7 @@ const Posts = () => {
   // );
   const { role, userName, image, _id: user_id } = useSelector((store) => store.auth.userDetails);
 
-  console.log(role, userName, image)
+  // console.log(role, userName, image)
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -116,6 +116,17 @@ const Posts = () => {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
+  
+  const getNotifys = async () => {
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
+    dispatch(getAllNotifications(user_id));
+  };
+
+  useEffect(() => {
+    getNotifys();
+  }, []);
+
+  
   const followerController = async (e, id) => {
     console.log('following to', id)
     console.log('userId', user_id);
@@ -161,14 +172,6 @@ const Posts = () => {
     e.target.disabled = false;
   };
 
-  const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
-    dispatch(getAllNotifications(user_id));
-  };
-
-  useEffect(() => {
-    getNotifys();
-  }, []);
 
   ////////////////////////////////
 
@@ -178,19 +181,70 @@ const Posts = () => {
   const [tags, setTags] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState("");
-  const [checkedValues, setCheckedValues] = useState({
-    public: false,
-    private: false,
-  });
+  const [isPublic, setIsPublic] = useState(false);
+const [isPrivate, setIsPrivate] = useState(false);
+
+
+const handlePublicCheckboxChange = (event) => {
+  setIsPublic(event.target.checked);
+};
+
+const handlePrivateCheckboxChange = (event) => {
+ 
+  setIsPrivate(event.target.checked);
+};
+
+console.log('filteredposts: ', filteredPosts)
+  // const [checkedValues, setCheckedValues] = useState({
+  //   public: false,
+  //   private: false,
+  // });
 
   // Handle checkbox change
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    setCheckedValues((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
-  };
+  // const handleCheckboxChange = (event) => {
+  //   const { name, checked } = event.target;
+   
+  //   setCheckedValues((prev) => ({
+  //     ...prev,
+  //     [name]: checked,
+  //   }));
+  
+   
+  // };
+
+  useEffect(() => {
+    const fetchFilteredPosts = async () => {
+      try {
+        const filterData = {
+          tags: selectedTags,
+          sortOption: selectedSortOption,
+          people: people,
+        };
+  
+        if (isPublic) {
+          filterData.public = true;
+        }
+        if (isPrivate) {
+          filterData.private = true;
+        }
+  
+        // if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
+        //   console.log("No valid filters or both selected. Clearing posts...");
+        //   setFilteredPosts([]); // Clear all posts in these cases.
+        //   return;
+        // }
+  
+        const response = await ApiServices.getFilterPosts(filterData);
+        setFilteredPosts(response.data); // Update with new data
+      } catch (error) {
+        console.error("Error filtering posts:", error);
+      }
+    };
+  
+    fetchFilteredPosts();
+  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate]);
+  
+
 
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
@@ -199,39 +253,20 @@ const Posts = () => {
     );
   };
 
+  
+  const clearAllTags = () => {
+    console.log("Tags changed",selectedTags,filteredPosts);
+    setSelectedTags([]);
+    setFilteredPosts([])
+  
+  };
+
   const filteredTagsOptions = postTypes.filter((option) =>
     option.value.toLowerCase().includes(tags.toLowerCase())
   );
 
-  useEffect(() => {
-    console.log(people, selectedSortOption, selectedTags, checkedValues);
+ 
 
-    const fetchFilteredPosts = async () => {
-      try {
-        const filterData = {
-          tags: selectedTags, // Selected tags
-          sortOption: selectedSortOption, // Selected sort option
-          people: people, // People filter
-        };
-
-        // Add filters based on checkbox states
-        if (checkedValues.public) {
-          filterData.public = true; // Include public filter if checked
-        }
-        if (checkedValues.private) {
-          filterData.private = true; // Include private filter if checked
-        }
-
-        const response = await ApiServices.getFilterPosts(filterData);
-        console.log("Filtered posts:", response.data);
-        setFilteredPosts(response.data);
-      } catch (error) {
-        console.error("Error filtering posts:", error);
-      }
-    };
-
-    fetchFilteredPosts(); // Call the function
-  }, [people, selectedSortOption, selectedTags, checkedValues]);
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -413,6 +448,15 @@ const Posts = () => {
                   onChange={(e) => setTags(e.target.value)}
                 />
 
+                {selectedTags.length > 0 && (
+                      <div className="clear-container">
+                        <div className="x-box">X</div>
+                          <a onClick={clearAllTags} className="clear-link">
+                            Clear All
+                          </a>
+                      </div>
+                )}
+
                 {filteredTagsOptions.map((option) => (
                   <div key={option.value} className="p-0">
                     <label>
@@ -426,211 +470,34 @@ const Posts = () => {
                     </label>
                   </div>
                 ))}
+                
               </div>
             )}
 
-            {/* <h5>Location</h5>
-            <div className="checkbox">
-              <input type="checkbox" id="delhi" name="location" value="Delhi" />
-              <label className="checkbox-label" for="delhi">
-                Delhi
-              </label>
-            </div>
-
-            <div className="checkbox">
-              {" "}
-              <input
-                type="checkbox"
-                id="mumbai"
-                name="location"
-                value="Mumbai"
-              />
-              <label className="checkbox-label" for="mumbai">
-                Mumbai
-              </label>
-            </div>
-
-            <div className="checkbox">
-              {" "}
-              <input
-                type="checkbox"
-                id="chennai"
-                name="location"
-                value="Chennai"
-              />
-              <label className="checkbox-label" for="chennai">
-                Chennai
-              </label>
-            </div> */}
-
-            {/* <h5>Category</h5> */}
-            {/* <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="general"
-                name="category"
-                value="General post"
-              />
-              <label className="checkbox-label" for="general">
-                General post
-              </label>
-            </div> */}
-
-            {/* <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="idea"
-                name="category"
-                value="Idea discussion"
-              />
-              <label className="checkbox-label" for="idea">
-                Idea discussion
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="Hiring"
-                name="category"
-                value="Hiring"
-              />
-              <label className="checkbox-label" for="hiring">
-                Hiring
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="mentor"
-                name="category"
-                value="Mentor
-              needed"
-              />
-              <label className="checkbox-label" for="mentor">
-                Mentor needed
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="announcement"
-                name="category"
-                value="Announcement"
-              />
-              <label className="checkbox-label" for="announcement">
-                Announcement
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="co-founder"
-                name="category"
-                value="Co-founder Needed"
-              />
-              <label className="checkbox-label" htmlFor="co-founder">
-                Co-founder Needed
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="tech-partner"
-                name="category"
-                value="Tech-partner Needed"
-              />
-              <label className="checkbox-label" htmlFor="tech-partner">
-                Tech-partner Needed
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="question-answer"
-                name="category"
-                value="Question and Answer"
-              />
-              <label className="checkbox-label" htmlFor="question-answer">
-                Question and Answer
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="news"
-                name="category"
-                value="News"
-              />
-              <label className="checkbox-label" htmlFor="news">
-                News
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="opportunities"
-                name="category"
-                value="Opportunities"
-              />
-              <label className="checkbox-label" htmlFor="opportunities">
-                Opportunities
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="investment"
-                name="category"
-                value="Investment"
-              />
-              <label className="checkbox-label" htmlFor="investment">
-                Investment
-              </label>
-            </div> */}
-
+        
             {/* <span class="see-all">See All</span> */}
             <hr className=" mt-4 mb-6" />
 
             <h4 className="mt-3 mb-2">Post Type</h4>
 
             <label>
-              <input
+            
+                  <input
                 type="checkbox"
                 name="public"
-                className="mt-1 w-4 h-4"
-                checked={checkedValues.public}
-                onChange={handleCheckboxChange}
+                checked={isPublic}
+                onChange={handlePublicCheckboxChange}
               />
               <span className="text-sm mt-1">Public Post</span>
             </label>
 
             <label>
-              <input
+            
+                 <input
                 type="checkbox"
                 name="private"
-                className="mt-1 w-4 h-4"
-                checked={checkedValues.private}
-                onChange={handleCheckboxChange}
+                checked={isPrivate}
+                onChange={handlePrivateCheckboxChange}
               />
               <span className="text-sm mt-1">Private Post</span>
             </label>
@@ -647,19 +514,65 @@ const Posts = () => {
           </div>
         </div>
       </div>
-
+      
+   
       <div className="main-content">
         <div className="allPostShowContainer">
-        {(filteredPosts.length > 0 ? filteredPosts : allPosts)
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
-            .map((post) => (
+
+
+
+
+        {filteredPosts.length > 0 && 
+          filteredPosts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            .map((p) => {
+              // console.log("Debugging post:", p); // Debugging each post
+              return (
+                <Post
+                  filteredPosts={filteredPosts}
+                  key={p.id}
+                  post={p} // Passing only id and title
+                  setAllPosts={setAllPosts}
+                  screenDecider={"home"}
+                />
+              );
+            })
+        }
+
+      
+      {/* Render filtered posts if available */}
+        {/* {filteredPosts.length > 0 && 
+          filteredPosts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            
+            .map((p) => (
               <Post
-                key={post.id}
-                post={post}
+                filteredPosts={filteredPosts}
+                key={p.id}
+                p={p} // Passing only id and title
                 setAllPosts={setAllPosts}
                 screenDecider={"home"}
               />
-            ))}
+            ))
+        } */}
+
+
+
+        {/* If filteredPosts is empty, render top 2 posts from allPosts */}
+        {/* {filteredPosts.length === 0 && 
+          allPosts // Limiting to top 2 posts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            .map((p) => (
+              <Post
+                filteredPosts={filteredPosts}
+                key={p.id}
+                post={p} // Passing only id and title
+                setAllPosts={setAllPosts}
+                screenDecider={"home"}
+              />
+            ))
+        } */}
+
         </div>
 
         <div className="loadMore-Container">
@@ -668,6 +581,8 @@ const Posts = () => {
           </button>
         </div>
       </div>
+
+{/* Right Bar */}
 
       <div className="sidebar-right">
         <div className="trending-section">

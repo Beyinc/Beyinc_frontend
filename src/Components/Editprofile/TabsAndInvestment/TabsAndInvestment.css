@@ -5,7 +5,7 @@
   border-radius: 12px;
   gap: 240px;
   flex-wrap: wrap;
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
 }
 
 .tabs-container {

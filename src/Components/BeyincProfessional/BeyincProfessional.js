@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography } from '@mui/material';
 import {
   TextField,
@@ -17,12 +17,17 @@ import {
   ListItem,
   Collapse,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { stages, allskills, domain_subdomain } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
+
 const BeyincProfessional = () => {
   // const [selectedRole, setSelectedRole] = useState("");
+
+  // used to find the state of edit (passed in TabsAndInvestment)
+  const location = useLocation();
+  const edit = location.state?.edit;
+
   const [openIndustries, setOpenIndustries] = useState(false);
   const [openCategories, setOpenCategories] = useState({});
   const [openStages, setOpenStages] = useState(false);
@@ -34,10 +39,33 @@ const BeyincProfessional = () => {
     investmentRange: "",
   });
 
+  const fetchData = async (req, res) => {
+    try {
+      const response = await ApiServices.fetchProfessionalProfile()
+      const { userData } = response.data;
+      setFormValues({
+        expertise: userData.expertise || [],
+        industries: userData.industries || [],
+        beyincProfile: userData.beyincProfile || "",
+      });
+    } catch (error) {
+      console.log("Error while fetching professional profile data");
+    }
+  };
+
+  useEffect(() => {
+    if (edit) {
+      fetchData();
+    }
+  }, [edit]);
+
   // // Function to handle radio button changes
   // const handleRoleChange = (e) => {
   //   setSelectedRole(e.target.value);
   // };
+
+  const dropdownRef = useRef(null);
+
   const navigate = useNavigate();
   const handleMultiSelectChange = (event, name) => {
     const selectedValues = event.target.value; // Get the array of selected values
@@ -48,8 +76,21 @@ const BeyincProfessional = () => {
   };
 
   const handleIndustriesClick = () => {
-    setOpenIndustries(!openIndustries);
+    setOpenIndustries((prev) => !prev);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenIndustries(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleIndustryToggle = (subCategory) => {
     const currentIndex = formValues.industries.indexOf(subCategory);
@@ -71,6 +112,7 @@ const BeyincProfessional = () => {
       [category]: !prev[category],
     }));
   };
+
   const handleStagesClick = () => {
     setOpenStages((prev) => !prev); // Toggle dropdown visibility
   };
@@ -119,12 +161,15 @@ const BeyincProfessional = () => {
       // Call the API service and await the response
 
       // await ApiServices.saveBeyincProfessional({ beyincProfile: selectedRole });
-      await ApiServices.saveBeyincProfessional({ data });
+      // await ApiServices.saveBeyincProfessional({ data });/
+      await ApiServices.saveOrUpdateProfessionalProfile({ data })
+      .then(()=>{
+        alert(`Profile ${edit? "updated" : "created"} successfully`);
+        navigate("/profile");
+      })
 
-      // Optionally handle any additional logic after a successful API call
-      alert("Profile created successfully");
-      navigate("/posts", { replace: true }); // Redirect without history stack addition
-      window.location.reload(); // Refresh the /posts page
+      // navigate("/posts", { replace: true }); // Redirect without history stack addition
+      // window.location.reload(); // Refresh the /posts page
     } catch (error) {
       // Handle any error that occurs during the API call
       console.error("Error submitting role:", error);
@@ -133,37 +178,37 @@ const BeyincProfessional = () => {
   };
 
   return (
-    <div className="bg-white my-5 mx-24 py-20 px-20 shadow-md">
+    <div className="bg-white md:my-5 md:mx-24 py-4 md:py-20 px-4 md:px-20 shadow-md">
       <h2 className="mb-10 font-serif text-2xl">
         Advance as a Professional on Our Platform
       </h2>
-      <h3 className="mb-6 font-serif text-xl">BeyInc Profile*</h3>
+      <h3 className=" mb-2 md:mb-6 font-serif text-xl">BeyInc Profile*</h3>
       <div className="flex space-x-28 mb-10">
-         <label>
-        <input
-          type="radio"
-          name="beyincProfile"
-          value="Mentor"
-          className="mt-1 w-4 h-4"
-          checked={formValues.beyincProfile === "Mentor"}
-          onChange={handleRadioChange}
-        />
-        <span className="font-normal text-base">Mentor</span>
-      </label>
+        <label>
+          <input
+            type="radio"
+            name="beyincProfile"
+            value="Mentor"
+            className="mt-1 w-4 h-4"
+            checked={formValues.beyincProfile === "Mentor"}
+            onChange={handleRadioChange}
+          />
+          <span className="font-normal text-base">Mentor</span>
+        </label>
 
-      <label>
-        <input
-          type="radio"
-          name="beyincProfile"
-          value="Co-Founder"
-          className="mt-1 w-4 h-4"
-          checked={formValues.beyincProfile === "Co-Founder"}
-          onChange={handleRadioChange}
-        />
-        <span className="font-normal text-base">Co-Founder</span>
-      </label>
+        <label>
+          <input
+            type="radio"
+            name="beyincProfile"
+            value="Co-Founder"
+            className="mt-1 w-4 h-4"
+            checked={formValues.beyincProfile === "Co-Founder"}
+            onChange={handleRadioChange}
+          />
+          <span className="font-normal text-base">Co-Founder</span>
+        </label>
 
-      {/* <label>
+        {/* <label>
         <input
           type="radio"
           name="beyincProfile"
@@ -174,11 +219,9 @@ const BeyincProfessional = () => {
         />
         <span className="font-normal text-base">Investor</span>
       </label> */}
-
-
       </div>
-      <h3 className="mb-6 mt-5 font-serif text-xl">Expertise*</h3>
 
+      <h3 className="mb-2 md:mb-6 mt-5 font-serif text-xl">Expertise*</h3>
       <Select
         multiple
         name="expertise"
@@ -187,11 +230,28 @@ const BeyincProfessional = () => {
         input={<OutlinedInput label="Expertise" />}
         renderValue={(selected) => selected.join(", ")}
         sx={{
-          width: "840px",
+          width: {
+            xs: "100%",
+            sm: "100%",
+            md: "840px",
+            lg: "840px",
+            xl: "840px",
+          },
           height: "40px",
           "& .MuiOutlinedInput-notchedOutline": {
             borderWidth: "2px",
             borderColor: "gray.400",
+          },
+        }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxHeight:{ xs:"100px",
+                sm: "100px",
+                md: "none"
+              },
+              overflowY: "auto",
+            },
           },
         }}
       >
@@ -204,13 +264,19 @@ const BeyincProfessional = () => {
         ))}
       </Select>
 
-      <h3 className="mb-6 mt-10 font-serif text-xl">Industries*</h3>
-      <FormControl fullWidth>
+      <h3 className="mb-2 md:mb-6 mt-10 font-serif text-xl">Industries*</h3>
+      <FormControl fullWidth ref={dropdownRef}>
         <TextField
           sx={{
             marginTop: "10px",
             marginBottom: "10px",
-            width: "840px",
+            width: {
+              xs: "100%",
+              sm: "100%",
+              md: "840px",
+              lg: "840px",
+              xl: "840px",
+            },
             height: "40px",
             "& .MuiOutlinedInput-notchedOutline": {
               borderWidth: "2px",
@@ -332,8 +398,11 @@ const BeyincProfessional = () => {
           }}
         />
       </FormControl> */}
-      <button onClick={handleSubmit} className="mt-10 rounded-full w-32 ml-4">
-        <span className="text-md font-bold">Submit</span>
+      <button
+        onClick={handleSubmit}
+        className="mt-3 md:mt-10 rounded-full w-full md:w-32 md:ml-4"
+      >
+        <span className="text-md font-bold">{edit ? "Update" : "Submit"}</span>
       </button>
     </div>
   );

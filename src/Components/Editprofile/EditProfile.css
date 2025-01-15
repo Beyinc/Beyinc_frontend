@@ -78,7 +78,7 @@
   background: none;
 }
 
-.BookSessionCard{
+.SessionCard{
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -154,8 +154,8 @@
   color: var(--followBtn-color);
 }
 .createPostContainer {
-  width: 850px;
-  margin-left: 30px;
+  /* width: 850px; */
+  /* margin-left: 30px; */
   height: auto;
   padding: 30px 40px;
   border-radius: 20px;
@@ -220,7 +220,7 @@
   color: var(--followBtn-color);
   width: 180px;
   height: 43px;
-  padding: 10px 50px;
+  /* padding: 10px 50px; */
   border-radius: 20px;
   font-size: 16px;
   font-weight: 700;
@@ -367,6 +367,7 @@
   box-shadow: 1px 4px 4px 0px #00000040;
   cursor: pointer;
   margin-left: 30px;
+  margin-top: 20px;
   /* background: var(--editprofile-details-card-bg); */
   background-color: #ffffff;
 }
@@ -1170,10 +1171,10 @@ textarea {
     width: 360px;
   }
   .createPostContainer {
-    width: 310px;
-    margin-left: 0px;
+    /* width: 310px; */
+    /* margin-left: 0px; */
     padding: 20px;
-    margin: 10px;
+    /* margin: 10px; */
   }
 
   .CommentPostContainer {
@@ -1212,7 +1213,7 @@ textarea {
     color: var(--followBtn-color);
     width: 180px;
     height: 43px;
-    padding: 10px 50px;
+    padding: 10px 30px;
     border-radius: 20px;
     font-size: 18px;
     font-weight: 700;

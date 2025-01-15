@@ -87,7 +87,6 @@ const EditProfile = () => {
   //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
-   
 
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
@@ -280,6 +279,7 @@ const EditProfile = () => {
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
   const [experienceDetails, setExperience] = useState([]);
+  
   // Temporary state to hold user input
   const [tempExperienceDetails, setTempExperienceDetails] = useState({
     business: "",
@@ -461,6 +461,7 @@ const EditProfile = () => {
     }, 500);
     setIsExperiencePopupVisible(true);
   };
+
   const handleEducationButtonClick = () => {
     window.scrollTo({
       top: 0,
@@ -522,13 +523,14 @@ const EditProfile = () => {
   };
 
   // const addEducation = (e) => {
+  //   console.log('education Details', educationDetails)
   //   e.preventDefault();
   //   if (editingEducationId == "") {
-  //     setTotalEducationData((prev) => [...prev, EducationDetails]);
+  //     setTotalEducationData((prev) => [...prev, educationDetails]);
   //   } else {
   //     setTotalEducationData(
   //       totalEducationData.map((t, i) => {
-  //         return i + 1 === editingEducationId ? EducationDetails : t;
+  //         return i + 1 === editingEducationId ? educationDetails : t;
   //       })
   //     );
   //     setIsEducationPopupVisible(false);
@@ -630,6 +632,7 @@ const EditProfile = () => {
     setRecentUploadedDocs((prev) => ({ ...prev, [e.target.name]: file?.name }));
     setFileBase(e, file);
   };
+
   const setFileBase = (e, file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -640,12 +643,20 @@ const EditProfile = () => {
       }));
     };
   };
+
   useEffect(() => {
     const hasEducation = totalEducationData.length > 0;
     const hasWorkExperience = totalExperienceData.length > 0;
     setIsFormValid(hasEducation && hasWorkExperience);
   }, [totalEducationData, totalExperienceData]);
 
+  useEffect(() => {
+    setEducationDetails(totalEducationData);
+  }, [totalEducationData]);
+
+  useEffect(() => {
+      setTotalExperienceData(experienceDetails);
+  }, [experienceDetails])
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
   const [requestUserId, setRequestedUserId] = useState("");
@@ -1393,39 +1404,39 @@ const EditProfile = () => {
     autoplaySpeed: 2000,
   };
 
-  // const savingLocal = () => {
-  //   localStorage.setItem(
-  //     "editProfile",
-  //     JSON.stringify({
-  //       twitter: twitter,
-  //       linkedin: linkedin,
-  //       salutation: salutation,
-  //       mentorCategories: mentorCategories,
-  //       email: email,
-  //       userId: user_id,
-  //       state: state,
-  //       town: town,
-  //       country: country,
-  //       userName: name,
-  //       phone: mobile,
-  //       role: role,
-  //       fee: fee,
-  //       bio: bio,
-  //       skills: skills,
-  //       languagesKnown: languagesKnown,
-  //       documents: changeResume,
-  //       experienceDetails: totalExperienceData,
-  //       educationDetails: totalEducationData,
-  //     })
-  //   );
-  //   dispatch(
-  //     setToast({
-  //       message: "Data Saved Locally",
-  //       bgColor: ToastColors.success,
-  //       visible: "yes",
-  //     })
-  //   );
-  // };
+  const savingLocal = () => {
+    localStorage.setItem(
+      "editProfile",
+      JSON.stringify({
+        twitter: twitter,
+        linkedin: linkedin,
+        salutation: salutation,
+        mentorCategories: mentorCategories,
+        email: email,
+        userId: user_id,
+        state: state,
+        town: town,
+        country: country,
+        userName: name,
+        phone: mobile,
+        role: role,
+        fee: fee,
+        bio: bio,
+        skills: skills,
+        languagesKnown: languagesKnown,
+        documents: changeResume,
+        experienceDetails: totalExperienceData,
+        educationDetails: totalEducationData,
+      })
+    );
+    dispatch(
+      setToast({
+        message: "Data Saved Locally",
+        bgColor: ToastColors.success,
+        visible: "yes",
+      })
+    );
+  };
 
   const retreiveLocal = () => {
     console.log(JSON.parse(localStorage.getItem("editProfile")));
@@ -1589,7 +1600,7 @@ const EditProfile = () => {
   };
 
   ///////////////////////////////////////////////////////////////
-
+console.log('education details', educationDetails)
   const saveEducationDetails = () => {
     // Check if the required fields are filled
     if (
@@ -1611,17 +1622,24 @@ const EditProfile = () => {
         Edstart: "",
         Edend: "",
       });
+      // setIsEducationPopupVisible(false);
     } else {
       alert("Please fill all required fields.");
     }
   };
+
   // Save changes from temp to main state
   const saveExperienceDetails = (event) => {
     event.preventDefault();
     //  setIsExperiencePopupVisible(false);
-    setExperience(tempExperienceDetails);
+
+    setExperience((prev) => [
+      ...prev,
+      { ...tempExperienceDetails }, // Add the new details
+    ]);
     // Reset temporary details after saving
-    setTempExperienceDetails({ ...tempExperienceDetails });
+    setTempExperienceDetails({});
+    setIsExperiencePopupVisible(false);
   };
 
   const submitAllData = async () => {
@@ -2187,9 +2205,9 @@ const EditProfile = () => {
                   )}
                 </div>
 
-                {totalEducationData.length > 0 ? (
+                {educationDetails.length > 0 ? (
                   <div>
-                    {totalEducationData.map((te, i) => (
+                    {educationDetails.map((te, i) => (
                       <div
                         className="indiEducationCont"
                         style={{
@@ -3751,7 +3769,7 @@ const EditProfile = () => {
                     <button
                       className="add-button"
                       // onClick={addEducation}
-                      onClick={saveEducationDetails}
+                       onClick={saveEducationDetails}
                       disabled={
                         tempEducationDetails.Edstart == "" ||
                         tempEducationDetails.grade == "" ||
