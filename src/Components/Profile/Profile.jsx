@@ -107,8 +107,6 @@ const [profileData, setProfileData] = useState({})
     fetchAvailabilityData();
 }, [id]); // Add dependencies if required
 
-
-
   return (
     <div>
       <div className="relative">
@@ -120,13 +118,13 @@ const [profileData, setProfileData] = useState({})
           />
         </div>
       
-        <div className="flex flex-col lg:flex-row lg:gap-5 absolute top-20 lg:top-52 lg:left-14 ">
-          <div>
+        <div className="flex justify-center items-start flex-col lg:flex-row lg:gap-5 top-20 lg:top-52">
+          <div className="mb-4 lg:-mt-36 ">
             <ProfileCard 
             selfProfile={selfProfile}
             setSelfProfile ={setSelfProfile} 
             profileData={profileData}
-            />
+          />
 
         {(profileData.beyincProfile === "Mentor"  || profileData.beyincProfile === "Co-Founder") && 
                     service.length > 0 && (
@@ -137,7 +135,7 @@ const [profileData, setProfileData] = useState({})
                 </div>
               
 
-          <div className="lg:mt-32">
+          <div>
           {(profileData.beyincProfile === "Mentor"  || profileData.beyincProfile === "Co-Founder") && 
             <div>
               <TabsAndInvestment
@@ -243,6 +241,7 @@ const [profileData, setProfileData] = useState({})
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   );
