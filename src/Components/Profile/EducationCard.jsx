@@ -3,8 +3,8 @@ import EditEducationModal from "./EditEducationModal";
 import DeleteEducationModal from "./DeleteEducationModal";
 import UpdateEducationModal from "./UpdateEducationModal";
 import aboutService from './aboutPageApi'
-
-const EducationCard = () => {
+import { useParams } from "react-router-dom";
+const EducationCard = ({selfProfile ,setSelfProfile}) => {
     const [education, setEducation] = useState([]);
     const [isEditEducationModalOpen, setIsEditEducationModalOpen] = useState(false); 
     const [errorMessage, setErrorMessage] = useState("");
@@ -13,10 +13,13 @@ const EducationCard = () => {
     const [eduItem, setEduItem] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
+
+    const { id } = useParams(); // Get the `id` from route params
+
     const fetchEducationData = async () => {
         try {
-            const userId = "675e7e41e424505620d8faee";  // This could be dynamic
-            const data = await aboutService.fetchEducation(userId);  // Use the service method to fetch education data
+        // This could be dynamic
+            const data = await aboutService.fetchEducation({id});  // Use the service method to fetch education data
             setEducation(data);
         } catch (error) {
             console.log("Error fetching education data: ", error);
@@ -62,7 +65,7 @@ const EducationCard = () => {
         <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             Education
-            <span onClick={() => setIsEditEducationModalOpen(true)}>
+           {selfProfile && <span onClick={() => setIsEditEducationModalOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -77,7 +80,7 @@ const EducationCard = () => {
                   d="M12 4.5v15m7.5-7.5h-15"
                 />
               </svg>
-            </span>
+            </span>}
           </div>
 
           {/* error message  */}
@@ -126,7 +129,7 @@ const EducationCard = () => {
                           {item.Edstart} - {item.Edend}
                         </div>
                       </div>
-                      <div className="text-blue-700 flex items-center">
+                     {selfProfile && <div className="text-blue-700 flex items-center">
                         <span onClick={() => handleOpenUpdateModal(item)}>
                           <i className="fas fa-pen"></i>
                         </span>
@@ -149,7 +152,7 @@ const EducationCard = () => {
                             />
                           </svg>
                         </span>
-                      </div>
+                      </div>}
                     </div>
                   </div>
 

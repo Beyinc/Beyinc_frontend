@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
 
-const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider }) => {
+const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key }) => {
   const userDetailsRef = useRef(null);
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
@@ -29,8 +29,13 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider }) => 
 
   const dispatch = useDispatch();
 
-
- console.log('post',post)
+  useEffect(() => {
+    if (initialPost) {
+      setPost(initialPost);
+    }
+  }, [initialPost]);
+  
+//  console.log('post',post)
 
   useEffect(() => {
     if (post?._id) {

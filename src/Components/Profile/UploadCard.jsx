@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { useParams } from "react-router-dom";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 
-const UploadCard = () => {
-  const { id } = useParams();
+const UploadCard = ({selfProfile ,setSelfProfile}) => {
+ 
   const { user_id } = useSelector((store) => store.auth.loginDetails);
 
   const [changeResume, setChangeDocuments] = useState({
@@ -20,13 +21,13 @@ const UploadCard = () => {
   const [recentUploadedDocs, setRecentUploadedDocs] = useState({
     resume: "",
   });
-
+  const { id } = useParams();
   const handleResume = (e) => {
     const file = e.target.files[0];
     setRecentUploadedDocs((prev) => ({ ...prev, [e.target.name]: file?.name }));
     setFileBase(e, file);
   };
-
+ 
   const submitAllData = async () => {
     try {
       const { resume } = changeResume;
@@ -80,30 +81,34 @@ const UploadCard = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    ApiServices.getProfile({ id: user_id })
-      .then((res) => {
-        if (res.data.documents !== undefined) {
+    const fetchProfile = async () => {
+      try {
+        const response = await ApiServices.getProfile({ id: id || user_id }); // Use id if present, else user_id
+        if (response.data.documents !== undefined) {
           setOldDocs((prev) => ({
             ...prev,
-            resume: res.data.documents.resume,
+            resume: response.data.documents.resume,
           }));
           setChangeDocuments((prev) => ({
             ...prev,
-            resume: res.data.documents?.resume || "",
+            resume: response.data.documents?.resume || "",
           }));
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         dispatch(
           setToast({
-            message: error?.response?.data?.message,
+            message: error?.response?.data?.message || "Something went wrong",
             bgColor: ToastColors.failure,
             visible: "yes",
           })
         );
-      });
-  }, [id]);
-
+      }
+    };
+  
+    // Call the fetchProfile function
+    fetchProfile();
+  }, [id, user_id]); // Add both `id` and `user_id` as dependencies
+  
   return (
     <div className="w-full lg:w-[60vw]">
       <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
@@ -119,21 +124,24 @@ const UploadCard = () => {
               justifyContent: "space-between",
             }}
           >
-            <label className="Input-Label">File to be pitched</label>
+            <label className="Input-Label">Pitchdeck</label>
             {oldDocs.resume && (
-              <a
-                href={oldDocs.resume?.secure_url}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  marginRight: "30px",
-                }}
-              >
-                View Previous Document
-              </a>
+         
+           <a
+             href={oldDocs.resume?.secure_url}
+             target="_blank"
+             rel="noreferrer"
+             className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+           >
+             <InsertDriveFileOutlinedIcon />
+             <span className="hidden md:block">Pitchdeck</span>
+           </a>
+           
             )}
           </div>
-          <div
+
+
+        { selfProfile && <div
             style={{
               display: "flex",
               alignItems: "center",
@@ -166,7 +174,7 @@ const UploadCard = () => {
                 Save
               </Button>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
     </div>

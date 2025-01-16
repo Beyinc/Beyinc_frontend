@@ -4,9 +4,9 @@ import axiosInstance from '../axiosInstance';
 
 const aboutService = {
     // Function to fetch the About data
-    fetchAbout: async () => {
+    fetchAbout: async (obj) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/getabout');
+            const response = await axiosInstance.post('/getabout', obj);
             if (response.data && response.data.about) {
                 return response.data.about;
             } else {
@@ -22,7 +22,7 @@ const aboutService = {
     // Function to save about information
     saveAbout: async (userId, aboutText) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/createAbout', {
+            const response = await axiosInstance.post('/createAbout', {
                 
                 about: aboutText
             });
@@ -36,9 +36,9 @@ const aboutService = {
             throw new Error(error.response ? error.response.data.message : "Network error. Please check your connection.");
         }
     },
-    fetchEducation: async (userId) => {
+    fetchEducation: async (obj) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/getEducationDetails');
+            const response = await axiosInstance.post('/getEducationDetails',obj);
 
             if (response.data && response.data.educationDetails) {
                 return response.data.educationDetails;  // Return education details if found
@@ -54,7 +54,7 @@ const aboutService = {
     // Function to delete an education item
     handleDeleteEducation: async (userId, eduId) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/deleteEducationDetails', {
+            const response = await axiosInstance.post('/deleteEducationDetails', {
                 _id: eduId
             });
 
@@ -70,7 +70,7 @@ const aboutService = {
     },
     saveEducation: async (userId, educationDetails) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/saveEducationDetails', {
+            const response = await axiosInstance.post('/saveEducationDetails', {
                 education: educationDetails
             });
 
@@ -87,7 +87,7 @@ const aboutService = {
     // Function to update education details
     saveUpdatedEducation: async (educationDetails) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/updateEducationDetails', {
+            const response = await axiosInstance.post('/updateEducationDetails', {
                 education: educationDetails
             });
 
@@ -105,7 +105,7 @@ const aboutService = {
     saveUpdatedEducation: async (payload) => {
         try {
             // console.log("This is the start year: ", startYear);
-            const response = await axiosInstance.post('http://localhost:4000/api/updateEducationDetails', {
+            const response = await axiosInstance.post('/updateEducationDetails', {
                 payload
             });
 
@@ -119,9 +119,9 @@ const aboutService = {
             throw error;  // Re-throw the error so it can be handled by the caller
         }
     },
-    fetchExperiences: async () => {
+    fetchExperiences: async (obj) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/getExperienceDetails');
+            const response = await axiosInstance.post('/getExperienceDetails',obj);
 
             if (response.data && response.data.experienceDetails) {
                 return response.data.experienceDetails;
@@ -138,7 +138,7 @@ const aboutService = {
     handleDeleteExperience: async (eduId) => {
         try {
             console.log("This is the eduId of the experience: ", eduId);
-            const response = await axiosInstance.post('http://localhost:4000/api/deleteExperienceDetails', {
+            const response = await axiosInstance.post('/deleteExperienceDetails', {
                 _id: eduId
             });
 
@@ -150,7 +150,7 @@ const aboutService = {
     },
     addExperience: async (experienceData) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/saveExperienceDetails', {
+            const response = await axiosInstance.post('/saveExperienceDetails', {
                 experience: experienceData,
             });
             return response.data; // Assuming the API response contains success status and experience details
@@ -161,7 +161,7 @@ const aboutService = {
     },
     handleUpdateExperience: async (item, startYear, endYear, company, designation, location, setExperiences, onClose) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/updateExperienceDetails', {
+            const response = await axiosInstance.post('/updateExperienceDetails', {
                 experience: {
                     _id: item._id,
                     startYear,
@@ -181,9 +181,9 @@ const aboutService = {
             console.log("There was an error Updating the Experience: ", error);
         }
     },
-    fetchSkills: async () => {
+    fetchSkills: async (obj) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/getSkills');
+            const response = await axiosInstance.post('/getSkills', obj);
 
             if (response.data && response.data.skills) {
                 return response.data.skills;
@@ -205,7 +205,7 @@ const aboutService = {
 
             // Add selected skills
             if (selectedSkills.length > 0) {
-                response = await axiosInstance.post('http://localhost:4000/api/addskills', {
+                response = await axiosInstance.post('/addskills', {
                     skills: selectedSkills
                 });
             }
@@ -230,7 +230,7 @@ const aboutService = {
 
     handleDeleteSkill: async (skillsToDelete, setSkills, onClose) => {
         try {
-            const response = await axiosInstance.post('http://localhost:4000/api/deleteSkill', {
+            const response = await axiosInstance.post('/deleteSkill', {
                 skillsToDelete
             });
 
