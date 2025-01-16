@@ -544,7 +544,8 @@ const ProfileCard = () => {
                             <button
                               type="button"
                               onClick={handleAddLanguage}
-                              className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+                              style={{ backgroundColor: "#4e54c7" }}
+                              className="py-2 px-4 text-white font-semibold rounded-md"
                             >
                               Add Language
                             </button>
