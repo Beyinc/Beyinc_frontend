@@ -1,4 +1,5 @@
-import React, {  useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography } from '@mui/material';
 import {
   TextField,
@@ -16,14 +17,20 @@ import {
   ListItem,
   Collapse,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { stages, allskills, domain_subdomain } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
+
 const BeyincProfessional = () => {
   // const [selectedRole, setSelectedRole] = useState("");
+
+  // used to find the state of edit (passed in TabsAndInvestment)
+  const location = useLocation();
+  const edit = location.state?.edit;
+
   const [openIndustries, setOpenIndustries] = useState(false);
   const [openCategories, setOpenCategories] = useState({});
+  const [openStages, setOpenStages] = useState(false);
   const [formValues, setFormValues] = useState({
     expertise: [],
     industries: [],
@@ -32,22 +39,58 @@ const BeyincProfessional = () => {
     investmentRange: "",
   });
 
+  const fetchData = async (req, res) => {
+    try {
+      const response = await ApiServices.fetchProfessionalProfile()
+      const { userData } = response.data;
+      setFormValues({
+        expertise: userData.expertise || [],
+        industries: userData.industries || [],
+        beyincProfile: userData.beyincProfile || "",
+      });
+    } catch (error) {
+      console.log("Error while fetching professional profile data");
+    }
+  };
+
+  useEffect(() => {
+    if (edit) {
+      fetchData();
+    }
+  }, [edit]);
+
   // // Function to handle radio button changes
   // const handleRoleChange = (e) => {
   //   setSelectedRole(e.target.value);
   // };
 
+  const dropdownRef = useRef(null);
+
+  const navigate = useNavigate();
   const handleMultiSelectChange = (event, name) => {
-    const { value } = event.target;
-    setFormValues({
-      ...formValues,
-      [name]: typeof value === "string" ? value.split(",") : value,
-    });
+    const selectedValues = event.target.value; // Get the array of selected values
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: selectedValues, // Update the state with the array of selected values
+    }));
   };
 
   const handleIndustriesClick = () => {
-    setOpenIndustries(!openIndustries);
+    setOpenIndustries((prev) => !prev);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenIndustries(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleIndustryToggle = (subCategory) => {
     const currentIndex = formValues.industries.indexOf(subCategory);
@@ -70,9 +113,27 @@ const BeyincProfessional = () => {
     }));
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const handleStagesClick = () => {
+    setOpenStages((prev) => !prev); // Toggle dropdown visibility
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleRadioChange = (event) => {
+    const { value } = event.target;
+    setFormValues({ ...formValues, beyincProfile: value });
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { value, checked } = event.target;
+    const updatedProfile = checked
+      ? [...formValues.beyincProfile, value]
+      : formValues.beyincProfile.filter((item) => item !== value);
+
+    setFormValues({ ...formValues, beyincProfile: updatedProfile });
   };
 
   const handleSubmit = async (e) => {
@@ -83,7 +144,7 @@ const BeyincProfessional = () => {
     // Prepare the data to send to the API
     const data = {
       beyincProfile: formValues.beyincProfile,
-      expertise: formValues.expertise,
+      expertise: formValues.expertise.flat(),
       industries: formValues.industries,
       stages: formValues.stages,
       investmentRange: formValues.investmentRange,
@@ -100,10 +161,15 @@ const BeyincProfessional = () => {
       // Call the API service and await the response
 
       // await ApiServices.saveBeyincProfessional({ beyincProfile: selectedRole });
-      await ApiServices.saveBeyincProfessional({data});
+      // await ApiServices.saveBeyincProfessional({ data });/
+      await ApiServices.saveOrUpdateProfessionalProfile({ data })
+      .then(()=>{
+        alert(`Profile ${edit? "updated" : "created"} successfully`);
+        navigate("/profile");
+      })
 
-      // Optionally handle any additional logic after a successful API call
-      alert("Role submitted successfully");
+      // navigate("/posts", { replace: true }); // Redirect without history stack addition
+      // window.location.reload(); // Refresh the /posts page
     } catch (error) {
       // Handle any error that occurs during the API call
       console.error("Error submitting role:", error);
@@ -112,85 +178,113 @@ const BeyincProfessional = () => {
   };
 
   return (
+    <div className="bg-white md:my-5 md:mx-24 py-4 md:py-20 px-4 md:px-20 shadow-md">
+      <h2 className="mb-10 font-serif text-2xl">
+        Advance as a Professional on Our Platform
+      </h2>
+      <h3 className=" mb-2 md:mb-6 font-serif text-xl">BeyInc Profile*</h3>
+      <div className="flex space-x-28 mb-10">
+        <label>
+          <input
+            type="radio"
+            name="beyincProfile"
+            value="Mentor"
+            className="mt-1 w-4 h-4"
+            checked={formValues.beyincProfile === "Mentor"}
+            onChange={handleRadioChange}
+          />
+          <span className="font-normal text-base">Mentor</span>
+        </label>
 
+        <label>
+          <input
+            type="radio"
+            name="beyincProfile"
+            value="Co-Founder"
+            className="mt-1 w-4 h-4"
+            checked={formValues.beyincProfile === "Co-Founder"}
+            onChange={handleRadioChange}
+          />
+          <span className="font-normal text-base">Co-Founder</span>
+        </label>
 
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        backgroundColor: "#f6f6fc",
-        padding: "80px",
-        borderRadius: "20px",
-        marginTop: "100px",
-        width: "900px",
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}
-    >
-      <Typography
-        variant="h4"
+        {/* <label>
+        <input
+          type="radio"
+          name="beyincProfile"
+          value="Investor"
+          className="mt-1 w-4 h-4"
+          checked={formValues.beyincProfile === "Investor"}
+          onChange={handleRadioChange}
+        />
+        <span className="font-normal text-base">Investor</span>
+      </label> */}
+      </div>
+
+      <h3 className="mb-2 md:mb-6 mt-5 font-serif text-xl">Expertise*</h3>
+      <Select
+        multiple
+        name="expertise"
+        value={formValues.expertise} // This is the array of selected values
+        onChange={(event) => handleMultiSelectChange(event, "expertise")} // Pass event to handleMultiSelectChange
+        input={<OutlinedInput label="Expertise" />}
+        renderValue={(selected) => selected.join(", ")}
         sx={{
-          marginTop: "5px",
-          marginBottom: "30px",
-          textAlign: "center",
-          fontWeight: "300",
-          color: "#333",
+          width: {
+            xs: "100%",
+            sm: "100%",
+            md: "840px",
+            lg: "840px",
+            xl: "840px",
+          },
+          height: "40px",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderWidth: "2px",
+            borderColor: "gray.400",
+          },
+        }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxHeight:{ xs:"100px",
+                sm: "100px",
+                md: "none"
+              },
+              overflowY: "auto",
+            },
+          },
         }}
       >
-        Fill this form
-      </Typography>
+        {allskills.map((option) => (
+          <MenuItem key={option} value={option}>
+            <Checkbox checked={formValues.expertise.includes(option)} />{" "}
+            {/* This ensures checkbox ticks correctly */}
+            <ListItemText primary={option} />
+          </MenuItem>
+        ))}
+      </Select>
 
-      {/* Beyinc Profile */}
-      <Grid item xs={12}>
-        <FormControl fullWidth>
-          <InputLabel>Beyinc Profile</InputLabel>
-          <Select
-            name="beyincProfile"
-            value={formValues.beyincProfile}
-            onChange={handleChange}
-            variant="outlined"
-            sx={{
-              marginTop: "16px",
-            }}
-          >
-            <MenuItem value="Co-founder">Co-founder</MenuItem>
-            <MenuItem value="Mentor">Mentor</MenuItem>
-            <MenuItem value="Investor">Investor</MenuItem>
-            <MenuItem value="other">Other</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-
-      {/* Expertise */}
-      <Grid item xs={12}>
-        <FormControl fullWidth sx={{ marginTop: "20px" }}>
-          <InputLabel>Expertise</InputLabel>
-          <Select
-            multiple
-            name="expertise"
-            value={formValues.expertise}
-            onChange={(event) => handleMultiSelectChange(event, "expertise")}
-            input={<OutlinedInput label="Expertise" />}
-            renderValue={(selected) => selected.join(", ")}
-          >
-            {allskills.map((option) => (
-              <MenuItem key={option} value={option}>
-                <Checkbox checked={formValues.expertise.indexOf(option) > -1} />
-                <ListItemText primary={option} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-
-      {/* Industries Section */}
-      <FormControl fullWidth>
+      <h3 className="mb-2 md:mb-6 mt-10 font-serif text-xl">Industries*</h3>
+      <FormControl fullWidth ref={dropdownRef}>
         <TextField
           sx={{
             marginTop: "10px",
             marginBottom: "10px",
+            width: {
+              xs: "100%",
+              sm: "100%",
+              md: "840px",
+              lg: "840px",
+              xl: "840px",
+            },
+            height: "40px",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderWidth: "2px",
+              borderColor: "gray.400",
+              // Static dark gray border color
+            },
             borderRadius: "8px", // Example of border radius
           }}
-          label="Industries"
           value={formValues.industries.join(", ") || ""}
           onClick={handleIndustriesClick}
           readOnly
@@ -200,7 +294,11 @@ const BeyincProfessional = () => {
           }}
         />
         <Collapse in={openIndustries} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
+          <List
+            component="div"
+            disablePadding
+            style={{ maxHeight: "300px", overflowY: "auto", width: "840px" }}
+          >
             {Object.keys(domain_subdomain).map((category) => (
               <React.Fragment key={category}>
                 <ListItem button onClick={() => handleCategoryToggle(category)}>
@@ -239,57 +337,74 @@ const BeyincProfessional = () => {
         </Collapse>
       </FormControl>
 
-      {/* Stages */}
-      <Grid item xs={12}>
-        <FormControl fullWidth>
-          <InputLabel>Stages</InputLabel>
-          <Select
-            multiple
-            name="stages"
-            value={formValues.stages}
-            onChange={(event) => handleMultiSelectChange(event, "stages")}
-            input={<OutlinedInput label="Stages" />}
-            renderValue={(selected) => selected.join(", ")}
+      {/* <h3 className="mb-6 mt-10 font-serif text-xl">Stage*</h3>
+      <FormControl fullWidth>
+        <TextField
+          sx={{
+            marginTop: "10px",
+            marginBottom: "10px",
+            width: "840px",
+            height: "40px",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderWidth: "2px",
+              borderColor: "gray.400", // Static dark gray border color
+            },
+            borderRadius: "8px", // Example of border radius
+          }}
+          value={formValues.stages.join(", ") || ""}
+          onClick={handleStagesClick}
+          readOnly
+          variant="outlined"
+          InputProps={{
+            endAdornment: openStages ? <ExpandLess /> : <ExpandMore />,
+          }}
+        />
+        <Collapse in={openStages} timeout="auto" unmountOnExit>
+          <List
+            component="div"
+            disablePadding
+            style={{ maxHeight: "250px", overflowY: "auto", width: "840px" }}
           >
             {stages.map((option) => (
-              <MenuItem key={option} value={option}>
+              <ListItem
+                key={option}
+                onClick={() => handleMultiSelectChange(option, "stages")}
+              >
                 <Checkbox checked={formValues.stages.indexOf(option) > -1} />
                 <ListItemText primary={option} />
-              </MenuItem>
+              </ListItem>
             ))}
-          </Select>
-        </FormControl>
-      </Grid>
-
-      {/* Investment Range */}
-      <Grid item xs={12}>
-        <FormControl fullWidth>
-          <TextField
-            label="Investment Range"
-            name="investmentRange"
-            type="number"
-            value={formValues.investmentRange}
-            onChange={handleChange}
-            variant="outlined"
-            sx={{
-              marginTop: "16px",
-            }}
-          />
-        </FormControl>
-      </Grid>
-
-      {/* Submit Button */}
-      <Grid item xs={12} container justifyContent="center">
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ marginTop: "30px" }}
-        >
-          Submit
-        </Button>
-      </Grid>
-    </form>
+          </List>
+        </Collapse>
+      </FormControl>
+      <h3 className="mb-6 mt-10 font-serif text-xl">Investment Range</h3>
+      <FormControl fullWidth>
+        <TextField
+          // label="Investment Range"
+          name="investmentRange"
+          type="number"
+          value={formValues.investmentRange}
+          onChange={handleChange}
+          variant="outlined"
+          sx={{
+            marginTop: "20px",
+            width: "840px",
+            height: "40px",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderWidth: "2px",
+              borderColor: "gray.400",
+              // Static dark gray border color
+            },
+          }}
+        />
+      </FormControl> */}
+      <button
+        onClick={handleSubmit}
+        className="mt-3 md:mt-10 rounded-full w-full md:w-32 md:ml-4"
+      >
+        <span className="text-md font-bold">{edit ? "Update" : "Submit"}</span>
+      </button>
+    </div>
   );
 };
 

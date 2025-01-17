@@ -18,7 +18,7 @@ import WebinarModal from './webinar.jsx'; // Adjust the import path as needed
 const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
 
   console.log('mentorId', mentorId)
- console.log('reschedule', reschedule);
+//  console.log('reschedule', reschedule);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [duration, setDuration] = useState('');
@@ -40,8 +40,9 @@ const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
 
   const [durationId, setDurationId] = useState({ duration: null, id: '' });
 
+  console.log('selected date', selectedDate)
   if (reschedule) {
-    console.log('rescheduling',rescheduleBooking)
+    // console.log('rescheduling',rescheduleBooking)
   }
 
  useEffect(() => {
@@ -73,9 +74,9 @@ const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
 
 const handleTimezoneChange = (event) => {
   const newTimezone = event.target.value;
-  console.log('Selected timezone:', newTimezone);
+  // console.log('Selected timezone:', newTimezone);
   setSelectedTimezone(newTimezone);
-  console.log('Timezone state updated to:', newTimezone);
+  // console.log('Timezone state updated to:', newTimezone);
 };
 
 
@@ -90,10 +91,10 @@ const handleTimezoneChange = (event) => {
     } else {
       // If bookings is present, use the provided functions to map and filter slots
       const mapSavedTimeSlots = mapTimeSlotsToDates(bookings, Timezone);
-      console.log('Map saved time slots:', JSON.stringify(mapSavedTimeSlots));
+      // console.log('Map saved time slots:', JSON.stringify(mapSavedTimeSlots));
   
       finalAvailSlots = getAvailableSlots(availableLocalSlots, mapSavedTimeSlots);
-      console.log('Final available slots:', JSON.stringify(finalAvailSlots));
+      // console.log('Final available slots:', JSON.stringify(finalAvailSlots));
     }
   
     return finalAvailSlots;
@@ -104,15 +105,15 @@ const handleTimezoneChange = (event) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('mentorid',mentorId)
+        // console.log('mentorid',mentorId)
         const { data } = await CalendarServices.getAvailabilityData({mentorId});
-        console.log('Availability data:', JSON.stringify(data.availability));
+        // console.log('Availability data:', JSON.stringify(data.availability));
         const availabilityData = data.availability;
         setMentorData(availabilityData)
 
 
      
-       console.log('set duration:', duration)
+      //  console.log('set duration:', duration)
 
         const durationsWithIds = availabilityData.sessions.map(session => ({
           duration: session.duration,
@@ -120,34 +121,34 @@ const handleTimezoneChange = (event) => {
         }));
         
         // Log the array to check its structure
-        console.log('Session durations with IDs:', durationsWithIds);
+        // console.log('Session durations with IDs:', durationsWithIds);
 
         setDurationList(durationsWithIds)
 
-        console.log('durationID', durationList)
+        // console.log('durationID', durationList)
                 
 
       
         const {availableDayTimeUtc} = data.availabilityData;
 
-        console.log('availableDayTimeUtc', availableDayTimeUtc)
+        // console.log('availableDayTimeUtc', availableDayTimeUtc)
 
         const timeSlotsLocal = convertToLocalTimeSlots(availableDayTimeUtc, selectedTimezone);
-        console.log('Time slots local:', JSON.stringify(timeSlotsLocal), duration);
+        // console.log('Time slots local:', JSON.stringify(timeSlotsLocal), duration);
 
        
         const startDate = dayjs(availabilityData.startDate);
         const endDate = dayjs(availabilityData.endDate);
-        console.log(startDate, endDate);
+        // console.log(startDate, endDate);
 
         const availableLocalSlots = convertSlotsToFormat(timeSlotsLocal, startDate, endDate);
-        console.log('Available local slots:', JSON.stringify(availableLocalSlots));
+        // console.log('Available local slots:', JSON.stringify(availableLocalSlots));
 
         const {bookings} = await CalendarServices.mentorBookings({mentorId});
-        console.log('Booking:', bookings)
+        // console.log('Booking:', bookings)
 
         const finalAvailSlots = getFinalAvailableSlots(bookings, availableLocalSlots, selectedTimezone);
-        console.log('Final Available Slots:', finalAvailSlots);
+        // console.log('Final Available Slots:', finalAvailSlots);
 
 
 
@@ -155,11 +156,11 @@ const handleTimezoneChange = (event) => {
         setFinalAvailableSlots(finalAvailSlots);
 
         let blockDates = availabilityData.unavailableDates.map(date => dayjs(date).format('YYYY-MM-DD'));
-        console.log('Block dates:', blockDates);
+        // console.log('Block dates:', blockDates);
 
         const noticePeriod = availabilityData.noticePeriod // Example notice period
         const noticeDates = generateNoticeDates(finalAvailSlots, noticePeriod);
-        console.log('Notice dates:', noticeDates);
+        // console.log('Notice dates:', noticeDates);
 
     
         blockDates = [...blockDates, ... noticeDates]
@@ -187,7 +188,7 @@ const handleTimezoneChange = (event) => {
 
         let timeSlots
         if (reschedule) {
-          console.log('reschedule booking',rescheduleBooking.duration,selDate,finalAvailableSlots)
+          // console.log('reschedule booking',rescheduleBooking.duration,selDate,finalAvailableSlots)
         
            timeSlots = generateTimeSlots(finalAvailableSlots, selDate, rescheduleBooking.duration, bufferTime);
          
@@ -195,7 +196,7 @@ const handleTimezoneChange = (event) => {
         else  {
            timeSlots = generateTimeSlots(finalAvailableSlots, selDate, durationId.duration, bufferTime);
         }
-        console.log('timeslots', timeSlots);
+        // console.log('timeslots', timeSlots);
         setTimeSlots(timeSlots);
     }
 }, [selectedDate, durationId,rescheduleBooking, reschedule]);
@@ -204,8 +205,13 @@ const handleTimezoneChange = (event) => {
 
   const handleDateChange = async (date) => {
 
-      setSelectedDate(date); // Continue with other logic if needed
-    
+       // If the selected date is clicked again, unselect it
+    if (selectedDate && date.isSame(selectedDate, 'day')) {
+      setSelectedDate(null);
+    } else {
+      setSelectedDate(date);
+    }
+
   };
 
 
@@ -240,10 +246,14 @@ const handleTimezoneChange = (event) => {
   
 
   const handleSelectedTime = (time) => {
-  
-    setSelectedTime(time);
-    
+    // If the same time is selected again, unselect it
+    if (selectedTime === time) {
+      setSelectedTime(null);
+    } else {
+      setSelectedTime(time);
+    }
   };
+  
 
 // If you want to log the updated `selectedTime` after the state has been set:
 useEffect(() => {
@@ -294,36 +304,45 @@ const handleDurationChange = (selectedId) => {
           </select>
 
 
-       {!reschedule &&   (<>
-         <label className="label">Duration</label>
-                  <select
-                        className="select"
-                        value={durationId.id}
-                        onChange={(e) => handleDurationChange(e.target.value)}
-                    >
-                        <option value="" disabled>Select Duration</option>
-                        {durationList.map((item) => (
-                            <option key={item.id} value={item.id}>
-                                {item.duration} Minutes
-                            </option>
-                        ))}
-                  </select>
-                  </>)
-}
+                    {!reschedule &&   (<>
+                      <label className="label">Duration</label>
+                                <select
+                                      className="select"
+                                      value={durationId.id}
+                                      onChange={(e) => handleDurationChange(e.target.value)}
+                                  >
+                                      <option value="" disabled>Select Duration</option>
+                                      {durationList.map((item) => (
+                                          <option key={item.id} value={item.id}>
+                                              {item.duration} Minutes
+                                          </option>
+                                      ))}
+                                </select>
+                                </>)
+              }
 
+{/* {durationId && durationId.length > 0 && ( */}
+{(durationId.id && durationId.id.length > 0) || (durationId.duration !== null) ? (
+  <div>
 
-      <label className="label">Availability</label>
       
-      <DateCalendarServerRequest 
-        onDateChange={handleDateChange}
-        period={period} // Use the fetched period
-        daysOfWeekToHighlight={daysOfWeekToHighlight} // Use the fetched days of the week to highlight
-        unavailableDates={unavailableDates}
-        finalAvailableSlots = {finalAvailableSlots}
-      />
+        <label className="label">Availability</label>
+   
+
+                <DateCalendarServerRequest 
+                selectedDate={selectedDate}
+                  durationId={durationId}
+                  onDateChange={handleDateChange}
+                  period={period} // Use the fetched period
+                  daysOfWeekToHighlight={daysOfWeekToHighlight} // Use the fetched days of the week to highlight
+                  unavailableDates={unavailableDates}
+                  finalAvailableSlots = {finalAvailableSlots}
+                />
+
+              
 
 
-          {selectedDate && (
+                 {selectedDate && (
                           <Box sx={{ marginTop: 2 }}>
                               <Typography variant="body1" className="label">
                                   {formatDate(selectedDate)}
@@ -353,17 +372,25 @@ const handleDurationChange = (selectedId) => {
 
       
 
-      <BookButton
-              selectedDate={selectedDate}
-              selectedTime={selectedTime}
-              durationId={durationId}
-              mentorData={mentorData}
-             selectedTimezone={selectedTimezone}
-             mentorId={mentorId}
-             reschedule={reschedule}
+      {
+        mentorId && selectedDate && selectedTime ? (
+          <BookButton
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            durationId={durationId}
+            mentorData={mentorData}
+            selectedTimezone={selectedTimezone}
+            mentorId={mentorId}
+            reschedule={reschedule}
             rescheduleBooking={rescheduleBooking}
+          />
+        ) : (
+          <button className="grey">
+            Book Session Now
+          </button>
+        )
+      }
 
-            />
 
         {/* <WebinarModal
         
@@ -371,8 +398,9 @@ const handleDurationChange = (selectedId) => {
         mentorId={mentorId}
         
         /> */}
-
-  
+    </div>
+     
+    ) : null}
     </div>
   );
 };

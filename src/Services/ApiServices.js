@@ -170,6 +170,19 @@ export const ApiServices = {
     });
   },
 
+  getProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/getUser`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   saveFollowers: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -182,6 +195,20 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  unfollowUser: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/unfollow`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   login: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -775,6 +802,7 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
   dislikePitchComment: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -841,10 +869,6 @@ export const ApiServices = {
     });
   },
 
-
-
-
-
   createPost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -871,7 +895,6 @@ export const ApiServices = {
     });
   },
 
-
   getUsersPost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -884,7 +907,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   getAllPosts: (obj) => {
     return new Promise((resolve, reject) => {
@@ -899,7 +921,6 @@ export const ApiServices = {
     });
   },
 
-
   getTopTrendingPosts: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -912,7 +933,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   getRecommendedUsers: (obj) => {
     return new Promise((resolve, reject) => {
@@ -927,7 +947,6 @@ export const ApiServices = {
     });
   },
 
-  
   getPost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -940,7 +959,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   likePost: (obj) => {
     return new Promise((resolve, reject) => {
@@ -955,7 +973,6 @@ export const ApiServices = {
     });
   },
 
-
   dislikePost: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -968,7 +985,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   requestIntoOpenDiscussion: (obj) => {
     return new Promise((resolve, reject) => {
@@ -983,7 +999,6 @@ export const ApiServices = {
     });
   },
 
-
   updaterequestIntoOpenDiscussion: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -997,9 +1012,7 @@ export const ApiServices = {
     });
   },
 
-  
-
- getPostRequestDiscussion: (obj) => {
+  getPostRequestDiscussion: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/posts/getPostRequestDiscussion`, obj)
@@ -1024,10 +1037,6 @@ export const ApiServices = {
     });
   },
 
-
-
-
-
   getPostComments: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1040,7 +1049,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   addPostComment: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1092,7 +1100,6 @@ export const ApiServices = {
     });
   },
 
-
   addReport: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1105,7 +1112,6 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
 
   updateReport: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1159,6 +1165,31 @@ export const ApiServices = {
     });
   },
 
+  saveOrUpdateProfessionalProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .put(`/professionalProfile/update`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  fetchProfessionalProfile: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/professionalProfile/fetch`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   SaveData: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1211,8 +1242,65 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  InputEntryData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/inputEntryData`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
+  searchProfiles: (query) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/searchProfiles?query=${query}`) // Use query param
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  },
+
+  FilterSearchProfiles: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/filterSearchProfiles`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  SaveDocuments: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveDocuments`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  SaveDocument: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveDocument`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  }
+  
 };
-
-
-

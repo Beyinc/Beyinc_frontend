@@ -485,7 +485,7 @@ export const postTypes = [
     { 'value': 'Co-founder Needed', 'color': '#af1dd8' },
     { 'value': 'Tech Partner Needed', 'color': '#60d441' },
     { 'value': 'Mentor Needed', 'color': '#9f1f04' },
-    { 'value': 'General post', 'color': '#05eb1b' },
+    { 'value': 'General Post', 'color': '#05eb1b' },
     { 'value': 'Question and Answer', 'color': '#6920a9' },
     { 'value': 'Announcement', 'color': '#70b9d5' },
     { 'value': 'News', 'color': '#f14edf' },
@@ -591,57 +591,68 @@ export function updateLastSeen() {
 
 export const dataEntry = [
     {
+        id: 1,
         title: 'Individual /Entrepreneur',
         icon: 'mage:light-bulb',
         paragraph: 'Already started your entrepreneurial journey, either with an idea or a newly established business.',
       },
       {
+        id: 2,
         title: 'Mentor',
         icon: 'nimbus:university',
         paragraph: 'A person who shares their knowledge and experience to guide and support others.',
       },
      
       {
+        id: 3,
         title: 'Startup',
         icon: 'material-symbols:rocket-launch-outline',
         paragraph: 'A company in early stages of development and looking to scale.',
       },
       {
+        id: 4,
         title: 'Incubator',
         icon: 'clarity:organization-line',
         paragraph: 'An organization that provides startups with workspace, mentorship, and resources.',
       },
       {
+        id: 5,
         title: 'Accelerator',
         icon: 'material-symbols:speed-outline-rounded',
         paragraph: 'A program that helps startups grow rapidly through mentorship, funding and connections',
       },
       {
+        id: 6,
         title: 'Individual Investor',
         icon: 'fluent:building-bank-16-filled',
         paragraph: 'An individual who invest their own money in companies',
       },
       {
+        id: 7,
         title: 'Institutional Investor',
         icon: 'ph:building-apartment',
         paragraph: 'An organization that invest money on behalf of others, such as pension funds or insurance companies.',
       },
       {
+        id: 8,
         title: 'Trade Bodies',
         icon: 'material-symbols:handshake-outline',
         paragraph: 'Organizations that represent the interests of businesses in a particular sector.',
       },
       {
+        id: 9,
         title: 'Government body',
         icon: 'streamline:justice-hammer',
         paragraph: 'A department or agency of the government that supports startups.',
       },
       {
+        id: 10,
         title: 'Corporate',
         icon: 'material-symbols:corporate-fare-rounded',
         paragraph: 'A large company that invests in or partners with startups.',
       },
       {
+        id: 11,
         title: 'Technology partner',
         icon: 'material-symbols:laptop-mac-outline',
         paragraph: 'A company that provides technology or services to startups.',

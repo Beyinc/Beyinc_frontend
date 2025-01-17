@@ -111,8 +111,8 @@ const CreatePostPage = () => {
   }, []);
 
   const addingpost = async (e) => {
-    console.log(description,postTitle,posttype,accessSetting);
-    
+    console.log(description, postTitle, posttype, accessSetting);
+
     e.target.disabled = true;
     setLoading(true);
     await ApiServices.createPost({
@@ -128,7 +128,6 @@ const CreatePostPage = () => {
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       openDiscussion: accessSetting === "public",
-     
     })
       .then((res) => {
         setLoading(false);
@@ -184,17 +183,17 @@ const CreatePostPage = () => {
     setValue(newValue);
   };
 
-  const [accessSetting, setAccessSetting] = useState("");
+  const [accessSetting, setAccessSetting] = useState("public");
 
   const handleAccessChange = (e) => {
     // Logging the selected value for debugging
     console.log("Selected access setting:", e.target.value);
-  
+
     setAccessSetting(e.target.value);
     setFullDetails("");
     setGroupDiscussion("");
   };
-  
+
   const [fullDetails, setFullDetails] = useState("");
   const [groupDiscussion, setGroupDiscussion] = useState("");
   const [postTitle, setPostTitle] = useState("");
@@ -343,19 +342,23 @@ const CreatePostPage = () => {
                   onChange={handleChange}
                   aria-label="lab API tabs example"
                 >
-                  <Tab label="Information" value="1"  className="Testing-Tab"/>
-                  <Tab label="File Upload" value="2" className="Testing-Tab"/>
-                  <Tab label="Pitches / Links" value="3" className="Testing-Tab"/>
+                  <Tab label="Information" value="1" className="Testing-Tab" />
+                  <Tab label="File Upload" value="2" className="Testing-Tab" />
+                  <Tab
+                    label="Pitches / Links"
+                    value="3"
+                    className="Testing-Tab"
+                  />
                 </TabList>
               </Box>
               <TabPanel
                 value="1"
                 style={{
-                  maxHeight: "330px",
-                  overflow: "scroll",
-                  overflowX: "hidden",
-                  scrollbarWidth: "thin",
-                  scrollBehavior: "smooth",
+                  // maxHeight: "330px",
+                  // overflow: "scroll",
+                  // overflowX: "hidden",
+                  // scrollbarWidth: "thin",
+                  // scrollBehavior: "smooth",
                 }}
               >
                 <div>
@@ -422,10 +425,10 @@ const CreatePostPage = () => {
                 <div className="postTypeContainer" ref={userDetailsRef}>
                   {postTypes.map((p) => (
                     <div
-                    key={p.value}
+                      key={p.value}
                       className="individualPostTypes"
                       onClick={() => {
-                        if (p.value !== "General post") {
+                        if (p.value !== "General Post") {
                           setposttype(p.value);
                         } else {
                           setposttype(p.value);
@@ -804,7 +807,7 @@ const CreatePostPage = () => {
           <button
             className="cancelButton"
             onClick={() => {
-              navigate("/editProfile");
+              navigate("/profile");
             }}
           >
             Cancel

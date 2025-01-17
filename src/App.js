@@ -46,7 +46,11 @@ import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBooking
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
-
+import SearchResults from "./Components/Searching/SearchResults";
+import payOut from "./Components/PayOut/payOut";
+import Payment from "./Components/Dashboard/Payment/Payment";
+import About from "./Components/Profile/About";
+import Profile from "./Components/Profile/Profile";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -308,10 +312,14 @@ const App = () => {
           <Route path="*" element={<NoMatch />} />
 
           <Route path="/dashboard" Component={AuthHoc(Home)} />
-          {/* <Route path="/editProfile" Component={AuthHoc(Editprofile)} /> */}
-          <Route path="/editProfile" Component={AuthHoc(EditProfile)} />
+       
+          <Route path="/editProfile" Component={AuthHoc(Profile)} />
+          {/* <Route path="/profile" Component={AuthHoc(Profile)} /> */}
 
         <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
+
+        <Route path="/search" Component={AuthHoc(SearchResults)} />
+
 
           <Route path="/conversations" Component={AuthHoc(Conversations)} />
           <Route
@@ -329,7 +337,7 @@ const App = () => {
           />
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
            
-          <Route path="/user/:id" Component={AuthHoc(EditProfile)} />
+          <Route path="/user/:id" Component={AuthHoc(Profile)} />
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
@@ -345,6 +353,7 @@ const App = () => {
             Component={AdminDeciderHoc(EditProfile)}
           />
 
+          <Route path="/payout" Component={AdminDeciderHoc(payOut)} />
 
           <Route
             path="/postReports"
@@ -355,9 +364,13 @@ const App = () => {
            <Route path="/bank" element={<Bank />} />
            <Route path="/rescheduleCalendar" element={<Calendar />} />
            <Route path="/dashboard/availability" element={<Schedule />} />
+           <Route path="/dashboard/payment" element={<Payment />} />
            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
            <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
+
+            <Route path="/about" element={<About />} />
+           
         </Routes>
       </Suspense>
     </div>

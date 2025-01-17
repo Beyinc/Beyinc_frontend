@@ -18,6 +18,7 @@ import { setLoading } from "../../redux/AuthReducers/AuthReducer";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Checkbox,
+  Collapse,
   FormControlLabel,
   Tab,
   Tabs,
@@ -72,7 +73,7 @@ const AllUsers = () => {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const [IsAdmin, setIsAdmin] = useState(false)
+  const [IsAdmin, setIsAdmin] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -110,8 +111,16 @@ const AllUsers = () => {
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
     ApiServices.getAllUsers({ type: "" }).then((res) => {
-      // console.log(res.data);
-      setData(res.data);
+      console.log(JSON.stringify(res.data));
+      const filteredUsers = res.data.filter(user => 
+        user.beyincProfile && user.beyincProfile.trim() !== ''
+    );
+    
+       
+      console.log(filteredUsers);
+      
+
+      setData(filteredUsers);
       dispatch(setLoading({ visible: "no" }));
     });
   }, []);
@@ -248,49 +257,54 @@ const AllUsers = () => {
     );
   }, [historicalConversations]);
 
+  // iqra
 
+  const [users, setUsers] = useState([]);
+  const [filters, setFilters] = useState({
+    expertise: [],
+    userName: "",
+    stages: [],
+    industries: [],
+    categories: [], // Added categories filter
+  });
 
-// iqra
-
-const [users, setUsers] = useState([]);
-const [filters, setFilters] = useState({
-  expertise: [],
-  userName: '',
-  stages: [],
-  industries: [],
-  categories: [],  // Added categories filter
-});
-
-// Function to fetch user data from backend based on filters
-const fetchUsers = async () => {
-  console.log("Current filters:", filters); 
-  try {
+  // Function to fetch user data from backend based on filters
+  const fetchUsers = async () => {
+    console.log("Current filters:", filters);
+    try {
       const response = await ApiServices.FilterData(filters);
-      setUsers(response.data);
-
-  } catch (error) {
-      console.error('Error fetching users:', error);
-  }
-};
+      // Filter users to only include those with the desired fields
+      const filteredUsers = response.data.filter((user) => {
+        return (
+          user.beyincProfile || // Check if beyincProfile is present
+          (user.industries && user.industries.length > 0) || // Check if industries array is not empty
+          (user.expertise && user.expertise.length > 0) || // Check if expertise array is not empty
+          (user.stages && user.stages.length > 0) // Check if stages array is not empty
+          // || (user.investmentRange !== undefined)
+        );
+      });
+      setUsers(filteredUsers);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   useEffect(() => {
     fetchUsers();
-}, [filters]);
+  }, [filters]);
 
- // Function to update filters based on user input
+  // Function to update filters based on user input
   const updateFilters = (newFilters) => {
     setFilters((prevFilters) => ({
-        ...prevFilters,
-        ...newFilters,
+      ...prevFilters,
+      ...newFilters,
     }));
-};
-
-
+  };
 
   return (
     <>
-      <Dialog
-        fullScreen={width <= 400}
+      {/* <Dialog
+       sx={{width:"500px" , height:"700px"}}
         maxWidth={"md"}
         fullWidth={true}
         open={open}
@@ -312,132 +326,9 @@ const fetchUsers = async () => {
             }}
           />
         </DialogTitle>
-        <DialogContent sx={{ overflow: "hidden" }} style={{ padding: 0 }}>
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              flexGrow: 1,
-              bgcolor: "background.paper",
-              height: width <= 400 ? "100%" : 400,
-              overflowY: "scroll",
-            }}
-          >
-            <Tabs
-              orientation="vertical"
-              variant="scrollable"
-              value={value}
-              onChange={handleChange}
-              className="tabs-vertical"
-              sx={{
-                borderRight: 1,
-                borderColor: "divider",
-                position: "sticky",
-                top: 0,
-                left: 0,
-              }}
-            >
-              {tabs.map((v, i) => (
-                <Tab
-                  className="filter-tab-style"
-                  label={<div className="filter-tab-text">{v}</div>}
-                  {...a11yProps(i)}
-                />
-              ))}
-            </Tabs>
-            {/* <TabPanel value={value} index={0}>
-              <FilterPanel
-                rawData={totalRoles}
-                dataKey={"role"}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <FilterPanel
-                rawData={data}
-                dataKey={"userName"}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            </TabPanel>{" "}
-            <TabPanel value={value} index={2}>
-              <FilterPanel
-                rawData={allskills}
-                dataKey={"skills"}
-                isFlat={true}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              <FilterPanel
-                rawData={Country?.getAllCountries()}
-                isCountry={true}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <FilterPanel
-                rawData={allLanguages}
-                dataKey={"languagesKnown"}
-                isFlat={true}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            </TabPanel> */}
-            <TabPanel value={value} index={5}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 20,
-                  }}
-                >
-                  <div className="filter-rating-label">Rating:</div>
-                  <div className="inputTag" style={{ marginLeft: 20 }}>
-                    <AddReviewStars
-                      filledStars={filledStars}
-                      setFilledStars={setFilledStars}
-                    />
-                  </div>
-                </div>
+        <FilterSidebar updateFilters={updateFilters} open={open}/>
 
-                <div className="verificationFilter">
-                  <div
-                    className="filter-options-label"
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <> Verified: </>
-                    <input
-                      type="checkbox"
-                      style={{ width: "20px", marginLeft: 20 }}
-                      checked={filters.verification}
-                      onChange={() => {
-                        setFilters((prev) => ({
-                          ...prev,
-                          verification: !filters.verification,
-                        }));
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </TabPanel>
-          </Box>
-        </DialogContent>
+       
         <DialogActions>
           <Button
             sx={{ width: "fit-content" }}
@@ -447,7 +338,22 @@ const fetchUsers = async () => {
             Close
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+      {width < 770 && (
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <div className="bg-white shadow-md m-3">
+          <h2 className="mt-4 px-20">Filter</h2>
+          <FilterSidebar updateFilters={updateFilters} open={open} />
+          <Button
+            sx={{ width: "fit-content", marginLeft: "100px",marginBottom:"30px" }}
+            variant="contained"
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+          </div>
+        </Collapse>
+      )}
 
       <div className="users-main-box">
         {width < 770 && (
@@ -505,7 +411,7 @@ const fetchUsers = async () => {
                   />
                 </div>
               </div>
-              <FilterSidebar updateFilters={updateFilters}/>
+              <FilterSidebar updateFilters={updateFilters} />
               {/* Role */}
               {/* <div className="tagFilter">
                 <div className="filter-header">
@@ -579,7 +485,7 @@ const fetchUsers = async () => {
               </div>
               <hr /> */}
               {/* Rating */}
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -596,9 +502,9 @@ const fetchUsers = async () => {
                     setFilledStars={setFilledStars}
                   />
                 </div>
-              </div>
+              </div> */}
 
-              <div className="verificationFilter">
+              {/* <div className="verificationFilter">
                 <div
                   className="filter-options-label"
                   style={{
@@ -622,11 +528,10 @@ const fetchUsers = async () => {
                     }}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
-          <div className="user-cards-panel">
-           
+          <div className="user-cards-panel w-[95%] lg:w-[80%]">
             <div className="mt-4 userscontainer">
               {users.length > 0 ? (
                 // filteredData?.map((user) => (
@@ -641,15 +546,15 @@ const fetchUsers = async () => {
                 // ))
                 users.map((user) => (
                   <SingleUserDetails key={user.id} user={user} />
-              ))
+                ))
               ) : (
-                <div className="no-users"
+                <div
+                  className="no-users"
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    flexDirection: 'column',
+                    flexDirection: "column",
                     alignItems: "center",
-
                   }}
                 >
                   <img src="/Search.gif" />
@@ -659,10 +564,12 @@ const fetchUsers = async () => {
             </div>
           </div>
         </div>
-        <AddConversationPopup receiverId={pitchSendTo}
+        <AddConversationPopup
+          receiverId={pitchSendTo}
           setReceiverId={setPitchSendTo}
           receiverRole={receiverRole}
-          IsAdmin={IsAdmin} />
+          IsAdmin={IsAdmin}
+        />
       </div>
     </>
   );

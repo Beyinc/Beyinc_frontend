@@ -98,5 +98,31 @@ export const PaymentServices = {
 
         })
     },
+    saveWithdrawData : (obj) => {
+        return new Promise((resolve, reject) => {
+            axiosInstance.post(`/payment/saveWithdrawl`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
+
+
+    getTransactions : (obj) => {
+        return new Promise((resolve, reject) => {
+            axiosInstance.post(`/payment/getTransactions`, obj)
+                .then((res) => {
+                    if (res) {
+                        resolve(res)
+                    }
+                })
+                .catch((err) => reject(err));
+
+        })
+    },
 
 }

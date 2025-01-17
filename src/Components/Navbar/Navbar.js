@@ -62,14 +62,25 @@ function TabPanel(props) {
 }
 
 const Navbar = () => {
-  const { email, role, userName, image, verification, user_id } = useSelector(
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate1 = useNavigate();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate1(`/search?query=${searchQuery}`);
+    }
+  };
+
+  const {  verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
   const {
-    beyincProfile
+    beyincProfile,
+    email, role, userName, image
   } = useSelector((store) => store.auth.userDetails);
 
-  console.log(role, userName)
+  // console.log(beyincProfile,image.url)
   const [logoutOpen, setLogoutOpen] = useState(false);
   const socket = useRef();
   useEffect(() => {
@@ -220,7 +231,7 @@ const Navbar = () => {
                 id="Profile-img"
                 className="menu-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image : "/profile.png"
+                  image !== undefined && image !== "" ? image.url : "/profile.png"
                 }
                 alt=""
               />
@@ -385,7 +396,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem
+            {/* <ListItem
               button
               key="dashboard"
               onClick={() => navigate("/dashboard")}
@@ -409,7 +420,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Pitches" />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key="searchUsers"
@@ -527,7 +538,7 @@ const Navbar = () => {
               <ListItemText primary="Profile Requests" />
             </ListItem>
 
-            <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
+            {/* <ListItem button key="pitches" onClick={() => navigate("/pitches")}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -544,7 +555,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Pitch Request" />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               key="postReports"
@@ -777,7 +788,7 @@ const Navbar = () => {
           <img
             id="Profile-img"
             className="menu-profile-img"
-            src={image !== undefined && image !== "" ? image : "/profile.png"}
+            src={image !== undefined && image !== "" ? image.url : "/profile.png"}
             alt=""
             onClick={() => navigate("/editProfile")}
             style={{ cursor: "pointer" }}
@@ -899,7 +910,7 @@ const Navbar = () => {
         </ListItem> */}
 
         {/* Conditional rendering of the Calendar button */}
-      {beyincProfile === "mentor" ||"cofounder" && (
+      {beyincProfile !== "" && (
         <ListItem
           button
           key="calendar"
@@ -941,19 +952,19 @@ const Navbar = () => {
       </ListItem>
 
       {/* Mentor Bookings - Render only if role === "Mentor" */}
-      {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
+      {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
         <ListItem
           button
-          key={beyincProfile === "mentor" ? "mentorBookings" : "cofounderBookings"}
+          key={beyincProfile === "Mentor" ? "mentorBookings" : "cofounderBookings"}
           onClick={() => navigate(`/dashboard/mentorBookings`)}
         >
           <ListItemIcon>
             <EventIcon
               className="menu-icon"
-              sx={{ width: "0.8em", height: "0.8em", color: beyincProfile === "mentor" ? "blue" : "green" }} // Different color for Mentor and Cofounder
+              sx={{ width: "0.8em", height: "0.8em", color: beyincProfile === "Mentor" ? "blue" : "green" }} // Different color for Mentor and Cofounder
             />
           </ListItemIcon>
-          <ListItemText primary={beyincProfile === "mentor" ? "Mentor Bookings" : "Cofounder Bookings"} />
+          <ListItemText primary={beyincProfile === "Mentor" ? "Mentor Bookings" : "Cofounder Bookings"} />
         </ListItem>
       )}
 
@@ -1181,9 +1192,17 @@ const Navbar = () => {
 
       <div class="search-container">
         <div class="search-icon">
-          <i class="fa fa-search"></i>
+          <i style={{cursor:"default"}} class="fa fa-search"></i>
         </div>
-        <input type="text" class="search-input" placeholder="Search" />
+        <form onSubmit={handleSearch}>
+        <input
+        type="text"
+        className="search-input"
+        placeholder="Search"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)} // Update search input value
+      />
+      </form>
       </div>
 
       <div className="menuIcons">
@@ -1198,9 +1217,10 @@ const Navbar = () => {
               handleItemClick("beyinc");
             }}
           >
-            <button className="navbar-btn">
-              Become Professional
-            </button>
+           <button className="navbar-btn rounded-2xl h-12 w-50 py-1 text-xs font-normal">
+            Become Professional
+          </button>
+
           </div>
             {/* HOME ICON */}
 
@@ -1253,7 +1273,7 @@ const Navbar = () => {
 
             {/* DASHBOARD ICON */}
 
-            <div
+            {/* <div
               className={`navbar-item ${
                 selectedIcon === "dashboard" ? "selected" : ""
               }`}
@@ -1298,7 +1318,7 @@ const Navbar = () => {
               >
                 Pitches
               </div>
-            </div>
+            </div> */}
 
             {/* MENTOR ICON */}
             <div
@@ -1599,7 +1619,7 @@ const Navbar = () => {
                     className="Profile-img"
                     src={
                       image !== undefined && image !== ""
-                        ? image
+                        ? image.url
                         : "/profile.png"
                     }
                     alt=""
@@ -1640,7 +1660,7 @@ const Navbar = () => {
                   id="Profile-img"
                   className="Profile-img"
                   src={
-                    image !== undefined && image !== "" ? image : "/profile.png"
+                    image !== undefined && image !== "" ? image.url : "/profile.png"
                   }
                   alt=""
                 />

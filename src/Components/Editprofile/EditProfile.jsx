@@ -24,7 +24,7 @@ import { Country, State, City } from "country-state-city";
 import { AdminServices } from "../../Services/AdminServices";
 import { jwtDecode } from "jwt-decode";
 import { format } from "timeago.js";
-
+import { CalendarServices } from '../../../src/Services/CalendarServices';
 import { Box, Dialog, DialogContent, Divider } from "@mui/material";
 import {
   allLanguages,
@@ -62,7 +62,6 @@ const EditProfile = () => {
   } = useSelector((store) => store.auth.loginDetails);
 
   const {
-    beyincProfile,
     bio: dbbio,
     userName: dbuserName,
     educationDetails: dbEducation,
@@ -71,14 +70,24 @@ const EditProfile = () => {
     country: dbcountry,
     languagesKnown: languages,
     beyincProfile: dbProfile,
+    expertise: dbExpertise,
+    industries: dbIndustires,
+    investmentRange: dbInvestmentRange,
+    stages: dbStages,
   } = useSelector((store) => store.auth.userDetails);
-
-  console.log('beyincProfile', beyincProfile, dbProfile)
 
   const [dbCountry, setDbCountry] = useState("");
   const [dblanguages, setDblanguages] = useState([]);
   const [dbbeyincProfile, setBeyincProfile] = useState("");
+  const [industries, setIndustries] = useState([]);
+  const [Stages, setStages] = useState([]);
+  const [expertise, setExpertise] = useState([]);
+  const [investmentRange, setInvestmentRange] = useState(0);
+  const [service, setService] = useState([])
+  //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
+
   useEffect(() => {
+
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
     if (dbEducation) setEducationDetails(dbEducation);
@@ -87,10 +96,24 @@ const EditProfile = () => {
     if (dbcountry) setDbCountry(dbcountry);
     if (languages) setDblanguages(languages);
     if (dbProfile) setBeyincProfile(dbProfile);
+    if (dbExpertise) setExpertise(dbExpertise);
+    if (dbIndustires) setIndustries(dbIndustires);
+    if (dbInvestmentRange) setInvestmentRange(dbInvestmentRange);
+    if (dbStages) setStages(dbStages);
     setTotalEducationData(dbEducation);
     setTotalExperienceData(dbExperience);
-  }, [dbbio, dbEducation, dbExperience, dbSkills]);
+  }, [
+    dbbio,
+    dbEducation,
+    dbExperience,
+    dbSkills,
+    dbExpertise,
+    dbInvestmentRange,
+    dbStages,
+    dbIndustires,
+  ]);
 
+  console.log("beyincProfile", dbbeyincProfile);
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
@@ -104,10 +127,9 @@ const EditProfile = () => {
   const [showPreviousFile, setShowPreviousFile] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
-
+  const location = useLocation();
   const [manualSkill, setManualSkill] = useState("");
   const [selectKey, setSelectKey] = useState(Date.now());
-
   const handleSkillChange = (e) => {
     const selectedSkill = e.target.value;
     if (selectedSkill !== "" && !tempSkills.includes(selectedSkill)) {
@@ -129,6 +151,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
+  
     // Fetch the user data on which profile is clicked
     const fetchUserData = async () => {
       try {
@@ -141,6 +164,10 @@ const EditProfile = () => {
           languagesKnown,
           country,
           beyincProfile,
+          expertise,
+          industries,
+          stages,
+          investmentRange,
         } = response.data;
 
         // Set state if data exists
@@ -151,6 +178,10 @@ const EditProfile = () => {
         if (educationDetails) setEducationDetails(educationDetails);
         if (experienceDetails) setExperience(experienceDetails);
         if (skills) setSkills(skills);
+        if (expertise) setExpertise(expertise);
+        if (industries) setIndustries(industries);
+        if (investmentRange) setInvestmentRange(investmentRange);
+        if (stages) setStages(stages);
         setTotalEducationData(educationDetails);
         setTotalExperienceData(experienceDetails);
 
@@ -248,6 +279,7 @@ const EditProfile = () => {
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
   const [experienceDetails, setExperience] = useState([]);
+  
   // Temporary state to hold user input
   const [tempExperienceDetails, setTempExperienceDetails] = useState({
     business: "",
@@ -285,6 +317,7 @@ const EditProfile = () => {
     Edstart: "",
     Edend: "",
   });
+
   const [fee, setFee] = useState("");
   const [bio, setBio] = useState("");
   const [tempBio, setTempBio] = useState("");
@@ -428,6 +461,7 @@ const EditProfile = () => {
     }, 500);
     setIsExperiencePopupVisible(true);
   };
+
   const handleEducationButtonClick = () => {
     window.scrollTo({
       top: 0,
@@ -489,13 +523,14 @@ const EditProfile = () => {
   };
 
   // const addEducation = (e) => {
+  //   console.log('education Details', educationDetails)
   //   e.preventDefault();
   //   if (editingEducationId == "") {
-  //     setTotalEducationData((prev) => [...prev, EducationDetails]);
+  //     setTotalEducationData((prev) => [...prev, educationDetails]);
   //   } else {
   //     setTotalEducationData(
   //       totalEducationData.map((t, i) => {
-  //         return i + 1 === editingEducationId ? EducationDetails : t;
+  //         return i + 1 === editingEducationId ? educationDetails : t;
   //       })
   //     );
   //     setIsEducationPopupVisible(false);
@@ -538,18 +573,36 @@ const EditProfile = () => {
   const [followering, setFollowering] = useState([]);
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
-  const location = useLocation();
   const pathSegments = location.pathname.split("/");
-  const mentorId = pathSegments[pathSegments.length - 1]; // Assuming mentorId is the last segment
+  const mentorId = pathSegments[pathSegments.length - 1]; 
   console.log("mentorId", mentorId);
 
   useEffect(() => {
+    const fetchAvailabilityData = async () => {
+        try {
+            const { data } = await CalendarServices.getAvailabilityData({ mentorId });
+            // Logging the availability data
+            console.log('Availability data:', JSON.stringify(data.availability));
+            setService(data.availability.sessions)
+            const availabilityData = data.availability;
+            // Perform additional operations with availabilityData here
+        } catch (error) {
+            console.error("Error fetching availability data:", error);
+        }
+    };
+
+    fetchAvailabilityData();
+}, []); // Add dependencies if required
+
+
+  useEffect(() => {
+
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
     if (toggler) {
       seteditPostToggler(toggler);
     }
-  }, [location, seteditPostToggler]);
+  }, [location, seteditPostToggler, mentorId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -579,6 +632,7 @@ const EditProfile = () => {
     setRecentUploadedDocs((prev) => ({ ...prev, [e.target.name]: file?.name }));
     setFileBase(e, file);
   };
+
   const setFileBase = (e, file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -589,12 +643,20 @@ const EditProfile = () => {
       }));
     };
   };
+
   useEffect(() => {
     const hasEducation = totalEducationData.length > 0;
     const hasWorkExperience = totalExperienceData.length > 0;
     setIsFormValid(hasEducation && hasWorkExperience);
   }, [totalEducationData, totalExperienceData]);
 
+  useEffect(() => {
+    setEducationDetails(totalEducationData);
+  }, [totalEducationData]);
+
+  useEffect(() => {
+      setTotalExperienceData(experienceDetails);
+  }, [experienceDetails])
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
   const [requestUserId, setRequestedUserId] = useState("");
@@ -1342,39 +1404,39 @@ const EditProfile = () => {
     autoplaySpeed: 2000,
   };
 
-  // const savingLocal = () => {
-  //   localStorage.setItem(
-  //     "editProfile",
-  //     JSON.stringify({
-  //       twitter: twitter,
-  //       linkedin: linkedin,
-  //       salutation: salutation,
-  //       mentorCategories: mentorCategories,
-  //       email: email,
-  //       userId: user_id,
-  //       state: state,
-  //       town: town,
-  //       country: country,
-  //       userName: name,
-  //       phone: mobile,
-  //       role: role,
-  //       fee: fee,
-  //       bio: bio,
-  //       skills: skills,
-  //       languagesKnown: languagesKnown,
-  //       documents: changeResume,
-  //       experienceDetails: totalExperienceData,
-  //       educationDetails: totalEducationData,
-  //     })
-  //   );
-  //   dispatch(
-  //     setToast({
-  //       message: "Data Saved Locally",
-  //       bgColor: ToastColors.success,
-  //       visible: "yes",
-  //     })
-  //   );
-  // };
+  const savingLocal = () => {
+    localStorage.setItem(
+      "editProfile",
+      JSON.stringify({
+        twitter: twitter,
+        linkedin: linkedin,
+        salutation: salutation,
+        mentorCategories: mentorCategories,
+        email: email,
+        userId: user_id,
+        state: state,
+        town: town,
+        country: country,
+        userName: name,
+        phone: mobile,
+        role: role,
+        fee: fee,
+        bio: bio,
+        skills: skills,
+        languagesKnown: languagesKnown,
+        documents: changeResume,
+        experienceDetails: totalExperienceData,
+        educationDetails: totalEducationData,
+      })
+    );
+    dispatch(
+      setToast({
+        message: "Data Saved Locally",
+        bgColor: ToastColors.success,
+        visible: "yes",
+      })
+    );
+  };
 
   const retreiveLocal = () => {
     console.log(JSON.parse(localStorage.getItem("editProfile")));
@@ -1538,7 +1600,7 @@ const EditProfile = () => {
   };
 
   ///////////////////////////////////////////////////////////////
-
+console.log('education details', educationDetails)
   const saveEducationDetails = () => {
     // Check if the required fields are filled
     if (
@@ -1560,17 +1622,24 @@ const EditProfile = () => {
         Edstart: "",
         Edend: "",
       });
+      // setIsEducationPopupVisible(false);
     } else {
       alert("Please fill all required fields.");
     }
   };
+
   // Save changes from temp to main state
   const saveExperienceDetails = (event) => {
     event.preventDefault();
     //  setIsExperiencePopupVisible(false);
-    setExperience(tempExperienceDetails);
+
+    setExperience((prev) => [
+      ...prev,
+      { ...tempExperienceDetails }, // Add the new details
+    ]);
     // Reset temporary details after saving
-    setTempExperienceDetails({ ...tempExperienceDetails });
+    setTempExperienceDetails({});
+    setIsExperiencePopupVisible(false);
   };
 
   const submitAllData = async () => {
@@ -1585,6 +1654,24 @@ const EditProfile = () => {
     try {
       await ApiServices.SaveData(allData);
       alert("Data saved successfully!");
+      // Check if any document fields are provided
+      const { resume, achievements, expertise, working, degree } = changeResume;
+
+      if (resume || achievements || expertise || working || degree) {
+        const documentData = {
+          userId: user_id,
+          resume: resume,
+          achievements: achievements,
+          expertise: expertise,
+          working: working,
+          degree: degree,
+        };
+        console.log("saving document with id " + user_id);
+
+        // Call the SaveDocuments API
+        await ApiServices.SaveDocuments(documentData);
+        alert("Documents saved successfully!");
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");
@@ -1719,7 +1806,7 @@ const EditProfile = () => {
             to send or update the profile
           </div>
         )} */}
-      <div className="EditProfileImageContainer">
+      <div className="EditProfileImageContainer ">
         <img src="/Banner.png" alt="Banner" />
       </div>
       <div className="ProfileContainer">
@@ -1772,16 +1859,19 @@ const EditProfile = () => {
               {role} {role == "Mentor" && mentorCategories}
             </div>
 
-            <div className="font-bold text-customPurple mt-3 mb-1">
-              {dbbeyincProfile} at beyinc
-            </div>
+            {dbbeyincProfile && (
+              <div className="font-bold text-customPurple mt-3 mb-1">
+                {dbbeyincProfile} at Beyinc
+              </div>
+            )}
 
             {/* {id !== undefined && (
               <div className="editProfile-stars">
                 <ReviewStars avg={averagereview} />
               </div>
             )} */}
-            {id == undefined && <div className="personaDetails">{email}</div>}
+            {/* {id == undefined && <div className="personaDetails">{email}</div>} */}
+
             {id == undefined && (
               <div className="personaDetails">
                 {mobile}
@@ -1814,7 +1904,8 @@ const EditProfile = () => {
               </>
             )}
 
-            {userpage == true && (
+            {userpage === true && (
+           
               <button
                 onClick={followerController}
                 className="mb-5 profileFollowBtn"
@@ -1824,6 +1915,7 @@ const EditProfile = () => {
                   : "Follow"}
               </button>
             )}
+            {/* )} */}
 
             {/* {userpage === true &&
               connectStatus &&
@@ -1873,28 +1965,35 @@ const EditProfile = () => {
               <div>Following</div>
               <div>{followering.length}</div>
             </div>
-            <div className="mr-36 mt-3 font-bold flex">
-              <CiGlobe className="mr-3 text-lg" /> {dblanguages.join(", ")}
+            <div className=" mr-20 mt-3 font-bold flex">
+              {dblanguages.length > 0 && (
+                <>
+                  <CiGlobe className="mr-3 text-lg text-customPurple" />{" "}
+                  {dblanguages.join(", ")}
+                </>
+              )}
             </div>
 
-            <div className="locationdetails">
-              <div>
-                <svg
-                  className="mt-3"
-                  width="25"
-                  height="25"
-                  viewBox="0 0 25 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20.3204 15.0939C21.0019 13.8147 21.3571 12.3871 21.3542 10.9377C21.3542 6.04756 17.3902 2.0835 12.5001 2.0835C7.60995 2.0835 3.64589 6.04756 3.64589 10.9377C3.64221 13.0264 4.38055 15.0485 5.72922 16.6434L5.73964 16.6564L5.74901 16.6668H5.72922L10.9834 22.245C11.1782 22.4517 11.4132 22.6164 11.6739 22.729C11.9347 22.8416 12.2157 22.8997 12.4998 22.8997C12.7838 22.8997 13.0649 22.8416 13.3257 22.729C13.5864 22.6164 13.8214 22.4517 14.0162 22.245L19.2709 16.6668H19.2511L19.2594 16.6569L19.2605 16.6559C19.298 16.6111 19.3353 16.566 19.3724 16.5205C19.7338 16.0765 20.0513 15.5991 20.3204 15.0939ZM12.5027 14.3226C11.6739 14.3226 10.879 13.9933 10.2929 13.4073C9.7069 12.8212 9.37766 12.0264 9.37766 11.1976C9.37766 10.3688 9.7069 9.5739 10.2929 8.98785C10.879 8.4018 11.6739 8.07256 12.5027 8.07256C13.3315 8.07256 14.1263 8.4018 14.7124 8.98785C15.2984 9.5739 15.6277 10.3688 15.6277 11.1976C15.6277 12.0264 15.2984 12.8212 14.7124 13.4073C14.1263 13.9933 13.3315 14.3226 12.5027 14.3226Z"
-                    fill="var(--followBtn-bg)"
-                  />
-                </svg>
+            {dbCountry && (
+              <div className="locationdetails">
+                <div>
+                  <svg
+                    className="mt-3"
+                    width="25"
+                    height="25"
+                    viewBox="0 0 25 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20.3204 15.0939C21.0019 13.8147 21.3571 12.3871 21.3542 10.9377C21.3542 6.04756 17.3902 2.0835 12.5001 2.0835C7.60995 2.0835 3.64589 6.04756 3.64589 10.9377C3.64221 13.0264 4.38055 15.0485 5.72922 16.6434L5.73964 16.6564L5.74901 16.6668H5.72922L10.9834 22.245C11.1782 22.4517 11.4132 22.6164 11.6739 22.729C11.9347 22.8416 12.2157 22.8997 12.4998 22.8997C12.7838 22.8997 13.0649 22.8416 13.3257 22.729C13.5864 22.6164 13.8214 22.4517 14.0162 22.245L19.2709 16.6668H19.2511L19.2594 16.6569L19.2605 16.6559C19.298 16.6111 19.3353 16.566 19.3724 16.5205C19.7338 16.0765 20.0513 15.5991 20.3204 15.0939ZM12.5027 14.3226C11.6739 14.3226 10.879 13.9933 10.2929 13.4073C9.7069 12.8212 9.37766 12.0264 9.37766 11.1976C9.37766 10.3688 9.7069 9.5739 10.2929 8.98785C10.879 8.4018 11.6739 8.07256 12.5027 8.07256C13.3315 8.07256 14.1263 8.4018 14.7124 8.98785C15.2984 9.5739 15.6277 10.3688 15.6277 11.1976C15.6277 12.0264 15.2984 12.8212 14.7124 13.4073C14.1263 13.9933 13.3315 14.3226 12.5027 14.3226Z"
+                      fill="var(--followBtn-bg)"
+                    />
+                  </svg>
+                </div>
+                <div className="mt-2">{dbCountry}</div>
               </div>
-              <div className="mt-2">{dbCountry}</div>
-            </div>
+            )}
 
             {twitter && (
               <div className="locationdetails">
@@ -1940,9 +2039,9 @@ const EditProfile = () => {
               </div>
             )}
 
-            <div className="reviewText">
+            {/* <div className="reviewText">
               <b>{review?.length}</b> Reviews
-            </div>
+            </div> */}
             <div>
               {id == undefined ? (
                 <ReviewStars avg={averagereview} />
@@ -1952,9 +2051,9 @@ const EditProfile = () => {
                     filledStars={filledStars}
                     setFilledStars={setFilledStars}
                   />{" "}
-                  <button className="reviewPostButton" onClick={sendReview}>
+                  {/* <button className="reviewPostButton" onClick={sendReview}>
                     Post
-                  </button>
+                  </button> */}
                 </>
               )}
             </div>
@@ -1973,24 +2072,26 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-        {(beyincProfile === "mentor" || beyincProfile === "cofounder") && (
-            <div className="BookSessionCard">
-              <BookSession
-                name={name}
-                mentorId={mentorId}
-                reschedule={false}
-              />
-            </div>
-          )}
+      {(dbbeyincProfile === "Mentor" || mentorId !== 'editProfile' || dbbeyincProfile === "Co-Founder") && 
+ service.length > 0 && (
+  <div className="BookSessionCard">
+    <BookSession name={name} mentorId={mentorId} reschedule={false} />
+  </div>
+)}
 
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
-          {(beyincProfile === "mentor" ||
-            beyincProfile === "cofounder" ||
-            beyincProfile === "investor") && (
+          {(dbbeyincProfile === "Mentor" ||
+            dbbeyincProfile === "Co-Founder" ||
+            dbbeyincProfile === "Investor") && (
             <div>
-              <TabsAndInvestment />
+              <TabsAndInvestment
+                industries={industries}
+                stages={Stages}
+                expertise={expertise}
+                investmentRange={investmentRange}
+              />
             </div>
           )}
 
@@ -2104,9 +2205,9 @@ const EditProfile = () => {
                   )}
                 </div>
 
-                {totalEducationData.length > 0 ? (
+                {educationDetails.length > 0 ? (
                   <div>
-                    {totalEducationData.map((te, i) => (
+                    {educationDetails.map((te, i) => (
                       <div
                         className="indiEducationCont"
                         style={{
@@ -2782,130 +2883,31 @@ const EditProfile = () => {
               )}
 
               {/* Buttons for save data */}
-              {userpage === false &&
-                (id == undefined ? (
-                  <section className="EditProfile-Buttons-Section">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "10px",
-                        marginTop: "15px",
-                        marginBottom: "15px",
-                      }}
-                    >
-                      <button
-                        style={{
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                        onClick={retreiveLocal}
-                      >
-                        Retreive last Save
-                      </button>
-                      <button
-                        style={{
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                        // onClick={savingLocal}
-                        onClick={submitAllData}
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={
-                          isLoading ||
-                          !isFormValid ||
-                          image === undefined ||
-                          image === ""
-                        }
-                        onClick={update}
-                        style={{
-                          whiteSpace: "nowrap",
-                          position: "relative",
-                          fontSize: "10px",
-                          background: "var(--button-background)",
-                          color: "var(--button-color)",
-                        }}
-                      >
-                        {isLoading ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "5px",
-                              alignItems: "center",
-                            }}
-                          >
-                            <div className="button-loader"></div>
-                            <div style={{}}>Updating...</div>
-                          </div>
-                        ) : (
-                          <>
-                            {/* <i
-                      className="fas fa-address-card"
-                      style={{ marginRight: "5px" }}
-                    ></i> */}
-                            Update
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </section>
-                ) : (
-                  <div className="button-container">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "25%",
-                        gap: "10px",
-                        marginTop: "15px",
-                      }}
-                    >
-                      {/* <button type="button" className="back-button" onClick={() => navigate(-1)}>Back</button> */}
+              {userpage === false && id === undefined && (
+              <section className="EditProfile-Buttons-Section">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "15px",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <button
+                    style={{
+                      fontSize: "10px",
+                      background: "var(--button-background)",
+                      color: "var(--button-color)",
+                    }}
+                    onClick={submitAllData}
+                  >
+                    Save
+                  </button>
+                </div>
+              </section>
+            )}
 
-                      <button
-                        type="submit"
-                        className="reject-button"
-                        onClick={(e) => adminupdate(e, "rejected")}
-                        style={{ whiteSpace: "nowrap", position: "relative" }}
-                        disabled={inputs.status === "rejected"}
-                      >
-                        {/* {isLoading ? (
-                                    <>
-                                                             <div className="button-loader"></div>
-                                        <span style={{ marginLeft: "12px" }}>Rejecting...</span>
-                                    </>
-                                ) : ( */}
-                        <>Reject</>
-                        {/* )} */}
-                      </button>
-                      <button
-                        type="submit"
-                        onClick={(e) => adminupdate(e, "approved")}
-                        style={{ whiteSpace: "nowrap", position: "relative" }}
-                        disabled={inputs.status === "approved"}
-                      >
-                        {isLoading ? (
-                          <>
-                            <div className="button-loader"></div>
-                            <span style={{ marginLeft: "12px" }}>
-                              Approving...
-                            </span>
-                          </>
-                        ) : (
-                          <>Approve</>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                ))}
             </div>
           )}
 
@@ -3653,11 +3655,31 @@ const EditProfile = () => {
                         <label className="Input-Label">
                           College/University*{" "}
                           {tempEducationDetails.grade !== "SSC" &&
-                            tempEducationDetails.grade !== "" &&
-                            "(Type 3 characters)"}
+                            tempEducationDetails.grade !== ""}
                         </label>
                       </div>
-                      <div className="Ed_Input_Fields">
+                      <input
+                        type="text"
+                        name="college"
+                        className="w-[270px]"
+                        value={tempEducationDetails.college}
+                        onChange={handleEducationChange}
+                      />
+                      {/* <input
+                            type="text"
+                            name="college/uni"
+                            className={
+                              tempExperienceDetails.institute === ""
+                                ? "editErrors"
+                                : "editSuccess"
+                            }
+                            value={tempExperienceDetails.institute}
+                            id=""
+                            onChange={handleChange}
+                            placeholder="Enter Your College/Universtiy name"
+                          /> */}
+
+                      {/* <div className="Ed_Input_Fields">
                         {tempEducationDetails.grade == "SSC" ||
                         tempEducationDetails.grade == "" ? (
                           <input
@@ -3709,10 +3731,10 @@ const EditProfile = () => {
                             <option value={u.name}>{u.name}</option>
                           ))}
                         </select>
-                      )} */}
+                      )} 
                           </>
                         )}
-                      </div>
+                      </div>  */}
                     </div>
 
                     <div>
@@ -3747,7 +3769,7 @@ const EditProfile = () => {
                     <button
                       className="add-button"
                       // onClick={addEducation}
-                      onClick={saveEducationDetails}
+                       onClick={saveEducationDetails}
                       disabled={
                         tempEducationDetails.Edstart == "" ||
                         tempEducationDetails.grade == "" ||

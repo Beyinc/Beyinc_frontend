@@ -8,14 +8,18 @@ import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import AllNotifications from "../Conversation/Notification/AllNotifications";
 import { getAllNotifications } from "../../redux/Conversationreducer/ConversationReducer";
-import { socket_io } from "../../Utils";
+import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
+import { RxCaretDown } from "react-icons/rx";
 
 const Posts = () => {
-  const { role, userName, image, user_id } = useSelector(
-    (store) => store.auth.loginDetails
-  );
+  // const { role, userName, image, user_id } = useSelector(
+  //   (store) => store.auth.loginDetails
+  // );
+  const { role, userName, image, _id: user_id } = useSelector((store) => store.auth.userDetails);
+
+  // console.log(role, userName, image)
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -112,7 +116,20 @@ const Posts = () => {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
+  
+  const getNotifys = async () => {
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
+    dispatch(getAllNotifications(user_id));
+  };
+
+  useEffect(() => {
+    getNotifys();
+  }, []);
+
+  
   const followerController = async (e, id) => {
+    console.log('following to', id)
+    console.log('userId', user_id);
     e.target.disabled = true;
     await ApiServices.saveFollowers({
       followerReqBy: user_id,
@@ -155,61 +172,100 @@ const Posts = () => {
     e.target.disabled = false;
   };
 
-  const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
-    dispatch(getAllNotifications(user_id));
-  };
-
-  useEffect(() => {
-    getNotifys();
-  }, []);
 
   ////////////////////////////////
 
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [people, setPeople] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [tags, setTags] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedSortOption, setSelectedSortOption] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+const [isPrivate, setIsPrivate] = useState(false);
 
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
 
-    // Update selected categories based on checkbox state
-    if (checked) {
-      setSelectedCategories((prev) => [...prev, value]);
-    } else {
-      setSelectedCategories((prev) =>
-        prev.filter((category) => category !== value)
-      );
-    }
-  };
+const handlePublicCheckboxChange = (event) => {
+  setIsPublic(event.target.checked);
+};
+
+const handlePrivateCheckboxChange = (event) => {
+ 
+  setIsPrivate(event.target.checked);
+};
+
+console.log('filteredposts: ', filteredPosts)
+  // const [checkedValues, setCheckedValues] = useState({
+  //   public: false,
+  //   private: false,
+  // });
+
+  // Handle checkbox change
+  // const handleCheckboxChange = (event) => {
+  //   const { name, checked } = event.target;
+   
+  //   setCheckedValues((prev) => ({
+  //     ...prev,
+  //     [name]: checked,
+  //   }));
+  
+   
+  // };
 
   useEffect(() => {
-    console.log(selectedCategories);
-
     const fetchFilteredPosts = async () => {
       try {
-        // Send data to the backend
-        const response = await ApiServices.getFilterPosts({
-          categories: selectedCategories, // Send selected categories
-        });
-
-        // Handle successful fetching of posts
-        console.log("Filtered posts:", response.data); // Log the filtered posts
-
-        setFilteredPosts(response.data);
+        const filterData = {
+          tags: selectedTags,
+          sortOption: selectedSortOption,
+          people: people,
+        };
+  
+        if (isPublic) {
+          filterData.public = true;
+        }
+        if (isPrivate) {
+          filterData.private = true;
+        }
+  
+        // if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
+        //   console.log("No valid filters or both selected. Clearing posts...");
+        //   setFilteredPosts([]); // Clear all posts in these cases.
+        //   return;
+        // }
+  
+        const response = await ApiServices.getFilterPosts(filterData);
+        setFilteredPosts(response.data); // Update with new data
       } catch (error) {
-        // Handle error
         console.error("Error filtering posts:", error);
       }
     };
+  
+    fetchFilteredPosts();
+  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate]);
+  
 
-    // Call the fetchFilteredPosts function
-    if (selectedCategories.length > 0) {
-      // Ensure there are selected categories before fetching
-      fetchFilteredPosts();
-    } else {
-      setFilteredPosts([]);
-    }
-  }, [selectedCategories]); // Add selectedCategories as a dependency
+
+  const handleTagsChange = (event) => {
+    const { value, checked } = event.target;
+    setSelectedTags((prev) =>
+      checked ? [...prev, value] : prev.filter((option) => option !== value)
+    );
+  };
+
+  
+  const clearAllTags = () => {
+    console.log("Tags changed",selectedTags,filteredPosts);
+    setSelectedTags([]);
+    setFilteredPosts([])
+  
+  };
+
+  const filteredTagsOptions = postTypes.filter((option) =>
+    option.value.toLowerCase().includes(tags.toLowerCase())
+  );
+
+ 
 
   return (
     <div className="Homepage-Container">
@@ -221,7 +277,7 @@ const Posts = () => {
                 id="Profile-img"
                 className="Homepage-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image : "/profile.png"
+                  image !== undefined && image !== "" ? image.url : "/profile.png"
                 }
                 alt=""
               />
@@ -259,7 +315,7 @@ const Posts = () => {
             <div>Create post</div>
           </div>
 
-          <div className="sidebar-menu-items">
+          {/* <div className="sidebar-menu-items">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +330,7 @@ const Posts = () => {
               </svg>
             </div>
             <div>Newsfeed</div>
-          </div>
+          </div> */}
 
           <div
             className="sidebar-menu-items"
@@ -316,7 +372,7 @@ const Posts = () => {
               {data?.connections_approved || 0}
             </div>
           </div>
-
+{/* 
           <div className="sidebar-menu-items">
             <div>
               <svg
@@ -332,7 +388,7 @@ const Posts = () => {
               </svg>
             </div>
             <div>Expertise</div>
-          </div>
+          </div> */}
 
           <div className="sidebar-menu-items">
             <div>
@@ -358,210 +414,165 @@ const Posts = () => {
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
-            <h5>People</h5>
-            <input type="text" placeholder="Search people" />
+            <h4 className="mt-3 mb-2">People</h4>
+            <input
+              type="text"
+              placeholder="Search people"
+              value={people}
+              onChange={(e) => setPeople(e.target.value)}
+            />
 
-            <h5>Tags</h5>
-            <input type="text" placeholder="Search tags" />
+            {/* <h5>Tags</h5>
+            <input type="text" placeholder="Search tags" /> */}
 
-            <h5>Location</h5>
-            <div className="checkbox">
-              <input type="checkbox" id="delhi" name="location" value="Delhi" />
-              <label className="checkbox-label" for="delhi">
-                Delhi
-              </label>
+            <h4 className="mt-3 mb-2">Tags</h4>
+            <div className="relative">
+              <button
+                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+                  isTagsOpen ? "rotate-180" : "rotate-0"
+                }`}
+                onClick={() => setIsTagsOpen(!isTagsOpen)}
+              >
+                <RxCaretDown />
+              </button>
             </div>
 
-            <div className="checkbox">
-              {" "}
-              <input
+            {/* Stage checkboxes, shown only if isStageOpen is true */}
+            {isTagsOpen && (
+              <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
+                <input
+                  type="text"
+                  className="w-60 mt-3"
+                  placeholder="Search Stage"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                />
+
+                {selectedTags.length > 0 && (
+                      <div className="clear-container">
+                        <div className="x-box">X</div>
+                          <a onClick={clearAllTags} className="clear-link">
+                            Clear All
+                          </a>
+                      </div>
+                )}
+
+                {filteredTagsOptions.map((option) => (
+                  <div key={option.value} className="p-0">
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={option.value}
+                        checked={selectedTags.includes(option.value)}
+                        onChange={handleTagsChange}
+                      />
+                      {option.value}
+                    </label>
+                  </div>
+                ))}
+                
+              </div>
+            )}
+
+        
+            {/* <span class="see-all">See All</span> */}
+            <hr className=" mt-4 mb-6" />
+
+            <h4 className="mt-3 mb-2">Post Type</h4>
+
+            <label>
+            
+                  <input
                 type="checkbox"
-                id="mumbai"
-                name="location"
-                value="Mumbai"
+                name="public"
+                checked={isPublic}
+                onChange={handlePublicCheckboxChange}
               />
-              <label className="checkbox-label" for="mumbai">
-                Mumbai
-              </label>
-            </div>
+              <span className="text-sm mt-1">Public Post</span>
+            </label>
 
-            <div className="checkbox">
-              {" "}
-              <input
+            <label>
+            
+                 <input
                 type="checkbox"
-                id="chennai"
-                name="location"
-                value="Chennai"
+                name="private"
+                checked={isPrivate}
+                onChange={handlePrivateCheckboxChange}
               />
-              <label className="checkbox-label" for="chennai">
-                Chennai
-              </label>
-            </div>
+              <span className="text-sm mt-1">Private Post</span>
+            </label>
+            <hr className=" mt-4 mb-6" />
 
-            <h5>Category</h5>
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="general"
-                name="category"
-                value="General post"
-              />
-              <label className="checkbox-label" for="general">
-                General post
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="idea"
-                name="category"
-                value="Idea discussion"
-              />
-              <label className="checkbox-label" for="idea">
-                Idea discussion
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="Hiring"
-                name="category"
-                value="Hiring"
-              />
-              <label className="checkbox-label" for="hiring">
-                Hiring
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="mentor"
-                name="category"
-                value="Mentor
-              needed"
-              />
-              <label className="checkbox-label" for="mentor">
-                Mentor needed
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="announcement"
-                name="category"
-                value="Announcement"
-              />
-              <label className="checkbox-label" for="announcement">
-                Announcement
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="co-founder"
-                name="category"
-                value="Co-founder Needed"
-              />
-              <label className="checkbox-label" htmlFor="co-founder">
-                Co-founder Needed
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="tech-partner"
-                name="category"
-                value="Tech-partner Needed"
-              />
-              <label className="checkbox-label" htmlFor="tech-partner">
-                Tech-partner Needed
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="question-answer"
-                name="category"
-                value="Question and Answer"
-              />
-              <label className="checkbox-label" htmlFor="question-answer">
-                Question and Answer
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="news"
-                name="category"
-                value="News"
-              />
-              <label className="checkbox-label" htmlFor="news">
-                News
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="opportunities"
-                name="category"
-                value="Opportunities"
-              />
-              <label className="checkbox-label" htmlFor="opportunities">
-                Opportunities
-              </label>
-            </div>
-
-            <div className="checkbox">
-              <input
-                onChange={handleCheckboxChange}
-                type="checkbox"
-                id="investment"
-                name="category"
-                value="Investment"
-              />
-              <label className="checkbox-label" htmlFor="investment">
-                Investment
-              </label>
-            </div>
-
-            <span class="see-all">See All</span>
-
-            <h5>Sort by</h5>
-            <select>
-              <option value="relevance">Relevance</option>
-            </select>
+            {/* <h4 className="mt-3 mb-2">Sort by</h4>
+            <select
+              value={selectedSortOption}
+              onChange={(event) => setSelectedSortOption(event.target.value)}
+            >
+              <option value="">Select an option</option>
+              <option value="recent">Recent</option>
+            </select> */}
           </div>
         </div>
       </div>
-
+      
+   
       <div className="main-content">
         <div className="allPostShowContainer">
-          {(filteredPosts.length > 0 ? filteredPosts : allPosts).map((post) => (
-            <Post
-              post={post}
-              setAllPosts={setAllPosts}
-              screenDecider={"home"}
-            />
-          ))}
+
+
+
+
+        {filteredPosts.length > 0 && 
+          filteredPosts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            .map((p) => {
+              // console.log("Debugging post:", p); // Debugging each post
+              return (
+                <Post
+                  filteredPosts={filteredPosts}
+                  key={p.id}
+                  post={p} // Passing only id and title
+                  setAllPosts={setAllPosts}
+                  screenDecider={"home"}
+                />
+              );
+            })
+        }
+
+      
+      {/* Render filtered posts if available */}
+        {/* {filteredPosts.length > 0 && 
+          filteredPosts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            
+            .map((p) => (
+              <Post
+                filteredPosts={filteredPosts}
+                key={p.id}
+                p={p} // Passing only id and title
+                setAllPosts={setAllPosts}
+                screenDecider={"home"}
+              />
+            ))
+        } */}
+
+
+
+        {/* If filteredPosts is empty, render top 2 posts from allPosts */}
+        {/* {filteredPosts.length === 0 && 
+          allPosts // Limiting to top 2 posts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            .map((p) => (
+              <Post
+                filteredPosts={filteredPosts}
+                key={p.id}
+                post={p} // Passing only id and title
+                setAllPosts={setAllPosts}
+                screenDecider={"home"}
+              />
+            ))
+        } */}
+
         </div>
 
         <div className="loadMore-Container">
@@ -570,6 +581,8 @@ const Posts = () => {
           </button>
         </div>
       </div>
+
+{/* Right Bar */}
 
       <div className="sidebar-right">
         <div className="trending-section">
@@ -591,16 +604,21 @@ const Posts = () => {
         </div>
 
         <div className="suggestions-section">
-          <div style={{ display: "flex", flexDirection: "row", gap: "60px" }}>
+          <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
-            <h3 className="label">Suggestions for you</h3>
+            <h4 className="label">Suggestions for you</h4>
             <span
-              style={{ color: "gray", fontSize: "14px", cursor: "pointer" }}
+              style={{
+                width: " 90px",
+                color: "gray",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
               onClick={() => {
                 navigate("/searchusers");
               }}
             >
-              See all
+              See All
             </span>
           </div>
           {recommendedUsers?.map((rec) => (
@@ -629,7 +647,7 @@ const Posts = () => {
                   {rec?.userName}
                 </h4>
                 <p>{rec?.role}</p>
-                <div className="button-container">
+                <div className="follow-container">
                   <button
                     className="follow"
                     onClick={(e) => {

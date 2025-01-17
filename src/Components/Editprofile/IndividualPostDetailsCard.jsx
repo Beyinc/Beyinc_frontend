@@ -363,7 +363,7 @@ const IndividualPostDetailsCard = () => {
                 ></div>
               </div>
 
-              {/* <div className="tagsContainer">
+              <div className="tagsContainer">
                 {post?.tags?.map((t) => (
                   <div
                     className="indiTag"
@@ -372,25 +372,31 @@ const IndividualPostDetailsCard = () => {
                     {`@${t?.userName}`}
                   </div>
                 ))}
-              </div> */}
-              <div className="PostimageContainer">
-                <img
-                  src={
-                    post?.image !== "" &&
-                    post?.image !== undefined &&
-                    post?.image?.url !== ""
-                      ? post?.image?.url
-                      : "/profile.png"
-                  }
-                  style={{ objectFit: "contain", objectPosition: "center" }}
-                  alt=""
-                />
               </div>
-              {post?.openDiscussion !== true && (
-                <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
-                  {post?.fullDetails}
-                </div>
+
+              <div className="PostimageContainer">
+             
+
+             {post?.image?.url && ( // Check if the image URL is available
+              <img
+                src={post.image.url}
+                style={{ objectFit: "contain" }}
+                alt=""
+                onClick={() => navigate(`/posts/${post?._id}`)}
+              />
               )}
+
+              </div>
+              {(post?.openDiscussion === true ||
+                post?.openDiscussionTeam.map((o) => o._id).includes(user_id) ||
+                post?.createdBy._id === user_id ||
+                role === "Admin") && (
+                  <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
+                    {post?.fullDetails}
+                  </div>
+                
+              )}
+
               <div className="likeCommentDetails">
                 <div className="likeTotal">
                   <div>
