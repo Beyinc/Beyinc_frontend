@@ -105,18 +105,7 @@ const SingleUserDetails = ({
                         {/* )} */}
                       </span>
                     </div>
-                    <div className="flex items-center justify-center gap-1 xl:gap-2 text-sm xl:text-2xl">
-                      <i
-                        className="fas fa-star"
-                        style={{ color: "#4f55c7" }}
-                      ></i>
-                      <p>
-                        {averagereview.toFixed(1).split(".")[1] != "0"
-                          ? averagereview.toFixed(1)
-                          : averagereview.toFixed(0)}
-                      </p>
-                      <p className="font-bold">Ratings</p>
-                    </div>
+               
                   </div>
                   <div className="flex flex-col md:flex-row md:space-x-12 ">
                     <span className="text-gray-500 font-semibold">
