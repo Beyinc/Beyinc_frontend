@@ -364,7 +364,13 @@ console.log('self', selfProfile);
             </span>
         </div>
 
-        <div className="font-bold text-xl text-gray-500">{formState?.role}</div>
+        <div className="font-bold text-sm text-gray-500">{formState?.role}</div>
+        {profileData?.beyincProfile && (
+  <div className="font-bold text-md" style={{ color: '#4F55C7' }}>
+    {profileData.beyincProfile} at Beyinc
+  </div>
+)}
+
 
         <div className="flex flex-col gap-4 mt-2 ">
 
