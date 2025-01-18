@@ -40,7 +40,7 @@ console.log('profile role', profileData.role)
                         />
                     </div>
                
-                  { profileData.role === 'Mentor' || profileData.role === 'Individual /Entrepreneur' && <div>
+                  { (profileData.role === 'Mentor' || profileData.role === 'Individual/Entrepreneur') && <div>
                     <div className="">
                         <SkillsCard
                           selfProfile={selfProfile}
