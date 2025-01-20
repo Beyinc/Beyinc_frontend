@@ -166,7 +166,8 @@ function SearchResults() {
                 }}
                 alt="profile pic"
               />
-              <h3 className="mt-3">{user.userName}</h3>
+           <h3 className="mt-3" style={{ textAlign: 'center' }}>{user.userName}</h3>
+
               {user.role && <h5 className="text-neutral-600 mt-1">{user.role}</h5>}
               {user.beyincProfile && (
                 <h5 className="text-neutral-600 mt-1">{user.beyincProfile} at Beyinc</h5>
