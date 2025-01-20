@@ -130,7 +130,7 @@ const EntryDetails = () => {
     // bg-customWhite
     <div className="bg-customWhite md:my-5 md:mx-20 shadow-[0_3px_12px_rgba(0,0,0,0.1)]">
       <div className="flex flex-col py-4 md:py-10 md:px-20">
-        <h2 className="font-bold md:mb-5 pl-6">Tell us who you are?</h2>
+        <h2 className="font-bold md:mb-5 pl-6">Tell us who you are?* </h2>
         <BoxCategories
           onCategoryClick={onCategoryClick}
           selectedCategory={selectedCategory}
@@ -143,24 +143,10 @@ const EntryDetails = () => {
           value={username}
           onChange={handleUsernameChange}
         />
-        <h2 className="font-bold md:mb-5 pl-6 mt-3 md:mt-11">Headline</h2>
-        <input
-          type="text"
-          className="ml-6 w-[840px] h-[20px] p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
-          placeholder="Enter your headline"
-          value={headline}
-          onChange={handleHeadlineChange}
-        />
-        <h2 className="font-bold md:mb-5 pl-6 mt-3 md:mt-11">Profile Image</h2>
-        <input
-          type="file"
-          accept="image/*"
-          className="ml-6 w-[840px] h-[20px] mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
-          onChange={handleImageChange}
-        />
-        <div className="flex flex-col md:flex-row pl-6 mt-3 md:mt-11 md:mb-5">
-          <h2 className="font-bold">Select Skills*</h2>
-          <span className="md:ml-2">(Choose up to 5 skills)</span>
+
+         <div className="flex flex-col md:flex-row pl-6 mt-3 md:mt-11 md:mb-5">
+          <h2 className="font-bold">Domain*</h2>
+          <span className="md:ml-2">(Choose up to 5 )</span>
         </div>
         <div>
           <select
@@ -188,6 +174,29 @@ const EntryDetails = () => {
             </div>
           ))}
         </div>
+
+
+
+        <h2 className="font-bold md:mb-5 pl-6 mt-3 md:mt-11">Headline</h2>
+        <input
+          type="text"
+          className="ml-6 w-[840px] h-[20px] p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
+          placeholder="Enter your headline"
+          value={headline}
+          onChange={handleHeadlineChange}
+        />
+
+
+        <h2 className="font-bold md:mb-5 pl-6 mt-3 md:mt-11">Profile Image</h2>
+        <input
+          type="file"
+          accept="image/*"
+          className="ml-6 w-[840px] h-[20px] mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
+          onChange={handleImageChange}
+        />
+       
+
+
         <div className="flex flex-col md:flex-row pl-6 mt-3 md:mt-11 md:mb-5">
           <h2 className="font-bold">Choose your interest</h2>
           <span className="md:ml-2">(Maximum 5 selections)</span>
@@ -210,14 +219,14 @@ const EntryDetails = () => {
           ))}
         </div>
         <div className="mx-auto mt-5 md:mt-20 flex flex-row space-x-9">
-          <button
+          {/* <button
             type="button"
             className="flex items-center justify-center h-14 w-36 text-lg text-[#4f55c7] bg-[#4f55c7] px-1 rounded-full"
           >
             <div className=" py-3 flex items-center justify-center rounded-full bg-white h-full w-full">
               Save
             </div>
-          </button>
+          </button> */}
 
           <button
             type="button"

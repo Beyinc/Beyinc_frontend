@@ -11,7 +11,6 @@ const Activity = ({allPosts, setAllPosts}) => {
 
   const navigate = useNavigate();
 
-
   return (
     <div className="w-full lg:w-[60vw]">
       {id === undefined && (

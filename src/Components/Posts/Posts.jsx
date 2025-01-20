@@ -503,14 +503,14 @@ console.log('filteredposts: ', filteredPosts)
             </label>
             <hr className=" mt-4 mb-6" />
 
-            <h4 className="mt-3 mb-2">Sort by</h4>
+            {/* <h4 className="mt-3 mb-2">Sort by</h4>
             <select
               value={selectedSortOption}
               onChange={(event) => setSelectedSortOption(event.target.value)}
             >
               <option value="">Select an option</option>
               <option value="recent">Recent</option>
-            </select>
+            </select> */}
           </div>
         </div>
       </div>

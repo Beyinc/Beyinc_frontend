@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
 import { CiGlobe } from "react-icons/ci";
 import { BsCircleFill } from "react-icons/bs";
+import { CalendarServices } from '../../Services/CalendarServices';
 
 const SingleUserDetails = ({
   // d,
@@ -29,6 +30,25 @@ const SingleUserDetails = ({
 
   const [averagereview, setAverageReview] = useState(0);
   const navigate = useNavigate();
+
+
+//   useEffect(() => {
+//     const fetchAvailabilityData = async () => {
+//         try {
+//             const { data } = await CalendarServices.getAvailabilityData({ mentorId:id });
+//             // Logging the availability data
+//             console.log('Availability data:', JSON.stringify(data.availability));
+//             setService(data.availability.sessions)
+//             const availabilityData = data.availability;
+//             // Perform additional operations with availabilityData here
+//         } catch (error) {
+//             console.error("Error fetching availability data:", error);
+//         }
+//     };
+
+//     fetchAvailabilityData();
+// }, [id]); // Add dependencies if required
+
 
   useEffect(() => {
     setAverageReview(0);
@@ -66,210 +86,161 @@ const SingleUserDetails = ({
 
   return (
     <>
-      <div className="user-card-main-container flex-col">
-        <div>
-          <div className="flex flex-col xl:flex-row justify-center items-center p-5">
-            <div className="w-full">
-              <div className="flex flex-col xl:flex-row xl:gap-7">
-                <div className="user-card-image" onClick={openUser}>
-                  <img
-                    alt="user-pic"
-                    src={
-                      user.image !== "" &&
-                      user.image !== undefined &&
-                      user.image.url !== ""
-                        ? user.image.url
-                        : "/profile.png"
-                    }
-                  />
-                </div>
-                <div className="user-card-details-text pt-2">
-                  <div className="flex items-center justify-between w-full max-w-[550px]">
-                    <div className="flex">
-                      <span className="user-name" onClick={openUser}>
-                        {user.userName}
-                      </span>
-                      <span className="">
-                        {/* {d.verification === "approved" && ( */}
-                        <img
-                          className="size-5 xl:size-8 mt-1 xl:mt-3.5"
-                          src="/verify.png"
-                          alt=""
-                          // style={{
-                          //   width: "15px",
-                          //   height: "15px",
-                          //   position: "absolute",
-                          //   marginTop: "10px",
-                          // }}
-                        />
-                        {/* )} */}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center gap-1 xl:gap-2 text-sm xl:text-2xl">
-                      <i
-                        className="fas fa-star"
-                        style={{ color: "#4f55c7" }}
-                      ></i>
-                      <p>
-                        {averagereview.toFixed(1).split(".")[1] != "0"
-                          ? averagereview.toFixed(1)
-                          : averagereview.toFixed(0)}
-                      </p>
-                      <p className="font-bold">Ratings</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col md:flex-row md:space-x-12 ">
-                    <span className="text-gray-500 font-semibold">
-                      {user.role}
-                    </span>
-                    {user.languagesKnown.length > 0 && (
-                      <span className="text-gray-500 font-semibold flex">
-                        <CiGlobe className="md:mr-3 text-lg" />{" "}
-                        {user.languagesKnown?.join(", ")}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* {d.educationDetails.length > 0 ? (
-                  <span>
-                    {d.educationDetails[0]?.grade} @{" "}
-                    {d.educationDetails[0]?.college}
-                  </span>
-                ) : (
-                  <span
-                    style={{
-                      color: "orange",
-                      border: "1px dashed orange",
-                      padding: "5px",
-                      width: "136px",
-                      whiteSpace: "noWrap",
-                    }}
-                  >
-                    Profile not updated
-                  </span>
-                )} */}
-                  <span className="skills ">{user.skills?.join(", ")}</span>
-                </div>
+     <div className="user-card-main-container flex-col">
+  <div>
+    <div className="flex flex-col xl:flex-row justify-center items-center p-5">
+      {/* New Container Wrap */}
+      <div className="container flex flex-col xl:flex-row w-full gap-7">
+        {/* Left Side Content */}
+        <div className="flex flex-col w-full xl:w-2/3">
+          <div className="w-full">
+            <div className="flex flex-col xl:flex-row xl:gap-7">
+              <div className="user-card-image" onClick={openUser}>
+                <img
+                  alt="user-pic"
+                  src={
+                    user.image !== "" &&
+                    user.image !== undefined &&
+                    user.image.url !== ""
+                      ? user.image.url
+                      : "/profile.png"
+                  }
+                />
               </div>
-              <div className="flex flex-col h-auto mt-4 ml-3">
-                <div>
-                  <div>
-                    <span className="mt-2 2xl:w-[100%] lg:w-[60%] md:[60%] sm:[50%] w-[30%]">
-                      {user.bio
-                        ? user.bio.slice(0, 100) + " . . ."
-                        : "No bio available"}
+              <div className="user-card-details-text pt-2">
+                <div className="flex items-center justify-between w-full max-w-[550px]">
+                  <div className="flex">
+                    <h2
+                      className="text-black font-bold text-l"
+                      onClick={openUser}
+                    >
+                      {user.userName}
+                    </h2>
+                    <span className="">
+                      <img
+                        className="size-5 xl:size-5 mt-2 "
+                        src="/verify.png"
+                        alt=""
+                      />
                     </span>
                   </div>
-                  <div className="mt-4 max-w-[650px]  tabsandinvestement">
-                    <div>
-                      <div className="tabs-container">
-                        <div
-                          className={`Ttab ${
-                            activeTab === "Expertise" ? "Tactive" : ""
-                          }`}
-                          onClick={() => handleTabClick("Expertise")}
-                        >
-                          Expertise
-                        </div>
-                        <div
-                          className={`Ttab ${
-                            activeTab === "Industries" ? "Tactive" : ""
-                          }`}
-                          onClick={() => handleTabClick("Industries")}
-                        >
-                          Industries
-                        </div>
-                        {/* <div
-                      className={`Ttab ${
-                        activeTab === "Stages" ? "Tactive" : ""
-                      }`}
-                      onClick={() => handleTabClick("Stages")}
-                    >
-                      Stages
-                    </div> */}
-                      </div>
-                      <div className="content-container">
-                        {activeTab === "Expertise" && (
-                          <p>{user.expertise?.join(", ")}</p>
-                        )}
-                        {activeTab === "Industries" && (
-                          <p>{user.industries?.join(", ")}</p>
-                        )}
-                        {activeTab === "Stages" && (
-                          <p>{user.stages?.join(", ")}</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
                 </div>
+                <div className="flex flex-col md:flex-row md:space-x-12">
+                  <span className="text-gray-500 font-semibold">
+                    {user.role}
+                  </span>
+                  {user.languagesKnown.length > 0 && (
+                    <span className="text-gray-500 font-semibold flex">
+                      <CiGlobe className="md:mr-3 text-lg" />{" "}
+                      {user.languagesKnown?.join(", ")}
+                    </span>
+                  )}
+                </div>
+                {user.beyincProfile && (
+                  <h5
+                    className="text-neutral-600 mt-1"
+                    style={{ color: "#4F55C7" }}
+                  >
+                    {user.beyincProfile} at Beyinc
+                  </h5>
+                )}
+                <p className="mt-2 mb-2">{user.headline}</p>
               </div>
             </div>
-            <div class="w-px h-72 bg-neutral-300 relative right-10 hidden md:hidden lg:hidden xl:hidden 2xl:block"></div>
-
-            <div className="user-card-actions mt-2 lg:mt-0 w-full">
-              <div className="w-full">
-                <div className="font-bold text-lg">Book a session</div>
-                <div className="mt-5">
-                  <div className="flex">
-                    <BsCircleFill
-                      className="mr-4 mt-1"
-                      style={{ fontSize: "7px" }}
-                    />
-                    Introduction
-                  </div>
-                  <div className="mt-3 text-neutral-500 ml-5">
-                    <span className="mr-3">45 minutes</span>{" "}
-                    {/* Adds margin-right */}
-                    <span>$200 per month</span>
-                  </div>
-                </div>
-                <hr className="border-gray-300 my-4" />
-
-                <div className="mt-5">
-                  <div className="flex">
-                    <BsCircleFill
-                      className="mr-4 mt-1"
-                      style={{ fontSize: "7px" }}
-                    />
-                    Introduction
-                  </div>
-                  <div className="mt-3 text-neutral-500 ml-5">
-                    <span className="mr-3">45 minutes</span>{" "}
-                    {/* Adds margin-right */}
-                    <span>$200 per month</span>
+            <div className="flex flex-col h-auto mt-4 ml-3">
+              <div>
+                <span
+                  className="mt-2 break-words text-ellipsis overflow-hidden 2xl:w-full lg:w-3/5 md:w-3/5 sm:w-1/2 w-1/3"
+                  style={{
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
+                    whiteSpace: "normal",
+                  }}
+                >
+                  {user.bio ? user.bio.slice(0, 180) + " . . ." : "No bio available"}
+                </span>
+                <div className="mt-4 max-w-[650px] tabsandinvestement">
+                  <div>
+                    <div className="tabs-container">
+                      <div
+                        className={`Ttab ${
+                          activeTab === "Expertise" ? "Tactive" : ""
+                        }`}
+                        onClick={() => handleTabClick("Expertise")}
+                      >
+                        Expertise
+                      </div>
+                      <div
+                        className={`Ttab ${
+                          activeTab === "Industries" ? "Tactive" : ""
+                        }`}
+                        onClick={() => handleTabClick("Industries")}
+                      >
+                        Industries
+                      </div>
+                    </div>
+                    <div className="content-container">
+                      {activeTab === "Expertise" && (
+                        <p>{user.expertise?.join(", ")}</p>
+                      )}
+                      {activeTab === "Industries" && (
+                        <p>{user.industries?.join(", ")}</p>
+                      )}
+                      {activeTab === "Stages" && (
+                        <p>{user.stages?.join(", ")}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* {
-               !isCurrentUser  &&
-                (connectStatus[user._id]?.status === "pending" ? (
-                  <button className="pending-color">Pending</button>
-                ) : connectStatus[user._id]?.status === "approved" ? (
-                  <button className="approved-color" onClick={openChat}>
-                    Chat
-                  </button>
-                ) : (
-                  <button
-                    className="connect-color"
-                    onClick={() => {
-                      setPitchSendTo(user._id);
-                      setreceiverRole(user.role);
-                      setIsAdmin(user.email == process.env.REACT_APP_ADMIN_MAIL);
-                    }}
-                  >
-                    Connect
-                  </button>
-                ))
-            } */}
             </div>
           </div>
         </div>
 
-        <div className="user-card-rating space-y-2 mx-9">
-          <span className="text-xs">62 Reviews/47 Sessions</span>
+        {/* Separator */}
+        <div className="w-px h-72 bg-neutral-300 hidden xl:block"></div>
+
+        {/* Right Side Content */}
+        <div className="user-card-actions mt-2 lg:mt-0 w-full xl:w-1/3">
+          <div className="w-full">
+            <div className="font-bold text-lg">Book a session</div>
+            <div className="mt-5">
+              <div className="flex">
+                <BsCircleFill
+                  className="mr-4 mt-1"
+                  style={{ fontSize: "7px" }}
+                />
+                Introduction
+              </div>
+              <div className="mt-3 text-neutral-500 ml-5">
+                <span className="mr-3">45 minutes</span>
+                <span>$200 per month</span>
+              </div>
+            </div>
+            <hr className="border-gray-300 my-4" />
+            <div className="mt-5">
+              <div className="flex">
+                <BsCircleFill
+                  className="mr-4 mt-1"
+                  style={{ fontSize: "7px" }}
+                />
+                Introduction
+              </div>
+              <div className="mt-3 text-neutral-500 ml-5">
+                <span className="mr-3">45 minutes</span>
+                <span>$200 per month</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+    <div className="user-card-rating space-y-2 mx-9">
+      <span className="text-xs">62 Reviews/47 Sessions</span>
+    </div>
+  </div>
+</div>
+
     </>
   );
 };
