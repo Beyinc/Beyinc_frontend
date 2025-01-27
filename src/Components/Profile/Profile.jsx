@@ -92,7 +92,6 @@ const Profile = () => {
                     onChange={handleChange}
                     aria-label="profile tabs"
                     sx={{
-                      borderBottom: 1,
                       borderColor: "white",
                       color: "#4E54C6",
                       display: "flex",
@@ -106,7 +105,7 @@ const Profile = () => {
                       value="1"
                       sx={{
                         fontSize: "20px",
-                        color: "#4E54C6",
+                        color: "gray",
                         flex: 1,
                         fontWeight: "bold",
                         textAlign: "center",
@@ -125,7 +124,7 @@ const Profile = () => {
                       value="2"
                       sx={{
                         fontSize: "20px",
-                        color: "#4E54C6",
+                        color: "gray",
                         flex: 1,
                         fontWeight: "bold",
                         textAlign: "center",
@@ -144,7 +143,7 @@ const Profile = () => {
                       value="3"
                       sx={{
                         fontSize: "20px",
-                        color: "#4E54C6",
+                        color: "gray",
                         flex: 1,
                         fontWeight: "bold",
                         textAlign: "center",

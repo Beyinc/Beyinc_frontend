@@ -48,7 +48,7 @@ const EditAboutModal = ({ isOpen, onClose, initialValue, onSave }) => {
             // onClick={handleClose} 
         >
             <div
-                className="bg-white w-1/3 p-6 rounded-lg shadow-lg relative"
+                className="bg-white w-full md:w-1/3 p-6 mt-10 md:mt-0 rounded-lg shadow-lg relative"
                 onClick={(e) => e.stopPropagation()} 
             >
                 {/* Modal Content */}

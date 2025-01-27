@@ -138,16 +138,15 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
   }
 
   return (
-    <div>
       <div
         className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
       >
         <div
-          className="bg-white w-1/3 p-6 rounded-lg shadow-lg relative"
+          className="bg-white md:w-1/3 p-6 rounded-lg shadow-lg relative"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Modal Content */}
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Edit Skills</h2>
+          <h2 className="text-2xl font-semibold mt-5 md:mt-0 text-gray-800 mb-4">Edit Skills</h2>
 
           {/* savedSkills */}
           <div className="mt-4 flex flex-wrap gap-2">{
@@ -246,7 +245,6 @@ const EditSkillsModal = ({ isOpen, onClose, savedSkills, setSkills }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
