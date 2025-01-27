@@ -207,7 +207,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider }) => 
 
   return (
     <section
-      className={`EditProfileOuterCard ${
+      className={` mt-4 ${
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >

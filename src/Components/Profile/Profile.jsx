@@ -62,21 +62,22 @@ const Profile = () => {
   };
 
   return (
-    <div>
+    <div className="h-full bg-customBackground relative">
       <div className="relative">
-        <div className="lg:p-4">
-          <img
-            src="/Banner.png"
-            alt="Banner"
-            className="w-full h-48 lg:h-80 m-0 object-cover rounded-none lg:rounded-xl"
-          />
-        </div>
+        <img
+          src="/Banner.png"
+          alt="Banner"
+          className="w-full h-48 lg:h-80 m-0 object-cover rounded-none lg:rounded-xl"
+        />
+      </div>
 
-        <div className="flex flex-col lg:flex-row lg:gap-5 absolute top-20 lg:top-52 lg:left-14 ">
+      {/* Content container with negative margin to overlap image */}
+      <div className="relative -mt-24 lg:-mt-40 z-10">
+        <div className="flex flex-col w-full justify-center lg:flex-row lg:gap-5">
           <div>
             <ProfileCard />
           </div>
-          <div className="lg:mt-32">
+          <div className="lg:mt-40">
             <div>
               <TabsAndInvestment
                 expertise={expertise}
@@ -89,7 +90,7 @@ const Profile = () => {
                 <Box>
                   <TabList
                     onChange={handleChange}
-                    aria-label="lab API tabs example"
+                    aria-label="profile tabs"
                     sx={{
                       borderBottom: 1,
                       borderColor: "white",
@@ -163,11 +164,9 @@ const Profile = () => {
                 <TabPanel value="1">
                   <About />
                 </TabPanel>
-
                 <TabPanel value="2">
                   <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
                 </TabPanel>
-
                 <TabPanel value="3">
                   <Comment />
                 </TabPanel>

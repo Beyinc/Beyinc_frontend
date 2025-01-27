@@ -36,8 +36,8 @@ const AboutCard = () => {
     };
 
     return (
-      <div className="w-full lg:w-[60vw]">
-        <div className="h-[100px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl">
+      <div className="w-full lg:w-[60vw] bg-white rounded-xl">
+        <div className="min-h-[100px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl">
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             About
             <span onClick={() => setAboutModalOpen(true)}>
