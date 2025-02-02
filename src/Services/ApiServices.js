@@ -195,6 +195,20 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  unfollowUser: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/userDetails/unfollow`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   login: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1275,4 +1289,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  SaveDocument: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/saveDocument`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  }
+  
 };

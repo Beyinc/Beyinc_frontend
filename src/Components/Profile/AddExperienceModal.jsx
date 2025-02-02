@@ -198,14 +198,16 @@ const AddExperienceModal = ({ isOpen, onClose, setExperiences }) => {
                     {/* Save Button */}
                     <button
                         onClick={handleAddExperience}
-                        className={`px-4 py-2 ${isFormComplete ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-300 cursor-not-allowed"} text-white rounded `}
+                        style={{ backgroundColor: "#4e54c7" }}
+                        className={`px-4 py-2 ${isFormComplete ? "" : "bg-blue-300 cursor-not-allowed"} text-white rounded `}
                         disabled={!isFormComplete}
                     >
                         Save
                     </button>
                     {/* Cancel Button */}
                     <button
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        style={{backgroundColor:"rgba(200, 50, 50, 1)"}}
+                        className="px-4 py-2 text-white rounded"
                         onClick={onClose}
                     >
                         Cancel

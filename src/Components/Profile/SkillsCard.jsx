@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import EditSkillsModal from "./EditSkillsModal";
 import aboutService from './aboutPageApi'
 import { useSelector } from "react-redux";
-
-const SkillsCard = () => {
-
+import { useParams } from "react-router-dom";
+const SkillsCard = ({selfProfile ,setSelfProfile}) => {
+ const { id } = useParams();
     const {
         user_id,
         userName: loggedUserName,
@@ -19,7 +19,7 @@ const SkillsCard = () => {
 
     const fetchSkills = async () => {
         try {
-            const fetchedSkills = await aboutService.fetchSkills(user_id);
+            const fetchedSkills = await aboutService.fetchSkills({user_id,id});
             setSkills(fetchedSkills);
         } catch (error) {
             setErrorMessage("Failed to load Skills data. Please try again.");
@@ -27,25 +27,12 @@ const SkillsCard = () => {
     };
 
 
-    // const handleSaveSkills = async (skills) => {
-    //     try{
-    //         const response = await axios.post('http://localhost:4000/api/addSkills',{
-    //             skills: skills,
-    //             userId: "675e7e41e424505620d8faee"
 
-    //         })
-    //         return response;
-    //     }catch(error){
-    //         console.log("There was an error while adding skills: ", error);
-
-    //     }
-    //     setSkills(skills);
-    // }
 
     useEffect(() => {
         fetchSkills();
         console.log(skills)
-    }, []);
+    }, [user_id,id]);
 
     return (
       <div className="w-full lg:w-[60vw] bg-white rounded-xl">
@@ -53,7 +40,7 @@ const SkillsCard = () => {
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             Skills
             <span onClick={() => setIsModalOpen(true)}>
-              <i className="fas fa-pen"></i>
+           { selfProfile &&  <i className="fas fa-pen"></i>}
             </span>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">

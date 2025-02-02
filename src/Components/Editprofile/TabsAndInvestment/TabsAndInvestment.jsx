@@ -4,7 +4,7 @@ import "./TabsAndInvestment.css";
 import "../../BeyincProfessional/BeyincProfessional";
 import { Link, useNavigate } from "react-router-dom";
 
-const TabsAndInvestment = ({ industries, stages, expertise }) => {
+const TabsAndInvestment = ({selfProfile, industries, stages, expertise }) => {
   const [activeTab, setActiveTab] = useState("Expertise");
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
 
@@ -40,11 +40,12 @@ const TabsAndInvestment = ({ industries, stages, expertise }) => {
             Industries
           </div>
           <span>
-            <i
+          { selfProfile && ( <i
               style={{ color: "var(--followBtn-bg)", cursor: "pointer" }}
               onClick={handleEditButtonClick}
               className="fas fa-pen"
-            ></i>
+            ></i>)
+            }
           </span>
         </div>
 

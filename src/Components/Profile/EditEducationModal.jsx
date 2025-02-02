@@ -207,16 +207,18 @@ const EditEducationModal = ({ isOpen, onClose, setEducation }) => {
                 <div className="flex justify-end mt-4 space-x-2">
                     <button
                         onClick={saveEducation}
+                        style={{ backgroundColor: "#4e54c7" }}
                         disabled={!isFormComplete}
                         className={`${!isFormComplete
-                            ? "bg-blue-400 cursor-not-allowed text-gray-500"
-                            : "bg-blue-500 hover:bg-blue-700 text-white"
+                            ? "cursor-not-allowed text-gray-500"
+                            : "text-white"
                             }  px-4 py-2 rounded-md`}
                     >
                         Save
                     </button>
                     <button
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        style={{backgroundColor:"rgba(200, 50, 50, 1)"}}
+                        className="px-4 py-2 text-white rounded"
                         onClick={onClose}
                     >Cancel</button>
 

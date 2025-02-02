@@ -116,6 +116,17 @@ const Posts = () => {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
+  
+  const getNotifys = async () => {
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
+    dispatch(getAllNotifications(user_id));
+  };
+
+  useEffect(() => {
+    getNotifys();
+  }, []);
+
+  
   const followerController = async (e, id) => {
     console.log('following to', id)
     console.log('userId', user_id);
@@ -161,14 +172,6 @@ const Posts = () => {
     e.target.disabled = false;
   };
 
-  const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
-    dispatch(getAllNotifications(user_id));
-  };
-
-  useEffect(() => {
-    getNotifys();
-  }, []);
 
   ////////////////////////////////
 
@@ -225,11 +228,11 @@ console.log('filteredposts: ', filteredPosts)
           filterData.private = true;
         }
   
-        if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
-          console.log("No valid filters or both selected. Clearing posts...");
-          setFilteredPosts([]); // Clear all posts in these cases.
-          return;
-        }
+        // if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
+        //   console.log("No valid filters or both selected. Clearing posts...");
+        //   setFilteredPosts([]); // Clear all posts in these cases.
+        //   return;
+        // }
   
         const response = await ApiServices.getFilterPosts(filterData);
         setFilteredPosts(response.data); // Update with new data
@@ -250,8 +253,12 @@ console.log('filteredposts: ', filteredPosts)
     );
   };
 
+  
   const clearAllTags = () => {
+    console.log("Tags changed",selectedTags,filteredPosts);
     setSelectedTags([]);
+    setFilteredPosts([])
+  
   };
 
   const filteredTagsOptions = postTypes.filter((option) =>
@@ -496,14 +503,14 @@ console.log('filteredposts: ', filteredPosts)
             </label>
             <hr className=" mt-4 mb-6" />
 
-            <h4 className="mt-3 mb-2">Sort by</h4>
+            {/* <h4 className="mt-3 mb-2">Sort by</h4>
             <select
               value={selectedSortOption}
               onChange={(event) => setSelectedSortOption(event.target.value)}
             >
               <option value="">Select an option</option>
               <option value="recent">Recent</option>
-            </select>
+            </select> */}
           </div>
         </div>
       </div>
@@ -511,26 +518,48 @@ console.log('filteredposts: ', filteredPosts)
    
       <div className="main-content">
         <div className="allPostShowContainer">
-      
-      {/* Render filtered posts if available */}
+
+
+
+
         {filteredPosts.length > 0 && 
           filteredPosts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            .map((p) => {
+              // console.log("Debugging post:", p); // Debugging each post
+              return (
+                <Post
+                  filteredPosts={filteredPosts}
+                  key={p.id}
+                  post={p} // Passing only id and title
+                  setAllPosts={setAllPosts}
+                  screenDecider={"home"}
+                />
+              );
+            })
+        }
+
+      
+      {/* Render filtered posts if available */}
+        {/* {filteredPosts.length > 0 && 
+          filteredPosts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+            
             .map((p) => (
               <Post
                 filteredPosts={filteredPosts}
                 key={p.id}
-                post={p} // Passing only id and title
+                p={p} // Passing only id and title
                 setAllPosts={setAllPosts}
                 screenDecider={"home"}
               />
             ))
-        }
+        } */}
 
 
 
         {/* If filteredPosts is empty, render top 2 posts from allPosts */}
-        {filteredPosts.length === 0 && 
+        {/* {filteredPosts.length === 0 && 
           allPosts // Limiting to top 2 posts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
             .map((p) => (
@@ -542,7 +571,7 @@ console.log('filteredposts: ', filteredPosts)
                 screenDecider={"home"}
               />
             ))
-        }
+        } */}
 
         </div>
 

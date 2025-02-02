@@ -2,7 +2,7 @@ import React from 'react'
 
 const Comment = () => {
   return (
-    <div className='w-[60vw]'>Comment</div>
+    <div className='w-[60vw]'>Reviews</div>
   )
 }
 

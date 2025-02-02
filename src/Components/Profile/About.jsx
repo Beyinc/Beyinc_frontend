@@ -7,28 +7,12 @@ import EducationCard from "./EducationCard";
 import ExperiencesCard from "./ExperienceCard";
 import aboutService from "./aboutPageApi";
 import ProfileCard from "./ProfileCard";
+import UploadCard from "./UploadCard";
 
-const About = () => {
+const About = ( {profileData,selfProfile ,setSelfProfile} ) => {
     const [profileAbout, setProfileAbout] = useState("");
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState(""); // New state for error handling
-
-    // const fetchAbout = async () => {
-    //     try {
-    //         const response = await axios.post('http://localhost:4000/api/getabout', {
-    //             userId: "675e7e41e424505620d8faee"
-    //         });
-    //         if (response.data && response.data.about) {
-    //             setProfileAbout(response.data.about);
-    //             // console.log("This is the about from backend: ", response.data.about);
-    //         } else {
-    //             console.log("No about data found in the response.");
-    //         }
-    //     } catch (error) {
-    //         console.error("There was an error fetching about: ", error);
-    //         setErrorMessage("Failed to load About data. Please try again.");
-    //     }
-    // };
 
     useEffect(() => {
         aboutService.fetchAbout();
@@ -38,7 +22,7 @@ const About = () => {
         setProfileAbout(updatedAbout); // Update the profileAbout state with the new text
         setErrorMessage(""); // Clear any previous error message
     };
-
+console.log('profile role', profileData.role)
     return (
         <div className="flex flex-col w-full">
             {/* <div className="EditProfileImageContainer">
@@ -50,20 +34,36 @@ const About = () => {
                 </div> */}
                 <div className="flex-col">
                     <div>
-                        <AboutCard />
+                        <AboutCard
+                         selfProfile={selfProfile}
+                         setSelfProfile ={setSelfProfile} 
+                        />
+                    </div>
+               
+                  { (profileData.role === 'Mentor' || profileData.role === 'Individual/Entrepreneur') && <div>
+                    <div className="">
+                        <SkillsCard
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile}  />
                     </div>
                     <div className="">
-                        <SkillsCard />
-                    </div>
-                    <div className="">
-                        <EducationCard />
+                        <EducationCard
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile}  />
                     </div>
                     <div>
-                        <ExperiencesCard />
+                        <ExperiencesCard 
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile} />
+                    </div>
+                    </div>}
+                    <div>
+                        <UploadCard
+                          selfProfile={selfProfile}
+                          setSelfProfile ={setSelfProfile} />
                     </div>
                 </div>
             </div>
-
         </div>
     );
 };

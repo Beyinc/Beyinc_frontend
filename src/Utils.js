@@ -592,7 +592,7 @@ export function updateLastSeen() {
 export const dataEntry = [
     {
         id: 1,
-        title: 'Individual /Entrepreneur',
+        title: 'Individual/Entrepreneur',
         icon: 'mage:light-bulb',
         paragraph: 'Already started your entrepreneurial journey, either with an idea or a newly established business.',
       },

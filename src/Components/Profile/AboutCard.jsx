@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import aboutService from './aboutPageApi';  // Import the fetchAbout function from the api.js file
 import EditAboutModal from "./EditAboutModal";
 import { useSelector } from "react-redux";
-
-const AboutCard = () => {
+import { useParams } from "react-router-dom";
+const AboutCard = ( {selfProfile ,setSelfProfile} ) => {
     
     const {
         user_id,
@@ -16,15 +16,21 @@ const AboutCard = () => {
     const [aboutModalOpen, setAboutModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     
+   
 
+    const { id } = useParams(); // Get the `id` from route params
+    // console.log('id: ' + id);
     const getAbout = async () => {
-        try {
-            const about = await aboutService.fetchAbout(user_id); // Pass the user ID
-            setProfileAbout(about);
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
-    };
+      try {
+          const about = await aboutService.fetchAbout({  id , user_id }); // Pass an object with the key 'id'
+          console.log('about', about);
+          setProfileAbout(about);
+      } catch (error) {
+          setErrorMessage(error.message);
+      }
+  };
+  
+    
 
     useEffect(() => {
         getAbout();
@@ -41,10 +47,20 @@ const AboutCard = () => {
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             About
             <span onClick={() => setAboutModalOpen(true)}>
-              <i className="fas fa-pen"></i>
+             {selfProfile && <i className="fas fa-pen"></i>}
             </span>
           </div>
-          <div className="mt-4">{profileAbout ? profileAbout : ""}</div>
+          <div
+            className="mt-4 text-container"
+            style={{
+              maxHeight: "200px", // Set a max height for the container
+              overflowY: "auto", // Enable vertical scrolling if content exceeds maxHeight
+              wordWrap: "break-word", // Ensure long words or URLs wrap properly
+              whiteSpace: "pre-wrap", // Preserve whitespace and line breaks
+            }}
+          >
+            {profileAbout || "No information provided."}
+          </div>
           {errorMessage && (
             <div className="text-red-500 mt-4">{errorMessage}</div>
           )}

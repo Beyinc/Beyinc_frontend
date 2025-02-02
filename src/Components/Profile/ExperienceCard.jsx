@@ -4,8 +4,9 @@ import aboutService from "./aboutPageApi";
 import DeleteExperiencesModal from "./DeleteExperienceModal";
 import AddExperienceModal from "./AddExperienceModal";
 import UpdateExperienceModal from "./UpdateExperienceModal";
+import { useParams } from "react-router-dom";
 
-const ExperiencesCard = () => {
+const ExperiencesCard = ({selfProfile ,setSelfProfile}) => {
     const [experiences, setExperiences] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -15,6 +16,7 @@ const ExperiencesCard = () => {
     const [isAddExperienceModalOpen, setIsAddExperienceModalOpen] = useState(false);
     const [isUpdateExperienceModalOpen, setIsUpdateExperienceModalOpen] = useState(false);
     const [updateItem, setUpdateItem] = useState();
+  const { id } = useParams(); // Get the `id` from route params
 
     const userId = "675e7e41e424505620d8faee"; // User ID (could be dynamic or passed as a prop)
 
@@ -30,7 +32,7 @@ const ExperiencesCard = () => {
     // Fetch experiences
     const fetchAllExperiences = async () => {
         try {
-            const fetchedExperiences = await aboutService.fetchExperiences(userId);
+            const fetchedExperiences = await aboutService.fetchExperiences({id});
             setExperiences(fetchedExperiences);
         } catch (error) {
             setErrorMessage("There was an error fetching experiences.");
@@ -61,7 +63,7 @@ const ExperiencesCard = () => {
         <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             Experiences
-            <span onClick={handleClickAdd}>
+          {selfProfile &&  <span onClick={handleClickAdd}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -76,7 +78,7 @@ const ExperiencesCard = () => {
                   d="M12 4.5v15m7.5-7.5h-15"
                 />
               </svg>
-            </span>
+            </span>}
           </div>
 
           {/* Display error message if there is an error */}
@@ -143,7 +145,8 @@ const ExperiencesCard = () => {
                           {item.CompanyLocation}
                         </div>
                       </div>
-                      <div className="text-blue-700 flex items-center">
+
+                      {selfProfile && <div className="text-blue-700 flex items-center">
                         <span
                           onClick={() => {
                             handleOpenUpdateModal(item);
@@ -170,7 +173,7 @@ const ExperiencesCard = () => {
                             />
                           </svg>
                         </span>
-                      </div>
+                      </div>}
                     </div>
                   </div>
 
@@ -185,25 +188,27 @@ const ExperiencesCard = () => {
         </div>
 
         {/* Modals */}
-        <AddExperienceModal
-          setExperiences={setExperiences}
-          isOpen={isAddExperienceModalOpen}
-          onClose={() => setIsAddExperienceModalOpen(false)}
-        />
-        <UpdateExperienceModal
-          setExperiences={setExperiences}
-          item={updateItem}
-          isOpen={isUpdateExperienceModalOpen}
-          onClose={() => {
-            setIsUpdateExperienceModalOpen(false);
-          }}
-        />
-        <DeleteExperiencesModal
-          onDelete={handleDeleteExperiences}
-          isOpen={isDeleteModalOpen}
-          item={selectedForDeletion}
-          onClose={() => setIsDeleteModalOpen(false)}
-        />
+            <div>
+              <AddExperienceModal
+                setExperiences={setExperiences}
+                isOpen={isAddExperienceModalOpen}
+                onClose={() => setIsAddExperienceModalOpen(false)}
+              />
+              <UpdateExperienceModal
+                setExperiences={setExperiences}
+                item={updateItem}
+                isOpen={isUpdateExperienceModalOpen}
+                onClose={() => {
+                  setIsUpdateExperienceModalOpen(false);
+                }}
+              />
+              <DeleteExperiencesModal
+                onDelete={handleDeleteExperiences}
+                isOpen={isDeleteModalOpen}
+                item={selectedForDeletion}
+                onClose={() => setIsDeleteModalOpen(false)}
+              />
+            </div>
       </div>
     );
 };
