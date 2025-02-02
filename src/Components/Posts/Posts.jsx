@@ -263,7 +263,7 @@ console.log('filteredposts: ', filteredPosts)
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
-        <div className="sidebar-menu">
+        <div className="sidebar-menu shadow-lg">
           <div className="Homepage-left-container-profile">
             <div>
               <img
@@ -403,7 +403,7 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
 
-        <div class="filter-sidebar">
+        <div class="filter-sidebar shadow-lg">
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
@@ -556,7 +556,7 @@ console.log('filteredposts: ', filteredPosts)
 {/* Right Bar */}
 
       <div className="sidebar-right">
-        <div className="trending-section">
+        <div className="trending-section shadow-lg">
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
@@ -574,7 +574,7 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
 
-        <div className="suggestions-section">
+        <div className="suggestions-section shadow-lg">
           <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
             <h4 className="label">Suggestions for you</h4>
@@ -639,7 +639,7 @@ console.log('filteredposts: ', filteredPosts)
           ))}
         </div>
 
-        <div className="activity-section">
+        <div className="activity-section shadow-lg">
           <h3 className="label">Latest Activities</h3>
           <div className="activity-item">
             <div className="activity-single-item">
