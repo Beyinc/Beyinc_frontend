@@ -13,6 +13,7 @@ import { setReceiverId } from "../../redux/Conversationreducer/ConversationReduc
 import { CiGlobe } from "react-icons/ci";
 import { BsCircleFill } from "react-icons/bs";
 import { CalendarServices } from '../../Services/CalendarServices';
+import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 const SingleUserDetails = ({
   // d,
@@ -157,7 +158,7 @@ const SingleUserDetails = ({
                     whiteSpace: "normal",
                   }}
                 >
-                  {user.bio ? user.bio.slice(0, 180) + " . . ." : "No bio available"}
+                  {user.about ? user.about.slice(0, 180) + " . . ." : "No bio available"}
                 </span>
                 <div className="mt-4 max-w-[650px] tabsandinvestement">
                   <div>
