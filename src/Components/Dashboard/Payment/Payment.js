@@ -26,6 +26,7 @@ import { CalendarServices } from "../../../Services/CalendarServices";
 import { PaymentServices } from "../../../Services/PaymentServices";
 import ConnectPayoutModal from "./ConnectPayoutModal";
 import UpiandBankModal from "./UpiandBankModal";
+import axiosInstance from "../../axiosInstance";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -38,6 +39,7 @@ export default function Payment() {
 
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
   const [isUpiandBankModalOpen, setIsUpiandBankModalOpen] = useState(false);
+  const [transactionData, setTransactionData] = useState();
 
 
   const handleTabChange = (event, newValue) => {
@@ -53,12 +55,29 @@ export default function Payment() {
     "Withdraw",
   ];
 
+  const trasactionsColoumn = [
+    "Total Amount",
+    "Withdrawl Amount",
+    "Status",
+    "Payment Proof",
+  ]
+
   const {
     email: userEmail,
     user_id,
     userName,
   } = useSelector((store) => store.auth.loginDetails);
+  const fetchTransactionsData = async () => {
+    try {
+      const transactionData = await axiosInstance.post('/payment/getPayoutDetails',);
+      setTransactionData(transactionData.data.withdrawlData);
+      console.log("This is the transactionData.data: ", transactionData.data.withdrawlData);
 
+
+    } catch (error) {
+      console.log("There was an error fetching transactions data: ", error);
+    }
+  }
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
@@ -74,6 +93,13 @@ export default function Payment() {
 
     fetchBookingData();
   }, [user_id]);
+
+  useEffect(() => {
+    fetchTransactionsData();
+
+  }, [activeTab]);
+
+
 
   const [selectedAmounts, setSelectedAmounts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -223,28 +249,97 @@ export default function Payment() {
               </Table>
             </TableContainer>
           )}
-          <div className="flex justify-around mt-20">
-            <div className="font-bold"> Charge: {chargePerCent} %</div>
-            <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
-            <div className="font-bold"> Total Amount: {totalAmount}</div>
-          </div>
-          <div>
-            <button
-              type="button"
-              className={`mt-10 ml-[650px] flex justify-center items-center h-14 w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full ${loading ? "bg-blue-300" : "bg-customPurple"}`}
-              onClick={saveToDatabase}
-            >
-              {loading ? (
-                <span>Loading...</span>
-              ) : (
-                `Withdraw ${remainingAmount}`
-              )}
-            </button>
-          </div>
+          {
+            activeTab === 1 && (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow style={{ backgroundColor: "#fafafa" }}>
+                      {" "}
+                      {/* Gray background for header */}
+                      {trasactionsColoumn.map((column) => (
+                        <TableCell
+                          key={column}
+                          style={{
+                            color: "black",
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                          }}
+                        >
+                          {column}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {transactionData.map((tData, index) => (
+                      <TableRow key={index}>
+                        <TableCell style={{ color: "black", fontSize: "15px" }}>
+                          {/* {new Date(booking.startDateTime).toLocaleString()} */}
+                          {tData.totalAmount}
+                        </TableCell>
+                        <TableCell style={{ color: "black", fontSize: "15px" }}>
+                          {/* {booking.duration} */}
+                          {tData.withdrawlAmount}
+                        </TableCell>
+                        <TableCell style={{ color: "black", fontSize: "15px" }}>
+                          {tData.payoutStatus}
+                          {/* {booking.mentorId.userName} */}
+                        </TableCell>
+                        <TableCell style={{ color: "black", fontSize: "15px" }}>
+                          {/* {booking.title} */}
+                          null
+                        </TableCell>
+                        {/* <TableCell style={{ color: "black", fontSize: "15px" }}>
+                          {booking.amount} {booking.currency}
+                        </TableCell> */}
+                        {/* <TableCell style={{ color: "black", fontSize: "15px" }}>
+                          <Checkbox
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                booking._id,
+                                booking.amount,
+                                e.target.checked
+                              )
+                            }
+                          />
+                        </TableCell> */}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>)
+          }
+          {
+            activeTab === 0 && (
+              <>
+                <div className="flex justify-around mt-20">
+                  <div className="font-bold"> Charge: {chargePerCent} %</div>
+                  <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
+                  <div className="font-bold"> Total Amount: {totalAmount}</div>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    className={`mt-10 ml-[650px] flex justify-center items-center h-14 w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full ${loading ? "bg-blue-300" : "bg-customPurple"}`}
+                    onClick={saveToDatabase}
+                  >
+                    {loading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      `Withdraw ${remainingAmount}`
+                    )}
+                  </button>
+                </div>
+              </>
+
+            )
+          }
+
         </Box>
       </Box>
       <ConnectPayoutModal setIsUpiandBankModalOpen={setIsUpiandBankModalOpen} currency={currency} setCurrency={setCurrency} isOpen={isPayoutModalOpen} onClose={() => setIsPayoutModalOpen(false)} />
-      <UpiandBankModal currency={currency} isOpen={isUpiandBankModalOpen} onClose={() => setIsUpiandBankModalOpen(false)}/>
+      <UpiandBankModal currency={currency} isOpen={isUpiandBankModalOpen} onClose={() => setIsUpiandBankModalOpen(false)} />
 
     </div>
   );
