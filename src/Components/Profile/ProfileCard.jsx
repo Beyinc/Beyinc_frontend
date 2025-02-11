@@ -70,6 +70,11 @@ console.log('self', selfProfile);
     console.log("Current userId:", user_id);
   
     e.target.disabled = true;
+
+    setFollower([...follower, { _id: user_id }]);
+    setFollowing([...following, { _id: id}])
+
+    e.target.disabled = false;
   
     try {
       const response = await ApiServices.saveFollowers({
@@ -118,6 +123,11 @@ console.log('self', selfProfile);
     console.log("Current userId:", user_id);
   
     e.target.disabled = true;
+
+    setFollower(follower.filter((f) => f._id !== user_id));
+    setFollowing(following.filter((f) => f._id !== id));
+
+    e.target.disabled = false;
   
     try {
       const response = await ApiServices.unfollowUser({

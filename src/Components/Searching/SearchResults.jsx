@@ -87,57 +87,64 @@ function SearchResults() {
   }, [filters]);
 
 
-  const handleFollowToggle = async (e, userId, isFollowing) => {
-    e.target.disabled = true;
+const handleFollowToggle = async (e, userId, isFollowing) => {
+  console.log("userId:", userId, "isFollowing:", isFollowing);
+  // e.target.disabled = true;
 
-    try {
-      if (isFollowing) {
-        // Unfollow user
-        const response = await ApiServices.unfollowUser({
-          unfollowReqBy: user_id,
-          unfollowReqTo: userId,
-        });
+  const prevFollowers = [...follower];
+  const prevUsers = [...users];
 
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, isFollowing: false } : user
-          )
-        );
-
-        setFollower(response.data.followers);
-      } else {
-        // Follow user
-        const response = await ApiServices.saveFollowers({
-          followerReqBy: user_id,
-          followerReqTo: userId,
-        });
-
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, isFollowing: true } : user
-          )
-        );
-
-        setFollower(response.data.followers);
-
-        socket.current.emit("sendNotification", {
-          senderId: user_id,
-          receiverId: userId,
-        });
-      }
-    } catch (err) {
-      console.error("Error in handleFollowToggle:", err);
-      dispatch(
-        setToast({
-          message: "Error while updating follow status",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
+  try {
+    if (isFollowing) {
+      setFollower((prevFollowers) =>
+        prevFollowers.filter((f) => f._id !== userId)
       );
-    } finally {
-      e.target.disabled = false;
+      console.log("Here")
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, isFollowing: false } : user
+        )
+      );
+
+      await ApiServices.unfollowUser({
+        unfollowReqBy: user_id,
+        unfollowReqTo: userId,
+      });
+    } else {
+      setFollower((prevFollowers) => [...prevFollowers, { _id: userId }]);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, isFollowing: true } : user
+        )
+      );
+
+      const response = await ApiServices.saveFollowers({
+        followerReqBy: user_id,
+        followerReqTo: userId,
+      });
+
+      socket.current.emit("sendNotification", {
+        senderId: user_id,
+        receiverId: userId,
+      });
     }
-  };
+  } catch (err) {
+    console.error("Error in handleFollowToggle:", err);
+
+    setFollower(prevFollowers);
+    setUsers(prevUsers);
+
+    dispatch(
+      setToast({
+        message: "Error while updating follow status",
+        bgColor: ToastColors.failure,
+        visible: "yes",
+      })
+    );
+  } finally {
+    e.target.disabled = false;
+  }
+};
 
   return (
     <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-10">
