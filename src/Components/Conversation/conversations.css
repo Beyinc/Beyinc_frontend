@@ -19,6 +19,8 @@ body {
 
 .chat-sidebar {
   width: fit-content;
+  overflow-y: hidden;
+  scrollbar-width: none;
   background: var(--chatcontainer-bg);
 
   /* margin-left: -80px; */
