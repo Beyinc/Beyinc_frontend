@@ -110,9 +110,9 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
   }, [id, user_id]); // Add both `id` and `user_id` as dependencies
   
   return (
-    <div className="w-full lg:w-[60vw]">
+    <div className="w-full lg:w-[60vw] bg-white rounded-xl">
       <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
-        <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
+        <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           Documents
         </div>
         <div>
@@ -126,55 +126,54 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
           >
             <label className="Input-Label">Pitchdeck</label>
             {oldDocs.resume && (
-         
-           <a
-             href={oldDocs.resume?.secure_url}
-             target="_blank"
-             rel="noreferrer"
-             className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
-           >
-             <InsertDriveFileOutlinedIcon />
-             <span className="hidden md:block">Pitchdeck</span>
-           </a>
-           
+              <a
+                href={oldDocs.resume?.secure_url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+              >
+                <InsertDriveFileOutlinedIcon />
+                <span className="hidden md:block">Pitchdeck</span>
+              </a>
             )}
           </div>
 
-
-        { selfProfile && <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap:"20px"
-            }}
-          >
-            <>
-              <label htmlFor="resume" className="resume">
-                <CloudUploadIcon />
-                <span className="fileName">
-                  {recentUploadedDocs?.resume || "Upload"}
-                </span>
-              </label>
-              <input
-                className="resume"
-                type="file"
-                name="resume"
-                id="resume"
-                onChange={handleResume}
-                style={{ display: "none" }}
-              />
-            </>
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={submitAllData}
-                disabled={!changeResume.resume}
-              >
-                Save
-              </Button>
+          {selfProfile && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+              }}
+            >
+              <>
+                <label htmlFor="resume" className="resume">
+                  <CloudUploadIcon />
+                  <span className="fileName">
+                    {recentUploadedDocs?.resume || "Upload"}
+                  </span>
+                </label>
+                <input
+                  className="resume"
+                  type="file"
+                  name="resume"
+                  id="resume"
+                  onChange={handleResume}
+                  style={{ display: "none" }}
+                />
+              </>
+              <div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={submitAllData}
+                  disabled={!changeResume.resume}
+                >
+                  Save
+                </Button>
+              </div>
             </div>
-          </div>}
+          )}
         </div>
       </div>
     </div>
