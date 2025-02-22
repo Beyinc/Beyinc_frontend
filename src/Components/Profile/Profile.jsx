@@ -108,7 +108,7 @@ const [profileData, setProfileData] = useState({})
 }, [id]); // Add dependencies if required
 
   return (
-    <div>
+    <div className="h-full bg-customBackground relative">
       <div className="relative">
         <div className="lg:p-4">
           <img
@@ -152,9 +152,8 @@ const [profileData, setProfileData] = useState({})
                 <Box>
                   <TabList
                     onChange={handleChange}
-                    aria-label="lab API tabs example"
+                    aria-label="profile tabs"
                     sx={{
-                      borderBottom: 1,
                       borderColor: "white",
                       color: "#4E54C6",
                       display: "flex",
@@ -168,7 +167,7 @@ const [profileData, setProfileData] = useState({})
                       value="1"
                       sx={{
                         fontSize: "20px",
-                        color: "#4E54C6",
+                        color: "gray",
                         flex: 1,
                         fontWeight: "bold",
                         textAlign: "center",
@@ -187,7 +186,7 @@ const [profileData, setProfileData] = useState({})
                       value="2"
                       sx={{
                         fontSize: "20px",
-                        color: "#4E54C6",
+                        color: "gray",
                         flex: 1,
                         fontWeight: "bold",
                         textAlign: "center",
@@ -206,7 +205,7 @@ const [profileData, setProfileData] = useState({})
                       value="3"
                       sx={{
                         fontSize: "20px",
-                        color: "#4E54C6",
+                        color: "gray",
                         flex: 1,
                         fontWeight: "bold",
                         textAlign: "center",
@@ -229,11 +228,9 @@ const [profileData, setProfileData] = useState({})
                       setSelfProfile ={setSelfProfile}
                       profileData={profileData}  />
                 </TabPanel>
-
                 <TabPanel value="2">
                   <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
                 </TabPanel>
-
                 <TabPanel value="3">
                   <Comment />
                 </TabPanel>

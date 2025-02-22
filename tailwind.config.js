@@ -7,6 +7,7 @@ module.exports = {
         customPurple: "#4E54C6",
         customWhite: "#ffffff", // Add your custom color here
         lightPurple: "#f0f0ff",
+        customBackground: "#f0f1f5",
       },
     },
   },
