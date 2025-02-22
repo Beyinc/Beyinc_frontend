@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from "react";
-import { Checkbox, Tabs } from "@mui/material";
-
+import { Checkbox, Tabs, useMediaQuery, useTheme } from "@mui/material";
+// ... other imports remain the same ...
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -31,6 +30,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function Payment() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  // ... existing state and logic remains the same ...
   const [activeTab, setActiveTab] = useState(0);
   const [mentorBookings, setMentorBookings] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,6 +58,7 @@ export default function Payment() {
   ];
 
   const trasactionsColoumn = [
+    "BookingIds",
     "Total Amount",
     "Withdrawl Amount",
     "Status",
@@ -69,9 +72,10 @@ export default function Payment() {
   } = useSelector((store) => store.auth.loginDetails);
   const fetchTransactionsData = async () => {
     try {
-      const transactionData = await axiosInstance.post('/payment/getPayoutDetails',);
-      setTransactionData(transactionData.data.withdrawlData);
-      console.log("This is the transactionData.data: ", transactionData.data.withdrawlData);
+      const transactionDataResponse = await axiosInstance.post('/payment/getPayoutDetails',);
+      console.log("This is the response from backend: ", transactionDataResponse.data.withdrawlData);
+      setTransactionData(transactionDataResponse.data.withdrawlData);
+      // console.log("This is the transactionData.data: ", transactionData);
 
 
     } catch (error) {
@@ -86,6 +90,7 @@ export default function Payment() {
         });
         console.log("mentor Bookings:", mentorBookings);
         setMentorBookings(mentorBookings);
+        // console.log("This is the transactionData.data: ", transactionData);
       } catch (error) {
         console.log(error);
       }
@@ -96,6 +101,8 @@ export default function Payment() {
 
   useEffect(() => {
     fetchTransactionsData();
+    setSelectedAmounts([]);
+    setSelectedIds([]);
 
   }, [activeTab]);
 
@@ -128,8 +135,11 @@ export default function Payment() {
 
   // Example function to send data to backend
 
+
+
   const saveToDatabase = async () => {
     const data = {
+      // BookingId of the person
       selectedIds,
       totalAmount,
       commission,
@@ -156,56 +166,47 @@ export default function Payment() {
 
   return (
     <div>
-      <Box px={4} py={3}>
-        <Box p={8} bgcolor={"white"} borderRadius={3} boxShadow={2}>
-          <div className="flex justify-between items-center">
+      <Box px={{ xs: 2, sm: 4 }} py={3}>
+        <Box p={{ xs: 2, sm: 4, md: 8 }} bgcolor={"white"} borderRadius={3} boxShadow={2}>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <Typography variant="h5" align="left" style={{ fontFamily: "Roboto" }}>
               Availability
             </Typography>
-            <button className="bg-customPurple rounded-md w-40" onClick={() => setIsPayoutModalOpen(true)}>
+            <button
+              className="bg-customPurple rounded-md w-full sm:w-40 py-2"
+              onClick={() => setIsPayoutModalOpen(true)}
+            >
               Connect Payout
             </button>
           </div>
 
-          {/* Tab selection */}
-          <Tabs value={activeTab} onChange={handleTabChange}>
-            <Tab
-              label="WithDrawals"
-              className={`available-tab ${activeTab === 0 ? "available-tab-active" : ""
-                }`}
-            />
-
-            <Tab
-              label="Transactions"
-              className={`available-tab ${activeTab === 1 ? "availabe-tab-active" : ""
-                }`}
-            />
+          {/* Tabs */}
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            variant={isMobile ? "scrollable" : "standard"}
+            scrollButtons="auto"
+          >
+            <Tab label="WithDrawals" />
+            <Tab label="Transactions" />
           </Tabs>
 
-          {/* Divider Below Tabs */}
-          <Box
-            mt={2}
-            mb={3}
-            bgcolor="grey.300"
-            height=".5px"
-            width="100%"
-            marginTop={"0px"}
-          />
+          {/* Divider */}
+          <Box mt={2} mb={3} bgcolor="grey.300" height=".5px" width="100%" />
 
           {activeTab === 0 && (
-            <TableContainer component={Paper}>
-              <Table>
+            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+              <Table sx={{ minWidth: 650 }}>
                 <TableHead>
-                  <TableRow style={{ backgroundColor: "#fafafa" }}>
-                    {" "}
-                    {/* Gray background for header */}
+                  <TableRow sx={{ backgroundColor: "#fafafa" }}>
                     {columns.map((column) => (
                       <TableCell
                         key={column}
-                        style={{
+                        sx={{
                           color: "black",
                           fontWeight: "bold",
-                          fontSize: "15px",
+                          fontSize: { xs: '12px', sm: '15px' },
+                          py: 1
                         }}
                       >
                         {column}
@@ -213,27 +214,27 @@ export default function Payment() {
                     ))}
                   </TableRow>
                 </TableHead>
-
                 <TableBody>
                   {mentorBookings.map((booking) => (
                     <TableRow key={booking._id}>
-                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
                         {new Date(booking.startDateTime).toLocaleString()}
                       </TableCell>
-                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
                         {booking.duration}
                       </TableCell>
-                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
                         {booking.mentorId.userName}
                       </TableCell>
-                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
                         {booking.title}
                       </TableCell>
-                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
                         {booking.amount} {booking.currency}
                       </TableCell>
-                      <TableCell style={{ color: "black", fontSize: "15px" }}>
+                      <TableCell sx={{ py: 1 }}>
                         <Checkbox
+                          size={isMobile ? "small" : "medium"}
                           onChange={(e) =>
                             handleCheckboxChange(
                               booking._id,
@@ -249,252 +250,113 @@ export default function Payment() {
               </Table>
             </TableContainer>
           )}
-          {
-            activeTab === 1 && (
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow style={{ backgroundColor: "#fafafa" }}>
-                      {" "}
-                      {/* Gray background for header */}
-                      {trasactionsColoumn.map((column) => (
-                        <TableCell
-                          key={column}
-                          style={{
-                            color: "black",
-                            fontWeight: "bold",
-                            fontSize: "15px",
-                          }}
-                        >
-                          {column}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {transactionData.map((tData, index) => (
-                      <TableRow key={index}>
-                        <TableCell style={{ color: "black", fontSize: "15px" }}>
-                          {/* {new Date(booking.startDateTime).toLocaleString()} */}
-                          {tData.totalAmount}
-                        </TableCell>
-                        <TableCell style={{ color: "black", fontSize: "15px" }}>
-                          {/* {booking.duration} */}
-                          {tData.withdrawlAmount}
-                        </TableCell>
-                        <TableCell style={{ color: "black", fontSize: "15px" }}>
-                          {tData.payoutStatus}
-                          {/* {booking.mentorId.userName} */}
-                        </TableCell>
-                        <TableCell style={{ color: "black", fontSize: "15px" }}>
-                          {/* {booking.title} */}
-                          null
-                        </TableCell>
-                        {/* <TableCell style={{ color: "black", fontSize: "15px" }}>
-                          {booking.amount} {booking.currency}
-                        </TableCell> */}
-                        {/* <TableCell style={{ color: "black", fontSize: "15px" }}>
-                          <Checkbox
-                            onChange={(e) =>
-                              handleCheckboxChange(
-                                booking._id,
-                                booking.amount,
-                                e.target.checked
-                              )
-                            }
-                          />
-                        </TableCell> */}
-                      </TableRow>
+
+          {activeTab === 1 && (
+            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+              <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow sx={{ backgroundColor: "#fafafa" }}>
+                    {trasactionsColoumn.map((column) => (
+                      <TableCell
+                        key={column}
+                        sx={{
+                          color: "black",
+                          fontWeight: "bold",
+                          fontSize: { xs: '12px', sm: '15px' },
+                          py: 1
+                        }}
+                      >
+                        {column}
+                      </TableCell>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>)
-          }
-          {
-            activeTab === 0 && (
-              <>
-                <div className="flex justify-around mt-20">
-                  <div className="font-bold"> Charge: {chargePerCent} %</div>
-                  <div className="font-bold"> Withdraw Amount: {remainingAmount}</div>
-                  <div className="font-bold"> Total Amount: {totalAmount}</div>
-                </div>
-                <div>
-                  <button
-                    type="button"
-                    className={`mt-10 ml-[650px] flex justify-center items-center h-14 w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full ${loading ? "bg-blue-300" : "bg-customPurple"}`}
-                    onClick={saveToDatabase}
-                  >
-                    {loading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      `Withdraw ${remainingAmount}`
-                    )}
-                  </button>
-                </div>
-              </>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {transactionData.map((transaction, index) => (
+                    <TableRow key={index}>
+                      {/* <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
+                        {new Date(booking.startDateTime).toLocaleString()}
+                      </TableCell> */}
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
+                        {transaction.bookingIds.map((bookingId, index) => (
+                        <div key={index}>
+                          {bookingId}
+                        </div> 
+                        ))}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
+                        {transaction.totalAmount}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
+                        {transaction.withdrawlAmount}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
+                        {transaction.payoutStatus}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: { xs: '12px', sm: '15px' }, py: 1 }}>
+                        {transaction.paymentProof}
+                      </TableCell>
+                      <TableCell sx={{ py: 1 }}>
+                        {/* <Checkbox
+                          size={isMobile ? "small" : "medium"}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              booking._id,
+                              booking.amount,
+                              e.target.checked
+                            )
+                          }
+                        /> */}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
 
-            )
-          }
+              </Table>
+            </TableContainer>
+          )}
 
+          {activeTab === 0 && (
+            <>
+              <Box
+                mt={4}
+                display="flex"
+                flexDirection={{ xs: 'column', sm: 'row' }}
+                justifyContent="space-around"
+                gap={2}
+              >
+                <Box textAlign="center">
+                  <Typography variant="subtitle2">Charge:</Typography>
+                  <Typography fontWeight="bold">{chargePerCent}%</Typography>
+                </Box>
+                <Box textAlign="center">
+                  <Typography variant="subtitle2">Withdraw Amount:</Typography>
+                  <Typography fontWeight="bold">{remainingAmount}</Typography>
+                </Box>
+                <Box textAlign="center">
+                  <Typography variant="subtitle2">Total Amount:</Typography>
+                  <Typography fontWeight="bold">{totalAmount}</Typography>
+                </Box>
+              </Box>
+
+              <Box mt={4} display="flex" justifyContent="center">
+                <button
+                  type="button"
+                  className={`flex justify-center items-center h-14 w-full sm:w-36 text-lg border-2 border-[#4f55c7] px-2 py-3 rounded-full ${loading ? "bg-blue-300" : "bg-customPurple"
+                    }`}
+                  onClick={saveToDatabase}
+                >
+                  {loading ? "Loading..." : `Withdraw ${remainingAmount}`}
+                </button>
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
       <ConnectPayoutModal setIsUpiandBankModalOpen={setIsUpiandBankModalOpen} currency={currency} setCurrency={setCurrency} isOpen={isPayoutModalOpen} onClose={() => setIsPayoutModalOpen(false)} />
       <UpiandBankModal currency={currency} isOpen={isUpiandBankModalOpen} onClose={() => setIsUpiandBankModalOpen(false)} />
 
+      {/* Modals remain the same */}
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState, useEffect } from "react";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Paper,
-//   Tabs,
-//   Tab,
-//   Box,
-//   Typography,
-// } from "@mui/material";
-// import { useSelector } from "react-redux";
-// import { PaymentServices } from "../../../Services/PaymentServices";
-
-// export default function Payment() {
-//   const [activeTab, setActiveTab] = useState(0);
-//   const [transactions, setTransactions] = useState([]);
-//   const [mentorBookings, setMentorBookings] = useState([]);
-
-//   const { user_id } = useSelector((store) => store.auth.loginDetails);
-
-//   // Fetch transactions on component mount
-//   useEffect(() => {
-//     const fetchTransactions = async () => {
-//       try {
-//         const response = await PaymentServices.getTransactions(user_id); // API call for transactions
-//         console.log('Transaction',transactions)
-//         setTransactions(response.data);
-//       } catch (error) {
-//         console.error("Error fetching transactions:", error);
-//       }
-//     };
-
-//     fetchTransactions();
-//   }, [user_id]);
-
-//   const handleTabChange = (event, newValue) => {
-//     setActiveTab(newValue);
-//   };
-
-//   const transactionColumns = ["Date", "Amount", "Currency", "Status"];
-//   const withdrawalColumns = [
-//     "DateTime",
-//     "Duration",
-//     "UserName",
-//     "Title",
-//     "Amount",
-//     "Withdraw",
-//   ];
-
-//   return (
-//     <Box px={4} py={3}>
-//       <Box p={8} bgcolor="white" borderRadius={3} boxShadow={2}>
-//         <Typography variant="h5" align="left" style={{ fontFamily: "Roboto" }}>
-//           Payments
-//         </Typography>
-
-//         {/* Tabs */}
-//         <Tabs value={activeTab} onChange={handleTabChange}>
-//           <Tab label="Withdrawals" />
-//           <Tab label="Transactions" />
-//         </Tabs>
-
-//         <Box mt={2} mb={3} bgcolor="grey.300" height=".5px" width="100%" />
-
-//         {activeTab === 0 && (
-//           <TableContainer component={Paper}>
-//             <Table>
-//               <TableHead>
-//                 <TableRow>
-//                   {withdrawalColumns.map((column) => (
-//                     <TableCell
-//                       key={column}
-//                       style={{ fontWeight: "bold", fontSize: "15px" }}
-//                     >
-//                       {column}
-//                     </TableCell>
-//                   ))}
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {mentorBookings.map((booking) => (
-//                   <TableRow key={booking._id}>
-//                     <TableCell>{new Date(booking.startDateTime).toLocaleString()}</TableCell>
-//                     <TableCell>{booking.duration}</TableCell>
-//                     <TableCell>{booking.mentorId?.userName || "N/A"}</TableCell>
-//                     <TableCell>{booking.title}</TableCell>
-//                     <TableCell>{booking.amount}</TableCell>
-//                     <TableCell>
-//                       {/* Implement your checkbox logic here */}
-//                     </TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         )}
-
-//         {activeTab === 1 && (
-//           <TableContainer component={Paper}>
-//             <Table>
-//               <TableHead>
-//                 <TableRow>
-//                   {transactionColumns.map((column) => (
-//                     <TableCell
-//                       key={column}
-//                       style={{ fontWeight: "bold", fontSize: "15px" }}
-//                     >
-//                       {column}
-//                     </TableCell>
-//                   ))}
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {transactions.map((transaction) => (
-//                   <TableRow key={transaction._id}>
-//                     <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>
-//                     <TableCell>{transaction.amount}</TableCell>
-//                     <TableCell>{transaction.currency}</TableCell>
-//                     <TableCell>{transaction.status}</TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         )}
-//       </Box>
-//     </Box>
-//   );
-// }

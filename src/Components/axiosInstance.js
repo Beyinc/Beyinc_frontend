@@ -14,6 +14,8 @@ var axiosInstance = axios.create({
    
   })
 
+  // console.log("This is the token: ", token);
+
   //This allows you to intercept the response and check the status and error messages and if ncessary reject the promise.
   axiosInstance.interceptors.response.use((response) => {
     return response

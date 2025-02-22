@@ -125,4 +125,34 @@ export const PaymentServices = {
         })
     },
 
+    fetchTransactionsAdmin: async (obj) => {
+        try {
+            const response = await axiosInstance.post('/getpayoutdetailsadmin');
+            if (response.data && response.data.payoutDetails) {
+                return response;
+            } else {
+                console.log("No transactions data found in the response.");
+                return null;
+            }
+        } catch (error) {
+            console.error("There was an error fetching transactions: ", error);
+            throw new Error("Failed to load transactions data. Please try again.");
+        }
+    },
+
+    updatePayoutStatus: async (obj) => {
+        try {
+            const response = await axiosInstance.post('/editPayoutStatusAdmin', obj);
+            if (response) {
+                return response;
+            } else {
+                console.log("Error updating status");
+                return null;
+            }
+        } catch (error) {
+            console.error("There was an error updating payout status: ", error);
+            throw new Error("Failed to load payout status. Please try again.");
+        }
+    },
+
 }
