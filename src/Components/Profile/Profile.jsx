@@ -41,7 +41,6 @@ const [profileData, setProfileData] = useState({})
     image: loggedImage,
   } = useSelector((store) => store.auth.loginDetails);
 
-  console.log('id',id)
   // const {
   //   expertise: dbExpertise,
   //   industries: dbIndustires,
@@ -232,7 +231,7 @@ const [profileData, setProfileData] = useState({})
                   <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
                 </TabPanel>
                 <TabPanel value="3">
-                  <Comment />
+                  <Comment id={id?id: user_id} user_id={user_id} />
                 </TabPanel>
               </TabContext>
             </div>

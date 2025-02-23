@@ -71,7 +71,8 @@ const Comment = ({ id, user_id }) => {
   };
 
   const getReviews = async () => {
-    const response = await ApiServices.getReviews({ user_id: id });
+    console.log("id", id);
+    const response = await ApiServices.getReviews({ userID: id });
     if (response?.status === 200) {
       setReviews(response.data.reviews);
     } else {
@@ -85,49 +86,59 @@ const Comment = ({ id, user_id }) => {
 
   return (
     <div className="w-[60vw]">
-      <div className="mb-4">
-        <p className="mb-2 text-gray-700 font-medium">Rate your experience:</p>
-        <Rating
-          value={rating}
-          onChange={(event, newValue) => {
-            setRating(newValue);
-            // Clear rating error when user makes a selection
-            if (newValue > 0) {
-              setError((prev) => ({ ...prev, rating: "" }));
-            }
-          }}
-          max={5}
-          sx={{
-            "& .MuiRating-icon": {
-              fontSize: "2rem",
-            },
-          }}
-        />
-        {error.rating && (
-          <p className="text-red-500 text-sm mt-1">{error.rating}</p>
-        )}
-      </div>
-      <div className="mb-4">
-        <textarea
-          placeholder="Write your review here..."
-          onChange={(e) => {
-            setReview(e.target.value);
-            // Clear review error when user starts typing
-            if (e.target.value.trim()) {
-              setError((prev) => ({ ...prev, review: "" }));
-            }
-          }}
-          value={review}
-          rows="4"
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {error.review && (
-          <p className="text-red-500 text-sm mt-1">{error.review}</p>
-        )}
-      </div>
-      <button onClick={onSubmit} disabled={loading} className="rounded-lg mb-3">
-        {loading ? "Submitting..." : "Submit Review"}
-      </button>
+      {(id!==user_id) && (
+        <div>
+          <div className="mb-4">
+            <p className="mb-2 text-gray-700 font-medium">
+              Rate your experience:
+            </p>
+            <Rating
+              value={rating}
+              onChange={(event, newValue) => {
+                setRating(newValue);
+                // Clear rating error when user makes a selection
+                if (newValue > 0) {
+                  setError((prev) => ({ ...prev, rating: "" }));
+                }
+              }}
+              max={5}
+              sx={{
+                "& .MuiRating-icon": {
+                  fontSize: "2rem",
+                },
+              }}
+            />
+            {error.rating && (
+              <p className="text-red-500 text-sm mt-1">{error.rating}</p>
+            )}
+          </div>
+          <div className="mb-4">
+            <textarea
+              placeholder="Write your review here..."
+              onChange={(e) => {
+                setReview(e.target.value);
+                // Clear review error when user starts typing
+                if (e.target.value.trim()) {
+                  setError((prev) => ({ ...prev, review: "" }));
+                }
+              }}
+              value={review}
+              rows="4"
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {error.review && (
+              <p className="text-red-500 text-sm mt-1">{error.review}</p>
+            )}
+          </div>
+          <button
+            onClick={onSubmit}
+            disabled={loading}
+            className="rounded-lg mb-3"
+          >
+            {loading ? "Submitting..." : "Submit Review"}
+          </button>
+        </div>
+      )}
       <div className="space-y-4">
         {reviews.toReversed().map((review, index) => (
           <div
