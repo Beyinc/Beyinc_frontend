@@ -356,95 +356,144 @@ export default function ServicesTab({ selectedTimezone }) {
  
 
 
-  const renderServiceList = () => (
-    <Box mt={6}>
-      {sessions.length > 0 ? (
-        sessions.map((session, index) => (
+const renderServiceList = () => (
+  <Box mt={6}>
+    {sessions.length > 0 ? (
+      sessions.map((session, index) => (
+        <Grid
+          container
+          key={index}
+          alignItems="center"
+          sx={{
+            border: { xs: "1px solid black", sm: "2px solid black" },
+            borderRadius: { xs: "3px", sm: "5px" },
+            background: "white",
+            mt: { xs: 1, sm: 3 },
+            mb: { xs: 2, sm: 4 },
+          }}
+        >
+          {/* Column 1: Title and Duration/Amount */}
           <Grid
-            container
-            key={index}
-            mt={3}
-            mb={4}
-            alignItems="center"
-            sx={{ border: "2px solid black", borderRadius: "5px", background:"red" }}
+            item
+            xs={12}
+            sm={4}
+            sx={{
+              pl: { xs: "10px", sm: "35px" },
+              height: { xs: "100px", sm: "130px" },
+            }}
           >
-            {/* Column 1: Title and Duration/Amount */}
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              style={{ paddingLeft: "35px", height: "130px" }}
+            <Typography
+              mt={{ xs: 2, sm: 4 }}
+              variant="h6"
+              sx={{
+                mb: { xs: 1, sm: 1 },
+                fontSize: { xs: "0.9rem", sm: "1.25rem" },
+              }}
             >
-              <Typography mt={4} variant="h6" style={{ marginBottom: "8px" }}>
-                {session.title}
-              </Typography>
-              <Typography variant="body2">
-                {session.duration} min | ₹{session.amount}
-              </Typography>
-            </Grid>
-
-            {/* Column 2: Views */}
-            <Grid item xs={6} sm={2}>
-              <Typography mb={1} variant="h6">
-                5
-              </Typography>
-              <Typography variant="body2">Views</Typography>
-            </Grid>
-
-            {/* Column 3: Bookings */}
-            <Grid item xs={6} sm={2}>
-              <Typography mb={1} variant="h6">
-                4
-              </Typography>
-              <Typography variant="body2">Bookings</Typography>
-            </Grid>
-
-            {/* Column 4: Earnings */}
-            <Grid item xs={6} sm={1.5}>
-              <Typography mb={1} variant="h6">
-                ₹ 1200
-              </Typography>
-              <Typography variant="body2">Earnings</Typography>
-            </Grid>
-
-            {/* Vertical Divider */}
-            <Grid
-              item
-              xs={0}
-              sm={0.5}
-              sx={{ borderLeft: "1px solid lightgrey", height: "80px", mx: 1 }}
-            />
-
-            {/* Column 5: Edit Icon */}
-            <Grid item xs={6} sm={1}>
-              <IconButton onClick={() => handleEditService(session)}>
-                <EditIcon />
-              </IconButton>
-            </Grid>
-
-            <Grid item xs={6} sm={0.8}>
-              <IconButton
-                onClick={(event) => handleMenuClick(event, session._id)}
-              >
-                <MoreVertIcon />
-              </IconButton>
-            </Grid>
-
-            {/* Dropdown Menu */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
+              {session.title}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: { xs: "0.75rem", sm: "0.9rem" } }}
             >
-              <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-            </Menu>
+              {session.duration} min | ₹{session.amount}
+            </Typography>
           </Grid>
-        ))
-      ) : (
-        <Typography>No services available at the moment</Typography>
-      )}
-    </Box>
-  );
+
+          {/* Column 2: Views */}
+          <Grid item xs={6} sm={2}>
+            <Typography
+              mb={{ xs: 0.5, sm: 1 }}
+              variant="h6"
+              sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}
+            >
+              5
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: { xs: "0.7rem", sm: "0.85rem" } }}
+            >
+              Views
+            </Typography>
+          </Grid>
+
+          {/* Column 3: Bookings */}
+          <Grid item xs={6} sm={2}>
+            <Typography
+              mb={{ xs: 0.5, sm: 1 }}
+              variant="h6"
+              sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}
+            >
+              4
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: { xs: "0.7rem", sm: "0.85rem" } }}
+            >
+              Bookings
+            </Typography>
+          </Grid>
+
+          {/* Column 4: Earnings */}
+          <Grid item xs={6} sm={1.5}>
+            <Typography
+              mb={{ xs: 0.5, sm: 1 }}
+              variant="h6"
+              sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}
+            >
+              ₹ 1200
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: { xs: "0.7rem", sm: "0.85rem" } }}
+            >
+              Earnings
+            </Typography>
+          </Grid>
+
+          {/* Vertical Divider */}
+          <Grid
+            item
+            xs={0}
+            sm={0.5}
+            sx={{
+              borderLeft: "1px solid lightgrey",
+              height: { xs: "60px", sm: "80px" },
+              mx: { xs: 0.5, sm: 1 },
+            }}
+          />
+
+          {/* Column 5: Edit Icon */}
+          <Grid item xs={6} sm={1}>
+            <IconButton onClick={() => handleEditService(session)}>
+              <EditIcon sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }} />
+            </IconButton>
+          </Grid>
+
+          <Grid item xs={6} sm={0.8}>
+            <IconButton
+              onClick={(event) => handleMenuClick(event, session._id)}
+            >
+              <MoreVertIcon sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }} />
+            </IconButton>
+          </Grid>
+
+          {/* Dropdown Menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+          </Menu>
+        </Grid>
+      ))
+    ) : (
+      <Typography>No services available at the moment</Typography>
+    )}
+  </Box>
+);
+
 
   const handleEditService = (service) => {
     setData({
