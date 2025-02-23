@@ -357,59 +357,75 @@ export default function ServicesTab({ selectedTimezone }) {
 
 
   const renderServiceList = () => (
-
-
     <Box mt={6}>
-    {sessions.length > 0 ? (
-      sessions.map((session, index) => (
-        <Grid
-          container
-          key={index}
-          mt={3}
-          mb={4}
-          alignItems="center"
-          sx={{ border: '2px solid black', borderRadius: '5px',  }}
-        >
-          {/* Column 1: Title and Duration/Amount */}
-          <Grid item xs={4} style={{ paddingLeft: '35px', height: '130px' }}>
-            <Typography mt={4} variant="h6" style={{ marginBottom: '8px' }}> {/* Increased font size and margin bottom */}
-              {session.title}
-            </Typography>
-            <Typography variant="body2">
-              {session.duration} min | ₹{session.amount}
-            </Typography>
-          </Grid>
-  
-          {/* Column 2: Views */}
-          <Grid item xs={2}>
-            <Typography mb={1} variant="h6">5</Typography>
-            <Typography variant="body2">Views</Typography>
-          </Grid>
-  
-          {/* Column 3: Bookings */}
-          <Grid item xs={2}>
-            <Typography mb={1} variant="h6">4</Typography>
-            <Typography variant="body2">Bookings</Typography>
-          </Grid>
-  
-          {/* Column 4: Earnings */}
-          <Grid item xs={1.5}>
-            <Typography mb={1} variant="h6">₹ 1200</Typography>
-            <Typography variant="body2">Earnings</Typography>
-          </Grid>
-  
-          {/* Vertical Divider */}
-          <Grid item xs={0.5} sx={{ borderLeft: '1px solid lightgrey', height: '80px', mx: 1 }} />
-  
-          {/* Column 5: Edit Icon */}
-          <Grid item xs={1}>
-            <IconButton onClick={() => handleEditService(session)}>
-              <EditIcon />
-            </IconButton>
-          </Grid>
-  
-          <Grid item xs={0.8}>
-              <IconButton onClick={(event) => handleMenuClick(event, session._id)}>
+      {sessions.length > 0 ? (
+        sessions.map((session, index) => (
+          <Grid
+            container
+            key={index}
+            mt={3}
+            mb={4}
+            alignItems="center"
+            sx={{ border: "2px solid black", borderRadius: "5px", background:"red" }}
+          >
+            {/* Column 1: Title and Duration/Amount */}
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{ paddingLeft: "35px", height: "130px" }}
+            >
+              <Typography mt={4} variant="h6" style={{ marginBottom: "8px" }}>
+                {session.title}
+              </Typography>
+              <Typography variant="body2">
+                {session.duration} min | ₹{session.amount}
+              </Typography>
+            </Grid>
+
+            {/* Column 2: Views */}
+            <Grid item xs={6} sm={2}>
+              <Typography mb={1} variant="h6">
+                5
+              </Typography>
+              <Typography variant="body2">Views</Typography>
+            </Grid>
+
+            {/* Column 3: Bookings */}
+            <Grid item xs={6} sm={2}>
+              <Typography mb={1} variant="h6">
+                4
+              </Typography>
+              <Typography variant="body2">Bookings</Typography>
+            </Grid>
+
+            {/* Column 4: Earnings */}
+            <Grid item xs={6} sm={1.5}>
+              <Typography mb={1} variant="h6">
+                ₹ 1200
+              </Typography>
+              <Typography variant="body2">Earnings</Typography>
+            </Grid>
+
+            {/* Vertical Divider */}
+            <Grid
+              item
+              xs={0}
+              sm={0.5}
+              sx={{ borderLeft: "1px solid lightgrey", height: "80px", mx: 1 }}
+            />
+
+            {/* Column 5: Edit Icon */}
+            <Grid item xs={6} sm={1}>
+              <IconButton onClick={() => handleEditService(session)}>
+                <EditIcon />
+              </IconButton>
+            </Grid>
+
+            <Grid item xs={6} sm={0.8}>
+              <IconButton
+                onClick={(event) => handleMenuClick(event, session._id)}
+              >
                 <MoreVertIcon />
               </IconButton>
             </Grid>
@@ -422,16 +438,12 @@ export default function ServicesTab({ selectedTimezone }) {
             >
               <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
             </Menu>
-        </Grid>
-      ))
-    ) : (
-      <Typography>No services available at the moment</Typography>
-    )}
-  </Box>
-  
-
-
-
+          </Grid>
+        ))
+      ) : (
+        <Typography>No services available at the moment</Typography>
+      )}
+    </Box>
   );
 
   const handleEditService = (service) => {
@@ -469,7 +481,8 @@ export default function ServicesTab({ selectedTimezone }) {
           mx: 'auto', // Center the container
         }}
       >
-        <Box display="flex" alignItems="center">
+        <Box className="flex flex-col gap-5 sm:flex-row  items-center">
+        {/* <Box display="flex" alignItems="center"> */}
           <div
             className={`tab-box ${activeSubTab === 0 ? 'active' : ''}`}
             onClick={() => handleSubTabChange(0)}

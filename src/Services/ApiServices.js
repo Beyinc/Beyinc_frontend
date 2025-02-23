@@ -1301,6 +1301,31 @@ export const ApiServices = {
         })
         .catch((err) => reject(err));
     });
-  }
-  
+  },
+
+  addReview: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/review/addReview`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  getReviews: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/review/getReviews`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  }  
 };
