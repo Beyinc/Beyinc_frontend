@@ -216,7 +216,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >
-      <div className="ProfilepostContainer">
+      <div className="ProfilepostContainer hover: cursor-pointer">
         <div className="PostHeaderContainer">
           <div className="postTotaldetails">
             <div
