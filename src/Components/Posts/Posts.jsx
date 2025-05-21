@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -40,6 +40,8 @@ const Posts = () => {
 
   const [allPosts, setAllPosts] = useState([]);
   const [topTrendingPosts, setTopTrendingPosts] = useState([]);
+  console.log("all posts", allPosts);
+  console.log("top trending posts", topTrendingPosts);
 
   const [loadingTrigger, setLoadingTrigger] = useState(false);
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
@@ -69,6 +71,7 @@ const Posts = () => {
     ApiServices.getTopTrendingPosts()
       .then((res) => {
         setTopTrendingPosts(res.data);
+        console.log("tranding post", res)
       })
       .catch((err) => {
         dispatch(
@@ -116,9 +119,9 @@ const Posts = () => {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
-  
+
   const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => { });
     dispatch(getAllNotifications(user_id));
   };
 
@@ -126,7 +129,7 @@ const Posts = () => {
     getNotifys();
   }, []);
 
-  
+
   const followerController = async (e, id) => {
     console.log('following to', id)
     console.log('userId', user_id);
@@ -182,19 +185,19 @@ const Posts = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState("");
   const [isPublic, setIsPublic] = useState(false);
-const [isPrivate, setIsPrivate] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
 
 
-const handlePublicCheckboxChange = (event) => {
-  setIsPublic(event.target.checked);
-};
+  const handlePublicCheckboxChange = (event) => {
+    setIsPublic(event.target.checked);
+  };
 
-const handlePrivateCheckboxChange = (event) => {
- 
-  setIsPrivate(event.target.checked);
-};
+  const handlePrivateCheckboxChange = (event) => {
 
-console.log('filteredposts: ', filteredPosts)
+    setIsPrivate(event.target.checked);
+  };
+
+  // console.log('filteredposts: ', filteredPosts)
   // const [checkedValues, setCheckedValues] = useState({
   //   public: false,
   //   private: false,
@@ -203,13 +206,13 @@ console.log('filteredposts: ', filteredPosts)
   // Handle checkbox change
   // const handleCheckboxChange = (event) => {
   //   const { name, checked } = event.target;
-   
+
   //   setCheckedValues((prev) => ({
   //     ...prev,
   //     [name]: checked,
   //   }));
-  
-   
+
+
   // };
 
   useEffect(() => {
@@ -220,30 +223,30 @@ console.log('filteredposts: ', filteredPosts)
           sortOption: selectedSortOption,
           people: people,
         };
-  
+
         if (isPublic) {
           filterData.public = true;
         }
         if (isPrivate) {
           filterData.private = true;
         }
-  
+
         // if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
         //   console.log("No valid filters or both selected. Clearing posts...");
         //   setFilteredPosts([]); // Clear all posts in these cases.
         //   return;
         // }
-  
+
         const response = await ApiServices.getFilterPosts(filterData);
         setFilteredPosts(response.data); // Update with new data
       } catch (error) {
         console.error("Error filtering posts:", error);
       }
     };
-  
+
     fetchFilteredPosts();
   }, [people, selectedSortOption, selectedTags, isPublic, isPrivate]);
-  
+
 
 
   const handleTagsChange = (event) => {
@@ -253,19 +256,19 @@ console.log('filteredposts: ', filteredPosts)
     );
   };
 
-  
+
   const clearAllTags = () => {
-    console.log("Tags changed",selectedTags,filteredPosts);
+    console.log("Tags changed", selectedTags, filteredPosts);
     setSelectedTags([]);
     setFilteredPosts([])
-  
+
   };
 
   const filteredTagsOptions = postTypes.filter((option) =>
     option.value.toLowerCase().includes(tags.toLowerCase())
   );
 
- 
+
 
   return (
     <div className="Homepage-Container">
@@ -372,7 +375,7 @@ console.log('filteredposts: ', filteredPosts)
               {data?.connections_approved || 0}
             </div>
           </div>
-{/* 
+          {/* 
           <div className="sidebar-menu-items">
             <div>
               <svg
@@ -428,9 +431,8 @@ console.log('filteredposts: ', filteredPosts)
             <h4 className="mt-3 mb-2">Tags</h4>
             <div className="relative">
               <button
-                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
-                  isTagsOpen ? "rotate-180" : "rotate-0"
-                }`}
+                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${isTagsOpen ? "rotate-180" : "rotate-0"
+                  }`}
                 onClick={() => setIsTagsOpen(!isTagsOpen)}
               >
                 <RxCaretDown />
@@ -449,12 +451,12 @@ console.log('filteredposts: ', filteredPosts)
                 />
 
                 {selectedTags.length > 0 && (
-                      <div className="clear-container">
-                        <div className="x-box">X</div>
-                          <a onClick={clearAllTags} className="clear-link">
-                            Clear All
-                          </a>
-                      </div>
+                  <div className="clear-container">
+                    <div className="x-box">X</div>
+                    <a onClick={clearAllTags} className="clear-link">
+                      Clear All
+                    </a>
+                  </div>
                 )}
 
                 {filteredTagsOptions.map((option) => (
@@ -470,19 +472,19 @@ console.log('filteredposts: ', filteredPosts)
                     </label>
                   </div>
                 ))}
-                
+
               </div>
             )}
 
-        
+
             {/* <span class="see-all">See All</span> */}
             <hr className=" mt-4 mb-6" />
 
             <h4 className="mt-3 mb-2">Post Type</h4>
 
             <label>
-            
-                  <input
+
+              <input
                 type="checkbox"
                 name="public"
                 checked={isPublic}
@@ -492,8 +494,8 @@ console.log('filteredposts: ', filteredPosts)
             </label>
 
             <label>
-            
-                 <input
+
+              <input
                 type="checkbox"
                 name="private"
                 checked={isPrivate}
@@ -514,34 +516,34 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
       </div>
-      
-   
+
+
       <div className="main-content">
         <div className="allPostShowContainer">
 
 
 
 
-        {filteredPosts.length > 0 && 
-          filteredPosts
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
-            .map((p) => {
-              // console.log("Debugging post:", p); // Debugging each post
-              return (
-                <Post
-                  filteredPosts={filteredPosts}
-                  key={p.id}
-                  post={p} // Passing only id and title
-                  setAllPosts={setAllPosts}
-                  screenDecider={"home"}
-                />
-              );
-            })
-        }
+          {filteredPosts.length > 0 &&
+            filteredPosts
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+              .map((p) => {
+                // console.log("Debugging post:", p); // Debugging each post
+                return (
+                  <Post
+                    filteredPosts={filteredPosts}
+                    key={p.id}
+                    post={p} // Passing only id and title
+                    setAllPosts={setAllPosts}
+                    screenDecider={"home"}
+                  />
+                );
+              })
+          }
 
-      
-      {/* Render filtered posts if available */}
-        {/* {filteredPosts.length > 0 && 
+
+          {/* Render filtered posts if available */}
+          {/* {filteredPosts.length > 0 && 
           filteredPosts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
             
@@ -558,8 +560,8 @@ console.log('filteredposts: ', filteredPosts)
 
 
 
-        {/* If filteredPosts is empty, render top 2 posts from allPosts */}
-        {/* {filteredPosts.length === 0 && 
+          {/* If filteredPosts is empty, render top 2 posts from allPosts */}
+          {/* {filteredPosts.length === 0 && 
           allPosts // Limiting to top 2 posts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
             .map((p) => (
@@ -582,23 +584,26 @@ console.log('filteredposts: ', filteredPosts)
         </div>
       </div>
 
-{/* Right Bar */}
+      {/* Right Bar */}
 
       <div className="sidebar-right">
         <div className="trending-section shadow-lg">
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
-              <div key={post?._id}>
-                <h5>{post?.type}</h5>
-                <h4>
-                  <b>{post?.postTitle}</b>
-                </h4>
-                <p>{truncateDescription(post?.description)}</p>
-                {index === topTrendingPosts.length - 1 ? null : (
-                  <div className="line"></div>
-                )}
-              </div>
+              <Link to={`/posts/${post?._id}`} className="inline-block no-underline text-current cursor-pointer"
+              >
+                <div key={post?._id}>
+                  <h5>{post?.type}</h5>
+                  <h4>
+                    <b>{post?.postTitle}</b>
+                  </h4>
+                  <p>{truncateDescription(post?.description)}</p>
+                  {index === topTrendingPosts.length - 1 ? null : (
+                    <div className="line"></div>
+                  )}
+                </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -626,18 +631,18 @@ console.log('filteredposts: ', filteredPosts)
               <div className="left-section">
                 <img
                   src={
-                    rec?.image?.url == undefined
+                    rec?.image?.url === undefined
                       ? "/profile.png"
                       : rec?.image?.url
                   }
-                  alt="User Image"
+                  alt="User Profile"
                   className="user-image"
                 />
               </div>
               <div className="right-section">
                 <h4
                   onClick={() => {
-                    if (rec._id == user_id) {
+                    if (rec._id === user_id) {
                       navigate("/editProfile");
                     } else {
                       navigate(`/user/${rec._id}`);
