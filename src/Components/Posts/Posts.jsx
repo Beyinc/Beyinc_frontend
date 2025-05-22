@@ -448,14 +448,17 @@ console.log('filteredposts: ', filteredPosts)
                   onChange={(e) => setTags(e.target.value)}
                 />
 
+               
+
                 {selectedTags.length > 0 && (
-                      <div className="clear-container">
-                        <div className="x-box">X</div>
-                          <a onClick={clearAllTags} className="clear-link">
-                            Clear All
-                          </a>
-                      </div>
-                )}
+  <div className="clear-container">
+    <div className="x-box" onClick={clearAllTags}>X</div>
+    <a href="#" onClick={(e) => { e.preventDefault(); clearAllTags(); }} className="clear-link"   style={{ textDecoration: 'none' }}>
+      Clear All
+    </a>
+  </div>
+)}
+
 
                 {filteredTagsOptions.map((option) => (
                   <div key={option.value} className="p-0">

@@ -571,7 +571,7 @@ const EditProfile = () => {
 
   const [followers, setFollowers] = useState([]);
   const [followering, setFollowering] = useState([]);
-  const [editPostToggler, seteditPostToggler] = useState("profile");
+  const [editPostToggler, seteditPostToggler] = useState("posts");
 
   const pathSegments = location.pathname.split("/");
   const mentorId = pathSegments[pathSegments.length - 1]; 
@@ -1780,21 +1780,50 @@ console.log('education details', educationDetails)
     }
   }, [formState.country, formState.state, formState.town, formState]);
 
-  const handleFormSubmit = async (e) => {
-    console.log(formState);
-    e.preventDefault();
+  // const handleFormSubmit = async (e) => {
+  //   console.log(formState);
+  //   e.preventDefault();
+  //   setIsInputPopupVisible(false);
 
-    try {
-      await ApiServices.InputFormData(formState);
+  //   try {
+  //     await ApiServices.InputFormData(formState);
+  //     alert("Data saved successfully!");
+  //        setIsInputPopupVisible(false);
+          
+  //        setTimeout(()=>{
+  //         window.location.reload();
+  //        },200)
+  //     //   // Fetch updated data after saving
+  //     // const updatedProfile = await ApiServices.GetProfileData();
+  //   } catch (error) {
+  //     console.error("Error saving data:", error);
+  //     alert("There was an error saving your data. Please try again.");
+  //   }
+  // };
+
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    await ApiServices.InputFormData(formState);
+
+    // Log to verify
+    console.log("Closing popup...");
+    setIsInputPopupVisible(false);
+
+    // Delay alert and remove reload for test
+    setTimeout(() => {
       alert("Data saved successfully!");
+      // window.location.reload(); // test without this first
+    }, 100);
+  } catch (error) {
+    console.error("Error saving data:", error);
+    alert("There was an error saving your data. Please try again.");
+  }
+};
 
-      //   // Fetch updated data after saving
-      // const updatedProfile = await ApiServices.GetProfileData();
-    } catch (error) {
-      console.error("Error saving data:", error);
-      alert("There was an error saving your data. Please try again.");
-    }
-  };
+
+
 
   return (
     <div className="EditProfileContainer">
@@ -3392,7 +3421,12 @@ console.log('education details', educationDetails)
                         >
                           <button
                             className="add-button"
-                            onClick={handleFormSubmit}
+                            type="button"
+                            onClick={()=>{
+                              console.log("buttuon Clicked")
+                              handleFormSubmit();
+                     setIsInputPopupVisible(false);
+                            }}
                           >
                             Save
                           </button>
@@ -3404,6 +3438,7 @@ console.log('education details', educationDetails)
               </div>
             </div>
           </div>
+          
         )}
 
         {isAboutPopupVisible && (
