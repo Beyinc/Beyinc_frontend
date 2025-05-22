@@ -449,6 +449,7 @@ console.log('filteredposts: ', filteredPosts)
                 />
 
                 {selectedTags.length > 0 && (
+                  //added functionality to clear all button
                       <div className="clear-container">
                         <div className="x-box" onClick={clearAllTags}>X</div>
                           <a onClick={clearAllTags} className="clear-link">
