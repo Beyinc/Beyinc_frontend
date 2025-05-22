@@ -450,7 +450,7 @@ console.log('filteredposts: ', filteredPosts)
 
                 {selectedTags.length > 0 && (
                       <div className="clear-container">
-                        <div className="x-box">X</div>
+                        <div className="x-box" onClick={clearAllTags}>X</div>
                           <a onClick={clearAllTags} className="clear-link">
                             Clear All
                           </a>
