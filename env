@@ -1,0 +1,14 @@
+#REACT_APP_BACKEND = https://beyinc-backend-nxm7.onrender.com/api
+REACT_APP_BACKEND = http://localhost:4000/api
+
+REACT_APP_SOCKET_IO = https://beyinc-socket-zhmf.onrender.com
+REACT_APP_ADMIN_MAIL = admin@beyinc.org
+
+REACT_APP_CALENDER_CLIENT_ID = 120082718814-vebsfpafhaoomtugvfdljca1a9qrmc0v.apps.googleusercontent.com
+REACT_APP_CALENDER_API_KEY = AIzaSyAsUnkXS0W520zXyehlTG5ANUllp1iNuMY
+
+
+REACT_APP_RAZORPAY_COMPANY_NAME ="BeyInc.org"
+
+
+
