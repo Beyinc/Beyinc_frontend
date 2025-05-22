@@ -338,6 +338,7 @@ const App = () => {
           <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
            
           <Route path="/user/:id" Component={AuthHoc(Profile)} />
+          
         
           <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
           <Route
