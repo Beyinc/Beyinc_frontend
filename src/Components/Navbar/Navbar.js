@@ -65,6 +65,7 @@ const Navbar = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate1 = useNavigate();
+  
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
