@@ -256,7 +256,7 @@
 }
 
 .suggestion-item button:hover {
-  /* background-color: var(--button-hover); */
+  background-color: var(--button-hover);
 }
 
 .activity-item span {
