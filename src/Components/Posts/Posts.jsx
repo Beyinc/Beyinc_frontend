@@ -520,8 +520,6 @@ console.log('filteredposts: ', filteredPosts)
         <div className="allPostShowContainer">
 
 
-
-
         {filteredPosts.length > 0 && 
           filteredPosts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
