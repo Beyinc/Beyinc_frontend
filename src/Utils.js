@@ -1,4 +1,7 @@
 import moment from "moment"
+import { ApiServices } from "./Services/ApiServices"
+import { setToast } from "./redux/AuthReducers/AuthReducer"
+import { ToastColors } from "./Components/Toast/ToastColors"
 
 // export const socket_io = "https://beyinc-socket.onrender.com"
 export const socket_io = process.env.REACT_APP_SOCKET_IO
@@ -658,3 +661,53 @@ export const dataEntry = [
         paragraph: 'A company that provides technology or services to startups.',
       },
     ]
+
+    export const followerController = async ({ e, user, socket, recommendedUserTrigger, setRecommendedUserTrigger, dispatch, followingToId }) => {
+    if (!user.id) {
+        console.log('user :', user);
+        throw new Error("Invalid user ");
+    }
+
+    console.log('following to', followingToId)
+    console.log('userId', user.id);
+    e.target.disabled = true;
+    await ApiServices.saveFollowers({
+        followerReqBy: user.id,
+        followerReqTo: followingToId,
+    })
+        .then((res) => {
+            if (res.data.followers.map((f) => f._id).includes(user.id)) {
+                socket.current.emit("sendNotification", {
+                    senderId: user.id,
+                    receiverId: followingToId,
+                });
+                socket.current.emit("sendFollowerNotification", {
+                    senderId: user.id,
+                    receiverId: followingToId,
+                    type: "adding",
+                    image: user.image,
+                    role: user.role,
+                    _id: followingToId,
+                    userName: user.userName,
+                });
+            } else {
+                socket.current.emit("sendFollowerNotification", {
+                    senderId: user.id,
+                    receiverId: followingToId,
+                    type: "removing",
+                    _id: followingToId,
+                });
+            }
+            setRecommendedUserTrigger(!recommendedUserTrigger);
+        })
+        .catch((err) => {
+            dispatch(
+                setToast({
+                    message: "Error in update status",
+                    bgColor: ToastColors.failure,
+                    visible: "yes",
+                })
+            );
+        });
+    e.target.disabled = false;
+};
