@@ -227,21 +227,24 @@ const PostComments = ({ fetchComments, postId }) => {
             {/* Preview attachments */}
             {attachments.length > 0 && (
               <div className="attachments-preview" style={{
-                marginLeft: '20px',  // Add space from the left
-                marginTop: '15px'    // Increase top margin
+                marginLeft: '20px',
+                marginTop: '15px',
+                marginBottom: '20px',  // Add bottom margin
+                paddingBottom: '10px'  // Add bottom padding
               }}>
                 {attachments.map((file, index) => (
                   <div key={index} className="attachment-item" style={{
                     border: '1px solid #e0e0e0',
                     borderRadius: '8px',
-                    padding: '12px',    // Increased padding
+                    padding: '12px',
                     marginTop: '10px',
+                    marginBottom: '10px',  // Add space between items
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     width: 'fit-content',
                     backgroundColor: '#f8f8f8',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'  // Subtle shadow
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                   }}>
                     {file.type.startsWith('image/') ? (
                       <img 
