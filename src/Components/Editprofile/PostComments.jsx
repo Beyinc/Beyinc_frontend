@@ -226,15 +226,64 @@ const PostComments = ({ fetchComments, postId }) => {
             
             {/* Preview attachments */}
             {attachments.length > 0 && (
-              <div className="attachments-preview">
+              <div className="attachments-preview" style={{
+                marginLeft: '20px',  // Add space from the left
+                marginTop: '15px'    // Increase top margin
+              }}>
                 {attachments.map((file, index) => (
-                  <div key={index} className="attachment-item">
+                  <div key={index} className="attachment-item" style={{
+                    border: '1px solid #e0e0e0',
+                    borderRadius: '8px',
+                    padding: '12px',    // Increased padding
+                    marginTop: '10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: 'fit-content',
+                    backgroundColor: '#f8f8f8',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'  // Subtle shadow
+                  }}>
                     {file.type.startsWith('image/') ? (
-                      <img src={URL.createObjectURL(file)} alt="attachment" />
+                      <img 
+                        src={URL.createObjectURL(file)} 
+                        alt="attachment"
+                        style={{ 
+                          width: '140px', 
+                          height: '140px',
+                          objectFit: 'cover',
+                          borderRadius: '6px',
+                          margin: '4px'  // Add margin around image
+                        }} 
+                      />
                     ) : (
-                      <video src={URL.createObjectURL(file)} controls />
+                      <video 
+                        src={URL.createObjectURL(file)} 
+                        controls
+                        style={{ 
+                          width: '140px', 
+                          height: '140px',
+                          objectFit: 'cover',
+                          borderRadius: '6px',
+                          margin: '4px'  // Add margin around video
+                        }} 
+                      />
                     )}
-                    <button onClick={() => setAttachments(prev => prev.filter((_, i) => i !== index))}>
+                    <button 
+                      onClick={() => setAttachments(prev => prev.filter((_, i) => i !== index))}
+                      style={{
+                        backgroundColor: '#ff4d4d',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        padding: '4px 12px',
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        marginTop: '6px',
+                        transition: 'background-color 0.2s',
+                      }}
+                      onMouseOver={(e) => e.target.style.backgroundColor = '#ff3333'}
+                      onMouseOut={(e) => e.target.style.backgroundColor = '#ff4d4d'}
+                    >
                       Remove
                     </button>
                   </div>
