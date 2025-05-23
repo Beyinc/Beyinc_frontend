@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import BoxCategories from "./BoxCategories";
-import { allskills, dataEntry } from "../../Utils";
+import { allskills, convertCamelToNormalCapitalized, dataEntry } from "../../Utils";
 import { useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
 
@@ -214,7 +214,7 @@ const EntryDetails = () => {
                 className="mr-2 accent-blue-600" // Change accent color as needed
                 onChange={handleInterestChange}
               />
-              {entry.title}
+              {convertCamelToNormalCapitalized(entry.title)}
             </label>
           ))}
         </div>
