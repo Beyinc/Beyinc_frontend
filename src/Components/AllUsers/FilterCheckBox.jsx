@@ -14,6 +14,7 @@ export function FilterCheckBoxes({
 }) {
   const [data, setData] = useState(rawData);
   const [query, setQuery] = useState("");
+  
   useEffect(() => {
     if (query.length === 0 && showSearch) {
       setData(rawData.slice(0, 5));
