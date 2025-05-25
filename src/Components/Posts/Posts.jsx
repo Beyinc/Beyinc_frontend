@@ -571,7 +571,7 @@ const Posts = () => {
                   className="user-image"
                 />
               </div>
-              <div className="right-sectsion">
+              <div className="right-section">
                 <h4
                   onClick={() => {
                     if (rec._id == user_id) {
