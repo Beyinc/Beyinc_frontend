@@ -270,7 +270,7 @@ console.log('filteredposts: ', filteredPosts)
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
-        <div className="sidebar-menu">
+        <div className="sidebar-menu shadow-lg">
           <div className="Homepage-left-container-profile">
             <div>
               <img
@@ -410,7 +410,7 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
 
-        <div class="filter-sidebar">
+        <div class="filter-sidebar shadow-lg">
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
@@ -449,12 +449,12 @@ console.log('filteredposts: ', filteredPosts)
                 />
 
                 {selectedTags.length > 0 && (
-                      <div className="clear-container">
-                        <div className="x-box">X</div>
-                          <a onClick={clearAllTags} className="clear-link">
-                            Clear All
-                          </a>
-                      </div>
+                  <div className="clear-container">
+                    <div className="x-box" onClick={clearAllTags}>X</div>
+                    <a onClick={clearAllTags} className="clear-link">
+                      Clear All
+                    </a>
+                  </div>
                 )}
 
                 {filteredTagsOptions.map((option) => (
@@ -520,8 +520,6 @@ console.log('filteredposts: ', filteredPosts)
         <div className="allPostShowContainer">
 
 
-
-
         {filteredPosts.length > 0 && 
           filteredPosts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
@@ -585,7 +583,7 @@ console.log('filteredposts: ', filteredPosts)
 {/* Right Bar */}
 
       <div className="sidebar-right">
-        <div className="trending-section">
+        <div className="trending-section shadow-lg">
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
@@ -603,7 +601,7 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
 
-        <div className="suggestions-section">
+        <div className="suggestions-section shadow-lg">
           <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
             <h4 className="label">Suggestions for you</h4>
@@ -668,7 +666,7 @@ console.log('filteredposts: ', filteredPosts)
           ))}
         </div>
 
-        <div className="activity-section">
+        <div className="activity-section shadow-lg">
           <h3 className="label">Latest Activities</h3>
           <div className="activity-item">
             <div className="activity-single-item">

@@ -212,7 +212,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
 
   return (
     <section
-      className={`EditProfileOuterCard ${
+      className={` shadow-lg ${
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >
