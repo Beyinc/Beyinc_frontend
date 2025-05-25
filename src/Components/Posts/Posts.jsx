@@ -449,8 +449,9 @@ console.log('filteredposts: ', filteredPosts)
                 />
 
                 {selectedTags.length > 0 && (
+                  //added onclick handler in x-box to make it work
                       <div className="clear-container">
-                        <div className="x-box">X</div>
+                        <div onClick={clearAllTags} className="x-box">X</div>
                           <a onClick={clearAllTags} className="clear-link">
                             Clear All
                           </a>
