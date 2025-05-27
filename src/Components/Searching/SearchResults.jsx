@@ -32,28 +32,36 @@ function SearchResults() {
     socket.current = io(socket_io);
   }, []);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (searchQuery) {
-        try {
-          const profileResponse = await ApiServices.getProfile({ id: user_id });
-          const profileData = profileResponse.data;
-          setFollower(profileData.followers || []);
+  
 
-          const response = await ApiServices.searchProfiles(searchQuery);
-          const usersWithStatus = response.data.map((user) => ({
+  useEffect(() => {
+  const fetchUsers = async () => {
+    if (searchQuery) {
+      try {
+        const profileResponse = await ApiServices.getProfile({ id: user_id });
+        const profileData = profileResponse.data;
+        setFollower(profileData.followers || []);
+
+        const response = await ApiServices.searchProfiles(searchQuery);
+        console.log(response.data);
+        const usersWithStatus = response.data
+          .filter((user) => user._id !== user_id && user.isProfileComplete==true) //  Exclude self profile and incompleted profiles
+          .map((user) => ({
             ...user,
             isFollowing: profileData.followers.some((f) => f._id === user._id),
           }));
-          setUsers(usersWithStatus);
-        } catch (err) {
-          console.error("Error fetching users:", err.message);
-        }
-      }
-    };
 
-    fetchUsers();
-  }, [searchQuery, user_id]);
+        setUsers(usersWithStatus);
+        console.log(users);
+      } catch (err) {
+        console.error("Error fetching users:", err.message);
+      }
+    }
+  };
+
+  fetchUsers();
+}, [searchQuery, user_id]);
+
 
 
   
