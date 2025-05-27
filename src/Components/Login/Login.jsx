@@ -45,14 +45,11 @@ const Login = () => {
           e.target.value
         ),
       }));
-    }
+  }
     if (e.target.name === "password") {
       setInputs((prev) => ({
         ...prev,
-        isPasswordValid:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/.test(
-            e.target.value
-          ),
+        isPasswordValid:true
       }));
     }
     if (e.target.name === "mobile") {
@@ -71,7 +68,7 @@ const Login = () => {
   const isFormValid =
     (loginType === "email" && isEmailValid && isPasswordValid) ||
     (loginType === "mobile" && mobileVerified);
-
+console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "email"})
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -296,7 +293,7 @@ const Login = () => {
                         onChange={handleChanges}
                       />
                       <input
-                        type="password"
+                        type="text"
                         className={
                           isPasswordValid !== null &&
                           (isPasswordValid ? "valid" : "invalid")
