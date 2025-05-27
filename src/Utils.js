@@ -6,7 +6,7 @@ import { ToastColors } from "./Components/Toast/ToastColors"
 // export const socket_io = "https://beyinc-socket.onrender.com"
 export const socket_io = process.env.REACT_APP_SOCKET_IO
 
-export const categories = ["Co-founder","Mentor","Investor"]
+export const categories = ["Co-founder", "Mentor", "Investor"]
 export const domain_subdomain = {
     "Agriculture": [
         "Agriculture",
@@ -271,7 +271,7 @@ export const allskills = [
 
 export const allsalutations = [
     "Dr", "Mr",
-"Mrs", "Miss"]
+    "Mrs", "Miss"]
 
 export const mentorcategories = [
     "Academia Mentor", "Industry Expert Mentor "]
@@ -595,68 +595,67 @@ export function updateLastSeen() {
 export const dataEntry = [
     {
         id: 1,
-        title: 'Individual/Entrepreneur',
+        title: 'individualEntrepreneur',
         icon: 'mage:light-bulb',
         paragraph: 'Already started your entrepreneurial journey, either with an idea or a newly established business.',
-      },
-      {
+    },
+    {
         id: 2,
-        title: 'Mentor',
+        title: 'mentor',
         icon: 'nimbus:university',
         paragraph: 'A person who shares their knowledge and experience to guide and support others.',
-      },
-     
-      {
+    },
+    {
         id: 3,
-        title: 'Startup',
+        title: 'startup',
         icon: 'material-symbols:rocket-launch-outline',
         paragraph: 'A company in early stages of development and looking to scale.',
-      },
-      {
+    },
+    {
         id: 4,
-        title: 'Incubator',
+        title: 'incubator',
         icon: 'clarity:organization-line',
         paragraph: 'An organization that provides startups with workspace, mentorship, and resources.',
-      },
-      {
+    },
+    {
         id: 5,
-        title: 'Accelerator',
+        title: 'accelerator',
         icon: 'material-symbols:speed-outline-rounded',
         paragraph: 'A program that helps startups grow rapidly through mentorship, funding and connections',
-      },
-      {
+    },
+    {
         id: 6,
-        title: 'Individual Investor',
+        title: 'individualInvestor',
         icon: 'fluent:building-bank-16-filled',
         paragraph: 'An individual who invest their own money in companies',
-      },
-      {
+    },
+    {
         id: 7,
-        title: 'Institutional Investor',
+        title: 'institutionalInvestor',
         icon: 'ph:building-apartment',
         paragraph: 'An organization that invest money on behalf of others, such as pension funds or insurance companies.',
-      },
-      {
+    },
+    {
         id: 8,
-        title: 'Trade Bodies',
+        title: 'tradeBodies',
         icon: 'material-symbols:handshake-outline',
         paragraph: 'Organizations that represent the interests of businesses in a particular sector.',
-      },
-      {
+    },
+    {
         id: 9,
-        title: 'Government body',
+        title: 'governmentBody',
         icon: 'streamline:justice-hammer',
         paragraph: 'A department or agency of the government that supports startups.',
-      },
-      {
+    },
+    {
         id: 10,
-        title: 'Corporate',
+        title: 'corporate',
         icon: 'material-symbols:corporate-fare-rounded',
         paragraph: 'A large company that invests in or partners with startups.',
-      },
-      {
+    },
+    {
         id: 11,
-        title: 'Technology partner',
+        title: 'technologyPartner',
         icon: 'material-symbols:laptop-mac-outline',
         paragraph: 'A company that provides technology or services to startups.',
       },
@@ -711,3 +710,25 @@ export const dataEntry = [
         });
     e.target.disabled = false;
 };
+    },
+];
+
+export function convertCamelToNormalCapitalized(
+    camelCaseString
+) {
+    // Split the camelCase string into words
+    const words = camelCaseString
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .split(/[\s_]+/);
+
+    // Capitalize each word
+    const capitalizedWords = words.map(
+        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    );
+
+    // Join the capitalized words to form the normal capitalized string
+    const normalCapitalizedString = capitalizedWords.join(" ");
+
+    return normalCapitalizedString;
+}
+

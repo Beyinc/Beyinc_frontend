@@ -400,12 +400,13 @@ const Posts = () => {
                 />
 
                 {selectedTags.length > 0 && (
-                  <div className="clear-container">
-                    <div className="x-box">X</div>
-                    <a onClick={clearAllTags} className="clear-link">
-                      Clear All
-                    </a>
-                  </div>
+                  //added onclick handler in x-box to make it work
+                      <div className="clear-container">
+                        <div onClick={clearAllTags} className="x-box">X</div>
+                          <a onClick={clearAllTags} className="clear-link">
+                            Clear All
+                          </a>
+                      </div>
                 )}
 
                 {filteredTagsOptions.map((option) => (
