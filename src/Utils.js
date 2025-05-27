@@ -710,8 +710,8 @@ export const dataEntry = [
         });
     e.target.disabled = false;
 };
-    },
-];
+    
+
 
 export function convertCamelToNormalCapitalized(
     camelCaseString
