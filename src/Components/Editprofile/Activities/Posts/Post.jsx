@@ -216,9 +216,9 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >
-      <div className="ProfilepostContainer">
-        <div className="PostHeaderContainer">
-          <div className="postTotaldetails">
+      <div className="ProfilepostContainer hover:cursor-pointer">
+        <div className="PostHeaderContainer ">
+          <div className="postTotaldetails ">
             <div
               className="PostheaderimageContainer"
               onClick={() => {
