@@ -20,6 +20,7 @@ const IndividualPostComments = ({
   const [comment, setComment] = useState("");
   const [replyBox, setReplyBox] = useState(false);
   const [subCommentOpen, setSubCommentOpen] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -114,6 +115,84 @@ const IndividualPostComments = ({
             </div>
           </div>
           <div className="IndicommentsSectionDetailscomment">{c?.comment}</div>
+          
+          {/* File attachment display */}
+          {c?.file && (
+            <div className="comment-file-attachment" style={{ marginTop: '10px' }}>
+              {c.file.type === 'image' && (
+                <img 
+                  src={c.file.url} 
+                  alt="Comment attachment" 
+                  style={{ 
+                    maxWidth: '500px', 
+                    maxHeight: '400px',
+                    width: '100%',
+                    borderRadius: '12px',
+                    cursor: 'zoom-in',
+                    display: 'block',
+                    margin: '0 auto'
+                  }}
+                  onClick={() => setZoomedImage(c.file.url)}
+                />
+              )}
+              {c.file.type === 'video' && (
+                <video 
+                  controls 
+                  style={{ 
+                    maxWidth: '500px',
+                    maxHeight: '400px',
+                    width: '100%',
+                    borderRadius: '12px',
+                    display: 'block',
+                    margin: '0 auto'
+                  }}
+                >
+                  <source src={c.file.url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+              {c.file.type === 'pdf' && (
+                <div 
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '8px',
+                    padding: '8px',
+                    background: 'var(--comment-file-bg, #f5f5f5)',
+                    borderRadius: '8px',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => window.open(c.file.url, '_blank')}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 18V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 15H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span>View PDF</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Image Zoom Modal */}
+          {zoomedImage && (
+            <div 
+              className="image-zoom-modal" 
+              onClick={() => setZoomedImage(null)}
+            >
+              <div className="close-button" onClick={() => setZoomedImage(null)}>
+                ✕
+              </div>
+              <img 
+                src={zoomedImage} 
+                alt="Zoomed view" 
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          )}
+
           <div
             style={{
               display: "flex",

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -591,11 +591,13 @@ console.log('filteredposts: ', filteredPosts)
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
               <div key={post?._id}>
+                <Link to={`/post/${post?._id}`} className="cursor-pointer no-underline text-current">
                 <h5>{post?.type}</h5>
                 <h4>
                   <b>{post?.postTitle}</b>
                 </h4>
                 <p>{truncateDescription(post?.description)}</p>
+                </Link>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}

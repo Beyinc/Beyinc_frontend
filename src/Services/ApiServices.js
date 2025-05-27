@@ -1052,8 +1052,22 @@ export const ApiServices = {
 
   addPostComment: (obj) => {
     return new Promise((resolve, reject) => {
+      // Set the correct headers for FormData
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+      
+      // Log the FormData contents for debugging
+      if (obj instanceof FormData) {
+        for (let pair of obj.entries()) {
+          console.log('FormData entry:', pair[0], pair[1]);
+        }
+      }
+      
       axiosInstance
-        .post(`/post/addPostComment`, obj)
+        .post(`/post/addPostComment`, obj, config)
         .then((res) => {
           if (res) {
             resolve(res);
