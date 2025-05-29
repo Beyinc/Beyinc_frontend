@@ -165,7 +165,7 @@ const BeyincProfessional = () => {
       await ApiServices.saveOrUpdateProfessionalProfile({ data })
       .then(()=>{
         alert(`Profile ${edit? "updated" : "created"} successfully`);
-        navigate("/profile");
+        navigate("/editProfile");
       })
 
       // navigate("/posts", { replace: true }); // Redirect without history stack addition
