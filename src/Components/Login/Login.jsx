@@ -45,11 +45,11 @@ const Login = () => {
           e.target.value
         ),
       }));
-  }
+    }
     if (e.target.name === "password") {
       setInputs((prev) => ({
         ...prev,
-        isPasswordValid:true
+        isPasswordValid: true,
       }));
     }
     if (e.target.name === "mobile") {
@@ -68,7 +68,7 @@ const Login = () => {
   const isFormValid =
     (loginType === "email" && isEmailValid && isPasswordValid) ||
     (loginType === "mobile" && mobileVerified);
-console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "email"})
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -122,7 +122,6 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
         );
         e.target.disabled = true;
       });
-
   };
 
   // const handleMobileChange = (value) => {
@@ -158,7 +157,6 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
           })
         );
       });
-
   };
 
   const login = async (e) => {
@@ -198,7 +196,6 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
           })
         );
       });
-
   };
 
   const mobileLogin = async (e) => {
@@ -231,7 +228,6 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
           })
         );
       });
-
   };
   return (
     <>
@@ -293,7 +289,7 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
                         onChange={handleChanges}
                       />
                       <input
-                        type="text"
+                        type="password"
                         className={
                           isPasswordValid !== null &&
                           (isPasswordValid ? "valid" : "invalid")
@@ -320,7 +316,7 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
                           name="mobile"
                           onChange={handleChanges}
                         />
-                        
+
                         {isMobileValid && !otpVisible && (
                           <button type="button" onClick={sendMobileOtpF}>
                             Get OTP
@@ -354,16 +350,52 @@ console.log({isFormValid,isEmailValid,isPasswordValid,loginType :loginType === "
                       )}
                     </>
                   )}
-                  {loginType === "email" && <div className="passwordHint">
-                    <ul>
-                      <li className={password?.length >= 8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
-                      <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                      <li className={/.*[a-z].*/.test(password) && password ? 'success' : 'failure'}>Atleast one small letter</li>
-                      <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
-                      <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
-                    </ul>
-                  </div>}
-                 
+                  {loginType === "email" && (
+                    <div className="passwordHint">
+                      <ul>
+                        <li
+                          className={
+                            password?.length >= 8 ? "success" : "failure"
+                          }
+                        >
+                          Password should be atleast 8 character length
+                        </li>
+                        <li
+                          className={
+                            /.*[A-Z].*/.test(password) ? "success" : "failure"
+                          }
+                        >
+                          Atleast one capital letter
+                        </li>
+                        <li
+                          className={
+                            /.*[a-z].*/.test(password) && password
+                              ? "success"
+                              : "failure"
+                          }
+                        >
+                          Atleast one small letter
+                        </li>
+                        <li
+                          className={
+                            /.*[!@#$%^&*()_+].*/.test(password)
+                              ? "success"
+                              : "failure"
+                          }
+                        >
+                          Atleast one special character (!@#$%^&*()_+)
+                        </li>
+                        <li
+                          className={
+                            /.*[0-9].*/.test(password) ? "success" : "failure"
+                          }
+                        >
+                          Atleast one Number
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+
                   <button
                     className="full-width-button"
                     type="submit"

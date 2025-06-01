@@ -1,17 +1,13 @@
 import { useLocation } from "react-router-dom";
-import { useEffect,useRef,  useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import SearchFilter from "./SearchFilter";
 import { useNavigate } from "react-router";
-import { socket_io} from "../../Utils";
+import { socket_io } from "../../Utils";
 import { io } from "socket.io-client";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
-import { useDispatch,useSelector } from "react-redux";
-
-
-
-
+import { useDispatch, useSelector } from "react-redux";
 
 function SearchResults() {
   const location = useLocation();
@@ -27,55 +23,48 @@ function SearchResults() {
     interests: [],
   });
 
-
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
+
   useEffect(() => {
-          console.log({users})
-  }, [users]);
+    const fetchAndSetUsers = async () => {
+      if (!searchQuery) return;
 
-useEffect(() => {
-  const fetchAndSetUsers = async () => {
-    if (!searchQuery) return;
+      try {
+        const profileData = await ApiServices.getProfile({ id: user_id });
+        setFollower(profileData.followers || []);
+        const followingList = profileData.following || [];
 
-    try {
-      const profileData = await ApiServices.getProfile({ id: user_id });
-      setFollower(profileData.followers || []);
-      const followingList = profileData.following || [];
+        let response;
 
-      let response;
+        if (filters.interests.length > 0) {
+          // Fetch with filters
+          response = await ApiServices.FilterSearchProfiles({
+            query: searchQuery,
+            interests: filters.interests,
+          });
+          response = response.data; // since filtered returns { data: [...] }
+        } else {
+          // Default search
+          response = await ApiServices.searchProfiles(searchQuery);
+        }
 
-      if (filters.interests.length > 0) {
-        // Fetch with filters
-        response = await ApiServices.FilterSearchProfiles({
-          query: searchQuery,
-          interests: filters.interests,
-        });
-        response = response.data; // since filtered returns { data: [...] }
-      } else {
-        // Default search
-        response = await ApiServices.searchProfiles(searchQuery);
+        // Add isFollowing to each user
+        const usersWithStatus = response.map((user) => ({
+          ...user,
+          isFollowing: followingList.some((f) => f._id === user._id),
+        }));
+
+        setUsers(usersWithStatus);
+      } catch (err) {
+        console.error("Error fetching users:", err.message);
       }
+    };
 
-      // Add isFollowing to each user
-      const usersWithStatus = response.map((user) => ({
-        ...user,
-        isFollowing: followingList.some((f) => f._id === user._id),
-      }));
+    fetchAndSetUsers();
+  }, [searchQuery, user_id, filters]);
 
-      setUsers(usersWithStatus);
-    } catch (err) {
-      console.error("Error fetching users:", err.message);
-    }
-  };
-
-  fetchAndSetUsers();
-}, [searchQuery, user_id, filters]);
-
-
-
-  
   const FilteredSearchProfiles = (newFilters) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -83,13 +72,8 @@ useEffect(() => {
     }));
   };
 
-
-
-
-
   const handleFollowToggle = async (e, userId, isFollowing) => {
     e.target.disabled = true;
-console.log('occured')
     try {
       if (isFollowing) {
         // Unfollow user
@@ -141,7 +125,7 @@ console.log('occured')
 
   return (
     <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-10">
-      <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles}  />
+      <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
       <div
         className="mt-6 w-full lg:w-[1100px] bg-white p-8 py-8 rounded-lg"
         style={{ border: "1px solid lightgray" }}
@@ -166,19 +150,26 @@ console.log('occured')
                 }}
                 alt="profile pic"
               />
-           <h3 className="mt-3" style={{ textAlign: 'center' }}>{user.userName}</h3>
+              <h3 className="mt-3" style={{ textAlign: "center" }}>
+                {user.userName}
+              </h3>
 
-              {user.role && <h5 className="text-neutral-600 mt-1">{user.role}</h5>}
+              {user.role && (
+                <h5 className="text-neutral-600 mt-1">{user.role}</h5>
+              )}
               {user.beyincProfile && (
-                <h5 className="text-neutral-600 mt-1">{user.beyincProfile} at Beyinc</h5>
+                <h5 className="text-neutral-600 mt-1">
+                  {user.beyincProfile} at Beyinc
+                </h5>
               )}
               <p className="mt-2 mb-2">{user.headline}</p>
               <button
                 className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
-                onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
+                onClick={(e) =>
+                  handleFollowToggle(e, user._id, user.isFollowing)
+                }
               >
-                {user.isFollowing ===true && "Unfollow"}
-                {!user.isFollowing && "Follow"}
+                {user.isFollowing ? "Unfollow" : "Follow"}
               </button>
             </div>
           ))}
@@ -187,8 +178,5 @@ console.log('occured')
     </div>
   );
 }
-
-
-
 
 export default SearchResults;
