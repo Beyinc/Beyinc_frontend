@@ -270,7 +270,7 @@ console.log('filteredposts: ', filteredPosts)
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
-        <div className="sidebar-menu">
+        <div className="sidebar-menu shadow-lg">
           <div className="Homepage-left-container-profile">
             <div>
               <img
@@ -410,7 +410,7 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
 
-        <div class="filter-sidebar">
+        <div class="filter-sidebar shadow-lg">
           <div class="filter-section">
             <h3 className="label">Filter</h3>
 
@@ -449,8 +449,9 @@ console.log('filteredposts: ', filteredPosts)
                 />
 
                 {selectedTags.length > 0 && (
+                  //added onclick handler in x-box to make it work
                       <div className="clear-container">
-                        <div className="x-box">X</div>
+                        <div onClick={clearAllTags} className="x-box">X</div>
                           <a onClick={clearAllTags} className="clear-link">
                             Clear All
                           </a>
@@ -517,7 +518,7 @@ console.log('filteredposts: ', filteredPosts)
       
    
       <div className="main-content">
-        <div className="allPostShowContainer">
+        <div className="allPostShowContainer ">
 
 
 
@@ -585,11 +586,15 @@ console.log('filteredposts: ', filteredPosts)
 {/* Right Bar */}
 
       <div className="sidebar-right">
-        <div className="trending-section">
+        <div className="trending-section shadow-lg">
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
-              <div key={post?._id}>
+              <div key={post?._id}
+               onClick={() => {
+                  navigate(`/posts/${post._id}`);
+                }}
+                className="hover:cursor-pointer">
                 <h5>{post?.type}</h5>
                 <h4>
                   <b>{post?.postTitle}</b>
@@ -603,7 +608,7 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
 
-        <div className="suggestions-section">
+        <div className="suggestions-section shadow-lg">
           <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
             <h4 className="label">Suggestions for you</h4>
@@ -668,7 +673,7 @@ console.log('filteredposts: ', filteredPosts)
           ))}
         </div>
 
-        <div className="activity-section">
+        <div className="activity-section shadow-lg">
           <h3 className="label">Latest Activities</h3>
           <div className="activity-item">
             <div className="activity-single-item">

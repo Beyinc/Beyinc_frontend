@@ -353,13 +353,15 @@ const CreatePostPage = () => {
               </Box>
               <TabPanel
                 value="1"
-                style={{
-                  // maxHeight: "330px",
-                  // overflow: "scroll",
-                  // overflowX: "hidden",
-                  // scrollbarWidth: "thin",
-                  // scrollBehavior: "smooth",
-                }}
+                style={
+                  {
+                    // maxHeight: "330px",
+                    // overflow: "scroll",
+                    // overflowX: "hidden",
+                    // scrollbarWidth: "thin",
+                    // scrollBehavior: "smooth",
+                  }
+                }
               >
                 <div>
                   <label className="createPost-labels">
@@ -453,20 +455,17 @@ const CreatePostPage = () => {
                 </div>
                 <div>
                   <div
-                    className="createPost-textarea"
+                    className="createPost-textarea w-full"
                     style={{ width: "100%" }}
                   >
-                    <ReactQuill
-                      theme="snow"
-                      value={description}
-                      onChange={setDescription}
-                      modules={modules}
-                      style={{
-                        height: "150px",
-                        borderRadius: "10px",
-                        border: "none",
-                      }}
-                    />
+                    <div className="quill-editor-wrapper overflow-hidden">
+                      <ReactQuill
+                        theme="snow"
+                        value={description}
+                        onChange={setDescription}
+                        modules={modules}
+                      />
+                    </div>
                   </div>
                 </div>
 

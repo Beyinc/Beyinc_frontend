@@ -114,7 +114,7 @@ const UpdateEducationModal = ({ isOpen, onClose, setEducation, item }) => {
 
             <div
                 id="education-modal-content"
-                className="bg-white w-1/3 p-6 rounded-lg shadow-lg relative"
+                className="bg-white md:w-1/3 mt-10 md:mt-0 p-6 rounded-lg shadow-lg relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-center items-center flex-col ">

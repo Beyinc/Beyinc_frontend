@@ -32,7 +32,7 @@ const PostComments = ({ fetchComments, postId }) => {
         .then((res) => {
           setAllComments(
             res.data.sort(
-              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
             )
           );
         })

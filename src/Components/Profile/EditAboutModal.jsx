@@ -41,8 +41,8 @@ const EditAboutModal = ({ isOpen, onClose, initialValue, onSave }) => {
             onClick={onClose} // Close modal on outside click
         >
             <div
-                className="bg-white w-1/3 p-6 rounded-lg shadow-lg relative"
-                onClick={(e) => e.stopPropagation()} // Prevent close on content click
+                className="bg-white w-full md:w-1/3 p-6 mt-10 md:mt-0 rounded-lg shadow-lg relative"
+                onClick={(e) => e.stopPropagation()} 
             >
                 {/* Modal Content */}
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Edit About</h2>
