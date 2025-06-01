@@ -31,29 +31,48 @@ function SearchResults() {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
-
   useEffect(() => {
-    const fetchUsers = async () => {
-      if (searchQuery) {
-        try {
-          const profileResponse = await ApiServices.getProfile({ id: user_id });
-          const profileData = profileResponse.data;
-          setFollower(profileData.followers || []);
+          console.log({users})
+  }, [users]);
 
-          const response = await ApiServices.searchProfiles(searchQuery);
-          const usersWithStatus = response.data.map((user) => ({
-            ...user,
-            isFollowing: profileData.followers.some((f) => f._id === user._id),
-          }));
-          setUsers(usersWithStatus);
-        } catch (err) {
-          console.error("Error fetching users:", err.message);
-        }
+useEffect(() => {
+  const fetchAndSetUsers = async () => {
+    if (!searchQuery) return;
+
+    try {
+      const profileData = await ApiServices.getProfile({ id: user_id });
+      setFollower(profileData.followers || []);
+      const followingList = profileData.following || [];
+
+      let response;
+
+      if (filters.interests.length > 0) {
+        // Fetch with filters
+        response = await ApiServices.FilterSearchProfiles({
+          query: searchQuery,
+          interests: filters.interests,
+        });
+        response = response.data; // since filtered returns { data: [...] }
+      } else {
+        // Default search
+        response = await ApiServices.searchProfiles(searchQuery);
       }
-    };
 
-    fetchUsers();
-  }, [searchQuery, user_id]);
+      // Add isFollowing to each user
+      const usersWithStatus = response.map((user) => ({
+        ...user,
+        isFollowing: followingList.some((f) => f._id === user._id),
+      }));
+
+      setUsers(usersWithStatus);
+    } catch (err) {
+      console.error("Error fetching users:", err.message);
+    }
+  };
+
+  fetchAndSetUsers();
+}, [searchQuery, user_id, filters]);
+
 
 
   
@@ -65,31 +84,12 @@ function SearchResults() {
   };
 
 
-  // Function to fetch user data from backend based on filters
-  const fetchSearchUsers = async () => {
-    console.log("Current filters:", filters);
-    try {
-      const response = await ApiServices.FilterSearchProfiles({
-        query: searchQuery, // Send query directly
-        interests: filters.interests, // Send interests directly
-      });
-      setUsers(response.data);
 
-      // Filter users to only include those with the desired fields
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSearchUsers();
-  }, [filters]);
 
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
     e.target.disabled = true;
-
+console.log('occured')
     try {
       if (isFollowing) {
         // Unfollow user
@@ -177,7 +177,8 @@ function SearchResults() {
                 className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
                 onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
               >
-                {user.isFollowing ? "Unfollow" : "Follow"}
+                {user.isFollowing ===true && "Unfollow"}
+                {!user.isFollowing && "Follow"}
               </button>
             </div>
           ))}
