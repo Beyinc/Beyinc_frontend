@@ -20,6 +20,10 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
   const [post, setPost] = useState(initialPost ||{});
+  const [localLikes, setLocalLikes] = useState([]);
+  const [localDislikes, setLocalDislikes] = useState([]);
+  const [isLiking, setIsLiking] = useState(false);
+  const [isDisliking, setIsDisliking] = useState(false);
   const { email, role, userName, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
@@ -32,6 +36,8 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
   useEffect(() => {
     if (initialPost) {
       setPost(initialPost);
+      setLocalLikes(initialPost.likes || []);
+      setLocalDislikes(initialPost.disLikes || []);
     }
   }, [initialPost]);
   
@@ -66,44 +72,86 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
   
 
   const likingpost = async () => {
-    dispatch(setLoading({ visible: "yes" }));
+    if (isLiking) return;
+    setIsLiking(true);
+    
+    // Optimistically update UI
+    const newLikes = [...localLikes];
+    const userLikeIndex = newLikes.findIndex(like => like._id === user_id);
+    
+    if (userLikeIndex === -1) {
+      // Add like
+      newLikes.push({ _id: user_id, userName });
+      setLocalLikes(newLikes);
+      
+      // Remove from dislikes if exists
+      const newDislikes = localDislikes.filter(dislike => dislike._id !== user_id);
+      setLocalDislikes(newDislikes);
+    } else {
+      // Remove like
+      newLikes.splice(userLikeIndex, 1);
+      setLocalLikes(newLikes);
+    }
 
-    await ApiServices.likePost({ id: post?._id })
-      .then((res) => {
-        setPost(res.data);
-      })
-      .catch((err) => {
-        dispatch(
-          setToast({
-            message: "Error occured when updating Pitch",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      });
-    dispatch(setLoading({ visible: "no" }));
+    try {
+      const res = await ApiServices.likePost({ id: post?._id });
+      setPost(res.data);
+    } catch (err) {
+      // Revert changes on error
+      setLocalLikes(post.likes || []);
+      setLocalDislikes(post.disLikes || []);
+      dispatch(
+        setToast({
+          message: "Error occurred when updating Pitch",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    } finally {
+      setIsLiking(false);
+    }
   };
-
 
   const dislikePost = async () => {
-    dispatch(setLoading({ visible: "yes" }));
+    if (isDisliking) return;
+    setIsDisliking(true);
+    
+    // Optimistically update UI
+    const newDislikes = [...localDislikes];
+    const userDislikeIndex = newDislikes.findIndex(dislike => dislike._id === user_id);
+    
+    if (userDislikeIndex === -1) {
+      // Add dislike
+      newDislikes.push({ _id: user_id, userName });
+      setLocalDislikes(newDislikes);
+      
+      // Remove from likes if exists
+      const newLikes = localLikes.filter(like => like._id !== user_id);
+      setLocalLikes(newLikes);
+    } else {
+      // Remove dislike
+      newDislikes.splice(userDislikeIndex, 1);
+      setLocalDislikes(newDislikes);
+    }
 
-    await ApiServices.dislikePost({ id: post?._id })
-      .then((res) => {
-        setPost(res.data);
-      })
-      .catch((err) => {
-        dispatch(
-          setToast({
-            message: "Error occured when updating Pitch",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      });
-    dispatch(setLoading({ visible: "no" }));
+    try {
+      const res = await ApiServices.dislikePost({ id: post?._id });
+      setPost(res.data);
+    } catch (err) {
+      // Revert changes on error
+      setLocalLikes(post.likes || []);
+      setLocalDislikes(post.disLikes || []);
+      dispatch(
+        setToast({
+          message: "Error occurred when updating Pitch",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    } finally {
+      setIsDisliking(false);
+    }
   };
-
 
   const handleClickOutside = (event) => {
     if (
@@ -216,9 +264,9 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >
-      <div className="ProfilepostContainer">
-        <div className="PostHeaderContainer">
-          <div className="postTotaldetails">
+      <div className="ProfilepostContainer hover:cursor-pointer">
+        <div className="PostHeaderContainer ">
+          <div className="postTotaldetails ">
             <div
               className="PostheaderimageContainer"
               onClick={() => {
@@ -436,9 +484,8 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                   </svg>
                 </div>
                 <div style={{ color: "var(--personalDetails-color)" }}>
-                  {post?.likes?.length > 0 && post?.likes[0]?.userName}{" "}
-                  {post?.likes?.length > 1 &&
-                    `and ${post?.likes?.length - 1} other`}
+                  {localLikes.length > 0 && localLikes[0]?.userName}{" "}
+                  {localLikes.length > 1 && `and ${localLikes.length - 1} other`}
                 </div>
               </div>
 
@@ -458,9 +505,8 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                   </svg>
                 </div>
                 <div style={{ color: "var(--personalDetails-color)" }}>
-                  {post?.disLikes?.length > 0 && post?.disLikes[0]?.userName}{" "}
-                  {post?.disLikes?.length > 1 &&
-                    `and ${post?.disLikes?.length - 1} other`}
+                  {localDislikes.length > 0 && localDislikes[0]?.userName}{" "}
+                  {localDislikes.length > 1 && `and ${localDislikes.length - 1} other`}
                 </div>
               </div>
             </div>
@@ -470,7 +516,6 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
           <div className="actionsHolder">
             <div className="actionsHolder-leftContent">
               <div className="likeActionHolder" onClick={likingpost}>
-                {/* LIKE ACTION */}
                 <div>
                   <svg
                     width="20"
@@ -482,7 +527,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     <path
                       d="M34.6055 20.8477C35.2617 19.9805 35.625 18.918 35.625 17.8125C35.625 16.0586 34.6445 14.3985 33.0664 13.4727C32.6601 13.2344 32.1976 13.109 31.7266 13.1094H22.3594L22.5938 8.30862C22.6484 7.14847 22.2383 6.0469 21.4414 5.20706C21.0503 4.79311 20.5785 4.46375 20.0551 4.23935C19.5318 4.01494 18.9679 3.90025 18.3984 3.90237C16.3672 3.90237 14.5703 5.26956 14.0312 7.22659L10.6758 19.375H5.625C4.93359 19.375 4.375 19.9336 4.375 20.625V34.8438C4.375 35.5352 4.93359 36.0938 5.625 36.0938H29.1133C29.4727 36.0938 29.8242 36.0235 30.1484 35.8828C32.0078 35.0899 33.207 33.2735 33.207 31.2578C33.207 30.7657 33.1367 30.2813 32.9961 29.8125C33.6523 28.9453 34.0156 27.8828 34.0156 26.7774C34.0156 26.2852 33.9453 25.8008 33.8047 25.3321C34.4609 24.4649 34.8242 23.4024 34.8242 22.2969C34.8164 21.8047 34.7461 21.3164 34.6055 20.8477ZM7.1875 33.2813V22.1875H10.3516V33.2813H7.1875ZM32.0469 19.4922L31.1914 20.2344L31.7344 21.2266C31.9133 21.5534 32.006 21.9204 32.0039 22.293C32.0039 22.9375 31.7227 23.5508 31.2383 23.9727L30.3828 24.7149L30.9258 25.7071C31.1047 26.0339 31.1974 26.4009 31.1953 26.7735C31.1953 27.418 30.9141 28.0313 30.4297 28.4532L29.5742 29.1953L30.1172 30.1875C30.2961 30.5144 30.3888 30.8814 30.3867 31.2539C30.3867 32.1289 29.8711 32.918 29.0742 33.2774H12.8516V22.0625L16.7383 7.9805C16.8385 7.61956 17.0536 7.30113 17.3511 7.07345C17.6486 6.84577 18.0121 6.72126 18.3867 6.71878C18.6836 6.71878 18.9766 6.80472 19.2109 6.9805C19.5977 7.26956 19.8047 7.70706 19.7812 8.1719L19.4062 15.9219H31.6875C32.3828 16.3477 32.8125 17.0664 32.8125 17.8125C32.8125 18.4571 32.5312 19.0664 32.0469 19.4922Z"
                       fill={
-                        post?.likes?.map((l) => l._id).includes(user_id)
+                        localLikes.some(like => like._id === user_id)
                           ? "var(--followBtn-bg)"
                           : "var(--likeAction-bg)"
                       }
@@ -491,7 +536,6 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                 </div>
                 <div className="actionText">upvote</div>
               </div>
-              {/* DISLIKE ACTION */}
               <div className="likeActionHolder" onClick={dislikePost}>
                 <div>
                   <svg
@@ -504,7 +548,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     <path
                       d="M34.6055 19.1524C34.7461 18.6836 34.8164 18.1993 34.8164 17.7071C34.8164 16.6016 34.4531 15.5391 33.7969 14.6719C33.9375 14.2032 34.0078 13.7188 34.0078 13.2266C34.0078 12.1211 33.6445 11.0586 32.9883 10.1914C33.1289 9.72269 33.1992 9.23831 33.1992 8.74613C33.1992 6.7305 32 4.91409 30.1406 4.12113C29.8138 3.98022 29.4614 3.90841 29.1055 3.91019H5.625C4.93359 3.91019 4.375 4.46878 4.375 5.16019V19.3789C4.375 20.0703 4.93359 20.6289 5.625 20.6289H10.6758L14.0273 32.7696C14.5664 34.7266 16.3633 36.0938 18.3945 36.0938C19.5547 36.0938 20.6367 35.6328 21.4375 34.7891C22.2383 33.9493 22.6484 32.8477 22.5898 31.6875L22.3555 26.8868H31.7266C32.1992 26.8868 32.6602 26.7618 33.0664 26.5235C34.6445 25.6055 35.625 23.9414 35.625 22.1875C35.625 21.0821 35.2617 20.0196 34.6055 19.1524ZM7.1875 17.8125V6.71878H10.3516V17.8125H7.1875ZM31.6875 24.0782H19.4062L19.7812 31.8282C19.8047 32.293 19.5977 32.7305 19.2109 33.0196C18.9727 33.1953 18.6797 33.2852 18.3867 33.2813C18.0124 33.2777 17.6494 33.1527 17.3522 32.9252C17.0549 32.6977 16.8395 32.3799 16.7383 32.0196L12.8516 17.9375V6.71878H29.0781C29.4686 6.89377 29.8002 7.17783 30.033 7.53679C30.2659 7.89576 30.39 8.31435 30.3906 8.74222C30.3906 9.12113 30.3008 9.4805 30.1211 9.80863L29.5781 10.8008L30.4336 11.543C30.6744 11.7515 30.8674 12.0095 30.9995 12.2994C31.1316 12.5892 31.1998 12.9041 31.1992 13.2227C31.1992 13.6016 31.1094 13.961 30.9297 14.2891L30.3867 15.2813L31.2422 16.0235C31.483 16.232 31.676 16.49 31.8081 16.7798C31.9402 17.0697 32.0083 17.3846 32.0078 17.7032C32.0078 18.0821 31.918 18.4414 31.7383 18.7696L31.1914 19.7657L32.0469 20.5078C32.2877 20.7164 32.4807 20.9744 32.6128 21.2642C32.7449 21.5541 32.813 21.869 32.8125 22.1875C32.8125 22.9336 32.3828 23.6524 31.6875 24.0782Z"
                       fill={
-                        post?.disLikes?.map((l) => l._id).includes(user_id)
+                        localDislikes.some(dislike => dislike._id === user_id)
                           ? "var(--followBtn-bg)"
                           : "var(--likeAction-bg)"
                       }
@@ -513,7 +557,6 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                 </div>
                 <div className="actionText">downvote</div>
               </div>
-              {/* COMMENT ACTION */}
               <div
                 className="likeActionHolder"
                 onClick={() => navigate(`/posts/${post?._id}`)}
@@ -538,7 +581,6 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                 <div className="actionText">Comment</div>
               </div>
 
-              {/* SHARE ACTION */}
               <div className="likeActionHolder">
                 <ShareButton url={`${window.location.href}/${post?._id}`} />
               </div>
