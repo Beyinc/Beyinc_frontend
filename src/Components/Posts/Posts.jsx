@@ -518,7 +518,7 @@ console.log('filteredposts: ', filteredPosts)
       
    
       <div className="main-content">
-        <div className="allPostShowContainer">
+        <div className="allPostShowContainer ">
 
 
 
@@ -590,7 +590,11 @@ console.log('filteredposts: ', filteredPosts)
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
-              <div key={post?._id}>
+              <div key={post?._id}
+               onClick={() => {
+                  navigate(`/posts/${post._id}`);
+                }}
+                className="hover:cursor-pointer">
                 <h5>{post?.type}</h5>
                 <h4>
                   <b>{post?.postTitle}</b>
