@@ -27,43 +27,43 @@ function SearchResults() {
     socket.current = io(socket_io);
   }, []);
 
-  useEffect(() => {
-    const fetchAndSetUsers = async () => {
-      if (!searchQuery) return;
+useEffect(() => {
+  const fetchAndSetUsers = async () => {
+    if (!searchQuery) return;
 
-      try {
-        const profileData = await ApiServices.getProfile({ id: user_id });
-        setFollower(profileData.followers || []);
-        const followingList = profileData.following || [];
+    try {
+      const profileData = await ApiServices.getProfile({ id: user_id });
+      setFollower(profileData.followers || []);
+      const followingList = profileData.following || [];
 
-        let response;
+      let response;
 
-        if (filters.interests.length > 0) {
-          // Fetch with filters
-          response = await ApiServices.FilterSearchProfiles({
-            query: searchQuery,
-            interests: filters.interests,
-          });
-          response = response.data; // since filtered returns { data: [...] }
-        } else {
-          // Default search
-          response = await ApiServices.searchProfiles(searchQuery);
-        }
-
-        // Add isFollowing to each user
-        const usersWithStatus = response.map((user) => ({
-          ...user,
-          isFollowing: followingList.some((f) => f._id === user._id),
-        }));
-
-        setUsers(usersWithStatus);
-      } catch (err) {
-        console.error("Error fetching users:", err.message);
+      if (filters.interests.length > 0) {
+        // Fetch with filters
+        response = await ApiServices.FilterSearchProfiles({
+          query: searchQuery,
+          interests: filters.interests,
+        });
+        response = response.data; // since filtered returns { data: [...] }
+      } else {
+        // Default search
+        response = await ApiServices.searchProfiles(searchQuery);
       }
-    };
 
-    fetchAndSetUsers();
-  }, [searchQuery, user_id, filters]);
+      // Add isFollowing to each user
+      const usersWithStatus = response.data.map((user) => ({
+        ...user,
+        isFollowing: followingList.some((f) => f._id === user._id),
+      }));
+      console.log({usersWithStatus})
+      setUsers(usersWithStatus);
+    } catch (err) {
+      console.error("Error fetching users:", err.message);
+    }
+  };
+
+  fetchAndSetUsers();
+}, [searchQuery, user_id, filters]);
 
   const FilteredSearchProfiles = (newFilters) => {
     setFilters((prevFilters) => ({
