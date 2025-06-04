@@ -295,3 +295,8 @@ button.createPost-Button {
     margin-top: -30px;
   }
 }
+.ql-editor {
+  min-height: 150px;
+  padding: 12px;
+  overflow-y: hidden;
+}
