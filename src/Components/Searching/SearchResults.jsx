@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+
 import { ApiServices } from "../../Services/ApiServices";
 import SearchFilter from "./SearchFilter";
 import { useNavigate } from "react-router";
+
 import { socket_io } from "../../Utils";
 import { io } from "socket.io-client";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -28,36 +30,46 @@ function SearchResults() {
   }, []);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      if (searchQuery) {
-        try {
-          const profileResponse = await ApiServices.getProfile({ id: user_id });
-          const profileData = profileResponse.data;
-          setFollower(profileData.followers || []);
+    const fetchAndSetUsers = async () => {
+      if (!searchQuery) return;
 
-          const response = await ApiServices.searchProfiles(searchQuery);
-          console.log(response.data);
-          const usersWithStatus = response.data
-            .filter(
-              (user) => user._id !== user_id && user.isProfileComplete == true
-            ) //  Exclude self profile and incompleted profiles
-            .map((user) => ({
-              ...user,
-              isFollowing: profileData.followers.some(
-                (f) => f._id === user._id
-              ),
-            }));
+      try {
+        const profileResponse = await ApiServices.getProfile({ id: user_id });
+        const userProfileData = profileResponse;
+        console.log({profileDatafollowers: userProfileData});
+        
+        // Correctly access followers and following from the nested data structure
+        setFollower(userProfileData.data.followers || []);
+        const userFollowingList = userProfileData.data.following || [];
 
-          setUsers(usersWithStatus);
-          console.log(users);
-        } catch (err) {
-          console.error("Error fetching users:", err.message);
+        let searchResponse;
+
+        if (filters.interests.length > 0) {
+          // Fetch with filters
+          searchResponse = await ApiServices.FilterSearchProfiles({
+            query: searchQuery,
+            interests: filters.interests,
+          });
+          searchResponse = searchResponse.data; // since filtered returns { data: [...] }
+        } else {
+          // Default search
+          searchResponse = await ApiServices.searchProfiles(searchQuery);
         }
+
+        // Add isFollowing to each user
+        const usersWithStatus = searchResponse.data.map((user) => ({
+          ...user,
+          isFollowing: userFollowingList.some((f) => f._id === user._id),
+        }));
+        console.log({usersWithStatus});
+        setUsers(usersWithStatus);
+      } catch (err) {
+        console.error("Error fetching users:", err.message);
       }
     };
 
-    fetchUsers();
-  }, [searchQuery, user_id]);
+    fetchAndSetUsers();
+  }, [searchQuery, user_id, filters]);
 
   const FilteredSearchProfiles = (newFilters) => {
     setFilters((prevFilters) => ({
@@ -66,66 +78,68 @@ function SearchResults() {
     }));
   };
 
-  // Function to fetch user data from backend based on filters
-  const fetchSearchUsers = async () => {
-    console.log("Current filters:", filters);
-    try {
-      const response = await ApiServices.FilterSearchProfiles({
-        query: searchQuery, // Send query directly
-        interests: filters.interests, // Send interests directly
-      });
-      setUsers(response.data);
-
-      // Filter users to only include those with the desired fields
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSearchUsers();
-  }, [filters]);
-
   const handleFollowToggle = async (e, userId, isFollowing) => {
     e.target.disabled = true;
 
+    // Optimistically update the UI immediately
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user._id === userId ? { ...user, isFollowing: !isFollowing } : user
+      )
+    );
+
+    // Optimistically update followers list
+    setFollower((prevFollowers) => {
+      if (isFollowing) {
+        // Remove from followers (unfollow)
+        return prevFollowers.filter((f) => f._id !== userId);
+      } else {
+        // Add to followers (follow)
+        const userToAdd = users.find((user) => user._id === userId);
+        return [...prevFollowers, userToAdd];
+      }
+    });
+
     try {
+      let response;
       if (isFollowing) {
         // Unfollow user
-        const response = await ApiServices.unfollowUser({
+        response = await ApiServices.unfollowUser({
           unfollowReqBy: user_id,
           unfollowReqTo: userId,
         });
-
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, isFollowing: false } : user
-          )
-        );
-
-        setFollower(response.data.followers);
       } else {
         // Follow user
-        const response = await ApiServices.saveFollowers({
+        response = await ApiServices.saveFollowers({
           followerReqBy: user_id,
           followerReqTo: userId,
         });
 
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, isFollowing: true } : user
-          )
-        );
-
-        setFollower(response.data.followers);
-
-        socket.current.emit("sendNotification", {
+        // Send notification only after successful follow
+        await socket.current.emit("sendNotification", {
           senderId: user_id,
           receiverId: userId,
         });
       }
+
+      // Update with actual server response
+      setFollower(response.data.followers);
     } catch (err) {
+      // Revert optimistic updates on error
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, isFollowing: isFollowing } : user
+        )
+      );
+      setFollower((prevFollowers) => {
+        if (isFollowing) {
+          const userToAdd = users.find((user) => user._id === userId);
+          return [...prevFollowers, userToAdd];
+        } else {
+          return prevFollowers.filter((f) => f._id !== userId);
+        }
+      });
+
       console.error("Error in handleFollowToggle:", err);
       dispatch(
         setToast({
@@ -142,6 +156,7 @@ function SearchResults() {
   return (
     <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-10">
       <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
+     
       <div
         className="mt-6 w-full lg:w-[1100px] bg-white p-8 py-8 rounded-lg"
         style={{ border: "1px solid lightgray" }}
@@ -196,3 +211,4 @@ function SearchResults() {
 }
 
 export default SearchResults;
+
