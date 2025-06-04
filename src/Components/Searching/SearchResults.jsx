@@ -27,43 +27,47 @@ function SearchResults() {
     socket.current = io(socket_io);
   }, []);
 
-useEffect(() => {
-  const fetchAndSetUsers = async () => {
-    if (!searchQuery) return;
+  useEffect(() => {
+    const fetchAndSetUsers = async () => {
+      if (!searchQuery) return;
 
-    try {
-      const profileData = await ApiServices.getProfile({ id: user_id });
-      setFollower(profileData.followers || []);
-      const followingList = profileData.following || [];
+      try {
+        const profileResponse = await ApiServices.getProfile({ id: user_id });
+        const userProfileData = profileResponse;
+        console.log({profileDatafollowers: userProfileData});
+        
+        // Correctly access followers and following from the nested data structure
+        setFollower(userProfileData.data.followers || []);
+        const userFollowingList = userProfileData.data.following || [];
 
-      let response;
+        let searchResponse;
 
-      if (filters.interests.length > 0) {
-        // Fetch with filters
-        response = await ApiServices.FilterSearchProfiles({
-          query: searchQuery,
-          interests: filters.interests,
-        });
-        response = response.data; // since filtered returns { data: [...] }
-      } else {
-        // Default search
-        response = await ApiServices.searchProfiles(searchQuery);
+        if (filters.interests.length > 0) {
+          // Fetch with filters
+          searchResponse = await ApiServices.FilterSearchProfiles({
+            query: searchQuery,
+            interests: filters.interests,
+          });
+          searchResponse = searchResponse.data; // since filtered returns { data: [...] }
+        } else {
+          // Default search
+          searchResponse = await ApiServices.searchProfiles(searchQuery);
+        }
+
+        // Add isFollowing to each user
+        const usersWithStatus = searchResponse.data.map((user) => ({
+          ...user,
+          isFollowing: userFollowingList.some((f) => f._id === user._id),
+        }));
+        console.log({usersWithStatus});
+        setUsers(usersWithStatus);
+      } catch (err) {
+        console.error("Error fetching users:", err.message);
       }
+    };
 
-      // Add isFollowing to each user
-      const usersWithStatus = response.data.map((user) => ({
-        ...user,
-        isFollowing: followingList.some((f) => f._id === user._id),
-      }));
-      console.log({usersWithStatus})
-      setUsers(usersWithStatus);
-    } catch (err) {
-      console.error("Error fetching users:", err.message);
-    }
-  };
-
-  fetchAndSetUsers();
-}, [searchQuery, user_id, filters]);
+    fetchAndSetUsers();
+  }, [searchQuery, user_id, filters]);
 
   const FilteredSearchProfiles = (newFilters) => {
     setFilters((prevFilters) => ({
@@ -74,42 +78,66 @@ useEffect(() => {
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
     e.target.disabled = true;
+
+    // Optimistically update the UI immediately
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user._id === userId ? { ...user, isFollowing: !isFollowing } : user
+      )
+    );
+
+    // Optimistically update followers list
+    setFollower((prevFollowers) => {
+      if (isFollowing) {
+        // Remove from followers (unfollow)
+        return prevFollowers.filter((f) => f._id !== userId);
+      } else {
+        // Add to followers (follow)
+        const userToAdd = users.find((user) => user._id === userId);
+        return [...prevFollowers, userToAdd];
+      }
+    });
+
     try {
+      let response;
       if (isFollowing) {
         // Unfollow user
-        const response = await ApiServices.unfollowUser({
+        response = await ApiServices.unfollowUser({
           unfollowReqBy: user_id,
           unfollowReqTo: userId,
         });
-
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, isFollowing: false } : user
-          )
-        );
-
-        setFollower(response.data.followers);
       } else {
         // Follow user
-        const response = await ApiServices.saveFollowers({
+        response = await ApiServices.saveFollowers({
           followerReqBy: user_id,
           followerReqTo: userId,
         });
 
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, isFollowing: true } : user
-          )
-        );
-
-        setFollower(response.data.followers);
-
-        socket.current.emit("sendNotification", {
+        // Send notification only after successful follow
+        await socket.current.emit("sendNotification", {
           senderId: user_id,
           receiverId: userId,
         });
       }
+
+      // Update with actual server response
+      setFollower(response.data.followers);
     } catch (err) {
+      // Revert optimistic updates on error
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, isFollowing: isFollowing } : user
+        )
+      );
+      setFollower((prevFollowers) => {
+        if (isFollowing) {
+          const userToAdd = users.find((user) => user._id === userId);
+          return [...prevFollowers, userToAdd];
+        } else {
+          return prevFollowers.filter((f) => f._id !== userId);
+        }
+      });
+
       console.error("Error in handleFollowToggle:", err);
       dispatch(
         setToast({
