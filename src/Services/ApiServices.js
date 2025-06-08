@@ -1301,6 +1301,17 @@ export const ApiServices = {
         })
         .catch((err) => reject(err));
     });
-  }
-  
+  },
+    getNewProfiles: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/newProfiles`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };
