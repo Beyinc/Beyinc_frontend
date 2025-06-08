@@ -81,14 +81,19 @@ function SearchResults() {
   const handleFollowToggle = async (e, userId, isFollowing) => {
     e.target.disabled = true;
 
-    // Optimistically update the UI immediately
+    // Immediately update the button text and state
+    const button = e.target;
+    const newFollowState = !isFollowing;
+    button.textContent = newFollowState ? "Unfollow" : "Follow";
+
+    // Immediately update the UI state
     setUsers((prevUsers) =>
       prevUsers.map((user) =>
-        user._id === userId ? { ...user, isFollowing: !isFollowing } : user
+        user._id === userId ? { ...user, isFollowing: newFollowState } : user
       )
     );
 
-    // Optimistically update followers list
+    // Immediately update followers list
     setFollower((prevFollowers) => {
       if (isFollowing) {
         // Remove from followers (unfollow)
@@ -126,6 +131,8 @@ function SearchResults() {
       setFollower(response.data.followers);
     } catch (err) {
       // Revert optimistic updates on error
+      button.textContent = isFollowing ? "Unfollow" : "Follow";
+      
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user._id === userId ? { ...user, isFollowing: isFollowing } : user
