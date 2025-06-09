@@ -44,8 +44,8 @@ function SearchResults() {
         console.log({profileDatafollowers: userProfileData});
         
         // Correctly access followers and following from the nested data structure
-        setFollower(userProfileData.data.followers || []);
-        const userFollowingList = userProfileData.data.following || [];
+        setFollower(userProfileData.followers || []);
+        const userFollowingList = userProfileData.following || [];
 
         let searchResponse;
 
@@ -55,14 +55,15 @@ function SearchResults() {
             query: searchQuery,
             interests: filters.interests,
           });
-          searchResponse = searchResponse.data; // since filtered returns { data: [...] }
+          searchResponse = searchResponse; // since filtered returns { data: [...] }
         } else {
           // Default search
           searchResponse = await ApiServices.searchProfiles(searchQuery);
+          
         }
-
+console.log('searchResponse',searchResponse)
         // Add isFollowing to each user
-        const usersWithStatus = searchResponse.data.map((user) => ({
+        const usersWithStatus = searchResponse.map((user) => ({
           ...user,
           isFollowing: userFollowingList.some((f) => f._id === user._id),
         }));

@@ -56,7 +56,7 @@ export const apiCallSlice = createSlice(
       ApiServices.verifyAccessToken({ accessToken })
         .then((res) => {
           // Update user details in local storage
-          localStorage.setItem('user', JSON.stringify(res.data));
+          localStorage.setItem('user', JSON.stringify(res));
   
           // Decode and dispatch user data
           const decodedUser = jwtDecode(accessToken);
@@ -71,7 +71,7 @@ export const apiCallSlice = createSlice(
         .then((userData) => {
           console.log('API call login successful', userData);
   
-          dispatch(setUserDetails(userData.data));
+          dispatch(setUserDetails(userData));
          dispatch(setLoading({ visible: 'no' }));
         })
         .catch((err) => {
