@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import BoxCategories from "./BoxCategories";
-import { allskills, dataEntry } from "../../Utils";
+import {
+  allskills,
+  dataEntry,
+} from "../../Utils";
 import { useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
 
@@ -144,7 +147,7 @@ const EntryDetails = () => {
           onChange={handleUsernameChange}
         />
 
-         <div className="flex flex-col md:flex-row pl-6 mt-3 md:mt-11 md:mb-5">
+        <div className="flex flex-col md:flex-row pl-6 mt-3 md:mt-11 md:mb-5">
           <h2 className="font-bold">Domain*</h2>
           <span className="md:ml-2">(Choose up to 5 )</span>
         </div>
@@ -175,8 +178,6 @@ const EntryDetails = () => {
           ))}
         </div>
 
-
-
         <h2 className="font-bold md:mb-5 pl-6 mt-3 md:mt-11">Headline</h2>
         <input
           type="text"
@@ -186,7 +187,6 @@ const EntryDetails = () => {
           onChange={handleHeadlineChange}
         />
 
-
         <h2 className="font-bold md:mb-5 pl-6 mt-3 md:mt-11">Profile Image</h2>
         <input
           type="file"
@@ -194,8 +194,6 @@ const EntryDetails = () => {
           className="ml-6 w-[840px] h-[20px] mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
           onChange={handleImageChange}
         />
-       
-
 
         <div className="flex flex-col md:flex-row pl-6 mt-3 md:mt-11 md:mb-5">
           <h2 className="font-bold">Choose your interest</h2>
