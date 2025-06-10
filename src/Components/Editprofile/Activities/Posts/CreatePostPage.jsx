@@ -500,12 +500,12 @@ const CreatePostPage = () => {
                       ></textarea>
                     </div>
 
-                    <div>
+                    {/* <div>
                       <label className="createPost-labels">
                         Group Discussion{" "}
                       </label>
-                    </div>
-                    <div className="createPost-textarea">
+                    </div> */}
+                    {/* <div className="createPost-textarea">
                       <textarea
                         type="text"
                         style={{
@@ -522,7 +522,7 @@ const CreatePostPage = () => {
                         rows={7}
                         cols={7}
                       ></textarea>
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </TabPanel>
