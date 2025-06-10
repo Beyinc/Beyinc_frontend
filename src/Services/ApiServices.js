@@ -1050,18 +1050,30 @@ export const ApiServices = {
     });
   },
 
-  addPostComment: (obj) => {
-    return new Promise((resolve, reject) => {
-      axiosInstance
-        .post(`/post/addPostComment`, obj)
-        .then((res) => {
-          if (res) {
-            resolve(res);
-          }
-        })
-        .catch((err) => reject(err));
-    });
-  },
+  // addPostComment: (obj) => {
+  //   return new Promise((resolve, reject) => {
+  //     axiosInstance
+  //       .post(`/post/addPostComment`, obj)
+  //       .then((res) => {
+  //         if (res) {
+  //           resolve(res);
+  //         }
+  //       })
+  //       .catch((err) => reject(err));
+  //   });
+  // },
+
+  addPostComment: (formData) => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .post("/post/addPostComment", formData) // Don't set headers manually
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => reject(err));
+  });
+},
+
 
   likePostComment: (obj) => {
     return new Promise((resolve, reject) => {

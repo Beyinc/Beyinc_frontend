@@ -29,6 +29,7 @@ const IndividualPostComments = ({
 
   const [count, setCount] = useState(0);
   const [dislikecount, setdislikecount] = useState(0);
+const BACKEND_BASE_URL = "http://localhost:4000";
 
   useEffect(() => {
     setLiked(c.likes?.includes(user_id));
@@ -113,7 +114,85 @@ const IndividualPostComments = ({
               {format(c?.createdAt)}
             </div>
           </div>
-          <div className="IndicommentsSectionDetailscomment">{c?.comment}</div>
+          {/* <div className="IndicommentsSectionDetailscomment">{c?.comment?c.comment:c.fileUrl}</div> */}
+          <div className="IndicommentsSectionDetailscomment">
+{/* {c?.comment ? (
+  c.comment
+) : c?.fileUrl ? (
+  (() => {
+    const fileName = c.fileUrl.split('/').pop(); // get file name from full URL or path
+    const encodedFileName = encodeURIComponent(fileName);
+    const fileURL = `${BACKEND_BASE_URL}/uploads/comments/${encodedFileName}`;
+
+    return (
+      <a href={fileURL} target="_blank" rel="noopener noreferrer">
+        {fileName.match(/\.(jpeg|jpg|png|gif)$/i) ? (
+          <img
+            src={fileURL}
+            alt="comment file"
+            style={{
+              maxWidth: "200px",
+              maxHeight: "200px",
+              borderRadius: "8px",
+              marginTop: "5px",
+              cursor: "pointer",
+            }}
+          />
+        ) : (
+          <span style={{ color: "#0073e6", textDecoration: "underline" }}>
+            View attached file
+          </span>
+        )}
+      </a>
+    );
+  })()
+) : null} */}
+
+
+
+<>
+  {/* Always show comment if it exists */}
+  {c?.comment && (
+    <div style={{ marginBottom: "5px" }}>
+      {c.comment}
+    </div>
+  )}
+
+  {/* Show file if fileUrl exists */}
+  {c?.fileUrl && (() => {
+    const fileName = c.fileUrl.split('/').pop(); // get file name
+    const encodedFileName = encodeURIComponent(fileName);
+    const fileURL = `${BACKEND_BASE_URL}/uploads/comments/${encodedFileName}`;
+
+    return (
+      <a href={fileURL} target="_blank" rel="noopener noreferrer">
+        {fileName.match(/\.(jpeg|jpg|png|gif)$/i) ? (
+          <img
+            src={fileURL}
+            alt="comment file"
+            style={{
+              maxWidth: "200px",
+              maxHeight: "200px",
+              borderRadius: "8px",
+              marginTop: "5px",
+              cursor: "pointer",
+              display: "block"
+            }}
+          />
+        ) : (
+          <span style={{ color: "#0073e6", textDecoration: "underline" }}>
+            View attached file
+          </span>
+        )}
+      </a>
+    );
+  })()}
+</>
+
+
+
+</div>
+
           <div
             style={{
               display: "flex",
