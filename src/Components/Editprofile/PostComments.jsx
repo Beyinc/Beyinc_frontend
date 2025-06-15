@@ -293,28 +293,77 @@ const PostComments = ({ fetchComments, postId }) => {
     setFile(selectedFile);
   };
 
-  const sendText = async () => {
-    if (!comment.trim() && !file) return;
+  // const sendText = async () => {
+  //   if (!comment.trim() && !file) return;
 
-    dispatch(setLoading({ visible: "yes" }));
-    const formData = new FormData();
-    formData.append("postId", postId);
-    formData.append("commentBy", user_id);
-    formData.append("comment", comment);
-    if (file) formData.append("file", file);
+  //   dispatch(setLoading({ visible: "yes" }));
+  //   const formData = new FormData();
+  //   formData.append("postId", postId);
+  //   formData.append("commentBy", user_id);
+  //   formData.append("comment", comment);
+  //   if (file) formData.append("file", file);
 
+  //   try {
+  //     await ApiServices.addPostComment(formData);
+  //     setComment("");
+  //     setFile(null);
+  //     setpostTrigger((prev) => !prev);
+  //   } catch (err) {
+  //     // navigate("/posts");
+  //     alert(err)
+  //   } finally {
+  //     dispatch(setLoading({ visible: "no" }));
+  //   }
+  // };
+
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
+
+const sendText = async () => {
+  if (!comment.trim() && !file) return;
+
+  dispatch(setLoading({ visible: "yes" }));
+
+  let fileBase64 = "";
+
+  if (file) {
     try {
-      await ApiServices.addPostComment(formData);
-      setComment("");
-      setFile(null);
-      setpostTrigger((prev) => !prev);
+      fileBase64 = await toBase64(file);
+      if (!fileBase64.startsWith("data:")) {
+        throw new Error("Invalid base64 file format");
+      }
     } catch (err) {
-      // navigate("/posts");
-      alert(err)
-    } finally {
+      alert("Failed to convert file to base64.");
       dispatch(setLoading({ visible: "no" }));
+      return;
     }
-  };
+  }
+
+  try {
+    const response = await ApiServices.addPostComment({
+      postId,
+      commentBy: user_id,
+      comment,
+      fileBase64,
+    });
+
+    setComment("");
+    setFile(null);
+    setpostTrigger((prev) => !prev);
+  } catch (err) {
+    alert(err?.response?.data?.error || "Something went wrong");
+  } finally {
+    dispatch(setLoading({ visible: "no" }));
+  }
+};
+
+ 
+
 
   const onLike = async (commentId) => {
     dispatch(setLoading({ visible: "yes" }));
