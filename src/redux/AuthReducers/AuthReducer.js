@@ -69,9 +69,9 @@ export const apiCallSlice = createSlice(
           return ApiServices.getProfile();
         })
         .then((userData) => {
-          console.log('API call login successful', userData);
+          console.log('API call login successful', userData.data);
   
-          dispatch(setUserDetails(userData));
+          dispatch(setUserDetails(userData.data));
          dispatch(setLoading({ visible: 'no' }));
         })
         .catch((err) => {

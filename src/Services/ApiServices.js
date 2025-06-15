@@ -176,7 +176,7 @@ export const ApiServices = {
         .post(`/userDetails/getUser`, obj)
         .then((res) => {
           if (res.data) {
-            resolve(res.data);
+            resolve(res);
           }
         })
         .catch((err) => reject(err));
