@@ -29,7 +29,7 @@ const IndividualPostComments = ({
 
   const [count, setCount] = useState(0);
   const [dislikecount, setdislikecount] = useState(0);
-const BACKEND_BASE_URL = "http://localhost:4000";
+  const BACKEND_BASE_URL = "http://localhost:4000";
 
   useEffect(() => {
     setLiked(c.likes?.includes(user_id));
@@ -116,7 +116,7 @@ const BACKEND_BASE_URL = "http://localhost:4000";
           </div>
           {/* <div className="IndicommentsSectionDetailscomment">{c?.comment?c.comment:c.fileUrl}</div> */}
           <div className="IndicommentsSectionDetailscomment">
-{/* {c?.comment ? (
+            {/* {c?.comment ? (
   c.comment
 ) : c?.fileUrl ? (
   (() => {
@@ -148,27 +148,21 @@ const BACKEND_BASE_URL = "http://localhost:4000";
   })()
 ) : null} */}
 
-
-
-<>
+          <>
   {/* Always show comment if it exists */}
   {c?.comment && (
-    <div style={{ marginBottom: "5px" }}>
-      {c.comment}
-    </div>
+    <div style={{ marginBottom: "5px" }}>{c.comment}</div>
   )}
 
   {/* Show file if fileUrl exists */}
   {c?.fileUrl && (() => {
-    const fileName = c.fileUrl.split('/').pop(); // get file name
-    const encodedFileName = encodeURIComponent(fileName);
-    const fileURL = `${BACKEND_BASE_URL}/uploads/comments/${encodedFileName}`;
+    const fileName = c.fileUrl.split("/").pop();
 
     return (
-      <a href={fileURL} target="_blank" rel="noopener noreferrer">
+      <a href={c.fileUrl} target="_blank" rel="noopener noreferrer">
         {fileName.match(/\.(jpeg|jpg|png|gif)$/i) ? (
           <img
-            src={fileURL}
+            src={c.fileUrl}
             alt="comment file"
             style={{
               maxWidth: "200px",
@@ -176,11 +170,16 @@ const BACKEND_BASE_URL = "http://localhost:4000";
               borderRadius: "8px",
               marginTop: "5px",
               cursor: "pointer",
-              display: "block"
+              display: "block",
             }}
           />
         ) : (
-          <span style={{ color: "#0073e6", textDecoration: "underline" }}>
+          <span
+            style={{
+              color: "#0073e6",
+              textDecoration: "underline",
+            }}
+          >
             View attached file
           </span>
         )}
@@ -189,9 +188,7 @@ const BACKEND_BASE_URL = "http://localhost:4000";
   })()}
 </>
 
-
-
-</div>
+          </div>
 
           <div
             style={{

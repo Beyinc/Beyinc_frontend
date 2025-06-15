@@ -620,7 +620,7 @@ console.log('filteredposts: ', filteredPosts)
                 cursor: "pointer",
               }}
               onClick={() => {
-                navigate("/searchusers");
+                navigate("/see-all-users");
               }}
             >
               See All
