@@ -51,7 +51,7 @@ import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
 import About from "./Components/Profile/About";
 import Profile from "./Components/Profile/Profile";
-import SeeAllUsers from "./Components/AllUsers/SeeAllUsers";
+// import SeeAllUsers from "./Components/AllUsers/SeeAllUsers";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -369,7 +369,7 @@ const App = () => {
            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
            <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
-            <Route path="/see-all-users" element={<SeeAllUsers/>}></Route>
+            {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
            
         </Routes>
