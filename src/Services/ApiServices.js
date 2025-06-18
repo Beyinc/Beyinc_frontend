@@ -6,8 +6,8 @@ export const ApiServices = {
       axiosInstance
         .post(`/auth/verifyApiAccessToken`, obj)
         .then((res) => {
-          if (res) {
-            resolve(res);
+          if (res.data) {
+            resolve(res.data);
           }
         })
         .catch((err) => reject(err));
@@ -175,7 +175,7 @@ export const ApiServices = {
       axiosInstance
         .post(`/userDetails/getUser`, obj)
         .then((res) => {
-          if (res) {
+          if (res.data) {
             resolve(res);
           }
         })
@@ -1271,7 +1271,7 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`/searchProfiles?query=${query}`) // Use query param
-        .then((res) => resolve(res))
+        .then((res) => resolve(res.data))
         .catch((err) => reject(err));
     });
   },
@@ -1282,7 +1282,7 @@ export const ApiServices = {
         .post(`/filterSearchProfiles`, obj)
         .then((res) => {
           if (res) {
-            resolve(res);
+            resolve(res.data);
           }
         })
         .catch((err) => reject(err));
@@ -1313,6 +1313,17 @@ export const ApiServices = {
         })
         .catch((err) => reject(err));
     });
-  }
-  
+  },
+    getNewProfiles: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/newProfiles`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };
