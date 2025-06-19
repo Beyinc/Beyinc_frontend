@@ -369,7 +369,7 @@ const App = () => {
            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
            <Route path="/dashboard/userBookings" element={<UserBooking />} />
            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
-            <Route path="/see-all-users" element={<SeeAllUsers/>}></Route>
+            {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
            
         </Routes>
