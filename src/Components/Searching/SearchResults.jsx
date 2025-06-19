@@ -17,11 +17,7 @@ function SearchResults() {
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("query");
   const [users, setUsers] = useState([]);
-  const [follower, setFollower] = useState(() => {
-    // Initialize from localStorage if available
-    const savedFollowers = localStorage.getItem('followers');
-    return savedFollowers ? JSON.parse(savedFollowers) : [];
-  });
+  const [follower, setFollower] = useState([]);
   const [localFollowStates, setLocalFollowStates] = useState({});
   const { user_id } = useSelector((store) => store.auth.loginDetails);
   const dispatch = useDispatch();
@@ -41,11 +37,13 @@ function SearchResults() {
       try {
         const profileResponse = await ApiServices.getProfile({ id: user_id });
         const userProfileData = profileResponse;
-        console.log({profileDatafollowers: userProfileData});
+        console.log('userProfileData',userProfileData);
         
         // Correctly access followers and following from the nested data structure
-        setFollower(userProfileData.followers || []);
-        const userFollowingList = userProfileData.following || [];
+        setFollower(userProfileData.data.followers || []);
+
+        console.log('set follower', userProfileData.data.followers);
+        const userFollowingList = userProfileData.data.following || [];
 
         let searchResponse;
 
@@ -61,13 +59,13 @@ function SearchResults() {
           searchResponse = await ApiServices.searchProfiles(searchQuery);
           
         }
-console.log('searchResponse',searchResponse)
+
         // Add isFollowing to each user
         const usersWithStatus = searchResponse.map((user) => ({
           ...user,
           isFollowing: userFollowingList.some((f) => f._id === user._id),
         }));
-        console.log({usersWithStatus});
+        // console.log({usersWithStatus});
         setUsers(usersWithStatus);
       } catch (err) {
         console.error("Error fetching users:", err.message);
