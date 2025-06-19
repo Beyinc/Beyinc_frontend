@@ -85,7 +85,7 @@ console.log('searchResponse',searchResponse)
   };
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
-    e.target.disabled = true;
+    // e.target.disabled = true;
 
     // Immediately update local follow state
     setLocalFollowStates(prev => ({
