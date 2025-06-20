@@ -202,13 +202,13 @@ const EntryDetails = () => {
         <div className="flex flex-col md:flex-row flex-wrap mt-4 ml-6">
           {dataEntry.map((entry) => (
             <label
-              key={entry}
+              key={entry.key}
               className="flex items-center mr-4 mb-2 text-xl font-normal"
             >
               <input
                 type="checkbox"
-                value={entry.title}
-                checked={interests.includes(entry.title)}
+                value={entry.key}
+                checked={interests.includes(entry.key)}
                 className="mr-2 accent-blue-600" // Change accent color as needed
                 onChange={handleInterestChange}
               />
