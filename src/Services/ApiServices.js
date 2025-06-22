@@ -209,6 +209,36 @@ export const ApiServices = {
     });
   },
 
+  // followers and followings api
+
+
+
+  getFollowers: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("/userDetails/getFollowers")
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+   getFollowings: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("/userDetails/getFollowings")
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   login: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1064,16 +1094,15 @@ export const ApiServices = {
   // },
 
   addPostComment: (formData) => {
-  return new Promise((resolve, reject) => {
-    axiosInstance
-      .post("/post/addPostComment", formData) // Don't set headers manually
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((err) => reject(err));
-  });
-},
-
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post("/post/addPostComment", formData) // Don't set headers manually
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   likePostComment: (obj) => {
     return new Promise((resolve, reject) => {
@@ -1314,7 +1343,7 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-    getNewProfiles: (obj) => {
+  getNewProfiles: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`/newProfiles`, obj)

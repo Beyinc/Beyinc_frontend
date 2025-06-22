@@ -202,6 +202,13 @@ const PostComments = ({ fetchComments, postId }) => {
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Add a comment..."
                 style={{ resize: "none" }}
+              onKeyDown={(e) => {
+    if (e.key === "Enter" && (comment.trim() || file)) {
+      e.preventDefault(); 
+      sendText();
+    }
+  }}    
+                
               />
 
               {/* 📎 Attach File Icon (paperclip) */}
