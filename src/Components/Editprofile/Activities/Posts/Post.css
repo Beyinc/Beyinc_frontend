@@ -58,6 +58,7 @@
   padding: 6px 10px;
   border-radius: 20px;
   color: black;
+  white-space: nowrap;
 }
 
 .postDescContainer {

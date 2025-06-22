@@ -223,7 +223,7 @@ const IndividualPostDetailsCard = () => {
       {post !== null && (
         <div className="post-details-container">
           <div className="post-details-content-left">
-            <div className="createPostHeader" style={{ position: "relative" }}>
+            <div style={{ position: "relative" }}>
               <div className="PostHeaderContainer">
                 <div className="individualPostTotalDetails">
                   <div
@@ -256,6 +256,8 @@ const IndividualPostDetailsCard = () => {
                     <div className="postCardRole">{post?.createdBy?.role}</div>
                   </div>
                 </div>
+
+                <span className="postType"> {post?.type}</span>
 
                 <div
                   style={{
@@ -375,26 +377,22 @@ const IndividualPostDetailsCard = () => {
               </div>
 
               <div className="PostimageContainer">
-             
-
-             {post?.image?.url && ( // Check if the image URL is available
-              <img
-                src={post.image.url}
-                style={{ objectFit: "contain" }}
-                alt=""
-                onClick={() => navigate(`/posts/${post?._id}`)}
-              />
-              )}
-
+                {post?.image?.url && ( // Check if the image URL is available
+                  <img
+                    src={post.image.url}
+                    style={{ objectFit: "contain" }}
+                    alt=""
+                    onClick={() => navigate(`/posts/${post?._id}`)}
+                  />
+                )}
               </div>
               {(post?.openDiscussion === true ||
                 post?.openDiscussionTeam.map((o) => o._id).includes(user_id) ||
                 post?.createdBy._id === user_id ||
                 role === "Admin") && (
-                  <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
-                    {post?.fullDetails}
-                  </div>
-                
+                <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
+                  {post?.fullDetails}
+                </div>
               )}
 
               <div className="likeCommentDetails">
@@ -631,7 +629,7 @@ const IndividualPostDetailsCard = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <b>Post type : </b>{" "}
-                    <span className="postType"> {post?.type}</span>
+                    <span className="postType"> {post?.visibility}</span>
                   </div>
 
                   {/* <div style={{ marginBottom: "10px" }}>
