@@ -172,7 +172,18 @@ const PostComments = ({ fetchComments, postId }) => {
       );
     }
   };
-
+ const handleKeyDown = (e) => {
+      console.log('triggred')
+      const currentValue = e.target.value.trim();
+      
+      if (e.key === "Enter" && !e.shiftKey) {
+          console.log('entered')
+            e.preventDefault();
+            if (currentValue){ 
+                setComment(currentValue);
+              sendText();}
+        }
+    }
   return (
     <div className="">
       <div className="postCommentAddSection">
@@ -198,6 +209,7 @@ const PostComments = ({ fetchComments, postId }) => {
                 className="textarea"
                 rows={2}
                 cols={80}
+                onKeyDown={handleKeyDown}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Add a comment..."
