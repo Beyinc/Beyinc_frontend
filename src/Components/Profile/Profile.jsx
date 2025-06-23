@@ -14,7 +14,7 @@ import ProfileCard from "./ProfileCard";
 import BookSession from "../Editprofile/BookSession/BookSession2";
 
 import { ApiServices } from "../../Services/ApiServices";
-import { CalendarServices } from '../../Services/CalendarServices';
+import { CalendarServices } from "../../Services/CalendarServices";
 
 import "../Editprofile/EditProfile.css";
 
@@ -73,7 +73,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchAvailabilityData = async () => {
       try {
-        const { data } = await CalendarServices.getAvailabilityData({ mentorId: id });
+        const { data } = await CalendarServices.getAvailabilityData({
+          mentorId: id,
+        });
         setService(data.availability?.sessions || []);
       } catch (error) {
         console.error("Error fetching availability data:", error);
@@ -88,25 +90,26 @@ const Profile = () => {
   };
 
   return (
-    <div className="h-full bg-customBackground relative">
+    <div className="h-full bg-customBackground relative ">
       <div className="relative">
-        <div className="lg:p-4">
+        <div>
           <img
             src="/Banner.png"
             alt="Banner"
-            className="w-full h-48 lg:h-80 object-cover rounded-none lg:rounded-xl"
+            className="w-full h-48 lg:h-80 object-cover rounded-none m-2"
           />
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:top-52 relative">
-          <div className="mb-4 lg:-mt-36 ml-7">
+        <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:ml-10 relative">
+          <div className="mb-4 lg:-mt-36 ml-6">
             <ProfileCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
               profileData={profileData}
             />
 
-            {(profileData.beyincProfile === "Mentor" || profileData.beyincProfile === "Co-Founder") &&
+            {(profileData.beyincProfile === "Mentor" ||
+              profileData.beyincProfile === "Co-Founder") &&
               service.length > 0 && (
                 <div className="BookSessionCard">
                   <BookSession
@@ -118,8 +121,9 @@ const Profile = () => {
               )}
           </div>
 
-          <div className="w-full">
-            {(profileData.beyincProfile === "Mentor" || profileData.beyincProfile === "Co-Founder") && (
+          <div className="w-full mt-0">
+            {(profileData.beyincProfile === "Mentor" ||
+              profileData.beyincProfile === "Co-Founder") && (
               <TabsAndInvestment
                 selfProfile={selfProfile}
                 setSelfProfile={setSelfProfile}

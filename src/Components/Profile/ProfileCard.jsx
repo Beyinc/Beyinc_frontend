@@ -336,7 +336,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
   };
 
   return (
-    <div className="h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
+    <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
       <div className="absolute lg:relative">
         <div className="relative group mt-4 flex items-center justify-center">
           <img
