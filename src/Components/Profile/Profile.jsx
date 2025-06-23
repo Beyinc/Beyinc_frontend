@@ -99,7 +99,7 @@ const Profile = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:top-52 relative">
-          <div className="mb-4 lg:-mt-36">
+          <div className="mb-4 lg:-mt-36 ml-7">
             <ProfileCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}

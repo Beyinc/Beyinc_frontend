@@ -99,47 +99,40 @@ export const Connections = () => {
   };
 
   const renderUserCard = (user) => {
-    const isFollowing = localFollowStates[user._id] ?? following.some(f => f._id === user._id);
+  const isFollowing = localFollowStates[user._id] ?? following.some(f => f._id === user._id);
 
-    return (
-      <div
-        key={user._id}
-        style={{ border: "1px solid gainsboro" }}
-        className="bg-white hover:shadow-lg rounded-xl p-5 py-5 w-[250px] flex flex-col justify-center items-center"
-      >
-        <img
-          src={user.image?.url ? user.image.url : "/profile.png"}
-          onClick={() => navigate(`/user/${user._id}`)}
-          style={{
-            cursor: "pointer",
-            objectFit: "cover",
-            borderRadius: "50%",
-            height: "150px",
-            width: "150px",
-          }}
-          alt="profile"
-        />
-        <h3 className="mt-3 text-center">{user.userName}</h3>
-        {user.role && <h5 className="text-neutral-600 mt-1">{user.role}</h5>}
-        {user.beyincProfile && (
-          <h5 className="text-neutral-600 mt-1">
-            {user.beyincProfile} at Beyinc
-          </h5>
-        )}
-        <p className="mt-2 mb-2 text-center">{user.headline}</p>
+  return (
+    <div
+      key={user._id}
+      className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[180px] flex flex-col justify-center items-center"
+    >
+      <img
+        src={user.image?.url ? user.image.url : "/profile.png"}
+        onClick={() => navigate(`/user/${user._id}`)}
+        className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
+        alt="profile"
+      />
+      <h3 className="mt-2 text-center text-sm font-medium">{user.userName}</h3>
+      {user.role && <h5 className="text-neutral-600 mt-1 text-xs">{user.role}</h5>}
+      {user.beyincProfile && (
+        <h5 className="text-neutral-600 mt-1 text-xs">
+          {user.beyincProfile} at Beyinc
+        </h5>
+      )}
+      <p className="mt-2 mb-2 text-center text-xs">{user.headline}</p>
 
-        {/* ✅ Follow/Unfollow Button */}
-        {user_id !== user._id && (
-          <button
-            className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
-            onClick={(e) => handleFollowToggle(e, user._id, isFollowing)}
-          >
-            {isFollowing ? "Unfollow" : "Follow"}
-          </button>
-        )}
-      </div>
-    );
-  };
+      {user_id !== user._id && (
+        <button
+          className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
+          onClick={(e) => handleFollowToggle(e, user._id, isFollowing)}
+        >
+          {isFollowing ? "Unfollow" : "Follow"}
+        </button>
+      )}
+    </div>
+  );
+};
+
 
   return (
     <div className="flex">
@@ -170,7 +163,7 @@ export const Connections = () => {
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-6 ml-20">
+<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user) => renderUserCard(user))
           ) : (
