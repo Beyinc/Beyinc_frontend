@@ -1,6 +1,6 @@
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
-import { useEffect,useRef,  useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReviewStars from "../LivePitches/ReviewStars";
 import AddReviewStars from "../LivePitches/AddReviewStars";
 import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
@@ -13,20 +13,20 @@ import { ToastColors } from "../Toast/ToastColors";
 import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
 
-const ProfileCard = (  {selfProfile ,setSelfProfile}  ) => {
+const ProfileCard = ({ selfProfile, setSelfProfile }) => {
   const [profileData, setProfileData] = useState({}); // Initialize as an empty object
   const [averageReview, setAverageReview] = useState(0); // State to hold the average review
   const [filledStars, setFilledStars] = useState(0); // State to store the filled stars for the review
   const [openEditPfp, setOpenEditPfp] = useState(false);
   const [isInputPopupVisible, setIsInputPopupVisible] = useState(false);
   const [singlelanguagesKnown, setSinglelanguagesKnown] = useState("");
-  
+
   const [languagesKnown, setlanguagesKnown] = useState([]);
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
   const [town, settown] = useState("");
-   const dispatch = useDispatch();
-   const [places, setPlaces] = useState({
+  const dispatch = useDispatch();
+  const [places, setPlaces] = useState({
     country: [],
     state: [],
     town: [],
@@ -49,40 +49,36 @@ const ProfileCard = (  {selfProfile ,setSelfProfile}  ) => {
     languages: [],
   });
 
-   const { id } = useParams();
-console.log('self', selfProfile);
-
-
+  const { id } = useParams();
+  console.log("self", selfProfile);
 
   const { email, role, userName, image, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
 
-
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
-  
 
   const followerController = async (e, id) => {
     console.log("Following user:", id);
     console.log("Current userId:", user_id);
-  
+
     e.target.disabled = true;
-  
+
     try {
       const response = await ApiServices.saveFollowers({
         followerReqBy: user_id,
         followerReqTo: id,
       });
-  
+
       const updatedUser = response.data;
-  
+
       // Update the state with the latest data
       setFollower(updatedUser.followers);
       setFollowing(updatedUser.following);
-  
+
       // Emit socket notifications
       socket.current.emit("sendNotification", {
         senderId: user_id,
@@ -97,7 +93,7 @@ console.log('self', selfProfile);
         _id: id,
         userName: updatedUser.userName,
       });
-  
+
       console.log("Follow successful, updated user data:", updatedUser);
     } catch (err) {
       console.error("Error in followerController:", err);
@@ -112,25 +108,25 @@ console.log('self', selfProfile);
       e.target.disabled = false;
     }
   };
-  
+
   const unfollowHandler = async (e, id) => {
     console.log("Unfollowing user:", id);
     console.log("Current userId:", user_id);
-  
+
     e.target.disabled = true;
-  
+
     try {
       const response = await ApiServices.unfollowUser({
         unfollowReqBy: user_id,
         unfollowReqTo: id,
       });
-  
+
       const updatedUser = response.data;
-  
+
       // Update the state with the latest data
       setFollower(updatedUser.followers);
       setFollowing(updatedUser.following);
-  
+
       // Emit socket notifications
       socket.current.emit("sendFollowerNotification", {
         senderId: user_id,
@@ -138,7 +134,7 @@ console.log('self', selfProfile);
         type: "removing",
         _id: id,
       });
-  
+
       console.log("Unfollow successful, updated user data:", updatedUser);
     } catch (err) {
       console.error("Error in unfollowHandler:", err);
@@ -153,7 +149,7 @@ console.log('self', selfProfile);
       e.target.disabled = false;
     }
   };
-  
+
   // Function to calculate average review
   const calculateAvgReview = (reviews) => {
     if (reviews && reviews.length > 0) {
@@ -200,12 +196,11 @@ console.log('self', selfProfile);
         const profileResponse = id
           ? await ApiServices.getProfile({ id })
           : await ApiServices.getProfile({ id: user_id });
-  
+
         const profileData = profileResponse.data;
-        console.log('profiledata', profileData);
-        setProfileData(profileData)
-       
-  
+        console.log("profiledata", profileData);
+        setProfileData(profileData);
+
         if (profileData.review !== undefined && profileData.review.length > 0) {
           let avgR = 0;
           profileData.review.forEach((rev) => {
@@ -213,10 +208,10 @@ console.log('self', selfProfile);
           });
           setAverageReview(avgR / profileData.review.length);
         }
-  
+
         const countryCode = profileData.country?.split("-")[1] || "";
         const stateCode = profileData.state?.split("-")[1] || "";
-  
+
         setFormState((prevFormState) => ({
           ...prevFormState,
           fullName: profileData.userName,
@@ -227,14 +222,14 @@ console.log('self', selfProfile);
           role: profileData.role || "",
           image: profileData.image || "",
           mobileNumber: profileData.mobileNumber || "",
-          twitter:profileData.twitter ||"",
+          twitter: profileData.twitter || "",
           linkedin: profileData.linkedin || "",
         }));
-        
+
         setFollower(profileData.followers || []);
         setFollowing(profileData.following || []);
         setlanguagesKnown(profileData.languagesKnown || []);
-  
+
         settown(profileData.town || "");
         setCountry(profileData.country || "");
         setState(profileData.state || "");
@@ -253,12 +248,12 @@ console.log('self', selfProfile);
         );
       }
     };
-  
+
     fetchProfileData();
   }, [email, id, user_id]); // Include user_id in the dependencies
-  
-  console.log('follower', follower);
-  console.log('following', following);
+
+  console.log("follower", follower);
+  console.log("following", following);
   // console.log('popup',isInputPopupVisible)
 
   const handleCountryChange = (e) => {
@@ -333,6 +328,7 @@ console.log('self', selfProfile);
     try {
       await ApiServices.InputFormData({ ...formState, user_id: user_id });
       alert("Data saved successfully!");
+      setIsInputPopupVisible(false);
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");
@@ -346,7 +342,11 @@ console.log('self', selfProfile);
           <img
             className="size-28 lg:size-36 rounded-full m-0 bg-white p-3"
             // src={image !== undefined && image !== "" ? image : "/profile.png"}
-            src={formState?.image && formState.image !== "" ? formState.image.url : "/profile.png"}
+            src={
+              formState?.image && formState.image !== ""
+                ? formState.image.url
+                : "/profile.png"
+            }
           />
           <i
             onClick={() => setOpenEditPfp(true)}
@@ -359,33 +359,33 @@ console.log('self', selfProfile);
         <div className="font-bold text-xl ml-3">
           {/* {userName && userName[0]?.toUpperCase() + userName?.slice(1)} */}
           {formState?.fullName}
-          <span onClick={() => setIsInputPopupVisible(true)} >
-             {selfProfile && <i className="fas fa-pen"></i>}
-            </span>
+          <span onClick={() => setIsInputPopupVisible(true)}>
+            {selfProfile && <i className="fas fa-pen"></i>}
+          </span>
         </div>
 
         <div className="font-bold text-sm text-gray-500">{formState?.role}</div>
         {profileData?.beyincProfile && (
-  <div className="font-bold text-md" style={{ color: '#4F55C7' }}>
-    {profileData.beyincProfile} at Beyinc
-  </div>
-)}
-
+          <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
+            {profileData.beyincProfile} at Beyinc
+          </div>
+        )}
 
         <div className="flex flex-col gap-4 mt-2 ">
-
-        {!selfProfile && (
-                <button
-                  className="rounded-full px-20"
-                  onClick={(e) => {
-                    follower.some((follower) => follower._id === user_id)
-                      ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
-                      : followerController(e, id); // Call followerController if "Follow"
-                  }}
-                >
-                  {follower.some((follower) => follower._id === user_id) ? "Unfollow" : "Follow"}
-                </button>
-              )}
+          {!selfProfile && (
+            <button
+              className="rounded-full px-20"
+              onClick={(e) => {
+                follower.some((follower) => follower._id === user_id)
+                  ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
+                  : followerController(e, id); // Call followerController if "Follow"
+              }}
+            >
+              {follower.some((follower) => follower._id === user_id)
+                ? "Unfollow"
+                : "Follow"}
+            </button>
+          )}
 
           {isInputPopupVisible && (
             <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
@@ -433,25 +433,25 @@ console.log('self', selfProfile);
                         />
                       </div>
                       <div className="max-w-xs">
-                          <label className="text-sm font-semibold text-blue-600">
-                            Mobile Number
-                          </label>
-                          <input
-                            type="text"
-                            className={`border rounded-md p-2 w-full ${
-                              formState.mobileNumber
-                                ? formState.mobileNumber.length === 10
-                                  ? "border-green-500"
-                                  : "border-red-500"
-                                : "border-gray-300"
-                            }`}
-                            name="mobileNumber"
-                            id="mobile"
-                            value={formState.mobileNumber}
-                            onChange={handleInputChange}
-                            placeholder="Mobile Number"
-                          />
-                        </div>
+                        <label className="text-sm font-semibold text-blue-600">
+                          Mobile Number
+                        </label>
+                        <input
+                          type="text"
+                          className={`border rounded-md p-2 w-full ${
+                            formState.mobileNumber
+                              ? formState.mobileNumber.length === 10
+                                ? "border-green-500"
+                                : "border-red-500"
+                              : "border-gray-300"
+                          }`}
+                          name="mobileNumber"
+                          id="mobile"
+                          value={formState.mobileNumber}
+                          onChange={handleInputChange}
+                          placeholder="Mobile Number"
+                        />
+                      </div>
 
                       <div className="max-w-xs">
                         <label className="text-sm font-semibold text-blue-600">
@@ -611,16 +611,10 @@ console.log('self', selfProfile);
         <div className="flex flex-col mt-4 font-bold w-full">
           <div className="px-4 lg:px-28 gap-4 flex flex-col">
             <div className="flex justify-between">
-              <span>Followers</span>{" "}
-              <span>
-                { follower.length}
-              </span>
+              <span>Followers</span> <span>{follower.length}</span>
             </div>
             <div className="flex justify-between">
-              <span>Following</span>{" "}
-              <span>
-                {following.length}
-              </span>
+              <span>Following</span> <span>{following.length}</span>
             </div>
 
             {country && (
@@ -676,10 +670,10 @@ console.log('self', selfProfile);
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                  <path
-                    d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z"
-                    fill="var(--followBtn-bg)"
-                  />
+                    <path
+                      d="M17.0417 14.5835C17.125 13.896 17.1875 13.2085 17.1875 12.5002C17.1875 11.7918 17.125 11.1043 17.0417 10.4168H20.5625C20.7292 11.0835 20.8334 11.7814 20.8334 12.5002C20.8334 13.2189 20.7292 13.9168 20.5625 14.5835M15.198 20.3752C15.823 19.2189 16.3021 17.9689 16.6355 16.6668H19.7084C18.6992 18.4046 17.0981 19.721 15.198 20.3752ZM14.9375 14.5835H10.0625C9.95837 13.896 9.89587 13.2085 9.89587 12.5002C9.89587 11.7918 9.95837 11.0939 10.0625 10.4168H14.9375C15.0313 11.0939 15.1042 11.7918 15.1042 12.5002C15.1042 13.2085 15.0313 13.896 14.9375 14.5835ZM12.5 20.7918C11.6355 19.5418 10.9375 18.1564 10.5105 16.6668H14.4896C14.0625 18.1564 13.3646 19.5418 12.5 20.7918ZM8.33337 8.3335H5.29171C6.29029 6.59082 7.89031 5.27229 9.79171 4.62516C9.16671 5.78141 8.69796 7.03141 8.33337 8.3335ZM5.29171 16.6668H8.33337C8.69796 17.9689 9.16671 19.2189 9.79171 20.3752C7.89407 19.7213 6.29618 18.4045 5.29171 16.6668ZM4.43754 14.5835C4.27087 13.9168 4.16671 13.2189 4.16671 12.5002C4.16671 11.7814 4.27087 11.0835 4.43754 10.4168H7.95837C7.87504 11.1043 7.81254 11.7918 7.81254 12.5002C7.81254 13.2085 7.87504 13.896 7.95837 14.5835M12.5 4.19808C13.3646 5.44808 14.0625 6.84391 14.4896 8.3335H10.5105C10.9375 6.84391 11.6355 5.44808 12.5 4.19808ZM19.7084 8.3335H16.6355C16.3089 7.04351 15.8262 5.79819 15.198 4.62516C17.1146 5.28141 18.7084 6.60433 19.7084 8.3335ZM12.5 2.0835C6.73962 2.0835 2.08337 6.771 2.08337 12.5002C2.08337 15.2628 3.18084 17.9124 5.13435 19.8659C6.10162 20.8331 7.24995 21.6004 8.51375 22.1239C9.77756 22.6474 11.1321 22.9168 12.5 22.9168C15.2627 22.9168 17.9122 21.8194 19.8657 19.8659C21.8192 17.9124 22.9167 15.2628 22.9167 12.5002C22.9167 11.1322 22.6473 9.77769 22.1238 8.51388C21.6003 7.25007 20.833 6.10174 19.8657 5.13447C18.8985 4.16719 17.7501 3.3999 16.4863 2.87642C15.2225 2.35293 13.868 2.0835 12.5 2.0835Z"
+                      fill="var(--followBtn-bg)"
+                    />
                   </svg>
                 </div>
                 <a href={formState.twitter} target="_blank">
@@ -701,7 +695,6 @@ console.log('self', selfProfile);
             <div className="reviewSessionText">
               <b>{formState.review?.length}</b> Reviews / 0 Sessions
             </div> */}
-            
           </div>
         </div>
         <ProfileImageUpdate open={openEditPfp} setOpen={setOpenEditPfp} />
