@@ -4,7 +4,7 @@ import { format } from "timeago.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import IndividualPostSubComments from "./IndividualPostSubComments";
-
+import { setLoading } from "../../redux/AuthReducers/AuthReducer";
 const IndividualPostComments = ({
   c,
   postId,
@@ -77,7 +77,7 @@ const IndividualPostComments = ({
     console.log("add comment clicked");
     if (!comment.trim() && !file) return;
 
-    // dispatch(setLoading({ visible: "yes" }));
+    dispatch(setLoading({ visible: "yes" }));
 
     let fileBase64 = "";
 
@@ -89,7 +89,7 @@ const IndividualPostComments = ({
         }
       } catch (err) {
         alert("Failed to convert file to base64.");
-        // dispatch(setLoading({ visible: "no" }));
+        dispatch(setLoading({ visible: "no" }));
         return;
       }
     }
@@ -108,7 +108,7 @@ const IndividualPostComments = ({
     } catch (err) {
       alert(err?.response?.data?.error || "Something went wrong");
     } finally {
-      // dispatch(setLoading({ visible: "no" }));
+      dispatch(setLoading({ visible: "no" }));
     }
   };
 
@@ -344,6 +344,13 @@ const IndividualPostComments = ({
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Add a comment..."
                 style={{ resize: "none" }}
+
+                  onKeyDown={(e) => {
+    if (e.key === "Enter" && (comment.trim() || file)) {
+      e.preventDefault(); 
+      addSubComment();
+    }
+  }}
               />
 
               {/* File upload icon */}
@@ -369,15 +376,15 @@ const IndividualPostComments = ({
                 </svg>
               </label>
 
-              {/* File input (make sure it's NOT reused elsewhere) */}
               <input
                 id="file-upload-subcomments"
                 type="file"
                 style={{ display: "none" }}
                 onChange={(e) => {
-                  console.log("File selected"); // ✅ Ensure this logs
-                  handleFileUpload(e.target.files[0]); // ✅ Pass the file
+                  console.log("File selected"); 
+                  handleFileUpload(e.target.files[0]); 
                 }}
+
               />
 
               {/* File name preview */}
