@@ -14,6 +14,8 @@ export const Connections = () => {
   const [activeTab, setActiveTab] = useState("followers");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [localFollowStates, setLocalFollowStates] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const socket = useRef();
@@ -42,12 +44,20 @@ export const Connections = () => {
 
   const FilteredSearchProfiles = ({ interests }) => {
     const baseData = activeTab === "followers" ? followers : following;
-    if (!interests.length) {
-      setFilteredUsers(baseData);
-    } else {
-      const filtered = baseData.filter((user) => interests.includes(user.role));
-      setFilteredUsers(filtered);
+
+    let filtered = baseData;
+
+    if (interests.length) {
+      filtered = filtered.filter((user) => interests.includes(user.role));
     }
+
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((user) =>
+        user.userName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredUsers(filtered);
   };
 
   useEffect(() => {
@@ -102,7 +112,7 @@ export const Connections = () => {
     return (
       <div
         key={user._id}
-        className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[180px] flex flex-col justify-center items-center"
+        className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[180px] flex flex-col justify-center items-center flex-wrap-reverse"
       >
         <img
           src={user.image?.url ? user.image.url : "/profile.png"}
@@ -137,7 +147,26 @@ export const Connections = () => {
 
   return (
     <div className="flex">
-      <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
+      <div
+        id="left-div"
+        className="mt-5 ml-10 flex flex-col gap-4 w-full max-w-sm"
+      >
+        <input
+          type="text"
+          placeholder="Search Profiles"
+          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm  w-80 ml-10"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            FilteredSearchProfiles({ interests: [] });
+          }}
+        />
+
+        <div className="w-full">
+          <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
+        </div>
+      </div>
+
       <div className="p-6 flex-1">
         <h2 className="text-xl font-semibold mb-4 ml-10">Your Connections</h2>
 
@@ -145,7 +174,7 @@ export const Connections = () => {
           <button
             className={`px-4 py-2 rounded-full ${
               activeTab === "followers"
-                ? "bg-blue-600 text-white"
+                ? "bg-custom text-white"
                 : "bg-gray-200 text-gray-700"
             }`}
             onClick={() => setActiveTab("followers")}
@@ -155,7 +184,7 @@ export const Connections = () => {
           <button
             className={`px-4 py-2 rounded-full ${
               activeTab === "following"
-                ? "bg-blue-600 text-white"
+                ? "bg-custom text-white"
                 : "bg-gray-200 text-gray-700"
             }`}
             onClick={() => setActiveTab("following")}
@@ -164,7 +193,7 @@ export const Connections = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user) => renderUserCard(user))
           ) : (
