@@ -317,7 +317,7 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div onClick={()=>navigate("/connections")}>Connections</div>
+            <div onClick={() => navigate("/connections")}>Connections</div>
 
             <div style={{ marginLeft: "80px" }}>
               {data?.connections_approved || 0}
@@ -401,12 +401,14 @@ const Posts = () => {
 
                 {selectedTags.length > 0 && (
                   //added onclick handler in x-box to make it work
-                      <div className="clear-container">
-                        <div onClick={clearAllTags} className="x-box">X</div>
-                          <a onClick={clearAllTags} className="clear-link">
-                            Clear All
-                          </a>
-                      </div>
+                  <div className="clear-container">
+                    <div onClick={clearAllTags} className="x-box">
+                      X
+                    </div>
+                    <a onClick={clearAllTags} className="clear-link">
+                      Clear All
+                    </a>
+                  </div>
                 )}
 
                 {filteredTagsOptions.map((option) => (
@@ -527,11 +529,13 @@ const Posts = () => {
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
-              <div key={post?._id}
-               onClick={() => {
+              <div
+                key={post?._id}
+                onClick={() => {
                   navigate(`/posts/${post._id}`);
                 }}
-                className="hover:cursor-pointer">
+                className="hover:cursor-pointer"
+              >
                 <h5>{post?.type}</h5>
                 <h4>
                   <b>{post?.postTitle}</b>
@@ -601,6 +605,7 @@ const Posts = () => {
                         setRecommendedUserTrigger,
                         socket,
                         user: { id: user_id, userName, image, role },
+                        setRecommendedUsers,
                       });
                     }}
                   >

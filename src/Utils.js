@@ -667,21 +667,21 @@ export const dataEntry = [
     {
         id: 11,
         title: 'Technology partner',
-       key: 'TechPartner',
+        key: 'TechPartner',
         icon: 'material-symbols:laptop-mac-outline',
         paragraph: 'A company that provides technology or services to startups.',
     },
 ]
 
-export const followerController = async ({ e, user, socket, recommendedUserTrigger, setRecommendedUserTrigger, dispatch, followingToId }) => {
+export const followerController = async ({ e, user, socket, recommendedUserTrigger, setRecommendedUserTrigger, dispatch, followingToId, setRecommendedUsers }) => {
     if (!user.id) {
         console.log('user :', user);
         throw new Error("Invalid user ");
     }
-
-    console.log('following to', followingToId)
-    console.log('userId', user.id);
-    e.target.disabled = true;
+    if (setRecommendedUsers) {
+        setRecommendedUsers(prev => Array.pisArray(prev) ? prev.filter(u => u._id !== followingToId) : prev)
+    }
+    
     await ApiServices.saveFollowers({
         followerReqBy: user.id,
         followerReqTo: followingToId,

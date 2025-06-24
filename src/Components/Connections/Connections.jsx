@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
@@ -13,7 +13,6 @@ export const Connections = () => {
   const [following, setFollowing] = useState([]);
   const [activeTab, setActiveTab] = useState("followers");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [localFollowStates, setLocalFollowStates] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const socket = useRef();
@@ -29,9 +28,22 @@ export const Connections = () => {
         const FollowersRes = await ApiServices.getFollowers({ user_id });
         const followingRes = await ApiServices.getFollowings({ user_id });
 
-        setFollowers(FollowersRes.data || []);
-        setFollowing(followingRes.data || []);
-        setFilteredUsers(FollowersRes.data || []);
+        const modifiedFollowers = Array.isArray(FollowersRes.data)
+          ? FollowersRes.data.map((u) => ({
+              ...u,
+              isFollowing: u.followers.includes(user_id),
+            }))
+          : [];
+        console.log({ modifiedFollowers });
+        const modifiedFollowings = Array.isArray(followingRes.data)
+          ? followingRes.data.map((u) => ({
+              ...u,
+              isFollowing: u.followers.includes(user_id),
+            }))
+          : [];
+        setFollowers(modifiedFollowers || []);
+        setFollowing(modifiedFollowings || []);
+        setFilteredUsers(modifiedFollowers || []);
       } catch (e) {
         console.error("Error fetching connections:", e);
       }
@@ -55,10 +67,23 @@ export const Connections = () => {
   }, [activeTab, followers, following]);
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
-    e.target.disabled = true;
+
     const button = e.target;
     button.textContent = isFollowing ? "Follow" : "Unfollow";
-
+    if (activeTab === "following") {
+      setFilteredUsers((prev) =>
+        Array.isArray(prev) ? prev.filter((u) => u._id !== userId) : prev
+      );
+    } else {
+      setFilteredUsers((prev) =>
+        Array.isArray(prev)
+          ? prev.map((u) => {
+              if (u._id == userId) return { ...u, isFollowing: !u.isFollowing };
+              return u;
+            })
+          : prev
+      );
+    }
     try {
       let response;
       if (isFollowing) {
@@ -76,11 +101,6 @@ export const Connections = () => {
           receiverId: userId,
         });
       }
-
-      setLocalFollowStates((prev) => ({
-        ...prev,
-        [userId]: !isFollowing,
-      }));
     } catch (err) {
       dispatch(
         setToast({
@@ -90,15 +110,10 @@ export const Connections = () => {
         })
       );
       console.error("Follow error:", err);
-    } finally {
-      e.target.disabled = false;
     }
   };
 
   const renderUserCard = (user) => {
-    const isFollowing =
-      localFollowStates[user._id] ?? following.some((f) => f._id === user._id);
-
     return (
       <div
         key={user._id}
@@ -126,9 +141,9 @@ export const Connections = () => {
         {user_id !== user._id && (
           <button
             className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
-            onClick={(e) => handleFollowToggle(e, user._id, isFollowing)}
+            onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
           >
-            {isFollowing ? "Unfollow" : "Follow"}
+            {user.isFollowing ? "Unfollow" : "Follow"}
           </button>
         )}
       </div>
