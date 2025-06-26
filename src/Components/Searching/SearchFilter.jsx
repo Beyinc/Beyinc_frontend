@@ -32,7 +32,7 @@ const SearchFilter = ({ FilteredSearchProfiles}) => {
 
   return (
     <div>
-      <div className="bg-white ml-5 p-5 mt-5 rounded-lg w-[300px]  shadow-md">
+      <div className="bg-white ml-10 p-5 mt-0 rounded-lg w-[300px]  shadow-md">
         <h2>Filter</h2>
         
         <h3 className="mt-6 mb-2">Role Type</h3>

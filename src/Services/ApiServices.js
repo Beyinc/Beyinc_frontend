@@ -6,8 +6,8 @@ export const ApiServices = {
       axiosInstance
         .post(`/auth/verifyApiAccessToken`, obj)
         .then((res) => {
-          if (res) {
-            resolve(res);
+          if (res.data) {
+            resolve(res.data);
           }
         })
         .catch((err) => reject(err));
@@ -175,7 +175,7 @@ export const ApiServices = {
       axiosInstance
         .post(`/userDetails/getUser`, obj)
         .then((res) => {
-          if (res) {
+          if (res.data) {
             resolve(res);
           }
         })
@@ -200,6 +200,36 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/userDetails/unfollow`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  // followers and followings api
+
+
+
+  getFollowers: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("/userDetails/getFollowers")
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+   getFollowings: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("/userDetails/getFollowings")
         .then((res) => {
           if (res) {
             resolve(res);
@@ -1050,14 +1080,25 @@ export const ApiServices = {
     });
   },
 
-  addPostComment: (obj) => {
+  // addPostComment: (obj) => {
+  //   return new Promise((resolve, reject) => {
+  //     axiosInstance
+  //       .post(`/post/addPostComment`, obj)
+  //       .then((res) => {
+  //         if (res) {
+  //           resolve(res);
+  //         }
+  //       })
+  //       .catch((err) => reject(err));
+  //   });
+  // },
+
+  addPostComment: (formData) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post(`/post/addPostComment`, obj)
+        .post("/post/addPostComment", formData) // Don't set headers manually
         .then((res) => {
-          if (res) {
-            resolve(res);
-          }
+          resolve(res);
         })
         .catch((err) => reject(err));
     });
@@ -1259,7 +1300,7 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`/searchProfiles?query=${query}`) // Use query param
-        .then((res) => resolve(res))
+        .then((res) => resolve(res.data))
         .catch((err) => reject(err));
     });
   },
@@ -1270,7 +1311,7 @@ export const ApiServices = {
         .post(`/filterSearchProfiles`, obj)
         .then((res) => {
           if (res) {
-            resolve(res);
+            resolve(res.data);
           }
         })
         .catch((err) => reject(err));
@@ -1302,7 +1343,7 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-    getNewProfiles: (obj) => {
+  getNewProfiles: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`/newProfiles`, obj)
