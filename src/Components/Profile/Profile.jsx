@@ -90,6 +90,8 @@ const Profile = () => {
   };
 
   return (
+
+
     <div className="h-full bg-customBackground relative ">
       <div className="relative">
         <div>
@@ -187,3 +189,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

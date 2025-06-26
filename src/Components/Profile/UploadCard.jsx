@@ -112,7 +112,7 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
   return (
     <div className="w-full lg:w-[60vw] bg-white">
       <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
-        <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
+        <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           Documents
         </div>
         <div>
