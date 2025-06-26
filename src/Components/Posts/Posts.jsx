@@ -317,7 +317,7 @@ const Posts = () => {
                 />
               </svg>
             </div>
-            <div>Connections</div>
+            <div onClick={()=>navigate("/connections")}>Connections</div>
 
             <div style={{ marginLeft: "80px" }}>
               {data?.connections_approved || 0}
