@@ -12,7 +12,7 @@ const Activity = ({allPosts, setAllPosts}) => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full lg:w-[60vw]">
+    <div className="w-full grow">
       {id === undefined && (
         <section className="createPostContainer">
           <button
