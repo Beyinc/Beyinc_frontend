@@ -123,7 +123,7 @@ const Profile = () => {
               )}
           </div>
 
-          <div>
+          <div className="grow">
             {(profileData.beyincProfile === "Mentor" ||
               profileData.beyincProfile === "Co-Founder") && (
               <TabsAndInvestment
