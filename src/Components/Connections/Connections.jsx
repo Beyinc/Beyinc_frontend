@@ -44,6 +44,7 @@ export const Connections = () => {
               isFollowing: u.followers.includes(user_id),
             }))
           : [];
+        console.log({ modifiedFollowings });
         setFollowers(modifiedFollowers || []);
         setFollowing(modifiedFollowings || []);
         setFilteredUsers(modifiedFollowers || []);
@@ -78,7 +79,6 @@ export const Connections = () => {
   }, [activeTab, followers, following]);
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
-
     const button = e.target;
     button.textContent = isFollowing ? "Follow" : "Unfollow";
     if (activeTab === "following") {
@@ -128,7 +128,8 @@ export const Connections = () => {
     return (
       <div
         key={user._id}
-        className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[180px] flex flex-col justify-center items-center flex-wrap-reverse"
+        style={{ border: "1px solid gainsboro" }}
+        className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[190px] flex flex-col justify-center items-center flex-wrap-reverse"
       >
         <img
           src={user.image?.url ? user.image.url : "/profile.png"}
@@ -209,9 +210,14 @@ export const Connections = () => {
           </button>
         </div>
 
-<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div
+          className="mt-6 w-full lg:w-[1070px] bg-white p-8 rounded-lg"
+          style={{ border: "1px solid lightgray" }}
+        >
           {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => renderUserCard(user))
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredUsers.map((user) => renderUserCard(user))}
+            </div>
           ) : (
             <p>No {activeTab} found.</p>
           )}
