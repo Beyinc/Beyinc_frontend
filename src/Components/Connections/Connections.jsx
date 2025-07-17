@@ -220,24 +220,25 @@ export const Connections = () => {
           </button>
         </div>
 
-<div className="mt-6 w-full lg:w-[1100px] bg-white p-8 rounded-lg" style={{ border: "1px solid lightgray" }}>
-  {filteredUsers.length > 0 ? (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {filteredUsers.map((user) => renderUserCard(user))}
-    </div>
-  ) : (
-    <p>No {activeTab} found.</p>
-  )}
-</div>
+        <div
+          className="mt-6 w-full lg:w-[1070px] bg-white p-8 rounded-lg"
+          style={{ border: "1px solid lightgray" }}
+        >
+          {filteredUsers.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredUsers.map((user) => renderUserCard(user))}
+            </div>
+          ) : (
+            <p>No {activeTab} found.</p>
+          )}
+        </div>
 
-<AddConversationPopup
-  receiverId={receiverId}
-  setReceiverId={setReceiverId}
-  isNavigate={true}
-/>
-
-
-</div>
+        <AddConversationPopup
+          receiverId={receiverId}
+          setReceiverId={setReceiverId}
+          isNavigate={true}
+        />
+      </div>
     </div>
   );
 };
