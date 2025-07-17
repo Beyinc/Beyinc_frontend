@@ -679,7 +679,7 @@ export const followerController = async ({ e, user, socket, recommendedUserTrigg
         throw new Error("Invalid user ");
     }
     if (setRecommendedUsers) {
-        setRecommendedUsers(prev => Array.pisArray(prev) ? prev.filter(u => u._id !== followingToId) : prev)
+        setRecommendedUsers(prev => Array.isArray(prev) ? prev.filter(u => u._id !== followingToId) : prev)
     }
     
     await ApiServices.saveFollowers({

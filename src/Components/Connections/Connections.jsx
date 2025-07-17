@@ -7,13 +7,14 @@ import { io } from "socket.io-client";
 import { socket_io } from "../../Utils";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
+import AddConversationPopup from "../Common/AddConversationPopup";
 
 export const Connections = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [activeTab, setActiveTab] = useState("followers");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [localFollowStates, setLocalFollowStates] = useState({});
+  const [receiverId, setReceiverId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
@@ -149,15 +150,24 @@ export const Connections = () => {
           </h5>
         )}
         <p className="mt-2 mb-2 text-center text-xs">{user.headline}</p>
-
-        {user_id !== user._id && (
-          <button
-            className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
-            onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
-          >
-            {user.isFollowing ? "Unfollow" : "Follow"}
-          </button>
-        )}
+        <div className="flex gap-4">
+          {user_id !== user._id && (
+            <button
+              className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
+              onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
+            >
+              {user.isFollowing ? "Unfollow" : "Follow"}
+            </button>
+          )}
+          {user_id !== user._id && user.isFollowing && (
+            <button
+              className="rounded-full px-4 py-1 text-[rgb(79,85,199)] border border-solid border-[rgb(79,85,199)] bg-white text-sm hover:text-white"
+              onClick={(e) => setReceiverId(user._id)}
+            >
+              Chat
+            </button>
+          )}
+        </div>
       </div>
     );
   };
@@ -210,10 +220,7 @@ export const Connections = () => {
           </button>
         </div>
 
-        <div
-          className="mt-6 w-full lg:w-[1070px] bg-white p-8 rounded-lg"
-          style={{ border: "1px solid lightgray" }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredUsers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredUsers.map((user) => renderUserCard(user))}
@@ -223,6 +230,11 @@ export const Connections = () => {
           )}
         </div>
       </div>
+      <AddConversationPopup
+        receiverId={receiverId}
+        setReceiverId={setReceiverId}
+        isNavigate={true}
+      />
     </div>
   );
 };

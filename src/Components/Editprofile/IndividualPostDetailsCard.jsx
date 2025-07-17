@@ -629,7 +629,7 @@ const IndividualPostDetailsCard = () => {
                   </div>
                   <div style={{ marginBottom: "10px" }}>
                     <b>Post type : </b>{" "}
-                    <span className="postType"> {post?.visibility}</span>
+                    <span > {post?.visibility}</span>
                   </div>
 
                   {/* <div style={{ marginBottom: "10px" }}>

@@ -300,6 +300,8 @@ const App = () => {
         <Toast />
         <LoadingData />
         <Navbar />
+        <div className=" max-w-[1550px] m-auto">
+
         <Routes>
           <Route path="/signup" Component={LoginAuth(SignUp)} />
           <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
@@ -374,6 +376,8 @@ const App = () => {
             <Route path="/about" element={<About />} />
            <Route path="/connections" element={<Connections/>}/>
         </Routes>
+        </div>
+
       </Suspense>
     </div>
   );
