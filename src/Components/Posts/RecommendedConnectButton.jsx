@@ -12,7 +12,7 @@ const RecommendedConnectButton = ({ id, handleFollower }) => {
   return (
     <div>
       <button
-        className="connect-btn"
+        className="connect-btn !p-[7px_37px]"
         onClick={() => {
           setPitchSendTo(id);
           setreceiverRole(role);

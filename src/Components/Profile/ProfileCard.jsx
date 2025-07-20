@@ -12,6 +12,7 @@ import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
+import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 
 const ProfileCard = ({ selfProfile, setSelfProfile }) => {
   const [profileData, setProfileData] = useState({}); // Initialize as an empty object
@@ -372,9 +373,10 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
         )}
 
         <div className="flex flex-col gap-4 mt-2 ">
-          {!selfProfile && (
+          {!selfProfile && <div className="flex items-center gap-2">
+
             <button
-              className="rounded-full px-20"
+              className="rounded-full p-[7px_37px]"
               onClick={(e) => {
                 follower.some((follower) => follower._id === user_id)
                   ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
@@ -385,7 +387,11 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 ? "Unfollow"
                 : "Follow"}
             </button>
-          )}
+            <RecommendedConnectButton
+              id={id}
+            />
+          </div>
+          }
 
           {isInputPopupVisible && (
             <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
@@ -438,13 +444,12 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                         </label>
                         <input
                           type="text"
-                          className={`border rounded-md p-2 w-full ${
-                            formState.mobileNumber
+                          className={`border rounded-md p-2 w-full ${formState.mobileNumber
                               ? formState.mobileNumber.length === 10
                                 ? "border-green-500"
                                 : "border-red-500"
                               : "border-gray-300"
-                          }`}
+                            }`}
                           name="mobileNumber"
                           id="mobile"
                           value={formState.mobileNumber}

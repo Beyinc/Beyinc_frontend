@@ -10,6 +10,7 @@ import { io } from "socket.io-client";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { useDispatch, useSelector } from "react-redux";
+import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 
 function SearchResults() {
   const location = useLocation();
@@ -37,8 +38,8 @@ function SearchResults() {
       try {
         const profileResponse = await ApiServices.getProfile({ id: user_id });
         const userProfileData = profileResponse;
-        console.log('userProfileData',userProfileData);
-        
+        console.log('userProfileData', userProfileData);
+
         // Correctly access followers and following from the nested data structure
         setFollower(userProfileData.data.followers || []);
 
@@ -57,7 +58,7 @@ function SearchResults() {
         } else {
           // Default search
           searchResponse = await ApiServices.searchProfiles(searchQuery);
-          
+
         }
 
         // Add isFollowing to each user
@@ -119,7 +120,7 @@ function SearchResults() {
 
       // Update with actual server response
       setFollower(response.data.followers);
-      
+
       // Update the users state with the new follow status
       setUsers(prevUsers =>
         prevUsers.map(user =>
@@ -132,7 +133,7 @@ function SearchResults() {
         ...prev,
         [userId]: isFollowing
       }));
-      
+
       // Revert button text
       button.textContent = isFollowing ? "Unfollow" : "Follow";
 
@@ -152,7 +153,7 @@ function SearchResults() {
   return (
     <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-10">
       <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
-     
+
       <div
         className="mt-6 w-full lg:w-[1100px] bg-white p-8 py-8 rounded-lg"
         style={{ border: "1px solid lightgray" }}
@@ -190,14 +191,20 @@ function SearchResults() {
                 </h5>
               )}
               <p className="mt-2 mb-2">{user.headline}</p>
-              <button
-                className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
-                onClick={(e) =>
-                  handleFollowToggle(e, user._id, localFollowStates[user._id] ?? user.isFollowing)
-                }
-              >
-                {localFollowStates[user._id] ?? user.isFollowing ? "Unfollow" : "Follow"}
-              </button>
+              <div className="flex justify-center items-center gap-2">
+
+                <button
+                  className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
+                  onClick={(e) =>
+                    handleFollowToggle(e, user._id, localFollowStates[user._id] ?? user.isFollowing)
+                  }
+                >
+                  {localFollowStates[user._id] ?? user.isFollowing ? "Unfollow" : "Follow"}
+                </button>
+                <RecommendedConnectButton
+                  id={user._id}
+                />
+              </div>
             </div>
           ))}
         </div>
