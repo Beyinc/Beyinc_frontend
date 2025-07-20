@@ -180,9 +180,8 @@
   border-radius: 50%;
 }
 .CommentPostContainer textarea {
-  width: 700px;
+  width:100%;
   /* padding: 20px !important; */
-  padding-left: 20px !important;
   border-radius: 30px;
   margin: 0 !important;
   transform: translateY(4px);
@@ -1195,10 +1194,6 @@ textarea {
     height: 30px;
     border-radius: 50%;
   }
-  .CommentPostContainer textarea {
-    width: 180px;
-    height: 4vh;
-  }
 
   .CommentPostContainer textarea::placeholder {
     font-size: 12px;
@@ -1230,7 +1225,6 @@ textarea {
   .send-button-svg {
     width: 20px;
     height: 20px;
-    margin: 20px;
   }
   .MuiDialog-paperWidthXl {
     width: 90% !important;

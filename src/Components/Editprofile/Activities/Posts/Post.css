@@ -235,13 +235,7 @@ background: var( --button-background);
     font-size: 12px;
     line-height: 15px;
   }
-  .postType{
-    background: var(--postType-bg);
-    padding: 6px 10px;
-    border-radius: 20px;
-    color: black;
-    font-size: 10px;
-  }
+  
   .PostDetailsContainer{
     padding: 0;
     margin: 0;
