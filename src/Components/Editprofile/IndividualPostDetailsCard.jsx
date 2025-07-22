@@ -256,7 +256,7 @@ const IndividualPostDetailsCard = () => {
                     <div className="postCardRole">{post?.createdBy?.role}</div>
                   </div>
                 </div>
-                <div className="flex">
+                <div className="flex gap-2">
                   <span className="postType"> {post?.type}</span>
 
                   <div
@@ -524,7 +524,7 @@ const IndividualPostDetailsCard = () => {
           <div className="post-details-content-right">
             <div className="wholePostWrapper">
               <div style={{ flex: "1", margin: "10px" }}>
-                <div className="individualPostTotalDetailsRight">
+                <div className="individualPostTotalDetailsRight gap-4">
                   <div
                     className="IndividualPostHeaderImageContainer"
                     onClick={() => {

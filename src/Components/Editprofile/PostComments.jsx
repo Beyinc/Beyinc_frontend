@@ -216,7 +216,7 @@ const PostComments = ({ fetchComments, postId }) => {
                   placeholder="Add a comment..."
                   style={{ resize: "none" }}
                 />
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center ">
                   <input
                     id="file-upload"
                     type="file"
@@ -243,7 +243,7 @@ const PostComments = ({ fetchComments, postId }) => {
                   </label>
                   <svg
                     onClick={sendText}
-                    className="send-button-svg"
+                    className="send-button-svg w-[20px] h-[20px]"
                     width="30"
                     height="30"
                     viewBox="0 0 34 34"

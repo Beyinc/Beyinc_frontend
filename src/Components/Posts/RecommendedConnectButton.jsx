@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import "./Posts.css";
 
-const RecommendedConnectButton = ({ id, handleFollower }) => {
+const RecommendedConnectButton = ({ id, handleFollower, btnClassname }) => {
   const [receiverRole, setreceiverRole] = useState("");
   const [pitchSendTo, setPitchSendTo] = useState("");
   const [IsAdmin, setIsAdmin] = useState(false);
@@ -12,7 +12,7 @@ const RecommendedConnectButton = ({ id, handleFollower }) => {
   return (
     <div>
       <button
-        className="connect-btn !p-[7px_37px]"
+        className={`connect-btn ${btnClassname}`}
         onClick={() => {
           setPitchSendTo(id);
           setreceiverRole(role);

@@ -389,6 +389,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
             </button>
             <RecommendedConnectButton
               id={id}
+              btnClassname='!p-[7px_37px]'
             />
           </div>
           }
