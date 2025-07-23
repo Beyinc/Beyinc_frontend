@@ -264,7 +264,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >
-      <div className="ProfilepostContainer hover:cursor-pointer">
+      <div className="ProfilepostContainer hover:cursor-pointer mt-1">
         <div className="PostHeaderContainer ">
           <div className="postTotaldetails ">
             <div
@@ -338,7 +338,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
               marginTop: "-40px",
             }}
           >
-            <div className="flex flex-col mt-12 space-y-3">
+            <div className="flex flex-col mt-0 space-y-3">
               <div className="flex space-x-3">
                 <div className="postType">{post?.type}</div>
                 <div
