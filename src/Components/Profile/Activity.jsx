@@ -24,7 +24,7 @@ const Activity = ({allPosts, setAllPosts}) => {
         </section>
       )}
 
-      <div className="allPostShowContainer">
+      <div className="allPostShowContainer mt-3">
         {allPosts.length > 0 ? (
           allPosts.map((post) => (
             <Post key={post.id} post={post} setAllPosts={setAllPosts} />
