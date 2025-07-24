@@ -65,6 +65,11 @@ const Navbar = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate1 = useNavigate();
+  const location = useLocation()
+  if(['/login','/signup'].includes(location.pathname)){
+    return null
+  }
+  console.log({ location })
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -1142,7 +1147,6 @@ const Navbar = () => {
   const handleItemClick = (val) => {
     setSelectedIcon(val);
   };
-  const location = useLocation();
   const currentPath = location.pathname;
 
   useEffect(() => {

@@ -616,7 +616,7 @@ const IndividualPostDetailsCard = () => {
                     </div>
                   )}
 
-                <div className="h-[1px] bg-gray-600 my-4 w-[76%]"></div>
+                <div className="h-[1px] bg-gray-600 my-4 w-full"></div>
                 <div className="text-[12px] w-fit">
                   <div style={{ marginBottom: "10px" }}>
                     <b>Updated at :</b> {formatedDate(post?.updatedAt)}
