@@ -170,6 +170,8 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
                 color="primary"
                 onClick={submitAllData}
                 disabled={!changeResume.resume}
+                  style={{ backgroundColor: '#4F55C7' }}
+
               >
                 Save
               </Button>
