@@ -520,6 +520,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                   <svg
                     width="20"
                     height="20"
+                    className="w-7 h-7 sm:w-5 sm:h-5"
                     viewBox="0 0 40 40"
                     fill={"none"}
                     xmlns="http://www.w3.org/2000/svg"
@@ -534,9 +535,9 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     />
                   </svg>
                 </div>
-                <div className="actionText">upvote</div>
+                <div className="actionText hidden sm:block">upvote</div>
               </div>
-              <div className="likeActionHolder" onClick={dislikePost}>
+              <div className="likeActionHolder " onClick={dislikePost}>
                 <div>
                   <svg
                     width="20"
@@ -544,6 +545,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     viewBox="0 0 40 40"
                     fill={"none"}
                     xmlns="http://www.w3.org/2000/svg"
+                    className="w-7 h-7 sm:w-5 sm:h-5"
                   >
                     <path
                       d="M34.6055 19.1524C34.7461 18.6836 34.8164 18.1993 34.8164 17.7071C34.8164 16.6016 34.4531 15.5391 33.7969 14.6719C33.9375 14.2032 34.0078 13.7188 34.0078 13.2266C34.0078 12.1211 33.6445 11.0586 32.9883 10.1914C33.1289 9.72269 33.1992 9.23831 33.1992 8.74613C33.1992 6.7305 32 4.91409 30.1406 4.12113C29.8138 3.98022 29.4614 3.90841 29.1055 3.91019H5.625C4.93359 3.91019 4.375 4.46878 4.375 5.16019V19.3789C4.375 20.0703 4.93359 20.6289 5.625 20.6289H10.6758L14.0273 32.7696C14.5664 34.7266 16.3633 36.0938 18.3945 36.0938C19.5547 36.0938 20.6367 35.6328 21.4375 34.7891C22.2383 33.9493 22.6484 32.8477 22.5898 31.6875L22.3555 26.8868H31.7266C32.1992 26.8868 32.6602 26.7618 33.0664 26.5235C34.6445 25.6055 35.625 23.9414 35.625 22.1875C35.625 21.0821 35.2617 20.0196 34.6055 19.1524ZM7.1875 17.8125V6.71878H10.3516V17.8125H7.1875ZM31.6875 24.0782H19.4062L19.7812 31.8282C19.8047 32.293 19.5977 32.7305 19.2109 33.0196C18.9727 33.1953 18.6797 33.2852 18.3867 33.2813C18.0124 33.2777 17.6494 33.1527 17.3522 32.9252C17.0549 32.6977 16.8395 32.3799 16.7383 32.0196L12.8516 17.9375V6.71878H29.0781C29.4686 6.89377 29.8002 7.17783 30.033 7.53679C30.2659 7.89576 30.39 8.31435 30.3906 8.74222C30.3906 9.12113 30.3008 9.4805 30.1211 9.80863L29.5781 10.8008L30.4336 11.543C30.6744 11.7515 30.8674 12.0095 30.9995 12.2994C31.1316 12.5892 31.1998 12.9041 31.1992 13.2227C31.1992 13.6016 31.1094 13.961 30.9297 14.2891L30.3867 15.2813L31.2422 16.0235C31.483 16.232 31.676 16.49 31.8081 16.7798C31.9402 17.0697 32.0083 17.3846 32.0078 17.7032C32.0078 18.0821 31.918 18.4414 31.7383 18.7696L31.1914 19.7657L32.0469 20.5078C32.2877 20.7164 32.4807 20.9744 32.6128 21.2642C32.7449 21.5541 32.813 21.869 32.8125 22.1875C32.8125 22.9336 32.3828 23.6524 31.6875 24.0782Z"
@@ -555,7 +557,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     />
                   </svg>
                 </div>
-                <div className="actionText">downvote</div>
+                <div className="actionText hidden sm:block">downvote</div>
               </div>
               <div
                 className="likeActionHolder"
@@ -568,6 +570,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     viewBox="0 0 34 34"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="w-7 h-7 sm:w-5 sm:h-5"
                   >
                     <path
                       d="M17 32C19.9667 32 22.8668 31.1203 25.3336 29.4721C27.8003 27.8238 29.7229 25.4811 30.8582 22.7403C31.9935 19.9994 32.2906 16.9834 31.7118 14.0737C31.133 11.1639 29.7044 8.49119 27.6066 6.3934C25.5088 4.29562 22.8361 2.86701 19.9264 2.28823C17.0166 1.70945 14.0006 2.0065 11.2597 3.14181C8.51886 4.27713 6.17618 6.19972 4.52796 8.66645C2.87973 11.1332 2 14.0333 2 17C2 19.48 2.6 21.8183 3.66667 23.8783L2 32L10.1217 30.3333C12.1817 31.4 14.5217 32 17 32Z"
@@ -578,7 +581,7 @@ const Post = ({filteredPosts,post:initialPost, setAllPosts, screenDecider,key })
                     />
                   </svg>
                 </div>
-                <div className="actionText">Comment</div>
+                <div className="actionText hidden sm:block">Comment</div>
               </div>
 
               <div className="likeActionHolder">
