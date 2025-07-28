@@ -66,10 +66,14 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate1 = useNavigate();
   const location = useLocation()
-  if(['/login','/signup'].includes(location.pathname)){
+  const {
+    beyincProfile,
+    email, role, userName, image
+  } = useSelector((store) => store.auth.userDetails);
+
+  if (['/login', '/signup'].includes(location.pathname) || (location.pathname === '/' && !userName)) {
     return null
   }
-  console.log({ location })
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -80,10 +84,6 @@ const Navbar = () => {
   const { verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
   );
-  const {
-    beyincProfile,
-    email, role, userName, image
-  } = useSelector((store) => store.auth.userDetails);
 
   // console.log(beyincProfile,image.url)
   const [logoutOpen, setLogoutOpen] = useState(false);
