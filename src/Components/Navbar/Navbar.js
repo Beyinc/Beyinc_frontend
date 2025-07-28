@@ -71,9 +71,7 @@ const Navbar = () => {
     email, role, userName, image
   } = useSelector((store) => store.auth.userDetails);
 
-  if (['/login', '/signup'].includes(location.pathname) || (location.pathname === '/' && !userName)) {
-    return null
-  }
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {

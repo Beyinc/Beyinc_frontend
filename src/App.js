@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   useParams,
+  useLocation,
 } from "react-router-dom";
 import "./App.css";
 import AuthHoc, { AdminDeciderHoc, LoginAuth } from "./AuthHoc";
@@ -41,7 +42,7 @@ import Proffesional from "./Components/Razorpay/Proffesional";
 import Bank from "./Components/Razorpay/Bank";
 import Calendar from "./Components/Dashboard/Bookings/UserBooking/Calendar";
 import Schedule from "./Components/Dashboard/Availability/Schedule";
-import OAuthPopupHandler from "./Components/Calendar/calendarAuth" ;
+import OAuthPopupHandler from "./Components/Calendar/calendarAuth";
 import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBookings";
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
@@ -60,7 +61,7 @@ const Posts = React.lazy(() =>
 const IndividualPostDetailsCard = React.lazy(() =>
   import("./Components/Editprofile/IndividualPostDetailsCard")
 );
-const PostReports =React.lazy(() =>
+const PostReports = React.lazy(() =>
   import("./Components/Admin/PostReports/PostReports")
 );
 const LandingPage = React.lazy(() =>
@@ -85,25 +86,25 @@ const Conversations = React.lazy(() =>
   import("./Components/Conversation/Conversations")
 );
 const Notifications = React.lazy(() =>
-  
-    import("./Components/Conversation/Notification/Notifications")
-  
+
+  import("./Components/Conversation/Notification/Notifications")
+
 );
 const AllPitches = React.lazy(() =>
- import("./Components/Admin/pitchDecider/AllPitches")
+  import("./Components/Admin/pitchDecider/AllPitches")
 );
 
 const LoggedInPitches = React.lazy(() =>
- import("./Components/LoggedInPitches/LoggedInPitches")
+  import("./Components/LoggedInPitches/LoggedInPitches")
 );
 
 const ENV = process.env;
 const NoMatch = () => {
   return (
     <div className="noMatch">
-    <div className="noRoute-image">
-<img src="/no-route.gif" alt="gif"/>
-    </div>
+      <div className="noRoute-image">
+        <img src="/no-route.gif" alt="gif" />
+      </div>
       <div className="noRoute-text">Oops..! no such routes found.</div>
     </div>
   );
@@ -111,7 +112,9 @@ const NoMatch = () => {
 
 const App = () => {
   const notificationAlert = useSelector(state => state.conv.notificationAlert);
-
+  const location = useLocation()
+  const { userName,
+  } = useSelector((store) => store.auth.userDetails);
 
 
   const dispatch = useDispatch();
@@ -136,7 +139,7 @@ const App = () => {
     });
   }, [email]);
 
- 
+
   // live message updates
   useEffect(() => {
     socket.current.on("getMessage", (data) => {
@@ -149,7 +152,7 @@ const App = () => {
           conversationId: data.conversationId, file: data.file
         })
       );
-     
+
 
       // setMessages(prev => [...prev, data])
     });
@@ -166,15 +169,15 @@ const App = () => {
   }, []);
 
   // DONT REMOVE THIS IT IS FOR DARK AND WHITE THEME
-    useEffect(() => {
-      if (!localStorage.getItem('theme')) {
-        localStorage.setItem('theme', 'light')
-        document.body.setAttribute('data-theme', 'light')
-      } else {
-        document.body.setAttribute('data-theme', localStorage.getItem('theme'))
+  useEffect(() => {
+    if (!localStorage.getItem('theme')) {
+      localStorage.setItem('theme', 'light')
+      document.body.setAttribute('data-theme', 'light')
+    } else {
+      document.body.setAttribute('data-theme', localStorage.getItem('theme'))
 
-     }
-   }, [])
+    }
+  }, [])
   useEffect(() => {
     socket.current.on("sendseenMessage", (data) => {
       // console.log(data);
@@ -216,7 +219,7 @@ const App = () => {
           )
         );
       }).catch(err => {
-        
+
       });
     }
   }, [user_id]);
@@ -282,6 +285,7 @@ const App = () => {
       })
     }
   }, [notificationAlert]);
+
   return (
     <div>
       <Suspense
@@ -299,83 +303,83 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-        <Navbar />
+        {!(['/login', '/signup'].includes(location.pathname) || (location.pathname === '/' && userName)) && <Navbar />}
         <div className=" max-w-[1550px] m-auto">
 
-        <Routes>
-          <Route path="/signup" Component={LoginAuth(SignUp)} />
-          <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
-          <Route path="/login" Component={LoginAuth(Login)} />
-          <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/posts" Component={AuthHoc(Posts)} />
-          <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
-          <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
-          <Route path="/beyincProfesional" Component={AuthHoc(BeyincProfessional)} />
-          <Route path="*" element={<NoMatch />} />
+          <Routes>
+            <Route path="/signup" Component={LoginAuth(SignUp)} />
+            <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
+            <Route path="/login" Component={LoginAuth(Login)} />
+            <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/posts" Component={AuthHoc(Posts)} />
+            <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
+            <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
+            <Route path="/beyincProfesional" Component={AuthHoc(BeyincProfessional)} />
+            <Route path="*" element={<NoMatch />} />
 
-          <Route path="/dashboard" Component={AuthHoc(Home)} />
-       
-          <Route path="/editProfile" Component={AuthHoc(Profile)} />
-          <Route path="/newProfiles" Component={AuthHoc(NewProfiles)} />
+            <Route path="/dashboard" Component={AuthHoc(Home)} />
 
-        <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
+            <Route path="/editProfile" Component={AuthHoc(Profile)} />
+            <Route path="/newProfiles" Component={AuthHoc(NewProfiles)} />
 
-        <Route path="/search" Component={AuthHoc(SearchResults)} />
+            <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
+
+            <Route path="/search" Component={AuthHoc(SearchResults)} />
 
 
-          <Route path="/conversations" Component={AuthHoc(Conversations)} />
-          <Route
-            path="/conversations/:conversationId"
-            Component={AuthHoc(Conversations)}
-          />
-          <Route path="/notifications" Component={AuthHoc(Notifications)} />
-          <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
-          <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
-          <Route path="/posts/:id" Component={AuthHoc(IndividualPostDetailsCard)} />
+            <Route path="/conversations" Component={AuthHoc(Conversations)} />
+            <Route
+              path="/conversations/:conversationId"
+              Component={AuthHoc(Conversations)}
+            />
+            <Route path="/notifications" Component={AuthHoc(Notifications)} />
+            <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
+            <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
+            <Route path="/posts/:id" Component={AuthHoc(IndividualPostDetailsCard)} />
 
-          <Route
-            path="/livePitches/:pitchId"
-            Component={AuthHoc(IndividualPitch)}
-          />
-          <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
-           
-          <Route path="/user/:id" Component={AuthHoc(Profile)} />
-        
-          <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
-          <Route
-            path="/profileRequests"
-            Component={AdminDeciderHoc(UserRequests)}
-          />
-          {/* <Route
+            <Route
+              path="/livePitches/:pitchId"
+              Component={AuthHoc(IndividualPitch)}
+            />
+            <Route path="/searchusers" Component={AuthHoc(AllUsers)} />
+
+            <Route path="/user/:id" Component={AuthHoc(Profile)} />
+
+            <Route path="/pitches" Component={AdminDeciderHoc(AllPitches)} />
+            <Route
+              path="/profileRequests"
+              Component={AdminDeciderHoc(UserRequests)}
+            />
+            {/* <Route
             path="/singleProfileRequest/:id"
             Component={AdminDeciderHoc(SingleRequestProfile)}
           /> */}
-          <Route
-            path="/singleProfileRequest/:id"
-            Component={AdminDeciderHoc(EditProfile)}
-          />
+            <Route
+              path="/singleProfileRequest/:id"
+              Component={AdminDeciderHoc(EditProfile)}
+            />
 
-          <Route path="/payout" Component={AdminDeciderHoc(payOut)} />
+            <Route path="/payout" Component={AdminDeciderHoc(payOut)} />
 
-          <Route
-            path="/postReports"
-            Component={AdminDeciderHoc(PostReports)}
-          />
-           <Route path="/book" element={< Book/>} />
-           <Route path="/proffesional" element={<Proffesional />} />
-           <Route path="/bank" element={<Bank />} />
-           <Route path="/rescheduleCalendar" element={<Calendar />} />
-           <Route path="/dashboard/availability" element={<Schedule />} />
-           <Route path="/dashboard/payment" element={<Payment />} />
-           <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
-           <Route path="/dashboard/userBookings" element={<UserBooking />} />
-           <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
+            <Route
+              path="/postReports"
+              Component={AdminDeciderHoc(PostReports)}
+            />
+            <Route path="/book" element={< Book />} />
+            <Route path="/proffesional" element={<Proffesional />} />
+            <Route path="/bank" element={<Bank />} />
+            <Route path="/rescheduleCalendar" element={<Calendar />} />
+            <Route path="/dashboard/availability" element={<Schedule />} />
+            <Route path="/dashboard/payment" element={<Payment />} />
+            <Route path="/dashboard/mentorBookings" element={<MentorBookings />} />
+            <Route path="/dashboard/userBookings" element={<UserBooking />} />
+            <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
             {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
-           <Route path="/connections" element={<Connections/>}/>
-        </Routes>
+            <Route path="/connections" element={<Connections />} />
+          </Routes>
         </div>
 
       </Suspense>
