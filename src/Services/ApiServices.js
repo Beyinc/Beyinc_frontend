@@ -226,7 +226,7 @@ export const ApiServices = {
     });
   },
 
-   getFollowings: (obj) => {
+  getFollowings: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get("/userDetails/getFollowings")
@@ -1347,6 +1347,28 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`/newProfiles`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err)); 
+    });
+  },
+  getPostLiveChatMessages: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance.post(`/postLiveChat/getMessages`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  sendPostLiveChatMessage: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance.post(`/postLiveChat/send`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
