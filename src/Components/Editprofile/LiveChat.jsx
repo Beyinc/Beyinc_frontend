@@ -112,7 +112,7 @@ export function LiveChat({ post, userName, user_id, onlineEmails }) {
                                 {chatMessages.map((msg, idx) => (
                                     <div key={msg._id || idx} className="chat-message">
                                         <div className="message-header">
-                                            <span className="sender-name">{msg.senderName}</span>
+                                            <span className="sender-name">{msg.senderId.userName||msg.senderName}</span>
                                             <span className="message-time">
                                                 {new Date(msg.timestamp).toLocaleTimeString()}
                                             </span>
