@@ -17,6 +17,7 @@ import { gridCSS } from "../CommonStyles";
 import "./IndividualPostDetailsCard.css";
 import ShareButton from "./ShareButton";
 import { Dialog, DialogContent } from "@mui/material";
+import { LiveChat } from "./LiveChat";
 
 const IndividualPostDetailsCard = () => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
@@ -715,71 +716,7 @@ const IndividualPostDetailsCard = () => {
                 </div>
               </div>
             </div>
-            {post?.openDiscussion == false &&
-              post?.openDiscussionTeam.length !== 0 && (
-                <div className="membersWrapper">
-                  <h5>Members</h5>
-                  <div className="openDiscussionUsers">
-                    {post?.openDiscussionTeam?.map((p) => (
-                      <div className="openDiscussionUser" key={p._id}>
-                        <div className="openDiscussionUserContainer">
-                          <img
-                            src={
-                              p?.image !== "" &&
-                              p?.image !== undefined &&
-                              p?.image?.url !== ""
-                                ? p?.image?.url
-                                : "/profile.png"
-                            }
-                            alt=""
-                            className="openDiscussionUserImage"
-                          />
-
-                          <div>
-                            <div
-                              className="openDiscussionUserName"
-                              onClick={() => {
-                                if (p._id == user_id) {
-                                  navigate("/editProfile");
-                                } else {
-                                  navigate(`/user/${p._id}`);
-                                }
-                              }}
-                            >
-                              {p?.userName}
-                            </div>
-                            <div className="openDiscussionUserrole">
-                              {p?.role}
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          <div
-                            title={
-                              onlineEmails.includes(p._id) ? "online" : "away"
-                            }
-                            style={{ position: "relative", marginLeft: "10px" }}
-                            className={
-                              onlineEmails.includes(p._id) ? "online" : "away"
-                            }
-                          ></div>
-                          <div
-                            style={{ marginLeft: "-16px", fontSize: "12px" }}
-                          >
-                            {onlineEmails.includes(p._id) ? "online" : "away"}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+          <LiveChat post={post} onlineEmails={onlineEmails} userName={userName} user_id={user_id}/>
           </div>
         </div>
       )}
