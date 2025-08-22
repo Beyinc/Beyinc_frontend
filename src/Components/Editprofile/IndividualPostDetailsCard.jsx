@@ -527,12 +527,11 @@ const IndividualPostDetailsCard = () => {
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
                   <div
-                    className="IndividualPostHeaderImageContainer"
                     onClick={() => {
                       navigate(`/user/${post?.createdBy?._id}`);
                     }}
                   >
-                    <img
+                    <img className="h-9 w-9 rounded-full"
                       src={
                         post?.createdBy?.image !== "" &&
                         post?.createdBy?.image !== undefined &&
@@ -555,23 +554,24 @@ const IndividualPostDetailsCard = () => {
                         post?.createdBy?.userName?.slice(1)}
                     </div>
                   </div>
-                  {!(post?.createdBy._id == user_id) && (
-                    <div className="openDiscussion-Buttons">
-                      {post?.openDiscussionRequests
-                        .map((o) => o._id)
-                        .includes(user_id) ? (
-                        <button>Discussion Request Pending</button>
-                      ) : post?.openDiscussionTeam
+                  {post?.visibility === "private" &&
+                    !(post?.createdBy._id == user_id) && (
+                      <div className="openDiscussion-Buttons">
+                        {post?.openDiscussionRequests
                           .map((o) => o._id)
                           .includes(user_id) ? (
-                        <button>Joined</button>
-                      ) : (
-                        <button onClick={addingRequestDiscussion}>
-                          Join for discussion
-                        </button>
-                      )}
-                    </div>
-                  )}
+                        <button>Discussion Request Pending</button>
+                        ) : post?.openDiscussionTeam
+                            .map((o) => o._id)
+                            .includes(user_id) ? (
+                          <button>Joined</button>
+                        ) : (
+                          <button onClick={addingRequestDiscussion}>
+                            Join for discussion
+                          </button>
+                        )}
+                      </div>
+                    )}
                 </div>
                 {post?.openDiscussion == false &&
                   post?.openDiscussionTeam.length !== 0 && (
@@ -716,7 +716,12 @@ const IndividualPostDetailsCard = () => {
                 </div>
               </div>
             </div>
-          <LiveChat post={post} onlineEmails={onlineEmails} userName={userName} user_id={user_id}/>
+            <LiveChat
+              post={post}
+              onlineEmails={onlineEmails}
+              userName={userName}
+              user_id={user_id}
+            />
           </div>
         </div>
       )}
