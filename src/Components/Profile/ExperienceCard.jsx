@@ -59,7 +59,7 @@ const ExperiencesCard = ({selfProfile ,setSelfProfile}) => {
     }, []); // Run only once when the component mounts
 
     return (
-      <div className="w-full lg:w-[60vw] bg-white rounded-xl">
+      <div className="w-full grow bg-white rounded-xl">
         <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             Experiences

@@ -11,7 +11,7 @@
 // import { io } from "socket.io-client";
 // import './AddConv.css'
 // import {
-  
+
 //     itPositions,
 //     socket_io,
 
@@ -183,7 +183,7 @@
 //             decidingRolesMessage(receiverId);
 //         }
 //     }, [receiverId]);
-    
+
 
 //     const addconversation = async (e) => {
 //         // e.preventDefault();
@@ -317,16 +317,17 @@ import {
     socket_io,
 } from "../../Utils";
 import useWindowDimensions from './WindowSize';
+import { useNavigate } from 'react-router-dom';
 
-const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin, handleFollower }) => {
+const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin, handleFollower, isNavigate }) => {
     const dispatch = useDispatch();
     const { width } = useWindowDimensions();
     const socket = useRef();
-    
+    const navigate = useNavigate();
     useEffect(() => {
         socket.current = io(socket_io);
     }, []);
-    
+
     const [open, setOpen] = useState(false);
     const { role, user_id } = useSelector((state) => state.auth.loginDetails);
     const userPitches = useSelector(state => state.conv.userLivePitches);
@@ -340,15 +341,34 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
             senderId: user_id,
             status: "approved", // Directly setting status to "approved" for everyone
         })
-            .then((res) => {
+            .then(async (res) => {
                 dispatch(getAllHistoricalConversations(user_id));
-                dispatch(
-                    setToast({
-                        message: res.data,
-                        bgColor: ToastColors.success,
-                        visible: "yes",
+
+                const conversationsRes = await ApiServices.getHistoricalConversations({ userId: user_id });
+                const data = conversationsRes.data;
+                
+                if (isNavigate) {
+                    const conversation = data.find((c) => {
+                        const ids = c.members.map(m => m._id)
+
+                        return ids.includes(receiverId) && ids.includes(user_id)
                     })
-                );
+
+                    if (conversation) {
+
+                        navigate(`/conversations/${conversation._id}`);
+                    }
+                }
+
+                if (!isNavigate) {
+                    dispatch(
+                        setToast({
+                            message: res.data,
+                            bgColor: ToastColors.success,
+                            visible: "yes",
+                        })
+                    );
+                }
                 if (handleFollower) {
                     handleFollower();
                 }
@@ -363,6 +383,8 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
                     ?.classList?.remove("show");
             })
             .catch((err) => {
+                console.log(err);
+
                 dispatch(
                     setToast({
                         message: `Error Occured`,
@@ -372,12 +394,12 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
                 );
                 setReceiverId("");
             });
-        
-     
-    };
-    
 
-    
+
+    };
+
+
+
     // const decidingRolesMessage = async (receiverId) => {
     //     if (role === "Admin" || isParent(role, receiverRole)) {
     //         await ApiServices.directConversationCreation({
@@ -419,7 +441,7 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
     //                 setReceiverId("");
     //             });
     //     } 
-        
+
     //     else {
     //         setOpen(true);
     //     }
@@ -433,15 +455,15 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
 
     const addconversation = async (e) => {
         e.target.disabled = true;
-        dispatch(setLoading({ visible: "yes" }));
-        
+                dispatch(setLoading({ visible: "yes" }));
+
         const conversation = {
             userId: user_id,
             receiverId: receiverId,
             senderId: user_id,
             pitchId: selectedpitchId
         };
-        
+
         await ApiServices.addConversation(conversation)
             .then((res) => {
                 dispatch(getAllHistoricalConversations(user_id));
@@ -477,8 +499,8 @@ const AddConversationPopup = ({ receiverId, setReceiverId, receiverRole, IsAdmin
             .getElementsByClassName("newConversation")[0]
             ?.classList.remove("show");
     };
-    
-    
+
+
     return (
         <Dialog
             fullWidth={width < 700}

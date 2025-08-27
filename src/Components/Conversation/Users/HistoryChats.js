@@ -88,79 +88,35 @@ const HistoryChats = () => {
                 <Tab className='tabs' sx={{ width: '50px', background: 'none', textTransform: 'capitalize', padding: "0px", fontSize: '13px', fontWeight: 600 }} label={`Pending`} {...a11yProps(1)} />
 
             </Tabs> */}
-      <div className="historicalTabHeader">
-        <div
-          className={`historicalTabIcons ${
-            value == 1 && "historicalTabIconsselected"
-          }`}
-          onClick={() => setValue(1)}
-        >
-          Approved
-        </div>
-        <div
-          className={`historicalTabIcons ${
-            value == 2 && "historicalTabIconsselected"
-          }`}
-          onClick={() => setValue(2)}
-        >
-          Pending
-        </div>
+
+
+      <div
+        style={{
+          marginTop: "10px",
+          maxHeight: "400px",
+          width: "fit-content",
+        }}
+      >
+        {historicalConversations.filter((f) => f.status == "approved")
+          .length > 0 ? (
+          historicalConversations.map(
+            (a) =>
+              a.status === "approved" && (
+                <IndividualHistory
+                  a={a}
+                  onlineEmails={onlineEmails}
+                  status="approved"
+                  key={a._id}
+                />
+              )
+
+          )
+        ) : (
+          <div style={{ textAlign: "start", padding: "10px" }}>
+            No Approved chats
+          </div>
+        )}
       </div>
-      {value == 2 && (
-        <div
-          style={{
-            marginTop: "10px",
-            maxHeight: "400px",
-            width: "fit-content",
-          }}
-        >
-          {historicalConversations.filter(
-            (f) => f.status == "pending" && f.members[0]._id == user_id
-          ).length > 0 ? (
-            historicalConversations.map(
-              (a) =>
-                a.status === "pending" && (
-                  <IndividualHistory
-                    a={a}
-                    onlineEmails={onlineEmails}
-                    status="pending"
-                  />
-                )
-            )
-          ) : (
-            <div style={{ textAlign: "start", padding: "10px" }}>
-              No Pending Requests
-            </div>
-          )}
-        </div>
-      )}
-      {value == 1 && (
-        <div
-          style={{
-            marginTop: "10px",
-            maxHeight: "400px",
-            width: "fit-content",
-          }}
-        >
-          {historicalConversations.filter((f) => f.status == "approved")
-            .length > 0 ? (
-            historicalConversations.map(
-              (a) =>
-                a.status === "approved" && (
-                  <IndividualHistory
-                    a={a}
-                    onlineEmails={onlineEmails}
-                    status="approved"
-                  />
-                )
-            )
-          ) : (
-            <div style={{ textAlign: "start", padding: "10px" }}>
-              No Approved chats
-            </div>
-          )}
-        </div>
-      )}
 
       {/* <div className='statusHeader'>
                 <i class={`fas fa-caret-right`} id='pending' onClick={handleMenuvisible}></i>Pending

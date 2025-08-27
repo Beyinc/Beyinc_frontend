@@ -15,6 +15,7 @@ const PostReports = () => {
   useEffect(() => {
     ApiServices.getReportedPosts().then(res => {
       setAllPosts(res.data)
+      console.log(res.data);
     }).catch(err => {
       dispatch(
         setToast({
@@ -42,13 +43,34 @@ const PostReports = () => {
       );
     })
     dispatch(setLoading({ visible: 'no' }))
-
   }
+  useEffect(()=>{
+    console.log(allPosts)
+  })
   return (
     <div className="postContainer">
       <div className='postCardContainer'>
         {allPosts?.map(post => (
-          <div style={{ display: 'flex', flexDirection: 'column' }}><Post post={post} />
+          <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '24px' }}>
+            <Post post={post} />
+            {/* Reported reasons UI */}
+            {post.reportBy && post.reportBy.length > 0 && (
+              <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 my-2.5 text-base text-yellow-800 max-w-[500px]">
+                <span className="font-bold">Reports:</span>
+                <ul className="mt-1 pl-5 list-disc">
+                  {post.reportBy.map((report, idx) => (
+                    <li key={report._id || idx} className="mb-1">
+                      <span>
+                        <span className="font-semibold">Reason:</span> {report.reason || 'N/A'} <span className="font-semibold">Report Type: </span>{report.reportType||"N/A"}
+                      </span>
+                      <span className="ml-2 text-gray-500 text-xs">
+                        {report.reportedTime ? new Date(report.reportedTime).toLocaleString() : ''}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <button onClick={(e) => {
                 setDeletePopUp(true)

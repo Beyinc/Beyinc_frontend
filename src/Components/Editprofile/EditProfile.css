@@ -180,9 +180,8 @@
   border-radius: 50%;
 }
 .CommentPostContainer textarea {
-  width: 700px;
+  width:100%;
   /* padding: 20px !important; */
-  padding-left: 20px !important;
   border-radius: 30px;
   margin: 0 !important;
   transform: translateY(4px);
@@ -965,7 +964,6 @@ textarea {
 
 .postCardContainer {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 20px;
   margin-top: 10px;
@@ -1023,12 +1021,7 @@ textarea {
     padding: 15px;
     font-size: 12px;
   }
-  .css-13xfq8m-MuiTabPanel-root{
-    width: 356px !important;
-    .likeActionHolder{
-      padding: 10px 3px !important;
-    }
-  }
+ 
   
   .EditProfileImageContainer img {
     width: 100%;
@@ -1200,10 +1193,6 @@ textarea {
     height: 30px;
     border-radius: 50%;
   }
-  .CommentPostContainer textarea {
-    width: 180px;
-    height: 4vh;
-  }
 
   .CommentPostContainer textarea::placeholder {
     font-size: 12px;
@@ -1235,7 +1224,6 @@ textarea {
   .send-button-svg {
     width: 20px;
     height: 20px;
-    margin: 20px;
   }
   .MuiDialog-paperWidthXl {
     width: 90% !important;

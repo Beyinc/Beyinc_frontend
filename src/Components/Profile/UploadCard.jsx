@@ -110,9 +110,9 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
   }, [id, user_id]); // Add both `id` and `user_id` as dependencies
   
   return (
-    <div className="w-full lg:w-[60vw]">
+    <div className="w-full grow bg-white rounded-xl">
       <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
-        <div className="text-xl font-extrabold text-blue-600 mt-4 flex justify-between">
+        <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           Documents
         </div>
         <div>
@@ -170,6 +170,8 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
                 color="primary"
                 onClick={submitAllData}
                 disabled={!changeResume.resume}
+                  style={{ backgroundColor: '#4F55C7' }}
+
               >
                 Save
               </Button>

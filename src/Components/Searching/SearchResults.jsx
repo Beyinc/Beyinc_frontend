@@ -10,6 +10,7 @@ import { io } from "socket.io-client";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { useDispatch, useSelector } from "react-redux";
+import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 
 function SearchResults() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function SearchResults() {
   const searchQuery = queryParams.get("query");
   const [users, setUsers] = useState([]);
   const [follower, setFollower] = useState([]);
+  const [localFollowStates, setLocalFollowStates] = useState({});
   const { user_id } = useSelector((store) => store.auth.loginDetails);
   const dispatch = useDispatch();
   const socket = useRef();
@@ -36,10 +38,12 @@ function SearchResults() {
       try {
         const profileResponse = await ApiServices.getProfile({ id: user_id });
         const userProfileData = profileResponse;
-        console.log({profileDatafollowers: userProfileData});
-        
+        console.log('userProfileData', userProfileData);
+
         // Correctly access followers and following from the nested data structure
         setFollower(userProfileData.data.followers || []);
+
+        console.log('set follower', userProfileData.data.followers);
         const userFollowingList = userProfileData.data.following || [];
 
         let searchResponse;
@@ -50,18 +54,19 @@ function SearchResults() {
             query: searchQuery,
             interests: filters.interests,
           });
-          searchResponse = searchResponse.data; // since filtered returns { data: [...] }
+          searchResponse = searchResponse; // since filtered returns { data: [...] }
         } else {
           // Default search
           searchResponse = await ApiServices.searchProfiles(searchQuery);
+
         }
 
         // Add isFollowing to each user
-        const usersWithStatus = searchResponse.data.map((user) => ({
+        const usersWithStatus = searchResponse.map((user) => ({
           ...user,
           isFollowing: userFollowingList.some((f) => f._id === user._id),
         }));
-        console.log({usersWithStatus});
+        // console.log({usersWithStatus});
         setUsers(usersWithStatus);
       } catch (err) {
         console.error("Error fetching users:", err.message);
@@ -79,31 +84,17 @@ function SearchResults() {
   };
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
-    e.target.disabled = true;
+    // e.target.disabled = true;
 
-    // Immediately update the button text and state
+    // Immediately update local follow state
+    setLocalFollowStates(prev => ({
+      ...prev,
+      [userId]: !isFollowing
+    }));
+
+    // Immediately update the button text
     const button = e.target;
-    const newFollowState = !isFollowing;
-    button.textContent = newFollowState ? "Unfollow" : "Follow";
-
-    // Immediately update the UI state
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user._id === userId ? { ...user, isFollowing: newFollowState } : user
-      )
-    );
-
-    // Immediately update followers list
-    setFollower((prevFollowers) => {
-      if (isFollowing) {
-        // Remove from followers (unfollow)
-        return prevFollowers.filter((f) => f._id !== userId);
-      } else {
-        // Add to followers (follow)
-        const userToAdd = users.find((user) => user._id === userId);
-        return [...prevFollowers, userToAdd];
-      }
-    });
+    button.textContent = !isFollowing ? "Unfollow" : "Follow";
 
     try {
       let response;
@@ -129,23 +120,22 @@ function SearchResults() {
 
       // Update with actual server response
       setFollower(response.data.followers);
-    } catch (err) {
-      // Revert optimistic updates on error
-      button.textContent = isFollowing ? "Unfollow" : "Follow";
-      
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === userId ? { ...user, isFollowing: isFollowing } : user
+
+      // Update the users state with the new follow status
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
+          user._id === userId ? { ...user, isFollowing: !isFollowing } : user
         )
       );
-      setFollower((prevFollowers) => {
-        if (isFollowing) {
-          const userToAdd = users.find((user) => user._id === userId);
-          return [...prevFollowers, userToAdd];
-        } else {
-          return prevFollowers.filter((f) => f._id !== userId);
-        }
-      });
+    } catch (err) {
+      // Revert local follow state on error
+      setLocalFollowStates(prev => ({
+        ...prev,
+        [userId]: isFollowing
+      }));
+
+      // Revert button text
+      button.textContent = isFollowing ? "Unfollow" : "Follow";
 
       console.error("Error in handleFollowToggle:", err);
       dispatch(
@@ -163,7 +153,7 @@ function SearchResults() {
   return (
     <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-10">
       <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
-     
+
       <div
         className="mt-6 w-full lg:w-[1100px] bg-white p-8 py-8 rounded-lg"
         style={{ border: "1px solid lightgray" }}
@@ -201,14 +191,20 @@ function SearchResults() {
                 </h5>
               )}
               <p className="mt-2 mb-2">{user.headline}</p>
-              <button
-                className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
-                onClick={(e) =>
-                  handleFollowToggle(e, user._id, user.isFollowing)
-                }
-              >
-                {user.isFollowing ? "Unfollow" : "Follow"}
-              </button>
+              <div className="flex justify-center items-center gap-2">
+
+                <button
+                  className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
+                  onClick={(e) =>
+                    handleFollowToggle(e, user._id, localFollowStates[user._id] ?? user.isFollowing)
+                  }
+                >
+                  {localFollowStates[user._id] ?? user.isFollowing ? "Unfollow" : "Follow"}
+                </button>
+                <RecommendedConnectButton
+                  id={user._id}
+                />
+              </div>
             </div>
           ))}
         </div>

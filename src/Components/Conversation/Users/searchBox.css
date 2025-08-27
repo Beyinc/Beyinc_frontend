@@ -41,20 +41,16 @@
   /* padding-left: -10px; */
   transition: all ease 0.2s;
   margin: 0px 0px 5px 0px;
-  width: 100%;
   font-size: 12px;
   /* border-radius: 30px; */
   position: relative;
 }
-.searchedUsers .individuals {
-  width: fit-content;
-}
+
 .searchPic {
   position: relative;
 }
 .individuals:hover {
   background: #c2e7ff46;
-  width: 95%;
   border-radius: 5px;
 }
 .role {
@@ -111,8 +107,10 @@
 }
 
 .historyChats {
-  height: 70vh;
+  height: -webkit-fill-available;
   background: var(--users-bg);
+  overflow-y: scroll;
+  overflow-x: clip;
 }
 
 .onlineHolder {
