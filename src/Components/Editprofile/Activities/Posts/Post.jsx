@@ -184,7 +184,7 @@ const Post = ({
   const [deletePop, setdeletePopUp] = useState(false);
   const [reportpopup, setreportpopUp] = useState(false);
   const [reportText, setReportText] = useState("");
-
+  const[reportType,setReportType]=useState("");
   const deletePost = async (e) => {
     e.target.disabled = true;
     await ApiServices.deletepost({ id: post?._id })
@@ -207,10 +207,12 @@ const Post = ({
 
   const reportPost = async (e) => {
     e.target.disabled = true;
+    console.log(reportType);
     await ApiServices.addReport({
       id: post?._id,
       reportby: user_id,
       reason: reportText,
+      reportType:reportType
     })
       .then((res) => {
         setReportText("");
@@ -347,7 +349,7 @@ const Post = ({
           >
             <div className="flex flex-col mt-0 space-y-3">
               <div className="flex space-x-3">
-                <div className="postType text-xs mt-1 sm:text-base sm:mt-0">
+                <div className="postType text mt-1 sm:text-base sm:mt-0">
                   {post?.type}
                 </div>
 
@@ -701,6 +703,26 @@ const Post = ({
               gap: "10px",
             }}
           >
+
+        <div>
+      <select
+        className="select"
+        value={reportType}
+        onChange={(e) => setReportType(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "6px",
+          borderRadius: "4px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <option value="">Select Report Type</option>
+        <option value="spam">Spam</option>
+        <option value="abuse">Abusive Content</option>
+      </select>
+    </div>
+
+
             <div>
               <textarea
                 className="textarea"

@@ -1142,6 +1142,7 @@ export const ApiServices = {
   },
 
   addReport: (obj) => {
+    // console.log(obj)
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/posts/addReport`, obj)
