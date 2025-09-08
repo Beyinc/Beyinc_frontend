@@ -62,15 +62,12 @@ function TabPanel(props) {
 }
 
 const Navbar = () => {
-
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate1 = useNavigate();
-  const location = useLocation()
-  const {
-    beyincProfile,
-    email, role, userName, image
-  } = useSelector((store) => store.auth.userDetails);
-
+  const location = useLocation();
+  const { beyincProfile, email, role, userName, image } = useSelector(
+    (store) => store.auth.userDetails
+  );
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -153,7 +150,7 @@ const Navbar = () => {
           console.log(d);
           dispatch(setMessageCount(d));
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   }, [liveMessage]);
 
@@ -234,7 +231,9 @@ const Navbar = () => {
                 id="Profile-img"
                 className="menu-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image.url : "/profile.png"
+                  image !== undefined && image !== ""
+                    ? image.url
+                    : "/profile.png"
                 }
                 alt=""
               />
@@ -347,8 +346,9 @@ const Navbar = () => {
               </ListItemIcon>
 
               <ListItemText
-                primary={`${localStorage.getItem("theme") === "light" ? "Dark" : "Light"
-                  } Mode`}
+                primary={`${
+                  localStorage.getItem("theme") === "light" ? "Dark" : "Light"
+                } Mode`}
               />
             </ListItem>
 
@@ -790,7 +790,9 @@ const Navbar = () => {
           <img
             id="Profile-img"
             className="menu-profile-img"
-            src={image !== undefined && image !== "" ? image.url : "/profile.png"}
+            src={
+              image !== undefined && image !== "" ? image.url : "/profile.png"
+            }
             alt=""
             onClick={() => navigate("/editProfile")}
             style={{ cursor: "pointer" }}
@@ -937,7 +939,6 @@ const Navbar = () => {
           </ListItem>
         )}
 
-
         {/* User Bookings */}
         <ListItem
           button
@@ -947,7 +948,11 @@ const Navbar = () => {
           <ListItemIcon>
             <EventIcon
               className="menu-icon"
-              sx={{ width: "0.8em", height: "0.8em", color: "var(--nav-head-icons)" }}
+              sx={{
+                width: "0.8em",
+                height: "0.8em",
+                color: "var(--nav-head-icons)",
+              }}
             />
           </ListItemIcon>
           <ListItemText primary="User Bookings" />
@@ -957,19 +962,32 @@ const Navbar = () => {
         {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
           <ListItem
             button
-            key={beyincProfile === "Mentor" ? "mentorBookings" : "cofounderBookings"}
+            key={
+              beyincProfile === "Mentor"
+                ? "mentorBookings"
+                : "cofounderBookings"
+            }
             onClick={() => navigate(`/dashboard/mentorBookings`)}
           >
             <ListItemIcon>
               <EventIcon
                 className="menu-icon"
-                sx={{ width: "0.8em", height: "0.8em", color: beyincProfile === "Mentor" ? "blue" : "green" }} // Different color for Mentor and Cofounder
+                sx={{
+                  width: "0.8em",
+                  height: "0.8em",
+                  color: beyincProfile === "Mentor" ? "blue" : "green",
+                }} // Different color for Mentor and Cofounder
               />
             </ListItemIcon>
-            <ListItemText primary={beyincProfile === "Mentor" ? "Mentor Bookings" : "Cofounder Bookings"} />
+            <ListItemText
+              primary={
+                beyincProfile === "Mentor"
+                  ? "Mentor Bookings"
+                  : "Cofounder Bookings"
+              }
+            />
           </ListItem>
         )}
-
 
         <ListItem
           button
@@ -1167,10 +1185,7 @@ const Navbar = () => {
     }
   }, [currentPath, role]);
   return (
-    <div
-      className="navbar "
-    >
-
+    <div className="navbar ">
       <div
         className="w-full max-w-[1550px] m-auto"
         style={{
@@ -1229,8 +1244,9 @@ const Navbar = () => {
               {/* HOME ICON */}
 
               <div
-                className={`navbar-item ${selectedIcon === "home" ? "selected" : ""
-                  }`}
+                className={`navbar-item ${
+                  selectedIcon === "home" ? "selected" : ""
+                }`}
                 onClick={() => {
                   navigate("/posts");
                   handleItemClick("home");
@@ -1266,10 +1282,56 @@ const Navbar = () => {
                   </svg>
                 )}
                 <div
-                  className={`navbar-title ${selectedIcon === "home" ? "selected-title" : ""
-                    }`}
+                  className={`navbar-title ${
+                    selectedIcon === "home" ? "selected-title" : ""
+                  }`}
                 >
                   Home
+                </div>
+              </div>
+              <div
+                className={`navbar-item ${
+                  selectedIcon === "groups" ? "selected" : ""
+                }`}
+                onClick={() => {
+                  navigate("/newProfiles");
+                  handleItemClick("groups");
+                }}
+              >
+                {selectedIcon === "groups" ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 24 24"
+                    className="icon"
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M12 11.5c1.38 0 2.5-1.12 2.5-2.5S13.38 6.5 12 6.5 9.5 7.62 9.5 9s1.12 2.5 2.5 2.5m0 1.5c-1.67 0-5 0.84-5 2.5V18h10v-2.5c0-1.66-3.33-2.5-5-2.5m6.5-1c1.38 0 2.5-1.12 2.5-2.5S19.88 5.5 18.5 5.5 16 6.62 16 8s1.12 2.5 2.5 2.5m0 1.5c-0.44 0-0.92 0.03-1.43 0.1 0.89 0.63 1.43 1.5 1.43 2.4V18h4v-2.5c0-1.66-3.33-2.5-5-2.5M5.5 10.5C6.88 10.5 8 9.38 8 8S6.88 5.5 5.5 5.5 3 6.62 3 8s1.12 2.5 2.5 2.5m1.43 1.6C6.42 12.03 5.94 12 5.5 12c-1.67 0-5 0.84-5 2.5V17h4v-2.5c0-0.9 0.54-1.77 1.43-2.4"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 24 24"
+                    className="icon"
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M12 11.5c1.38 0 2.5-1.12 2.5-2.5S13.38 6.5 12 6.5 9.5 7.62 9.5 9s1.12 2.5 2.5 2.5m0 1.5c-1.67 0-5 0.84-5 2.5V18h10v-2.5c0-1.66-3.33-2.5-5-2.5m6.5-1c1.38 0 2.5-1.12 2.5-2.5S19.88 5.5 18.5 5.5 16 6.62 16 8s1.12 2.5 2.5 2.5m0 1.5c-0.44 0-0.92 0.03-1.43 0.1 0.89 0.63 1.43 1.5 1.43 2.4V18h4v-2.5c0-1.66-3.33-2.5-5-2.5M5.5 10.5C6.88 10.5 8 9.38 8 8S6.88 5.5 5.5 5.5 3 6.62 3 8s1.12 2.5 2.5 2.5m1.43 1.6C6.42 12.03 5.94 12 5.5 12c-1.67 0-5 0.84-5 2.5V17h4v-2.5c0-0.9 0.54-1.77 1.43-2.4"
+                    />
+                  </svg>
+                )}
+
+                <div
+                  className={`navbar-title ${
+                    selectedIcon === "groups" ? "selected-title" : ""
+                  }`}
+                >
+                  Network
                 </div>
               </div>
 
@@ -1373,8 +1435,9 @@ const Navbar = () => {
                   {/* PROFILE REQUEST ICON */}
                   {role === "Admin" && (
                     <div
-                      className={`navbar-item ${selectedIcon === "profiles" ? "selected" : ""
-                        }`}
+                      className={`navbar-item ${
+                        selectedIcon === "profiles" ? "selected" : ""
+                      }`}
                       onClick={() => {
                         navigate("/profileRequests");
                         handleItemClick("profiles");
@@ -1410,8 +1473,9 @@ const Navbar = () => {
                         </svg>
                       )}
                       <div
-                        className={`navbar-title${selectedIcon === "profiles" ? " selected-title" : ""
-                          }`}
+                        className={`navbar-title${
+                          selectedIcon === "profiles" ? " selected-title" : ""
+                        }`}
                       >
                         Profiles
                       </div>
@@ -1421,8 +1485,9 @@ const Navbar = () => {
                   {/* PITCHES ICON */}
                   {role === "Admin" && (
                     <div
-                      className={`navbar-item ${selectedIcon === "pitches" ? "selected" : ""
-                        }`}
+                      className={`navbar-item ${
+                        selectedIcon === "pitches" ? "selected" : ""
+                      }`}
                       onClick={() => {
                         navigate("/pitches");
                         handleItemClick("pitches");
@@ -1458,8 +1523,9 @@ const Navbar = () => {
                         </svg>
                       )}
                       <div
-                        className={`navbar-title${selectedIcon === "pitches" ? " selected-title" : ""
-                          }`}
+                        className={`navbar-title${
+                          selectedIcon === "pitches" ? " selected-title" : ""
+                        }`}
                       >
                         Pitches
                       </div>
@@ -1470,8 +1536,9 @@ const Navbar = () => {
 
                   {role === "Admin" && (
                     <div
-                      className={`navbar-item ${selectedIcon === "reports" ? "selected" : ""
-                        }`}
+                      className={`navbar-item ${
+                        selectedIcon === "reports" ? "selected" : ""
+                      }`}
                       onClick={() => {
                         navigate("/postReports");
                         handleItemClick("reports");
@@ -1507,8 +1574,9 @@ const Navbar = () => {
                         </svg>
                       )}
                       <div
-                        className={`navbar-title${selectedIcon === "reports" ? " selected-title" : ""
-                          }`}
+                        className={`navbar-title${
+                          selectedIcon === "reports" ? " selected-title" : ""
+                        }`}
                       >
                         Reports
                       </div>
@@ -1519,8 +1587,9 @@ const Navbar = () => {
 
               {/* MESSAGE ICON */}
               <div
-                className={`navbar-item ${selectedIcon === "messages" ? "selected" : ""
-                  }`}
+                className={`navbar-item ${
+                  selectedIcon === "messages" ? "selected" : ""
+                }`}
                 onClick={() => {
                   navigate("/conversations");
                   handleItemClick("messages");
@@ -1556,8 +1625,9 @@ const Navbar = () => {
                   </svg>
                 )}
                 <div
-                  className={`navbar-title${selectedIcon === "messages" ? " selected-title" : ""
-                    }`}
+                  className={`navbar-title${
+                    selectedIcon === "messages" ? " selected-title" : ""
+                  }`}
                 >
                   Messages
                 </div>
@@ -1652,7 +1722,9 @@ const Navbar = () => {
                     id="Profile-img"
                     className="Profile-img"
                     src={
-                      image !== undefined && image !== "" ? image.url : "/profile.png"
+                      image !== undefined && image !== ""
+                        ? image.url
+                        : "/profile.png"
                     }
                     alt=""
                   />
