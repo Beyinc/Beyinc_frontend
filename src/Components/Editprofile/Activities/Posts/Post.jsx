@@ -746,7 +746,7 @@ const Post = ({
               }}
             >
               <button
-                disabled={reportText == ""}
+                disabled={reportText == ""&&reportType==""}
                 onClick={(e) => {
                   reportPost(e);
                 }}
