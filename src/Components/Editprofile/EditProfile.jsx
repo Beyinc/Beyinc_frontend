@@ -364,6 +364,9 @@ const EditProfile = () => {
       setIsInputPopupVisible(true);
     }
   };
+  useEffect(()=>{
+    console.log(editPostToggler);
+  },[editPostToggler]);
 
   const handleAboutButtonClick = () => {
     window.scrollTo({

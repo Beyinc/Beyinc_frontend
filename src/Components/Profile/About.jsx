@@ -24,15 +24,15 @@ const About = ( {profileData,selfProfile ,setSelfProfile} ) => {
     };
 console.log('profile role', profileData.role)
     return (
-        <div className="flex flex-col w-full">
+        <div >
             {/* <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
             </div> */}
-            <div className="flex gap-10">
+            <div >
                 {/* <div className="flex-col">
                     <ProfileCard />
                 </div> */}
-                <div className="flex-col">
+                <div>
                     <div>
                         <AboutCard
                          selfProfile={selfProfile}

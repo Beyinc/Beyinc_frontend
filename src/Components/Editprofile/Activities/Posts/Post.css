@@ -58,6 +58,7 @@
   padding: 6px 10px;
   border-radius: 20px;
   color: black;
+  white-space: nowrap;
 }
 
 .postDescContainer {
@@ -234,13 +235,7 @@ background: var( --button-background);
     font-size: 12px;
     line-height: 15px;
   }
-  .postType{
-    background: var(--postType-bg);
-    padding: 6px 10px;
-    border-radius: 20px;
-    color: black;
-    font-size: 10px;
-  }
+  
   .PostDetailsContainer{
     padding: 0;
     margin: 0;
@@ -281,3 +276,14 @@ background: var( --button-background);
     font-weight: 600;
   }
 }
+
+
+@media (max-width: 639px) {
+  .icon {
+    transform: rotate(90deg);
+  }
+}
+.menu-icon-wrapper {
+  @apply w-8 h-8 flex items-center justify-center overflow-hidden;
+}
+
