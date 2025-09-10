@@ -45,6 +45,12 @@ jobs:
           output_location: "build" # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
+        env:
+          CI: false
+          REACT_APP_CALENDER_API_KEY: ${{ secrets.REACT_APP_CALENDER_API_KEY }}
+          REACT_APP_SOCKET_IO: ${{ secrets.REACT_APP_SOCKET_IO }}
+          REACT_APP_CALENDER_CLIENT_ID: ${{ secrets.REACT_APP_CALENDER_CLIENT_ID }}
+          REACT_APP_BACKEND: ${{ secrets.REACT_APP_BACKEND }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
