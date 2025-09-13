@@ -7,20 +7,29 @@
   background: transparent;
   width: 100%;
   cursor: pointer;
+  margin-left: 22px;
+  margin-top: 4px;
 }
 
 .search-container {
   display: flex;
   align-items: center;
   background-color: var(--searchbar-bg);
+
+  width: 457px;
+  height: 38px;
+
   border-radius: 20px;
-  padding: 5px;
-  height: 4vh;
-  width: 140em;
-  overflow: hidden;
-  margin-right: 200px;
-  
+  padding: 7px 20px; 
+  gap: 15px;
+
+  position: absolute;
+  top: 16px;
+  left: 253px;
+
+  opacity: 1;
 }
+
 
 .search-icon {
   margin-right: 5px;
@@ -234,12 +243,12 @@
   border-radius: 50% !important;
 } */
 
-img {
+/* img {
   width: 35px;
   height: 35px;
   border-radius: 15px;
   margin-left: 15px;
-}
+} */
 
 /* 
 .userDetails {
@@ -669,3 +678,33 @@ img {
     display: none;
   }
 }
+
+
+
+/* Profile image fix */
+.Profile-img {
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  margin-left: -8px !important; /* keep your original offset */
+  display: block !important;
+
+  /* prevent browser from rotating on small screens */
+  transform: none !important;
+  rotate: 0deg !important;
+  writing-mode: horizontal-tb !important;
+  image-orientation: none !important;
+}
+
+
+
+
+.navbar-item {
+  margin-right: 10px;
+}
+
+.navbar-item:last-child {
+  margin-right: 0; /* no extra space on last */
+}
+
