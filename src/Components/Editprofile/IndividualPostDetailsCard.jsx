@@ -559,13 +559,13 @@ const IndividualPostDetailsCard = () => {
                     <div className="openDiscussion-Buttons">
                       {post?.openDiscussionRequests
                         .map((o) => o._id)
-                        .includes(user_id) ? (
+                        .includes(user_id) && (
                         <button>Discussion Request Pending</button>
-                      ) : post?.openDiscussionTeam
+                      ) }{ post?.openDiscussionTeam
                           .map((o) => o._id)
-                          .includes(user_id) ? (
+                          .includes(user_id)&& (
                         <button>Joined</button>
-                      ) : (
+                      )}{post?.visibility=='private'&& (
                         <button onClick={addingRequestDiscussion}>
                           Join for discussion
                         </button>
