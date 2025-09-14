@@ -577,11 +577,12 @@ const Posts = () => {
                       : rec?.image?.url
                   }
                   alt="User Image"
-                  className="user-image"
+                  className="user-image mb-5"
                 />
               </div>
               <div className="right-section">
                 <h4
+               style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
                   onClick={() => {
                     if (rec._id == user_id) {
                       navigate("/editProfile");
@@ -589,13 +590,14 @@ const Posts = () => {
                       navigate(`/user/${rec._id}`);
                     }
                   }}
+                  
                 >
                   {rec?.userName}
                 </h4>
                 <p>{rec?.role}</p>
-                <div className="follow-container">
+                <div className="follow-container -ml-14 mt-2">
                   <button
-                    className="follow"
+                    className="follow w-[120px] h-[35px]"
                     onClick={(e) => {
                       followerController({
                         dispatch,

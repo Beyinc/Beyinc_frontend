@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const AllNotifications = ({ n }) => {
   const navigate = useNavigate();
+  // console.log(n);
   const changeStatus = async () => {
     await ApiServices.changeNotification({ notificationId: n._id }).then(
       (res) => {}
@@ -36,15 +37,16 @@ const AllNotifications = ({ n }) => {
           />
         </div>
         {/* <div style={{ wordBreak: 'break-word' }}>{n.message}  {n.type == 'postDiscussion' && <Link to={`/posts/${n.postId}`}>View Post</Link>} {n.type == 'report' && <Link style={{color: 'red'}} to={`/posts/${n.postId}`}>View Post</Link>}</div> */}
-        <div style={{ wordBreak: 'break-word' }}>
+       <div style={{ wordBreak: "break-word" }}>
   <Link
     to={`/posts/${n.postId}`}
-    style={{ 
-      color: n.type === 'report' ? 'red' : 'inherit', 
-      textDecoration: 'none' 
+    style={{
+      color: n.type === "report" ? "red" : "inherit",
+      textDecoration: "none",
     }}
   >
-    {n.message}
+    <strong>{n.senderInfo?.userName}</strong>{" "}
+    {n.message.replace(n.senderInfo?.userName, "").trim()}
   </Link>
 </div>
 
