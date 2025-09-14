@@ -349,9 +349,10 @@ const Post = ({
           >
             <div className="flex flex-col mt-0 space-y-3">
               <div className="flex space-x-3">
-                <div className="postType text mt-1 sm:text-base sm:mt-0">
-                  {post?.type}
-                </div>
+              <div className="postType text-xs mt-1 sm:text-sm sm:mt-0">
+  {post?.type}
+</div>
+
 
                 <div
                   id="menu"
@@ -477,7 +478,7 @@ const Post = ({
               />
             )} */}
             </div>
-            <div className="likeCommentDetails">
+            <div className="likeCommentDetails mt-2">
               <div className="likeTotal">
                 <div>
                   <div>
@@ -548,7 +549,7 @@ const Post = ({
                     />
                   </svg>
                 </div>
-                <div className="actionText hidden sm:block">upvote</div>
+                <div className="actionText hidden sm:block  font-semibold">upvote</div>
               </div>
               <div className="likeActionHolder " onClick={dislikePost}>
                 <div>
@@ -570,7 +571,7 @@ const Post = ({
                     />
                   </svg>
                 </div>
-                <div className="actionText hidden sm:block">downvote</div>
+                <div className="actionText hidden sm:block  font-semibold">downvote</div>
               </div>
               <div
                 className="likeActionHolder"
@@ -594,7 +595,7 @@ const Post = ({
                     />
                   </svg>
                 </div>
-                <div className="actionText hidden sm:block">Comment</div>
+                <div className="actionText  hidden sm:block font-semibold">Comment</div>
               </div>
 
               <div className="likeActionHolder">

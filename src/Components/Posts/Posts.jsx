@@ -538,9 +538,9 @@ const Posts = () => {
               >
                 <h5>{post?.type}</h5>
                 <h4>
-                  <b>{post?.postTitle}</b>
+                  <p className="font-semibold">{post?.postTitle}</p>
                 </h4>
-                <p>{truncateDescription(post?.description)}</p>
+                <p className="mt-2">{truncateDescription(post?.description)}</p>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}
