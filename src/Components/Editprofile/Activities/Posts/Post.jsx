@@ -276,6 +276,7 @@ const Post = ({
       }`}
     >
       <div className="ProfilepostContainer hover:cursor-pointer mt-1">
+<div className="PostHeaderContainer ">
   <div className="postTotaldetails ">
     <div
       className="PostheaderimageContainer"
@@ -359,7 +360,6 @@ const Post = ({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-
             <path
               d="M8.75 15C8.75 15.663 8.48661 16.2989 8.01777 16.7678C7.54893 17.2366 6.91304 17.5 6.25 17.5C5.58696 17.5 4.95107 17.2366 4.48223 16.7678C4.01339 16.2989 3.75 15.663 3.75 15C3.75 14.337 4.01339 13.7011 4.48223 13.2322C4.95107 12.7634 5.58696 12.5 6.25 12.5C6.91304 12.5 7.54893 12.7634 8.01777 13.2322C8.48661 13.7011 8.75 14.337 8.75 15ZM17.5 15C17.5 15.663 17.2366 16.2989 16.7678 16.7678C16.2989 17.2366 15.663 17.5 15 17.5C14.337 17.5 13.7011 17.2366 13.2322 16.7678C12.7634 16.2989 12.5 15.663 12.5 15C12.5 14.337 12.7634 13.7011 13.2322 13.2322C13.7011 12.7634 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.7634 16.7678 13.2322C17.2366 13.7011 17.5 14.337 17.5 15ZM26.25 15C26.25 15.663 25.9866 16.2989 25.5178 16.7678C25.0489 17.2366 24.413 17.5 23.75 17.5C23.087 17.5 22.4511 17.2366 21.9822 16.7678C21.5134 16.2989 21.25 15.663 21.25 15C21.25 14.337 21.5134 13.7011 21.9822 13.2322C22.4511 12.7634 23.087 12.5 23.75 12.5C24.413 12.5 25.0489 12.7634 25.5178 13.2322C25.9866 13.7011 26.25 14.337 26.25 15Z"
               fill="var(--text-total-color)"
@@ -373,12 +373,6 @@ const Post = ({
   className={`subMenu postSubActions${post?._id} absolute top-full left-0 mt-2 hidden bg-white border rounded-md shadow-md z-50`}
   ref={userDetailsRef}
 >
-            <div className="flex flex-col mt-0 space-y-3">
-              <div className="flex space-x-3">
-                <div className="postType text mt-1 sm:text-base sm:mt-0">
-                  {post?.type}
-                </div>
-
 
         {post?.createdBy?._id == user_id ? (
           <>
@@ -473,7 +467,7 @@ const Post = ({
               />
             )} */}
             </div>
-            <div className="likeCommentDetails">
+            <div className="likeCommentDetails mt-2">
               <div className="likeTotal">
                 <div>
                   <div>
@@ -547,7 +541,6 @@ const Post = ({
                 <div className="actionText hidden sm:block  font-semibold">
                   upvote
                 </div>
-                <div className="actionText hidden sm:block">upvote</div>
               </div>
               <div className="likeActionHolder " onClick={dislikePost}>
                 <div>
@@ -596,7 +589,6 @@ const Post = ({
                 <div className="actionText  hidden sm:block font-thin">
                   Comment
                 </div>
-                <div className="actionText hidden sm:block">Comment</div>
               </div>
 
               <div className="likeActionHolder">
@@ -756,7 +748,6 @@ const Post = ({
             </div>
           </DialogContent>
         </Dialog>
-      </div>
       </div>
     </section>
   );
