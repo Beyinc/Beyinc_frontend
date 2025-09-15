@@ -276,7 +276,6 @@ const Post = ({
       }`}
     >
       <div className="ProfilepostContainer hover:cursor-pointer mt-1">
-<div className="PostHeaderContainer ">
   <div className="postTotaldetails ">
     <div
       className="PostheaderimageContainer"
@@ -757,6 +756,7 @@ const Post = ({
             </div>
           </DialogContent>
         </Dialog>
+      </div>
       </div>
     </section>
   );
