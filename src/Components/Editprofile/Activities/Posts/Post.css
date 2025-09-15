@@ -170,10 +170,12 @@
  border-radius: 5px;
 }
 
+
+
 .actionText {
   /* font-family: Gentium Book Basic; */
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 23.14px;
   text-align: left;
   cursor: pointer;

@@ -242,6 +242,7 @@ const IndividualPostDetailsCard = () => {
                           : "/profile.png"
                       }
                       alt=""
+                      className="size-8 rounded-full"
                     />
                   </div>
                   <div className="IndividualPostDetailsContainer">
@@ -526,13 +527,11 @@ const IndividualPostDetailsCard = () => {
             <div className="wholePostWrapper">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
-                  <div
-                    className="IndividualPostHeaderImageContainer"
+                    <img
                     onClick={() => {
                       navigate(`/user/${post?.createdBy?._id}`);
                     }}
-                  >
-                    <img
+                    
                       src={
                         post?.createdBy?.image !== "" &&
                         post?.createdBy?.image !== undefined &&
@@ -541,8 +540,8 @@ const IndividualPostDetailsCard = () => {
                           : "/profile.png"
                       }
                       alt=""
+                      className="size-8 rounded-full"
                     />
-                  </div>
 
                   <div className="IndividualPostDetailsContainer">
                     <div
