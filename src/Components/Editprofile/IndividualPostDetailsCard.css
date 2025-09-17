@@ -119,7 +119,7 @@ background: var( --button-background);
   box-sizing: border-box;
   max-width: 1350px;
   margin: 0 auto; 
-  
+
 }
 .post-details-container {
   display: flex;
