@@ -1,5 +1,3 @@
-
-
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
@@ -114,9 +112,9 @@ export default function NewProfiles() {
                   <h5 className="text-neutral-600 mt-1 text-xs">{rec.role}</h5>
                 )}
                 <p className="mt-2 mb-2 text-center text-xs">{rec.headline}</p>
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-2 w-full items-center">
                   <button
-                    className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
+                    className="ml-2 rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm w-[100px] h-[30px]"
                     onClick={(e) => {
                       followerController({
                         dispatch,

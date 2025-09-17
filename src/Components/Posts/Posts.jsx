@@ -597,7 +597,7 @@ const Posts = () => {
                 <p>{rec?.role}</p>
                 <div className="follow-container -ml-14 mt-2">
                   <button
-                    className="follow w-[120px] h-[35px]"
+                    className="follow w-[100px] h-[30px]"
                     onClick={(e) => {
                       followerController({
                         dispatch,
