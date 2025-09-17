@@ -242,6 +242,7 @@ const IndividualPostDetailsCard = () => {
                           : "/profile.png"
                       }
                       alt=""
+                      className="size-8 rounded-full"
                     />
                   </div>
                   <div className="IndividualPostDetailsContainer">
@@ -526,23 +527,20 @@ const IndividualPostDetailsCard = () => {
             <div className="wholePostWrapper">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
-                  <div
-                    className="IndividualPostHeaderImageContainer"
+                  <img
                     onClick={() => {
                       navigate(`/user/${post?.createdBy?._id}`);
                     }}
-                  >
-                    <img
-                      src={
-                        post?.createdBy?.image !== "" &&
-                        post?.createdBy?.image !== undefined &&
-                        post?.createdBy?.image?.url !== ""
-                          ? post?.createdBy?.image?.url
-                          : "/profile.png"
-                      }
-                      alt=""
-                    />
-                  </div>
+                    src={
+                      post?.createdBy?.image !== "" &&
+                      post?.createdBy?.image !== undefined &&
+                      post?.createdBy?.image?.url !== ""
+                        ? post?.createdBy?.image?.url
+                        : "/profile.png"
+                    }
+                    alt=""
+                    className="size-8 rounded-full"
+                  />
 
                   <div className="IndividualPostDetailsContainer">
                     <div
@@ -555,23 +553,24 @@ const IndividualPostDetailsCard = () => {
                         post?.createdBy?.userName?.slice(1)}
                     </div>
                   </div>
-                  {!(post?.createdBy._id == user_id) && (
-                    <div className="openDiscussion-Buttons">
-                      {post?.openDiscussionRequests
-                        .map((o) => o._id)
-                        .includes(user_id) && (
-                        <button>Discussion Request Pending</button>
-                      ) }{ post?.openDiscussionTeam
+                  {!(post?.createdBy._id == user_id) &&
+                    post.type === "private" && (
+                      <div className="openDiscussion-Buttons">
+                        {post?.openDiscussionRequests
                           .map((o) => o._id)
-                          .includes(user_id)&& (
-                        <button>Joined</button>
-                      )}{post?.visibility=='private'&& (
-                        <button onClick={addingRequestDiscussion}>
-                          Join for discussion
-                        </button>
-                      )}
-                    </div>
-                  )}
+                          .includes(user_id) ? (
+                          <button>Discussion Request Pending</button>
+                        ) : post?.openDiscussionTeam
+                            .map((o) => o._id)
+                            .includes(user_id) ? (
+                          <button>Joined</button>
+                        ) : (
+                          <button onClick={addingRequestDiscussion}>
+                            Join for discussion
+                          </button>
+                        )}
+                      </div>
+                    )}
                 </div>
                 {post?.openDiscussion == false &&
                   post?.openDiscussionTeam.length !== 0 && (
@@ -716,7 +715,12 @@ const IndividualPostDetailsCard = () => {
                 </div>
               </div>
             </div>
-          <LiveChat post={post} onlineEmails={onlineEmails} userName={userName} user_id={user_id}/>
+            <LiveChat
+              post={post}
+              onlineEmails={onlineEmails}
+              userName={userName}
+              user_id={user_id}
+            />
           </div>
         </div>
       )}
