@@ -133,6 +133,7 @@ background: var( --button-background);
 .post-details-content-left {
   width: 860px;
   flex-shrink: 0;   /* don’t shrink */
+  margin-top: 55px;
 }
 
 /* Right column flexible */
