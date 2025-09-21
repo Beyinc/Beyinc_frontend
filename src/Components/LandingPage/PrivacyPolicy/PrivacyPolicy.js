@@ -65,10 +65,10 @@ const PrivacyPolicy = () => {
             <img src="/About.png"/>
         </div>
           <p>
-          BeyInc Entrepreneurship Venture Private Limited is  a social entrepreneurship platform bringing entrepreneurs,
+          Bloomr Entrepreneurship Venture Private Limited is  a social entrepreneurship platform bringing entrepreneurs,
             mentors, investors and other stakeholders at one place and catering
             early-stage startup to increase their success rate from 10 % to
-            potentially 50%. At BeyInc Entrepreneurship Venture Private Limited, we pride ourselves on providing
+            potentially 50%. At Bloomr Entrepreneurship Venture Private Limited, we pride ourselves on providing
             unmatched collaboration opportunities that stand apart from any
             other.
           </p>
@@ -145,7 +145,7 @@ const PrivacyPolicy = () => {
           </div>
           <h2>Privacy Policy</h2>
           <p>
-          BeyInc Entrepreneurship Venture Private Limited is committed to protecting the privacy of our users. This
+          Bloomr Entrepreneurship Venture Private Limited is committed to protecting the privacy of our users. This
             Privacy Policy describes how we collect, use, and disclose
             information when you use our website{" "}
             <a href="https://www.beyinc.org/">https://www.beyinc.org/</a> and
@@ -270,7 +270,7 @@ const PrivacyPolicy = () => {
             <br />
             <strong>Non-Compete:</strong> Mentors/investors agree not to partake
             in similar mentorship/investment activities that may directly
-            compete with BeyInc during the MOU term, except within their
+            compete with Bloomr during the MOU term, except within their
             existing institutional roles. They are required to disclose all
             engagements with startups outside of BeyInc's platforms to ensure
             transparency and compliance. Mentors/investors are kindly requested
@@ -338,12 +338,12 @@ const PrivacyPolicy = () => {
                   </p>
                   <p>
                     <strong>Clause 2:</strong> A platform fee of 2-20% in terms
-                    of equity of the company, if Beyinc along with the mentor
+                    of equity of the company, if Bloomr along with the mentor
                     agrees to support the startup.
                   </p>
                   <p>
                     Users are free to choose Clause 1 for one-to-one mentorship
-                    sessions. If users agree to work with Beyinc for longer
+                    sessions. If users agree to work with Bloomr for longer
                     terms for their start-up, then Clause 2 will be applicable.
                   </p>
                 </li>

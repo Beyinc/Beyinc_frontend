@@ -69,7 +69,7 @@ const Proffesional = () => {
                 <Box sx={{ mb: 2 }}>
                     <TextField
                         fullWidth
-                        label="Beyinc Member"
+                        label="Bloomr Member"
                         variant="outlined"
                         value={userName}
                         onChange={(e) => setuserName(e.target.value)}

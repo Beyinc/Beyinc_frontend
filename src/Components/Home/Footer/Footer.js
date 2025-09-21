@@ -71,7 +71,7 @@ const Footer = () => {
         </nav>
       </div>
       <p className="copyright">
-        Copyright &copy; 2024 BeyInc Entrepreneurship Venture Private Limited. All Rights Reserved.
+        Copyright &copy; 2024 Bloomr Entrepreneurship Venture Private Limited. All Rights Reserved.
       </p>
     </footer>
   );
