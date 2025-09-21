@@ -25,6 +25,8 @@ const Posts = () => {
   } = useSelector((store) => store.auth.userDetails);
 
   // console.log(role, userName, image)
+
+
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -50,12 +52,18 @@ const Posts = () => {
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
 
   const [recommendedUsers, setRecommendedUsers] = useState([]);
+
+  const [filterPage, setFilterPage] = useState(1); // start page for filtered posts
+const pageSize = 10; // fixed page size
   useEffect(() => {
     // dispatch(setLoading({ visible: "yes" }));
+  if (filterPage === 1) setAllPosts([]); // clear previous posts on first load
 
-    ApiServices.getAllPosts({ page: page, pageSize: pageSize })
+    ApiServices.getAllPosts({ page: filterPage, pageSize: pageSize })
+    
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
+        console.log("all posts:",allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
@@ -69,6 +77,11 @@ const Posts = () => {
         // dispatch(setLoading({ visible: "no" }));
       });
   }, [loadingTrigger]);
+
+
+  useEffect(()=>{
+    console.log("all posts-:",allPosts);
+  },[allPosts])
 
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
@@ -108,14 +121,21 @@ const Posts = () => {
       });
   }, [recommendedUserTrigger]);
 
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [pageSize, setPageSize] = useState(10);
 
-  const handleLoadMore = () => {
-    setPage(pageSize);
-    setPageSize(pageSize + 10);
-    setLoadingTrigger(!loadingTrigger);
-  };
+  // const handleLoadMore = () => {
+  //   setPage(pageSize);
+  //   setPageSize(pageSize + 10);
+  //   setLoadingTrigger(!loadingTrigger);
+  // };
+//   const [page, setPage] = useState(1); // start from page 1
+// const pageSize = 10; // fixed
+
+// const handleLoadMore = () => {
+//   setPage(prev => prev + 1); // increment page
+//   setLoadingTrigger(!loadingTrigger);
+// };
 
   const socket = useRef();
   useEffect(() => {
@@ -167,37 +187,40 @@ const Posts = () => {
 
   // };
 
-  useEffect(() => {
-    const fetchFilteredPosts = async () => {
-      try {
-        const filterData = {
-          tags: selectedTags,
-          sortOption: selectedSortOption,
-          people: people,
-        };
 
-        if (isPublic) {
-          filterData.public = true;
-        }
-        if (isPrivate) {
-          filterData.private = true;
-        }
 
-        // if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
-        //   console.log("No valid filters or both selected. Clearing posts...");
-        //   setFilteredPosts([]); // Clear all posts in these cases.
-        //   return;
-        // }
+useEffect(() => {
+  const fetchFilteredPosts = async () => {
+    try {
+      const filterData = {
+        tags: selectedTags,
+        sortOption: selectedSortOption,
+        people: people,
+        public: isPublic,
+        private: isPrivate,
+        page: filterPage,       // send page
+        pageSize,               // send pageSize
+      };
 
-        const response = await ApiServices.getFilterPosts(filterData);
-        setFilteredPosts(response.data); // Update with new data
-      } catch (error) {
-        console.error("Error filtering posts:", error);
+      const response = await ApiServices.getFilterPosts(filterData);
+
+      if (filterPage === 1) {
+        setFilteredPosts(response.data); // first page replaces
+      } else {
+        setFilteredPosts((prev) => [...prev, ...response.data]); // append next pages
       }
-    };
+    } catch (error) {
+      console.error("Error filtering posts:", error);
+    }
+  };
 
-    fetchFilteredPosts();
-  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate]);
+  fetchFilteredPosts();
+}, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
+
+// Load More for filtered posts
+const handleLoadMore = () => {
+  setFilterPage((prev) => prev + 1);
+};
 
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
@@ -471,7 +494,6 @@ const Posts = () => {
             filteredPosts
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
               .map((p) => {
-                // console.log("Debugging post:", p); // Debugging each post
                 return (
                   <Post
                     filteredPosts={filteredPosts}
@@ -650,3 +672,5 @@ const Posts = () => {
 };
 
 export default Posts;
+
+

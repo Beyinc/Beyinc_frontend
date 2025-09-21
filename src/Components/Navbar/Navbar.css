@@ -9,6 +9,19 @@
   cursor: pointer;
 }
 
+
+#logoImage {
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  object-fit: contain;
+  transform: rotate(0deg);
+  opacity: 1;
+  object-fit: contain;
+  background-color: transparent;
+  mix-blend-mode: multiply;
+}
+
 .search-container {
   display: flex;
   align-items: center;
