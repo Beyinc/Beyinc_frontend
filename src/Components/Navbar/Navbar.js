@@ -615,7 +615,7 @@ const Navbar = () => {
   const NotificationList = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 800,
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 1100,
         overFlowX: "hidden",
       }}
       role="presentation"
@@ -656,6 +656,11 @@ const Navbar = () => {
           {...a11yProps(0)}
         />
       </Tabs> */}
+      <div className="notification-headers flex justify-between items-center">
+        <span>Notifications</span>
+        <span>Mark all read</span>
+      </div>
+
       <div className="SideNotificationHeader">
         <div
           className={`sideNavIcons ${value == 1 && "sideselected"}`}
@@ -1656,14 +1661,38 @@ const Navbar = () => {
                 <div className="navbar-title">Notifications</div>
               </div>
 
-              <Drawer
+              {/* <Drawer
                 anchor="right"
                 open={notificationDrawerState["right"]}
                 onClose={toggleNotificationDrawer("right", false)}
                 onOpen={toggleNotificationDrawer("right", true)}
               >
                 {NotificationList("right")}
-              </Drawer>
+              </Drawer> */}
+
+              <Drawer
+  anchor="right"
+  open={notificationDrawerState["right"]}
+  onClose={toggleNotificationDrawer("right", false)}
+  onOpen={toggleNotificationDrawer("right", true)}
+  PaperProps={{
+    sx: {
+      width: "1064px",
+      height: "759px",
+      top: "100px",
+      left: "360px",
+      bottom:"20px",
+      borderRadius: "12px",
+      borderWidth: "1px",
+      borderStyle: "solid",
+      opacity: 1,
+      position: "absolute", // allow custom top/left
+    },
+  }}
+>
+  {NotificationList("right")}
+</Drawer>
+
             </>
           )}
 

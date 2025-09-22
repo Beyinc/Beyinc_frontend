@@ -321,6 +321,8 @@ input {
   font-size: 12px;
   display: block;
   text-align: start !important;
+  font-style: italic;
+
 }
 .passwordHint ul li.success{
  color: green !important;
