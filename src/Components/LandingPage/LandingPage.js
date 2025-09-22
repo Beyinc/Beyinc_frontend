@@ -90,7 +90,7 @@ const LandingPage = () => {
           <img src="/section-2.png" />
         </div>
         <div className="content-2" data-aos="fade-left">
-          <h1>To whom is BeyInc for?</h1>
+          <h1>To whom is Bloomr for?</h1>
           <p>Anyone looking to start their entrepreneurial journey</p>
 
           <div className="logos">
@@ -191,7 +191,7 @@ const LandingPage = () => {
           </p>
           <p data-aos="fade-up">
             <i className="fas fa-check-square" data-aos="zoom-in"></i> Talk to
-            Us any time on BeyInc Admin (Blue tick)
+            Us any time on Bloomr Admin (Blue tick)
           </p>
           <p data-aos="fade-up">
             <i className="fas fa-check-square" data-aos="zoom-in"></i> Take

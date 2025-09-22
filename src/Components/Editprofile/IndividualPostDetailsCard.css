@@ -115,23 +115,32 @@ background: var( --button-background);
 
 .post-details-main-container {
   width: 100%;
-  padding: 16px;
+  padding: 16px 0;   /* remove left/right padding */
   box-sizing: border-box;
-  max-width: 1253px;
-  margin: auto;
-}
+  max-width: 1350px;
+  margin: 0 auto; 
 
+}
 .post-details-container {
   display: flex;
   flex-direction: row;
   gap: 24px;
   width: 100%;
+  align-items: flex-start;
 }
 
-.post-details-content-left,
+/* Left column fixed */
+.post-details-content-left {
+  width: 860px;
+  flex-shrink: 0;   /* don’t shrink */
+  margin-top: 55px;
+}
+
+/* Right column flexible */
 .post-details-content-right {
   flex: 1;
-  min-width: 0;
+  min-width: 300px; /* safeguard */
+  padding: 20px;
 }
 
 /* Responsive styles for mobile */
@@ -140,15 +149,18 @@ background: var( --button-background);
     flex-direction: column;
     gap: 0;
   }
+
   .post-details-content-left,
   .post-details-content-right {
-    width: 100%;
+    width: 100% !important; /* both full width */
     min-width: 0;
   }
+
   .post-details-content-right {
     margin-top: 24px;
   }
 }
+
 
 /* Make images responsive */
 .PostimageContainer img,
@@ -215,6 +227,9 @@ background: var( --button-background);
 }
   
 /* Live Chat Styles */
+.membersWrapper{
+  width: 477px;
+}
 .members-header {
   display: flex;
   justify-content: space-between;

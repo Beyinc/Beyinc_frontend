@@ -41,7 +41,7 @@ const AllNotifications = ({ n }) => {
   <Link
     to={`/posts/${n.postId}`}
     style={{
-      color: n.type === "report" ? "red" : "inherit",
+      color: "inherit",
       textDecoration: "none",
     }}
   >

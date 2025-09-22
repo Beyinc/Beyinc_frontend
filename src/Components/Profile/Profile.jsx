@@ -161,6 +161,8 @@ const Profile = () => {
                         textAlign: "center",
                         textTransform: "none",
                         "&.Mui-selected": { color: "#4E54C6" },
+                            "&:hover": { color: "white" },   // 👈 added
+
                       }}
                     />
                   ))}

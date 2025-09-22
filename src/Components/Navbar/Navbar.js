@@ -1203,7 +1203,7 @@ const Navbar = () => {
             id="logoImage"
             src={
               localStorage.getItem("theme") == "light"
-                ? "/logo.png"
+                ? "/logo3.png"
                 : "/Footer-Logo.png"
             }
             alt="logo"

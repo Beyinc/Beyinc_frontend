@@ -65,10 +65,10 @@ const PrivacyPolicy = () => {
             <img src="/About.png"/>
         </div>
           <p>
-          BeyInc Entrepreneurship Venture Private Limited is  a social entrepreneurship platform bringing entrepreneurs,
+          Bloomr Entrepreneurship Venture Private Limited is  a social entrepreneurship platform bringing entrepreneurs,
             mentors, investors and other stakeholders at one place and catering
             early-stage startup to increase their success rate from 10 % to
-            potentially 50%. At BeyInc Entrepreneurship Venture Private Limited, we pride ourselves on providing
+            potentially 50%. At Bloomr Entrepreneurship Venture Private Limited, we pride ourselves on providing
             unmatched collaboration opportunities that stand apart from any
             other.
           </p>
@@ -145,7 +145,7 @@ const PrivacyPolicy = () => {
           </div>
           <h2>Privacy Policy</h2>
           <p>
-          BeyInc Entrepreneurship Venture Private Limited is committed to protecting the privacy of our users. This
+          Bloomr Entrepreneurship Venture Private Limited is committed to protecting the privacy of our users. This
             Privacy Policy describes how we collect, use, and disclose
             information when you use our website{" "}
             <a href="https://www.beyinc.org/">https://www.beyinc.org/</a> and
@@ -219,22 +219,22 @@ const PrivacyPolicy = () => {
             <img src="/Terms.png"/>
         </div>
           <p>
-            <strong>User Agreement:</strong> By using beyinc.org, you agree to
+            <strong>User Agreement:</strong> By using bloomr.org, you agree to
             abide by these terms and conditions. If you do not agree with any
             part of these terms, you may not use the platform.
             <br />
             <strong>Age Requirement:</strong> Users must be at least 13 years
-            old to create an account on beyinc.org.
+            old to create an account on bloomr.org.
             <br />
             <strong>Content Ownership:</strong> You retain ownership of the
-            content you post on beyinc.org. However, by posting content, you
-            grant beyinc.org a non-exclusive, worldwide, royalty-free license to
+            content you post on bloomr.org. However, by posting content, you
+            grant bloomr.org a non-exclusive, worldwide, royalty-free license to
             use, reproduce, modify, adapt, publish, translate, distribute, and
             display such content.
             <br />
             <strong>Privacy Policy:</strong> Our privacy policy outlines how we
             collect, use, and protect your personal information. By using
-            beyinc.org, you consent to the collection and use of your data in
+            bloomr.org, you consent to the collection and use of your data in
             accordance with our privacy policy.
             <br />
             <strong>Community Guidelines:</strong> Users are expected to adhere
@@ -244,18 +244,18 @@ const PrivacyPolicy = () => {
             terminated.
             <br />
             <strong>Copyright:</strong> Users may not post copyrighted material
-            on beyinc.org without permission from the copyright holder. We have
+            on bloomr.org without permission from the copyright holder. We have
             a system in place for reporting copyright violations, and accounts
             found to be in violation may be subject to suspension or
             termination.
             <br />
-            <strong>Account Suspension/Termination:</strong> beyinc.org reserves
+            <strong>Account Suspension/Termination:</strong> bloomr.org reserves
             the right to suspend or terminate accounts that violate these terms
             and conditions or our community guidelines.
             <br />
             <strong>Third-party Links and Apps:</strong> Users should exercise
             caution when clicking on links or using third-party apps within
-            beyinc.org. These external links and apps are not under our control,
+            bloomr.org. These external links and apps are not under our control,
             and we are not responsible for any content or actions associated
             with them.
             <br />
@@ -270,7 +270,7 @@ const PrivacyPolicy = () => {
             <br />
             <strong>Non-Compete:</strong> Mentors/investors agree not to partake
             in similar mentorship/investment activities that may directly
-            compete with BeyInc during the MOU term, except within their
+            compete with Bloomr during the MOU term, except within their
             existing institutional roles. They are required to disclose all
             engagements with startups outside of BeyInc's platforms to ensure
             transparency and compliance. Mentors/investors are kindly requested
@@ -278,7 +278,7 @@ const PrivacyPolicy = () => {
             platform through personal approaches unless done via the specified
             channels.
             <br />
-            <strong>Changes to Terms:</strong> beyinc.org may update these terms
+            <strong>Changes to Terms:</strong> bloomr.org may update these terms
             and conditions from time to time. Users will be notified of any
             changes, and continued use of the platform constitutes acceptance of
             the updated terms.
@@ -338,12 +338,12 @@ const PrivacyPolicy = () => {
                   </p>
                   <p>
                     <strong>Clause 2:</strong> A platform fee of 2-20% in terms
-                    of equity of the company, if Beyinc along with the mentor
+                    of equity of the company, if Bloomr along with the mentor
                     agrees to support the startup.
                   </p>
                   <p>
                     Users are free to choose Clause 1 for one-to-one mentorship
-                    sessions. If users agree to work with Beyinc for longer
+                    sessions. If users agree to work with Bloomr for longer
                     terms for their start-up, then Clause 2 will be applicable.
                   </p>
                 </li>

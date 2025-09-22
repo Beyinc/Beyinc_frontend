@@ -186,7 +186,7 @@ const PostComments = ({ fetchComments, postId }) => {
   };
   return (
     <div className="">
-      <div className="postCommentAddSection">
+      <div className="postCommentAddSection ml-5">
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div>
             <img

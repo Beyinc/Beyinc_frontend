@@ -126,7 +126,7 @@ const Stepper = ({ currentStep }) => {
       <div className="stepper-content">
         <div>Details</div>
         <div>Additional Information</div>
-        <div>BeyInc Profile</div>
+        <div>Bloomr Profile</div>
       </div>
     </div>
   );
@@ -940,7 +940,7 @@ const UserDetails = () => {
       {/* step-2 */}
       {currentStep === 3 && (
         <div className="step2-content">
-          <h1>Do you want to become a Proffesional at Beyinc ?</h1>
+          <h1>Do you want to become a Proffesional at Bloomr?</h1>
           <div>
             <h2>Upgrade your profile as a: </h2>
             <p>
@@ -5365,16 +5365,16 @@ const UserDetails = () => {
           <div className="terms-of-use-containuer">
             <h2>Terms and Conditions</h2>
             <p>
-              1) This website, the official platform of Beyinc Entrepreneurship
+              1) This website, the official platform of Bloomr Entrepreneurship
               Venture Pvt. Ltd., is designed to offer general information to
               visitors. The content and documents provided here serve as
               reference materials and are not intended to constitute legal
               documentation.
             </p>
             <p>
-              2&#41; BeyInc does not guarantee the accuracy or completeness of the
+              2&#41; Bloomr does not guarantee the accuracy or completeness of the
               information, text, graphics, links, or other elements found within
-              the BeyInc web portal. Due to updates and corrections, the web
+              the Bloomr web portal. Due to updates and corrections, the web
               content is subject to regular changes.
             </p>
             <p>
@@ -5385,7 +5385,7 @@ const UserDetails = () => {
               security policies of the external website owners.
             </p>
             <p>
-              4&#41; BeyInc serves as a connectivity platform for stakeholders and
+              4&#41; Bloomr serves as a connectivity platform for stakeholders and
               is not liable for any idea copying, product infringement, or of
               any kind and not limited to monetary loss between connecting
               parties.

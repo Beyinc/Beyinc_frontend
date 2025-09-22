@@ -94,11 +94,11 @@ export function LiveChat({ post, userName, user_id, onlineEmails }) {
   };
 
   return (
-    <div className="membersWrapper">
-      <div className="members-header">
+    <div className="membersWrapper  w-[520px] h-auto ">
+      <div className="members-header ">
         <h5>{isChatOpen ? "Live Chat" : "Members"}</h5>
         <button
-          className="chat-toggle-btn"
+          className="chat-toggle-btn "
           onClick={() => setIsChatOpen(!isChatOpen)}
         >
           {isChatOpen ? "Show Members" : "Live Chat"}
@@ -106,7 +106,7 @@ export function LiveChat({ post, userName, user_id, onlineEmails }) {
       </div>
 
       {isChatOpen ? (
-        <div className="live-chat-container">
+        <div className="live-chat-container ">
           <div className="chat-messages">
             {chatMessages.map((msg, idx) => (
               <div key={msg._id || idx} className="chat-message">

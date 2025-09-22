@@ -386,6 +386,7 @@ const IndividualPostDetailsCard = () => {
                     style={{ objectFit: "contain" }}
                     alt=""
                     onClick={() => navigate(`/posts/${post?._id}`)}
+                    className="w-[850px]"
                   />
                 )}
               </div>
@@ -393,7 +394,7 @@ const IndividualPostDetailsCard = () => {
                 post?.openDiscussionTeam.map((o) => o._id).includes(user_id) ||
                 post?.createdBy._id === user_id ||
                 role === "Admin") && (
-                <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
+                <div className="postDesc w-[850px]" style={{ whiteSpace: "pre-wrap" }}>
                   {post?.fullDetails}
                 </div>
               )}
@@ -524,7 +525,7 @@ const IndividualPostDetailsCard = () => {
             </div>
           </div>
           <div className="post-details-content-right">
-            <div className="wholePostWrapper">
+            <div className="wholePostWrapper w-[477px] h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
                   <img
