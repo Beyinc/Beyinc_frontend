@@ -660,10 +660,12 @@ const Navbar = () => {
         />
       </Tabs> */}
       <div className="notification-headers flex justify-between items-center mt-[40px]">
-        <span className='[font-family:"Gentium_Book_Basic"] font-bold text-[20px] ml-[20px] mb-[10px]'>
+        <span className='[font-family:"Gentium_Book_Basic"] font-bold text-[20px] ml-[20px] mb-[10px] hover:cursor-pointer'>
           Notifications
         </span>
-        <span className="text-[#4F55C7] ">Mark all read</span>
+        <span className="text-[#4F55C7] hover:cursor-pointer" onClick={()=>{
+          toggleNotificationDrawer("right", false)()
+        }}>Mark all read</span>
       </div>
       <div className="border-div">
         <div className="SideNotificationHeader">

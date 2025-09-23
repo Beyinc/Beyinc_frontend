@@ -243,7 +243,7 @@ const Login = () => {
               <div class="login-header">
                 <img
                   class="login-logo"
-                  src="logo.png"
+                  src="/Bloomr-login-logo.svg"
                   alt="Your Alt Text"
                   onClick={() => {
                     navigate("/");
