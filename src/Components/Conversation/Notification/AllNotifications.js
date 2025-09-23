@@ -15,8 +15,14 @@ const AllNotifications = ({ n }) => {
   return (
     <div
       className={`individualrequest`}
+
+
       onClick={() => {
+
+                                  if (!(n.type === "postDiscussion" || n.type === "report")) {
+
         navigate(`/user/${n.senderInfo?._id}`);
+                                  }
         changeStatus();
       }}
     >

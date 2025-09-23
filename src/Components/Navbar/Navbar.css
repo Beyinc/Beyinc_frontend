@@ -572,15 +572,22 @@ img {
   display: flex;
   justify-content: space-around;
   position: sticky;
-  top: 0;
+  top: 50px;
+  width: 800px;
+  /* border-bottom:2px solid #959595;; */
 }
 .sideNavIcons {
   cursor: pointer;
-  background-color: var(--notification-head-bg);
+  /* background-color: var(--notification-head-bg); */
   width: 100%;
   color: var(--notification-title);
   padding: 10px;
   text-align: center;
+  color: #959595;
+}
+.border-div{
+    border-bottom:1px solid #EEEEEE;;
+
 }
 .sideNavIcons.sideselected {
   border-bottom: 2px solid var(--notification-head-icon-selected);
@@ -588,10 +595,10 @@ img {
   color: var(--notification-head-icon-selected);
   transition: all ease 0.3s;
 }
+
 .sideNavIcons:not(.sideselected):hover {
   background: var(--tab-hover);
 
-  /* color: #fff; */
 }
 @keyframes blink {
   0% {
@@ -682,3 +689,6 @@ img {
     display: none;
   }
 }
+
+
+

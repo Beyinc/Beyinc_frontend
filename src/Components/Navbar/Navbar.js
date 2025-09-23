@@ -106,6 +106,9 @@ const Navbar = () => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    console.log("notifications are:", notifications);
+  }, []);
   const [isMobile, setIsMobile] = useState(window.outerWidth <= 768);
   useEffect(() => {
     const handleResize = () => {
@@ -615,7 +618,7 @@ const Navbar = () => {
   const NotificationList = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 1100,
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 1050,
         overFlowX: "hidden",
       }}
       role="presentation"
@@ -656,45 +659,70 @@ const Navbar = () => {
           {...a11yProps(0)}
         />
       </Tabs> */}
-      <div className="notification-headers flex justify-between items-center">
-        <span>Notifications</span>
-        <span>Mark all read</span>
+      <div className="notification-headers flex justify-between items-center mt-[40px]">
+        <span className='[font-family:"Gentium_Book_Basic"] font-bold text-[20px] ml-[20px] mb-[10px]'>
+          Notifications
+        </span>
+        <span className="text-[#4F55C7] ">Mark all read</span>
       </div>
-
-      <div className="SideNotificationHeader">
-        <div
-          className={`sideNavIcons ${value == 1 && "sideselected"}`}
-          onClick={() => setValue(1)}
-        >
-          Notifications ({notifications?.length})
-        </div>
-        <div
-          className={`sideNavIcons ${value == 2 && "sideselected"}`}
-          onClick={() => setValue(2)}
-        >
-          Message Requests ({messageRequest?.length})
-        </div>
-        <div
-          className={`sideNavIcons ${value == 3 && "sideselected"}`}
-          onClick={() => setValue(3)}
-        >
-          Post Discussion Requests ({postDiscussionRequest?.length})
+      <div className="border-div">
+        <div className="SideNotificationHeader">
+          <div
+            className={`sideNavIcons ${value == 1 && "sideselected"}`}
+            onClick={() => setValue(1)}
+          >
+            All ({notifications?.length})
+          </div>
+          <div
+            className={`sideNavIcons ${value == 2 && "sideselected"}`}
+            onClick={() => setValue(2)}
+          >
+            Message Requests ({messageRequest?.length})
+          </div>
+          <div
+            className={`sideNavIcons ${value == 3 && "sideselected"}`}
+            onClick={() => setValue(3)}
+          >
+            Post Discussion Requests ({postDiscussionRequest?.length})
+          </div>
         </div>
       </div>
       {value == 1 &&
-        notifications.map((n) => (
-          <>
+        notifications.map((n) => {
+          const formattedDate = new Date(n.createdAt).toLocaleDateString(
+            "en-GB",
+            {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }
+          );
+
+          return (
             <div
+              key={n._id}
               className={`individualrequest`}
               style={{ marginLeft: "15px", textAlign: "start" }}
             >
               <div
                 className="individualrequestWrapper"
-                style={{ gap: "5px", alignItems: "center", width: "100%" }}
+                style={{
+                  gap: "5px",
+                  alignItems: "center",
+                  width: "100%",
+                  borderBottom: "1px solid #EEEEEE",
+                  background: "#FAFBFF",
+                  height: "auto", // allow height to grow with content
+                  padding: "10px 0",
+                }}
               >
                 <div
                   onClick={() => {
-                    navigate(`/user/${n.senderInfo?._id}`);
+                    if (!(n.type === "postDiscussion" || n.type === "report")) {
+                      navigate(`/user/${n.senderInfo?._id}`);
+
+                      toggleNotificationDrawer("right", false)(); // close only for non-postDiscussion/report
+                    }
                   }}
                 >
                   <img
@@ -709,25 +737,58 @@ const Navbar = () => {
                         : n.senderInfo?.image?.url
                     }
                     alt=""
-                    srcset=""
                   />
                 </div>
-                <div>
-                  {n.message}{" "}
-                  {n.type == "postDiscussion" && (
-                    <Link to={`/posts/${n.postId}`}>View Post</Link>
-                  )}{" "}
-                  {n.type == "report" && (
-                    <Link style={{ color: "red" }} to={`/posts/${n.postId}`}>
-                      View Post
-                    </Link>
-                  )}
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span
+                    className="ml-[20px]"
+                    style={{
+                      fontFamily: "Gentium Book Basic",
+                      fontWeight: 400,
+                      fontStyle: "normal",
+                      verticalAlign: "middle",
+                    }}
+                    onClick={() => {
+                      if (n.type === "postDiscussion" || n.type === "report") {
+                        toggleNotificationDrawer("right", false)(); // close for report and postDiscussion
+                      }
+                    }}
+                  >
+                    {n.type === "postDiscussion" || n.type === "report" ? (
+                      <Link
+                        to={`/posts/${n.postId}`}
+                        style={{
+                          textDecoration: "none",
+                          color:'black'
+                        }}
+                      >
+                        {n.message}
+                      </Link>
+                    ) : (
+                      <span>{n.message}</span>
+                    )}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "Gentium Book Basic",
+                      fontWeight: 400,
+                      fontStyle: "normal",
+                      fontSize: "14px",
+                      lineHeight: "20px",
+                      letterSpacing: "0.25px",
+                      verticalAlign: "middle",
+                      color: "#878787",
+                      marginLeft: "20px",
+                    }}
+                  >
+                    {formattedDate}
+                  </span>
                 </div>
               </div>
             </div>
-            {/* <div className="divider"></div> */}
-          </>
-        ))}
+          );
+        })}
+
       {value == 2 &&
         (messageRequest.length > 0 || notifications.length > 0) && (
           <>
@@ -1671,28 +1732,27 @@ const Navbar = () => {
               </Drawer> */}
 
               <Drawer
-  anchor="right"
-  open={notificationDrawerState["right"]}
-  onClose={toggleNotificationDrawer("right", false)}
-  onOpen={toggleNotificationDrawer("right", true)}
-  PaperProps={{
-    sx: {
-      width: "1064px",
-      height: "759px",
-      top: "100px",
-      left: "360px",
-      bottom:"20px",
-      borderRadius: "12px",
-      borderWidth: "1px",
-      borderStyle: "solid",
-      opacity: 1,
-      position: "absolute", // allow custom top/left
-    },
-  }}
->
-  {NotificationList("right")}
-</Drawer>
-
+                anchor="right"
+                open={notificationDrawerState["right"]}
+                onClose={toggleNotificationDrawer("right", false)}
+                onOpen={toggleNotificationDrawer("right", true)}
+                PaperProps={{
+                  sx: {
+                    width: "1064px",
+                    height: "759px",
+                    top: "100px",
+                    left: "360px",
+                    bottom: "20px",
+                    borderRadius: "12px",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    opacity: 1,
+                    position: "absolute", // allow custom top/left
+                  },
+                }}
+              >
+                {NotificationList("right")}
+              </Drawer>
             </>
           )}
 
