@@ -54,6 +54,7 @@ import About from "./Components/Profile/About";
 import Profile from "./Components/Profile/Profile";
 import NewProfiles from "./Components/NewProfiles/NewProfiles";
 import { Connections } from "./Components/Connections/Connections";
+import NotificationPage from "./Components/Navbar/NotificationPage";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -379,6 +380,7 @@ const App = () => {
             {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
             <Route path="/connections" element={<Connections />} />
+            <Route path="/notification-page" element={<NotificationPage/>}/>
           </Routes>
         </div>
 

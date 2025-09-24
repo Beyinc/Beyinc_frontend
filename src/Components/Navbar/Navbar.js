@@ -623,42 +623,7 @@ const Navbar = () => {
       }}
       role="presentation"
     >
-      {/* <Tabs
-        value={value}
-        className="pitchTabs"
-        style={{ width: "500px" }}
-        textColor="primary"
-        indicatorColor="secondary"
-        onChange={handleChange}
-        aria-label="basic tabs example"
-      >
-        <Tab
-          className="tabs"
-          sx={{
-            width: "250px",
-            background: "none",
-            textTransform: "capitalize",
-            padding: "0px",
-            fontSize: "13px",
-            fontWeight: 600,
-          }}
-          label={`Notifications (${notifications?.length})`}
-          {...a11yProps(1)}
-        />
-        <Tab
-          className="tabs"
-          sx={{
-            width: "250px",
-            background: "none",
-            textTransform: "capitalize",
-            padding: "0px",
-            fontSize: "13px",
-            fontWeight: 600,
-          }}
-          label={`Message Requests (${messageRequest?.length})`}
-          {...a11yProps(0)}
-        />
-      </Tabs> */}
+     
       <div className="notification-headers flex justify-between items-center mt-[40px]">
         <span className='[font-family:"Gentium_Book_Basic"] font-bold text-[20px] ml-[20px] mb-[10px] hover:cursor-pointer'>
           Notifications
@@ -1704,7 +1669,10 @@ const Navbar = () => {
               {/* NOTIFICATION ICON */}
               <div
                 className="navbar-item"
-                onClick={toggleNotificationDrawer("right", true)}
+                onClick={()=>{
+                  navigate("/notification-page")
+                }
+                }
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1733,7 +1701,7 @@ const Navbar = () => {
                 {NotificationList("right")}
               </Drawer> */}
 
-              <Drawer
+              {/* <Drawer
                 anchor="right"
                 open={notificationDrawerState["right"]}
                 onClose={toggleNotificationDrawer("right", false)}
@@ -1754,7 +1722,7 @@ const Navbar = () => {
                 }}
               >
                 {NotificationList("right")}
-              </Drawer>
+              </Drawer> */}
             </>
           )}
 
