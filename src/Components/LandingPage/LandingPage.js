@@ -47,6 +47,9 @@ const LandingPage = () => {
             <button
               className="signin-button"
               onClick={() => navigate("/login")}
+               style={{
+          display: localStorage.getItem("user") == undefined ? "flex" : "none",
+        }}
               
             >
               Sign In
@@ -56,6 +59,9 @@ const LandingPage = () => {
             <button
               className="signup-button"
               onClick={() => navigate("/signup")}
+               style={{
+          display: localStorage.getItem("user") == undefined ? "flex" : "none",
+        }}
             >
               Sign Up
             </button>
