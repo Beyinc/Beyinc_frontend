@@ -155,7 +155,7 @@ const pageSize = 10; // fixed page size
 
   const [people, setPeople] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [isTagsOpen, setIsTagsOpen] = useState(true);
   const [tags, setTags] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState("");
