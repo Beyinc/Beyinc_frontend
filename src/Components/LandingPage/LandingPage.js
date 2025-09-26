@@ -34,9 +34,9 @@ const LandingPage = () => {
       {/*navbar */}
       <div
         className="landing-navbar"
-        style={{
-          display: localStorage.getItem("user") == undefined ? "flex" : "none",
-        }}
+        // style={{
+        //   display: localStorage.getItem("user") == undefined ? "flex" : "none",
+        // }}
       >
         <div className="Beyinc-logo">
           <img src="/logo.png" alt="logo" />
@@ -47,6 +47,7 @@ const LandingPage = () => {
             <button
               className="signin-button"
               onClick={() => navigate("/login")}
+              
             >
               Sign In
             </button>

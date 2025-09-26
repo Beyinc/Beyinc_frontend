@@ -130,7 +130,7 @@ const Navbar = () => {
       notificationSound.play();
     }
     if (messageCount.length > 0) {
-      messageSound.play();
+      // messageSound.play();
     }
   }, [notificationAlert, messageCount]);
   const liveMessage = useSelector((state) => state.conv.liveMessage);
