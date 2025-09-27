@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -99,6 +99,11 @@ const pageSize = 10; // fixed page size
       });
   }, [dispatch]);
 
+
+  useEffect(()=>{
+            console.log("top trending posts are :",topTrendingPosts);
+
+  },[topTrendingPosts])
   const truncateDescription = (description, maxLength = 100) => {
     if (description.length <= maxLength) return description;
     const truncated = description.slice(0, maxLength);
@@ -239,6 +244,10 @@ const handleLoadMore = () => {
     option.value.toLowerCase().includes(tags.toLowerCase())
   );
 
+
+   const createMarkup = (html) => {
+    return { __html: html };
+  };
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -562,7 +571,8 @@ const handleLoadMore = () => {
                 <h4>
                   <b>{post?.postTitle}</b>
                 </h4>
-                <p>{truncateDescription(post?.description)}</p>
+
+<div dangerouslySetInnerHTML={createMarkup(post?.description)}></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}
