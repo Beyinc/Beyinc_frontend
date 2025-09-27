@@ -685,6 +685,12 @@ img {
     white-space: nowrap;
     font-weight: 400;
   }
+  /* .search-container {
+    display: none;
+  } */
+}
+
+@media (max-width: 990px){
   .search-container {
     display: none;
   }
