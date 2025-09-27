@@ -358,14 +358,14 @@ const Login = () => {
                             password?.length >= 8 ? "success" : "failure"
                           }
                         >
-                          Password should be atleast 8 character length
+                          <i>Password should be atleast 8 character length</i>
                         </li>
                         <li
                           className={
                             /.*[A-Z].*/.test(password) ? "success" : "failure"
                           }
                         >
-                          Atleast one capital letter
+                          <i> Atleast one capital letter</i>
                         </li>
                         <li
                           className={
@@ -374,7 +374,7 @@ const Login = () => {
                               : "failure"
                           }
                         >
-                          Atleast one small letter
+                          <i> Atleast one small letter</i>
                         </li>
                         <li
                           className={
@@ -383,14 +383,14 @@ const Login = () => {
                               : "failure"
                           }
                         >
-                          Atleast one special character (!@#$%^&*()_+)
+                          <i> Atleast one special character (!@#$%^&*()_+)</i>
                         </li>
                         <li
                           className={
                             /.*[0-9].*/.test(password) ? "success" : "failure"
                           }
                         >
-                          Atleast one Number
+                          <i> Atleast one Number</i>
                         </li>
                       </ul>
                     </div>
