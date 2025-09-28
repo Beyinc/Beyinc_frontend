@@ -1,17 +1,16 @@
 import { useLocation } from "react-router-dom";
-import { useEffect,useRef,  useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { ApiServices } from "../../Services/ApiServices";
 import SearchFilter from "./SearchFilter";
 import { useNavigate } from "react-router";
-import { socket_io} from "../../Utils";
+
+import { socket_io } from "../../Utils";
 import { io } from "socket.io-client";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
-import { useDispatch,useSelector } from "react-redux";
-
-
-
-
+import { useDispatch, useSelector } from "react-redux";
+import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 
 function SearchResults() {
   const location = useLocation();
@@ -20,6 +19,7 @@ function SearchResults() {
   const searchQuery = queryParams.get("query");
   const [users, setUsers] = useState([]);
   const [follower, setFollower] = useState([]);
+  const [localFollowStates, setLocalFollowStates] = useState({});
   const { user_id } = useSelector((store) => store.auth.loginDetails);
   const dispatch = useDispatch();
   const socket = useRef();
@@ -27,36 +27,55 @@ function SearchResults() {
     interests: [],
   });
 
-
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      if (searchQuery) {
-        try {
-          const profileResponse = await ApiServices.getProfile({ id: user_id });
-          const profileData = profileResponse.data;
-          setFollower(profileData.followers || []);
+    const fetchAndSetUsers = async () => {
+      if (!searchQuery) return;
 
-          const response = await ApiServices.searchProfiles(searchQuery);
-          const usersWithStatus = response.data.map((user) => ({
-            ...user,
-            isFollowing: profileData.followers.some((f) => f._id === user._id),
-          }));
-          setUsers(usersWithStatus);
-        } catch (err) {
-          console.error("Error fetching users:", err.message);
+      try {
+        const profileResponse = await ApiServices.getProfile({ id: user_id });
+        const userProfileData = profileResponse;
+        console.log('userProfileData', userProfileData);
+
+        // Correctly access followers and following from the nested data structure
+        setFollower(userProfileData.data.followers || []);
+
+        console.log('set follower', userProfileData.data.followers);
+        const userFollowingList = userProfileData.data.following || [];
+
+        let searchResponse;
+
+        if (filters.interests.length > 0) {
+          // Fetch with filters
+          searchResponse = await ApiServices.FilterSearchProfiles({
+            query: searchQuery,
+            interests: filters.interests,
+          });
+          searchResponse = searchResponse; // since filtered returns { data: [...] }
+        } else {
+          // Default search
+          searchResponse = await ApiServices.searchProfiles(searchQuery);
+
         }
+
+        // Add isFollowing to each user
+        const usersWithStatus = searchResponse.map((user) => ({
+          ...user,
+          isFollowing: userFollowingList.some((f) => f._id === user._id),
+        }));
+        // console.log({usersWithStatus});
+        setUsers(usersWithStatus);
+      } catch (err) {
+        console.error("Error fetching users:", err.message);
       }
     };
 
-    fetchUsers();
-  }, [searchQuery, user_id]);
+    fetchAndSetUsers();
+  }, [searchQuery, user_id, filters]);
 
-
-  
   const FilteredSearchProfiles = (newFilters) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -64,91 +83,77 @@ function SearchResults() {
     }));
   };
 
+  const handleFollowToggle = async (e, userId, isFollowing) => {
+    // e.target.disabled = true;
 
-  // Function to fetch user data from backend based on filters
-  const fetchSearchUsers = async () => {
-    console.log("Current filters:", filters);
+    // Immediately update local follow state
+    setLocalFollowStates(prev => ({
+      ...prev,
+      [userId]: !isFollowing
+    }));
+
+    // Immediately update the button text
+    const button = e.target;
+    button.textContent = !isFollowing ? "Unfollow" : "Follow";
+
     try {
-      const response = await ApiServices.FilterSearchProfiles({
-        query: searchQuery, // Send query directly
-        interests: filters.interests, // Send interests directly
-      });
-      setUsers(response.data);
+      let response;
+      if (isFollowing) {
+        // Unfollow user
+        response = await ApiServices.unfollowUser({
+          unfollowReqBy: user_id,
+          unfollowReqTo: userId,
+        });
+      } else {
+        // Follow user
+        response = await ApiServices.saveFollowers({
+          followerReqBy: user_id,
+          followerReqTo: userId,
+        });
 
-      // Filter users to only include those with the desired fields
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
+        // Send notification only after successful follow
+        await socket.current.emit("sendNotification", {
+          senderId: user_id,
+          receiverId: userId,
+        });
+      }
+
+      // Update with actual server response
+      setFollower(response.data.followers);
+
+      // Update the users state with the new follow status
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
+          user._id === userId ? { ...user, isFollowing: !isFollowing } : user
+        )
+      );
+    } catch (err) {
+      // Revert local follow state on error
+      setLocalFollowStates(prev => ({
+        ...prev,
+        [userId]: isFollowing
+      }));
+
+      // Revert button text
+      button.textContent = isFollowing ? "Unfollow" : "Follow";
+
+      console.error("Error in handleFollowToggle:", err);
+      dispatch(
+        setToast({
+          message: "Error while updating follow status",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    } finally {
+      e.target.disabled = false;
     }
   };
 
-  useEffect(() => {
-    fetchSearchUsers();
-  }, [filters]);
-
-
-const handleFollowToggle = async (e, userId, isFollowing) => {
-  console.log("userId:", userId, "isFollowing:", isFollowing);
-  // e.target.disabled = true;
-
-  const prevFollowers = [...follower];
-  const prevUsers = [...users];
-
-  try {
-    if (isFollowing) {
-      setFollower((prevFollowers) =>
-        prevFollowers.filter((f) => f._id !== userId)
-      );
-      console.log("Here")
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === userId ? { ...user, isFollowing: false } : user
-        )
-      );
-
-      await ApiServices.unfollowUser({
-        unfollowReqBy: user_id,
-        unfollowReqTo: userId,
-      });
-    } else {
-      setFollower((prevFollowers) => [...prevFollowers, { _id: userId }]);
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === userId ? { ...user, isFollowing: true } : user
-        )
-      );
-
-      const response = await ApiServices.saveFollowers({
-        followerReqBy: user_id,
-        followerReqTo: userId,
-      });
-
-      socket.current.emit("sendNotification", {
-        senderId: user_id,
-        receiverId: userId,
-      });
-    }
-  } catch (err) {
-    console.error("Error in handleFollowToggle:", err);
-
-    setFollower(prevFollowers);
-    setUsers(prevUsers);
-
-    dispatch(
-      setToast({
-        message: "Error while updating follow status",
-        bgColor: ToastColors.failure,
-        visible: "yes",
-      })
-    );
-  } finally {
-    e.target.disabled = false;
-  }
-};
-
   return (
     <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-10">
-      <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles}  />
+      <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
+
       <div
         className="mt-6 w-full lg:w-[1100px] bg-white p-8 py-8 rounded-lg"
         style={{ border: "1px solid lightgray" }}
@@ -173,19 +178,33 @@ const handleFollowToggle = async (e, userId, isFollowing) => {
                 }}
                 alt="profile pic"
               />
-           <h3 className="mt-3" style={{ textAlign: 'center' }}>{user.userName}</h3>
+              <h3 className="mt-3" style={{ textAlign: "center" }}>
+                {user.userName}
+              </h3>
 
-              {user.role && <h5 className="text-neutral-600 mt-1">{user.role}</h5>}
+              {user.role && (
+                <h5 className="text-neutral-600 mt-1">{user.role}</h5>
+              )}
               {user.beyincProfile && (
-                <h5 className="text-neutral-600 mt-1">{user.beyincProfile} at Beyinc</h5>
+                <h5 className="text-neutral-600 mt-1">
+                  {user.beyincProfile} at Beyinc
+                </h5>
               )}
               <p className="mt-2 mb-2">{user.headline}</p>
-              <button
-                className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
-                onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
-              >
-                {user.isFollowing ? "Unfollow" : "Follow"}
-              </button>
+              <div className="flex justify-center items-center gap-2">
+
+                <button
+                  className="rounded-full px-8 py-2 bg-[rgb(79,85,199)] text-white"
+                  onClick={(e) =>
+                    handleFollowToggle(e, user._id, localFollowStates[user._id] ?? user.isFollowing)
+                  }
+                >
+                  {localFollowStates[user._id] ?? user.isFollowing ? "Unfollow" : "Follow"}
+                </button>
+                <RecommendedConnectButton
+                  id={user._id}
+                />
+              </div>
             </div>
           ))}
         </div>
@@ -194,7 +213,5 @@ const handleFollowToggle = async (e, userId, isFollowing) => {
   );
 }
 
-
-
-
 export default SearchResults;
+

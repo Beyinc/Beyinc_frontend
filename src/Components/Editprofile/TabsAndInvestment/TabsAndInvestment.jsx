@@ -24,9 +24,9 @@ const TabsAndInvestment = ({selfProfile, industries, stages, expertise }) => {
   };
 
   return (
-    <div className="tabs-and-investment-container">
+    <div className="tabs-and-investment-container mt-0 bg-white">
       <div>
-        <div className="tabs-container">
+        <div className="tabs-container ">
           <div
             className={`Ttab ${activeTab === "Expertise" ? "Tactive" : ""}`}
             onClick={() => handleTabClick("Expertise")}

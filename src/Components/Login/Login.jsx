@@ -49,10 +49,7 @@ const Login = () => {
     if (e.target.name === "password") {
       setInputs((prev) => ({
         ...prev,
-        isPasswordValid:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/.test(
-            e.target.value
-          ),
+        isPasswordValid: true,
       }));
     }
     if (e.target.name === "mobile") {
@@ -125,7 +122,6 @@ const Login = () => {
         );
         e.target.disabled = true;
       });
-
   };
 
   // const handleMobileChange = (value) => {
@@ -161,7 +157,6 @@ const Login = () => {
           })
         );
       });
-
   };
 
   const login = async (e) => {
@@ -201,7 +196,6 @@ const Login = () => {
           })
         );
       });
-
   };
 
   const mobileLogin = async (e) => {
@@ -234,7 +228,6 @@ const Login = () => {
           })
         );
       });
-
   };
   return (
     <>
@@ -250,7 +243,7 @@ const Login = () => {
               <div class="login-header">
                 <img
                   class="login-logo"
-                  src="logo.png"
+                  src="/Bloomr-login-logo.svg"
                   alt="Your Alt Text"
                   onClick={() => {
                     navigate("/");
@@ -323,7 +316,7 @@ const Login = () => {
                           name="mobile"
                           onChange={handleChanges}
                         />
-                        
+
                         {isMobileValid && !otpVisible && (
                           <button type="button" onClick={sendMobileOtpF}>
                             Get OTP
@@ -357,16 +350,52 @@ const Login = () => {
                       )}
                     </>
                   )}
-                  {loginType === "email" && <div className="passwordHint">
-                    <ul>
-                      <li className={password?.length >= 8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
-                      <li className={/.*[A-Z].*/.test(password) ? 'success' : 'failure'}>Atleast one capital letter</li>
-                      <li className={/.*[a-z].*/.test(password) && password ? 'success' : 'failure'}>Atleast one small letter</li>
-                      <li className={/.*[!@#$%^&*()_+].*/.test(password) ? 'success' : 'failure'}>Atleast one special character (!@#$%^&*()_+)</li>
-                      <li className={/.*[0-9].*/.test(password) ? 'success' : 'failure'}>Atleast one Number</li>
-                    </ul>
-                  </div>}
-                 
+                  {loginType === "email" && (
+                    <div className="passwordHint">
+                      <ul>
+                        <li
+                          className={
+                            password?.length >= 8 ? "success" : "failure"
+                          }
+                        >
+                          <i>Password should be atleast 8 character length</i>
+                        </li>
+                        <li
+                          className={
+                            /.*[A-Z].*/.test(password) ? "success" : "failure"
+                          }
+                        >
+                          <i> Atleast one capital letter</i>
+                        </li>
+                        <li
+                          className={
+                            /.*[a-z].*/.test(password) && password
+                              ? "success"
+                              : "failure"
+                          }
+                        >
+                          <i> Atleast one small letter</i>
+                        </li>
+                        <li
+                          className={
+                            /.*[!@#$%^&*()_+].*/.test(password)
+                              ? "success"
+                              : "failure"
+                          }
+                        >
+                          <i> Atleast one special character (!@#$%^&*()_+)</i>
+                        </li>
+                        <li
+                          className={
+                            /.*[0-9].*/.test(password) ? "success" : "failure"
+                          }
+                        >
+                          <i> Atleast one Number</i>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+
                   <button
                     className="full-width-button"
                     type="submit"

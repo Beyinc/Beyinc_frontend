@@ -6,8 +6,8 @@ export const ApiServices = {
       axiosInstance
         .post(`/auth/verifyApiAccessToken`, obj)
         .then((res) => {
-          if (res) {
-            resolve(res);
+          if (res.data) {
+            resolve(res.data);
           }
         })
         .catch((err) => reject(err));
@@ -175,7 +175,7 @@ export const ApiServices = {
       axiosInstance
         .post(`/userDetails/getUser`, obj)
         .then((res) => {
-          if (res) {
+          if (res.data) {
             resolve(res);
           }
         })
@@ -200,6 +200,36 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/userDetails/unfollow`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  // followers and followings api
+
+
+
+  getFollowers: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("/userDetails/getFollowers")
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  getFollowings: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("/userDetails/getFollowings")
         .then((res) => {
           if (res) {
             resolve(res);
@@ -1050,14 +1080,25 @@ export const ApiServices = {
     });
   },
 
-  addPostComment: (obj) => {
+  // addPostComment: (obj) => {
+  //   return new Promise((resolve, reject) => {
+  //     axiosInstance
+  //       .post(`/post/addPostComment`, obj)
+  //       .then((res) => {
+  //         if (res) {
+  //           resolve(res);
+  //         }
+  //       })
+  //       .catch((err) => reject(err));
+  //   });
+  // },
+
+  addPostComment: (formData) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post(`/post/addPostComment`, obj)
+        .post("/post/addPostComment", formData) // Don't set headers manually
         .then((res) => {
-          if (res) {
-            resolve(res);
-          }
+          resolve(res);
         })
         .catch((err) => reject(err));
     });
@@ -1101,6 +1142,7 @@ export const ApiServices = {
   },
 
   addReport: (obj) => {
+    // console.log(obj)
     return new Promise((resolve, reject) => {
       axiosInstance
         .post(`/posts/addReport`, obj)
@@ -1259,7 +1301,7 @@ export const ApiServices = {
     return new Promise((resolve, reject) => {
       axiosInstance
         .get(`/searchProfiles?query=${query}`) // Use query param
-        .then((res) => resolve(res))
+        .then((res) => resolve(res.data))
         .catch((err) => reject(err));
     });
   },
@@ -1270,7 +1312,7 @@ export const ApiServices = {
         .post(`/filterSearchProfiles`, obj)
         .then((res) => {
           if (res) {
-            resolve(res);
+            resolve(res.data);
           }
         })
         .catch((err) => reject(err));
@@ -1302,11 +1344,21 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
-  addReview: (obj) => {
+  getNewProfiles: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post(`/review/addReview`, obj)
+        .get(`/newProfiles`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err)); 
+    });
+  },
+  getPostLiveChatMessages: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance.post(`/postLiveChat/getMessages`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
@@ -1315,11 +1367,9 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
-  getReviews: (obj) => {
+  sendPostLiveChatMessage: (obj) => {
     return new Promise((resolve, reject) => {
-      axiosInstance
-        .post(`/review/getReviews`, obj)
+      axiosInstance.post(`/postLiveChat/send`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
@@ -1327,5 +1377,5 @@ export const ApiServices = {
         })
         .catch((err) => reject(err));
     });
-  }  
+  },
 };

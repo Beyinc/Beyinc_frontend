@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import AllNotifications from "../Conversation/Notification/AllNotifications";
 import { getAllNotifications } from "../../redux/Conversationreducer/ConversationReducer";
-import { socket_io, postTypes } from "../../Utils";
+import { socket_io, postTypes, followerController } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
@@ -17,9 +17,16 @@ const Posts = () => {
   // const { role, userName, image, user_id } = useSelector(
   //   (store) => store.auth.loginDetails
   // );
-  const { role, userName, image, _id: user_id } = useSelector((store) => store.auth.userDetails);
+  const {
+    role,
+    userName,
+    image,
+    _id: user_id,
+  } = useSelector((store) => store.auth.userDetails);
 
   // console.log(role, userName, image)
+
+
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -45,12 +52,18 @@ const Posts = () => {
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
 
   const [recommendedUsers, setRecommendedUsers] = useState([]);
+
+  const [filterPage, setFilterPage] = useState(1); // start page for filtered posts
+const pageSize = 10; // fixed page size
   useEffect(() => {
     // dispatch(setLoading({ visible: "yes" }));
+  if (filterPage === 1) setAllPosts([]); // clear previous posts on first load
 
-    ApiServices.getAllPosts({ page: page, pageSize: pageSize })
+    ApiServices.getAllPosts({ page: filterPage, pageSize: pageSize })
+    
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
+        console.log("all posts:",allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
@@ -64,6 +77,11 @@ const Posts = () => {
         // dispatch(setLoading({ visible: "no" }));
       });
   }, [loadingTrigger]);
+
+
+  useEffect(()=>{
+    console.log("all posts-:",allPosts);
+  },[allPosts])
 
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
@@ -81,6 +99,11 @@ const Posts = () => {
       });
   }, [dispatch]);
 
+
+  useEffect(()=>{
+            console.log("top trending posts are :",topTrendingPosts);
+
+  },[topTrendingPosts])
   const truncateDescription = (description, maxLength = 100) => {
     if (description.length <= maxLength) return description;
     const truncated = description.slice(0, maxLength);
@@ -103,20 +126,27 @@ const Posts = () => {
       });
   }, [recommendedUserTrigger]);
 
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [pageSize, setPageSize] = useState(10);
 
-  const handleLoadMore = () => {
-    setPage(pageSize);
-    setPageSize(pageSize + 10);
-    setLoadingTrigger(!loadingTrigger);
-  };
+  // const handleLoadMore = () => {
+  //   setPage(pageSize);
+  //   setPageSize(pageSize + 10);
+  //   setLoadingTrigger(!loadingTrigger);
+  // };
+//   const [page, setPage] = useState(1); // start from page 1
+// const pageSize = 10; // fixed
+
+// const handleLoadMore = () => {
+//   setPage(prev => prev + 1); // increment page
+//   setLoadingTrigger(!loadingTrigger);
+// };
 
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
-  
+
   const getNotifys = async () => {
     await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
     dispatch(getAllNotifications(user_id));
@@ -126,75 +156,26 @@ const Posts = () => {
     getNotifys();
   }, []);
 
-  
-  const followerController = async (e, id) => {
-    console.log('following to', id)
-    console.log('userId', user_id);
-    e.target.disabled = true;
-    await ApiServices.saveFollowers({
-      followerReqBy: user_id,
-      followerReqTo: id,
-    })
-      .then((res) => {
-        if (res.data.followers.map((f) => f._id).includes(user_id)) {
-          socket.current.emit("sendNotification", {
-            senderId: user_id,
-            receiverId: id,
-          });
-          socket.current.emit("sendFollowerNotification", {
-            senderId: user_id,
-            receiverId: id,
-            type: "adding",
-            image: image,
-            role: role,
-            _id: id,
-            userName: userName,
-          });
-        } else {
-          socket.current.emit("sendFollowerNotification", {
-            senderId: user_id,
-            receiverId: id,
-            type: "removing",
-            _id: id,
-          });
-        }
-        setRecommendedUserTrigger(!recommendedUserTrigger);
-      })
-      .catch((err) => {
-        dispatch(
-          setToast({
-            message: "Error in update status",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      });
-    e.target.disabled = false;
-  };
-
-
   ////////////////////////////////
 
   const [people, setPeople] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [isTagsOpen, setIsTagsOpen] = useState(true);
   const [tags, setTags] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState("");
   const [isPublic, setIsPublic] = useState(false);
-const [isPrivate, setIsPrivate] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
 
+  const handlePublicCheckboxChange = (event) => {
+    setIsPublic(event.target.checked);
+  };
 
-const handlePublicCheckboxChange = (event) => {
-  setIsPublic(event.target.checked);
-};
+  const handlePrivateCheckboxChange = (event) => {
+    setIsPrivate(event.target.checked);
+  };
 
-const handlePrivateCheckboxChange = (event) => {
- 
-  setIsPrivate(event.target.checked);
-};
-
-console.log('filteredposts: ', filteredPosts)
+  console.log("filteredposts: ", filteredPosts);
   // const [checkedValues, setCheckedValues] = useState({
   //   public: false,
   //   private: false,
@@ -203,48 +184,48 @@ console.log('filteredposts: ', filteredPosts)
   // Handle checkbox change
   // const handleCheckboxChange = (event) => {
   //   const { name, checked } = event.target;
-   
+
   //   setCheckedValues((prev) => ({
   //     ...prev,
   //     [name]: checked,
   //   }));
-  
-   
+
   // };
 
-  useEffect(() => {
-    const fetchFilteredPosts = async () => {
-      try {
-        const filterData = {
-          tags: selectedTags,
-          sortOption: selectedSortOption,
-          people: people,
-        };
-  
-        if (isPublic) {
-          filterData.public = true;
-        }
-        if (isPrivate) {
-          filterData.private = true;
-        }
-  
-        // if ((!isPublic && !isPrivate) || (isPublic && isPrivate)) {
-        //   console.log("No valid filters or both selected. Clearing posts...");
-        //   setFilteredPosts([]); // Clear all posts in these cases.
-        //   return;
-        // }
-  
-        const response = await ApiServices.getFilterPosts(filterData);
-        setFilteredPosts(response.data); // Update with new data
-      } catch (error) {
-        console.error("Error filtering posts:", error);
-      }
-    };
-  
-    fetchFilteredPosts();
-  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate]);
-  
 
+
+useEffect(() => {
+  const fetchFilteredPosts = async () => {
+    try {
+      const filterData = {
+        tags: selectedTags,
+        sortOption: selectedSortOption,
+        people: people,
+        public: isPublic,
+        private: isPrivate,
+        page: filterPage,       // send page
+        pageSize,               // send pageSize
+      };
+
+      const response = await ApiServices.getFilterPosts(filterData);
+
+      if (filterPage === 1) {
+        setFilteredPosts(response.data); // first page replaces
+      } else {
+        setFilteredPosts((prev) => [...prev, ...response.data]); // append next pages
+      }
+    } catch (error) {
+      console.error("Error filtering posts:", error);
+    }
+  };
+
+  fetchFilteredPosts();
+}, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
+
+// Load More for filtered posts
+const handleLoadMore = () => {
+  setFilterPage((prev) => prev + 1);
+};
 
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
@@ -253,20 +234,20 @@ console.log('filteredposts: ', filteredPosts)
     );
   };
 
-  
   const clearAllTags = () => {
-    console.log("Tags changed",selectedTags,filteredPosts);
+    console.log("Tags changed", selectedTags, filteredPosts);
     setSelectedTags([]);
-    setFilteredPosts([])
-  
+    setFilteredPosts([]);
   };
 
   const filteredTagsOptions = postTypes.filter((option) =>
     option.value.toLowerCase().includes(tags.toLowerCase())
   );
 
- 
 
+   const createMarkup = (html) => {
+    return { __html: html };
+  };
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -277,7 +258,9 @@ console.log('filteredposts: ', filteredPosts)
                 id="Profile-img"
                 className="Homepage-profile-img"
                 src={
-                  image !== undefined && image !== "" ? image.url : "/profile.png"
+                  image !== undefined && image !== ""
+                    ? image.url
+                    : "/profile.png"
                 }
                 alt=""
               />
@@ -366,13 +349,13 @@ console.log('filteredposts: ', filteredPosts)
                 />
               </svg>
             </div>
-            <div>Connections</div>
+            <div onClick={() => navigate("/connections")}>Connections</div>
 
             <div style={{ marginLeft: "80px" }}>
               {data?.connections_approved || 0}
             </div>
           </div>
-{/* 
+          {/* 
           <div className="sidebar-menu-items">
             <div>
               <svg
@@ -449,12 +432,15 @@ console.log('filteredposts: ', filteredPosts)
                 />
 
                 {selectedTags.length > 0 && (
-                      <div className="clear-container">
-                        <div className="x-box">X</div>
-                          <a onClick={clearAllTags} className="clear-link">
-                            Clear All
-                          </a>
-                      </div>
+                  //added onclick handler in x-box to make it work
+                  <div className="clear-container">
+                    <div onClick={clearAllTags} className="x-box">
+                      X
+                    </div>
+                    <a onClick={clearAllTags} className="clear-link">
+                      Clear All
+                    </a>
+                  </div>
                 )}
 
                 {filteredTagsOptions.map((option) => (
@@ -470,19 +456,16 @@ console.log('filteredposts: ', filteredPosts)
                     </label>
                   </div>
                 ))}
-                
               </div>
             )}
 
-        
             {/* <span class="see-all">See All</span> */}
             <hr className=" mt-4 mb-6" />
 
             <h4 className="mt-3 mb-2">Post Type</h4>
 
             <label>
-            
-                  <input
+              <input
                 type="checkbox"
                 name="public"
                 checked={isPublic}
@@ -492,8 +475,7 @@ console.log('filteredposts: ', filteredPosts)
             </label>
 
             <label>
-            
-                 <input
+              <input
                 type="checkbox"
                 name="private"
                 checked={isPrivate}
@@ -514,34 +496,26 @@ console.log('filteredposts: ', filteredPosts)
           </div>
         </div>
       </div>
-      
-   
+
       <div className="main-content">
         <div className="allPostShowContainer">
+          {filteredPosts.length > 0 &&
+            filteredPosts
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+              .map((p) => {
+                return (
+                  <Post
+                    filteredPosts={filteredPosts}
+                    key={p.id}
+                    post={p} // Passing only id and title
+                    setAllPosts={setAllPosts}
+                    screenDecider={"home"}
+                  />
+                );
+              })}
 
-
-
-
-        {filteredPosts.length > 0 && 
-          filteredPosts
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
-            .map((p) => {
-              // console.log("Debugging post:", p); // Debugging each post
-              return (
-                <Post
-                  filteredPosts={filteredPosts}
-                  key={p.id}
-                  post={p} // Passing only id and title
-                  setAllPosts={setAllPosts}
-                  screenDecider={"home"}
-                />
-              );
-            })
-        }
-
-      
-      {/* Render filtered posts if available */}
-        {/* {filteredPosts.length > 0 && 
+          {/* Render filtered posts if available */}
+          {/* {filteredPosts.length > 0 && 
           filteredPosts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
             
@@ -556,10 +530,8 @@ console.log('filteredposts: ', filteredPosts)
             ))
         } */}
 
-
-
-        {/* If filteredPosts is empty, render top 2 posts from allPosts */}
-        {/* {filteredPosts.length === 0 && 
+          {/* If filteredPosts is empty, render top 2 posts from allPosts */}
+          {/* {filteredPosts.length === 0 && 
           allPosts // Limiting to top 2 posts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
             .map((p) => (
@@ -572,7 +544,6 @@ console.log('filteredposts: ', filteredPosts)
               />
             ))
         } */}
-
         </div>
 
         <div className="loadMore-Container">
@@ -582,19 +553,26 @@ console.log('filteredposts: ', filteredPosts)
         </div>
       </div>
 
-{/* Right Bar */}
+      {/* Right Bar */}
 
       <div className="sidebar-right">
         <div className="trending-section shadow-lg">
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
-              <div key={post?._id}>
+              <div
+                key={post?._id}
+                onClick={() => {
+                  navigate(`/posts/${post._id}`);
+                }}
+                className="hover:cursor-pointer"
+              >
                 <h5>{post?.type}</h5>
                 <h4>
                   <b>{post?.postTitle}</b>
                 </h4>
-                <p>{truncateDescription(post?.description)}</p>
+
+<div dangerouslySetInnerHTML={createMarkup(post?.description)}></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}
@@ -615,7 +593,7 @@ console.log('filteredposts: ', filteredPosts)
                 cursor: "pointer",
               }}
               onClick={() => {
-                navigate("/searchusers");
+                navigate("/newProfiles");
               }}
             >
               See All
@@ -631,11 +609,12 @@ console.log('filteredposts: ', filteredPosts)
                       : rec?.image?.url
                   }
                   alt="User Image"
-                  className="user-image"
+                  className="user-image mb-5"
                 />
               </div>
               <div className="right-section">
                 <h4
+               style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
                   onClick={() => {
                     if (rec._id == user_id) {
                       navigate("/editProfile");
@@ -643,15 +622,25 @@ console.log('filteredposts: ', filteredPosts)
                       navigate(`/user/${rec._id}`);
                     }
                   }}
+                  
                 >
                   {rec?.userName}
                 </h4>
                 <p>{rec?.role}</p>
-                <div className="follow-container">
+                <div className="follow-container -ml-14 mt-2">
                   <button
-                    className="follow"
+                    className="follow w-[100px] h-[30px]"
                     onClick={(e) => {
-                      followerController(e, rec._id);
+                      followerController({
+                        dispatch,
+                        e,
+                        followingToId: rec._id,
+                        recommendedUserTrigger,
+                        setRecommendedUserTrigger,
+                        socket,
+                        user: { id: user_id, userName, image, role },
+                        setRecommendedUsers,
+                      });
                     }}
                   >
                     Follow
@@ -693,3 +682,5 @@ console.log('filteredposts: ', filteredPosts)
 };
 
 export default Posts;
+
+

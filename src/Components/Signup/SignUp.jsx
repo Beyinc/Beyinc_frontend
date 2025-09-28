@@ -304,7 +304,7 @@ const SignUp = () => {
               <div class="signup-header">
                 <img
                   class="signup-logo"
-                  src="logo.png"
+                  src="Bloomr-login-logo.svg"
                   alt="Your Alt Text"
                   onClick={() => {
                     navigate("/");

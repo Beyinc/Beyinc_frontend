@@ -110,7 +110,7 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
   }, [id, user_id]); // Add both `id` and `user_id` as dependencies
   
   return (
-    <div className="w-full lg:w-[60vw] bg-white rounded-xl">
+    <div className="w-full grow bg-white rounded-xl">
       <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl mb-4">
         <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           Documents
@@ -138,42 +138,43 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
             )}
           </div>
 
-          {selfProfile && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "20px",
-              }}
-            >
-              <>
-                <label htmlFor="resume" className="resume">
-                  <CloudUploadIcon />
-                  <span className="fileName">
-                    {recentUploadedDocs?.resume || "Upload"}
-                  </span>
-                </label>
-                <input
-                  className="resume"
-                  type="file"
-                  name="resume"
-                  id="resume"
-                  onChange={handleResume}
-                  style={{ display: "none" }}
-                />
-              </>
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={submitAllData}
-                  disabled={!changeResume.resume}
-                >
-                  Save
-                </Button>
-              </div>
+
+        { selfProfile && <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap:"20px"
+            }}
+          >
+            <>
+              <label htmlFor="resume" className="resume">
+                <CloudUploadIcon />
+                <span className="fileName">
+                  {recentUploadedDocs?.resume || "Upload"}
+                </span>
+              </label>
+              <input
+                className="resume"
+                type="file"
+                name="resume"
+                id="resume"
+                onChange={handleResume}
+                style={{ display: "none" }}
+              />
+            </>
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={submitAllData}
+                disabled={!changeResume.resume}
+                  style={{ backgroundColor: '#4F55C7' }}
+
+              >
+                Save
+              </Button>
             </div>
-          )}
+          </div>}
         </div>
       </div>
     </div>
