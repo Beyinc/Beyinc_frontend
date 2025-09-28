@@ -251,7 +251,7 @@ const Navbar = () => {
             </div>
 
             {/* DARK AND WHITE THEME */}
-            <ListItem
+            {/* <ListItem
               button
               key="themeIcon"
               onClick={(e) => {
@@ -297,7 +297,6 @@ const Navbar = () => {
                   </svg>
                 );
 
-                // Switching the logo based on the theme
                 const logoImg = document.getElementById("logoImage");
                 logoImg.src =
                   newTheme === "light" ? "/logo.png" : "/Footer-Logo.png";
@@ -305,13 +304,7 @@ const Navbar = () => {
                 e.currentTarget.title = `${mode} Mode`;
               }}
             >
-              {/* <i
-            id="themeIcon"
-            class={`fas fa-${
-              localStorage.getItem("theme") == "light" ? "moon" : "sun"
-            }`}
-          >
-            </i> */}
+            
               <ListItemIcon>
                 {localStorage.getItem("theme") === "light" ? (
                   <svg
@@ -353,7 +346,7 @@ const Navbar = () => {
                   localStorage.getItem("theme") === "light" ? "Dark" : "Light"
                 } Mode`}
               />
-            </ListItem>
+            </ListItem> */}
 
             <ListItem
               button
@@ -382,7 +375,7 @@ const Navbar = () => {
               <ListItemText primary="Edit Profile" />
             </ListItem>
 
-            <ListItem button key="home" onClick={() => navigate("/posts")}>
+            {/* <ListItem button key="home" onClick={() => navigate("/posts")}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -400,7 +393,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Home" />
-            </ListItem>
+            </ListItem> */}
             {/* <ListItem
               button
               key="dashboard"
@@ -426,7 +419,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Pitches" />
             </ListItem> */}
-            <ListItem
+            {/* <ListItem
               button
               key="searchUsers"
               onClick={() => navigate("/searchusers")}
@@ -446,8 +439,8 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Mentors" />
-            </ListItem>
-            <ListItem
+            </ListItem> */}
+            {/* <ListItem
               button
               key="conversations"
               onClick={() => navigate("/conversations")}
@@ -472,9 +465,9 @@ const Navbar = () => {
                 )}
               </ListItemIcon>
               <ListItemText primary="Conversations" />
-            </ListItem>
+            </ListItem> */}
 
-            <ListItem
+            {/* <ListItem
               button
               key="notifications"
               onClick={() => navigate("/notifications")}
@@ -499,7 +492,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Notifications" />
-            </ListItem>
+            </ListItem> */}
           </>
         )}
 

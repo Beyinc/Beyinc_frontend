@@ -1,10 +1,10 @@
-/* Reset body and root */
-html, body, #root {
+/* Reset body and root */ 
+/* html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* prevent page scroll */
-}
+  overflow: hidden; 
+} */
 
 .conversationContainer {
   display: flex;
