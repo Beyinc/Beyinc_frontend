@@ -304,7 +304,8 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-        {!(['/login', '/signup'].includes(location.pathname) || (location.pathname === '/' && userName)) && <Navbar />}
+{!['/login', '/signup', '/'].includes(location.pathname) && <Navbar />}
+
         <div className=" max-w-[1550px] m-auto">
 
           <Routes>
