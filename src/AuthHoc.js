@@ -1,20 +1,20 @@
-import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home";
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { ApiServices } from "./Services/ApiServices";
-import UserDetails from "./Components/Signup/UserDetails";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
+
 export const LoginAuth = (Component) => {
   return function WithHooks(props) {
-    const { email } = useSelector((store) => store.auth.loginDetails);
-    const [loading, setLoading] = useState(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return email !== undefined ? <Home /> : loading ? <></> : <Component />;
+    const navigate = useNavigate();
+    useEffect(() => {
+      if (localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).accessToken) {
+        navigate("/posts");
+      }
+    }, []);
+    return  <Component />;
   };
 };
 
