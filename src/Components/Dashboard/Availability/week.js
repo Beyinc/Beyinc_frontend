@@ -139,7 +139,7 @@ const Week = ({ selectedDayTimeUtc, setSelectedDayTimeUtc, handleSaveSchedule })
                                 {day.name}
                             </Typography>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={30}>
                             <Button
                                 variant="contained"
                                 onClick={() => handleOpen(day.value)}

@@ -340,7 +340,7 @@ const Post = ({
   >
     <div className="flex flex-col mt-0 space-y-3 relative">
       <div className="flex space-x-3">
-        <div className="postType text-xs mt-1 sm:text-sm sm:mt-0">
+        <div className="postType hidden md:block text-xs mt-1 sm:text-sm sm:mt-0">
           {post?.type}
         </div>
 
@@ -369,10 +369,7 @@ const Post = ({
       </div>
 
       {/* Submenu absolutely positioned */}
-     <div
-  className={`subMenu postSubActions${post?._id} absolute top-full left-0 mt-2 hidden bg-white border rounded-md shadow-md z-50`}
-  ref={userDetailsRef}
->
+     <div className={`subMenu postSubActions${post?._id} absolute top-full left-0 mt-2 hidden bg-white border rounded-md shadow-md z-50`} ref={userDetailsRef} >
 
         {post?.createdBy?._id == user_id ? (
           <>
@@ -414,6 +411,9 @@ const Post = ({
           className="postDescContainer"
           //  onClick={() => navigate(`/posts/${post?._id}`)}
         >
+        <div className="postTypeM md:hidden">
+          {post?.type}
+        </div>
           {/* Post container */}
           <div onClick={() => navigate(`/posts/${post?._id}`)}>
             <div className="postDesc">
