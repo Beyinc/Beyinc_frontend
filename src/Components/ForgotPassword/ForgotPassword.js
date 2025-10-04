@@ -424,8 +424,8 @@ const ResetPassword = () => {
             <div class="login-header">
               <img
                 class="login-logo"
-                src="logo.png"
-                alt="Your Alt Text"
+
+src="/Bloomr-login-logo.svg"                alt="Your Alt Text"
                 onClick={() => {
                   navigate("/");
                 }}
@@ -583,7 +583,7 @@ const ResetPassword = () => {
                       onChange={handleChanges}
                     />
                     {/* )} */}
-                    <div className="passwordHint">
+                    <div className="passwordHint" hidden={!newPassword}>
                       <ul>
                         <li className={newPassword?.length >= 8 ? 'success' : 'failure'}>Password should be atleast 8 character length</li>
                         <li className={/.*[A-Z].*/.test(newPassword) ? 'success' : 'failure'}>Atleast one capital letter</li>

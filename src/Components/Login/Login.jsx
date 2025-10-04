@@ -23,6 +23,7 @@ const Login = () => {
     isPasswordValid: null,
   });
   const [loading, setLoading] = useState(false);
+  // const [passwordHintVisible, setPasswordHintVisible] = useState(true);
   const {
     email,
     mobile,
@@ -286,7 +287,10 @@ const Login = () => {
                           (isEmailValid ? "valid" : "invalid")
                         }
                         placeholder="Email Address"
-                        onChange={handleChanges}
+                        onChange={(e) => {
+                          handleChanges(e);
+                         
+                        }}
                       />
                       <input
                         type="password"
@@ -297,7 +301,9 @@ const Login = () => {
                         name="password"
                         value={password}
                         placeholder="Password"
-                        onChange={handleChanges}
+                        onChange={(e) => {
+                          handleChanges(e);
+                        }}
                       />
                     </>
                   ) : (
@@ -351,7 +357,7 @@ const Login = () => {
                     </>
                   )}
                   {loginType === "email" && (
-                    <div className="passwordHint">
+                    <div className="passwordHint" hidden={!password}>
                       <ul>
                         <li
                           className={
