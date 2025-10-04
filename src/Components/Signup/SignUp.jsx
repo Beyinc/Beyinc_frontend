@@ -577,7 +577,7 @@ const SignUp = () => {
                     onChange={handleChanges}
                     placeholder="Create Password*"
                   />
-                  <div className="passwordHint">
+                  <div className="passwordHint" hidden={!password}>
                     <ul>
                       <li
                         className={
