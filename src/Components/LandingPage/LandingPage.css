@@ -21,6 +21,12 @@ body {
   height: auto;
   width: 150px;
   margin-top: 10px;
+  object-fit: contain;
+  transform: rotate(0deg);
+  opacity: 1;
+  object-fit: contain;
+  background-color: transparent;
+  mix-blend-mode: multiply;
 }
 
 .landing-button-container {

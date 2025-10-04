@@ -1,11 +1,10 @@
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Footer from "../Home/Footer/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -23,15 +22,14 @@ const LandingPage = () => {
 
   const startingButtonContent = () => {
     if (isNavbarVisible) {
-      return userName ? 'Home' : 'Get Started Now';
+      return userName ? "Home" : "Get Started Now";
     } else {
-      return 'Get Started Now';
+      return "Get Started Now";
     }
   };
 
   return (
     <div className="landingPage-container">
-      {/*navbar */}
       <div
         className="landing-navbar"
         // style={{
@@ -47,10 +45,10 @@ const LandingPage = () => {
             <button
               className="signin-button"
               onClick={() => navigate("/login")}
-               style={{
-          display: localStorage.getItem("user") == undefined ? "flex" : "none",
-        }}
-              
+              style={{
+                display:
+                  localStorage.getItem("user") == undefined ? "flex" : "none",
+              }}
             >
               Sign In
             </button>
@@ -59,9 +57,10 @@ const LandingPage = () => {
             <button
               className="signup-button"
               onClick={() => navigate("/signup")}
-               style={{
-          display: localStorage.getItem("user") == undefined ? "flex" : "none",
-        }}
+              style={{
+                display:
+                  localStorage.getItem("user") == undefined ? "flex" : "none",
+              }}
             >
               Sign Up
             </button>
@@ -80,11 +79,11 @@ const LandingPage = () => {
           </h1>
           <h2>Increasing the success rate of startup</h2>
           <button
-          className="starting-button"
-            onClick={() => navigate(userName ? '/posts' : '/signup')}
-        >
-          {startingButtonContent()}
-        </button>
+            className="starting-button"
+            onClick={() => navigate(userName ? "/posts" : "/signup")}
+          >
+            {startingButtonContent()}
+          </button>
         </div>
         <div className="image-1" data-aos="fade-left">
           <img src="/business.png" />
