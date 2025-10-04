@@ -53,11 +53,7 @@ const IndividualPostDetailsCard = () => {
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
-console.log({user_id,creaotr:post?.createdBy._id,boolean:post?.createdBy._id !== user_id,isJOined:post?.openDiscussionTeam
-                            .map((o) => o._id)
-                            .includes(user_id),ispending:post?.openDiscussionRequests
-                          .map((o) => o._id)
-                          .includes(user_id),visibility:post.type,isprivate:post.type === "private"})
+
   const likingpost = async () => {
     dispatch(setLoading({ visible: "yes" }));
 
