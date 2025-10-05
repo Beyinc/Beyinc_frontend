@@ -304,7 +304,7 @@ const SignUp = () => {
               <div class="signup-header">
                 <img
                   class="signup-logo"
-                  src="logo.png"
+                  src="Bloomr-login-logo.svg"
                   alt="Your Alt Text"
                   onClick={() => {
                     navigate("/");
@@ -577,7 +577,7 @@ const SignUp = () => {
                     onChange={handleChanges}
                     placeholder="Create Password*"
                   />
-                  <div className="passwordHint">
+                  <div className="passwordHint" hidden={!password}>
                     <ul>
                       <li
                         className={

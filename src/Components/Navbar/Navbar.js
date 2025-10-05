@@ -106,6 +106,9 @@ const Navbar = () => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    console.log("notifications are:", notifications);
+  }, []);
   const [isMobile, setIsMobile] = useState(window.outerWidth <= 768);
   useEffect(() => {
     const handleResize = () => {
@@ -127,7 +130,7 @@ const Navbar = () => {
       notificationSound.play();
     }
     if (messageCount.length > 0) {
-      messageSound.play();
+      // messageSound.play();
     }
   }, [notificationAlert, messageCount]);
   const liveMessage = useSelector((state) => state.conv.liveMessage);
@@ -248,7 +251,7 @@ const Navbar = () => {
             </div>
 
             {/* DARK AND WHITE THEME */}
-            <ListItem
+            {/* <ListItem
               button
               key="themeIcon"
               onClick={(e) => {
@@ -294,7 +297,6 @@ const Navbar = () => {
                   </svg>
                 );
 
-                // Switching the logo based on the theme
                 const logoImg = document.getElementById("logoImage");
                 logoImg.src =
                   newTheme === "light" ? "/logo.png" : "/Footer-Logo.png";
@@ -302,13 +304,7 @@ const Navbar = () => {
                 e.currentTarget.title = `${mode} Mode`;
               }}
             >
-              {/* <i
-            id="themeIcon"
-            class={`fas fa-${
-              localStorage.getItem("theme") == "light" ? "moon" : "sun"
-            }`}
-          >
-            </i> */}
+            
               <ListItemIcon>
                 {localStorage.getItem("theme") === "light" ? (
                   <svg
@@ -350,7 +346,7 @@ const Navbar = () => {
                   localStorage.getItem("theme") === "light" ? "Dark" : "Light"
                 } Mode`}
               />
-            </ListItem>
+            </ListItem> */}
 
             <ListItem
               button
@@ -379,7 +375,7 @@ const Navbar = () => {
               <ListItemText primary="Edit Profile" />
             </ListItem>
 
-            <ListItem button key="home" onClick={() => navigate("/posts")}>
+            {/* <ListItem button key="home" onClick={() => navigate("/posts")}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -397,7 +393,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Home" />
-            </ListItem>
+            </ListItem> */}
             {/* <ListItem
               button
               key="dashboard"
@@ -423,7 +419,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Pitches" />
             </ListItem> */}
-            <ListItem
+            {/* <ListItem
               button
               key="searchUsers"
               onClick={() => navigate("/searchusers")}
@@ -443,8 +439,8 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Mentors" />
-            </ListItem>
-            <ListItem
+            </ListItem> */}
+            {/* <ListItem
               button
               key="conversations"
               onClick={() => navigate("/conversations")}
@@ -469,9 +465,9 @@ const Navbar = () => {
                 )}
               </ListItemIcon>
               <ListItemText primary="Conversations" />
-            </ListItem>
+            </ListItem> */}
 
-            <ListItem
+            {/* <ListItem
               button
               key="notifications"
               onClick={() => navigate("/notifications")}
@@ -496,7 +492,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Notifications" />
-            </ListItem>
+            </ListItem> */}
           </>
         )}
 
@@ -615,81 +611,78 @@ const Navbar = () => {
   const NotificationList = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 800,
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 1050,
         overFlowX: "hidden",
       }}
       role="presentation"
     >
-      {/* <Tabs
-        value={value}
-        className="pitchTabs"
-        style={{ width: "500px" }}
-        textColor="primary"
-        indicatorColor="secondary"
-        onChange={handleChange}
-        aria-label="basic tabs example"
-      >
-        <Tab
-          className="tabs"
-          sx={{
-            width: "250px",
-            background: "none",
-            textTransform: "capitalize",
-            padding: "0px",
-            fontSize: "13px",
-            fontWeight: 600,
-          }}
-          label={`Notifications (${notifications?.length})`}
-          {...a11yProps(1)}
-        />
-        <Tab
-          className="tabs"
-          sx={{
-            width: "250px",
-            background: "none",
-            textTransform: "capitalize",
-            padding: "0px",
-            fontSize: "13px",
-            fontWeight: 600,
-          }}
-          label={`Message Requests (${messageRequest?.length})`}
-          {...a11yProps(0)}
-        />
-      </Tabs> */}
-      <div className="SideNotificationHeader">
-        <div
-          className={`sideNavIcons ${value == 1 && "sideselected"}`}
-          onClick={() => setValue(1)}
-        >
-          Notifications ({notifications?.length})
-        </div>
-        <div
-          className={`sideNavIcons ${value == 2 && "sideselected"}`}
-          onClick={() => setValue(2)}
-        >
-          Message Requests ({messageRequest?.length})
-        </div>
-        <div
-          className={`sideNavIcons ${value == 3 && "sideselected"}`}
-          onClick={() => setValue(3)}
-        >
-          Post Discussion Requests ({postDiscussionRequest?.length})
+     
+      <div className="notification-headers flex justify-between items-center mt-[40px]">
+        <span className='[font-family:"Gentium_Book_Basic"] font-bold text-[20px] ml-[20px] mb-[10px] hover:cursor-pointer'>
+          Notifications
+        </span>
+        <span className="text-[#4F55C7] hover:cursor-pointer" onClick={()=>{
+          toggleNotificationDrawer("right", false)()
+        }}>Mark all read</span>
+      </div>
+      <div className="border-div">
+        <div className="SideNotificationHeader">
+          <div
+            className={`sideNavIcons ${value == 1 && "sideselected"}`}
+            onClick={() => setValue(1)}
+          >
+            All ({notifications?.length})
+          </div>
+          <div
+            className={`sideNavIcons ${value == 2 && "sideselected"}`}
+            onClick={() => setValue(2)}
+          >
+            Message Requests ({messageRequest?.length})
+          </div>
+          <div
+            className={`sideNavIcons ${value == 3 && "sideselected"}`}
+            onClick={() => setValue(3)}
+          >
+            Post Discussion Requests ({postDiscussionRequest?.length})
+          </div>
         </div>
       </div>
       {value == 1 &&
-        notifications.map((n) => (
-          <>
+        notifications.map((n) => {
+          const formattedDate = new Date(n.createdAt).toLocaleDateString(
+            "en-GB",
+            {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }
+          );
+
+          return (
             <div
+              key={n._id}
               className={`individualrequest`}
               style={{ marginLeft: "15px", textAlign: "start" }}
             >
               <div
                 className="individualrequestWrapper"
-                style={{ gap: "5px", alignItems: "center", width: "100%" }}
+                style={{
+                  gap: "5px",
+                  alignItems: "center",
+                  width: "100%",
+                  borderBottom: "1px solid #EEEEEE",
+                  background: "#FAFBFF",
+                  height: "auto", // allow height to grow with content
+                  padding: "10px 0",
+                }}
               >
                 <div
                   onClick={() => {
-                    navigate(`/user/${n.senderInfo?._id}`);
+                    if (!(n.type === "postDiscussion" || n.type === "report")) {
+                      navigate(`/user/${n.senderInfo?._id}`);
+
+                      toggleNotificationDrawer("right", false)(); // close only for non-postDiscussion/report
+                    }
                   }}
                 >
                   <img
@@ -704,25 +697,58 @@ const Navbar = () => {
                         : n.senderInfo?.image?.url
                     }
                     alt=""
-                    srcset=""
                   />
                 </div>
-                <div>
-                  {n.message}{" "}
-                  {n.type == "postDiscussion" && (
-                    <Link to={`/posts/${n.postId}`}>View Post</Link>
-                  )}{" "}
-                  {n.type == "report" && (
-                    <Link style={{ color: "red" }} to={`/posts/${n.postId}`}>
-                      View Post
-                    </Link>
-                  )}
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span
+                    className="ml-[20px]"
+                    style={{
+                      fontFamily: "Gentium Book Basic",
+                      fontWeight: 400,
+                      fontStyle: "normal",
+                      verticalAlign: "middle",
+                    }}
+                    onClick={() => {
+                      if (n.type === "postDiscussion" || n.type === "report") {
+                        toggleNotificationDrawer("right", false)(); // close for report and postDiscussion
+                      }
+                    }}
+                  >
+                    {n.type === "postDiscussion" || n.type === "report" ? (
+                      <Link
+                        to={`/posts/${n.postId}`}
+                        style={{
+                          textDecoration: "none",
+                          color:'black'
+                        }}
+                      >
+                        {n.message}
+                      </Link>
+                    ) : (
+                      <span>{n.message}</span>
+                    )}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "Gentium Book Basic",
+                      fontWeight: 400,
+                      fontStyle: "normal",
+                      fontSize: "14px",
+                      lineHeight: "20px",
+                      letterSpacing: "0.25px",
+                      verticalAlign: "middle",
+                      color: "#878787",
+                      marginLeft: "20px",
+                    }}
+                  >
+                    {formattedDate}
+                  </span>
                 </div>
               </div>
             </div>
-            {/* <div className="divider"></div> */}
-          </>
-        ))}
+          );
+        })}
+
       {value == 2 &&
         (messageRequest.length > 0 || notifications.length > 0) && (
           <>
@@ -940,7 +966,7 @@ const Navbar = () => {
         )}
 
         {/* User Bookings */}
-        <ListItem
+        {/* <ListItem
           button
           key="userBookings"
           onClick={() => navigate("/dashboard/userBookings")}
@@ -956,7 +982,7 @@ const Navbar = () => {
             />
           </ListItemIcon>
           <ListItemText primary="User Bookings" />
-        </ListItem>
+        </ListItem> */}  
 
         {/* Mentor Bookings - Render only if role === "Mentor" */}
         {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
@@ -1634,9 +1660,12 @@ const Navbar = () => {
               </div>
 
               {/* NOTIFICATION ICON */}
-              <div
+              {/* <div
                 className="navbar-item"
-                onClick={toggleNotificationDrawer("right", true)}
+                onClick={()=>{
+                  navigate("/notification-page")
+                }
+                }
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1654,16 +1683,92 @@ const Navbar = () => {
                 </svg>
 
                 <div className="navbar-title">Notifications</div>
-              </div>
+              </div> */}
 
-              <Drawer
+
+
+
+              {/* NOTIFICATION ICON */}
+<div
+  className={`navbar-item ${selectedIcon === "notifications" ? "selected" : ""}`}
+  onClick={() => {
+    navigate("/notification-page");
+    handleItemClick("notifications"); // mark as selected
+  }}
+>
+  {selectedIcon === "notifications" ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1.2em"
+      height="1.2em"
+      viewBox="0 0 24 24"
+      id="notifications-filled"
+      className="icon"
+    >
+      <path
+        fill="var(--nav-head-icons)"
+        d="M12 22c-.825 0-1.412-.587-1.412-1.412h2.824c0 .825-.587 1.412-1.412 1.412zM4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4z"
+      />
+      {notificationAlert && <div className="blinkBall"> </div>}
+    </svg>
+  ) : (
+    <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 24 24"
+                  id="notifications"
+                  className="icon"
+                >
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10z"
+                  />
+                  {notificationAlert && <div className="blinkBall"> </div>}
+                </svg>
+  )}
+
+  <div
+    className={`navbar-title${
+      selectedIcon === "notifications" ? " selected-title" : ""
+    }`}
+  >
+    Notifications
+  </div>
+</div>
+
+
+              {/* <Drawer
                 anchor="right"
                 open={notificationDrawerState["right"]}
                 onClose={toggleNotificationDrawer("right", false)}
                 onOpen={toggleNotificationDrawer("right", true)}
               >
                 {NotificationList("right")}
-              </Drawer>
+              </Drawer> */}
+
+              {/* <Drawer
+                anchor="right"
+                open={notificationDrawerState["right"]}
+                onClose={toggleNotificationDrawer("right", false)}
+                onOpen={toggleNotificationDrawer("right", true)}
+                PaperProps={{
+                  sx: {
+                    width: "1064px",
+                    height: "759px",
+                    top: "100px",
+                    left: "360px",
+                    bottom: "20px",
+                    borderRadius: "12px",
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    opacity: 1,
+                    position: "absolute", // allow custom top/left
+                  },
+                }}
+              >
+                {NotificationList("right")}
+              </Drawer> */}
             </>
           )}
 

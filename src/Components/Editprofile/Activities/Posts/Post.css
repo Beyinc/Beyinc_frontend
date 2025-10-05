@@ -61,6 +61,16 @@
   white-space: nowrap;
 }
 
+.postTypeM{
+  background: var(--postType-bg);
+  padding: 6px 10px;
+  border-radius: 20px;
+  color: black;
+  white-space: nowrap;
+  width: fit-content;
+  font-size: small;
+}
+
 .postDescContainer {
   padding: 10px;
   display: flex;

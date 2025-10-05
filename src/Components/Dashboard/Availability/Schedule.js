@@ -187,221 +187,270 @@ export default function AvailabilityForm() {
   ];
   
   return (
-    <Box px={4} py={3}>
-      <Box p={8} bgcolor={'white'} borderRadius={3} boxShadow={2}>
-        <Typography variant="h5" align="left" style={{ fontFamily: 'Roboto' }}>
+    <Box sx={{ px: { xs: 0, sm: 4 }, py: { xs: 0, sm: 3 } }}>
+      <Box className="p-8 bg-white shadow-lg rounded-xl">
+        <Typography variant="h5" align="left" style={{ fontFamily: "Roboto" }}>
           Availability
         </Typography>
 
         {/* Tab selection */}
         <Tabs value={activeTab} onChange={handleTabChange}>
           <Tab
-              label="Services"
-              className={`available-tab ${activeTab === 0 ? 'available-tab-active' : ''}`}
-            />
-           
+            label="Services"
+            className={`available-tab ${
+              activeTab === 0 ? "available-tab-active" : ""
+            }`}
+          />
+
           <Tab
             label="Settings"
-            className={`available-tab ${activeTab === 1 ? 'availabe-tab-active' : ''}`}
+            className={`available-tab ${
+              activeTab === 1 ? "availabe-tab-active" : ""
+            }`}
           />
           <Tab
             label="Schedule"
-            className={`available-tab ${activeTab === 2 ? 'available-tab-active' : ''}`}
+            className={`available-tab ${
+              activeTab === 2 ? "available-tab-active" : ""
+            }`}
           />
-        
         </Tabs>
 
         {/* Divider Below Tabs */}
-        <Box mt={2} mb={3} bgcolor="grey.300" height=".5px" width="100%" marginTop={'0px'} />
+        <Box
+          mt={2}
+          mb={3}
+          bgcolor="grey.300"
+          height=".5px"
+          width="100%"
+          marginTop={"0px"}
+        />
 
-        {activeTab === 0  && (
-          <ServicesTab>
-            selectedTimezone = {selectedTimezone }
-        </ServicesTab>)}
-
+        {activeTab === 0 && (
+          <ServicesTab>selectedTimezone = {selectedTimezone}</ServicesTab>
+        )}
 
         {/* Settings tab */}
         {activeTab === 1 && (
-          
-          <Box px={4} py={1}>
-          <Box p={2} bgcolor={'white'}  >
-            
-    
-            <Box mt={2} mb={2}>
-              <Typography variant="h5">Default</Typography>
-              <Typography className="default-description" variant="body1" style={{ marginBottom: '16px' }}>
-                Sync your personal and work calendar to avoid any clashes with your schedule
-              </Typography>
-    
-            
-                 <Box mt={2} onClick={handleAuth} 
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          backgroundColor: 'transparent', // Background color can be transparen
-                          width: '41%', // Set your desired width here
-                          padding: '10px 0px', // Padding to make it button-like
-                          cursor: 'pointer', // Change cursor to pointer
-                          borderRadius: '30px',
-                          '&:hover': {
-                            backgroundColor: 'lightgrey', // Optional hover effect
-                          },
-                        }}
-            >
-                <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft:'0px' }}>
-                  <img 
-                    src="/GcalendarIcon.png" 
-                    alt="Calendar Icon" 
-                    style={{ width: '50px', height: '50px', padding:'0px' }} // Adjust size as needed
-                  />
-                  <Typography variant="body1" sx={{ marginLeft: '20px', color: 'black' }}>
-                    Google Calendar
-                  </Typography>
-                </Box>
-                <ArrowForwardIosIcon sx={{ color: 'black', paddingRight:'10px' }} />
-              </Box>
-                    
-    
-              <Grid mt={2} container spacing={2} alignItems="center">
-                {/* Timezone Title */}
-                <Grid item xs={5}>
-                  <Typography variant="h5">Timezone</Typography>
-                  <Typography className="default-description" variant="body2" >
-                    Required for timely communications
-                  </Typography>
-                </Grid>
-    
-                {/* Timezone Dropdown */}
-                <Grid item xs={7}>
-                <TextField
-                    select
-                    value={selectedTimezone}
-                    onChange={handleTimezoneChange}
-                    className='outline'
-                   
+          <Box sx={{ px: { xs: 0, sm: 4 }, py: { xs: 0, sm: 1 } }}>
+            <Box sx={{ p: { xs: 0, sm: 2 } }} bgcolor={"white"}>
+              <Box mt={2} mb={2}>
+                <Typography variant="h5">Default</Typography>
+                <Typography
+                  className="default-description"
+                  variant="body1"
+                  style={{ marginBottom: "16px" }}
+                >
+                  Sync your personal and work calendar to avoid any clashes with
+                  your schedule
+                </Typography>
+
+                <Box
+                  mt={2}
+                  onClick={handleAuth}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    backgroundColor: "transparent", // Background color can be transparen
+                    width: "41%", // Set your desired width here
+                    padding: "10px 0px", // Padding to make it button-like
+                    cursor: "pointer", // Change cursor to pointer
+                    borderRadius: "30px",
+                    "&:hover": {
+                      backgroundColor: "lightgrey", // Optional hover effect
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      paddingLeft: "0px",
+                    }}
                   >
-                    {timezones.map((tz) => (
-                      <MenuItem key={tz.tzCode} value={tz.tzCode}>
-                        {tz.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-              </Grid>
-    
-              <Grid container spacing={2} alignItems="center" style={{ marginTop: '16px' }}>
-                {/* Booking Period */}
-                <Grid item xs={5}>
-                  <Typography variant="h5">Booking Period</Typography>
-                  <Typography className="default-description" variant="body2" >
-                    How far in the future can attendees book sessions
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <DatePicker
-                     className='outline'
-                    value={startDate}
-                    onChange={(newValue) => setStartDate(newValue)}
-                    disablePast
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    <img
+                      src="/GcalendarIcon.png"
+                      alt="Calendar Icon"
+                      style={{ width: "50px", height: "50px", padding: "0px" }} // Adjust size as needed
+                    />
+                    <Typography
+                      variant="body1"
+                      sx={{ marginLeft: "20px", color: "black" }}
+                    >
+                      Google Calendar
+                    </Typography>
+                  </Box>
+                  <ArrowForwardIosIcon
+                    sx={{ color: "black", paddingRight: "10px" }}
                   />
+                </Box>
+
+                <Grid mt={2} container spacing={2} alignItems="center">
+                  {/* Timezone Title */}
+                  <Grid item xs={5}>
+                    <Typography variant="h5">Timezone</Typography>
+                    <Typography className="default-description" variant="body2">
+                      Required for timely communications
+                    </Typography>
+                  </Grid>
+
+                  {/* Timezone Dropdown */}
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <TextField
+                      select
+                      value={selectedTimezone}
+                      onChange={handleTimezoneChange}
+                      className="outline"
+                    >
+                      {timezones.map((tz) => (
+                        <MenuItem key={tz.tzCode} value={tz.tzCode}>
+                          {tz.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
                 </Grid>
-                <Grid item xs={3}>
-                  <DatePicker
-                    className='outline'
-                    value={endDate}
-                    onChange={(newValue) => setEndDate(newValue)}
-                    disablePast
-                    minDate={startDate} // Ensure end date is after or on the start date
-                    renderInput={(params) => <TextField {...params} fullWidth />}
-                  />
+
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  style={{ marginTop: "16px" }}
+                >
+                  {/* Booking Period */}
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Typography variant="h5">Booking Period</Typography>
+                    <Typography className="default-description" variant="body2">
+                      How far in the future can attendees book sessions
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <DatePicker
+                      className="outline"
+                      value={startDate}
+                      onChange={(newValue) => setStartDate(newValue)}
+                      disablePast
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <DatePicker
+                      className="outline"
+                      value={endDate}
+                      onChange={(newValue) => setEndDate(newValue)}
+                      disablePast
+                      minDate={startDate} // Ensure end date is after or on the start date
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth />
+                      )}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-    
-              <Grid container spacing={2} alignItems="center" style={{ marginTop: '16px' }}>
-                {/* Notice Period Section */}
-                <Grid item xs={5}>
-                  <Typography variant="h5">Notice Period</Typography>
-                  <Typography  className="default-description" variant="body2" >
-                    Set the minimum amount of notice that is required
-                  </Typography>
+
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  style={{ marginTop: "16px" }}
+                >
+                  {/* Notice Period Section */}
+                  <Grid item xs={5}>
+                    <Typography variant="h5">Notice Period</Typography>
+                    <Typography className="default-description" variant="body2">
+                      Set the minimum amount of notice that is required
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <TextField
+                      className="outline"
+                      style={{ width: "37%" }}
+                      type="number"
+                      inputProps={{ min: 1 }}
+                      fullWidth
+                      onChange={(e) => setNoticePeriod(e.target.value)}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <TextField
-                 className='outline'
-                style={{width: '37%'}}
-                    type="number"
-                    inputProps={{ min: 1 }}
-                    fullWidth
-                    onChange={(e) => setNoticePeriod(e.target.value)}
-                  />
+
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  style={{ marginTop: "16px" }}
+                >
+                  {/* Buffer Time Section */}
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Typography variant="h5">Buffer Time</Typography>
+                    <Typography className="default-description" variant="body2">
+                      Add time between your events to stay zen
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <TextField
+                      className="outline"
+                      style={{ width: "37%" }}
+                      type="number"
+                      inputProps={{ min: 1 }}
+                      onChange={(e) => setBufferTime(e.target.value)}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-    
-              <Grid container spacing={2} alignItems="center" style={{ marginTop: '16px' }}>
-                {/* Buffer Time Section */}
-                <Grid item xs={5}>
-                  <Typography variant="h5">Buffer Time</Typography>
-                  <Typography className="default-description" variant="body2" >
-                    Add time between your events to stay zen
-                  </Typography>
-                </Grid>
-                <Grid item xs={7}>
-                  <TextField
-                   className='outline'
-                    style={{width: '37%'}}
-                    type="number"
-                    inputProps={{ min: 1 }}
-                 
-                    onChange={(e) => setBufferTime(e.target.value)}
-                  />
-                </Grid>
-              </Grid>
 
                 {/* Reschedule Policy Section */}
-                <Grid item xs={12} container spacing={2} alignItems="center" style={{ marginTop: '24px' }}>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  style={{ marginTop: "24px" }}
+                >
                   <Grid item xs={5}>
                     <Typography variant="h5">Reschedule Policy</Typography>
                     <Typography className="default-description" variant="body2">
-                      Notice days for rescheduling 
+                      Notice days for rescheduling
                     </Typography>
                     <FormControlLabel
                       control={
                         <Switch
                           checked={isRescheduleAllowed}
-                          onChange={(e) => setRescheduleAllowed(e.target.checked)}
+                          onChange={(e) =>
+                            setRescheduleAllowed(e.target.checked)
+                          }
                           color="primary"
                         />
                       }
-                       
                       label="Allow Rescheduling"
                     />
                   </Grid>
-                  <Grid item xs={7} sx={{ pt: 0, pb: '50px' }}>
-                 
+                  <Grid item xs={7} sx={{ pt: 0, pb: "50px" }}>
                     {isRescheduleAllowed && (
                       <TextField
-                       type="number"
+                        type="number"
                         inputProps={{ min: 0 }}
-                        className='outline'
+                        className="outline"
                         onChange={(e) => setRescheduleNotice(e.target.value)} // fixed typo here
-                        style={{ marginTop: 0 ,width: '37%'}} // aligned with title
+                        style={{ marginTop: 0, width: "37%" }} // aligned with title
                       />
                     )}
                   </Grid>
                 </Grid>
 
-    
-              {/* Save Button */}
-              <Box mt={8} textAlign="left">
-                <button className='saveSettings' onClick={handleSaveSettings}>
-                  Save Settings
-                </button>
+                {/* Save Button */}
+                <Box mt={8} textAlign="left">
+                  <button
+                    className="saveSettings p-4 rounded-lg"
+                    onClick={handleSaveSettings}
+                  >
+                    Save Settings
+                  </button>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
         )}
 
         {/* Schedule tab */}
@@ -414,30 +463,47 @@ export default function AvailabilityForm() {
                     selectedDayTimeUtc={selectedDayTimeUtc}
                     setSelectedDayTimeUtc={setSelectedDayTimeUtc}
                     handleSaveSchedule={handleSaveSchedule}
-
                   />
                 </Box>
               </Grid>
 
-              <Grid item xs={8} md={4}>
+              <Grid item xs={12} md={4}>
                 <Box className="available-box">
-                  <Box px={4} py={3}>
-                    <Typography component="legend" style={{ marginBottom: 20, color: 'black', fontFamily: 'Roboto', fontWeight: 'bold' }}>
+                  <Box px={{ xs: 0, md: 4 }} py={{ xs: 0, md: 3 }}>
+                    <Typography
+                      component="legend"
+                      sx={{
+                        mb: 2,
+                        color: "black",
+                        fontFamily: "Roboto",
+                        fontWeight: "bold",
+                        fontSize: { xs: "1rem", md: "1.25rem" },
+                      }}
+                    >
                       Block Dates
                     </Typography>
-                    <Typography component="legend" style={{ marginBottom: 20, color: 'black', paddingTop: 0, fontFamily: 'Roboto' }}>
-                      Add dates when you will be unavailable to take calls or take sessions
+                    <Typography
+                      component="legend"
+                      sx={{
+                        mb: 2,
+                        color: "black",
+                        fontFamily: "Roboto",
+                        fontSize: { xs: "0.9rem", md: "1rem" },
+                      }}
+                    >
+                      Add dates when you will be unavailable to take calls or
+                      take sessions
                     </Typography>
                     <MultiDatePicker
-                        unavailableDates={unavailableDates}
-                        setUnavailableDates={setUnavailableDates}
-                      />
+                      unavailableDates={unavailableDates}
+                      setUnavailableDates={setUnavailableDates}
+                    />
                   </Box>
                 </Box>
               </Grid>
             </Grid>
           </Box>
-        )} 
+        )}
       </Box>
     </Box>
   );

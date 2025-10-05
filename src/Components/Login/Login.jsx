@@ -23,6 +23,7 @@ const Login = () => {
     isPasswordValid: null,
   });
   const [loading, setLoading] = useState(false);
+  // const [passwordHintVisible, setPasswordHintVisible] = useState(true);
   const {
     email,
     mobile,
@@ -243,7 +244,7 @@ const Login = () => {
               <div class="login-header">
                 <img
                   class="login-logo"
-                  src="logo.png"
+                  src="/Bloomr-login-logo.svg"
                   alt="Your Alt Text"
                   onClick={() => {
                     navigate("/");
@@ -286,7 +287,10 @@ const Login = () => {
                           (isEmailValid ? "valid" : "invalid")
                         }
                         placeholder="Email Address"
-                        onChange={handleChanges}
+                        onChange={(e) => {
+                          handleChanges(e);
+                         
+                        }}
                       />
                       <input
                         type="password"
@@ -297,7 +301,9 @@ const Login = () => {
                         name="password"
                         value={password}
                         placeholder="Password"
-                        onChange={handleChanges}
+                        onChange={(e) => {
+                          handleChanges(e);
+                        }}
                       />
                     </>
                   ) : (
@@ -351,21 +357,21 @@ const Login = () => {
                     </>
                   )}
                   {loginType === "email" && (
-                    <div className="passwordHint">
+                    <div className="passwordHint" hidden={!password}>
                       <ul>
                         <li
                           className={
                             password?.length >= 8 ? "success" : "failure"
                           }
                         >
-                          Password should be atleast 8 character length
+                          <i>Password should be atleast 8 character length</i>
                         </li>
                         <li
                           className={
                             /.*[A-Z].*/.test(password) ? "success" : "failure"
                           }
                         >
-                          Atleast one capital letter
+                          <i> Atleast one capital letter</i>
                         </li>
                         <li
                           className={
@@ -374,7 +380,7 @@ const Login = () => {
                               : "failure"
                           }
                         >
-                          Atleast one small letter
+                          <i> Atleast one small letter</i>
                         </li>
                         <li
                           className={
@@ -383,14 +389,14 @@ const Login = () => {
                               : "failure"
                           }
                         >
-                          Atleast one special character (!@#$%^&*()_+)
+                          <i> Atleast one special character (!@#$%^&*()_+)</i>
                         </li>
                         <li
                           className={
                             /.*[0-9].*/.test(password) ? "success" : "failure"
                           }
                         >
-                          Atleast one Number
+                          <i> Atleast one Number</i>
                         </li>
                       </ul>
                     </div>

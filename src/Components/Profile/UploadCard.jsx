@@ -126,17 +126,15 @@ const UploadCard = ({selfProfile ,setSelfProfile}) => {
           >
             <label className="Input-Label">Pitchdeck</label>
             {oldDocs.resume && (
-         
-           <a
-             href={oldDocs.resume?.secure_url}
-             target="_blank"
-             rel="noreferrer"
-             className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
-           >
-             <InsertDriveFileOutlinedIcon />
-             <span className="hidden md:block">Pitchdeck</span>
-           </a>
-           
+              <a
+                href={oldDocs.resume?.secure_url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
+              >
+                <InsertDriveFileOutlinedIcon />
+                <span className="hidden md:block">Pitchdeck</span>
+              </a>
             )}
           </div>
 
