@@ -221,7 +221,7 @@ export const Connections = () => {
         </div>
 
         <div
-          className="mt-6 w-full lg:w-[1070px] bg-white p-8 rounded-lg"
+          className="mt-6 w-full lg:w-[980px] bg-white p-8 rounded-lg"
           style={{ border: "1px solid lightgray" }}
         >
           {filteredUsers.length > 0 ? (
