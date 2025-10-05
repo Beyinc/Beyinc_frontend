@@ -220,10 +220,10 @@ const IndividualPostDetailsCard = () => {
   };
 
   return (
-    <div className="post-details-main-container">
+    <div className="post-details-main-container sm:p-4 p-2">
       {post !== null && (
-        <div className="post-details-container ">
-          <div className="post-details-content-left">
+        <div className="post-details-container  ">
+          <div className="post-details-content-left grow">
             <div style={{ position: "relative" }}>
               <div className="PostHeaderContainer">
                 <div className="individualPostTotalDetails gap-2">
@@ -524,8 +524,8 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-          <div className="post-details-content-right">
-            <div className="wholePostWrapper w-[477px] h-auto ">
+          <div className="post-details-content-right grow">
+            <div className="wholePostWrapper h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
                   <img
@@ -554,8 +554,8 @@ const IndividualPostDetailsCard = () => {
                         post?.createdBy?.userName?.slice(1)}
                     </div>
                   </div>
-                  {!(post?.createdBy._id == user_id) &&
-                    post.type === "private" && (
+                  {(post?.createdBy._id !== user_id) &&
+                    post.visibility === "private" && (
                       <div className="openDiscussion-Buttons">
                         {post?.openDiscussionRequests
                           .map((o) => o._id)

@@ -94,7 +94,7 @@ export function LiveChat({ post, userName, user_id, onlineEmails }) {
   };
 
   return (
-    <div className="membersWrapper  w-[520px] h-auto ">
+    <div className="membersWrapper h-auto ">
       <div className="members-header ">
         <h5>{isChatOpen ? "Live Chat" : "Members"}</h5>
         <button
