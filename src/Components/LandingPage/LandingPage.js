@@ -37,7 +37,7 @@ const LandingPage = () => {
         // }}
       >
         <div className="Beyinc-logo">
-          <img src="/logo3.png" alt="logo" />
+          <img src="/Bloomr-login-logo.svg" alt="logo" />
         </div>
 
         <div className="landing-button-container">

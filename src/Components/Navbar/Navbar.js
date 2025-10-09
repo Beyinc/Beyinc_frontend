@@ -1229,7 +1229,7 @@ const Navbar = () => {
             id="logoImage"
             src={
               localStorage.getItem("theme") == "light"
-                ? "/logo3.png"
+                ? "/Bloomr-login-logo.svg"
                 : "/Footer-Logo.png"
             }
             alt="logo"
