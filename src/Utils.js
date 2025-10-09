@@ -494,7 +494,10 @@ export const postTypes = [
     { 'value': 'News', 'color': '#f14edf' },
     { 'value': 'Hiring', 'color': '#e1265d' },
     { 'value': 'Opportunities', 'color': '#5e8d7c' },
-    { 'value': 'Investment', 'color': '#207b6a' }
+    { 'value': 'Investment', 'color': '#207b6a' },
+    { 'value': 'Startup Expo', 'color': '#207b6a' },
+    { 'value': 'Startup Story', 'color': '#207b6a' },
+    { 'value': 'Open to work', 'color': '#207b6a' }
 ]
 
 
