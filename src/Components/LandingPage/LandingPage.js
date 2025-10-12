@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Footer from "../Home/Footer/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Navbar from "../Navbar/Navbar";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const LandingPage = () => {
       duration: 2000,
       easing: "ease", // Easing options: 'linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out', 'ease-in-back', 'ease-out-back', 'ease-in-out-back'
     });
+    console.log(userName);
   }, []);
 
   const startingButtonContent = () => {
@@ -28,13 +30,20 @@ const LandingPage = () => {
     }
   };
 
+
+    const userExists = localStorage.getItem("user") !== null;
+
   return (
     <div className="landingPage-container">
-      <div
+  {userExists?(
+<Navbar/>
+  ):(
+ <div
         className="landing-navbar"
-        // style={{
-        //   display: localStorage.getItem("user") == undefined ? "flex" : "none",
-        // }}
+        style={{
+          display: localStorage.getItem("user") == undefined ? "flex" : "none",
+        }}
+        hidden={!!userName}
       >
         <div className="Beyinc-logo">
           <img src="/Bloomr-login-logo.svg" alt="logo" />
@@ -67,6 +76,9 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
+  )}
+
+     
 
       {/* section-1 */}
       <section className="section-1">
