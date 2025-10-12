@@ -242,7 +242,7 @@ const Post = ({
       return post?.description;
     } else {
       return post?.description?.length > 100
-        ? post?.description.slice(0, 100) + "..."
+        ? post?.description.slice(0, 350) + "..."
         : post?.description;
     }
   };

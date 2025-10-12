@@ -248,6 +248,15 @@ const handleLoadMore = () => {
    const createMarkup = (html) => {
     return { __html: html };
   };
+
+
+  const getDescription = (post) => {
+  {
+      return post?.description?.length > 100
+        ? post?.description.slice(0, 150) + "..."
+        : post?.description;
+    }
+  };
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -572,7 +581,7 @@ const handleLoadMore = () => {
                   <b>{post?.postTitle}</b>
                 </h4>
 
-<div dangerouslySetInnerHTML={createMarkup(post?.description)}></div>
+                 <div dangerouslySetInnerHTML={createMarkup(getDescription(post))}></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}

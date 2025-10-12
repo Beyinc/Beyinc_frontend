@@ -344,11 +344,11 @@ const CreatePostPage = () => {
                 >
                   <Tab label="Information" value="1" className="Testing-Tab" />
                   <Tab label="File Upload" value="2" className="Testing-Tab" />
-                  <Tab
+                  {/* <Tab
                     label="Pitches / Links"
                     value="3"
                     className="Testing-Tab"
-                  />
+                  /> */}
                 </TabList>
               </Box>
               <TabPanel

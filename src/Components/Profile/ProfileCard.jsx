@@ -366,6 +366,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
         </div>
 
         <div className="font-bold text-sm text-gray-500">{formState?.role}</div>
+        <div>{formState.headline}</div>
         {profileData?.beyincProfile && (
           <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
             {profileData.beyincProfile} at Beyinc
