@@ -4,7 +4,7 @@ import { dataEntry } from '../../Utils';
 
 const SearchFilter = ({ FilteredSearchProfiles}) => {
   const [entityTitles, setEntityTitles] = useState(''); // Change from [] to ''
-  const [isEntityOpen, setIsEntityOpen] = useState(false);
+  const [isEntityOpen, setIsEntityOpen] = useState(true);
   const [selectedEntities, setSelectedEntities] = useState([]);
 
   const handleEntityTitlesChange = (event) => {
