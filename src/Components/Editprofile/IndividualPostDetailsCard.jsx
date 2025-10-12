@@ -524,7 +524,7 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-          <div className="post-details-content-right grow">
+<div className="post-details-content-right grow min-w-[450px] max-w-[600px]">
             <div className="wholePostWrapper h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
