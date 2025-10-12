@@ -66,6 +66,7 @@ const SearchFilter = ({ FilteredSearchProfiles}) => {
                     value={option.title} // Use option.title for checkbox value
                     checked={selectedEntities.includes(option.title)} // Check based on title
                     onChange={handleEntityTitlesChange}
+                    className='mr-2'
                   />
                   {option.title} {/* Display the title */}
                 </label>

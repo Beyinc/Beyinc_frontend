@@ -460,6 +460,7 @@ const handleLoadMore = () => {
                         value={option.value}
                         checked={selectedTags.includes(option.value)}
                         onChange={handleTagsChange}
+                        className="mr-2"
                       />
                       {option.value}
                     </label>
@@ -480,7 +481,7 @@ const handleLoadMore = () => {
                 checked={isPublic}
                 onChange={handlePublicCheckboxChange}
               />
-              <span className="text-sm mt-1">Public Post</span>
+              <span className="text-sm mt-1 ml-2">Public Post</span>
             </label>
 
             <label>
@@ -490,7 +491,7 @@ const handleLoadMore = () => {
                 checked={isPrivate}
                 onChange={handlePrivateCheckboxChange}
               />
-              <span className="text-sm mt-1">Private Post</span>
+              <span className="text-sm mt-1 ml-2">Private Post</span>
             </label>
             <hr className=" mt-4 mb-6" />
 

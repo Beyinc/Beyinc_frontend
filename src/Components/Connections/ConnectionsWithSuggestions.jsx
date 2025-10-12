@@ -264,7 +264,6 @@ export default function ConnectionsWithSuggestions() {
   const [receiverId, setReceiverId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // ---------------- SUGGESTIONS ----------------
   const [recommendedUsers, setRecommendedUsers] = useState([]);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
@@ -274,13 +273,11 @@ export default function ConnectionsWithSuggestions() {
   const dispatch = useDispatch();
   const socket = useRef();
 
-  // NOTE: be defensive about how auth is shaped in your store
   const auth = useSelector((store) => store.auth || {});
   // derive userId from multiple possible shapes
   const userIdFromRoot = auth?.user_id;
   const userIdFromLoginDetails = auth?.loginDetails?.user_id;
   const userIdFromDetails = auth?.userDetails?._id;
-  // fallback to localStorage if necessary (use the same key you persist on login)
   const localUser = (() => {
     try {
       return JSON.parse(localStorage.getItem("user")) || {};
@@ -311,7 +308,6 @@ export default function ConnectionsWithSuggestions() {
     };
   }, []);
 
-  // helper to normalize API responses that might be shaped differently
   const getArrayFromResponse = (res) => {
     if (!res) return [];
     if (Array.isArray(res)) return res;
