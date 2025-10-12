@@ -1,11 +1,10 @@
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Footer from "../Home/Footer/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -23,23 +22,22 @@ const LandingPage = () => {
 
   const startingButtonContent = () => {
     if (isNavbarVisible) {
-      return userName ? 'Home' : 'Get Started Now';
+      return userName ? "Home" : "Get Started Now";
     } else {
-      return 'Get Started Now';
+      return "Get Started Now";
     }
   };
 
   return (
     <div className="landingPage-container">
-      {/*navbar */}
       <div
         className="landing-navbar"
-        style={{
-          display: localStorage.getItem("user") == undefined ? "flex" : "none",
-        }}
+        // style={{
+        //   display: localStorage.getItem("user") == undefined ? "flex" : "none",
+        // }}
       >
         <div className="Beyinc-logo">
-          <img src="/logo.png" alt="logo" />
+          <img src="/Bloomr-login-logo.svg" alt="logo" />
         </div>
 
         <div className="landing-button-container">
@@ -47,6 +45,10 @@ const LandingPage = () => {
             <button
               className="signin-button"
               onClick={() => navigate("/login")}
+              style={{
+                display:
+                  localStorage.getItem("user") == undefined ? "flex" : "none",
+              }}
             >
               Sign In
             </button>
@@ -55,6 +57,10 @@ const LandingPage = () => {
             <button
               className="signup-button"
               onClick={() => navigate("/signup")}
+              style={{
+                display:
+                  localStorage.getItem("user") == undefined ? "flex" : "none",
+              }}
             >
               Sign Up
             </button>
@@ -73,11 +79,11 @@ const LandingPage = () => {
           </h1>
           <h2>Increasing the success rate of startup</h2>
           <button
-          className="starting-button"
-            onClick={() => navigate(userName ? '/dashboard' : '/signup')}
-        >
-          {startingButtonContent()}
-        </button>
+            className="starting-button"
+            onClick={() => navigate(userName ? "/posts" : "/signup")}
+          >
+            {startingButtonContent()}
+          </button>
         </div>
         <div className="image-1" data-aos="fade-left">
           <img src="/business.png" />
@@ -90,7 +96,7 @@ const LandingPage = () => {
           <img src="/section-2.png" />
         </div>
         <div className="content-2" data-aos="fade-left">
-          <h1>To whom is BeyInc for?</h1>
+          <h1>To whom is Bloomr for?</h1>
           <p>Anyone looking to start their entrepreneurial journey</p>
 
           <div className="logos">
@@ -191,7 +197,7 @@ const LandingPage = () => {
           </p>
           <p data-aos="fade-up">
             <i className="fas fa-check-square" data-aos="zoom-in"></i> Talk to
-            Us any time on BeyInc Admin (Blue tick)
+            Us any time on Bloomr Admin (Blue tick)
           </p>
           <p data-aos="fade-up">
             <i className="fas fa-check-square" data-aos="zoom-in"></i> Take

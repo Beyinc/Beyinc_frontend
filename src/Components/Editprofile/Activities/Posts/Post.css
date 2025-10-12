@@ -58,6 +58,17 @@
   padding: 6px 10px;
   border-radius: 20px;
   color: black;
+  white-space: nowrap;
+}
+
+.postTypeM{
+  background: var(--postType-bg);
+  padding: 6px 10px;
+  border-radius: 20px;
+  color: black;
+  white-space: nowrap;
+  width: fit-content;
+  font-size: small;
 }
 
 .postDescContainer {
@@ -169,10 +180,12 @@
  border-radius: 5px;
 }
 
+
+
 .actionText {
   /* font-family: Gentium Book Basic; */
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 23.14px;
   text-align: left;
   cursor: pointer;
@@ -234,13 +247,7 @@ background: var( --button-background);
     font-size: 12px;
     line-height: 15px;
   }
-  .postType{
-    background: var(--postType-bg);
-    padding: 6px 10px;
-    border-radius: 20px;
-    color: black;
-    font-size: 10px;
-  }
+  
   .PostDetailsContainer{
     padding: 0;
     margin: 0;
@@ -281,3 +288,9 @@ background: var( --button-background);
     font-weight: 600;
   }
 }
+
+
+.menu-icon-wrapper {
+  @apply w-8 h-8 flex items-center justify-center overflow-hidden;
+}
+

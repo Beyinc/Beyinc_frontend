@@ -9,6 +9,9 @@ module.exports = {
         lightPurple: "#f0f0ff",
         customBackground: "#f0f1f5",
       },
+       fontFamily: {
+        gentium: ['"Gentium Book Basic"', 'serif'],
+      },
     },
   },
   plugins: [],

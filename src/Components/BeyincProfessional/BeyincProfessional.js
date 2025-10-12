@@ -182,7 +182,7 @@ const BeyincProfessional = () => {
       <h2 className="mb-10 font-serif text-2xl">
         Advance as a Professional on Our Platform
       </h2>
-      <h3 className=" mb-2 md:mb-6 font-serif text-xl">BeyInc Profile*</h3>
+      <h3 className=" mb-2 md:mb-6 font-serif text-xl">Bloomr Profile*</h3>
       <div className="flex space-x-28 mb-10">
         <label>
           <input

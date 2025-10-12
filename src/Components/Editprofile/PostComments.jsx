@@ -172,10 +172,21 @@ const PostComments = ({ fetchComments, postId }) => {
       );
     }
   };
+  const handleKeyDown = (e) => {
+    const currentValue = e.target.value.trim();
 
+    if (e.key === "Enter" && !e.shiftKey) {
+      console.log("entered");
+      e.preventDefault();
+      if (currentValue) {
+        setComment(currentValue);
+        sendText();
+      }
+    }
+  };
   return (
     <div className="">
-      <div className="postCommentAddSection">
+      <div className="postCommentAddSection ml-5">
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div>
             <img
@@ -193,53 +204,69 @@ const PostComments = ({ fetchComments, postId }) => {
               alignItems: "flex-end",
             }}
           >
-            <div style={{ position: "relative", width: "100%" }}>
-              <textarea
-                className="textarea"
-                rows={2}
-                cols={80}
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Add a comment..."
-                style={{ resize: "none" }}
-              onKeyDown={(e) => {
-    if (e.key === "Enter" && (comment.trim() || file)) {
-      e.preventDefault(); 
-      sendText();
-    }
-  }}    
-                
-              />
+            <div className="relative w-full  rounded-[30px] bg-[var(--editprofile-details-card-bg)] p">
+              <div className="flex">
+                <textarea
+                  className="textarea grow !h-fit !p-[3px]"
+                  rows={2}
+                  cols={80}
+                  onKeyDown={handleKeyDown}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Add a comment..."
+                  style={{ resize: "none" }}
+                />
+                <div className="flex gap-2 items-center ">
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => handleFileUpload(e.target.files[0])}
+                  />
+                  <label htmlFor="file-upload">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="gray"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <path d="M21.44 11.05l-9.19 9.2a4 4 0 0 1-5.66-5.66l9.2-9.2a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.42-1.42l7.78-7.78" />
+                    </svg>
+                  </label>
+                  <svg
+                    onClick={sendText}
+                    className="send-button-svg w-[20px] h-[20px]"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 34 34"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      cursor:
+                        comment === "" && !file ? "not-allowed" : "pointer",
+                      padding: "10px",
+                    }}
+                  >
+                    <path
+                      d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2"
+                      stroke="gray"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
 
               {/* 📎 Attach File Icon (paperclip) */}
-              <label htmlFor="file-upload">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="gray"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{
-                    cursor: "pointer",
-                    position: "absolute",
-                    right: "90px",
-                    top: "10px",
-                  }}
-                >
-                  <path d="M21.44 11.05l-9.19 9.2a4 4 0 0 1-5.66-5.66l9.2-9.2a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.42-1.42l7.78-7.78" />
-                </svg>
-              </label>
-
-              <input
-                id="file-upload"
-                type="file"
-                style={{ display: "none" }}
-                onChange={(e) => handleFileUpload(e.target.files[0])}
-              />
 
               {/* ⬅️ Preview file name with a file icon */}
               {file && (
@@ -273,30 +300,6 @@ const PostComments = ({ fetchComments, postId }) => {
               )}
 
               {/* Send Icon (SVG) */}
-              <svg
-                onClick={sendText}
-                className="send-button-svg"
-                width="30"
-                height="30"
-                viewBox="0 0 34 34"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  cursor: comment === "" && !file ? "not-allowed" : "pointer",
-                  padding: "10px",
-                  position: "absolute",
-                  right: "0px",
-                  top: "6px",
-                }}
-              >
-                <path
-                  d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2"
-                  stroke="gray"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
             </div>
           </div>
         </div>

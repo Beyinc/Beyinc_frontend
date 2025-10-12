@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
@@ -7,13 +7,14 @@ import { io } from "socket.io-client";
 import { socket_io } from "../../Utils";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
+import AddConversationPopup from "../Common/AddConversationPopup";
 
 export const Connections = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [activeTab, setActiveTab] = useState("followers");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [localFollowStates, setLocalFollowStates] = useState({});
+  const [receiverId, setReceiverId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
@@ -31,9 +32,23 @@ export const Connections = () => {
         const FollowersRes = await ApiServices.getFollowers({ user_id });
         const followingRes = await ApiServices.getFollowings({ user_id });
 
-        setFollowers(FollowersRes.data || []);
-        setFollowing(followingRes.data || []);
-        setFilteredUsers(FollowersRes.data || []);
+        const modifiedFollowers = Array.isArray(FollowersRes.data)
+          ? FollowersRes.data.map((u) => ({
+              ...u,
+              isFollowing: u.followers.includes(user_id),
+            }))
+          : [];
+        console.log({ modifiedFollowers });
+        const modifiedFollowings = Array.isArray(followingRes.data)
+          ? followingRes.data.map((u) => ({
+              ...u,
+              isFollowing: u.followers.includes(user_id),
+            }))
+          : [];
+        console.log({ modifiedFollowings });
+        setFollowers(modifiedFollowers || []);
+        setFollowing(modifiedFollowings || []);
+        setFilteredUsers(modifiedFollowers || []);
       } catch (e) {
         console.error("Error fetching connections:", e);
       }
@@ -65,10 +80,22 @@ export const Connections = () => {
   }, [activeTab, followers, following]);
 
   const handleFollowToggle = async (e, userId, isFollowing) => {
-    e.target.disabled = true;
     const button = e.target;
     button.textContent = isFollowing ? "Follow" : "Unfollow";
-
+    if (activeTab === "following") {
+      setFilteredUsers((prev) =>
+        Array.isArray(prev) ? prev.filter((u) => u._id !== userId) : prev
+      );
+    } else {
+      setFilteredUsers((prev) =>
+        Array.isArray(prev)
+          ? prev.map((u) => {
+              if (u._id == userId) return { ...u, isFollowing: !u.isFollowing };
+              return u;
+            })
+          : prev
+      );
+    }
     try {
       let response;
       if (isFollowing) {
@@ -86,11 +113,6 @@ export const Connections = () => {
           receiverId: userId,
         });
       }
-
-      setLocalFollowStates((prev) => ({
-        ...prev,
-        [userId]: !isFollowing,
-      }));
     } catch (err) {
       dispatch(
         setToast({
@@ -100,19 +122,15 @@ export const Connections = () => {
         })
       );
       console.error("Follow error:", err);
-    } finally {
-      e.target.disabled = false;
     }
   };
 
   const renderUserCard = (user) => {
-    const isFollowing =
-      localFollowStates[user._id] ?? following.some((f) => f._id === user._id);
-
     return (
       <div
         key={user._id}
-        className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[180px] flex flex-col justify-center items-center flex-wrap-reverse"
+        style={{ border: "1px solid gainsboro" }}
+        className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-[190px] flex flex-col justify-center items-center flex-wrap-reverse"
       >
         <img
           src={user.image?.url ? user.image.url : "/profile.png"}
@@ -132,15 +150,24 @@ export const Connections = () => {
           </h5>
         )}
         <p className="mt-2 mb-2 text-center text-xs">{user.headline}</p>
-
-        {user_id !== user._id && (
-          <button
-            className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
-            onClick={(e) => handleFollowToggle(e, user._id, isFollowing)}
-          >
-            {isFollowing ? "Unfollow" : "Follow"}
-          </button>
-        )}
+        <div className="flex gap-4">
+          {user_id !== user._id && (
+            <button
+              className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
+              onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
+            >
+              {user.isFollowing ? "Unfollow" : "Follow"}
+            </button>
+          )}
+          {user_id !== user._id && user.isFollowing && (
+            <button
+              className="rounded-full px-4 py-1 text-[rgb(79,85,199)] border border-solid border-[rgb(79,85,199)] bg-white text-sm hover:text-white"
+              onClick={(e) => setReceiverId(user._id)}
+            >
+              Chat
+            </button>
+          )}
+        </div>
       </div>
     );
   };
@@ -149,7 +176,7 @@ export const Connections = () => {
     <div className="flex">
       <div
         id="left-div"
-        className="mt-5 ml-10 flex flex-col gap-4 w-full max-w-sm"
+        className="mt-5 ml-[-30px] flex flex-col gap-4 w-full max-w-sm"
       >
         <input
           type="text"
@@ -193,13 +220,24 @@ export const Connections = () => {
           </button>
         </div>
 
-<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div
+          className="mt-6 w-full lg:w-[980px] bg-white p-8 rounded-lg"
+          style={{ border: "1px solid lightgray" }}
+        >
           {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => renderUserCard(user))
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredUsers.map((user) => renderUserCard(user))}
+            </div>
           ) : (
             <p>No {activeTab} found.</p>
           )}
         </div>
+
+        <AddConversationPopup
+          receiverId={receiverId}
+          setReceiverId={setReceiverId}
+          isNavigate={true}
+        />
       </div>
     </div>
   );

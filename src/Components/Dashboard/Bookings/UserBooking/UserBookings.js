@@ -148,8 +148,8 @@ const UserBooking = () => {
   const openMenu = Boolean(anchorEl);
 
   return (
-    <Box px={6} py={3}>
-      <Box p={10} bgcolor={'white'} borderRadius={3} boxShadow={2}>
+    <Box sx={{px:{xs:0, sm:6}}} px={6} py={3}>
+      <Box sx={{p:{xs:2, sm:10}}} bgcolor={'white'} borderRadius={3} boxShadow={2}>
         <Typography variant="h5" align="left" style={{ fontFamily: 'Roboto', fontWeight:'bold' }}>
           User Bookings
         </Typography>
@@ -180,7 +180,7 @@ const UserBooking = () => {
           variant="fullWidth"
           textColor="primary"
           indicatorColor="primary"
-          style={{ width: '40%', marginTop: '10px',  }}
+          sx={{width:{xs:'100%', sm:'50%'}, marginTop: '10px'}}
         >
           <Tab label="Upcoming" />
           <Tab label="Completed" />

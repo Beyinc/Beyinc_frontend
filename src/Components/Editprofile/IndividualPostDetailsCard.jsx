@@ -17,6 +17,7 @@ import { gridCSS } from "../CommonStyles";
 import "./IndividualPostDetailsCard.css";
 import ShareButton from "./ShareButton";
 import { Dialog, DialogContent } from "@mui/material";
+import { LiveChat } from "./LiveChat";
 
 const IndividualPostDetailsCard = () => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
@@ -219,15 +220,15 @@ const IndividualPostDetailsCard = () => {
   };
 
   return (
-    <div className="post-details-main-container">
+    <div className="post-details-main-container sm:p-4 p-2">
       {post !== null && (
-        <div className="post-details-container">
-          <div className="post-details-content-left">
-            <div className="createPostHeader" style={{ position: "relative" }}>
+        <div className="post-details-container  ">
+          <div className="post-details-content-left grow">
+            <div style={{ position: "relative" }}>
               <div className="PostHeaderContainer">
-                <div className="individualPostTotalDetails">
+                <div className="individualPostTotalDetails gap-2">
                   <div
-                    className="IndividualPostHeaderImageContainer"
+                    className="cursor-pointer"
                     onClick={() => {
                       navigate(`/user/${post?.createdBy?._id}`);
                     }}
@@ -241,6 +242,7 @@ const IndividualPostDetailsCard = () => {
                           : "/profile.png"
                       }
                       alt=""
+                      className="size-8 rounded-full"
                     />
                   </div>
                   <div className="IndividualPostDetailsContainer">
@@ -256,83 +258,86 @@ const IndividualPostDetailsCard = () => {
                     <div className="postCardRole">{post?.createdBy?.role}</div>
                   </div>
                 </div>
+                <div className="flex gap-2">
+                  <span className="postType"> {post?.type}</span>
 
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "center",
-                  }}
-                >
                   <div
-                    className="editpostSubActions"
-                    style={{ cursor: "pointer" }}
-                    id="menu"
-                    onClick={() => {
-                      document
-                        .getElementsByClassName(`editpostSubActions${id}`)[0]
-                        ?.classList.toggle("show");
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      gap: "20px",
+                      alignItems: "center",
                     }}
                   >
-                    <svg
+                    <div
+                      className="editpostSubActions"
+                      style={{ cursor: "pointer" }}
                       id="menu"
-                      width="30"
-                      height="30"
-                      viewBox="0 0 30 30"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                      onClick={() => {
+                        document
+                          .getElementsByClassName(`editpostSubActions${id}`)[0]
+                          ?.classList.toggle("show");
+                      }}
                     >
-                      <path
-                        d="M8.75 15C8.75 15.663 8.48661 16.2989 8.01777 16.7678C7.54893 17.2366 6.91304 17.5 6.25 17.5C5.58696 17.5 4.95107 17.2366 4.48223 16.7678C4.01339 16.2989 3.75 15.663 3.75 15C3.75 14.337 4.01339 13.7011 4.48223 13.2322C4.95107 12.7634 5.58696 12.5 6.25 12.5C6.91304 12.5 7.54893 12.7634 8.01777 13.2322C8.48661 13.7011 8.75 14.337 8.75 15ZM17.5 15C17.5 15.663 17.2366 16.2989 16.7678 16.7678C16.2989 17.2366 15.663 17.5 15 17.5C14.337 17.5 13.7011 17.2366 13.2322 16.7678C12.7634 16.2989 12.5 15.663 12.5 15C12.5 14.337 12.7634 13.7011 13.2322 13.2322C13.7011 12.7634 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.7634 16.7678 13.2322C17.2366 13.7011 17.5 14.337 17.5 15ZM26.25 15C26.25 15.663 25.9866 16.2989 25.5178 16.7678C25.0489 17.2366 24.413 17.5 23.75 17.5C23.087 17.5 22.4511 17.2366 21.9822 16.7678C21.5134 16.2989 21.25 15.663 21.25 15C21.25 14.337 21.5134 13.7011 21.9822 13.2322C22.4511 12.7634 23.087 12.5 23.75 12.5C24.413 12.5 25.0489 12.7634 25.5178 13.2322C25.9866 13.7011 26.25 14.337 26.25 15Z"
-                        fill="var(--text-total-color)"
-                      />
-                    </svg>
-                  </div>
-                  <div
-                    id="menu"
-                    className={`subMenu editpostSubActions${id}`}
-                    ref={userDetailsRef}
-                  >
-                    {post?.createdBy?._id == user_id && (
-                      <>
-                        <div
-                          id="menu"
-                          style={{
-                            color: "black",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            setEditPostCount((prev) => prev + 1);
-                            // setEditPostPopup(true);
-                            navigate(`/editPostPage/${post?._id}`);
-                          }}
-                        >
-                          Edit
-                        </div>
-                        <div
-                          id="menu"
-                          style={{
-                            color: "black",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => setDeletePopUp(true)}
-                        >
-                          Delete
-                        </div>
-                      </>
-                    )}
-                    {post?.createdBy?._id !== user_id && (
-                      <div
+                      <svg
                         id="menu"
-                        style={{ color: "black" }}
-                        onClick={() => setReportPopup(true)}
+                        width="30"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        Report
-                      </div>
-                    )}
+                        <path
+                          d="M8.75 15C8.75 15.663 8.48661 16.2989 8.01777 16.7678C7.54893 17.2366 6.91304 17.5 6.25 17.5C5.58696 17.5 4.95107 17.2366 4.48223 16.7678C4.01339 16.2989 3.75 15.663 3.75 15C3.75 14.337 4.01339 13.7011 4.48223 13.2322C4.95107 12.7634 5.58696 12.5 6.25 12.5C6.91304 12.5 7.54893 12.7634 8.01777 13.2322C8.48661 13.7011 8.75 14.337 8.75 15ZM17.5 15C17.5 15.663 17.2366 16.2989 16.7678 16.7678C16.2989 17.2366 15.663 17.5 15 17.5C14.337 17.5 13.7011 17.2366 13.2322 16.7678C12.7634 16.2989 12.5 15.663 12.5 15C12.5 14.337 12.7634 13.7011 13.2322 13.2322C13.7011 12.7634 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.7634 16.7678 13.2322C17.2366 13.7011 17.5 14.337 17.5 15ZM26.25 15C26.25 15.663 25.9866 16.2989 25.5178 16.7678C25.0489 17.2366 24.413 17.5 23.75 17.5C23.087 17.5 22.4511 17.2366 21.9822 16.7678C21.5134 16.2989 21.25 15.663 21.25 15C21.25 14.337 21.5134 13.7011 21.9822 13.2322C22.4511 12.7634 23.087 12.5 23.75 12.5C24.413 12.5 25.0489 12.7634 25.5178 13.2322C25.9866 13.7011 26.25 14.337 26.25 15Z"
+                          fill="var(--text-total-color)"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      id="menu"
+                      className={`subMenu editpostSubActions${id}`}
+                      ref={userDetailsRef}
+                    >
+                      {post?.createdBy?._id == user_id && (
+                        <>
+                          <div
+                            id="menu"
+                            style={{
+                              color: "black",
+                              fontSize: "16px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setEditPostCount((prev) => prev + 1);
+                              // setEditPostPopup(true);
+                              navigate(`/editPostPage/${post?._id}`);
+                            }}
+                          >
+                            Edit
+                          </div>
+                          <div
+                            id="menu"
+                            style={{
+                              color: "black",
+                              fontSize: "16px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setDeletePopUp(true)}
+                          >
+                            Delete
+                          </div>
+                        </>
+                      )}
+                      {post?.createdBy?._id !== user_id && (
+                        <div
+                          id="menu"
+                          style={{ color: "black" }}
+                          onClick={() => setReportPopup(true)}
+                        >
+                          Report
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -375,26 +380,23 @@ const IndividualPostDetailsCard = () => {
               </div>
 
               <div className="PostimageContainer">
-             
-
-             {post?.image?.url && ( // Check if the image URL is available
-              <img
-                src={post.image.url}
-                style={{ objectFit: "contain" }}
-                alt=""
-                onClick={() => navigate(`/posts/${post?._id}`)}
-              />
-              )}
-
+                {post?.image?.url && ( // Check if the image URL is available
+                  <img
+                    src={post.image.url}
+                    style={{ objectFit: "contain" }}
+                    alt=""
+                    onClick={() => navigate(`/posts/${post?._id}`)}
+                    className="w-[850px]"
+                  />
+                )}
               </div>
               {(post?.openDiscussion === true ||
                 post?.openDiscussionTeam.map((o) => o._id).includes(user_id) ||
                 post?.createdBy._id === user_id ||
                 role === "Admin") && (
-                  <div className="postDesc" style={{ whiteSpace: "pre-wrap" }}>
-                    {post?.fullDetails}
-                  </div>
-                
+                <div className="postDesc w-[850px]" style={{ whiteSpace: "pre-wrap" }}>
+                  {post?.fullDetails}
+                </div>
               )}
 
               <div className="likeCommentDetails">
@@ -470,7 +472,7 @@ const IndividualPostDetailsCard = () => {
                         />
                       </svg>
                     </div>
-                    <div className="actionText">upvote</div>
+                    <div className="actionText hidden sm:block">upvote</div>
                   </div>
                   {/* DISLIKE ACTION */}
                   <div className="likeActionHolder">
@@ -492,7 +494,7 @@ const IndividualPostDetailsCard = () => {
                         />
                       </svg>
                     </div>
-                    <div className="actionText">downvote</div>
+                    <div className="actionText hidden sm:block">downvote</div>
                   </div>
                   {/* COMMENT ACTION */}
                   <div className="likeActionHolder">
@@ -522,27 +524,24 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-          <div className="post-details-content-right">
-            <div className="wholePostWrapper">
+          <div className="post-details-content-right grow">
+            <div className="wholePostWrapper h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
-                <div className="individualPostTotalDetailsRight">
-                  <div
-                    className="IndividualPostHeaderImageContainer"
+                <div className="individualPostTotalDetailsRight gap-4">
+                  <img
                     onClick={() => {
                       navigate(`/user/${post?.createdBy?._id}`);
                     }}
-                  >
-                    <img
-                      src={
-                        post?.createdBy?.image !== "" &&
-                        post?.createdBy?.image !== undefined &&
-                        post?.createdBy?.image?.url !== ""
-                          ? post?.createdBy?.image?.url
-                          : "/profile.png"
-                      }
-                      alt=""
-                    />
-                  </div>
+                    src={
+                      post?.createdBy?.image !== "" &&
+                      post?.createdBy?.image !== undefined &&
+                      post?.createdBy?.image?.url !== ""
+                        ? post?.createdBy?.image?.url
+                        : "/profile.png"
+                    }
+                    alt=""
+                    className="size-8 rounded-full"
+                  />
 
                   <div className="IndividualPostDetailsContainer">
                     <div
@@ -555,23 +554,24 @@ const IndividualPostDetailsCard = () => {
                         post?.createdBy?.userName?.slice(1)}
                     </div>
                   </div>
-                  {!(post?.createdBy._id == user_id) && (
-                    <div className="openDiscussion-Buttons">
-                      {post?.openDiscussionRequests
-                        .map((o) => o._id)
-                        .includes(user_id) ? (
-                        <button>Discussion Request Pending</button>
-                      ) : post?.openDiscussionTeam
+                  {(post?.createdBy._id !== user_id) &&
+                    post.visibility === "private" && (
+                      <div className="openDiscussion-Buttons">
+                        {post?.openDiscussionRequests
                           .map((o) => o._id)
                           .includes(user_id) ? (
-                        <button>Joined</button>
-                      ) : (
-                        <button onClick={addingRequestDiscussion}>
-                          Join for discussion
-                        </button>
-                      )}
-                    </div>
-                  )}
+                          <button>Discussion Request Pending</button>
+                        ) : post?.openDiscussionTeam
+                            .map((o) => o._id)
+                            .includes(user_id) ? (
+                          <button>Joined</button>
+                        ) : (
+                          <button onClick={addingRequestDiscussion}>
+                            Join for discussion
+                          </button>
+                        )}
+                      </div>
+                    )}
                 </div>
                 {post?.openDiscussion == false &&
                   post?.openDiscussionTeam.length !== 0 && (
@@ -617,21 +617,13 @@ const IndividualPostDetailsCard = () => {
                     </div>
                   )}
 
-                <div
-                  style={{
-                    borderBottom: "2px solid var(--post-outer-border)",
-                    marginTop: "20px",
-                    marginBottom: "20px",
-                  }}
-                ></div>
-
-                <div style={{ fontSize: "12px" }}>
+                <div className="h-[1px] bg-gray-600 my-4 w-full"></div>
+                <div className="text-[12px] w-fit">
                   <div style={{ marginBottom: "10px" }}>
                     <b>Updated at :</b> {formatedDate(post?.updatedAt)}
                   </div>
                   <div style={{ marginBottom: "10px" }}>
-                    <b>Post type : </b>{" "}
-                    <span className="postType"> {post?.type}</span>
+                    <b>Post type : </b> <span> {post?.visibility}</span>
                   </div>
 
                   {/* <div style={{ marginBottom: "10px" }}>
@@ -724,71 +716,12 @@ const IndividualPostDetailsCard = () => {
                 </div>
               </div>
             </div>
-            {post?.openDiscussion == false &&
-              post?.openDiscussionTeam.length !== 0 && (
-                <div className="membersWrapper">
-                  <h5>Members</h5>
-                  <div className="openDiscussionUsers">
-                    {post?.openDiscussionTeam?.map((p) => (
-                      <div className="openDiscussionUser" key={p._id}>
-                        <div className="openDiscussionUserContainer">
-                          <img
-                            src={
-                              p?.image !== "" &&
-                              p?.image !== undefined &&
-                              p?.image?.url !== ""
-                                ? p?.image?.url
-                                : "/profile.png"
-                            }
-                            alt=""
-                            className="openDiscussionUserImage"
-                          />
-
-                          <div>
-                            <div
-                              className="openDiscussionUserName"
-                              onClick={() => {
-                                if (p._id == user_id) {
-                                  navigate("/editProfile");
-                                } else {
-                                  navigate(`/user/${p._id}`);
-                                }
-                              }}
-                            >
-                              {p?.userName}
-                            </div>
-                            <div className="openDiscussionUserrole">
-                              {p?.role}
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          <div
-                            title={
-                              onlineEmails.includes(p._id) ? "online" : "away"
-                            }
-                            style={{ position: "relative", marginLeft: "10px" }}
-                            className={
-                              onlineEmails.includes(p._id) ? "online" : "away"
-                            }
-                          ></div>
-                          <div
-                            style={{ marginLeft: "-16px", fontSize: "12px" }}
-                          >
-                            {onlineEmails.includes(p._id) ? "online" : "away"}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <LiveChat
+              post={post}
+              onlineEmails={onlineEmails}
+              userName={userName}
+              user_id={user_id}
+            />
           </div>
         </div>
       )}

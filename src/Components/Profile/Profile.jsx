@@ -103,7 +103,7 @@ const Profile = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:ml-10 relative">
-          <div className="mb-4 lg:-mt-36 ml-6">
+          <div className="mb-4 -mt-36 ml-2">
             <ProfileCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
@@ -123,7 +123,7 @@ const Profile = () => {
               )}
           </div>
 
-          <div className="w-full mt-0">
+          <div className="grow">
             {(profileData.beyincProfile === "Mentor" ||
               profileData.beyincProfile === "Co-Founder") && (
               <TabsAndInvestment
@@ -148,7 +148,7 @@ const Profile = () => {
                     color: "#4E54C6",
                   }}
                 >
-                  {["About", "Activity", "Reviews"].map((label, idx) => (
+                  {["About", "Activity"].map((label, idx) => (
                     <Tab
                       key={label}
                       label={label}
@@ -161,6 +161,8 @@ const Profile = () => {
                         textAlign: "center",
                         textTransform: "none",
                         "&.Mui-selected": { color: "#4E54C6" },
+                            "&:hover": { color: "white" },   // 👈 added
+
                       }}
                     />
                   ))}
@@ -177,9 +179,9 @@ const Profile = () => {
               <TabPanel value="2">
                 <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
               </TabPanel>
-              <TabPanel value="3">
+              {/* <TabPanel value="3">
                 <Comment />
-              </TabPanel>
+              </TabPanel> */}
             </TabContext>
           </div>
         </div>

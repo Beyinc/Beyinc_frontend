@@ -35,7 +35,7 @@ const SkillsCard = ({selfProfile ,setSelfProfile}) => {
     }, [user_id,id]);
 
     return (
-      <div className="w-full lg:w-[60vw] bg-white rounded-xl">
+      <div className="w-full grow bg-white rounded-xl">
         <div className="shadow-xl mt-6 border-2 border-black p-5 pt-2  rounded-xl">
           <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
             Skills
@@ -48,7 +48,7 @@ const SkillsCard = ({selfProfile ,setSelfProfile}) => {
               skills.map((skill, index) => (
                 <span
                   key={index}
-                  className="bg-blue-200 py-3 px-4 rounded-lg text-sm cursor-pointer"
+                  className="bg-[#EEEFFF] text-[#4F55C7] py-3 px-4 rounded-lg text-sm cursor-pointer"
                 >
                   {skill}
                 </span>

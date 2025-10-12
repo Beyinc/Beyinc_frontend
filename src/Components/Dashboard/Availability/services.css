@@ -1,5 +1,6 @@
 .tab-box {
     padding: 15px 20px;
+    width: 85px;
     height: 15px;
     cursor: pointer;
     border-radius: 20px;
@@ -129,7 +130,8 @@
     display: flex;
     justify-content: center;
     align-self: flex-start;
-    width: 8%;
+    width: 8%;    
+    min-width: 80px;
     margin: 35px 0px 0px ;
     padding: 8px;
     border-radius: 20px;
@@ -144,6 +146,7 @@
     justify-content: center;
     align-self: flex-end;
     width: 8%;
+    min-width: 80px;
     height: 35px;
     margin: -35px  0px 0px;
     padding: 8px 12px;

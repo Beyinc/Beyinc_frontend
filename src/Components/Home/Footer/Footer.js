@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-logo">
-        <img src="/Footer-Logo.png" alt="logo" />
+        <img src="/Bloomr-login-logo.svg" alt="logo" />
       </div>
       <div className="footer-content">
         <nav>
@@ -71,7 +71,7 @@ const Footer = () => {
         </nav>
       </div>
       <p className="copyright">
-        Copyright &copy; 2024 BeyInc Entrepreneurship Venture Private Limited. All Rights Reserved.
+        Copyright &copy; 2024 Bloomr Entrepreneurship Venture Private Limited. All Rights Reserved.
       </p>
     </footer>
   );

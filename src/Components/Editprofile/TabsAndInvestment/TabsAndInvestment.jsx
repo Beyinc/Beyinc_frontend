@@ -24,7 +24,7 @@ const TabsAndInvestment = ({selfProfile, industries, stages, expertise }) => {
   };
 
   return (
-    <div className="tabs-and-investment-container mt-0">
+    <div className="tabs-and-investment-container mt-0 bg-white">
       <div>
         <div className="tabs-container ">
           <div
