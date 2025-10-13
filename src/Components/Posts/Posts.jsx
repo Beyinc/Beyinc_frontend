@@ -248,6 +248,15 @@ const handleLoadMore = () => {
    const createMarkup = (html) => {
     return { __html: html };
   };
+
+
+  const getDescription = (post) => {
+  {
+      return post?.description?.length > 100
+        ? post?.description.slice(0, 150) + "..."
+        : post?.description;
+    }
+  };
   return (
     <div className="Homepage-Container">
       <div className="Homepage-left-container">
@@ -451,6 +460,7 @@ const handleLoadMore = () => {
                         value={option.value}
                         checked={selectedTags.includes(option.value)}
                         onChange={handleTagsChange}
+                        className="mr-2"
                       />
                       {option.value}
                     </label>
@@ -471,7 +481,7 @@ const handleLoadMore = () => {
                 checked={isPublic}
                 onChange={handlePublicCheckboxChange}
               />
-              <span className="text-sm mt-1">Public Post</span>
+              <span className="text-sm mt-1 ml-2">Public Post</span>
             </label>
 
             <label>
@@ -481,7 +491,7 @@ const handleLoadMore = () => {
                 checked={isPrivate}
                 onChange={handlePrivateCheckboxChange}
               />
-              <span className="text-sm mt-1">Private Post</span>
+              <span className="text-sm mt-1 ml-2">Private Post</span>
             </label>
             <hr className=" mt-4 mb-6" />
 
@@ -572,7 +582,7 @@ const handleLoadMore = () => {
                   <b>{post?.postTitle}</b>
                 </h4>
 
-<div dangerouslySetInnerHTML={createMarkup(post?.description)}></div>
+                 <div dangerouslySetInnerHTML={createMarkup(getDescription(post))}></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}

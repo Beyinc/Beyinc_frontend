@@ -53,8 +53,9 @@ import Payment from "./Components/Dashboard/Payment/Payment";
 import About from "./Components/Profile/About";
 import Profile from "./Components/Profile/Profile";
 import NewProfiles from "./Components/NewProfiles/NewProfiles";
-import { Connections } from "./Components/Connections/Connections";
+import { Connections } from "./Components/Connections/ConnectionsWithSuggestions";
 import NotificationPage from "./Components/Navbar/NotificationPage";
+import ConnectionsWithSuggestions from "./Components/Connections/ConnectionsWithSuggestions";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -304,7 +305,7 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-{!['/login', '/signup', '/'].includes(location.pathname) && <Navbar />}
+{!['/login', '/signup',"/"].includes(location.pathname) && <Navbar />}
 
         <div className=" max-w-[1550px] m-auto">
 
@@ -380,7 +381,7 @@ const App = () => {
             <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
             {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
-            <Route path="/connections" element={<Connections />} />
+            <Route path="/connections" element={<ConnectionsWithSuggestions />} />
             <Route path="/notification-page" element={<NotificationPage/>}/>
           </Routes>
         </div>

@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-logo">
-        <img src="/footer-logo-final.png" alt="logo" />
+        <img src="/Bloomr-login-logo.svg" alt="logo" />
       </div>
       <div className="footer-content">
         <nav>
