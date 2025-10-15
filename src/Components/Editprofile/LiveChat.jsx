@@ -5,7 +5,7 @@ import { socket_io } from "../../Utils";
 import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 
-export function LiveChat({ post, userName, user_id, onlineEmails }) {
+export function LiveChat({ post, userName, user_id, onlineEmails,isEnabled }) {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -98,8 +98,9 @@ export function LiveChat({ post, userName, user_id, onlineEmails }) {
       <div className="members-header ">
         <h5>{isChatOpen ? "Live Chat" : "Members"}</h5>
         <button
-          className="chat-toggle-btn "
+          className="chat-toggle-btn disabled:!bg-blue-300"
           onClick={() => setIsChatOpen(!isChatOpen)}
+          disabled={!isEnabled}
         >
           {isChatOpen ? "Show Members" : "Live Chat"}
         </button>

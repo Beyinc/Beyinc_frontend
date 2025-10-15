@@ -220,7 +220,8 @@ background: var( --button-background);
 }
 
 .chat-toggle-btn:hover {
-  opacity: 0.8;
+  background: var(--button-background, #318dee);
+  
 }
 
 .live-chat-container {
