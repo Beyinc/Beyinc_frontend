@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BoxCategories from "./BoxCategories";
 import {
   allskills,
@@ -129,6 +129,10 @@ const EntryDetails = () => {
       alert("There was an error saving your data. Please try again.");
     }
   };
+
+  useEffect(()=>{
+console.log(dataEntry);
+  },[])
   return (
     // bg-customWhite
     <div className="bg-customWhite md:my-5 md:mx-20 shadow-[0_3px_12px_rgba(0,0,0,0.1)]">
