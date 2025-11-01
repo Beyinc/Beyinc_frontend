@@ -36,8 +36,6 @@ export function LiveChat({ post, userName, user_id, onlineEmails,isEnabled }) {
 
   useEffect(() => {
     if (socket.current && post?._id) {
-      console.log("socket", socket.current);
-      // Join post chat room
       socket.current.emit("joinPostChat", { postId: post._id });
 
       // Listen for new chat messages

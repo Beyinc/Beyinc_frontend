@@ -721,7 +721,7 @@ const IndividualPostDetailsCard = () => {
               onlineEmails={onlineEmails}
               userName={userName}
               user_id={user_id}
-              isEnabled={post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
+              isEnabled={post?.visibility==='public'?true:post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
             />
           </div>
         </div>
