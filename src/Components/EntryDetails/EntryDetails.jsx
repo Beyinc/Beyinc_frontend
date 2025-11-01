@@ -131,7 +131,7 @@ const EntryDetails = () => {
   };
 
   useEffect(()=>{
-console.log(dataEntry);
+// console.log(dataEntry);
   },[])
   return (
     // bg-customWhite
