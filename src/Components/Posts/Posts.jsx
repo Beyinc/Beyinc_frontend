@@ -603,7 +603,7 @@ const handleLoadMore = () => {
                 cursor: "pointer",
               }}
               onClick={() => {
-                navigate("/newProfiles");
+                navigate("/connections");
               }}
             >
               See All

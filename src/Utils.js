@@ -603,7 +603,7 @@ export const dataEntry = [
     {
         id: 2,
         title: 'Mentor',
-        kay: 'Mentor',
+        key: 'Mentor',
         icon: 'nimbus:university',
         paragraph: 'A person who shares their knowledge and experience to guide and support others.',
     },
