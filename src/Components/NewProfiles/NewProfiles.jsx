@@ -1,3 +1,107 @@
+// import { useEffect, useRef, useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { ApiServices } from "../../Services/ApiServices";
+// import { setToast } from "../../redux/AuthReducers/AuthReducer";
+// import { ToastColors } from "../Toast/ToastColors";
+// import { useNavigate } from "react-router-dom";
+// import { followerController, socket_io } from "../../Utils";
+// import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
+// import { io } from "socket.io-client";
+
+// export default function NewProfiles() {
+//   const [recommendedUsers, setRecommendedUsers] = useState([]);
+//   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
+
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+
+//   const {
+//     role,
+//     userName,
+//     image,
+//     _id: user_id,
+//   } = useSelector((store) => store.auth.userDetails);
+//   const socket = useRef();
+//   useEffect(() => {
+//     socket.current = io(socket_io);
+//   }, []);
+
+//   useEffect(() => {
+//     ApiServices.getNewProfiles({ userId: user_id })
+//       .then((res) => {
+//         setRecommendedUsers(res.data);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         dispatchEvent(
+//           setToast({
+//             message: "Error Occured!",
+//             bgColor: ToastColors.failure,
+//             visible: "yes",
+//           })
+//         );
+//       });
+//   }, [recommendedUserTrigger, user_id]);
+//   return (
+//     <div className="suggestions-section shadow-lg m-4">
+//       <h4 className="label">Suggestions for you</h4>
+
+//       {recommendedUsers?.map((rec) => (
+//         <div className="suggestion-item" key={rec._id}>
+//           <div className="left-section">
+//             <img
+//               src={
+//                 rec?.image?.url == undefined ? "/profile.png" : rec?.image?.url
+//               }
+//               alt="User Image"
+//               className="user-image"
+//             />
+//           </div>
+//           <div className="right-section">
+//             <h4
+//               onClick={() => {
+//                 if (rec._id == user_id) {
+//                   navigate("/editProfile");
+//                 } else {
+//                   navigate(`/user/${rec._id}`);
+//                 }
+//               }}
+//             >
+//               {rec?.userName}
+//             </h4>
+//             <p>{rec?.role}</p>
+//             <div className="follow-container">
+//               <button
+//                 className="follow"
+//                 onClick={(e) => {
+//                   followerController({
+//                     dispatch,
+//                     e,
+//                     followingToId: rec._id,
+//                     recommendedUserTrigger,
+//                     setRecommendedUserTrigger,
+//                     socket,
+//                     user: { id: user_id, userName, image, role },
+//                   });
+//                 }}
+//               >
+//                 Follow
+//               </button>
+//               <RecommendedConnectButton
+//                 id={rec._id}
+//                 handleFollower={() => {
+//                   setRecommendedUserTrigger(!recommendedUserTrigger);
+//                 }}
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
@@ -17,15 +121,14 @@ export default function NewProfiles() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const {
     role,
     userName,
     image,
     _id: user_id,
   } = useSelector((store) => store.auth.userDetails);
-
   const socket = useRef();
-
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
@@ -47,102 +150,61 @@ export default function NewProfiles() {
         );
       });
   }, [recommendedUserTrigger, user_id]);
-
-  const FilteredSearchProfiles = ({ interests }) => {
-    let filtered = recommendedUsers;
-
-    if (interests.length) {
-      filtered = filtered.filter((user) => interests.includes(user.role));
-    }
-
-    if (searchTerm.trim()) {
-      filtered = filtered.filter((user) =>
-        user.userName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setFilteredUsers(filtered);
-  };
-
   return (
-    <div className="flex gap-6 px-4 max-w-[1500px] mx-auto mt-6">
-      {/* LEFT SECTION: Search & Filter */}
-      <div className="w-full max-w-sm flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Search by name"
-          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-80 ml-10"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            FilteredSearchProfiles({ interests: [] });
-          }}
-        />
-        <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} />
-      </div>
+    <div className="suggestions-section shadow-lg m-4">
+      <h4 className="label">Suggestions for you</h4>
 
-      {/* RIGHT SECTION: Suggestions for You */}
-      <div
-        className="flex-1 bg-white p-8 rounded-lg"
-        style={{ border: "1px solid lightgray" }}
-      >
-        <h2 className="text-xl font-semibold mb-4">Suggestions for You</h2>
-        {filteredUsers.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredUsers.map((rec) => (
-              <div
-                key={rec._id}
-                style={{ border: "1px solid gainsboro" }}
-                className="bg-white hover:shadow-lg border rounded-xl p-4 w-[190px] flex flex-col justify-center items-center"
-              >
-                <img
-                  src={rec?.image?.url || "/profile.png"}
-                  onClick={() =>
-                    rec._id === user_id
-                      ? navigate("/editProfile")
-                      : navigate(`/user/${rec._id}`)
-                  }
-                  className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
-                  alt="profile"
-                />
-                <h3 className="mt-2 text-center text-sm font-medium">
-                  {rec?.userName}
-                </h3>
-                {rec.role && (
-                  <h5 className="text-neutral-600 mt-1 text-xs">{rec.role}</h5>
-                )}
-                <p className="mt-2 mb-2 text-center text-xs">{rec.headline}</p>
-                <div className="flex flex-col gap-2 w-full items-center">
-                  <button
-                    className="ml-2 rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm w-[100px] h-[30px]"
-                    onClick={(e) => {
-                      followerController({
-                        dispatch,
-                        e,
-                        followingToId: rec._id,
-                        recommendedUserTrigger,
-                        setRecommendedUserTrigger,
-                        socket,
-                        user: { id: user_id, userName, image, role },
-                      });
-                    }}
-                  >
-                    Follow
-                  </button>
-                  <RecommendedConnectButton
-                    id={rec._id}
-                    handleFollower={() =>
-                      setRecommendedUserTrigger(!recommendedUserTrigger)
-                    }
-                  />
-                </div>
-              </div>
-            ))}
+      {recommendedUsers?.map((rec) => (
+        <div className="suggestion-item" key={rec._id}>
+          <div className="left-section">
+            <img
+              src={
+                rec?.image?.url == undefined ? "/profile.png" : rec?.image?.url
+              }
+              alt="User Image"
+              className="user-image"
+            />
           </div>
-        ) : (
-          <p>No suggestions available.</p>
-        )}
-      </div>
+          <div className="right-section">
+            <h4
+              onClick={() => {
+                if (rec._id == user_id) {
+                  navigate("/editProfile");
+                } else {
+                  navigate(`/user/${rec._id}`);
+                }
+              }}
+            >
+              {rec?.userName}
+            </h4>
+            <p>{rec?.role}</p>
+            <div className="follow-container">
+              <button
+                className="follow"
+                onClick={(e) => {
+                  followerController({
+                    dispatch,
+                    e,
+                    followingToId: rec._id,
+                    recommendedUserTrigger,
+                    setRecommendedUserTrigger,
+                    socket,
+                    user: { id: user_id, userName, image, role },
+                  });
+                }}
+              >
+                Follow
+              </button>
+              <RecommendedConnectButton
+                id={rec._id}
+                handleFollower={() => {
+                  setRecommendedUserTrigger(!recommendedUserTrigger);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

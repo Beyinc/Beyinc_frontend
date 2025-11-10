@@ -711,7 +711,7 @@ const Post = ({
               >
                 <option value="">Select Report Type</option>
                 <option value="spam">Spam</option>
-                <option value="abuse">Abusive Content</option>
+                <option value="abuse">Irrelevant content</option>
               </select>
             </div>
 
