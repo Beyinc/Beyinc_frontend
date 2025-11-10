@@ -966,7 +966,7 @@ const Navbar = () => {
         )}
 
         {/* User Bookings */}
-        {/* <ListItem
+        <ListItem
           button
           key="userBookings"
           onClick={() => navigate("/dashboard/userBookings")}
@@ -982,7 +982,7 @@ const Navbar = () => {
             />
           </ListItemIcon>
           <ListItemText primary="User Bookings" />
-        </ListItem> */}  
+        </ListItem>  
 
         {/* Mentor Bookings - Render only if role === "Mentor" */}
         {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
@@ -1411,7 +1411,7 @@ const Navbar = () => {
             </div> */}
 
               {/* MENTOR ICON */}
-              {/* <div
+              <div
                 className={`navbar-item ${selectedIcon === "mentors" ? "selected" : ""
                   }`}
                 onClick={() => {
@@ -1454,7 +1454,7 @@ const Navbar = () => {
                 >
                   Mentors
                 </div>
-              </div> */}
+              </div>
 
               {role === "Admin" && (
                 <>
