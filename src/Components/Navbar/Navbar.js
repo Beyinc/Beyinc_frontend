@@ -1320,7 +1320,7 @@ const Navbar = () => {
                   selectedIcon === "groups" ? "selected" : ""
                 }`}
                 onClick={() => {
-                  navigate("/newProfiles");
+                  navigate("/connections");
                   handleItemClick("groups");
                 }}
               >

@@ -176,7 +176,7 @@ export const Connections = () => {
     <div className="flex">
       <div
         id="left-div"
-        className="mt-5 ml-[-30px] flex flex-col gap-4 w-full max-w-sm"
+        className="mt-5 ml-10 flex flex-col gap-4 w-full max-w-sm"
       >
         <input
           type="text"

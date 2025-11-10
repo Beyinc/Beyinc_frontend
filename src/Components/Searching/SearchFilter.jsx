@@ -4,7 +4,7 @@ import { dataEntry } from '../../Utils';
 
 const SearchFilter = ({ FilteredSearchProfiles}) => {
   const [entityTitles, setEntityTitles] = useState(''); // Change from [] to ''
-  const [isEntityOpen, setIsEntityOpen] = useState(false);
+  const [isEntityOpen, setIsEntityOpen] = useState(true);
   const [selectedEntities, setSelectedEntities] = useState([]);
 
   const handleEntityTitlesChange = (event) => {
@@ -66,6 +66,7 @@ const SearchFilter = ({ FilteredSearchProfiles}) => {
                     value={option.title} // Use option.title for checkbox value
                     checked={selectedEntities.includes(option.title)} // Check based on title
                     onChange={handleEntityTitlesChange}
+                    className='mr-2'
                   />
                   {option.title} {/* Display the title */}
                 </label>

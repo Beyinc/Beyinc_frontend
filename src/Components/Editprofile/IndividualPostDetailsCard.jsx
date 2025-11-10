@@ -524,7 +524,7 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-          <div className="post-details-content-right grow">
+<div className="post-details-content-right grow min-w-[450px] max-w-[600px]">
             <div className="wholePostWrapper h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
@@ -721,6 +721,7 @@ const IndividualPostDetailsCard = () => {
               onlineEmails={onlineEmails}
               userName={userName}
               user_id={user_id}
+              isEnabled={post?.visibility==='public'?true:post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
             />
           </div>
         </div>
