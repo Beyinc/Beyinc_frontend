@@ -387,3 +387,52 @@ button.connect {
   justify-content: center;
 }
 
+
+.Homepage-Container {
+  height: 100vh;
+  overflow: auto;
+  scrollbar-width: none;
+
+}
+
+.Homepage-left-container {
+  /* height: 100vh;
+  overflow:hidden;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  scrollbar-width: none; */
+
+  height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+}
+
+.sidebar-right {
+  height: 100vh;
+  overflow: hidden;
+  position: sticky;
+  overflow-y: auto;    /* scrollable */
+  scrollbar-width: none;     
+  top: 0;
+}
+
+.main-content {
+  height: 100vh;
+  overflow-y: auto;
+  
+  scroll-padding-top: 0;
+}
+
+
+.main-content::-webkit-scrollbar {
+  display: none;
+}
+.main-content::-webkit-scrollbar{
+  display: none;
+}
+
+.Homepage-left-container::-webkit-scrollbar{
+  display: none;
+}
