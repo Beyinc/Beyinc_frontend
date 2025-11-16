@@ -248,12 +248,22 @@ export default function ConnectionsWithSuggestions() {
           </button>
         )}
         {user_id !== user._id && user.isFollowing && (
+          // <button
+          //   className="rounded-full px-4 py-1 w-[100px] h-[30px] text-sm 
+          //    text-[rgb(79,85,199)]  bg-white border-black"
+          //   onClick={() => setReceiverId(user._id)}
+          // >
+          //   Chat
+          // </button>
+
           <button
-            className="rounded-full px-4 py-1 text-white border border-[rgb(79,85,199)] text-sm hover:text-white"
-            onClick={() => setReceiverId(user._id)}
-          >
-            Chat
-          </button>
+ className="!rounded-full !px-4 !py-1 !w-[100px] !h-[30px] !text-[rgb(79,85,199)] !border-2 !border-[rgb(79,85,199)] !bg-white border-solid shadow-lg"
+
+  onClick={() => setReceiverId(user._id)}
+>
+  Chat
+</button>
+
         )}
       </div>
     </div>
@@ -448,9 +458,9 @@ export default function ConnectionsWithSuggestions() {
                       {rec.headline}
                     </p>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-1">
                       <button
-                        className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
+                        className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm w-[100px] h-[30px]"
                         onClick={(e) =>
                           followerController({
                             dispatch,
