@@ -557,7 +557,7 @@ const handleLoadMore = () => {
         </div>
 
         <div className="loadMore-Container">
-          <button className="loadMore" onClick={handleLoadMore} hidden={filteredPosts.length==0}>
+          <button className="loadMore" onClick={handleLoadMore} hidden={filteredPosts.length<=10}>
             Load More
           </button>
         </div>
