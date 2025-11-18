@@ -11,6 +11,8 @@ module.exports = {
       },
        fontFamily: {
         gentium: ['"Gentium Book Basic"', 'serif'],
+         roboto: ["Roboto", "sans-serif"],
+
       },
     },
   },
