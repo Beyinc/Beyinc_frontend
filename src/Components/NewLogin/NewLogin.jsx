@@ -4,7 +4,14 @@ function NewLogin() {
   const [activeTab, setActiveTab] = useState("email");
 
   return (
-    <div className="flex flex-row bg-[#FFFFFF] h-[800px] w-[1180px] mt-[112px] ml-[130px] shadow-lg rounded-[20px] main-outer-div mb-10">
+    <div className="relative flex flex-row bg-[#FFFFFF] h-[800px] w-[1180px] mt-[112px] ml-[130px] shadow-lg rounded-[20px] main-outer-div mb-10">
+      {/* Logo top-right */}
+      <img
+        src="/Bloomr-login-logo.svg"
+        className="absolute top-6 right-6 h-[74px]  w-[214px]"
+        alt="logo"
+      />
+
       {/* this is image div*/}
       <div className="relative h-[692px] w-[541px] ml-[49px] image-div-left">
         <img
@@ -26,7 +33,7 @@ function NewLogin() {
 
       {/* this is the second div */}
 
-      <div className="w-[450px] h-[445px] ml-[79px] mt-[177px] shadow-2xl">
+      <div className="w-[450px] h-[445px] ml-[79px] mt-[177px] ">
         <div className="heading-div h-[41px] ml-[181px]">
           {/*Log in heading div */}
           <p className="w-full h-full font-gentium font-bold text-[#4F55C7] text-[35px]">
@@ -83,13 +90,41 @@ function NewLogin() {
             ></span>
           </p>
         </div>
-    
-        <div id="input-div"></div>
 
+        {activeTab == "email" ? (
+          <div id="input-div" className="flex flex-col mt-[40px]">
+            <p className="font-semibold font-roboto text-[16px]">
+              Email Address
+            </p>
+
+            <input
+              type="text"
+              className="w-[450px] h-[35px] mt-1 border border-black rounded-md px-2"
+            />
+
+            <p className="font-semibold font-roboto text-[16px] mt-4">
+              Password
+            </p>
+
+            <input
+              type="password"
+              className="w-[450px] h-[35px] mt-1 border border-black rounded-md px-2"
+            />
+            <button className="font-bold font-roboto rounded-3xl ml-5 mt-4 text-[20px]">
+              Login
+            </button>
+          </div>
+        ) : (
+          <div className="text-center text-gray-600 font-medium">
+            This feature is currently under maintenance. Please check back soon.
+          </div>
+        )}
+        
+
+        <div className="ml-36 mt-6 font-roboto text-[20px]"><span>New Here ?</span> <span className="hover:cursor-pointer text-[#4F55C7]">Sign Up</span></div>
+       <div><p className="ml-40 mt-6 font-roboto text-[20px] text-[#4F55C7] hover:cursor-pointer">Forgot Password</p></div>
 
       </div>
-
-
     </div>
   );
 }
