@@ -56,6 +56,8 @@ import NewProfiles from "./Components/NewProfiles/NewProfiles";
 import { Connections } from "./Components/Connections/ConnectionsWithSuggestions";
 import NotificationPage from "./Components/Navbar/NotificationPage";
 import ConnectionsWithSuggestions from "./Components/Connections/ConnectionsWithSuggestions";
+import NewLogin from "./Components/NewLogin/NewLogin";
+import NewSignup from "./Components/NewSignup/NewSignup";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -305,7 +307,7 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-{!['/login', '/signup',"/"].includes(location.pathname) && <Navbar />}
+{!['/login', '/signup',"/","/newlogin","/newsignup"].includes(location.pathname) && <Navbar />}
 
         <div className=" max-w-[1550px] m-auto">
 
@@ -313,6 +315,9 @@ const App = () => {
             <Route path="/signup" Component={LoginAuth(SignUp)} />
             <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
             <Route path="/login" Component={LoginAuth(Login)} />
+            // new login - signup routes
+            <Route path="newlogin" Component={LoginAuth(NewLogin)}/>
+            <Route path="newsignup" Component={LoginAuth(NewSignup)}/>
             <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />

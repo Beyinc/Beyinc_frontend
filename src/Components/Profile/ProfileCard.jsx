@@ -336,6 +336,13 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
     }
   };
 
+
+  const trimHeadline = (text) => {
+  const words = text.trim().split(/\s+/);
+  return words.length > 4
+    ? words.slice(0, 4).join(" ") + " . . . ."
+    : text;
+};
   return (
     <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
       <div className="absolute lg:relative">
@@ -366,7 +373,14 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
         </div>
 
         <div className="font-bold text-sm text-gray-500">{formState?.role}</div>
-        <div>{formState.headline}</div>
+        {/* <div>{formState.headline}</div> */}
+
+        <div className="flex justify-center">
+  <div className="text-center">
+    {trimHeadline(formState.headline)}
+  </div>
+</div>
+
         {profileData?.beyincProfile && (
           <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
             {profileData.beyincProfile} at Beyinc
