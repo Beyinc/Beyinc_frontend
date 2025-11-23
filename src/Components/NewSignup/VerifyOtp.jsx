@@ -37,71 +37,89 @@ const VerifyOtp = () => {
 
     setLoading(true);
 
-   try {
-  await ApiServices.verifyOtp({ email, otp });
+    try {
+      await ApiServices.verifyOtp({ email, otp });
 
-  // OTP correct
-} catch (err) {
-  dispatch(
-    setToast({
-      message: "Incorrect OTP",
-      bgColor: ToastColors.failure,
-      visible: "yes",
-    })
-  );
-  setLoading(false);
-  return;
-}
+      // OTP correct
+    } catch (err) {
+      dispatch(
+        setToast({
+          message: "Incorrect OTP",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+      setLoading(false);
+      return;
+    }
 
-// ---------------------------
-// OTP SUCCESS — NOW REGISTER
-// ---------------------------
-try {
-  const res = await ApiServices.register({
-    email,
-    password,
-    userName: name,
-  });
+    // ---------------------------
+    // OTP SUCCESS — NOW REGISTER
+    // ---------------------------
+    try {
+      const res = await ApiServices.register({
+        email,
+        password,
+        userName: name,
+      });
 
-  localStorage.setItem("user", JSON.stringify(res.data));
-  await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
+      localStorage.setItem("user", JSON.stringify(res.data));
+      await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
 
-  navigate("/userDetails");
+      navigate("/userDetails");
+    } catch (err) {
+      dispatch(
+        setToast({
+          message: err.response?.data?.message || "Registration failed",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    }
 
-} catch (err) {
-  dispatch(
-    setToast({
-      message: err.response?.data?.message || "Registration failed",
-      bgColor: ToastColors.failure,
-      visible: "yes",
-    })
-  );
-}
-
-setLoading(false);
-
+    setLoading(false);
   };
 
   return (
-    <div className="verify-container">
-      <h2>Email Verification</h2>
+   
+<div className="verify-container w-[444px] h-[605px]  ml-[500px] mt-10
+                flex flex-col items-center gap-4 text-center">
 
-      <input
-        type="text"
-        placeholder="Enter 6 digit OTP"
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-        maxLength={6}
-      />
+  <img src="/verify-otp.png" className="w-[444px] h-[272px]" />
 
-      <button
-        onClick={handleVerify}
-        disabled={loading}
-        className="verify-btn"
-      >
-        {loading ? "Verifying..." : "Verify OTP"}
-      </button>
-    </div>
+  <p className="font-bold font-gentium text-[35px] text-[#4F55C7]">
+    Verify your email
+  </p>
+
+  <p className="font-roboto text-black/70">
+    We just sent a 6-digit code to aish.beyinc@gmail.com.
+  </p>
+
+  <p className="font-roboto text-black/70 mt-[-10px]">Enter it below.</p>
+
+  <div className="w-full flex flex-col items-center gap-3 mt-4">
+    <p className="font-semibold">Verification code</p>
+
+    <input
+      type="text"
+      placeholder="Enter 6 digit OTP"
+      value={otp}
+      onChange={(e) => setOtp(e.target.value)}
+      maxLength={6}
+      className="w-[414px] h-[30px] border rounded-md px-2"
+    />
+      <p><span>Don’t see a code? </span> <span className="text=-[#4F55C7] hover:cursor-pointer">Resend to email</span></p>
+    <button
+      onClick={handleVerify}
+      disabled={loading}
+      className="verify-btn w-[414px] h-[40px] rounded-3xl p-[10px]"
+    >
+      {loading ? "Verifying..." : "Verify email"}
+    </button>
+   
+  </div>
+</div>
+
   );
 };
 
