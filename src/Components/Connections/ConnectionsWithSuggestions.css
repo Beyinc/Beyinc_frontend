@@ -1,0 +1,8 @@
+/* Hide scrollbar but keep scroll working
+.hide-scrollbar {
+  scrollbar-width: none;       
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             
+} */
