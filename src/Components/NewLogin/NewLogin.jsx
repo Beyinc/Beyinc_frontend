@@ -562,7 +562,7 @@ function NewLogin() {
           <span>New Here ?</span>{" "}
           <span
             className="hover:cursor-pointer text-[#4F55C7]"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/newsignup")}
           >
             Sign Up
           </span>

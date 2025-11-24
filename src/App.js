@@ -58,6 +58,7 @@ import NotificationPage from "./Components/Navbar/NotificationPage";
 import ConnectionsWithSuggestions from "./Components/Connections/ConnectionsWithSuggestions";
 import NewLogin from "./Components/NewLogin/NewLogin";
 import NewSignup from "./Components/NewSignup/NewSignup";
+import VerifyOtp from "./Components/NewSignup/VerifyOtp";
 const Posts = React.lazy(() =>
   import("./Components/Posts/Posts")
 );
@@ -307,7 +308,7 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-{!['/login', '/signup',"/","/newlogin","/newsignup"].includes(location.pathname) && <Navbar />}
+{!['/login', '/signup',"/","/newlogin","/newsignup","/verify-otp"].includes(location.pathname) && <Navbar />}
 
         <div className=" max-w-[1550px] m-auto">
 
@@ -318,6 +319,9 @@ const App = () => {
             // new login - signup routes
             <Route path="newlogin" Component={LoginAuth(NewLogin)}/>
             <Route path="newsignup" Component={LoginAuth(NewSignup)}/>
+            <Route path="/verify-otp" Component={LoginAuth(VerifyOtp)}/>
+
+            
             <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
