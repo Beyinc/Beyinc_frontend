@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
@@ -53,7 +51,7 @@ export default function Signup() {
         type: "Sign Up",
         subject: "Email Verification",
       });
-     
+
       dispatch(
         setToast({
           message: "OTP sent successfully!",
@@ -87,7 +85,7 @@ export default function Signup() {
     form.fullname && isEmailValid && isPasswordValid && !loading;
 
   return (
-    <div className="relative flex flex-row bg-[#FFFFFF] h-[850px] w-[1180px] max-h-[900px] mt-[112px] ml-[130px] shadow-lg rounded-[20px] main-outer-div mb-10">
+    <div className="relative flex flex-row bg-[#FFFFFF] h-[850px] w-[1180px] max-h-[900px] mt-[52px] ml-[130px] shadow-lg rounded-[20px] main-outer-div mb-10">
       <img
         src="/Bloomr-login-logo.svg"
         className="absolute top-6 right-6 h-[74px] w-[214px] cursor-pointer"
@@ -115,14 +113,14 @@ export default function Signup() {
       </div>
 
       <div className="w-[450px] h-[445px] ml-[79px] mt-[137px] ">
-        <div className="heading-div h-[41px] ml-[160px]">
+        <div className="heading-div h-[41px] w-full ml-[60px]">
           <p className="w-full h-full font-gentium font-bold text-[#4F55C7] text-[35px]">
-            Sign Up
+            Create your account
           </p>
         </div>
 
         <div id="google-auth-div" className="ml-[-50px]">
-          <div className="ml-36 mt-4">
+          <div className="ml-44 mt-4">
             <GoogleAuth />
           </div>
 
@@ -134,7 +132,23 @@ export default function Signup() {
         </div>
 
         <div id="input-div" className="flex flex-col mt-[20px]">
-          <p className="font-semibold font-roboto text-[16px]">Full Name</p>
+
+            <p className="font-semibold font-roboto text-[16px]">Email</p>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            className={`w-[450px] h-[35px] mt-1 border rounded-md border-black px-2 shadow-md ${
+              isEmailValid === null
+                ? ""
+                : isEmailValid
+                ? "border-green-500"
+                : "border-red-500"
+            }`}
+            placeholder="Email Address"
+            onChange={handleChanges}
+          />
+          <p className="font-semibold font-roboto text-[16px] mt-4">Full Name</p>
           <input
             type="text"
             name="fullname"
@@ -144,28 +158,14 @@ export default function Signup() {
             onChange={handleChanges}
           />
 
-          <p className="font-semibold font-roboto text-[16px] mt-4">
-            Email
-          </p>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            className={`w-[450px] h-[35px] mt-1 border rounded-md px-2 shadow-md ${
-              isEmailValid === null ? "" : isEmailValid ? "border-green-500" : "border-red-500"
-            }`}
-            placeholder="Email Address"
-            onChange={handleChanges}
-          />
+        
 
-          <p className="font-semibold font-roboto text-[16px] mt-4">
-            Password
-          </p>
+          <p className="font-semibold font-roboto text-[16px] mt-4">Password</p>
           <input
             type="password"
             name="password"
             value={form.password}
-            className={`w-[450px] h-[35px] mt-1 border rounded-md px-2 shadow-md ${
+            className={`w-[450px] h-[35px] mt-1 border border-black rounded-md px-2 shadow-md ${
               isPasswordValid === null
                 ? ""
                 : isPasswordValid
@@ -176,39 +176,47 @@ export default function Signup() {
             onChange={handleChanges}
           />
 
-            <div className="passwordHint" hidden={!form.password}>
-              <ul>
-                <li className={form.password?.length >= 8 ? "success" : "failure"}>
-                  <i>Password should be at least 8 character length</i>
-                </li>
-                <li
-                  className={/.*[A-Z].*/.test(form.password) ? "success" : "failure"}
-                >
-                  <i>At least one capital letter</i>
-                </li>
-                <li
-                  className={
-                    /.*[a-z].*/.test(form.password) && form.password
-                      ? "success"
-                      : "failure"
-                  }
-                >
-                  <i>At least one small letter</i>
-                </li>
-                <li
-                  className={
-                    /.*[!@#$%^&*()_+].*/.test(form.password) ? "success" : "failure"
-                  }
-                >
-                  <i>At least one special character (!@#$%^&*()_+)</i>
-                </li>
-                <li
-                  className={/.*[0-9].*/.test(form.password) ? "success" : "failure"}
-                >
-                  <i>At least one Number</i>
-                </li>
-              </ul>
-            </div>
+          <div className="passwordHint" hidden={!form.password}>
+            <ul>
+              <li
+                className={form.password?.length >= 8 ? "success" : "failure"}
+              >
+                <i>Password should be at least 8 character length</i>
+              </li>
+              <li
+                className={
+                  /.*[A-Z].*/.test(form.password) ? "success" : "failure"
+                }
+              >
+                <i>At least one capital letter</i>
+              </li>
+              <li
+                className={
+                  /.*[a-z].*/.test(form.password) && form.password
+                    ? "success"
+                    : "failure"
+                }
+              >
+                <i>At least one small letter</i>
+              </li>
+              <li
+                className={
+                  /.*[!@#$%^&*()_+].*/.test(form.password)
+                    ? "success"
+                    : "failure"
+                }
+              >
+                <i>At least one special character (!@#$%^&*()_+)</i>
+              </li>
+              <li
+                className={
+                  /.*[0-9].*/.test(form.password) ? "success" : "failure"
+                }
+              >
+                <i>At least one Number</i>
+              </li>
+            </ul>
+          </div>
 
           <button
             className="w-[450px] h-[52px] mt-6 ml-4 bg-[#4F55C7] text-white rounded-md shadow-md disabled:bg-gray-400"
@@ -217,6 +225,16 @@ export default function Signup() {
           >
             {loading ? "Signing up..." : "Create Account"}
           </button>
+
+          <p className="mt-2 ml-24">
+            <span>Already have an account ?</span>
+            <span
+              className="text-[#4F55C7] hover:cursor-pointer"
+              onClick={() => navigate("/newlogin")}
+            >
+              Log in
+            </span>
+          </p>
         </div>
       </div>
     </div>
