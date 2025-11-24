@@ -1,0 +1,29 @@
+.signup-bg-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(
+    117.74deg,
+    rgba(155, 248, 244, 1) 0%,
+    rgba(138, 201, 245, 1) 60.52%,
+    rgba(111, 123, 247, 1) 100%
+  );
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden !important;
+}
+
+body {
+  background: none !important;
+  background-color: transparent !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+

@@ -313,12 +313,12 @@ const App = () => {
         <div className=" max-w-[1550px] m-auto">
 
           <Routes>
-            <Route path="/signup" Component={LoginAuth(SignUp)} />
+            <Route path="/signup" Component={LoginAuth(NewSignup)} />
             <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
-            <Route path="/login" Component={LoginAuth(Login)} />
+            <Route path="/login" Component={LoginAuth(NewLogin)} />
             // new login - signup routes
-            <Route path="newlogin" Component={LoginAuth(NewLogin)}/>
-            <Route path="newsignup" Component={LoginAuth(NewSignup)}/>
+            {/* <Route path="/newlogin" Component={LoginAuth(NewLogin)}/>
+            <Route path="/newsignup" Component={LoginAuth(NewSignup)}/> */}
             <Route path="/verify-otp" Component={LoginAuth(VerifyOtp)}/>
 
             
