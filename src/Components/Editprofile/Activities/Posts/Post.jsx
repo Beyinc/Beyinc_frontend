@@ -14,6 +14,9 @@ import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
+import { reactionTypes } from "../../../../constants/reactions";
+import ReactionButton from "../../../components/ReactionButton";
+import { ReactionServices } from "../../../../Services/PostServices";
 
 const Post = ({
   filteredPosts,
@@ -269,6 +272,13 @@ const Post = ({
   //     });
   // };
 
+
+  const handleReaction = async (type) => {
+    console.log(type)
+    // await ReactionServices.addOrUpdate({ userId, postId, reactionType: type });
+    // await ReactionServices.addOrUpdate({ postId, reactionType: type });
+  };
+
   return (
     <section
       className={` shadow-lg ${
@@ -518,7 +528,16 @@ const Post = ({
           </div>
           <div className="actionsHolder font-semibold">
             <div className="actionsHolder-leftContent">
-              <div className="likeActionHolder" onClick={likingpost}>
+              <ReactionButton postId={post?.id} onReact={handleReaction} />
+              {/* <div className="likeActionHolder">
+              {reactionTypes.map((r)=>(
+                <div className="flex items-start justify-center">
+                  <Icon icon={r.icon} className="w-7 h-7 sm:w-5 sm:h-5" />
+                  <span className="actionText hidden sm:block  font-semibold">{r.type}</span>
+                </div>
+              ))}
+              </div> */}
+              {/* <div className="likeActionHolder" onClick={likingpost}>
                 <div>
                   <svg
                     width="20"
@@ -563,7 +582,7 @@ const Post = ({
                   </svg>
                 </div>
                 <div className="actionText hidden sm:block">downvote</div>
-              </div>
+              </div> */}
               <div
                 className="likeActionHolder"
                 onClick={() => navigate(`/posts/${post?._id}`)}
