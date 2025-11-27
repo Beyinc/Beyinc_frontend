@@ -1,29 +1,30 @@
-.signup-bg-wrapper {
-  width: 100%;
-  min-height: 100vh;
+ .signup-bg-wrapper {
+   width: 100%;
+     min-height: 100vh; 
   background: linear-gradient(
     117.74deg,
     rgba(155, 248, 244, 1) 0%,
     rgba(138, 201, 245, 1) 60.52%,
     rgba(111, 123, 247, 1) 100%
-  );
+  ); 
+
+  background-color: aquamarine;
+background-attachment: fixed;
+  background-repeat: no-repeat; 
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100%;
-  overflow-x: hidden !important;
-}
-
-body {
-  background: none !important;
-  background-color: transparent !important;
-  background-repeat: no-repeat;
+/* .signup-bg-wrapper {
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'>\
+<defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>\
+<stop offset='0%' stop-color='%239BF8F4'/>\
+<stop offset='60.52%' stop-color='%238AC9F5'/>\
+<stop offset='100%' stop-color='%236F7BF7'/>\
+</linearGradient></defs>\
+<rect width='100%' height='100%' fill='url(%23g)'/></svg>");
   background-size: cover;
-  background-attachment: fixed;
-}
+  background-repeat: no-repeat;
+} */
+
 
 
