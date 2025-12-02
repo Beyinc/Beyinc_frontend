@@ -187,11 +187,14 @@ const Post = ({
   const [reportType, setReportType] = useState("");
   const deletePost = async (e) => {
     e.target.disabled = true;
+     dispatch(setLoading({ visible: "yes" }));
     await ApiServices.deletepost({ id: post?._id })
       .then((res) => {
         // navigate(-1);
+                setdeletePopUp(false);
+
         setAllPosts((prev) => [...prev.filter((p) => p._id !== post?._id)]);
-        setdeletePopUp(false);
+         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
         dispatch(

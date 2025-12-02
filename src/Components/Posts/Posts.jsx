@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Await, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
-import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
+import { setLoading, setToast} from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import AllNotifications from "../Conversation/Notification/AllNotifications";
 import { getAllNotifications } from "../../redux/Conversationreducer/ConversationReducer";
@@ -23,6 +23,8 @@ const Posts = () => {
     image,
     _id: user_id,
   } = useSelector((store) => store.auth.userDetails);
+
+  const loading = useSelector((state) => state.auth.LoadingDetails);
 
   // console.log(role, userName, image)
 
@@ -193,6 +195,7 @@ const pageSize = 10; // fixed page size
   // };
 
 
+// const loading = useSelector((state) => state.apiCall.LoadingDetails.visible);
 
 useEffect(() => {
   const fetchFilteredPosts = async () => {
@@ -206,7 +209,6 @@ useEffect(() => {
         page: filterPage,       // send page
         pageSize,               // send pageSize
       };
-
       const response = await ApiServices.getFilterPosts(filterData);
 
       if (filterPage === 1) {
@@ -220,7 +222,7 @@ useEffect(() => {
   };
 
   fetchFilteredPosts();
-}, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
+}, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage,loading]);
 
 // Load More for filtered posts
 const handleLoadMore = () => {

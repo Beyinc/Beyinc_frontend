@@ -310,10 +310,7 @@ const SignUp = () => {
                     navigate("/");
                   }}
                 />
-                {/* <p>Sign up to turn your dreams into reality!</p> */}
-                {/* <button>
-                <i class="fab fa-google"></i> Log in with Google
-              </button> */}
+            
               </div>
               <div class="signup-container">
                 <form action="">
@@ -328,26 +325,8 @@ const SignUp = () => {
                     onChange={handleChanges}
                     placeholder="Full Name*"
                   />
-                  {/* <div className="role-container">
-                    {roles?.map((r) => (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="role"
-                          value={r.role}
-                          id={r.role}
-                          onClick={handleChangeRadio}
-                        />
-                        <label for={r.role}>{r.role}</label>
-                      </div>
-                    ))}
-                  </div> */}
+                
+                
                   <input
                     type="email"
                     className={
@@ -457,115 +436,7 @@ const SignUp = () => {
                       )}
                     </>
                   )}
-                  {/* <input
-                    type="number"
-                    className={
-                      mobile !== null &&
-                      (mobile.length === 10 ? "valid" : "invalid")
-                    }
-                    name="mobile"
-                    value={mobile}
-                    disabled={mobileVerified || isMobileOtpSent}
-                    onChange={handleChanges}
-                    placeholder="Mobile Number*"
-                  />
-                  {mobileVerified === true && (
-                    <img
-                      src="checked.png"
-                      height={20}
-                      alt="Your Alt Text"
-                      className="successIcons"
-                    />
-                  )}
-                  {!isMobileOtpSent && isMobileValid && (
-                    <button
-                      type="button"
-                      className="otp_button full-width-button"
-                      onClick={sendMobileOtpF}
-                      disabled={sendMobileOtpLoading}
-                      style={{
-                        whiteSpace: "nowrap",
-                        position: "relative",
-                        display: "flex",
-                        gap: "3px",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      {sendMobileOtpLoading ? (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "3px",
-                          }}
-                        >
-                          <div className="button-loader"></div>
-                          <div>
-                            <span style={{ marginLeft: "10px" }}>
-                              Sending OTP...
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        "Get OTP"
-                      )}
-                    </button>
-                  )}
-                  {isMobileOtpSent && mobileVerified !== true && (
-                    <>
-                      <input
-                        type="text"
-                        className={
-                          mobileOtp !== null &&
-                          (mobileOtp.length === 6 ? "valid" : "invalid")
-                        }
-                        name="mobileOtp"
-                        value={mobileOtp}
-                        onChange={handleChanges}
-                        placeholder="Enter Mobile OTP"
-                        id="mobileOTPinput"
-                      />
-                      {mobileOtp !== null && mobileOtp.length === 6 && (
-                        <button
-                          type="button"
-                          className="otp_button"
-                          id="mobileVerify"
-                          onClick={verifyMobileOtp}
-                          disabled={verifyMobileOtpLoading}
-                          style={{
-                            whiteSpace: "nowrap",
-                            position: "relative",
-                            display: "flex",
-                            gap: "3px",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: "10px",
-                          }}
-                        >
-                          {verifyMobileOtpLoading ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "3px",
-                              }}
-                            >
-                              <div className="button-loader"></div>
-                              <div>
-                                <span style={{ marginLeft: "10px" }}>
-                                  Verifying OTP...
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            "Verify OTP"
-                          )}
-                        </button>
-                      )}
-                    </>
-                  )} */}
+                 
                   <input
                     type="password"
                     className={
