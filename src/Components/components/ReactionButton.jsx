@@ -8,12 +8,10 @@ export default function ReactionButton({ postId, onReact }) {
     const timerRef = useRef(null);
 
     const handleSelect = (reaction) => {
+        console.log(reaction)
         setSelected(reaction.type);
         setShowMenu(false);
 
-        console.log(reaction)
-
-        // Send to parent (API call)
         onReact(reaction.type, postId);
     };
 

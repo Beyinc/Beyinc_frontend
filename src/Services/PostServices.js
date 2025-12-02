@@ -5,7 +5,7 @@ export const ReactionServices = {
     addOrUpdate: (obj) => {
         return new Promise((resolve, reject) => {
             axiosInstance
-                .post(`/post/reaction`, obj)
+                .post(`/posts/reactToPost`, obj)
                 .then((res) => {
                     if (res) {
                         resolve(res);
