@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
@@ -6,12 +8,12 @@ import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import "./NewSignup.css";
-export default function Signup() {
+
+function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [form, setForm] = useState({
-    fullname: "",
     email: "",
     password: "",
   });
@@ -36,16 +38,15 @@ export default function Signup() {
         /[a-z]/.test(value) &&
         /[0-9]/.test(value) &&
         /[!@#$%^&*()_+]/.test(value);
-
       setIsPasswordValid(passValid);
     }
   };
 
-  const signup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
     setLoading(true);
 
     try {
-      // STEP 1 → send OTP to email
       await ApiServices.sendOtp({
         to: form.email,
         type: "Sign Up",
@@ -54,16 +55,14 @@ export default function Signup() {
 
       dispatch(
         setToast({
-          message: "OTP sent successfully!",
+          message: "OTP Sent Successfully!",
           bgColor: ToastColors.success,
           visible: "yes",
         })
       );
 
-      // STEP 2 → redirect to OTP page with signup data
       navigate("/verify-otp", {
         state: {
-          name: form.fullname,
           email: form.email,
           password: form.password,
         },
@@ -71,175 +70,157 @@ export default function Signup() {
     } catch (err) {
       dispatch(
         setToast({
-          message: "Failed to send OTP!",
+          message: err?.response?.data?.message || "Failed to send OTP!",
           bgColor: ToastColors.failure,
           visible: "yes",
         })
       );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  const isFormValid =
-    form.fullname && isEmailValid && isPasswordValid && !loading;
+  const isFormValid = isEmailValid && isPasswordValid && !loading;
 
   return (
-    <div className="signup-bg-wrapper flex justify-center items-center">
-      <div className="relative flex flex-row bg-white h-[850px] w-[1180px] shadow-lg rounded-[20px] main-outer-div">
+    <div className="flex justify-center items-center p-4 md:p-10 login-bg-wrapper overflow-y-hidden">
+      <div className="relative flex flex-col mt-14 md:mt-4 md:flex-row bg-white w-full max-w-[1000px] md:h-[690px] shadow-lg rounded-2xl mb-20">
+        {/* Logo */}
         <img
           src="/Bloomr-login-logo.svg"
-          className="absolute top-6 right-6 h-[74px] w-[214px] cursor-pointer"
+          className="absolute top-4 right-4 h-12 w-40 cursor-pointer"
           alt="logo"
           onClick={() => navigate("/")}
         />
 
-        <div className="relative h-[692px] w-[541px] ml-[49px] image-div-left">
+        {/* Left Image */}
+        <div className="hidden md:block w-[40%] relative p-10">
           <img
-            src="/sign-up-bg.jpg"
-            className="h-full w-full rounded-[20px] mt-[54px]"
+            src="/login-bg.png"
+            className="w-full h-full rounded-xl object-cover"
             alt="bg"
           />
-          <div className="absolute inset-0 flex flex-col items-center mt-[200px] ml-[-80px] text-white">
-            <p className="font-gentium font-bold text-[40px] leading-[45px] tracking-normal mb-[1px]">
-              <p>Welcome to Social</p>
-              <p>Entrepreneurship</p>
-              <p>Platform</p>
-            </p>
-            <p className="font-gentium font-bold text-[40px] leading-[45px] tracking-normal ml-16 mt-4">
-              <p> Increasing the success</p>
-              <p>rate of startup</p>
-            </p>
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
+            <p className="text-3xl font-bold">Create Your</p>
+            <p className="text-3xl font-bold">New Account</p>
           </div>
         </div>
 
-        <div className="w-[450px] h-[445px] ml-[79px] mt-[137px] ">
-          <div className="heading-div h-[41px] w-full ml-[60px]">
-            <p className="w-full h-full font-gentium font-bold text-[#4F55C7] text-[35px]">
-              Create your account
-            </p>
-          </div>
-
-          <div id="google-auth-div" className="ml-[-50px]">
-            <div className="ml-40 mt-4">
-              <GoogleAuth />
-            </div>
-
-            <div className="ml-36 mt-6 font-roboto text-[16px] flex items-center gap-2">
-              <hr className="w-[120px]" />
-              <p className="text-sm">OR</p>
-              <hr className="w-[120px]" />
-            </div>
-          </div>
-
-          <div id="input-div" className="flex flex-col mt-[20px]">
-            <p className="font-semibold font-roboto text-[16px]">Email</p>
+        {/* Right Form */}
+        <div className="w-full md:w-[50%] p-6 md:p-10">
+          <p className="text-[#4F55C7] text-xl font-bold text-center mr-8 mt-14 md:mr-0 md:mt-10 md:text-3xl">
+            Sign Up
+          </p>
+          {/* Email */}
+          <div className="mt-6 ml-6 md:mt-6">
+            <p className="font-medium">Email Address</p>
             <input
               type="email"
               name="email"
               value={form.email}
-              className={`w-[450px] h-[35px] mt-1 border rounded-md border-black px-2 shadow-md ${
+              onChange={handleChanges}
+              placeholder="Email Address"
+              className={`w-full h-6 mt-1 border rounded-md px-2 shadow-sm ${
                 isEmailValid === null
                   ? ""
                   : isEmailValid
                   ? "border-green-500"
                   : "border-red-500"
               }`}
-              placeholder="Email Address"
-              onChange={handleChanges}
-            />
-            <p className="font-semibold font-roboto text-[16px] mt-4">
-              Full Name
-            </p>
-            <input
-              type="text"
-              name="fullname"
-              value={form.fullname}
-              className="w-[450px] h-[35px] mt-1 border border-black rounded-md px-2 shadow-md"
-              placeholder="Full Name"
-              onChange={handleChanges}
             />
 
-            <p className="font-semibold font-roboto text-[16px] mt-4">
-              Password
-            </p>
+            {/* Password */}
+            <p className="font-medium mt-4">Password</p>
             <input
               type="password"
               name="password"
               value={form.password}
-              className={`w-[450px] h-[35px] mt-1 border border-black rounded-md px-2 shadow-md ${
+              onChange={handleChanges}
+              placeholder="Password"
+              className={`w-full h-6 mt-1 border rounded-md px-2 shadow-sm ${
                 isPasswordValid === null
                   ? ""
                   : isPasswordValid
                   ? "border-green-500"
                   : "border-red-500"
               }`}
-              placeholder="Create Password"
-              onChange={handleChanges}
             />
 
+            {/* Password Hint */}
             <div className="passwordHint" hidden={!form.password}>
               <ul>
                 <li
                   className={form.password?.length >= 8 ? "success" : "failure"}
                 >
-                  <i>Password should be at least 8 character length</i>
+                  <i>Password should be at least 8 characters long</i>
                 </li>
                 <li
                   className={
-                    /.*[A-Z].*/.test(form.password) ? "success" : "failure"
+                    /[A-Z]/.test(form.password) ? "success" : "failure"
                   }
                 >
                   <i>At least one capital letter</i>
                 </li>
                 <li
                   className={
-                    /.*[a-z].*/.test(form.password) && form.password
-                      ? "success"
-                      : "failure"
+                    /[a-z]/.test(form.password) ? "success" : "failure"
                   }
                 >
                   <i>At least one small letter</i>
                 </li>
                 <li
                   className={
-                    /.*[!@#$%^&*()_+].*/.test(form.password)
-                      ? "success"
-                      : "failure"
+                    /[!@#$%^&*()_+]/.test(form.password) ? "success" : "failure"
                   }
                 >
                   <i>At least one special character (!@#$%^&*()_+)</i>
                 </li>
                 <li
                   className={
-                    /.*[0-9].*/.test(form.password) ? "success" : "failure"
+                    /[0-9]/.test(form.password) ? "success" : "failure"
                   }
                 >
-                  <i>At least one Number</i>
+                  <i>At least one number</i>
                 </li>
               </ul>
             </div>
 
+            {/* Sign Up Button */}
             <button
-              className="w-[450px] h-[52px] mt-6 ml-4 bg-[#4F55C7] text-white rounded-md shadow-md disabled:bg-gray-400"
-              disabled={!isFormValid}
-              onClick={signup}
+              disabled={!isFormValid || loading}
+              onClick={handleSignup}
+              className="w-[80%] md:w-full bg-[#4F55C7] text-white font-bold py-2 rounded-full mt-6 flex justify-center items-center"
             >
-              {loading ? "Signing up..." : "Create Account"}
+              {loading ? "Creating Account..." : "Sign Up"}
             </button>
+          </div>
+          {/* OR Divider */}
+          <div  className="mr-10 md:mr-0">
+            <div className="flex items-center justify-center gap-2 my-6">
+              <hr className="w-24" />
+              <span className="text-sm">OR</span>
+              <hr className="w-24" />
+            </div>
 
-            <p className="mt-2 ml-24">
-              <span>Already have an account ?</span>
+            {/* Google Auth */}
+            <div className="flex justify-center">
+              <GoogleAuth />
+            </div>
+
+            <div className="text-center mt-6 text-lg">
+              Already have an account?{" "}
               <span
-                className="text-[#4F55C7] hover:cursor-pointer ml-1"
+                className="text-[#4F55C7] cursor-pointer"
                 onClick={() => navigate("/login")}
               >
-                Log in
+                Log In
               </span>
-            </p>
-          </div>
+            </div>
+          </div>{" "}
         </div>
       </div>
     </div>
   );
 }
+
+export default Signup;
