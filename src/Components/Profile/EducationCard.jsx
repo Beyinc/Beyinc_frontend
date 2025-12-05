@@ -158,7 +158,7 @@ const EducationCard = ({selfProfile ,setSelfProfile}) => {
 
                   {/* Horizontal line between items, not after the last one */}
                   {index !== education.length - 1 && (
-                    <hr className="my-4 border-t-1 border-gray-700" />
+                    <hr className="my-4 border-t-1 border-gray-200" />
                   )}
                 </div>
               ))
