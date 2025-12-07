@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth/GoogleAuth";
@@ -96,21 +94,41 @@ function Signup() {
         {/* Left Image */}
         <div className="hidden md:block w-[40%] relative p-10">
           <img
-            src="/login-bg.png"
+            src="/sign-up-bg.jpg"
             className="w-full h-full rounded-xl object-cover"
             alt="bg"
           />
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
-            <p className="text-3xl font-bold">Create Your</p>
-            <p className="text-3xl font-bold">New Account</p>
+
+          <div className="absolute inset-0 flex flex-col justify-center text-white text-left ml-20 mb-36">
+            <p className="font-gentium text-[35px] font-bold leading-[45px]">
+              Welcome to Social <br />
+              Entrepreneurship <br />
+              Platform
+            </p>
+
+            <p className="font-gentium font-bold text-[30px] leading-[40px] mt-2">
+              Increasing the success <br />
+              rate of startup
+            </p>
           </div>
         </div>
 
         {/* Right Form */}
         <div className="w-full md:w-[50%] p-6 md:p-10">
-          <p className="text-[#4F55C7] text-xl font-bold text-center mr-8 mt-14 md:mr-0 md:mt-10 md:text-3xl">
-            Sign Up
+          <p className="text-[#4F55C7] font-gentium text-xl font-bold text-center mr-8 mt-14 md:mr-0 md:mt-10 md:text-3xl">
+            Create your account{" "}
           </p>
+          {/* Google Auth */}
+          <div className="mr-10 mt-4 md:mr-0">
+            <div className="flex justify-center">
+              <GoogleAuth />
+            </div>
+            <div className="flex items-center justify-center gap-2 my-6">
+              <hr className="w-24" />
+              <span className="text-sm">OR</span>
+              <hr className="w-24" />
+            </div>
+          </div>
           {/* Email */}
           <div className="mt-6 ml-6 md:mt-6">
             <p className="font-medium">Email Address</p>
@@ -191,20 +209,18 @@ function Signup() {
               onClick={handleSignup}
               className="w-[80%] md:w-full bg-[#4F55C7] text-white font-bold py-2 rounded-full mt-6 flex justify-center items-center"
             >
-              {loading ? "Creating Account..." : "Sign Up"}
+              {loading ? "Creating Account..." : "Create account"}
             </button>
           </div>
           {/* OR Divider */}
-          <div  className="mr-10 md:mr-0">
-            <div className="flex items-center justify-center gap-2 my-6">
-              <hr className="w-24" />
-              <span className="text-sm">OR</span>
-              <hr className="w-24" />
-            </div>
-
-            {/* Google Auth */}
-            <div className="flex justify-center">
-              <GoogleAuth />
+          <div className="mr-10 md:mr-0">
+            <div className="text-center font-roboto mx-8 mt-4 md:mx-20">
+              <p>
+                <span>By clicking Create account, You agree to our </span>
+                <span className="text-[#4F55C7]">
+                  Terms of Service and Privacy Policy.
+                </span>
+              </p>
             </div>
 
             <div className="text-center mt-6 text-lg">
