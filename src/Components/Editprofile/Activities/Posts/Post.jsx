@@ -274,7 +274,16 @@ const Post = ({
 
 
   const handleReaction = async (type, postId) => {
-    await ReactionServices.addOrUpdate({ postId, reactionType: type });
+      const response = await ReactionServices.addOrUpdate({
+        postId,
+        reactionType: type,
+      });
+      console.log(response.data.userReaction);
+
+      setPost((prev) => ({
+        ...prev,
+        userReaction: response.data.userReaction,
+      }));
   };
 
   return (
@@ -526,7 +535,12 @@ const Post = ({
           </div>
           <div className="actionsHolder font-semibold">
             <div className="actionsHolder-leftContent">
-              <ReactionButton postId={post?._id} onReact={handleReaction} />
+              <ReactionButton
+                postId={post._id}
+                onReact={handleReaction}
+                userReaction={post.userReaction}
+                post={post}
+            />
               {/* <div className="likeActionHolder">
               {reactionTypes.map((r)=>(
                 <div className="flex items-start justify-center">

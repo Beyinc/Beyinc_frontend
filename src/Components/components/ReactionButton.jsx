@@ -1,18 +1,61 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { reactionTypes } from "../../constants/reactions";
 
-export default function ReactionButton({ postId, onReact }) {
+export default function ReactionButton({
+    postId,
+    onReact,
+    userReaction = null,
+    post,
+}) {
+    const [selected, setSelected] = useState(userReaction);
     const [showMenu, setShowMenu] = useState(false);
-    const [selected, setSelected] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false);
+
     const timerRef = useRef(null);
+    const debounceRef = useRef(null);
+    const lastSentReactionRef = useRef(userReaction); 
+    const pendingReactionRef = useRef(null); 
+
+    useEffect(() => {
+        if (!isProcessing) {
+            setSelected(userReaction);
+            lastSentReactionRef.current = userReaction;
+        }
+    }, [userReaction, isProcessing]);
 
     const handleSelect = (reaction) => {
-        console.log(reaction)
-        setSelected(reaction.type);
+        const newReaction = reaction.type;
+
+        setSelected((prev) => (prev === newReaction ? null : newReaction));
         setShowMenu(false);
 
-        onReact(reaction.type, postId);
+        pendingReactionRef.current = newReaction;
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        debounceRef.current = setTimeout(async () => {
+            setIsProcessing(true);
+
+            try {
+                const reactionToSend = pendingReactionRef.current;
+
+                await onReact(reactionToSend, postId);
+
+                lastSentReactionRef.current =
+                    lastSentReactionRef.current === reactionToSend
+                        ? null
+                        : reactionToSend;
+            } catch (error) {
+                console.error("Failed to update reaction:", error);
+                setSelected(lastSentReactionRef.current);
+            } finally {
+                setIsProcessing(false);
+                pendingReactionRef.current = null;
+            }
+        }, 300);
     };
 
     const handleMouseEnter = () => {
@@ -26,6 +69,15 @@ export default function ReactionButton({ postId, onReact }) {
         }, 200);
     };
 
+    useEffect(() => {
+        return () => {
+            if (debounceRef.current) clearTimeout(debounceRef.current);
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, []);
+
+    const selectedReaction = reactionTypes.find((r) => r.type === selected);
+
     return (
         <div className="relative inline-block select-none">
             {/* Main reaction button */}
@@ -33,23 +85,20 @@ export default function ReactionButton({ postId, onReact }) {
                 onClick={() => handleSelect({ type: "like" })}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                className="flex items-center gap-1 px-5 py-3 mr-1 rounded-md bg-white text-black border hover:bg-[#f5f5f5] text-base"
+                disabled={isProcessing}
+                className={`flex items-center gap-1 px-5 py-3 mr-1 rounded-md bg-white text-black border hover:bg-[#f5f5f5] text-base transition-all ${
+                    isProcessing ? "opacity-60 cursor-wait" : ""
+                }`}
             >
-                {selected ? (
-                    reactionTypes
-                        .filter((r) => r.type == selected)
-                        .map((r) => (
-                            <div
-                                key={r.type}
-                                onClick={() => handleSelect(r)}
-                                className="text-blue-500 flex items-center justify-center gap-1"
-                            >
-                                {r.icon}
-                                <span>{r.type}</span>
-                            </div>
-                        ))
+                {selectedReaction ? (
+                    <div className="text-blue-500 flex items-center justify-center gap-1">
+                        {selectedReaction.icon}
+                        <span className="capitalize">
+                            {selectedReaction.type}
+                        </span>
+                    </div>
                 ) : (
-                    <div>
+                    <div className="flex items-center gap-1">
                         <Icon icon="mdi:thumb-up" />
                         <span>Like</span>
                     </div>
@@ -67,7 +116,12 @@ export default function ReactionButton({ postId, onReact }) {
                         <div
                             key={r.type}
                             onClick={() => handleSelect(r)}
-                            className="cursor-pointer hover:scale-125 transition-transform"
+                            className={`cursor-pointer hover:scale-125 transition-transform duration-150 ${
+                                selected === r.type
+                                    ? "scale-110 drop-shadow-lg"
+                                    : ""
+                            }`}
+                            title={r.type}
                         >
                             {r.icon}
                         </div>
