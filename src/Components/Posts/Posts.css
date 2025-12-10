@@ -256,7 +256,7 @@
 }
 
 .suggestion-item button:hover {
-  /* background-color: var(--button-hover); */
+  background-color: var(--button-hover);
 }
 
 .activity-item span {
@@ -435,4 +435,76 @@ button.connect {
 
 .Homepage-left-container::-webkit-scrollbar{
   display: none;
+}
+
+/* --- Responsiveness Fix for Ipad--- */
+@media screen and (max-width: 1024px) {
+
+  .sidebar-right {
+    display: none;
+  }
+
+.main-content {
+      width: 100%; 
+      flex: 1;
+  } 
+  
+}
+
+/* --- Hamburger Menu & Mobile Sidebar Styles --- */
+.mobile-menu-icon,
+.mobile-close-icon {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  
+  /* 1. Show the Hamburger Icon at the top left */
+  .mobile-menu-icon {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 2px;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 999;
+    color: var(--primary, #333);
+  }
+  .Homepage-Container {
+    padding-top: 60px; 
+  }
+
+  .Homepage-left-container {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px; 
+    height: 100vh;
+    background-color: white;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out; 
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    padding-top: 50px; 
+  }
+
+
+  .Homepage-left-container.sidebar-open {
+    left: 0;
+  }
+
+  .mobile-close-icon {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  .main-content {
+    margin-top: 50px; 
+    width: 100%;
+    padding: 10px;
+  }
 }

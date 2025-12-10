@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
+import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { Await, useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
@@ -50,20 +51,21 @@ const Posts = () => {
 
   const [loadingTrigger, setLoadingTrigger] = useState(false);
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [recommendedUsers, setRecommendedUsers] = useState([]);
 
   const [filterPage, setFilterPage] = useState(1); // start page for filtered posts
-const pageSize = 10; // fixed page size
+  const pageSize = 10; // fixed page size
   useEffect(() => {
     // dispatch(setLoading({ visible: "yes" }));
-  if (filterPage === 1) setAllPosts([]); // clear previous posts on first load
+    if (filterPage === 1) setAllPosts([]); // clear previous posts on first load
 
     ApiServices.getAllPosts({ page: filterPage, pageSize: pageSize })
-    
+
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
-        console.log("all posts:",allPosts);
+        console.log("all posts:", allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
@@ -79,9 +81,9 @@ const pageSize = 10; // fixed page size
   }, [loadingTrigger]);
 
 
-  useEffect(()=>{
-    console.log("all posts-:",allPosts);
-  },[allPosts])
+  useEffect(() => {
+    console.log("all posts-:", allPosts);
+  }, [allPosts])
 
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
@@ -100,10 +102,10 @@ const pageSize = 10; // fixed page size
   }, [dispatch]);
 
 
-  useEffect(()=>{
-            console.log("top trending posts are :",topTrendingPosts);
+  useEffect(() => {
+    console.log("top trending posts are :", topTrendingPosts);
 
-  },[topTrendingPosts])
+  }, [topTrendingPosts])
   const truncateDescription = (description, maxLength = 100) => {
     if (description.length <= maxLength) return description;
     const truncated = description.slice(0, maxLength);
@@ -134,13 +136,13 @@ const pageSize = 10; // fixed page size
   //   setPageSize(pageSize + 10);
   //   setLoadingTrigger(!loadingTrigger);
   // };
-//   const [page, setPage] = useState(1); // start from page 1
-// const pageSize = 10; // fixed
+  //   const [page, setPage] = useState(1); // start from page 1
+  // const pageSize = 10; // fixed
 
-// const handleLoadMore = () => {
-//   setPage(prev => prev + 1); // increment page
-//   setLoadingTrigger(!loadingTrigger);
-// };
+  // const handleLoadMore = () => {
+  //   setPage(prev => prev + 1); // increment page
+  //   setLoadingTrigger(!loadingTrigger);
+  // };
 
   const socket = useRef();
   useEffect(() => {
@@ -148,7 +150,7 @@ const pageSize = 10; // fixed page size
   }, []);
 
   const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => { });
     dispatch(getAllNotifications(user_id));
   };
 
@@ -194,38 +196,38 @@ const pageSize = 10; // fixed page size
 
 
 
-useEffect(() => {
-  const fetchFilteredPosts = async () => {
-    try {
-      const filterData = {
-        tags: selectedTags,
-        sortOption: selectedSortOption,
-        people: people,
-        public: isPublic,
-        private: isPrivate,
-        page: filterPage,       // send page
-        pageSize,               // send pageSize
-      };
+  useEffect(() => {
+    const fetchFilteredPosts = async () => {
+      try {
+        const filterData = {
+          tags: selectedTags,
+          sortOption: selectedSortOption,
+          people: people,
+          public: isPublic,
+          private: isPrivate,
+          page: filterPage,       // send page
+          pageSize,               // send pageSize
+        };
 
-      const response = await ApiServices.getFilterPosts(filterData);
+        const response = await ApiServices.getFilterPosts(filterData);
 
-      if (filterPage === 1) {
-        setFilteredPosts(response.data); // first page replaces
-      } else {
-        setFilteredPosts((prev) => [...prev, ...response.data]); // append next pages
+        if (filterPage === 1) {
+          setFilteredPosts(response.data); // first page replaces
+        } else {
+          setFilteredPosts((prev) => [...prev, ...response.data]); // append next pages
+        }
+      } catch (error) {
+        console.error("Error filtering posts:", error);
       }
-    } catch (error) {
-      console.error("Error filtering posts:", error);
-    }
+    };
+
+    fetchFilteredPosts();
+  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
+
+  // Load More for filtered posts
+  const handleLoadMore = () => {
+    setFilterPage((prev) => prev + 1);
   };
-
-  fetchFilteredPosts();
-}, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
-
-// Load More for filtered posts
-const handleLoadMore = () => {
-  setFilterPage((prev) => prev + 1);
-};
 
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
@@ -245,13 +247,13 @@ const handleLoadMore = () => {
   );
 
 
-   const createMarkup = (html) => {
+  const createMarkup = (html) => {
     return { __html: html };
   };
 
 
   const getDescription = (post) => {
-  {
+    {
       return post?.description?.length > 100
         ? post?.description.slice(0, 150) + "..."
         : post?.description;
@@ -259,7 +261,13 @@ const handleLoadMore = () => {
   };
   return (
     <div className="Homepage-Container">
-      <div className="Homepage-left-container">
+      <div className="mobile-menu-icon" onClick={() => setIsSidebarOpen(true)}>
+        <RxHamburgerMenu />
+      </div>
+      <div className={`Homepage-left-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
+        <div className="mobile-close-icon" onClick={() => setIsSidebarOpen(false)}>
+          <RxCross2 />
+        </div>
         <div className="sidebar-menu shadow-lg">
           <div className="Homepage-left-container-profile">
             <div>
@@ -420,9 +428,8 @@ const handleLoadMore = () => {
             <h4 className="mt-3 mb-2">Tags</h4>
             <div className="relative">
               <button
-                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
-                  isTagsOpen ? "rotate-180" : "rotate-0"
-                }`}
+                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${isTagsOpen ? "rotate-180" : "rotate-0"
+                  }`}
                 onClick={() => setIsTagsOpen(!isTagsOpen)}
               >
                 <RxCaretDown />
@@ -557,7 +564,7 @@ const handleLoadMore = () => {
         </div>
 
         <div className="loadMore-Container">
-          <button className="loadMore" onClick={handleLoadMore} hidden={filteredPosts.length<=10}>
+          <button className="loadMore" onClick={handleLoadMore} hidden={filteredPosts.length <= 10}>
             Load More
           </button>
         </div>
@@ -582,7 +589,7 @@ const handleLoadMore = () => {
                   <b>{post?.postTitle}</b>
                 </h4>
 
-                 <div dangerouslySetInnerHTML={createMarkup(getDescription(post))}></div>
+                <div dangerouslySetInnerHTML={createMarkup(getDescription(post))}></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}
@@ -624,7 +631,7 @@ const handleLoadMore = () => {
               </div>
               <div className="right-section">
                 <h4
-               style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
+                  style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
                   onClick={() => {
                     if (rec._id == user_id) {
                       navigate("/editProfile");
@@ -632,7 +639,7 @@ const handleLoadMore = () => {
                       navigate(`/user/${rec._id}`);
                     }
                   }}
-                  
+
                 >
                   {rec?.userName}
                 </h4>
