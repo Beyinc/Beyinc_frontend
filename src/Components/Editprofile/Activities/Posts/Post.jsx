@@ -14,6 +14,9 @@ import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
+import { reactionTypes } from "../../../../constants/reactions";
+import ReactionButton from "../../../components/ReactionButton";
+import { ReactionServices } from "../../../../Services/PostServices";
 
 const Post = ({
   filteredPosts,
@@ -207,7 +210,7 @@ const Post = ({
 
   const reportPost = async (e) => {
     e.target.disabled = true;
-    console.log(reportType);
+    // console.log(reportType);
     await ApiServices.addReport({
       id: post?._id,
       reportby: user_id,
@@ -268,6 +271,20 @@ const Post = ({
   //       e.target.disabled = false;
   //     });
   // };
+
+
+  const handleReaction = async (type, postId) => {
+      const response = await ReactionServices.addOrUpdate({
+        postId,
+        reactionType: type,
+      });
+      // console.log(response.data.userReaction);
+
+      setPost((prev) => ({
+        ...prev,
+        userReaction: response.data.userReaction,
+      }));
+  };
 
   return (
     <section
@@ -518,7 +535,21 @@ const Post = ({
           </div>
           <div className="actionsHolder font-semibold">
             <div className="actionsHolder-leftContent">
-              <div className="likeActionHolder" onClick={likingpost}>
+              <ReactionButton
+                postId={post._id}
+                onReact={handleReaction}
+                userReaction={post.userReaction}
+                post={post}
+            />
+              {/* <div className="likeActionHolder">
+              {reactionTypes.map((r)=>(
+                <div className="flex items-start justify-center">
+                  <Icon icon={r.icon} className="w-7 h-7 sm:w-5 sm:h-5" />
+                  <span className="actionText hidden sm:block  font-semibold">{r.type}</span>
+                </div>
+              ))}
+              </div> */}
+              {/* <div className="likeActionHolder" onClick={likingpost}>
                 <div>
                   <svg
                     width="20"
@@ -563,7 +594,7 @@ const Post = ({
                   </svg>
                 </div>
                 <div className="actionText hidden sm:block">downvote</div>
-              </div>
+              </div> */}
               <div
                 className="likeActionHolder"
                 onClick={() => navigate(`/posts/${post?._id}`)}
