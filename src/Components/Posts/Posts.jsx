@@ -63,7 +63,7 @@ const pageSize = 10; // fixed page size
     
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
-        console.log("all posts:",allPosts);
+        // console.log("all posts:",allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {

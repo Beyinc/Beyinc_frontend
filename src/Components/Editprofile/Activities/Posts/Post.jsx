@@ -210,7 +210,7 @@ const Post = ({
 
   const reportPost = async (e) => {
     e.target.disabled = true;
-    console.log(reportType);
+    // console.log(reportType);
     await ApiServices.addReport({
       id: post?._id,
       reportby: user_id,
@@ -278,7 +278,7 @@ const Post = ({
         postId,
         reactionType: type,
       });
-      console.log(response.data.userReaction);
+      // console.log(response.data.userReaction);
 
       setPost((prev) => ({
         ...prev,
