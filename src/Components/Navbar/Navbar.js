@@ -251,7 +251,7 @@ const Navbar = () => {
             </div>
 
             {/* DARK AND WHITE THEME */}
-            {/* <ListItem
+            <ListItem
               button
               key="themeIcon"
               onClick={(e) => {
@@ -346,7 +346,7 @@ const Navbar = () => {
                   localStorage.getItem("theme") === "light" ? "Dark" : "Light"
                 } Mode`}
               />
-            </ListItem> */}
+            </ListItem>
 
             <ListItem
               button
@@ -375,7 +375,7 @@ const Navbar = () => {
               <ListItemText primary="Edit Profile" />
             </ListItem>
 
-            {/* <ListItem button key="home" onClick={() => navigate("/posts")}>
+            <ListItem button key="home" onClick={() => navigate("/posts")}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -393,8 +393,9 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Home" />
-            </ListItem> */}
-            {/* <ListItem
+            </ListItem>
+            
+            <ListItem
               button
               key="dashboard"
               onClick={() => navigate("/dashboard")}
@@ -417,9 +418,11 @@ const Navbar = () => {
                   />
                 </svg>
               </ListItemIcon>
-              <ListItemText primary="Pitches" />
-            </ListItem> */}
-            {/* <ListItem
+              {/* NOTE: In your code this says Pitches, but based on the URL /dashboard it might be Dashboard */}
+              <ListItemText primary="Dashboard" /> 
+            </ListItem>
+
+            <ListItem
               button
               key="searchUsers"
               onClick={() => navigate("/searchusers")}
@@ -439,8 +442,9 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Mentors" />
-            </ListItem> */}
-            {/* <ListItem
+            </ListItem>
+            
+            <ListItem
               button
               key="conversations"
               onClick={() => navigate("/conversations")}
@@ -465,9 +469,9 @@ const Navbar = () => {
                 )}
               </ListItemIcon>
               <ListItemText primary="Conversations" />
-            </ListItem> */}
+            </ListItem>
 
-            {/* <ListItem
+            <ListItem
               button
               key="notifications"
               onClick={() => navigate("/notifications")}
@@ -492,7 +496,7 @@ const Navbar = () => {
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Notifications" />
-            </ListItem> */}
+            </ListItem>
           </>
         )}
 
