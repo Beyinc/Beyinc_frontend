@@ -12,11 +12,10 @@ import {
 } from "../../../../redux/AuthReducers/AuthReducer";
 import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
-import { reactionTypes } from "../../../../constants/reactions";
 import ReactionButton from "../../../components/ReactionButton";
 import { ReactionServices } from "../../../../Services/PostServices";
+import { ReactionDisplay } from "../../../Posts/components/ReactionDisplay";
 
 const Post = ({
   filteredPosts,
@@ -485,7 +484,7 @@ const Post = ({
             )} */}
             </div>
             <div className="likeCommentDetails mt-2">
-              <div className="likeTotal">
+              {/* <div className="likeTotal">
                 <div>
                   <div>
                     <svg
@@ -529,7 +528,9 @@ const Post = ({
                       `and ${localDislikes.length - 1} other`}
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+              <ReactionDisplay reactions={post?.reactions} />
               <div className="commentTotal">{allComments?.length} comments</div>
             </div>
           </div>
