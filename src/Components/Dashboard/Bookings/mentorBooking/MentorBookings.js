@@ -137,6 +137,7 @@ useEffect(() => {
 
   const [openReqDialog, setOpenReqDialog] = useState(false);
   const [selectedReq, setSelectedReq] = useState(null);
+ const [selectedRew, setSelectedRow] = useState(null);
 
   const handleOpenReqDialog = (req) => {
     setSelectedReq(req);
@@ -189,6 +190,7 @@ const handleDeleteRequest=async (id)=>{
     alert("Failed to delete request");
   }
 }
+
 
   return (
     <Box px={4} py={3}>
@@ -396,98 +398,139 @@ const handleDeleteRequest=async (id)=>{
             </>
           )}
 
-          {/* ----------- Request Tab (Mentor View) ----------- */}
-          {tabValue === 2 && (
-            <>
-              {mentorBookingRequests && mentorBookingRequests.length > 0 ? (
-                <List>
-                  {mentorBookingRequests.map((req) => (
-                    <Box key={req._id} mb={3}>
-                      <Typography
-                        variant="h6"
-                        align="left"
-                        style={{ marginBottom: "10px" }}
-                      >
-                        Request Type: {req.requestType.toUpperCase()}
-                      </Typography>
+       {tabValue === 2 && (
+  <Box display="flex" gap={3}>
+    
+    {/* LEFT: Request List */}
+    <Box width="70%">
+      {mentorBookingRequests.length ? (
+        mentorBookingRequests.map((req) => (
+          <Box
+            key={req._id}
+            mb={2}
+            p={2}
+            borderRadius={2}
+            boxShadow={1}
+            bgcolor={selectedReq?._id === req._id ? "#EEF2FF" : "#fff"}
+            sx={{ cursor: "pointer" }}
+            onClick={() => setSelectedReq(req)}
+          >
+             
+            <Typography fontSize={13}>
+              <strong>User: </strong>{req.userId?.userName}
+            </Typography>
+            <Typography fontSize={13} color="text.secondary">
+             <strong>Email:</strong> {req.userId?.email}
+            </Typography>
 
-                      <Box
-                        display="flex"
-                        flexDirection="row"
-                        alignItems="center"
-                        border="1px solid black"
-                        borderRadius={1}
-                      >
-                        {/* Purple Bar */}
-                        <Box width="1.5%" bgcolor="#4F55C7" height="120px" />
+            <Typography fontSize={13} mt={1}>
+              {req.requestMessage.slice(0, 60)}...
+            </Typography>
 
-                        {/* USER INFO (Shown to mentor) */}
-                        <Box width="25%" ml={4}>
-                          <Typography variant="body1">
-                            User: {req.userId?.userName}
-                          </Typography>
-                          <Typography variant="body2">
-                            Email: {req.userId?.email}
-                          </Typography>
-                        </Box>
+            <Typography
+              mt={0.5}
+              fontSize={12}
+              fontWeight={600}
+              color={req.requestStatus ? "green" : "orange"}
+            >
+              {req.requestStatus ? "Approved" : "Pending"}
+            </Typography>
+          </Box>
+        ))
+      ) : (
+        <Typography>No requests found</Typography>
+      )}
+    </Box>
 
-                        {/* Request Details */}
-                        <Box width="30%" ml={6}>
-                          <Typography variant="body1">
-                            Message: {req.requestMessage}
-                          </Typography>
+    {/* RIGHT: Request Details */}
+    <Box width="30%">
+      {selectedReq ? (
+        <Box
+          p={3}
+          borderRadius={3}
+          boxShadow={2}
+          bgcolor="#fff"
+        >
+          <Typography variant="h6" mb={2}>
+            Request Details
+          </Typography>
 
-                          <Typography variant="body1">
-                            Status:{" "}
-                            {req.requestStatus ? (
-                              <span
-                                style={{ color: "green", fontWeight: "bold" }}
-                              >
-                                Approved
-                              </span>
-                            ) : (
-                              <span
-                                style={{ color: "orange", fontWeight: "bold" }}
-                              >
-                                Pending
-                              </span>
-                            )}
-                          </Typography>
-                        </Box>
+          <Typography>
+            <strong>User:</strong> {selectedReq.userId?.userName}
+          </Typography>
 
-                        {/* Review Request Button */}
-                       <Box width="20%" ml={5}>
-  {req.requestStatus ? (
-    <button
-      className="joinCall"
-      style={{ backgroundColor: "red" }}
-      onClick={() => handleDeleteRequest(req._id)}
-    >
-      Delete Request
-    </button>
-  ) : (
-    <button
-      className="joinCall"
-      onClick={() => handleOpenReqDialog(req)}
-    >
-      Review Request
-    </button>
-  )}
-</Box>
+          <Typography>
+            <strong>Email:</strong> {selectedReq.userId?.email}
+          </Typography>
 
-                      </Box>
-                    </Box>
-                  ))}
-                </List>
-              ) : (
-                <Typography>No requests found.</Typography>
-              )}
-            </>
-          )}
+          <Typography mt={2}>
+            <strong>Type:</strong> {selectedReq.requestType}
+          </Typography>
+
+  <Typography mt={1}>
+            <strong>Amoount :</strong> ₹{selectedReq.amount}
+          </Typography>
+
+  <Typography mt={0}>
+            <strong>Duration:</strong> {selectedReq.duration} <strong>minutes</strong>
+          </Typography>
+
+          <Typography mt={1}>
+            <strong>Message:</strong>
+          </Typography>
+          <Typography color="text.secondary">
+            {selectedReq.requestMessage}
+          </Typography>
+
+          <Typography
+            mt={2}
+            fontWeight={600}
+            color={selectedReq.requestStatus ? "green" : "orange"}
+          >
+            Status: {selectedReq.requestStatus ? "Approved" : "Pending"}
+          </Typography>
+
+          {/* ACTIONS */}
+          <Box mt={3} display="flex" gap={2}>
+            {!selectedReq.requestStatus && (
+              <Button
+                variant="contained"
+                onClick={handleApproveRequest}
+              >
+                Approve Request
+              </Button>
+            )}
+
+            {selectedReq.requestStatus && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDeleteRequest(selectedReq._id)}
+              >
+                Delete Request
+              </Button>
+            )}
+          </Box>
+        </Box>
+      ) : (
+        <Box
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          color="text.secondary"
+        >
+          Select a request to view details
+        </Box>
+      )}
+    </Box>
+  </Box>
+)}
+
         </Box>
 
         {/* Dialog for Reschedule Request */}
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
+        {/* <Dialog open={openDialog} onClose={handleCloseDialog}>
           <DialogTitle>Request Reschedule</DialogTitle>
           <DialogContent>
             <TextField
@@ -508,7 +551,7 @@ const handleDeleteRequest=async (id)=>{
               Submit
             </Button>
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
       </Box>
     </Box>
   );
