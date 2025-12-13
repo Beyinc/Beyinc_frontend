@@ -5,6 +5,7 @@ import {
   Routes,
   useParams,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import "./App.css";
 import AuthHoc, { AdminDeciderHoc, LoginAuth } from "./AuthHoc";
@@ -307,7 +308,7 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-{!['/login', '/signup',"/","/newlogin","/newsignup"].includes(location.pathname) && <Navbar />}
+        {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes(location.pathname) && <Navbar />}
 
         <div className=" max-w-[1550px] m-auto">
 
@@ -316,12 +317,12 @@ const App = () => {
             <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
             <Route path="/login" Component={LoginAuth(Login)} />
             // new login - signup routes
-            <Route path="newlogin" Component={LoginAuth(NewLogin)}/>
-            <Route path="newsignup" Component={LoginAuth(NewSignup)}/>
+            <Route path="/newlogin" Component={LoginAuth(NewLogin)} />
+            <Route path="/newsignup" Component={LoginAuth(NewSignup)} />
             <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Navigate to="/posts" />} />
             <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
-            <Route path="/posts" Component={AuthHoc(Posts)} />
+            <Route path="/posts" Component={Posts} />
             <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
             <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
             <Route path="/beyincProfesional" Component={AuthHoc(BeyincProfessional)} />
@@ -387,7 +388,7 @@ const App = () => {
             {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
             <Route path="/connections" element={<ConnectionsWithSuggestions />} />
-            <Route path="/notification-page" element={<NotificationPage/>}/>
+            <Route path="/notification-page" element={<NotificationPage />} />
           </Routes>
         </div>
 

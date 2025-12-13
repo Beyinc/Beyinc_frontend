@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import { format } from "timeago.js";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import IndividualPostSubComments from "./IndividualPostSubComments";
 import { setLoading } from "../../redux/AuthReducers/AuthReducer";
 const IndividualPostComments = ({
@@ -15,7 +15,7 @@ const IndividualPostComments = ({
   onLike,
   onDisLike,
 }) => {
-  const { email, user_id } = useSelector((state) => state.auth.loginDetails);
+  const { user_id } = useSelector((state) => state.auth.loginDetails);
   const scrollRef = useRef();
   const [comment, setComment] = useState("");
   const [replyBox, setReplyBox] = useState(false);
@@ -30,7 +30,6 @@ const IndividualPostComments = ({
 
   const [count, setCount] = useState(0);
   const [dislikecount, setdislikecount] = useState(0);
-  const BACKEND_BASE_URL = "http://localhost:4000";
 
   useEffect(() => {
     setLiked(c.likes?.includes(user_id));
@@ -94,7 +93,7 @@ const IndividualPostComments = ({
       }
     }
     try {
-      const response = await ApiServices.addPostComment({
+      await ApiServices.addPostComment({
         postId,
         commentBy: user_id,
         comment,
@@ -145,7 +144,7 @@ const IndividualPostComments = ({
         <div
           className="IndicommentsSectionImage"
           onClick={() => {
-            if (c?.commentBy?._id == user_id) {
+            if (c?.commentBy?._id === user_id) {
               navigate("/editProfile");
             } else {
               navigate(`/user/${c?.commentBy?._id}`);
@@ -298,9 +297,8 @@ const IndividualPostComments = ({
             >
               <div>
                 <i
-                  class={`fas ${
-                    subCommentOpen ? "fa-caret-down" : "fa-caret-right"
-                  }`}
+                  class={`fas ${subCommentOpen ? "fa-caret-down" : "fa-caret-right"
+                    }`}
                 ></i>
               </div>
               <div>{c.subComments?.length} replies</div>
@@ -345,12 +343,12 @@ const IndividualPostComments = ({
                 placeholder="Add a comment..."
                 style={{ resize: "none" }}
 
-                  onKeyDown={(e) => {
-    if (e.key === "Enter" && (comment.trim() || file)) {
-      e.preventDefault(); 
-      addSubComment();
-    }
-  }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && (comment.trim() || file)) {
+                    e.preventDefault();
+                    addSubComment();
+                  }
+                }}
               />
 
               {/* File upload icon */}
@@ -381,8 +379,8 @@ const IndividualPostComments = ({
                 type="file"
                 style={{ display: "none" }}
                 onChange={(e) => {
-                  console.log("File selected"); 
-                  handleFileUpload(e.target.files[0]); 
+                  console.log("File selected");
+                  handleFileUpload(e.target.files[0]);
                 }}
 
               />

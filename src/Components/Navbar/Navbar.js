@@ -153,7 +153,7 @@ const Navbar = () => {
           console.log(d);
           dispatch(setMessageCount(d));
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   }, [liveMessage]);
 
@@ -616,12 +616,12 @@ const Navbar = () => {
       }}
       role="presentation"
     >
-     
+
       <div className="notification-headers flex justify-between items-center mt-[40px]">
         <span className='[font-family:"Gentium_Book_Basic"] font-bold text-[20px] ml-[20px] mb-[10px] hover:cursor-pointer'>
           Notifications
         </span>
-        <span className="text-[#4F55C7] hover:cursor-pointer" onClick={()=>{
+        <span className="text-[#4F55C7] hover:cursor-pointer" onClick={() => {
           toggleNotificationDrawer("right", false)()
         }}>Mark all read</span>
       </div>
@@ -719,7 +719,7 @@ const Navbar = () => {
                         to={`/posts/${n.postId}`}
                         style={{
                           textDecoration: "none",
-                          color:'black'
+                          color: 'black'
                         }}
                       >
                         {n.message}
@@ -966,7 +966,7 @@ const Navbar = () => {
         )}
 
         {/* User Bookings */}
-         <ListItem
+        <ListItem
           button
           key="userBookings"
           onClick={() => navigate("/dashboard/userBookings")}
@@ -982,7 +982,7 @@ const Navbar = () => {
             />
           </ListItemIcon>
           <ListItemText primary="User Bookings" />
-        </ListItem> 
+        </ListItem>
 
         {/* Mentor Bookings - Render only if role === "Mentor" */}
         {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
@@ -1270,9 +1270,8 @@ const Navbar = () => {
               {/* HOME ICON */}
 
               <div
-                className={`navbar-item ${
-                  selectedIcon === "home" ? "selected" : ""
-                }`}
+                className={`navbar-item ${selectedIcon === "home" ? "selected" : ""
+                  }`}
                 onClick={() => {
                   navigate("/posts");
                   handleItemClick("home");
@@ -1308,17 +1307,15 @@ const Navbar = () => {
                   </svg>
                 )}
                 <div
-                  className={`navbar-title ${
-                    selectedIcon === "home" ? "selected-title" : ""
-                  }`}
+                  className={`navbar-title ${selectedIcon === "home" ? "selected-title" : ""
+                    }`}
                 >
                   Home
                 </div>
               </div>
               <div
-                className={`navbar-item ${
-                  selectedIcon === "groups" ? "selected" : ""
-                }`}
+                className={`navbar-item ${selectedIcon === "groups" ? "selected" : ""
+                  }`}
                 onClick={() => {
                   navigate("/connections");
                   handleItemClick("groups");
@@ -1353,9 +1350,8 @@ const Navbar = () => {
                 )}
 
                 <div
-                  className={`navbar-title ${
-                    selectedIcon === "groups" ? "selected-title" : ""
-                  }`}
+                  className={`navbar-title ${selectedIcon === "groups" ? "selected-title" : ""
+                    }`}
                 >
                   Network
                 </div>
@@ -1461,9 +1457,8 @@ const Navbar = () => {
                   {/* PROFILE REQUEST ICON */}
                   {role === "Admin" && (
                     <div
-                      className={`navbar-item ${
-                        selectedIcon === "profiles" ? "selected" : ""
-                      }`}
+                      className={`navbar-item ${selectedIcon === "profiles" ? "selected" : ""
+                        }`}
                       onClick={() => {
                         navigate("/profileRequests");
                         handleItemClick("profiles");
@@ -1499,9 +1494,8 @@ const Navbar = () => {
                         </svg>
                       )}
                       <div
-                        className={`navbar-title${
-                          selectedIcon === "profiles" ? " selected-title" : ""
-                        }`}
+                        className={`navbar-title${selectedIcon === "profiles" ? " selected-title" : ""
+                          }`}
                       >
                         Profiles
                       </div>
@@ -1511,9 +1505,8 @@ const Navbar = () => {
                   {/* PITCHES ICON */}
                   {role === "Admin" && (
                     <div
-                      className={`navbar-item ${
-                        selectedIcon === "pitches" ? "selected" : ""
-                      }`}
+                      className={`navbar-item ${selectedIcon === "pitches" ? "selected" : ""
+                        }`}
                       onClick={() => {
                         navigate("/pitches");
                         handleItemClick("pitches");
@@ -1549,9 +1542,8 @@ const Navbar = () => {
                         </svg>
                       )}
                       <div
-                        className={`navbar-title${
-                          selectedIcon === "pitches" ? " selected-title" : ""
-                        }`}
+                        className={`navbar-title${selectedIcon === "pitches" ? " selected-title" : ""
+                          }`}
                       >
                         Pitches
                       </div>
@@ -1562,9 +1554,8 @@ const Navbar = () => {
 
                   {role === "Admin" && (
                     <div
-                      className={`navbar-item ${
-                        selectedIcon === "reports" ? "selected" : ""
-                      }`}
+                      className={`navbar-item ${selectedIcon === "reports" ? "selected" : ""
+                        }`}
                       onClick={() => {
                         navigate("/postReports");
                         handleItemClick("reports");
@@ -1600,9 +1591,8 @@ const Navbar = () => {
                         </svg>
                       )}
                       <div
-                        className={`navbar-title${
-                          selectedIcon === "reports" ? " selected-title" : ""
-                        }`}
+                        className={`navbar-title${selectedIcon === "reports" ? " selected-title" : ""
+                          }`}
                       >
                         Reports
                       </div>
@@ -1613,9 +1603,8 @@ const Navbar = () => {
 
               {/* MESSAGE ICON */}
               <div
-                className={`navbar-item ${
-                  selectedIcon === "messages" ? "selected" : ""
-                }`}
+                className={`navbar-item ${selectedIcon === "messages" ? "selected" : ""
+                  }`}
                 onClick={() => {
                   navigate("/conversations");
                   handleItemClick("messages");
@@ -1651,9 +1640,8 @@ const Navbar = () => {
                   </svg>
                 )}
                 <div
-                  className={`navbar-title${
-                    selectedIcon === "messages" ? " selected-title" : ""
-                  }`}
+                  className={`navbar-title${selectedIcon === "messages" ? " selected-title" : ""
+                    }`}
                 >
                   Messages
                 </div>
@@ -1689,53 +1677,52 @@ const Navbar = () => {
 
 
               {/* NOTIFICATION ICON */}
-<div
-  className={`navbar-item ${selectedIcon === "notifications" ? "selected" : ""}`}
-  onClick={() => {
-    navigate("/notification-page");
-    handleItemClick("notifications"); // mark as selected
-  }}
->
-  {selectedIcon === "notifications" ? (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1.2em"
-      height="1.2em"
-      viewBox="0 0 24 24"
-      id="notifications-filled"
-      className="icon"
-    >
-      <path
-        fill="var(--nav-head-icons)"
-        d="M12 22c-.825 0-1.412-.587-1.412-1.412h2.824c0 .825-.587 1.412-1.412 1.412zM4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4z"
-      />
-      {notificationAlert && <div className="blinkBall"> </div>}
-    </svg>
-  ) : (
-    <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1.2em"
-                  height="1.2em"
-                  viewBox="0 0 24 24"
-                  id="notifications"
-                  className="icon"
-                >
-                  <path
-                    fill="var(--nav-head-icons)"
-                    d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10z"
-                  />
-                  {notificationAlert && <div className="blinkBall"> </div>}
-                </svg>
-  )}
+              <div
+                className={`navbar-item ${selectedIcon === "notifications" ? "selected" : ""}`}
+                onClick={() => {
+                  navigate("/notification-page");
+                  handleItemClick("notifications"); // mark as selected
+                }}
+              >
+                {selectedIcon === "notifications" ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 24 24"
+                    id="notifications-filled"
+                    className="icon"
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M12 22c-.825 0-1.412-.587-1.412-1.412h2.824c0 .825-.587 1.412-1.412 1.412zM4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4z"
+                    />
+                    {notificationAlert && <div className="blinkBall"> </div>}
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 24 24"
+                    id="notifications"
+                    className="icon"
+                  >
+                    <path
+                      fill="var(--nav-head-icons)"
+                      d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10z"
+                    />
+                    {notificationAlert && <div className="blinkBall"> </div>}
+                  </svg>
+                )}
 
-  <div
-    className={`navbar-title${
-      selectedIcon === "notifications" ? " selected-title" : ""
-    }`}
-  >
-    Notifications
-  </div>
-</div>
+                <div
+                  className={`navbar-title${selectedIcon === "notifications" ? " selected-title" : ""
+                    }`}
+                >
+                  Notifications
+                </div>
+              </div>
 
 
               {/* <Drawer
@@ -1779,32 +1766,74 @@ const Navbar = () => {
                   <div
                     id="editProfile"
                     style={{ position: "relative" }}
-                    onClick={toggleSideBarDrawer(anchor, true)}
+                    onClick={user_id ? toggleSideBarDrawer(anchor, true) : null}
                   >
-                    <img
-                      id="Profile-img"
-                      className="Profile-img"
-                      src={
-                        image !== undefined && image !== ""
-                          ? image.url
-                          : "/profile.png"
-                      }
-                      alt=""
-                    />
-                    {verification === "approved" && (
-                      <img
-                        src="/verify.png"
-                        height={20}
-                        style={{
-                          right: "2px",
-                          top: "3px",
-                          height: "13px",
-                          width: "13px",
-                        }}
-                        alt="Your Alt Text"
-                        className="successIcons"
-                      />
+                    {!user_id ? (
+                      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                        <button
+                          onClick={() => navigate1("/login")}
+                          style={{
+                            background: "transparent",
+                            border: "1px solid var(--primary-color)",
+                            color: "var(--primary-color)",
+                            padding: "5px 15px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            whiteSpace: "nowrap"
+                          }}
+                        >
+                          Login
+                        </button>
+                        <button
+                          onClick={() => navigate1("/signup")}
+                          style={{
+                            background: "var(--primary-color)",
+                            border: "none",
+                            color: "white",
+                            padding: "5px 15px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            whiteSpace: "nowrap"
+                          }}
+                        >
+                          Sign Up
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <img
+                          id="Profile-img"
+                          className="Profile-img"
+                          src={
+                            image !== undefined && image !== ""
+                              ? image.url
+                              : "/profile.png"
+                          }
+                          alt=""
+                        />
+                        {verification === "approved" && (
+                          <img
+                            src="/verify.png"
+                            height={20}
+                            style={{
+                              right: "2px",
+                              top: "3px",
+                              position: 'absolute'
+                            }}
+                            alt="verified"
+                          />
+                        )}
+                      </>
                     )}
+                    {/* height: "13px",
+                    width: "13px",
+                        }}
+                    alt="Your Alt Text"
+                    className="successIcons"
+                      />
+                    )} */}
                   </div>
 
                   <Drawer
@@ -2089,5 +2118,4 @@ const Navbar = () => {
     </div>
   );
 };
-
 export default Navbar;
