@@ -139,7 +139,7 @@ const ReactionsModal = ({ reactions, onClose }) => {
                                             <div className="relative flex-shrink-0">
                                                 <img
                                                     src={
-                                                        reaction.user.image?.url
+                                                        reaction.user.image?.url || "./profile.png"
                                                     }
                                                     alt={reaction.user.userName}
                                                     className="w-12 h-12 rounded-full"
