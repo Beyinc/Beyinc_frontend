@@ -179,11 +179,13 @@ const UserBooking = () => {
   const [showBookSession, setShowBookSession] = useState(false);
   const [expandedReqId, setExpandedReqId] = useState(null);
 
-  const handleContinueBooking = (reqId) => {
+  const handleContinueBooking = (req) => {
     setShowBookSession(true);
-    setExpandedReqId(reqId)
+    // setExpandedReqId(reqId)
+    setSelectedReq(req);
   };
 
+  const [selectedReq, setSelectedReq] = useState(null);
 
   return (
     <Box sx={{ px: { xs: 0, sm: 6 } }} px={6} py={3}>
@@ -488,98 +490,112 @@ const UserBooking = () => {
               )}
             </>
           )}
-        {tabValue === 3 && (
-  <>
-    {userBookingRequest && userBookingRequest.length > 0 ? (
-      <List>
-        {userBookingRequest.map((req) => (
-          <Box key={req._id} mb={3}>
-            {/* Request Type */}
-            <Typography
-              variant="h6"
-              align="left"
-              style={{ marginBottom: "10px" }}
-            >
-              Request Type: {req.requestType.toUpperCase()}
-            </Typography>
+          {tabValue === 3 && (
+            <Box display="flex" width="100%" gap={2}>
+              {/* LEFT SIDE – 70% */}
+<Box
+  width="70%"
+  
+>
+                {userBookingRequest && userBookingRequest.length > 0 ? (
+                  <List>
+                    {userBookingRequest.map((req) => (
+                      <Box key={req._id} mb={3}>
+                        <Typography variant="h6" mb={1}>
+                          Request Type: {req.requestType.toUpperCase()}
+                        </Typography>
 
-            {/* Main Card */}
-            <Box
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              border="1px solid black"
-              borderRadius={1}
-            >
-              {/* Purple Bar */}
-              <Box width="1.5%" bgcolor="#4F55C7" height="100px" />
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          border="1px solid black"
+                          borderRadius={1}
+                          sx={{
+    transition: "all 0.3s ease",
+    "&:hover": {
+      boxShadow: "0px 8px 24px rgba(0,0,0,0.15)",
+    },
+  }}
+                        >
+                          <Box width="1.5%" bgcolor="#4F55C7" height="100px" />
 
-              {/* Mentor Info */}
-              <Box width="25%" ml={6}>
-                <Typography variant="body1">
-                  Mentor: {req.mentorId?.userName || "N/A"}
-                </Typography>
-                <Typography variant="body2">
-                  Email: {req.mentorId?.email}
-                </Typography>
-              </Box>
+                          <Box width="25%" ml={6}>
+                            <Typography>
+                              <strong>Mentor:</strong> {req.mentorId?.userName}
+                            </Typography>
+                            <Typography>
+                              <strong>Email:</strong> {req.mentorId?.email}
+                            </Typography>
+                          </Box>
 
-              {/* Request Details */}
-              <Box width="30%" ml={6}>
-                <Typography variant="body1">
-                  Message: {req.requestMessage}
-                </Typography>
+                          <Box width="30%" ml={20}>
+                            <Typography>
+                              <strong>Message: </strong>
+                              {req.requestMessage.slice(0, 30)}...
+                            </Typography>
+                            <Typography>
+                              <strong>Status:</strong>{" "}
+                              {req.requestStatus ? (
+                                <span
+                                  style={{ color: "green", fontWeight: "bold" }}
+                                >
+                                  Approved
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    color: "orange",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Pending
+                                </span>
+                              )}
+                            </Typography>
+                          </Box>
 
-                <Typography variant="body1">
-                  Status:{" "}
-                  {req.requestStatus ? (
-                    <span style={{ color: "green", fontWeight: "bold" }}>
-                      Approved
-                    </span>
-                  ) : (
-                    <span style={{ color: "orange", fontWeight: "bold" }}>
-                      Pending
-                    </span>
-                  )}
-                </Typography>
-              </Box>
-
-              {/* Action Button */}
-              <Box width="20%" ml={5}>
-                {req.requestStatus ? (
-                  <button
-                    className="joinCall"
-                  onClick={() => handleContinueBooking(req.mentorId._id)}
-                  >
-                    Continue to Booking
-                  </button>
+                          <Box width="20%" ml={10}>
+                            {req.requestStatus ? (
+                              <button
+                                className="joinCall"
+                                style={{
+    padding: "10px 28px",
+    borderRadius: "4px",
+    whiteSpace: "nowrap"
+  }}
+                                onClick={() => handleContinueBooking(req)}
+                              >
+                                Continue to Booking
+                              </button>
+                            ) : (
+                              <Typography color="gray">
+                                Still Pending…
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    ))}
+                  </List>
                 ) : (
-                  <Typography style={{ color: "gray" }}>
-                    Still Pending…
-                  </Typography>
+                  <Typography>No pending requests.</Typography>
+                )}
+              </Box>
+
+              {/* RIGHT SIDE – 30% */}
+              <Box width="30%" marginTop={4}>
+                {selectedReq && (
+                  <Box className="BookSessionCard">
+                    <BookSession
+                      name={selectedReq.mentorId.userName}
+                      mentorId={selectedReq.mentorId._id}
+                      reschedule={false}
+                    />
+                  </Box>
                 )}
               </Box>
             </Box>
-
-            {/* ⭐ BookSession appears BELOW the card */}
-            {showBookSession && expandedReqId === req.mentorId._id && req.requestStatus  && (
-              <div className="BookSessionCard">
-                <BookSession
-                  name={req.mentorId.userName}
-                  mentorId={req.mentorId._id}
-                  reschedule={false}
-                />
-              </div>
-            )}
-          </Box>
-        ))}
-      </List>
-    ) : (
-      <Typography>No pending requests.</Typography>
-    )}
-  </>
-)}
-
+          )}
         </Box>
 
         {/* Drop-down Menu for More Actions */}
