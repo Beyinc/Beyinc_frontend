@@ -244,22 +244,24 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    ApiServices.getAllRoles()
-      .then((res) => {
-        dispatch(setTotalRoles(res.data));
-      })
-      .catch((err) => {
-        // console.log(err);
-        if (err.message == "Network Error") {
-          dispatch(
-            setToast({
-              message: "Check your network connection",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        }
-      });
+    if (localStorage.getItem("user")) {
+      ApiServices.getAllRoles()
+        .then((res) => {
+          dispatch(setTotalRoles(res.data));
+        })
+        .catch((err) => {
+          // console.log(err);
+          if (err.message == "Network Error") {
+            dispatch(
+              setToast({
+                message: "Check your network connection",
+                bgColor: ToastColors.failure,
+                visible: "yes",
+              })
+            );
+          }
+        });
+    }
   }, []);
 
 

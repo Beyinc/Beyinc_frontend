@@ -60,7 +60,7 @@ export default function ConnectionsWithSuggestions() {
       // cleanup when component unmounts
       try {
         socket.current?.disconnect();
-      } catch {}
+      } catch { }
     };
   }, []);
 
@@ -257,12 +257,12 @@ export default function ConnectionsWithSuggestions() {
           // </button>
 
           <button
- className="!rounded-full !px-4 !py-1 !w-[100px] !h-[30px] !text-[rgb(79,85,199)] !border-2 !border-[rgb(79,85,199)] !bg-white border-solid shadow-lg"
+            className="!rounded-full !px-4 !py-1 !w-[100px] !h-[30px] !text-[rgb(79,85,199)] !border-2 !border-[rgb(79,85,199)] !bg-white border-solid shadow-lg"
 
-  onClick={() => setReceiverId(user._id)}
->
-  Chat
-</button>
+            onClick={() => setReceiverId(user._id)}
+          >
+            Chat
+          </button>
 
         )}
       </div>
@@ -326,22 +326,20 @@ export default function ConnectionsWithSuggestions() {
 
             <div className="flex gap-4 ml-10 mb-4 sticky top-[48px] bg-white z-10">
               <button
-                className={`px-4 py-2 rounded-full ${
-                  activeTab === "followers"
+                className={`px-4 py-2 rounded-full ${activeTab === "followers"
                     ? "bg-custom text-white"
                     : "bg-gray-200 text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("followers")}
               >
                 Followers ({followers.length})
               </button>
 
               <button
-                className={`px-4 py-2 rounded-full ${
-                  activeTab === "following"
+                className={`px-4 py-2 rounded-full ${activeTab === "following"
                     ? "bg-custom text-white"
                     : "bg-gray-200 text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("following")}
               >
                 Following ({following.length})
