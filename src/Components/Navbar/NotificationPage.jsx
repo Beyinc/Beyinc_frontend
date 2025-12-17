@@ -6,6 +6,7 @@ import { getAllNotifications } from "../../redux/Conversationreducer/Conversatio
 import { ApiServices } from "../../Services/ApiServices";
 import MessageRequest from "../Conversation/Notification/MessageRequest";
 import PostDiscussionRequest from "../Editprofile/PostDiscussionRequestNotifications";
+import "./NotificationPage.css";
 
 function NotificationPage() {
   const [messageRequest, setMessageRequest] = useState([]);
@@ -53,10 +54,10 @@ function NotificationPage() {
   }, []);
 
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 notification-page-container">
       {/* Sidebar */}
       <div
-        className="shadow-lg p-4"
+        className="shadow-lg p-4 notification-sidebar"
         style={{
           width: "250px",
           height: "300px",
@@ -141,7 +142,7 @@ function NotificationPage() {
 
       {/* Notification Panel */}
       <div
-        className="shadow-lg p-6"
+        className="shadow-lg p-6 notification-main-panel"
         style={{
           width: "1064px",
           height: "759px",

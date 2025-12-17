@@ -1222,23 +1222,25 @@ const Navbar = () => {
           display: localStorage.getItem("user") == undefined ? "none" : "flex",
         }}
       >
-        <div
-          className="logo"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          <img
-            id="logoImage"
-            src={
-              localStorage.getItem("theme") == "light"
-                ? "/Bloomr-login-logo.svg"
-                : "/Footer-Logo.png"
-            }
-            alt="logo"
-          />
-        </div>
+        {width > 768 && (
+          <div
+            className="logo"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <img
+              id="logoImage"
+              src={
+                localStorage.getItem("theme") == "light"
+                  ? "/Bloomr-login-logo.svg"
+                  : "/Footer-Logo.png"
+              }
+              alt="logo"
+            />
+          </div>
+        )}
 
         <div class="search-container">
           <div class="search-icon">
@@ -1255,7 +1257,7 @@ const Navbar = () => {
           </form>
         </div>
 
-        <div className="menuIcons">
+        <div className="menuIcons" style={{ marginLeft: "auto" }}>
           {width > 770 && (
             <>
               <div
