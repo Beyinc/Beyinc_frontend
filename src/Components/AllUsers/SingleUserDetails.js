@@ -96,7 +96,7 @@ const SingleUserDetails = ({
   };
 
   const handleSendRequest = async () => {
-    if (!requestType || !requestMessage) {
+    if (!requestMessage) {
       alert("Please fill all fields");
       return;
     }
@@ -322,10 +322,10 @@ const SingleUserDetails = ({
             </h2>
 
             {/* Dropdown */}
-            <label className="text-sm font-semibold text-blue-600">
+            {/* <label className="text-sm font-semibold text-blue-600">
               Request Type
-            </label>
-            <select
+            </label> */}
+            {/* <select
               className="border border-gray-300 rounded-md p-2 w-full mt-1"
               value={requestType}
               onChange={(e) => setRequestType(e.target.value)}
@@ -338,13 +338,13 @@ const SingleUserDetails = ({
               <option value="priority_dm" disabled>
                 Priority DM
               </option>
-            </select>
+            </select> */}
 
             {/* Duration Dropdown */}
-            {requestType === "session" && (
+        
               <div className="mt-4">
                 <label className="text-sm font-semibold text-blue-600">
-                  Select Duration
+                  Select Session Type
                 </label>
 
                 <select
@@ -357,15 +357,15 @@ const SingleUserDetails = ({
                     setSelectedSession(sessionData);
                   }}
                 >
-                  <option value="">Select Duration</option>
+                  <option value="">Select </option>
                   {session.map((s) => (
                     <option key={s._id} value={s._id}>
-                      {s.duration} minutes
+                      {s.duration} minutes - ₹{s.amount}
                     </option>
                   ))}
                 </select>
               </div>
-            )}
+            
 
             {selectedSession && (
               <div className="mt-4 p-3 bg-blue-50 rounded-md text-center">

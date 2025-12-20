@@ -493,10 +493,7 @@ const UserBooking = () => {
           {tabValue === 3 && (
             <Box display="flex" width="100%" gap={2}>
               {/* LEFT SIDE – 70% */}
-<Box
-  width="70%"
-  
->
+              <Box width="70%">
                 {userBookingRequest && userBookingRequest.length > 0 ? (
                   <List>
                     {userBookingRequest.map((req) => (
@@ -511,11 +508,11 @@ const UserBooking = () => {
                           border="1px solid black"
                           borderRadius={1}
                           sx={{
-    transition: "all 0.3s ease",
-    "&:hover": {
-      boxShadow: "0px 8px 24px rgba(0,0,0,0.15)",
-    },
-  }}
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              boxShadow: "0px 8px 24px rgba(0,0,0,0.15)",
+                            },
+                          }}
                         >
                           <Box width="1.5%" bgcolor="#4F55C7" height="100px" />
 
@@ -559,10 +556,10 @@ const UserBooking = () => {
                               <button
                                 className="joinCall"
                                 style={{
-    padding: "10px 28px",
-    borderRadius: "4px",
-    whiteSpace: "nowrap"
-  }}
+                                  padding: "10px 28px",
+                                  borderRadius: "4px",
+                                  whiteSpace: "nowrap",
+                                }}
                                 onClick={() => handleContinueBooking(req)}
                               >
                                 Continue to Booking
@@ -590,6 +587,7 @@ const UserBooking = () => {
                       name={selectedReq.mentorId.userName}
                       mentorId={selectedReq.mentorId._id}
                       reschedule={false}
+                      selectedDuration={selectedReq.duration}
                     />
                   </Box>
                 )}
