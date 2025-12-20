@@ -1,17 +1,17 @@
 import { useState } from "react";
-// import {
-//   ChevronRight,
-//   CheckCircle2,
-//   ChevronDown,
-//   ChevronUp,
-//   Search,
-//   X,
-//   Users,
-//   User,
-//   Briefcase,
-//   Eye,
-//   EyeOff,
-// } from "lucide-react";
+import {
+  ChevronRight,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Search,
+  X,
+  Users,
+  User,
+  Briefcase,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 import {
   ROLE_LEVELS,
   INDUSTRY_EXPERTISE,
@@ -27,11 +27,6 @@ import {
   TARGET_MARKETS,
 } from "../../lib/constants";
 
-const Icon = ({ children, className = "" }) => (
-  <span className={`inline-flex items-center justify-center ${className}`}>
-    {children}
-  </span>
-);
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
 
@@ -225,9 +220,7 @@ export default function OnboardingPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-12 text-center max-w-md">
           <div className="mb-6 flex justify-center">
-            {/* <CheckCircle2 className="w-16 h-16 text-green-500" /> */}
-
-            <Icon className="text-green-500 text-2xl">✔️</Icon>
+            <CheckCircle2 className="w-16 h-16 text-green-500" />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 mb-3">
             Onboarding Complete!
@@ -467,17 +460,19 @@ export default function OnboardingPage() {
                       onClick={() => setSelectedProfileType(type.id)}
                       className={`p-6 rounded-xl text-left transition-all border-2 flex flex-col h-full ${
                         selectedProfileType === type.id
-                          ? "bg-blue-50 border-blue-600 shadow-md"
-                          : "bg-white border-slate-100 hover:border-blue-200 hover:shadow-sm"
+                          ? "border-blue-200 shadow-md bg-indigo-700"
+                          : "bg-white hover:bg-indigo-700  border-slate-100 hover:border-blue-200 hover:shadow-sm "
                       }`}
                     >
                       <div className="p-3 bg-blue-100 w-fit rounded-lg mb-4 text-2xl">
                         {type.icon}
                       </div>
-                      <h3 className="font-bold text-slate-900 mb-2">
+                      <h3 className={`font-bold  mb-2 text-slate-900 `}>
                         {type.label}
                       </h3>
-                      <p className="text-sm text-slate-500 leading-relaxed">
+                      <p
+                        className={`text-sm  leading-relaxed ${selectedProfileType === type.id ? "text-slate-400" : "text-slate-500"}`}
+                      >
                         {type.description}
                       </p>
                     </button>
@@ -515,12 +510,7 @@ export default function OnboardingPage() {
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-semibold">{level}</span>
                           {roleLevel === level && (
-                            <>
-                              <Icon className="text-green-500 text-2xl">
-                                ✔️
-                              </Icon>
-                              {/* <CheckCircle2 className="w-5 h-5 text-white" /> */}
-                            </>
+                            <CheckCircle2 className="w-5 h-5 text-white" />
                           )}
                         </div>
                       </button>
@@ -556,27 +546,13 @@ export default function OnboardingPage() {
                                     {stage.label}
                                   </span>
                                   {companyStage === stage.label && (
-                                    <>
-                                      <Icon className="text-green-500 text-2xl">
-                                        ✔️
-                                      </Icon>
-                                      {/* <CheckCircle2 */}
-                                      {/**/}
-                                      {/*   className={`w-5 h-5 ${ */}
-                                      {/*     companyStage === stage.label */}
-                                      {/*       ? "text-white" */}
-                                      {/*       : "text-blue-600" */}
-                                      {/*   }`} */}
-                                      {/* /> */}
-                                    </>
+                                    <CheckCircle2
+                                      className={`w-5 h-5 ${companyStage === stage.label ? "text-white" : "text-blue-600"}`}
+                                    />
                                   )}
                                 </div>
                                 <p
-                                  className={`text-xs mt-1 ${
-                                    companyStage === stage.label
-                                      ? "text-blue-100"
-                                      : "text-slate-500"
-                                  }`}
+                                  className={`text-xs mt-1 ${companyStage === stage.label ? "text-blue-100" : "text-slate-500"}`}
                                 >
                                   {stage.description}
                                 </p>
@@ -690,29 +666,16 @@ export default function OnboardingPage() {
                               <div className="flex-1">
                                 <div className="flex items-center justify-between mb-1">
                                   <span
-                                    className={`font-bold text-sm ${
-                                      visibilityMode === mode.id
-                                        ? "text-white"
-                                        : "text-slate-900"
-                                    }`}
+                                    className={`font-bold text-sm ${visibilityMode === mode.id ? "text-white" : "text-slate-900"}`}
                                   >
                                     {mode.label}
                                   </span>
                                   {visibilityMode === mode.id && (
-                                    <>
-                                      <Icon className="text-green-500 text-2xl">
-                                        ✔️
-                                      </Icon>
-                                      {/* <CheckCircle2 className="w-5 h-5 text-white" /> */}
-                                    </>
+                                    <CheckCircle2 className="w-5 h-5 text-white" />
                                   )}
                                 </div>
                                 <p
-                                  className={`text-xs mt-1 ${
-                                    visibilityMode === mode.id
-                                      ? "text-blue-100"
-                                      : "text-slate-500"
-                                  }`}
+                                  className={`text-xs mt-1 ${visibilityMode === mode.id ? "text-blue-100" : "text-slate-500"}`}
                                 >
                                   {mode.description}
                                 </p>
@@ -811,7 +774,11 @@ export default function OnboardingPage() {
                                 )}
                               </div>
                               <div className="flex items-center gap-2">
-                                {isExpanded ? <Icon>▴</Icon> : <Icon>▾</Icon>}
+                                {isExpanded ? (
+                                  <ChevronUp className="w-5 h-5 text-slate-600" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 text-slate-600" />
+                                )}
                               </div>
                             </button>
 
@@ -834,9 +801,7 @@ export default function OnboardingPage() {
                                       <div className="flex items-center justify-between">
                                         <span>{skill}</span>
                                         {selectedExpertise.includes(skill) && (
-                                          <Icon className="text-green-500 text-2xl">
-                                            ✔️
-                                          </Icon>
+                                          <CheckCircle2 className="w-4 h-4 text-white" />
                                         )}
                                       </div>
                                     </button>
@@ -996,7 +961,11 @@ export default function OnboardingPage() {
                                 )}
                               </div>
                               <div className="flex items-center gap-2">
-                                {isExpanded ? <Icon>▴</Icon> : <Icon>▾</Icon>}
+                                {isExpanded ? (
+                                  <ChevronUp className="w-5 h-5 text-slate-600" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 text-slate-600" />
+                                )}
                               </div>
                             </button>
 
@@ -1018,9 +987,7 @@ export default function OnboardingPage() {
                                       <div className="flex items-center justify-between">
                                         <span>{skill}</span>
                                         {selectedExpertise.includes(skill) && (
-                                          <Icon className="text-green-500 text-2xl">
-                                            ✔️
-                                          </Icon>
+                                          <CheckCircle2 className="w-4 h-4 text-white" />
                                         )}
                                       </div>
                                     </button>
@@ -1119,22 +1086,11 @@ export default function OnboardingPage() {
                           }`}
                         >
                           <div className="flex items-center gap-3 mb-2">
-                            <Icon
-                              className={`w-6 h-6 ${
-                                servicePartnerType === "individual"
-                                  ? "text-blue-600"
-                                  : "text-slate-400"
-                              }`}
-                            >
-                              👤
-                            </Icon>
-
+                            <User
+                              className={`w-6 h-6 ${servicePartnerType === "individual" ? "text-blue-600" : "text-slate-400"}`}
+                            />
                             <span
-                              className={`font-semibold ${
-                                servicePartnerType === "individual"
-                                  ? "text-blue-900"
-                                  : "text-slate-700"
-                              }`}
+                              className={`font-semibold ${servicePartnerType === "individual" ? "text-blue-900" : "text-slate-700"}`}
                             >
                               Individual / Freelancer
                             </span>
@@ -1154,22 +1110,11 @@ export default function OnboardingPage() {
                           }`}
                         >
                           <div className="flex items-center gap-3 mb-2">
-                            <Icon
-                              className={`w-6 h-6 ${
-                                servicePartnerType === "agency"
-                                  ? "text-blue-600"
-                                  : "text-slate-400"
-                              }`}
-                            >
-                              👥
-                            </Icon>
-
+                            <Users
+                              className={`w-6 h-6 ${servicePartnerType === "agency" ? "text-blue-600" : "text-slate-400"}`}
+                            />
                             <span
-                              className={`font-semibold ${
-                                servicePartnerType === "agency"
-                                  ? "text-blue-900"
-                                  : "text-slate-700"
-                              }`}
+                              className={`font-semibold ${servicePartnerType === "agency" ? "text-blue-900" : "text-slate-700"}`}
                             >
                               Agency / Company
                             </span>
@@ -1215,8 +1160,7 @@ export default function OnboardingPage() {
                             : "Year Started"}
                         </label>
                         <div className="relative">
-                          <Icon className="text-xl">💼</Icon>
-
+                          <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                           <input
                             type="number"
                             min="1900"
@@ -1292,17 +1236,11 @@ export default function OnboardingPage() {
                                     {stage.label}
                                   </span>
                                   {startupStage === stage.id && (
-                                    <Icon className="text-green-500 text-2xl">
-                                      ✔️
-                                    </Icon>
+                                    <CheckCircle2 className="w-5 h-5 text-white" />
                                   )}
                                 </div>
                                 <p
-                                  className={`text-xs mt-1 ${
-                                    startupStage === stage.id
-                                      ? "text-blue-100"
-                                      : "text-slate-500"
-                                  }`}
+                                  className={`text-xs mt-1 ${startupStage === stage.id ? "text-blue-100" : "text-slate-500"}`}
                                 >
                                   {stage.description}
                                 </p>
@@ -1333,9 +1271,7 @@ export default function OnboardingPage() {
                             <div className="flex items-center justify-between">
                               <span>{size}</span>
                               {startupTeamSize === size && (
-                                <Icon className="text-green-500 text-2xl">
-                                  ✔️
-                                </Icon>
+                                <CheckCircle2 className="w-4 h-4 text-white" />
                               )}
                             </div>
                           </button>
@@ -1373,9 +1309,7 @@ export default function OnboardingPage() {
                                   {industry}
                                 </span>
                                 {isSelected && (
-                                  <Icon className="text-green-500 text-2xl">
-                                    ✔️
-                                  </Icon>
+                                  <CheckCircle2 className="w-5 h-5 text-white" />
                                 )}
                               </div>
                             </button>
@@ -1410,9 +1344,7 @@ export default function OnboardingPage() {
                             <div className="flex items-center justify-between">
                               <span>{market}</span>
                               {targetMarket === market && (
-                                <Icon className="text-green-500 text-2xl">
-                                  ✔️
-                                </Icon>
+                                <CheckCircle2 className="w-4 h-4 text-white" />
                               )}
                             </div>
                           </button>
@@ -1495,7 +1427,7 @@ export default function OnboardingPage() {
                 selectedProfileType === "service-partner" ||
                 selectedProfileType === "startup"
                   ? 3
-                  : 1) && <Icon className="text-lg">›</Icon>}
+                  : 1) && <ChevronRight className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -1503,3 +1435,4 @@ export default function OnboardingPage() {
     </div>
   );
 }
+

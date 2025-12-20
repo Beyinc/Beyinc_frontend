@@ -4,7 +4,7 @@ import { dataEntry } from "../../Utils";
 
 const BoxCategories = ({ onCategoryClick, selectedCategory }) => {
   const handleNext = () => {
-    console.log(selectedCategory);
+    // console.log(selectedCategory);
   };
 
   return (

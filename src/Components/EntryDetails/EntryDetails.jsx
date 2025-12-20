@@ -136,14 +136,11 @@ const EntryDetails = () => {
     <div className="bg-customWhite md:my-5 md:mx-20 shadow-[0_3px_12px_rgba(0,0,0,0.1)]">
       <div className="flex flex-col py-4 md:py-10 md:px-20">
         <h2 className="font-bold md:mb-5 pl-6">Tell us who you are?* </h2>
-        {selectedCategory === "Startup" ? (
-          <BoxCategories
-            onCategoryClick={onCategoryClick}
-            selectedCategory={selectedCategory}
-          />
-        ) : (
-          <StartupOnboard />
-        )}
+        {/* <BoxCategories */}
+        {/*   onCategoryClick={onCategoryClick} */}
+        {/*   selectedCategory={selectedCategory} */}
+        {/* /> */}
+        <StartupOnboard />
         <h2 className="font-bold md:mb-5 pl-6 mt-5 md:mt-11">Name*</h2>
         <input
           type="text"
