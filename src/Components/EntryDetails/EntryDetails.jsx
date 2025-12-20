@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import BoxCategories from "./BoxCategories";
-import {
-  allskills,
-  dataEntry,
-} from "../../Utils";
+import { allskills, dataEntry } from "../../Utils";
 import { useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
+import StartupOnboard from "../StartupOnboard/StartupOnboard";
 
 const EntryDetails = () => {
   const { email, user_id } = useSelector((store) => store.auth.loginDetails);
@@ -42,7 +40,7 @@ const EntryDetails = () => {
         alert(
           `File size should be less than ${
             (4 * 1024 * 1024) / (1024 * 1024)
-          } MB.`
+          } MB.`,
         );
         e.target.value = null; // Clear the selected file
         return;
@@ -65,7 +63,7 @@ const EntryDetails = () => {
     const selectedInterest = e.target.value;
     if (interests.includes(selectedInterest)) {
       setInterests(
-        interests.filter((interest) => interest !== selectedInterest)
+        interests.filter((interest) => interest !== selectedInterest),
       );
     } else {
       if (interests.length < 5) {
@@ -97,7 +95,7 @@ const EntryDetails = () => {
 
     if (!selectedCategory || !username || !skills || skills.length === 0) {
       alert(
-        "Please fill in the required fields: Category, Username, and Skills."
+        "Please fill in the required fields: Category, Username, and Skills.",
       );
       return;
     }
@@ -130,18 +128,19 @@ const EntryDetails = () => {
     }
   };
 
-  useEffect(()=>{
-// console.log(dataEntry);
-  },[])
+  useEffect(() => {
+    // console.log(dataEntry);
+  }, []);
   return (
     // bg-customWhite
     <div className="bg-customWhite md:my-5 md:mx-20 shadow-[0_3px_12px_rgba(0,0,0,0.1)]">
       <div className="flex flex-col py-4 md:py-10 md:px-20">
         <h2 className="font-bold md:mb-5 pl-6">Tell us who you are?* </h2>
-        <BoxCategories
-          onCategoryClick={onCategoryClick}
-          selectedCategory={selectedCategory}
-        />
+        {/* <BoxCategories */}
+        {/*   onCategoryClick={onCategoryClick} */}
+        {/*   selectedCategory={selectedCategory} */}
+        {/* /> */}
+        <StartupOnboard />
         <h2 className="font-bold md:mb-5 pl-6 mt-5 md:mt-11">Name*</h2>
         <input
           type="text"
