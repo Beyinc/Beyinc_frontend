@@ -15,7 +15,7 @@ import WebinarModal from './webinar.jsx'; // Adjust the import path as needed
 
 
 
-const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
+const BookSession = ({ name, mentorId, reschedule, rescheduleBooking,selectedDuration }) => {
 
   console.log('mentorId', mentorId)
 //  console.log('reschedule', reschedule);
@@ -37,6 +37,34 @@ const BookSession = ({ name, mentorId, reschedule, rescheduleBooking }) => {
   const [ mentorData, setMentorData] = useState({})
   const [selectedSession, setSelectedSession] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
+
+
+const isDurationLocked = Boolean(
+  reschedule || selectedDuration
+);
+
+useEffect(() => {
+  // Decide where duration comes from
+console.log('selected duration coming', selectedDuration)
+  const incomingDuration = reschedule
+    ? rescheduleBooking?.duration
+    : selectedDuration; // or props.defaultDuration
+
+  if (!incomingDuration || durationList.length === 0) return;
+
+  const matchedSession = durationList.find(
+    (item) => item.duration === incomingDuration
+  );
+
+  if (matchedSession) {
+    setDurationId({
+      duration: matchedSession.duration,
+      id: matchedSession.id,
+    });
+  }
+}, [durationList, reschedule, rescheduleBooking]);
+
+
 
   const [durationId, setDurationId] = useState({ duration: null, id: '' });
 
@@ -304,7 +332,7 @@ const handleDurationChange = (selectedId) => {
           </select>
 
 
-                    {!reschedule &&   (<>
+                    {/* {!reschedule &&   (<>
                       <label className="label">Duration</label>
                                 <select
                                       className="select"
@@ -319,7 +347,30 @@ const handleDurationChange = (selectedId) => {
                                       ))}
                                 </select>
                                 </>)
-              }
+              } */}
+
+<label className="label">Duration:</label>
+
+{isDurationLocked ? (
+  // Read-only duration display
+  <div className="duration-box">
+    {durationId.duration} Minutes
+  </div>
+) : (
+  //  Normal dropdown
+  <select
+    className="select"
+    value={durationId.id}
+    onChange={(e) => handleDurationChange(e.target.value)}
+  >
+    <option value="" disabled>Select Duration</option>
+    {durationList.map((item) => (
+      <option key={item.id} value={item.id}>
+        {item.duration} Minutes
+      </option>
+    ))}
+  </select>
+)}
 
 {/* {durationId && durationId.length > 0 && ( */}
 {(durationId.id && durationId.id.length > 0) || (durationId.duration !== null) ? (
