@@ -439,9 +439,7 @@
 //   ],
 // }
 
-
 // const EntryDetails = () => {
-
 
 // // const [step, setStep] = useState(1);
 //   const [completed, setCompleted] = useState(false);
@@ -481,9 +479,6 @@
 //   const [selectedStartupIndustries, setSelectedStartupIndustries] = useState([]);
 //   const [targetMarket, setTargetMarket] = useState("");
 
-
-
-  
 //   const { email, user_id } = useSelector((store) => store.auth.loginDetails);
 
 //   const [step, setStep] = useState(1);
@@ -546,7 +541,6 @@
 //     [industry]: false,
 //   }));
 // };
-
 
 //   /* ------------------ Handlers ------------------ */
 
@@ -713,9 +707,7 @@
 //   </div>
 // ))}
 
-
 // </div>
-
 
 //           <button
 //             disabled={!roleLevel}
@@ -946,7 +938,6 @@
 
 // export default EntryDetails;
 
-
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import BoxCategories from "./BoxCategories";
@@ -955,9 +946,6 @@ import { ApiServices } from "../../Services/ApiServices";
 import { INDUSTRY_EXPERTISE } from "../../Utils";
 import { ROLE_LEVELS } from "../../Utils";
 /* ------------------ CONSTANTS ------------------ */
-
-
-
 
 // export const INDUSTRY_EXPERTISE = {
 //   "Technology / Software": [
@@ -1025,7 +1013,6 @@ const EntryDetails = () => {
 
   const onCategoryClick = (title) => {
     setSelectedCategory(title);
-    setStep(title === "Mentor" ? 2 : 1);
   };
 
   const handleSkillToggle = (skill) => {
@@ -1106,10 +1093,29 @@ const EntryDetails = () => {
       //   expertise: selectedExpertise,
       // });
 
-      console.log("role:", roleLevel, "expertise: ",selectedExpertise);
+      await ApiServices.InputEntryData({
+        username,
+        headline,
+        skills,
+        interests,
+        selectedCategory,
+        role_level: roleLevel,
+        mentorExpertise: selectedExpertise,
+      });
+
+      // username, headline, skills, interests, selectedCategory ,role_level,mentor_expertise
+
+      console.log(
+        "role:",
+        roleLevel,
+        "expertise: ",
+        selectedExpertise,
+        "selected category:",
+        selectedCategory
+      );
 
       alert("Profile created successfully!");
-      // window.location.href = "/posts";
+      window.location.href = "/posts";
     } catch (err) {
       alert("Something went wrong");
       console.error(err);
@@ -1130,7 +1136,19 @@ const EntryDetails = () => {
             selectedCategory={selectedCategory}
           />
 
-          {selectedCategory && selectedCategory !== "Mentor" && (
+        <div className="flex justify-end">
+  <button
+    onClick={() => {
+      setStep(selectedCategory === "Mentor" ? 2 : 1);
+    }}
+    className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 w-[100px]"
+    disabled={!selectedCategory}
+  >
+    Next
+  </button>
+</div>
+
+          {/* {selectedCategory && selectedCategory !== "Mentor" && (
             <>
               <input
                 className="mt-6 w-full border p-2 rounded"
@@ -1186,7 +1204,7 @@ const EntryDetails = () => {
                 Submit
               </button>
             </>
-          )}
+          )} */}
         </>
       )}
 
@@ -1198,9 +1216,9 @@ const EntryDetails = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {ROLE_LEVELS.map((role) => (
               <div
-              style={{
-                "border":"1px solid gray"
-              }}
+                style={{
+                  border: "1px solid gray",
+                }}
                 key={role}
                 onClick={() => setRoleLevel(role)}
                 className={`cursor-pointer text-center p-3 rounded-lg border-2
@@ -1216,8 +1234,19 @@ const EntryDetails = () => {
           </div>
 
           <button
+            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 w-[100px]"
+            onClick={() => {
+              setStep(1);
+              setRoleLevel("");
+              setSelectedCategory("");
+            }}
+          >
+            Prev
+          </button>
+
+          <button
             disabled={!roleLevel}
-            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded  ml-4 w-[100px] disabled:opacity-50"
             onClick={() => setStep(3)}
           >
             Next
@@ -1234,15 +1263,12 @@ const EntryDetails = () => {
 
           <div className="space-y-3">
             {Object.entries(INDUSTRY_EXPERTISE).map(([industry, skills]) => (
-              <div
-                key={industry}
-                className="border-2 rounded-lg bg-white"
-              >
+              <div key={industry} className="border-2 rounded-lg bg-white">
                 <div
                   onClick={() => toggleIndustry(industry)}
                   className="flex justify-between p-4 cursor-pointer"
                   style={{
-                    "border":"1px solid gray"
+                    border: "1px solid gray",
                   }}
                 >
                   <strong>{industry}</strong>
@@ -1254,12 +1280,10 @@ const EntryDetails = () => {
                     {skills.map((skill) => (
                       <div
                         style={{
-                    "border":"1px solid gray"
-                  }}
+                          border: "1px solid gray",
+                        }}
                         key={skill}
-                        onClick={() =>
-                          handleExpertiseToggle(industry, skill)
-                        }
+                        onClick={() => handleExpertiseToggle(industry, skill)}
                         className={`cursor-pointer p-2 rounded border
                           ${
                             selectedExpertise[industry]?.includes(skill)
@@ -1277,8 +1301,18 @@ const EntryDetails = () => {
           </div>
 
           <button
-            className="mt-8 bg-blue-600 text-white px-6 py-2 rounded"
+            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded w-[100px] disabled:opacity-50"
+            onClick={() => {
+              setStep(2);
+              setSelectedExpertise({});
+            }}
+          >
+            Prev
+          </button>
+          <button
+            className="mt-8 bg-blue-600 text-white px-6 py-2 rounded w-[100px] ml-4 disabled:opacity-50"
             onClick={handleSubmit}
+            disabled={Object.keys(selectedExpertise).length === 0}
           >
             Submit
           </button>

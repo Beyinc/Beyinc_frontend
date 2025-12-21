@@ -2,7 +2,9 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { dataEntry } from "../../Utils";
 
-const BoxCategories = ({ onCategoryClick,selectedCategory }) => {
+const BoxCategories = ({
+   onCategoryClick,
+   selectedCategory }) => {
   const allowedTitles = ['Individual/Entrepreneur','Mentor','Startup'];
 
   return (
