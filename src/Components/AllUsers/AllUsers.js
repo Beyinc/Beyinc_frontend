@@ -1,577 +1,467 @@
 import React, { useEffect, useState } from "react";
-import { ApiServices } from "../../Services/ApiServices";
 import { useDispatch, useSelector } from "react-redux";
-import { Country } from "country-state-city";
-import CachedIcon from "@mui/icons-material/Cached";
-import SingleUserDetails from "./SingleUserDetails";
-import "./users.css";
-import { allLanguages, allskills, fetchRating } from "../../Utils";
-import AddReviewStars from "../LivePitches/AddReviewStars";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
+import { ApiServices } from "../../Services/ApiServices";
 import { setLoading } from "../../redux/AuthReducers/AuthReducer";
-
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  Checkbox,
-  Collapse,
-  FormControlLabel,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-} from "@mui/material";
-// import { FilterPanel } from "./FilterPanel";
-import useWindowDimensions from "../Common/WindowSize";
-// import { FilterCheckBoxes } from "./FilterCheckBox";
-import { Search } from "@mui/icons-material";
-import { getAllHistoricalConversations } from "../../redux/Conversationreducer/ConversationReducer";
-// import AddPitch from "../Common/AddPitch";
-import AddConversationPopup from "../Common/AddConversationPopup";
 import FilterSidebar from "./FilterSidebar";
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+import SingleUserDetails from "./SingleUserDetails";
+import { Collapse, Button } from "@mui/material";
+import AddConversationPopup from "../Common/AddConversationPopup";
+import CachedIcon from "@mui/icons-material/Cached";
+import { AccessTime, CalendarMonth } from "@mui/icons-material";
+import "./users.css";
+
+// --- Sub-Component: Request List Item (Left Side) ---
+const IncomingRequestItem = ({ item, isSelected, onClick }) => (
+  <div
+    onClick={onClick}
+    className={`relative p-4 cursor-pointer transition-all duration-200 rounded-xl mb-3 border
+      ${isSelected 
+        ? "bg-white border-[#4f55c7] shadow-[0_0_0_1px_#4f55c7]" // Selected State
+        : "bg-white border-transparent hover:border-gray-200 hover:shadow-md hover:translate-x-1" // Default/Hover State
+      }`}
+  >
+    <div className="flex items-start gap-4">
+      <img
+        alt={item.userName}
+        className="w-12 h-12 rounded-full object-cover flex-shrink-0 border border-gray-100"
+        src={item.userImg}
+      />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between mb-1">
+          <p className={`font-bold text-base ${isSelected ? 'text-[#4f55c7]' : 'text-gray-900'}`}>
+            {item.userName}
+          </p>
+          <span className="text-[10px] bg-[#4f55c7]/10 text-[#4f55c7] px-2 py-1 rounded-md font-bold uppercase tracking-wider">
+            {item.type}
+          </span>
+        </div>
+        <p className="text-sm font-medium text-gray-800 mb-1">{item.title}</p>
+        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">{item.description}</p>
+        <div className="flex items-center gap-2 mt-3 text-xs text-gray-400 font-medium">
+            <span>{item.date}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// --- Sub-Component: Request Detail View (Right Side) ---
+const RequestDetailView = ({ request }) => {
+  if (!request) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center text-gray-400 border border-dashed border-gray-300 rounded-2xl bg-gray-50/50 p-10">
+        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#4f55c7]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        </div>
+        <p className="font-medium text-gray-500">Select a request to view details</p>
+      </div>
+    );
+  }
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+    <div className="bg-white border border-gray-200 rounded-2xl p-8 sticky top-24 shadow-sm">
+      <div className="flex justify-between items-start mb-6 pb-6 border-b border-gray-100">
+        <div className="flex items-center gap-4">
+            <img
+            alt={request.userName}
+            className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
+            src={request.userImg}
+            />
+            <div>
+            <h3 className="text-xl font-bold text-gray-900">{request.userName}</h3>
+            <p className="text-xs font-medium text-gray-500">Requested {request.requestedTime || "Recently"}</p>
+            </div>
+        </div>
+        <div className="text-right">
+             <p className="text-2xl font-bold text-[#4f55c7]">₹ {request.price || "Free"}</p>
+             <p className="text-xs text-gray-400">Total Price</p>
+        </div>
+      </div>
+      
+      {/* Title */}
+      <div className="mb-6">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Session Topic</p>
+        <p className="font-semibold text-gray-800 text-lg">{request.title}</p>
+      </div>
+
+      {/* Message */}
+      <div className="mb-8">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Message</p>
+        <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-[#4f55c7]">
+            <p className="text-sm text-gray-600 leading-relaxed italic">
+            "{request.description}"
+            </p>
+        </div>
+      </div>
+
+      {/* Duration & Details Grid */}
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="bg-white border border-gray-100 p-3 rounded-lg shadow-sm">
+             <p className="text-xs text-gray-500 mb-1">Duration</p>
+             <p className="font-semibold text-gray-900 flex items-center gap-2">
+                <AccessTime sx={{fontSize: 16, color: '#4f55c7'}}/> 
+                {request.durationSimple || "45 mins"}
+             </p>
+        </div>
+        <div className="bg-white border border-gray-100 p-3 rounded-lg shadow-sm">
+             <p className="text-xs text-gray-500 mb-1">Session Type</p>
+             <p className="font-semibold text-gray-900">{request.type}</p>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="space-y-3 pt-2">
+        <button className="w-full px-6 py-3 bg-[#4f55c7] text-white font-semibold rounded-xl hover:bg-[#3e44a8] transition-all shadow-md shadow-[#4f55c7]/20 flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+          Approve & Schedule
+        </button>
+        
+        <div className="grid grid-cols-2 gap-3">
+            <button className="w-full px-4 py-3 border border-[#4f55c7] text-[#4f55c7] font-semibold rounded-xl hover:bg-[#4f55c7]/5 transition-colors flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+            Reschedule
+            </button>
+            <button className="w-full px-4 py-3 border border-gray-200 text-gray-500 font-semibold rounded-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            Decline
+            </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
-  };
-}
 
-const tabs = ["Role", "Name", "Skills", "Country", "Language", "Other"];
 const AllUsers = () => {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  const totalRoles = useSelector((state) => state.auth.totalRoles);
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const [IsAdmin, setIsAdmin] = useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [data, setData] = useState([]);
-  const [tag, settag] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
-  const { email, user_id } = useSelector((state) => state.auth.loginDetails);
-  const [filledStars, setFilledStars] = useState(0);
-  const [search, setSearch] = useState("");
-  const [receiverRole, setreceiverRole] = useState("");
-  const [pitchSendTo, setPitchSendTo] = useState("");
-  // const [filters, setFilters] = useState({
-  //   role: [],
-  //   languagesKnown: [],
-  //   skills: [],
-  //   email: [],
-  //   state: [],
-  //   country: [],
-  //   userColleges: [],
-  //   verification: false,
-  //   userName: [],
-  //   review: 0,
-  // });
+  // --- 1. Window Width Logic ---
+  const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
-    setFilters((prev) => ({ ...prev, review: filledStars }));
-  }, [filledStars]);
-  // const [universities, setUniversities] = useState([])
-  // useEffect(() => {
-  //     axios.get('http://universities.hipolabs.com/search').then(res => {
-  //         setUniversities(res.data)
-  //     })
-  // }, [])
-  useEffect(() => {
-    dispatch(setLoading({ visible: "yes" }));
-    ApiServices.getAllUsers({ type: "" }).then((res) => {
-      console.log(JSON.stringify(res.data));
-      const filteredUsers = res.data.filter(user => 
-        user.beyincProfile && user.beyincProfile.trim() !== ''
-    );
-    
-       
-      console.log(filteredUsers);
-      
-
-      setData(filteredUsers);
-      dispatch(setLoading({ visible: "no" }));
-    });
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // useEffect(() => {
-  //   if (data.length > 0) {
-  //     filterUsers();
-  //   }
-  // }, [data, filters]);
-
-  // const filterUsers = () => {
-  //   let filteredData = [...data];
-  //   // console.log(filters);
-  //   if (Object.keys(filters).length > 0) {
-  //     Object.keys(filters).map((ob) => {
-  //       if (filters[ob].length > 0 || ob === "verification" || ob === "review") {
-  //         if (
-  //           ob !== "tags" &&
-  //           ob !== "verification" &&
-  //           ob !== "email" &&
-  //           ob !== "userName" &&
-  //           ob !== "industry2" &&
-  //           ob !== "userColleges" &&
-  //           ob !== "country" &&
-  //           ob !== "state" &&
-  //           ob !== "skills" &&
-  //           ob !== "languagesKnown" &&
-  //           ob !== "review" &&
-  //           ob !== "role"
-  //         ) {
-  //           filteredData = filteredData.filter((f) =>
-  //             filters[ob].includes(f[ob])
-  //           );
-  //         } else if (
-  //           ob === "tags" ||
-  //           ob == "skills" ||
-  //           ob == "languagesKnown"
-  //         ) {
-  //           filteredData = filteredData.filter((item) => {
-  //             const itemdata = item[ob].map((t) => t.toLowerCase()) || [];
-  //             return filters[ob].some((tag) =>
-  //               itemdata.includes(tag.toLowerCase())
-  //             );
-  //           });
-  //         } else if (ob == "userColleges") {
-  //           filteredData = filteredData.filter((item) => {
-  //             const itemdata =
-  //               item["educationDetails"]?.map((t) => t.college) || [];
-  //             return filters[ob].some((tag) => itemdata.includes(tag));
-  //           });
-  //         } else if (ob == "verification") {
-  //           if (filters[ob]) {
-  //             filteredData = filteredData.filter((item) => {
-  //               return item.verification == "approved";
-  //             });
-  //           }
-  //         } else if (
-  //           ob == "userName" ||
-  //           ob == "industry2" ||
-  //           ob == "country" ||
-  //           ob == "state" ||
-  //           ob == "email" ||
-  //           ob == "role"
-  //         ) {
-  //           filteredData = filteredData.filter((f) => {
-  //             return filters[ob].some((fs) => fs === f[ob]);
-  //           });
-  //         } else if (ob == "review") {
-  //           if (filters[ob] !== 0) {
-  //             filteredData = filteredData.filter((f) => {
-  //               return fetchRating(f) <= filters[ob];
-  //             });
-  //           }
-  //         }
-
-  //       }
-  //     });
-  //   }
-  //   filteredData.sort((a, b) => {
-  //     return fetchRating(b) - fetchRating(a);
-  //   });
-  //   setFilteredData(filteredData);
-  // };
-
-  const [isSpinning, setSpinning] = useState(false);
-  const handleReloadClick = () => {
-    setSpinning(true);
-    setFilters({
-      role: [],
-      email: [],
-      state: [],
-      country: [],
-      skills: [],
-      languagesKnown: [],
-      userColleges: [],
-      verification: false,
-      userName: [],
-      review: 0,
-    });
-    setFilledStars(0);
-  };
-  const [connectStatus, setConnectStatus] = useState({});
-  const { height, width } = useWindowDimensions();
-  const dispatch = useDispatch();
-  const historicalConversations = useSelector(
-    (state) => state.conv.historicalConversations
-  );
-  useEffect(() => {
-    dispatch(getAllHistoricalConversations(user_id));
-  }, []);
-
-  useEffect(() => {
-    // console.log(historicalConversations.reduce(
-    //   (prev, cur) => ({
-    //     ...prev,
-    //     [cur.members.filter((f) => f._id !== user_id)[0]._id]: {
-    //       status: cur.status,
-    //       id: cur._id,
-    //     },
-    //   }),
-    //   {}
-    // ));
-    setConnectStatus(
-      historicalConversations.reduce(
-        (prev, cur) => ({
-          ...prev,
-          [cur.members.filter((f) => f._id !== user_id)[0]?._id]: {
-            status: cur.status,
-            id: cur._id,
-          },
-        }),
-        {}
-      )
-    );
-  }, [historicalConversations]);
-
-  // iqra
-
+  // --- 2. State & Hooks ---
+  const [activeTab, setActiveTab] = useState("Find Mentors");
   const [users, setUsers] = useState([]);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+
+  const { user_id } = useSelector((state) => state.auth.loginDetails);
+  const dispatch = useDispatch();
+
   const [filters, setFilters] = useState({
-    expertise: [],
     userName: "",
-    stages: [],
+    categories: [],
+    expertise: [],
     industries: [],
-    categories: [], // Added categories filter
   });
 
-  // Function to fetch user data from backend based on filters
+  // --- 3. Mock Data ---
+
+  // Tab 2: Bookings (Who booked me)
+  const incomingBookings = [
+    {
+      id: 101,
+      time: "12:00 PM",
+      date: "Today",
+      otherUserName: "Samantha Smith",
+      otherUserTitle: "Individual/Entrepreneur",
+      otherUserImg: "/profile.png", 
+      topic: "Introduction",
+      duration: "45 mins",
+      price: "250",
+      status: "Confirmed"
+    },
+    {
+      id: 102,
+      time: "10:38 PM",
+      date: "Today",
+      otherUserName: "John Foley",
+      otherUserTitle: "Full Stack Developer",
+      otherUserImg: "/profile.png",
+      topic: "Technical Discussion",
+      duration: "60 mins",
+      price: "300",
+      status: "Confirmed"
+    }
+  ];
+
+  // Tab 3: Mentor Bookings (Who I booked)
+  const myOutgoingRequests = [
+    {
+      id: 201,
+      title: "Startup Mentorship",
+      mentorName: "Samantha Smith",
+      status: "Approved",
+      isPaid: false,
+      description: "Looking for guidance on launching my new SaaS product. I have a working prototype.",
+      date: "12/19/2025",
+      duration: "45",
+      price: "250"
+    },
+    {
+      id: 202,
+      title: "Career Development",
+      mentorName: "Samantha Smith",
+      status: "Approved",
+      isPaid: true,
+      description: "Need advice on transitioning to product management from engineering.",
+      date: "12/20/2025",
+      duration: "45",
+      price: "250"
+    }
+  ];
+
+  // Tab 4: Requests (Inbox List Style)
+  const inboxRequests = [
+    {
+      id: 301,
+      userName: "Alex Johnson",
+      userImg: "/profile.png",
+      type: "1:1 Call",
+      title: "Startup Mentorship",
+      description: "Looking for guidance on launching my new SaaS product. I have a working prototype and need advice on market validation and fundraising strategies.",
+      date: "Dec 22 • 45 mins",
+      requestedTime: "9:30 AM",
+      price: "250",
+      durationSimple: "45 mins"
+    },
+    {
+      id: 302,
+      userName: "Sarah Williams",
+      userImg: "/profile.png",
+      type: "1:1 Call",
+      title: "Career Development",
+      description: "Need advice on transitioning to product management...",
+      date: "Dec 19 • 45 mins",
+      requestedTime: "Yesterday",
+      price: "250",
+      durationSimple: "45 mins"
+    },
+    {
+      id: 303,
+      userName: "Mike Chen",
+      userImg: "/profile.png",
+      type: "1:1 Call",
+      title: "System Design Fundamentals",
+      description: "I'm preparing for senior engineer interviews...",
+      date: "Dec 19 • 60 mins",
+      requestedTime: "Dec 19",
+      price: "300",
+      durationSimple: "60 mins"
+    }
+  ];
+
+  // --- 4. Fetch Users (Only for Find Mentors) ---
   const fetchUsers = async () => {
-    console.log("Current filters:", filters);
+    dispatch(setLoading({ visible: "yes" }));
     try {
       const response = await ApiServices.FilterData(filters);
-      // Filter users to only include those with the desired fields
-      const filteredUsers = response.data.filter((user) => {
-        return (
-          user.beyincProfile || // Check if beyincProfile is present
-          (user.industries && user.industries.length > 0) || // Check if industries array is not empty
-          (user.expertise && user.expertise.length > 0) || // Check if expertise array is not empty
-          (user.stages && user.stages.length > 0) // Check if stages array is not empty
-          // || (user.investmentRange !== undefined)
-        );
-      });
-      setUsers(filteredUsers);
+      const validUsers = response.data.filter(user => 
+        user.userName && (user.beyincProfile || user.role)
+      );
+      setUsers(validUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      dispatch(setLoading({ visible: "no" }));
+      setIsSpinning(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, [filters]);
+    if (activeTab === "Find Mentors") {
+        fetchUsers();
+    }
+  }, [filters, activeTab]);
 
-  // Function to update filters based on user input
   const updateFilters = (newFilters) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      ...newFilters,
-    }));
+    setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
-  return (
-    <>
-      {/* <Dialog
-       sx={{width:"500px" , height:"700px"}}
-        maxWidth={"md"}
-        fullWidth={true}
-        open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <>Filter</>
-          <CachedIcon
-            style={{ cursor: "pointer" }}
-            className={isSpinning ? "spin" : ""}
-            onClick={() => {
-              handleReloadClick();
-            }}
-          />
-        </DialogTitle>
-        <FilterSidebar updateFilters={updateFilters} open={open}/>
+  const handleReloadClick = () => {
+    setIsSpinning(true);
+    setFilters({ userName: "", categories: [], expertise: [], industries: [] });
+  };
 
-       
-        <DialogActions>
-          <Button
-            sx={{ width: "fit-content" }}
-            variant="contained"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-      {width < 770 && (
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <div className="bg-white shadow-md m-3">
-          <h2 className="mt-4 px-20">Filter</h2>
-          <FilterSidebar updateFilters={updateFilters} open={open} />
-          <Button
-            sx={{ width: "fit-content", marginLeft: "100px",marginBottom:"30px" }}
-            variant="contained"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
+  // --- 5. Custom Card Components (for other tabs) ---
+
+  const ConfirmedSessionCard = ({ booking }) => (
+    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all mb-4">
+      <div className="flex flex-col md:flex-row md:items-center gap-6">
+        <div className="hidden md:block w-1 h-24 bg-[#4f55c7] rounded-full flex-shrink-0"></div>
+        <div className="w-20 flex-shrink-0">
+          <p className="font-bold text-gray-900 text-lg">{booking.time}</p>
+        </div>
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <img alt={booking.otherUserName} className="w-16 h-16 rounded-full object-cover" src={booking.otherUserImg} />
+          <div>
+            <p className="font-bold text-gray-900">{booking.otherUserName}</p>
+            <p className="text-sm text-gray-600">{booking.otherUserTitle}</p>
           </div>
-        </Collapse>
+        </div>
+        <div className="flex-1">
+          <p className="font-bold text-gray-900 mb-1">{booking.topic}</p>
+          <p className="text-sm text-gray-600">{booking.duration} | ₹ {booking.price}</p>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0 mt-4 md:mt-0">
+          <button className="px-4 py-2 bg-[#4f55c7] text-white font-medium rounded-lg hover:bg-[#3e44a8] transition-colors flex items-center gap-2">
+            Join Call
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const RequestStatusCard = ({ req }) => (
+    <div className="bg-white border border-gray-200 rounded-xl p-6 mb-4 hover:shadow-md transition-shadow">
+      <div className="flex justify-between items-start mb-2">
+         <div>
+            <h3 className="font-bold text-lg text-gray-900">{req.title}</h3>
+            <p className="text-sm text-gray-600 font-medium mt-1">
+               Mentor: <span className="text-gray-900">{req.mentorName}</span>
+            </p>
+         </div>
+         <div className="flex gap-2">
+            <span className={`px-3 py-1 rounded-full text-xs font-bold 
+               ${req.status === 'Approved' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+               {req.status === 'Approved' && '✓'} {req.status}
+            </span>
+         </div>
+      </div>
+      <p className="text-gray-500 text-sm mb-4 leading-relaxed mt-3">{req.description}</p>
+      <div className="flex justify-between items-center text-sm pt-2">
+         <div className="flex gap-4 text-gray-500 font-medium">
+             <div className="flex items-center gap-1"><CalendarMonth fontSize="small" className="text-gray-400"/> {req.date}</div>
+             <div className="flex items-center gap-1"><AccessTime fontSize="small" className="text-gray-400"/> {req.duration} mins</div>
+         </div>
+         <div className="font-bold text-[#4f55c7]">₹ {req.price}</div>
+      </div>
+    </div>
+  );
+
+
+  // --- 6. Main Render ---
+  return (
+    <div className="bg-gray-50 min-h-screen pb-10">
+      
+      {/* Mobile Filter Toggle */}
+      {width < 770 && activeTab === "Find Mentors" && (
+        <div className="p-4 bg-white shadow-sm mb-4">
+           <Button variant="outlined" fullWidth onClick={() => setMobileFilterOpen(!mobileFilterOpen)}>
+             <i className="fa fa-filter mr-2" /> {mobileFilterOpen ? "Hide Filters" : "Filter Mentors"}
+           </Button>
+           <Collapse in={mobileFilterOpen}>
+             <div className="mt-4 bg-white p-4 rounded shadow-inner">
+               <FilterSidebar updateFilters={updateFilters} />
+             </div>
+           </Collapse>
+        </div>
       )}
 
-      <div className="users-main-box">
-        {width < 770 && (
-          <div className="user-nav-bar">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <button className="nav-bar-buttons" onClick={handleClickOpen}>
-                <i style={{ marginRight: 3 }} class="fa fa-filter" /> Filter
-              </button>
-              {/* <button className="nav-bar-buttons">
-              <i class="fa fa-sort-amount-desc"></i>
-              Sort by
-            </button> */}
-              <input
-                type="text"
-                style={{ marginTop: "2px", marginLeft: "8px", width: "150px" }}
-                className="nav-bar-buttons"
-                value={search}
-                placeholder="Search user"
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  if (e.target.value !== "") {
-                    setFilteredData(
-                      filteredData.filter((f) => {
-                        return f.userName.includes(e.target.value);
-                      })
-                    );
-                  } else {
-                    setFilteredData(data);
-                  }
-                }}
-                label="Search.."
-                variant="standard"
-              />
+      {/* Main Container */}
+      <div className="flex flex-col md:flex-row gap-6 px-4 md:px-8 max-w-[1400px] mx-auto mt-6">
+        
+        {/* --- LEFT SIDEBAR (Only for Find Mentors) --- */}
+        {width >= 770 && activeTab === "Find Mentors" && (
+          <div className="w-1/4 min-w-[280px] flex-shrink-0">
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm sticky top-6">
+               <div className="flex justify-between items-center mb-6">
+                 <h2 className="font-bold text-xl text-gray-800">Filter By:</h2>
+                 <CachedIcon style={{ cursor: "pointer", color: "#666" }} className={isSpinning ? "animate-spin" : ""} onClick={handleReloadClick} />
+               </div>
+               <FilterSidebar updateFilters={updateFilters} />
             </div>
           </div>
         )}
-        <div className="usersWrapper">
-          {width > 770 && (
-            <div className="filterContainer">
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
+
+        {/* --- RIGHT CONTENT AREA --- */}
+        <div className="flex-1">
+          
+          {/* Navigation Pills */}
+          <div className="flex flex-wrap gap-3 mb-8">
+            {["Find Mentors", "Bookings", "Mentor Bookings", "Requests"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`
+                  px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border
+                  ${activeTab === tab 
+                    ? "bg-[#4f55c7] text-white border-[#4f55c7] shadow-lg shadow-[#4f55c7]/30" 
+                    : "bg-white text-gray-600 border-gray-200 hover:border-[#4f55c7]/50 hover:text-[#4f55c7] hover:bg-white"}
+                `}
               >
-                <div className="filterHeader">Filter By:</div>
-                <div title="Reset filters">
-                  <CachedIcon
-                    style={{ cursor: "pointer" }}
-                    className={isSpinning ? "spin" : ""}
-                    onClick={() => {
-                      handleReloadClick();
-                    }}
-                  />
-                </div>
-              </div>
-              <FilterSidebar updateFilters={updateFilters} />
-              {/* Role */}
-              {/* <div className="tagFilter">
-                <div className="filter-header">
-                  <b>Role</b>
-                </div>
-
-                <FilterCheckBoxes
-                  dataKey={"role"}
-                  rawData={totalRoles}
-                  setFilters={setFilters}
-                  filters={filters}
-                />
-              </div>
-              <hr /> */}
-
-              {/* Domain */}
-              {/* <div className="tagFilter">
-                <div className="filter-header">
-                  <b>User Names</b>
-                </div>
-                <FilterCheckBoxes
-                  showSearch={true}
-                  dataKey={"userName"}
-                  rawData={data}
-                  setFilters={setFilters}
-                  filters={filters}
-                />
-              </div> */}
-              {/* <hr />
-              <div className="tagFilter">
-                <div className="filter-header">
-                  <b>Skills</b>
-                </div>
-                <FilterCheckBoxes
-                  showSearch={true}
-                  rawData={allskills}
-                  dataKey={"skills"}
-                  isFlat={true}
-                  setFilters={setFilters}
-                  filters={filters}
-                />
-              </div>
-              <hr /> */}
-              {/* country */}
-              {/* <div className="tagFilter">
-                <div className="filter-header">
-                  <b>Country</b>
-                </div>
-                <FilterCheckBoxes
-                  showSearch={true}
-                  rawData={Country?.getAllCountries()}
-                  isCountry={true}
-                  setFilters={setFilters}
-                  filters={filters}
-                />
-              </div> */}
-
-              {/* <hr />
-              <div className="tagFilter">
-                <div className="filter-header">
-                  <b>Languages known</b>
-                </div>
-                <FilterCheckBoxes
-                  showSearch={true}
-                  rawData={allLanguages}
-                  dataKey={"languagesKnown"}
-                  isFlat={true}
-                  setFilters={setFilters}
-                  filters={filters}
-                />
-              </div>
-              <hr /> */}
-              {/* Rating */}
-              {/* <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  fontSize: 14,
-                }}
-              >
-                <div style={{ marginLeft: 8 }} className="filter-rating-label">
-                  <b> Rating:</b>
-                </div>
-                <div className="inputTag" style={{ marginLeft: 10 }}>
-                  <AddReviewStars
-                    filledStars={filledStars}
-                    setFilledStars={setFilledStars}
-                  />
-                </div>
-              </div> */}
-
-              {/* <div className="verificationFilter">
-                <div
-                  className="filter-options-label"
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    fontSize: 14,
-                    marginLeft: 8,
-                  }}
-                >
-                  <b> Verified:</b>
-                  <input
-                    type="checkbox"
-                    style={{ width: "20px", marginLeft: 20, marginBottom: 0 }}
-                    checked={filters.verification}
-                    onChange={() => {
-                      setFilters((prev) => ({
-                        ...prev,
-                        verification: !filters.verification,
-                      }));
-                    }}
-                  />
-                </div>
-              </div> */}
-            </div>
-          )}
-          <div className="user-cards-panel w-[95%] lg:w-[80%]">
-            <div className="mt-4 userscontainer">
-              {users.length > 0 ? (
-                // filteredData?.map((user) => (
-                //   <SingleUserDetails
-                //     d={d} setIsAdmin={setIsAdmin}
-                //     connectStatus={connectStatus}
-                //     setPitchSendTo={setPitchSendTo}
-                //     pitchSendTo={pitchSendTo}
-                //     receiverRole={receiverRole}
-                //     setreceiverRole={setreceiverRole}
-                //   />
-                // ))
-                users.map((user) => (
-                  <SingleUserDetails key={user.id} user={user} />
-                ))
-              ) : (
-                <div
-                  className="no-users"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <img src="/Search.gif" />
-                  <div>No users available</div>
-                </div>
-              )}
-            </div>
+                {tab}
+              </button>
+            ))}
           </div>
+
+          {/* TAB 1: Find Mentors */}
+          {activeTab === "Find Mentors" && (
+            <>
+              <div className="mb-4 text-gray-500 text-sm font-medium">
+                  Showing {users.length} Mentors
+              </div>
+              <div className="flex flex-col gap-4">
+                {users.length > 0 ? (
+                  users.map(user => <SingleUserDetails key={user._id} user={user} />)
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-[400px] bg-white rounded-xl border border-gray-200 p-8">
+                      <img src="/Search.gif" alt="Empty" className="w-32 opacity-80 mb-4" />
+                      <h3 className="text-lg font-bold text-gray-700">No mentors found</h3>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* TAB 2: Bookings (Who Booked Me) */}
+          {activeTab === "Bookings" && (
+             <div className="w-full">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Upcoming Sessions</h3>
+                {incomingBookings.map(b => <ConfirmedSessionCard key={b.id} booking={b} />)}
+             </div>
+          )}
+
+          {/* TAB 3: Mentor Bookings (Who I Booked) */}
+          {activeTab === "Mentor Bookings" && (
+             <div className="w-full">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">My Booking Requests</h3>
+                {myOutgoingRequests.map(req => <RequestStatusCard key={req.id} req={req} />)}
+             </div>
+          )}
+
+          {/* TAB 4: Requests (Inbox Style) - REFINED & THEMED */}
+          {activeTab === "Requests" && (
+             <div className="flex flex-col lg:flex-row gap-6 relative items-start">
+                {/* Inbox List (Left Panel) */}
+                <div className="w-full lg:w-5/12">
+                   {inboxRequests.map(item => (
+                      <IncomingRequestItem 
+                        key={item.id} 
+                        item={item} 
+                        isSelected={selectedRequest?.id === item.id}
+                        onClick={() => setSelectedRequest(item)}
+                      />
+                   ))}
+                </div>
+
+                {/* Detail View (Right Panel) */}
+                <div className="hidden lg:block lg:w-7/12">
+                   <RequestDetailView request={selectedRequest} />
+                </div>
+             </div>
+          )}
+
         </div>
-        <AddConversationPopup
-          receiverId={pitchSendTo}
-          setReceiverId={setPitchSendTo}
-          receiverRole={receiverRole}
-          IsAdmin={IsAdmin}
-        />
       </div>
-    </>
+
+      <div style={{ display: 'none' }}>
+        <AddConversationPopup receiverId={""} setReceiverId={() => {}} receiverRole={""} IsAdmin={false} />
+      </div>
+    </div>
   );
 };
 
