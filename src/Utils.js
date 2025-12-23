@@ -494,7 +494,16 @@ export const postTypes = [
     { 'value': 'News', 'color': '#f14edf' },
     { 'value': 'Hiring', 'color': '#e1265d' },
     { 'value': 'Opportunities', 'color': '#5e8d7c' },
-    { 'value': 'Investment', 'color': '#207b6a' }
+    { 'value': 'Investment', 'color': '#207b6a' },
+    
+    { 'value': 'Startup Expo', 'color': '#ff9800' },
+    { 'value': 'Startup Journey', 'color': '#4caf50' },
+    { 'value': 'OpenToWork', 'color': '#2196f3' }, 
+    { 'value': 'Connect', 'color': '#9c27b0' },
+    { 'value': 'Event', 'color': '#795548' },
+    { 'value': 'Potential Problem', 'color': '#f44336' },
+    { 'value': 'Portfolio', 'color': '#3f51b5' },
+    { 'value': 'Open-To-Build', 'color': '#009688' },
 ]
 
 export const INDUSTRY_EXPERTISE = {
