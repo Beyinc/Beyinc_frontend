@@ -12,8 +12,10 @@ import {
 } from "../../../../redux/AuthReducers/AuthReducer";
 import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
+import ReactionButton from "../../../components/ReactionButton";
+import { ReactionServices } from "../../../../Services/PostServices";
+import { ReactionDisplay } from "../../../Posts/components/ReactionDisplay";
 
 const Post = ({
   filteredPosts,
@@ -76,91 +78,91 @@ const Post = ({
   //   console.log("Updated posts:", post);
   // }, [post,allPosts]);
 
-  const likingpost = async () => {
-    if (isLiking) return;
-    setIsLiking(true);
+  // const likingpost = async () => {
+  //   if (isLiking) return;
+  //   setIsLiking(true);
 
-    // Optimistically update UI
-    const newLikes = [...localLikes];
-    const userLikeIndex = newLikes.findIndex((like) => like._id === user_id);
+  //   // Optimistically update UI
+  //   const newLikes = [...localLikes];
+  //   const userLikeIndex = newLikes.findIndex((like) => like._id === user_id);
 
-    if (userLikeIndex === -1) {
-      // Add like
-      newLikes.push({ _id: user_id, userName });
-      setLocalLikes(newLikes);
+  //   if (userLikeIndex === -1) {
+  //     // Add like
+  //     newLikes.push({ _id: user_id, userName });
+  //     setLocalLikes(newLikes);
 
-      // Remove from dislikes if exists
-      const newDislikes = localDislikes.filter(
-        (dislike) => dislike._id !== user_id
-      );
-      setLocalDislikes(newDislikes);
-    } else {
-      // Remove like
-      newLikes.splice(userLikeIndex, 1);
-      setLocalLikes(newLikes);
-    }
+  //     // Remove from dislikes if exists
+  //     const newDislikes = localDislikes.filter(
+  //       (dislike) => dislike._id !== user_id
+  //     );
+  //     setLocalDislikes(newDislikes);
+  //   } else {
+  //     // Remove like
+  //     newLikes.splice(userLikeIndex, 1);
+  //     setLocalLikes(newLikes);
+  //   }
 
-    try {
-      const res = await ApiServices.likePost({ id: post?._id });
-      setPost(res.data);
-    } catch (err) {
-      // Revert changes on error
-      setLocalLikes(post.likes || []);
-      setLocalDislikes(post.disLikes || []);
-      dispatch(
-        setToast({
-          message: "Error occurred when updating Pitch",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
-    } finally {
-      setIsLiking(false);
-    }
-  };
+  //   try {
+  //     const res = await ApiServices.likePost({ id: post?._id });
+  //     setPost(res.data);
+  //   } catch (err) {
+  //     // Revert changes on error
+  //     setLocalLikes(post.likes || []);
+  //     setLocalDislikes(post.disLikes || []);
+  //     dispatch(
+  //       setToast({
+  //         message: "Error occurred when updating Pitch",
+  //         bgColor: ToastColors.failure,
+  //         visible: "yes",
+  //       })
+  //     );
+  //   } finally {
+  //     setIsLiking(false);
+  //   }
+  // };
 
-  const dislikePost = async () => {
-    if (isDisliking) return;
-    setIsDisliking(true);
+  // const dislikePost = async () => {
+  //   if (isDisliking) return;
+  //   setIsDisliking(true);
 
-    // Optimistically update UI
-    const newDislikes = [...localDislikes];
-    const userDislikeIndex = newDislikes.findIndex(
-      (dislike) => dislike._id === user_id
-    );
+  //   // Optimistically update UI
+  //   const newDislikes = [...localDislikes];
+  //   const userDislikeIndex = newDislikes.findIndex(
+  //     (dislike) => dislike._id === user_id
+  //   );
 
-    if (userDislikeIndex === -1) {
-      // Add dislike
-      newDislikes.push({ _id: user_id, userName });
-      setLocalDislikes(newDislikes);
+  //   if (userDislikeIndex === -1) {
+  //     // Add dislike
+  //     newDislikes.push({ _id: user_id, userName });
+  //     setLocalDislikes(newDislikes);
 
-      // Remove from likes if exists
-      const newLikes = localLikes.filter((like) => like._id !== user_id);
-      setLocalLikes(newLikes);
-    } else {
-      // Remove dislike
-      newDislikes.splice(userDislikeIndex, 1);
-      setLocalDislikes(newDislikes);
-    }
+  //     // Remove from likes if exists
+  //     const newLikes = localLikes.filter((like) => like._id !== user_id);
+  //     setLocalLikes(newLikes);
+  //   } else {
+  //     // Remove dislike
+  //     newDislikes.splice(userDislikeIndex, 1);
+  //     setLocalDislikes(newDislikes);
+  //   }
 
-    try {
-      const res = await ApiServices.dislikePost({ id: post?._id });
-      setPost(res.data);
-    } catch (err) {
-      // Revert changes on error
-      setLocalLikes(post.likes || []);
-      setLocalDislikes(post.disLikes || []);
-      dispatch(
-        setToast({
-          message: "Error occurred when updating Pitch",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
-    } finally {
-      setIsDisliking(false);
-    }
-  };
+  //   try {
+  //     const res = await ApiServices.dislikePost({ id: post?._id });
+  //     setPost(res.data);
+  //   } catch (err) {
+  //     // Revert changes on error
+  //     setLocalLikes(post.likes || []);
+  //     setLocalDislikes(post.disLikes || []);
+  //     dispatch(
+  //       setToast({
+  //         message: "Error occurred when updating Pitch",
+  //         bgColor: ToastColors.failure,
+  //         visible: "yes",
+  //       })
+  //     );
+  //   } finally {
+  //     setIsDisliking(false);
+  //   }
+  // };
 
   const handleClickOutside = (event) => {
     if (
@@ -207,7 +209,7 @@ const Post = ({
 
   const reportPost = async (e) => {
     e.target.disabled = true;
-    console.log(reportType);
+    // console.log(reportType);
     await ApiServices.addReport({
       id: post?._id,
       reportby: user_id,
@@ -268,6 +270,44 @@ const Post = ({
   //       e.target.disabled = false;
   //     });
   // };
+
+
+  const handleReaction = async (type, postId) => {
+    try {
+        const response = await ReactionServices.addOrUpdate({
+            postId,
+            reactionType: type,
+        });
+        console.log(response.data)
+
+        setPost((prev) => ({
+            ...prev,
+            userReaction: response.data.userReaction,
+            reactions: response.data.reactions, 
+        }));
+
+        setAllPosts((prevPosts) =>
+            prevPosts.map((p) =>
+                p?._id === postId
+                    ? {
+                          ...p,
+                          userReaction: response.data.userReaction,
+                          reactions: response.data.reactions,
+                      }
+                    : p
+            )
+        );
+    } catch (error) {
+        console.error("Failed to update reaction:", error);
+        dispatch(
+            setToast({
+                message: "Error occurred when updating reaction",
+                bgColor: ToastColors.failure,
+                visible: "yes",
+            })
+        );
+    }
+  };
 
   return (
     <section
@@ -468,7 +508,7 @@ const Post = ({
             )} */}
             </div>
             <div className="likeCommentDetails mt-2">
-              <div className="likeTotal">
+              {/* <div className="likeTotal">
                 <div>
                   <div>
                     <svg
@@ -512,13 +552,29 @@ const Post = ({
                       `and ${localDislikes.length - 1} other`}
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+              <ReactionDisplay reactions={post?.reactions} />
               <div className="commentTotal">{allComments?.length} comments</div>
             </div>
           </div>
           <div className="actionsHolder font-semibold">
             <div className="actionsHolder-leftContent">
-              <div className="likeActionHolder" onClick={likingpost}>
+              <ReactionButton
+                postId={post._id}
+                onReact={handleReaction}
+                userReaction={post.userReaction}
+                post={post}
+            />
+              {/* <div className="likeActionHolder">
+              {reactionTypes.map((r)=>(
+                <div className="flex items-start justify-center">
+                  <Icon icon={r.icon} className="w-7 h-7 sm:w-5 sm:h-5" />
+                  <span className="actionText hidden sm:block  font-semibold">{r.type}</span>
+                </div>
+              ))}
+              </div> */}
+              {/* <div className="likeActionHolder" onClick={likingpost}>
                 <div>
                   <svg
                     width="20"
@@ -563,7 +619,7 @@ const Post = ({
                   </svg>
                 </div>
                 <div className="actionText hidden sm:block">downvote</div>
-              </div>
+              </div> */}
               <div
                 className="likeActionHolder"
                 onClick={() => navigate(`/posts/${post?._id}`)}

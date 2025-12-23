@@ -63,7 +63,7 @@ const pageSize = 10; // fixed page size
     
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
-        console.log("all posts:",allPosts);
+        // console.log("all posts:",allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
@@ -79,9 +79,9 @@ const pageSize = 10; // fixed page size
   }, [loadingTrigger]);
 
 
-  useEffect(()=>{
-    console.log("all posts-:",allPosts);
-  },[allPosts])
+  // useEffect(()=>{
+  //   console.log("all posts-:",allPosts);
+  // },[allPosts])
 
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
@@ -100,10 +100,10 @@ const pageSize = 10; // fixed page size
   }, [dispatch]);
 
 
-  useEffect(()=>{
-            console.log("top trending posts are :",topTrendingPosts);
+  // useEffect(()=>{
+  //           console.log("top trending posts are :",topTrendingPosts);
 
-  },[topTrendingPosts])
+  // },[topTrendingPosts])
   const truncateDescription = (description, maxLength = 100) => {
     if (description.length <= maxLength) return description;
     const truncated = description.slice(0, maxLength);
@@ -175,7 +175,7 @@ const pageSize = 10; // fixed page size
     setIsPrivate(event.target.checked);
   };
 
-  console.log("filteredposts: ", filteredPosts);
+  // console.log("filteredposts: ", filteredPosts);
   // const [checkedValues, setCheckedValues] = useState({
   //   public: false,
   //   private: false,
@@ -235,7 +235,7 @@ const handleLoadMore = () => {
   };
 
   const clearAllTags = () => {
-    console.log("Tags changed", selectedTags, filteredPosts);
+    // console.log("Tags changed", selectedTags, filteredPosts);
     setSelectedTags([]);
     setFilteredPosts([]);
   };
