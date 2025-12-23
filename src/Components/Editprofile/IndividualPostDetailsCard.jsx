@@ -232,6 +232,7 @@ const IndividualPostDetailsCard = () => {
       setPost((prev) => ({
         ...prev,
         userReaction: response.data.userReaction,
+        reactions: response.data.reactions
       }));
   };
 

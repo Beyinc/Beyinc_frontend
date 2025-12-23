@@ -82,7 +82,9 @@ export default function ReactionButton({
         <div className="relative inline-block select-none">
             {/* Main reaction button */}
             <button
-                onClick={() => handleSelect({ type: "like" })}
+                onClick={() =>
+                    handleSelect({ type: selected ? selected : "like" })
+                }
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 disabled={isProcessing}
@@ -91,10 +93,15 @@ export default function ReactionButton({
                 }`}
             >
                 {selectedReaction ? (
-                    <div className="text-blue-500 flex items-center justify-center gap-1">
-                        {selectedReaction.icon}
+                    <div
+                        className={`${selectedReaction.textColor} flex items-center justify-center gap-1`}
+                    >
+                        <Icon
+                            icon={selectedReaction.icon}
+                            className="w-5 h-5"
+                        />
                         <span className="capitalize">
-                            {selectedReaction.type}
+                            {selectedReaction.label}
                         </span>
                     </div>
                 ) : (
@@ -108,24 +115,25 @@ export default function ReactionButton({
             {/* Hover reaction menu */}
             {showMenu && (
                 <div
-                    className="absolute left-0 -top-12 flex gap-3 bg-white shadow-lg px-3 py-2 rounded-full border z-50"
+                    className="absolute left-0 -top-24 sm:-top-16 bg-white shadow-lg px-3 py-2 rounded-2xl border z-50 w-[90vw] sm:w-auto"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
-                    {reactionTypes.map((r) => (
-                        <div
-                            key={r.type}
-                            onClick={() => handleSelect(r)}
-                            className={`cursor-pointer hover:scale-125 transition-transform duration-150 ${
-                                selected === r.type
-                                    ? "scale-110 drop-shadow-lg"
-                                    : ""
-                            }`}
-                            title={r.type}
-                        >
-                            {r.icon}
-                        </div>
-                    ))}
+                    <div className="grid grid-cols-5 sm:flex gap-2">
+                        {reactionTypes.map((reaction) => (
+                            <button
+                                key={reaction.type}
+                                onClick={() => handleSelect(reaction)}
+                                className={`flex items-center justify-center size-8 sm:size-12 rounded-lg ${reaction.bg} ${reaction.hover} ${reaction.textColor} transition ring-1 ${reaction.ring}`}
+                                title={reaction.label}
+                            >
+                                <Icon
+                                    icon={reaction.icon}
+                                    className="w-5 h-5 sm:size-4"
+                                />
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
         </div>

@@ -1,34 +1,10 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-
-// Reaction types configuration
-export const reactionTypes = [
-    {
-        type: "like",
-        icon: "mdi:thumb-up",
-        color: "bg-blue-500",
-        textColor: "text-blue-600",
-        label: "Like",
-    },
-    {
-        type: "innovative",
-        icon: "mdi:lightbulb-on-outline",
-        color: "bg-green-500",
-        textColor: "text-green-600",
-        label: "Innovative",
-    },
-    {
-        type: "unique",
-        icon: "mdi:sparkles",
-        color: "bg-purple-500",
-        textColor: "text-purple-600",
-        label: "Unique",
-    },
-];
+import { reactionTypes } from "../../../constants/reactions";
 
 // Reactions Modal Component
 const ReactionsModal = ({ reactions, onClose }) => {
-    console.log(reactions)
+    console.log(reactions);
     const [activeTab, setActiveTab] = useState("all");
 
     const reactionCounts = reactions.reduce((acc, reaction) => {
@@ -60,23 +36,26 @@ const ReactionsModal = ({ reactions, onClose }) => {
     return (
         <div
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-            onClick={(e) => e.stopPropagation()}
+            onClick={onClose}
         >
-            <div className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl">
+            <div
+                className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="flex items-center justify-between p-4 border-b">
-                    <h2 className="text-xl font-semibold ">Reactions</h2>
+                    <h2 className="text-xl font-semibold">Reactions</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700 transition-colors bg-transparent hover:bg-customBackground"
+                        className="text-gray-500 hover:text-gray-700 transition-colors bg-transparent hover:bg-gray-100 p-1 rounded"
                     >
                         <Icon icon="mdi:close" className="w-6 h-6" />
                     </button>
                 </div>
 
-                <div className="flex border-b overflow-x-auto *:bg-white hover:*:bg-customBackground">
+                <div className="flex border-b overflow-x-auto">
                     <button
                         onClick={() => setActiveTab("all")}
-                        className={`px-6 py-3 font-medium transition-colors whitespace-nowrap ${
+                        className={`px-6 py-3 font-medium transition-colors whitespace-nowrap bg-white hover:bg-gray-50 ${
                             activeTab === "all"
                                 ? "text-green-600 border-b-2 border-green-600"
                                 : "text-gray-600 hover:text-gray-900"
@@ -92,12 +71,12 @@ const ReactionsModal = ({ reactions, onClose }) => {
                             <button
                                 key={reaction.type}
                                 onClick={() => setActiveTab(reaction.type)}
-                                className={`px-4 py-3 font-medium transition-colors flex items-center gap-2 whitespace-nowrap ${
+                                className={`px-4 py-3 font-medium transition-colors flex items-center gap-2 whitespace-nowrap bg-white hover:bg-gray-50 ${
                                     activeTab === reaction.type
                                         ? `${
                                               reaction.textColor
-                                          } border-b-2 ${reaction.color.replace(
-                                              "bg-",
+                                          } border-b-2 ${reaction.textColor.replace(
+                                              "text-",
                                               "border-"
                                           )}`
                                         : "text-gray-600 hover:text-gray-900"
@@ -139,10 +118,14 @@ const ReactionsModal = ({ reactions, onClose }) => {
                                             <div className="relative flex-shrink-0">
                                                 <img
                                                     src={
-                                                        reaction.user.image?.url || "./profile.png"
+                                                        reaction.user?.image
+                                                            ?.url ||
+                                                        "./profile.png"
                                                     }
-                                                    alt={reaction.user.userName}
-                                                    className="w-12 h-12 rounded-full"
+                                                    alt={
+                                                        reaction.user?.userName
+                                                    }
+                                                    className="w-12 h-12 rounded-full object-cover"
                                                 />
                                                 <div
                                                     className={`absolute -bottom-1 -right-1 w-5 h-5 ${config.color} rounded-full flex items-center justify-center border-2 border-white`}
@@ -157,13 +140,14 @@ const ReactionsModal = ({ reactions, onClose }) => {
                                                 <div className="flex items-start justify-between gap-2">
                                                     <div>
                                                         <p className="font-semibold text-gray-900 hover:text-blue-600 transition-colors">
-                                                            {
-                                                                reaction.user
-                                                                    .userName
-                                                            }
+                                                            {reaction.user
+                                                                ?.userName ||
+                                                                "Unknown User"}
                                                         </p>
                                                         <p className="text-sm text-gray-600 line-clamp-2">
-                                                            {reaction.user.role}
+                                                            {reaction.user
+                                                                ?.role ||
+                                                                "User"}
                                                         </p>
                                                     </div>
                                                     <span className="text-xs text-gray-500 whitespace-nowrap">
@@ -193,47 +177,19 @@ export const ReactionDisplay = ({ reactions = [] }) => {
         return null;
     }
 
-    const reactionCounts = reactions.reduce((acc, reaction) => {
-        acc[reaction.type] = (acc[reaction.type] || 0) + 1;
-        return acc;
-    }, {});
-
     const totalCount = reactions.length;
-
-    const topReactions = Object.entries(reactionCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
-        .map(([type]) => type);
 
     return (
         <>
             <button
                 onClick={(e) => {
-                    e.stopPropagation()
-                    setShowModal(true)
+                    e.stopPropagation();
+                    setShowModal(true);
                 }}
-                className="flex items-center gap-1.5 transition-all group bg-transparent hover:bg-customBackground"
+                className="flex items-center gap-1.5 transition-all group bg-transparent hover:bg-gray-100 px-2 py-1 rounded"
             >
-                <div className="flex -space-x-1">
-                    {topReactions.map((type) => {
-                        const config = reactionTypes.find(
-                            (rt) => rt.type === type
-                        );
-                        return (
-                            <div
-                                key={type}
-                                className={`w-5 h-5 ${config.color} rounded-full flex items-center justify-center border-2 border-white transition-transform group-hover:scale-110`}
-                            >
-                                <Icon
-                                    icon={config.icon}
-                                    className="w-3 h-3 text-white"
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
                 <span className="text-sm text-gray-600 group-hover:text-gray-900">
-                    {totalCount}
+                    {totalCount} {totalCount === 1 ? "Reaction" : "Reactions"}
                 </span>
             </button>
 

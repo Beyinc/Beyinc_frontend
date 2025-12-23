@@ -78,91 +78,91 @@ const Post = ({
   //   console.log("Updated posts:", post);
   // }, [post,allPosts]);
 
-  const likingpost = async () => {
-    if (isLiking) return;
-    setIsLiking(true);
+  // const likingpost = async () => {
+  //   if (isLiking) return;
+  //   setIsLiking(true);
 
-    // Optimistically update UI
-    const newLikes = [...localLikes];
-    const userLikeIndex = newLikes.findIndex((like) => like._id === user_id);
+  //   // Optimistically update UI
+  //   const newLikes = [...localLikes];
+  //   const userLikeIndex = newLikes.findIndex((like) => like._id === user_id);
 
-    if (userLikeIndex === -1) {
-      // Add like
-      newLikes.push({ _id: user_id, userName });
-      setLocalLikes(newLikes);
+  //   if (userLikeIndex === -1) {
+  //     // Add like
+  //     newLikes.push({ _id: user_id, userName });
+  //     setLocalLikes(newLikes);
 
-      // Remove from dislikes if exists
-      const newDislikes = localDislikes.filter(
-        (dislike) => dislike._id !== user_id
-      );
-      setLocalDislikes(newDislikes);
-    } else {
-      // Remove like
-      newLikes.splice(userLikeIndex, 1);
-      setLocalLikes(newLikes);
-    }
+  //     // Remove from dislikes if exists
+  //     const newDislikes = localDislikes.filter(
+  //       (dislike) => dislike._id !== user_id
+  //     );
+  //     setLocalDislikes(newDislikes);
+  //   } else {
+  //     // Remove like
+  //     newLikes.splice(userLikeIndex, 1);
+  //     setLocalLikes(newLikes);
+  //   }
 
-    try {
-      const res = await ApiServices.likePost({ id: post?._id });
-      setPost(res.data);
-    } catch (err) {
-      // Revert changes on error
-      setLocalLikes(post.likes || []);
-      setLocalDislikes(post.disLikes || []);
-      dispatch(
-        setToast({
-          message: "Error occurred when updating Pitch",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
-    } finally {
-      setIsLiking(false);
-    }
-  };
+  //   try {
+  //     const res = await ApiServices.likePost({ id: post?._id });
+  //     setPost(res.data);
+  //   } catch (err) {
+  //     // Revert changes on error
+  //     setLocalLikes(post.likes || []);
+  //     setLocalDislikes(post.disLikes || []);
+  //     dispatch(
+  //       setToast({
+  //         message: "Error occurred when updating Pitch",
+  //         bgColor: ToastColors.failure,
+  //         visible: "yes",
+  //       })
+  //     );
+  //   } finally {
+  //     setIsLiking(false);
+  //   }
+  // };
 
-  const dislikePost = async () => {
-    if (isDisliking) return;
-    setIsDisliking(true);
+  // const dislikePost = async () => {
+  //   if (isDisliking) return;
+  //   setIsDisliking(true);
 
-    // Optimistically update UI
-    const newDislikes = [...localDislikes];
-    const userDislikeIndex = newDislikes.findIndex(
-      (dislike) => dislike._id === user_id
-    );
+  //   // Optimistically update UI
+  //   const newDislikes = [...localDislikes];
+  //   const userDislikeIndex = newDislikes.findIndex(
+  //     (dislike) => dislike._id === user_id
+  //   );
 
-    if (userDislikeIndex === -1) {
-      // Add dislike
-      newDislikes.push({ _id: user_id, userName });
-      setLocalDislikes(newDislikes);
+  //   if (userDislikeIndex === -1) {
+  //     // Add dislike
+  //     newDislikes.push({ _id: user_id, userName });
+  //     setLocalDislikes(newDislikes);
 
-      // Remove from likes if exists
-      const newLikes = localLikes.filter((like) => like._id !== user_id);
-      setLocalLikes(newLikes);
-    } else {
-      // Remove dislike
-      newDislikes.splice(userDislikeIndex, 1);
-      setLocalDislikes(newDislikes);
-    }
+  //     // Remove from likes if exists
+  //     const newLikes = localLikes.filter((like) => like._id !== user_id);
+  //     setLocalLikes(newLikes);
+  //   } else {
+  //     // Remove dislike
+  //     newDislikes.splice(userDislikeIndex, 1);
+  //     setLocalDislikes(newDislikes);
+  //   }
 
-    try {
-      const res = await ApiServices.dislikePost({ id: post?._id });
-      setPost(res.data);
-    } catch (err) {
-      // Revert changes on error
-      setLocalLikes(post.likes || []);
-      setLocalDislikes(post.disLikes || []);
-      dispatch(
-        setToast({
-          message: "Error occurred when updating Pitch",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
-    } finally {
-      setIsDisliking(false);
-    }
-  };
+  //   try {
+  //     const res = await ApiServices.dislikePost({ id: post?._id });
+  //     setPost(res.data);
+  //   } catch (err) {
+  //     // Revert changes on error
+  //     setLocalLikes(post.likes || []);
+  //     setLocalDislikes(post.disLikes || []);
+  //     dispatch(
+  //       setToast({
+  //         message: "Error occurred when updating Pitch",
+  //         bgColor: ToastColors.failure,
+  //         visible: "yes",
+  //       })
+  //     );
+  //   } finally {
+  //     setIsDisliking(false);
+  //   }
+  // };
 
   const handleClickOutside = (event) => {
     if (
@@ -273,16 +273,40 @@ const Post = ({
 
 
   const handleReaction = async (type, postId) => {
-      const response = await ReactionServices.addOrUpdate({
-        postId,
-        reactionType: type,
-      });
-      // console.log(response.data.userReaction);
+    try {
+        const response = await ReactionServices.addOrUpdate({
+            postId,
+            reactionType: type,
+        });
+        console.log(response.data)
 
-      setPost((prev) => ({
-        ...prev,
-        userReaction: response.data.userReaction,
-      }));
+        setPost((prev) => ({
+            ...prev,
+            userReaction: response.data.userReaction,
+            reactions: response.data.reactions, 
+        }));
+
+        setAllPosts((prevPosts) =>
+            prevPosts.map((p) =>
+                p?._id === postId
+                    ? {
+                          ...p,
+                          userReaction: response.data.userReaction,
+                          reactions: response.data.reactions,
+                      }
+                    : p
+            )
+        );
+    } catch (error) {
+        console.error("Failed to update reaction:", error);
+        dispatch(
+            setToast({
+                message: "Error occurred when updating reaction",
+                bgColor: ToastColors.failure,
+                visible: "yes",
+            })
+        );
+    }
   };
 
   return (
