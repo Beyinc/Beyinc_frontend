@@ -211,8 +211,6 @@ export const ApiServices = {
 
   // followers and followings api
 
-
-
   getFollowers: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1296,6 +1294,16 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  StartupEntryData: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post("/startupEntryData", obj) // ✅ correct backend route
+        .then((res) => {
+          if (res) resolve(res);
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   searchProfiles: (query) => {
     return new Promise((resolve, reject) => {
@@ -1353,12 +1361,13 @@ export const ApiServices = {
             resolve(res);
           }
         })
-        .catch((err) => reject(err)); 
+        .catch((err) => reject(err));
     });
   },
   getPostLiveChatMessages: (obj) => {
     return new Promise((resolve, reject) => {
-      axiosInstance.post(`/postLiveChat/getMessages`, obj)
+      axiosInstance
+        .post(`/postLiveChat/getMessages`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
@@ -1369,7 +1378,8 @@ export const ApiServices = {
   },
   sendPostLiveChatMessage: (obj) => {
     return new Promise((resolve, reject) => {
-      axiosInstance.post(`/postLiveChat/send`, obj)
+      axiosInstance
+        .post(`/postLiveChat/send`, obj)
         .then((res) => {
           if (res) {
             resolve(res);
