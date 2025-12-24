@@ -681,6 +681,39 @@ export const ROLE_LEVELS = [
   "Principal Researcher",
 ];
 
+export const COMPANY_STAGES = [
+  {
+    id: "early-stage",
+    label: "Early Stage Startup",
+    description: "Pre-seed, Seed, Bootstrapped (0-$1M funding)",
+    icon: "🌱",
+  },
+  {
+    id: "funded-startup",
+    label: "Funded Startup",
+    description: "Series A/B/C+ ($1M+ funding)",
+    icon: "🚀",
+  },
+  {
+    id: "revenue-stage",
+    label: "Revenue Stage",
+    description: "Generating revenue, profitable, scaling",
+    icon: "📈",
+  },
+  {
+    id: "established",
+    label: "Established Company",
+    description: "Mature, stable operations",
+    icon: "🏢",
+  },
+  {
+    id: "enterprise",
+    label: "Enterprise",
+    description: "Large corporation (1000+ employees)",
+    icon: "🏛️",
+  },
+]
+
 // January 15, 2024
 export const MMDDYYFormat = (date) => {
     const formattedDate = moment(date).format('MMMM D, YYYY'); // "January 15, 2024"

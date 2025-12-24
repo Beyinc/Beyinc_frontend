@@ -945,45 +945,9 @@ import { allskills, dataEntry } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
 import { INDUSTRY_EXPERTISE } from "../../Utils";
 import { ROLE_LEVELS } from "../../Utils";
-/* ------------------ CONSTANTS ------------------ */
+import { COMPANY_STAGES } from "../../Utils";
 
-// export const INDUSTRY_EXPERTISE = {
-//   "Technology / Software": [
-//     "Backend Development",
-//     "Frontend Development",
-//     "Full Stack",
-//     "AI/ML",
-//     "DevOps",
-//     "Cloud Architecture",
-//     "Cybersecurity",
-//     "Mobile Development",
-//   ],
-//   Engineering: [
-//     "Mechanical Engineering",
-//     "Electrical Engineering",
-//     "Civil Engineering",
-//     "Software Architecture",
-//     "Systems Design",
-//     "IoT",
-//     "Embedded Systems",
-//   ],
-//   Product: [
-//     "Product Strategy",
-//     "Product Roadmap",
-//     "User Research",
-//     "Product Launch",
-//     "Market Analysis",
-//   ],
-//   Marketing: [
-//     "Digital Marketing",
-//     "SEO",
-//     "Content Strategy",
-//     "Brand Building",
-//     "Growth Hacking",
-//   ],
-// };
 
-/* ------------------ COMPONENT ------------------ */
 
 const EntryDetails = () => {
   const { email, user_id } = useSelector((s) => s.auth.loginDetails);
@@ -1008,7 +972,7 @@ const EntryDetails = () => {
   const [selectedExpertise, setSelectedExpertise] = useState({});
   const [customExpertise, setCustomExpertise] = useState({});
   const [showOtherInput, setShowOtherInput] = useState({});
-
+  const [companyStage, setCompanyStage] = useState("");
   /* ------------------ HANDLERS ------------------ */
 
   const onCategoryClick = (title) => {
@@ -1100,6 +1064,7 @@ const EntryDetails = () => {
         interests,
         selectedCategory,
         role_level: roleLevel,
+        companyStage: companyStage,
         mentorExpertise: selectedExpertise,
       });
 
@@ -1136,17 +1101,28 @@ const EntryDetails = () => {
             selectedCategory={selectedCategory}
           />
 
-        <div className="flex justify-end">
-  <button
-    onClick={() => {
-      setStep(selectedCategory === "Mentor" ? 2 : 1);
-    }}
-    className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 w-[100px]"
-    disabled={!selectedCategory}
-  >
-    Next
-  </button>
-</div>
+        <div className="mt-4">
+          {selectedCategory === "Mentor" && (
+            <input
+              className="mt-2 w-full border p-2 rounded"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          )}
+
+          <div className="flex justify-end">
+            <button
+              onClick={() => {
+                setStep(selectedCategory === "Mentor" ? 2 : 1);
+              }}
+              className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 w-[100px]"
+              disabled={!selectedCategory || (selectedCategory === "Mentor" && !username)}
+            >
+              Next
+            </button>
+          </div>
+        </div>
 
           {/* {selectedCategory && selectedCategory !== "Mentor" && (
             <>
@@ -1213,23 +1189,59 @@ const EntryDetails = () => {
         <>
           <h3 className="font-semibold mb-4">Select your role</h3>
 
+
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {ROLE_LEVELS.map((role) => (
-              <div
-                style={{
-                  border: "1px solid gray",
-                }}
-                key={role}
-                onClick={() => setRoleLevel(role)}
-                className={`cursor-pointer text-center p-3 rounded-lg border-2
-                  ${
-                    roleLevel === role
-                      ? "border-blue-600 bg-blue-500 text-white"
-                      : "border-gray-400 bg-white"
-                  }`}
-              >
-                {role}
-              </div>
+              <React.Fragment key={role}>
+                <div
+                  style={{
+                    border: "1px solid gray",
+                  }}
+                  onClick={() => setRoleLevel(role)}
+                  className={`cursor-pointer text-center p-3 rounded-lg border-2
+                    ${
+                      roleLevel === role
+                        ? "border-blue-600 bg-blue-500 text-white"
+                        : "border-gray-400 bg-white"
+                    }`}
+                >
+                  {role}
+                </div>
+
+                {role === "CXO" && roleLevel === "CXO" && (
+                  <div className="col-span-2 md:col-span-3 mt-8 pt-8 border-t-2 border-slate-200">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">What stage is your company at?</h3>
+                    <p className="text-slate-600 mb-6">
+                      This helps us understand your company context and match you with relevant mentors
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {COMPANY_STAGES.map((stage) => (
+                        <button
+                          key={stage.id}
+                          onClick={() => setCompanyStage(stage.label)}
+                          className={`px-5 py-5 rounded-xl font-medium transition-all text-left border-2 ${
+                            companyStage === stage.label
+                              ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
+                              : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md"
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="text-2xl">{stage.icon}</span>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-bold text-sm">{stage.label}</span>
+                              </div>
+                              <p className={`text-xs mt-1 ${companyStage === stage.label ? "text-blue-100" : "text-slate-500"}`}>
+                                {stage.description}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
 
@@ -1238,14 +1250,16 @@ const EntryDetails = () => {
             onClick={() => {
               setStep(1);
               setRoleLevel("");
+              setCompanyStage("");
               setSelectedCategory("");
+              setUsername("");
             }}
           >
             Prev
           </button>
 
           <button
-            disabled={!roleLevel}
+            disabled={!roleLevel || (roleLevel === "CXO" && !companyStage)}
             className="mt-6 bg-blue-600 text-white px-6 py-2 rounded  ml-4 w-[100px] disabled:opacity-50"
             onClick={() => setStep(3)}
           >
@@ -1305,6 +1319,8 @@ const EntryDetails = () => {
             onClick={() => {
               setStep(2);
               setSelectedExpertise({});
+                            setCompanyStage("");
+
             }}
           >
             Prev
