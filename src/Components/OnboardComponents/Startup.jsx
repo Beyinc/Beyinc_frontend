@@ -32,7 +32,7 @@ const Startup = ({ step, setStep }) => {
         selectedStartupIndustries.filter((ind) => ind !== industry),
       );
     } else {
-      if (selectedStartupIndustries.length < 5) {
+      if (selectedStartupIndustries.length < 6) {
         setSelectedStartupIndustries([...selectedStartupIndustries, industry]);
       }
     }
@@ -68,7 +68,7 @@ const Startup = ({ step, setStep }) => {
             {/* Tagline */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-2">
-                Tagline / One-liner <span className="text-red-500">*</span>
+                Tagline
                 <span className="text-xs font-normal text-slate-500 ml-2">
                   (Max 100 characters)
                 </span>
@@ -211,7 +211,6 @@ const Startup = ({ step, setStep }) => {
                 ))}
               </div>
             </div>
-
             {/* Team Size */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-4">
@@ -225,7 +224,7 @@ const Startup = ({ step, setStep }) => {
                     onClick={() => setStartupTeamSize(size)}
                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
                       startupTeamSize === size
-                        ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
                         : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
                     }`}
                   >
@@ -239,7 +238,6 @@ const Startup = ({ step, setStep }) => {
                 ))}
               </div>
             </div>
-
             {/* Industry Selection - Reuse the industry selector */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-4">
@@ -259,7 +257,7 @@ const Startup = ({ step, setStep }) => {
                       onClick={() => handleStartupIndustryToggle(industry)}
                       className={`w-full px-5 py-4 rounded-lg text-left transition-all border-2 ${
                         isSelected
-                          ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                          ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
                           : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
                       }`}
                     >
@@ -273,14 +271,15 @@ const Startup = ({ step, setStep }) => {
                   );
                 })}
               </div>
+
               <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-700 font-semibold">
-                  Selected: {selectedStartupIndustries.length} industr
-                  {selectedStartupIndustries.length !== 1 ? "ies" : "y"}
+                  {selectedStartupIndustries.length === 1
+                    ? "No industry selected"
+                    : `Selected ${selectedStartupIndustries.length - 1} Industries`}
                 </p>
               </div>
             </div>
-
             {/* Target Market */}
             <div>
               <label className="block text-sm font-bold text-slate-900 mb-4">
@@ -294,7 +293,7 @@ const Startup = ({ step, setStep }) => {
                     onClick={() => setTargetMarket(market)}
                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
                       targetMarket === market
-                        ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
                         : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
                     }`}
                   >

@@ -17,7 +17,6 @@ const Navigation = ({
   const [submitting, setSubmitting] = useState(false);
   const isStep2Invalid =
     !startupName.trim() ||
-    !startupTagline.trim() ||
     !founderName.trim() ||
     !startupEmail.trim() ||
     !visibilityMode.trim();
