@@ -236,7 +236,8 @@ const VerifyOtp = () => {
     setLoading(true);
 
     try {
-      await ApiServices.verifyOtp({ email, otp });
+      const res=await ApiServices.verifyOtp({ email, otp });
+      console.log("OTP verification response:", res);
     } catch (err) {
       dispatch(
         setToast({
@@ -251,6 +252,7 @@ const VerifyOtp = () => {
 
     try {
       const res = await ApiServices.register({ email, password });
+      console.log("Registration response:", res);
       localStorage.setItem("user", JSON.stringify(res.data));
       await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
       navigate("/userDetails");
