@@ -115,21 +115,21 @@ export default function ReactionButton({
             {/* Hover reaction menu */}
             {showMenu && (
                 <div
-                    className="absolute left-0 -top-24 sm:-top-16 bg-white shadow-lg px-3 py-2 rounded-2xl border z-50 w-[90vw] sm:w-auto"
+                    className="absolute  -left-20 sm:left-0 -top-40 sm:-top-16 bg-white shadow-lg px-3 py-2 rounded-2xl border z-50 w-[90vw] sm:w-auto"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <div className="grid grid-cols-5 sm:flex gap-2">
+                    <div className="grid grid-cols-4 sm:flex gap-2">
                         {reactionTypes.map((reaction) => (
                             <button
                                 key={reaction.type}
                                 onClick={() => handleSelect(reaction)}
-                                className={`flex items-center justify-center size-8 sm:size-12 rounded-lg ${reaction.bg} ${reaction.hover} ${reaction.textColor} transition ring-1 ${reaction.ring}`}
+                                className={`flex items-center justify-center sm:size-12 rounded-lg ${reaction.bg} ${reaction.hover} ${reaction.textColor} transition ring-1 ${reaction.ring}`}
                                 title={reaction.label}
                             >
                                 <Icon
                                     icon={reaction.icon}
-                                    className="w-5 h-5 sm:size-4"
+                                    className="  sm:size-4"
                                 />
                             </button>
                         ))}
