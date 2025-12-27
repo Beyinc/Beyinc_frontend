@@ -1809,7 +1809,7 @@ const Navbar = () => {
                           style={{
                             background: "var(--primary-color)",
                             border: "none",
-                            color: "white",
+                            color: "black",
                             padding: "5px 15px",
                             borderRadius: "5px",
                             cursor: "pointer",

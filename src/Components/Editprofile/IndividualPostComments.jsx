@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import { format } from "timeago.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import IndividualPostSubComments from "./IndividualPostSubComments";
 import { setLoading } from "../../redux/AuthReducers/AuthReducer";
+import { useAuthAction } from "../../hooks/useAuthAction";
 const IndividualPostComments = ({
   c,
   postId,
@@ -15,13 +16,15 @@ const IndividualPostComments = ({
   onLike,
   onDisLike,
 }) => {
-  const { user_id } = useSelector((state) => state.auth.loginDetails);
+  const loginDetails = useSelector((state) => state.auth.loginDetails || {});
+  const { user_id } = loginDetails;
   const scrollRef = useRef();
   const [comment, setComment] = useState("");
   const [replyBox, setReplyBox] = useState(false);
   const [subCommentOpen, setSubCommentOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const authenticated = useAuthAction();
   const [file, setFile] = useState(null);
 
   const [liked, setLiked] = useState(false);
@@ -32,8 +35,8 @@ const IndividualPostComments = ({
   const [dislikecount, setdislikecount] = useState(0);
 
   useEffect(() => {
-    setLiked(c.likes?.includes(user_id));
-    setdisLiked(c.Dislikes?.includes(user_id));
+    setLiked(user_id ? c.likes?.includes(user_id) : false);
+    setdisLiked(user_id ? c.Dislikes?.includes(user_id) : false);
     setCount(c.likes?.length);
     setdislikecount(c.Dislikes?.length);
   }, [c, user_id]);
@@ -72,7 +75,7 @@ const IndividualPostComments = ({
       reader.onerror = reject;
     });
 
-  const addSubComment = async () => {
+  const addSubComment = authenticated(async () => {
     console.log("add comment clicked");
     if (!comment.trim() && !file) return;
 
@@ -109,22 +112,22 @@ const IndividualPostComments = ({
     } finally {
       dispatch(setLoading({ visible: "no" }));
     }
-  };
+  });
 
-  const handleLike = (id) => {
+  const handleLike = authenticated((id) => {
     if (liked) {
       setLiked(false);
       setCount((prev) => prev - 1);
     } else {
       setLiked(true);
       setCount((prev) => prev + 1);
-      setdislikecount((prev) => prev - 1);
+      setdislikecount((prev) => (prev > 0 ? prev - 1 : 0));
       setdisLiked(false);
     }
     onLike(id, !c.likes?.includes(user_id));
-  };
+  });
 
-  const handleDisLike = (id) => {
+  const handleDisLike = authenticated((id) => {
     if (disliked) {
       setdisLiked(false);
       setdislikecount((prev) => prev - 1);
@@ -133,10 +136,10 @@ const IndividualPostComments = ({
       setLiked(false);
 
       setdislikecount((prev) => prev + 1);
-      setCount((prev) => prev - 1);
+      setCount((prev) => (prev > 0 ? prev - 1 : 0));
     }
     onDisLike(id, !c.Dislikes?.includes(user_id));
-  };
+  });
 
   return (
     <>
@@ -278,12 +281,10 @@ const IndividualPostComments = ({
             <div>
               <span
                 className="replyTag"
-                onClick={() => {
+                onClick={authenticated(() => {
                   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
                   setReplyBox(!replyBox);
-
-                  // setReplyBox(!replyBox)
-                }}
+                })}
               >
                 Reply
               </span>

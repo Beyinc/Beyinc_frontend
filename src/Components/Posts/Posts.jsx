@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Await, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -12,6 +12,7 @@ import { socket_io, postTypes, followerController } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
+import { useAuthAction } from "../../hooks/useAuthAction";
 
 const Posts = () => {
     // const { role, userName, image, user_id } = useSelector(
@@ -29,6 +30,7 @@ const Posts = () => {
 
     const notifications = useSelector((state) => state.conv.notifications);
     const navigate = useNavigate();
+    const authenticated = useAuthAction();
     const [data, setData] = useState({});
     const dispatch = useDispatch();
     useEffect(() => {
@@ -45,12 +47,12 @@ const Posts = () => {
                     dispatch(setLoading({ visible: "no" }));
                 });
         }
-    }, [user_id]);
+    }, [user_id, dispatch]);
 
     const [allPosts, setAllPosts] = useState([]);
     const [topTrendingPosts, setTopTrendingPosts] = useState([]);
 
-    const [loadingTrigger, setLoadingTrigger] = useState(false);
+    // const [loadingTrigger, setLoadingTrigger] = useState(false);
     const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
 
     const [recommendedUsers, setRecommendedUsers] = useState([]);
@@ -77,7 +79,7 @@ const Posts = () => {
                 );
                 // dispatch(setLoading({ visible: "no" }));
             });
-    }, [loadingTrigger]);
+    }, [filterPage, dispatch, pageSize]);
 
 
     useEffect(() => {
@@ -112,22 +114,14 @@ const Posts = () => {
     };
 
     useEffect(() => {
-        if (user_id) {
-            ApiServices.getRecommendedUsers({ userId: user_id })
-                .then((res) => {
-                    setRecommendedUsers(res.data);
-                })
-                .catch((err) => {
-                    // dispatch(
-                    //     setToast({
-                    //         message: "Error Occured!",
-                    //         bgColor: ToastColors.failure,
-                    //         visible: "yes",
-                    //     })
-                    // );
-                });
-        }
-    }, [recommendedUserTrigger, user_id]);
+        ApiServices.getNewProfiles()
+            .then((res) => {
+                setRecommendedUsers(res.data);
+            })
+            .catch((err) => {
+                console.log("Error fetching recommendations", err);
+            });
+    }, [recommendedUserTrigger]);
 
     // const [page, setPage] = useState(0);
     // const [pageSize, setPageSize] = useState(10);
@@ -255,11 +249,9 @@ const Posts = () => {
 
 
     const getDescription = (post) => {
-        {
-            return post?.description?.length > 100
-                ? post?.description.slice(0, 150) + "..."
-                : post?.description;
-        }
+        return post?.description?.length > 100
+            ? post?.description.slice(0, 150) + "..."
+            : post?.description;
     };
     return (
         <div className="Homepage-Container">
@@ -288,7 +280,7 @@ const Posts = () => {
                     </div>
                     <div
                         className="sidebar-menu-items"
-                        onClick={() => navigate("/createPostPage")}
+                        onClick={authenticated(() => navigate("/createPostPage"))}
                     >
                         <div>
                             <svg
@@ -617,11 +609,11 @@ const Posts = () => {
                             <div className="left-section">
                                 <img
                                     src={
-                                        rec?.image?.url == undefined
+                                        rec?.image?.url === undefined
                                             ? "/profile.png"
                                             : rec?.image?.url
                                     }
-                                    alt="User Image"
+                                    alt="User"
                                     className="user-image mb-5"
                                 />
                             </div>
@@ -629,7 +621,7 @@ const Posts = () => {
                                 <h4
                                     style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
                                     onClick={() => {
-                                        if (rec._id == user_id) {
+                                        if (rec._id === user_id) {
                                             navigate("/editProfile");
                                         } else {
                                             navigate(`/user/${rec._id}`);
@@ -643,34 +635,26 @@ const Posts = () => {
                                 <div className="follow-container -ml-14 mt-2">
                                     <button
                                         className="follow w-[100px] h-[30px]"
-                                        onClick={(e) => {
-                                            if (user_id) {
-                                                followerController({
-                                                    dispatch,
-                                                    e,
-                                                    followingToId: rec._id,
-                                                    recommendedUserTrigger,
-                                                    setRecommendedUserTrigger,
-                                                    socket,
-                                                    user: { id: user_id, userName, image, role },
-                                                    setRecommendedUsers,
-                                                });
-                                            } else {
-                                                window.location.href = "/login";
-                                            }
-                                        }}
+                                        onClick={authenticated((e) => {
+                                            followerController({
+                                                dispatch,
+                                                e,
+                                                followingToId: rec._id,
+                                                recommendedUserTrigger,
+                                                setRecommendedUserTrigger,
+                                                socket,
+                                                user: { id: user_id, userName, image, role },
+                                                setRecommendedUsers,
+                                            });
+                                        })}
                                     >
                                         Follow
                                     </button>
                                     <RecommendedConnectButton
                                         id={rec._id}
-                                        handleFollower={() => {
-                                            if (user_id) {
-                                                setRecommendedUserTrigger(!recommendedUserTrigger);
-                                            } else {
-                                                window.location.href = "/login";
-                                            }
-                                        }}
+                                        handleFollower={authenticated(() => {
+                                            setRecommendedUserTrigger(!recommendedUserTrigger);
+                                        })}
                                     />
                                 </div>
                             </div>

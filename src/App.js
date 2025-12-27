@@ -348,7 +348,7 @@ const App = () => {
             <Route path="/notifications" Component={AuthHoc(Notifications)} />
             <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
             <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
-            <Route path="/posts/:id" Component={AuthHoc(IndividualPostDetailsCard)} />
+            <Route path="/posts/:id" Component={IndividualPostDetailsCard} />
 
             <Route
               path="/livePitches/:pitchId"

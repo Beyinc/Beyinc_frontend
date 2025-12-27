@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
+import { useAuthAction } from "../../hooks/useAuthAction";
 
 const IndividualPostSubComments = ({
   c,
@@ -14,7 +15,10 @@ const IndividualPostSubComments = ({
   replyBox,
   scrollRef,
 }) => {
-  const { email, user_id } = useSelector((state) => state.auth.loginDetails);
+  const loginDetails = useSelector((state) => state.auth.loginDetails || {});
+  const { email, user_id } = loginDetails;
+  const navigate = useNavigate();
+  const authenticated = useAuthAction();
   const { pitchId } = useParams();
 
   const [liked, setLiked] = useState(false);
@@ -26,26 +30,26 @@ const IndividualPostSubComments = ({
 
   useEffect(() => {
     console.log(c);
-    setLiked(c.likes?.includes(user_id));
-    setdisLiked(c.Dislikes?.includes(user_id));
+    setLiked(user_id ? c.likes?.includes(user_id) : false);
+    setdisLiked(user_id ? c.Dislikes?.includes(user_id) : false);
     setCount(c.likes?.length);
     setdislikecount(c.Dislikes?.length);
   }, [c, user_id]);
 
-  const handleLike = (id) => {
+  const handleLike = authenticated((id) => {
     if (liked) {
       setLiked(false);
       setCount((prev) => prev - 1);
     } else {
       setLiked(true);
       setCount((prev) => prev + 1);
-      setdislikecount((prev) => prev - 1);
+      setdislikecount((prev) => (prev > 0 ? prev - 1 : 0));
       setdisLiked(false);
     }
     onLike(id, !c.likes?.includes(user_id));
-  };
+  });
 
-  const handleDisLike = (id) => {
+  const handleDisLike = authenticated((id) => {
     if (disliked) {
       setdisLiked(false);
       setdislikecount((prev) => prev - 1);
@@ -54,11 +58,11 @@ const IndividualPostSubComments = ({
       setLiked(false);
 
       setdislikecount((prev) => prev + 1);
-      setCount((prev) => prev - 1);
+      setCount((prev) => (prev > 0 ? prev - 1 : 0));
     }
     onDisLike(id, !c.Dislikes?.includes(user_id));
-  };
-  const navigate = useNavigate();
+  });
+
   return (
     <>
       <div className="IndicommentsSection">
@@ -120,24 +124,24 @@ const IndividualPostSubComments = ({
                           }}
                         />
                       ) : (
-                       <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#0073e6"
-  strokeWidth="2"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  style={{ marginTop: "5px" }}
->
-  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-  <polyline points="14 2 14 8 20 8" />
-  <line x1="16" y1="13" x2="8" y2="13" />
-  <line x1="16" y1="17" x2="8" y2="17" />
-  <line x1="10" y1="9" x2="8" y2="9" />
-</svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#0073e6"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          style={{ marginTop: "5px" }}
+                        >
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                          <line x1="16" y1="13" x2="8" y2="13" />
+                          <line x1="16" y1="17" x2="8" y2="17" />
+                          <line x1="10" y1="9" x2="8" y2="9" />
+                        </svg>
 
                       )}
                     </a>
@@ -197,11 +201,10 @@ const IndividualPostSubComments = ({
             <div>
               <span
                 className="replyTag"
-                onClick={() => {
+                onClick={authenticated(() => {
                   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-
                   setReplyBox(!replyBox);
-                }}
+                })}
               >
                 Reply
               </span>
