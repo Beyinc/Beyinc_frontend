@@ -374,7 +374,8 @@
 }
 
 .homeEditProfileOuterCard {
-  margin-left: -10px !important;
+  margin-left: -5px !important;
+  margin-right: -5px !important;
   width: 100%;
   padding: 0px !important;
 }

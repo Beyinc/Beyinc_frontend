@@ -1353,7 +1353,7 @@ export const ApiServices = {
             resolve(res);
           }
         })
-        .catch((err) => reject(err)); 
+        .catch((err) => reject(err));
     });
   },
   getPostLiveChatMessages: (obj) => {
@@ -1377,5 +1377,17 @@ export const ApiServices = {
         })
         .catch((err) => reject(err));
     });
+  },
+
+  markNotificationRead: (id) => {
+    return axiosInstance.put(`/notification/mark-read/${id}`);
+  },
+
+  markAllNotificationsRead: (obj) => {
+    return axiosInstance.put(`/notification/mark-all-read`, obj);
+  },
+
+  changeSeenStatus: (obj) => {
+    return axiosInstance.post(`/conversation/changeChatSeen`, obj);
   },
 };

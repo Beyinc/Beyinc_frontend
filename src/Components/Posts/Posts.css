@@ -109,6 +109,12 @@
   height: 40px;
   border-radius: 50%;
 }
+.PostHeaderContainer {
+    display: flex;
+    flex-direction: row; /* Stacks the Top Row and the Tag vertically */
+    width: 100%;
+    margin-bottom: 10px;
+}
 
 .Homepage-left-container-profile h2,
 .Homepage-left-container-profile p {
@@ -458,7 +464,7 @@ button.connect {
 }
 
 @media screen and (max-width: 768px) {
-  
+
   /* 1. Show the Hamburger Icon at the top left */
   .mobile-menu-icon {
     display: block;
@@ -471,7 +477,7 @@ button.connect {
     color: var(--primary, #333);
   }
   .Homepage-Container {
-    padding-top: 60px; 
+    padding-top: 0px; 
   }
 
   .Homepage-left-container {
@@ -503,7 +509,7 @@ button.connect {
   }
 
   .main-content {
-    margin-top: 50px; 
+    margin-top: 10px; 
     width: 100%;
     padding: 10px;
   }

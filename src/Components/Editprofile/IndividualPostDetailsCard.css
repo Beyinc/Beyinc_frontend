@@ -338,7 +338,7 @@ background: var( --button-background);
 /* 1. Header Layout */
 .PostHeaderContainer {
     display: flex;
-    flex-direction: column; /* Stacks the Top Row and the Tag vertically */
+    /* flex-direction: column; */
     width: 100%;
     margin-bottom: 10px;
 }

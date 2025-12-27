@@ -225,7 +225,7 @@ const IndividualPostDetailsCard = () => {
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">
             <div style={{ position: "relative" }}>
-              <div className="PostHeaderContainer">
+              <div className="PostHeaderContainer" style={{ flexDirection: "column" }} >
   {/* ROW 1: User Info (Left) and Menu (Right) */}
   <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "flex-start" }}>
     

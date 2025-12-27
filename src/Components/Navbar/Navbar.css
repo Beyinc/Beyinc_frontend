@@ -11,7 +11,7 @@
 
 
 #logoImage {
-  position: absolute;
+  /* position: absolute; */
   width: 150px;
   height: 50px;
   object-fit: contain;

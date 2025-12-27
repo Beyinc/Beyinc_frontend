@@ -523,7 +523,7 @@ const Posts = () => {
                 return (
                   <Post
                     filteredPosts={filteredPosts}
-                    key={p.id}
+                    key={p._id}
                     post={p} // Passing only id and title
                     setAllPosts={setAllPosts}
                     screenDecider={"home"}

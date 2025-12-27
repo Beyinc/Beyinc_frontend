@@ -158,7 +158,17 @@ function NotificationPage() {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <span className="font-bold text-[20px] ml-[10px]">Notifications</span>
-          <span className="text-[#4F55C7] text-sm font-medium cursor-pointer">Mark all read</span>
+          <span
+            className="text-[#4F55C7] text-sm font-medium cursor-pointer" // Close quote here
+            onClick={() => {                                              // Prop starts here
+              ApiServices.markAllNotificationsRead({ userId: user_id })
+                .then(() => {
+                  dispatch(getAllNotifications(user_id));
+                });
+            }}
+          >
+            Mark all read
+          </span>
         </div>
 
         {/* Tabs */}
@@ -195,15 +205,23 @@ function NotificationPage() {
             return (
               <div
                 key={n._id}
-                className="flex items-start gap-3 p-3 border-b border-gray-200 hover:bg-gray-50 rounded-md cursor-pointer"
+                // CHANGE 1: Conditional Background Color
+                className={`flex items-start gap-3 p-3 border-b border-gray-200 rounded-md cursor-pointer ${!n.read ? "bg-blue-50 hover:bg-blue-100" : "bg-white hover:bg-gray-50"
+                  }`}
+                // CHANGE 2: Click handler on the PARENT div so clicking anywhere works
+                onClick={async () => {
+                  // A. Mark as read in backend
+                  if (!n.read) {
+                    await ApiServices.markNotificationRead(n._id);
+                  }
+
+                  // B. Navigation Logic (Moved from the image div to here)
+                  if (!(n.type === "postDiscussion" || n.type === "report")) {
+                    navigate(`/user/${n.senderInfo?._id}`);
+                  }
+                }}
               >
-                <div
-                  onClick={() => {
-                    if (!(n.type === "postDiscussion" || n.type === "report")) {
-                      navigate(`/user/${n.senderInfo?._id}`);
-                    }
-                  }}
-                >
+                <div>
                   <img
                     className="w-[35px] h-[35px] rounded-full object-cover"
                     src={n.senderInfo?.image?.url || "/profile.png"}
@@ -213,6 +231,7 @@ function NotificationPage() {
                 <div className="flex flex-col">
                   <span className="text-sm">
                     {n.type === "postDiscussion" || n.type === "report" ? (
+                      // Note: You might want to wrap this Link in a stopPropagation if you want separate click behavior
                       <Link to={`/posts/${n.postId}`} className="text-black no-underline">
                         {n.message}
                       </Link>
@@ -222,6 +241,11 @@ function NotificationPage() {
                   </span>
                   <span className="text-xs text-gray-500">{formattedDate}</span>
                 </div>
+
+                {/* Optional: Add a small blue dot to make it even more obvious */}
+                {!n.read && (
+                  <div className="ml-auto mt-2 w-2 h-2 bg-blue-600 rounded-full"></div>
+                )}
               </div>
             );
           })}

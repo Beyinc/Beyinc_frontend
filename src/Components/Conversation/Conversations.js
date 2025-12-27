@@ -78,12 +78,32 @@ const Conversations = () => {
         userId: user_id,
       })
         .then((res) => {
+          const friend = res.data?.members.filter((f) => f._id !== user_id)[0];
+
           dispatch(
-            setReceiverId(res.data?.members.filter((f) => f._id !== user_id)[0])
+            setReceiverId(friend)
           );
+
+          // --- NEW CODE STARTS HERE ---
+          // If we found a friend, mark the chat as seen immediately
+          if (friend) {
+            ApiServices.changeSeenStatus({
+              senderId: friend._id, // The person who sent the msg
+              receiverId: user_id,  // Me (the one reading it)
+              conversationId: conversationId
+            })
+              .then(() => {
+                console.log("Chat marked as seen");
+                // Optional: You might want to refresh the chat list here to remove the blue dot immediately
+                // ApiServices.getAllConversations().then(...) 
+              })
+              .catch(err => console.log("Read status error:", err));
+          }
+          // --- NEW CODE ENDS HERE ---
         })
         .catch((err) => {
-          window.location.href = "/conversations";
+          // window.location.href = "/conversations";
+          console.log(err);
         });
     }
   }, [conversationId]);

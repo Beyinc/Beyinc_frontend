@@ -101,6 +101,7 @@ const Navbar = () => {
   const [postDiscussionRequest, setpostDiscussionRequest] = useState([]);
 
   const notifications = useSelector((state) => state.conv.notifications);
+  const unreadCount = notifications?.filter((n) => !n.read).length || 0;
   const [value, setValue] = useState(1);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -1618,52 +1619,83 @@ const Navbar = () => {
               )}
 
               {/* MESSAGE ICON */}
-              <div
-                className={`navbar-item ${
-                  selectedIcon === "messages" ? "selected" : ""
-                }`}
-                onClick={() => {
-                  navigate("/conversations");
-                  handleItemClick("messages");
-                }}
-              >
-                {selectedIcon === "messages" ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.2em"
-                    height="1.2em"
-                    viewBox="0 0 24 24"
-                    id="conversations"
-                    className="icon"
-                  >
-                    <path
-                      fill="var(--nav-head-icons)"
-                      d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2M6 9h12v2H6m8 3H6v-2h8m4-4H6V6h12"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.2em"
-                    height="1.2em"
-                    viewBox="0 0 24 24"
-                    id="conversations"
-                    className="icon"
-                  >
-                    <path
-                      fill="var(--nav-head-icons)"
-                      d="M4 4h16v12H5.17L4 17.17zm0-2c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm2 10h12v2H6zm0-3h12v2H6zm0-3h12v2H6z"
-                    />
-                  </svg>
-                )}
-                <div
-                  className={`navbar-title${
-                    selectedIcon === "messages" ? " selected-title" : ""
-                  }`}
+          <div
+            className={`navbar-item ${
+              selectedIcon === "messages" ? "selected" : ""
+            }`}
+            onClick={() => {
+              navigate("/conversations");
+              handleItemClick("messages");
+            }}
+          >
+            {/* Wrapper for relative positioning */}
+            <div style={{ position: "relative", display: "inline-block" }}>
+              
+              {/* Icon Logic */}
+              {selectedIcon === "messages" ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 24 24"
+                  id="conversations-filled"
+                  className="icon"
                 >
-                  Messages
-                </div>
-              </div>
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2M6 9h12v2H6m8 3H6v-2h8m4-4H6V6h12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.2em"
+                  height="1.2em"
+                  viewBox="0 0 24 24"
+                  id="conversations"
+                  className="icon"
+                >
+                  <path
+                    fill="var(--nav-head-icons)"
+                    d="M4 4h16v12H5.17L4 17.17zm0-2c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm2 10h12v2H6zm0-3h12v2H6zm0-3h12v2H6z"
+                  />
+                </svg>
+              )}
+
+              {/* RED BADGE FOR MESSAGES */}
+              {messageCount.length > 0 && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-6px",
+                    right: "-6px",
+                    backgroundColor: "#dc2626",
+                    color: "white",
+                    borderRadius: "50%",
+                    fontSize: "10px",
+                    minWidth: "16px",
+                    height: "16px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                    padding: "2px",
+                    zIndex: 10,
+                  }}
+                >
+                  {messageCount.length > 99 ? "99+" : messageCount.length}
+                </span>
+              )}
+            </div>
+
+            <div
+              className={`navbar-title${
+                selectedIcon === "messages" ? " selected-title" : ""
+              }`}
+            >
+              Messages
+            </div>
+          </div>
 
               {/* NOTIFICATION ICON */}
               {/* <div
@@ -1695,53 +1727,83 @@ const Navbar = () => {
 
 
               {/* NOTIFICATION ICON */}
-<div
-  className={`navbar-item ${selectedIcon === "notifications" ? "selected" : ""}`}
-  onClick={() => {
-    navigate("/notification-page");
-    handleItemClick("notifications"); // mark as selected
-  }}
->
-  {selectedIcon === "notifications" ? (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1.2em"
-      height="1.2em"
-      viewBox="0 0 24 24"
-      id="notifications-filled"
-      className="icon"
-    >
-      <path
-        fill="var(--nav-head-icons)"
-        d="M12 22c-.825 0-1.412-.587-1.412-1.412h2.824c0 .825-.587 1.412-1.412 1.412zM4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4z"
-      />
-      {notificationAlert && <div className="blinkBall"> </div>}
-    </svg>
-  ) : (
-    <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1.2em"
-                  height="1.2em"
-                  viewBox="0 0 24 24"
-                  id="notifications"
-                  className="icon"
-                >
-                  <path
-                    fill="var(--nav-head-icons)"
-                    d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10z"
-                  />
-                  {notificationAlert && <div className="blinkBall"> </div>}
-                </svg>
-  )}
+        <div
+          className={`navbar-item ${
+            selectedIcon === "notifications" ? "selected" : ""
+          }`}
+          onClick={() => {
+            navigate("/notification-page");
+            handleItemClick("notifications");
+          }}
+        >
+          {/* Wrapper div for relative positioning of the badge */}
+          <div style={{ position: "relative", display: "inline-block" }}>
+            
+            {/* Logic for Filled vs Outlined Icon */}
+            {selectedIcon === "notifications" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.2em"
+                height="1.2em"
+                viewBox="0 0 24 24"
+                id="notifications-filled"
+                className="icon"
+              >
+                <path
+                  fill="var(--nav-head-icons)"
+                  d="M12 22c-.825 0-1.412-.587-1.412-1.412h2.824c0 .825-.587 1.412-1.412 1.412zM4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.2em"
+                height="1.2em"
+                viewBox="0 0 24 24"
+                id="notifications"
+                className="icon"
+              >
+                <path
+                  fill="var(--nav-head-icons)"
+                  d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10z"
+                />
+              </svg>
+            )}
 
-  <div
-    className={`navbar-title${
-      selectedIcon === "notifications" ? " selected-title" : ""
-    }`}
-  >
-    Notifications
-  </div>
-</div>
+            {/* THE RED BADGE COUNT */}
+            {unreadCount > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-6px",
+                  right: "-6px",
+                  backgroundColor: "#dc2626", // Red color
+                  color: "white",
+                  borderRadius: "50%",
+                  fontSize: "10px",
+                  minWidth: "16px",
+                  height: "16px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontWeight: "bold",
+                  padding: "2px",
+                  zIndex: 10,
+                }}
+              >
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </div>
+
+          <div
+            className={`navbar-title${
+              selectedIcon === "notifications" ? " selected-title" : ""
+            }`}
+          >
+            Notifications
+          </div>
+        </div>
 
 
               {/* <Drawer
