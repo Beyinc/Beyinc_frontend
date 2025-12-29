@@ -1304,6 +1304,16 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  GetStartupProfileData: (userId) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/startupProfileData/${userId}`)
+        .then((res) => {
+          if (res) resolve(res);
+        })
+        .catch((err) => reject(err));
+    });
+  },
 
   searchProfiles: (query) => {
     return new Promise((resolve, reject) => {

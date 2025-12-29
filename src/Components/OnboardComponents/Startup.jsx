@@ -10,7 +10,7 @@ import {
 import { CheckCircle2 } from "lucide-react";
 import Navigation from "./Navigation";
 
-const Startup = ({ step, setStep }) => {
+const Startup = ({ step, setStep, selectedCategory }) => {
   // Startup States
   const [startupName, setStartupName] = useState("");
   const [startupTagline, setStartupTagline] = useState("");
@@ -19,6 +19,12 @@ const Startup = ({ step, setStep }) => {
   const [visibilityMode, setVisibilityMode] = useState("");
   const [startupStage, setStartupStage] = useState("");
   const [startupTeamSize, setStartupTeamSize] = useState("");
+
+  // Calculate progress based on total steps (3 for mentor/service-partner/startup, 1 for others currently)
+
+  const totalSteps =
+    selectedCategory === "Mentor" || selectedCategory === "Startup" ? 3 : 1;
+  const progressPercentage = (step / totalSteps) * 100;
 
   const [selectedStartupIndustries, setSelectedStartupIndustries] = useState([
     "",
@@ -130,7 +136,7 @@ const Startup = ({ step, setStep }) => {
                     onClick={() => setVisibilityMode(mode.id)}
                     className={`p-5 rounded-xl text-left transition-all border-2 ${
                       visibilityMode === mode.id
-                        ? "bg-blue-600 text-white border-blue-600 shadow-lg scale-105"
+                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
                         : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
                     }`}
                   >

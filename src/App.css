@@ -28,7 +28,7 @@ body[data-theme="dark"] {
 
   /* OVERALL BODY */
   --body-background: #17171e;
- --text-total-color : #fff;
+  --text-total-color: #fff;
 
   /* LANDING PAGE TEXTS */
   --landingpage-h1: #4f55c7;
@@ -62,9 +62,6 @@ body[data-theme="dark"] {
   --comment-section-bg: #072d44af;
 
   --post-details-card-bg: #4a7fa0;
-
-  
-  
 
   /* old themes */
   --nabar-text: #fff;
@@ -143,16 +140,15 @@ body[data-theme="light"] {
   --createPost-bg: #f6f6fc;
   --light-border: gray;
   --empty-img-bg: rgba(211, 211, 211, 0.837);
-  --tag-bg: #EEEFFF;
-  --bg-profile:#F0F1F5;
-  --bg-message:#4f55c71d;
-  --scrollbar-thumb-color: #888; 
-  --scrollbar-track-color: #f0f0f0; 
-  --tag-bg-right:#e3e3e361;
+  --tag-bg: #eeefff;
+  --bg-profile: #f0f1f5;
+  --bg-message: #4f55c71d;
+  --scrollbar-thumb-color: #888;
+  --scrollbar-track-color: #f0f0f0;
+  --tag-bg-right: #e3e3e361;
   --comment-section-bg: #f6f6fc;
 
-  --post-details-card-bg: #F0F1F5;
-
+  --post-details-card-bg: #f0f1f5;
 
   /* old themes */
   --text: #040316;
@@ -322,7 +318,7 @@ button:disabled {
 }
 
 button {
-  width: auto ;
+  width: auto;
   padding: 15px;
   color: var(--button-color);
   background: var(--button-background);

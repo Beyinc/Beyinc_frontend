@@ -98,7 +98,7 @@ const Navigation = ({
             disabled={isCurrentStepInvalid || submitting}
             className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all
     disabled:opacity-50 disabled:cursor-not-allowed
-    bg-blue-600 hover:bg-blue-700 text-white
+    bg-indigo-600 hover:bg-indigo-700 text-white
     flex items-center justify-center gap-2"
           >
             {step === 3 ? "Submit" : "Next"}
