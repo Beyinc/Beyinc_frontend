@@ -13,77 +13,83 @@ import { CalendarServices } from "../../../../Services/CalendarServices";
 import FeedbackModal from "./FeedbackPop.js";
 import BookSession from "../../../Editprofile/BookSession/BookSession2";
 import dayjs from "dayjs";
-import { AccessTime, VideoCameraFront, MoreVert } from "@mui/icons-material";
+import { VideoCameraFront, MoreVert, ChevronDown, Phone } from "@mui/icons-material"; // Added Icons to match reference
 
-// --- Sub-Component: User Booking Card ---
+// --- Sub-Component: User Booking Card (Styled per Reference) ---
 const UserBookingCard = ({ booking, type, onJoin, onMenuOpen, onFeedback }) => (
-  <div className="bg-white border border-gray-200 rounded-xl p-6 mb-4 hover:shadow-lg transition-all duration-200">
-    <div className="flex flex-col md:flex-row md:items-center gap-6">
+  <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all mb-4">
+    <div className="flex flex-col lg:flex-row lg:items-center gap-6">
       
-      {/* Visual Indicator */}
-      <div className="hidden md:block w-1 h-24 bg-[#4f55c7] rounded-full flex-shrink-0 opacity-80"></div>
+      {/* 1. Visual Stripe (Purple Theme) */}
+      <div className="hidden lg:block w-1 h-24 bg-[#4f55c7] rounded-full flex-shrink-0"></div>
 
-      {/* Date & Time */}
-      <div className="w-32 flex-shrink-0">
-        <p className="text-xs text-gray-500 font-bold uppercase mb-1 tracking-wider">
-           {dayjs(booking.startDateTime).format("MMM D, YYYY")}
-        </p>
-        <p className="font-bold text-gray-900 text-xl">
+      {/* 2. Time Section */}
+      <div className="w-auto lg:w-24 flex-shrink-0">
+        <p className="font-bold text-gray-900 text-lg">
            {new Date(booking.startDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </p>
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mt-1">
+           {dayjs(booking.startDateTime).format("MMM D, YYYY")}
         </p>
       </div>
 
-      {/* Mentor Info */}
+      {/* 3. Mentor Profile Section */}
       <div className="flex items-center gap-4 flex-shrink-0 min-w-[200px]">
-        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-[#4f55c7] font-bold text-xl border border-gray-200">
+        {/* Avatar */}
+        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-[#4f55c7] font-bold text-2xl border border-gray-200 object-cover">
             {booking.mentorId?.userName?.charAt(0) || "M"}
         </div>
+        {/* Name & Role */}
         <div>
           <p className="font-bold text-gray-900">{booking.mentorId?.userName || "Unknown Mentor"}</p>
-          <p className="text-xs text-gray-500 truncate max-w-[150px]">
-            {booking.mentorId?.email || "No Email"}
+          <p className="text-sm text-gray-600 truncate max-w-[150px]">
+            {booking.mentorId?.email || "Individual"}
           </p>
         </div>
       </div>
 
-      {/* Session Details */}
+      {/* 4. Details Section (Title & Price) */}
       <div className="flex-1">
-        <p className="font-bold text-gray-900 mb-1">{booking.title || "Session"}</p>
-        <div className="flex items-center gap-3 text-sm text-gray-600">
-             <span className="flex items-center gap-1"><AccessTime fontSize="small"/> {booking.duration} mins</span>
-             <span>|</span>
-             <span className="font-semibold text-[#4f55c7]">₹ {booking.amount}</span>
-        </div>
+        <p className="font-bold text-gray-900 mb-1 text-lg">{booking.title || "Session"}</p>
+        <p className="text-sm text-gray-600">
+             {booking.duration} mins | <span className="font-semibold">₹ {booking.amount}</span>
+        </p>
+        
+        {/* Reschedule Logic Display */}
         {type === "rescheduled" && (
-            <p className="text-xs text-orange-600 mt-2 font-medium">
+            <p className="text-xs text-orange-600 mt-2 font-medium bg-orange-50 inline-block px-2 py-1 rounded">
                 Reason: {booking.mentorReschedule[1] || "No reason provided"}
             </p>
         )}
       </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-3 flex-shrink-0 mt-4 md:mt-0">
+      {/* 5. Actions Section */}
+      <div className="flex items-center gap-3 flex-shrink-0 mt-4 lg:mt-0">
         {type !== "completed" ? (
              <>
-                {/* Join Button: Explicit White Text */}
+                {/* Join Call Button - Styled exactly like reference */}
                 <button 
                     onClick={() => onJoin(booking.meetLink)}
-                    className="px-4 py-2 bg-[#4f55c7] text-white font-semibold rounded-lg hover:bg-[#3e44a8] transition-colors shadow-md shadow-[#4f55c7]/20 flex items-center gap-2"
+                    className="px-4 py-2 bg-[#4f55c7] text-white font-medium rounded-lg hover:bg-[#3e44a8] transition-colors flex items-center gap-2 shadow-sm"
                 >
-                    <VideoCameraFront fontSize="small" /> Join
+                    <VideoCameraFront style={{ fontSize: 18 }} />
+                    Join Call
                 </button>
+
+                {/* More Actions Button - Styled exactly like reference */}
                 <button 
                     onClick={(e) => onMenuOpen(e, booking)}
-                    className="p-2 bg-transparent text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+                    className="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 bg-white"
                 >
-                    <MoreVert />
+                    Actions
+                    <MoreVert style={{ fontSize: 18 }} />
                 </button>
              </>
         ) : (
-             /* Feedback Button: Explicit White Background to prevent transparency issues */
+             /* Feedback Button for Completed Tabs */
              <button 
                 onClick={() => onFeedback(booking, "feedback")}
-                className="px-4 py-2 bg-white border border-[#4f55c7] text-[#4f55c7] font-semibold rounded-lg hover:bg-[#4f55c7]/5 transition-colors"
+                className="px-4 py-2 bg-white border border-[#4f55c7] text-[#4f55c7] font-medium rounded-lg hover:bg-[#4f55c7]/5 transition-colors"
              >
                 Give Feedback
              </button>
@@ -119,7 +125,7 @@ const RequestListItem = ({ req, isSelected, onSelect }) => (
           </div>
           <p className="text-xs text-gray-500 mb-2 truncate">{req.mentorId?.email}</p>
           <p className="text-sm text-gray-800 line-clamp-2 bg-gray-50 p-2 rounded-md italic border border-gray-100">
-             "{req.requestMessage}"
+              "{req.requestMessage}"
           </p>
         </div>
       </div>
@@ -171,8 +177,8 @@ const UserBooking = () => {
         );
 
         setUpcomingBookings(upcomingBookings);
-        // Note: Preserving your original logic where you set completed = upcoming
-        // If this is a bug in logic, please change 'upcomingBookings' to 'completedBookings' below
+        // Logic preserved: original code mapped completedBookings to upcomingBookings. 
+        // If that was intentional, keeping it. If it was a bug, you might want to change this to setCompletedBookings(completedBookings).
         setCompletedBookings(upcomingBookings); 
         setRescheduledBookings(rescheduledBookings);
       } catch (error) {
@@ -267,7 +273,7 @@ const UserBooking = () => {
         
         <h1 className="text-2xl font-bold text-gray-900 mb-6 font-roboto">User Bookings</h1>
 
-        {/* 1:1 vs Webinar Tabs (Updated with Explicit BG Colors) */}
+        {/* 1:1 vs Webinar Tabs */}
         <div className="flex gap-2 mb-6 p-1 bg-gray-200 rounded-lg w-fit">
             {["1:1", "webinar"].map((type) => (
                 <button
@@ -275,8 +281,8 @@ const UserBooking = () => {
                     onClick={() => setBookingType(type)}
                     className={`px-6 py-1.5 rounded-md text-sm font-semibold transition-all ${
                         bookingType === type 
-                        ? "bg-white text-[#4f55c7] shadow-sm"  // Active: Explicit White BG
-                        : "bg-transparent text-gray-500 hover:text-gray-700" // Inactive: Transparent BG
+                        ? "bg-white text-[#4f55c7] shadow-sm" 
+                        : "bg-transparent text-gray-500 hover:text-gray-700"
                     }`}
                 >
                     {type === "1:1" ? "1:1 Sessions" : "Webinar"}
@@ -284,7 +290,7 @@ const UserBooking = () => {
             ))}
         </div>
 
-        {/* Main Tabs (Pill Style) */}
+        {/* Main Tabs (Pill Style - Purple Theme) */}
         <div className="flex flex-wrap gap-3 mb-8 border-b border-gray-200 pb-4">
             {[
                 { label: "Upcoming", value: 0 },
@@ -323,7 +329,7 @@ const UserBooking = () => {
                         />
                     ))
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg border border-dashed border-gray-300">
                         <p className="text-gray-500 font-medium">No upcoming bookings.</p>
                     </div>
                 )}
@@ -343,7 +349,7 @@ const UserBooking = () => {
                         />
                     ))
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg border border-dashed border-gray-300">
                         <p className="text-gray-500 font-medium">No completed bookings.</p>
                     </div>
                 )}
@@ -364,7 +370,7 @@ const UserBooking = () => {
                         />
                     ))
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg border border-dashed border-gray-300">
                         <p className="text-gray-500 font-medium">No rescheduled bookings.</p>
                     </div>
                 )}
@@ -389,8 +395,8 @@ const UserBooking = () => {
                            />
                        ))
                    ) : (
-                       <div className="text-center py-10 text-gray-500 bg-white rounded-xl border border-dashed border-gray-200">
-                            No pending requests.
+                       <div className="text-center py-10 text-gray-500 bg-white rounded-lg border border-dashed border-gray-200">
+                           No pending requests.
                        </div>
                    )}
                 </div>
@@ -398,7 +404,7 @@ const UserBooking = () => {
                 {/* Right Panel: Action Area */}
                 <div className="w-full lg:w-8/12">
                    {selectedReq ? (
-                       <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm sticky top-6">
+                       <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm sticky top-6">
                            <div className="flex justify-between items-center mb-4">
                                <h3 className="text-lg font-bold text-gray-900">Complete Your Booking</h3>
                                {selectedReq.requestStatus && (
@@ -418,7 +424,7 @@ const UserBooking = () => {
                                         mentorId={selectedReq.mentorId._id}
                                         reschedule={false}
                                         selectedDuration={selectedReq.duration}
-                                    />
+                                   />
                                </div>
                            ) : (
                                <div className="p-8 bg-gray-50 rounded-lg text-center border border-gray-200">
@@ -427,7 +433,7 @@ const UserBooking = () => {
                            )}
                        </div>
                    ) : (
-                       <div className="h-full flex flex-col items-center justify-center text-gray-400 border border-dashed border-gray-300 rounded-2xl bg-gray-50/50 p-10 min-h-[300px]">
+                       <div className="h-full flex flex-col items-center justify-center text-gray-400 border border-dashed border-gray-300 rounded-lg bg-gray-50/50 p-10 min-h-[300px]">
                             <p className="font-medium">Select a request to continue</p>
                        </div>
                    )}

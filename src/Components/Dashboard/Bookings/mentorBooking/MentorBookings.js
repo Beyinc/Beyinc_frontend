@@ -2,9 +2,141 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CalendarServices } from "../../../../Services/CalendarServices.js";
 import dayjs from "dayjs";
-import { AccessTime, CalendarMonth, Close } from "@mui/icons-material";
+import { AccessTime, CalendarMonth, Close, VideoCameraFront, Event } from "@mui/icons-material";
 
-// --- Sub-Component: Request List Item (Left Side of Tab 2) ---
+// --- 1. NEW COMPONENT: Styled Booking List Item (Based on your provided HTML) ---
+const BookingListItem = ({ booking, isSelected, onClick }) => {
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        bg-white border-2 rounded-lg p-4 cursor-pointer transition-all mb-3
+        hover:shadow-md hover:border-blue-300
+        ${isSelected ? "border-blue-500 shadow-sm ring-1 ring-blue-500" : "border-gray-200"}
+      `}
+    >
+      <div className="flex items-start gap-4">
+        {/* Profile Image */}
+        <img
+          alt={booking.userId?.userName || "User"}
+          className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+          src={booking.userId?.image?.url || "/profile.png"}
+        />
+        
+        <div className="flex-1 min-w-0">
+          {/* Header: Name + Badge */}
+          <div className="flex items-center justify-between mb-1">
+            <p className="font-semibold text-gray-900">
+              {booking.userId?.userName || "Unknown User"}
+            </p>
+            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
+              1:1 Call
+            </span>
+          </div>
+
+          {/* Subtitle / Title */}
+          <p className="text-sm font-medium text-gray-800 mb-1">
+            {booking.title || "Mentorship Session"}
+          </p>
+
+          {/* Description (Truncated) */}
+          <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+            {booking.description || "No specific topic description provided for this session."}
+          </p>
+
+          {/* Date Footer */}
+          <p className="text-xs text-gray-500 mt-2 font-medium flex items-center gap-1">
+             <Event sx={{ fontSize: 14 }} />
+             {dayjs(booking.startDateTime).format("MMM D, YYYY")} • {dayjs(booking.startDateTime).format("h:mm A")} ({booking.duration} mins)
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- 2. NEW COMPONENT: Booking Detail View (Right Side for Tabs 0 & 1) ---
+const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
+  if (!booking) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center text-gray-400 border border-dashed border-gray-300 rounded-2xl bg-gray-50/50 p-10 min-h-[400px]">
+        <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 text-[#4f55c7]">
+          <CalendarMonth sx={{ fontSize: 32 }} />
+        </div>
+        <p className="font-medium text-gray-500">Select a booking to view details</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-2xl p-8 sticky top-6 shadow-sm h-fit">
+      {/* Header Section */}
+      <div className="flex flex-col items-center text-center mb-8 pb-6 border-b border-gray-100">
+        <img
+          alt={booking.userId?.userName}
+          className="w-24 h-24 rounded-full object-cover border-4 border-blue-50 shadow-sm mb-4"
+          src={booking.userId?.image?.url || "/profile.png"}
+        />
+        <h3 className="text-2xl font-bold text-gray-900">{booking.userId?.userName}</h3>
+        <p className="text-sm text-gray-500 mb-2">{booking.userId?.email}</p>
+        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${isCompleted ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'}`}>
+            {isCompleted ? "Session Completed" : "Upcoming Session"}
+        </span>
+      </div>
+
+      {/* Session Info Grid */}
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="bg-gray-50 p-4 rounded-xl">
+             <p className="text-xs text-gray-500 uppercase font-bold mb-1">Date</p>
+             <p className="font-semibold text-gray-900">{dayjs(booking.startDateTime).format("MMM D, YYYY")}</p>
+        </div>
+        <div className="bg-gray-50 p-4 rounded-xl">
+             <p className="text-xs text-gray-500 uppercase font-bold mb-1">Time</p>
+             <p className="font-semibold text-gray-900">{dayjs(booking.startDateTime).format("h:mm A")}</p>
+        </div>
+        <div className="bg-gray-50 p-4 rounded-xl">
+             <p className="text-xs text-gray-500 uppercase font-bold mb-1">Duration</p>
+             <p className="font-semibold text-gray-900">{booking.duration} Minutes</p>
+        </div>
+        <div className="bg-gray-50 p-4 rounded-xl">
+             <p className="text-xs text-gray-500 uppercase font-bold mb-1">Fee</p>
+             <p className="font-semibold text-[#4f55c7]">₹ {booking.amount}</p>
+        </div>
+      </div>
+
+      {/* Agenda / Topic */}
+      <div className="mb-8">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Topic / Agenda</p>
+        <div className="bg-white border border-gray-100 p-4 rounded-lg shadow-sm">
+            <h4 className="font-bold text-gray-800 mb-2">{booking.title}</h4>
+            <p className="text-sm text-gray-600 leading-relaxed">
+                {booking.description || "No specific description provided."}
+            </p>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="space-y-3">
+        {!isCompleted && (
+            <>
+                <button className="w-full px-6 py-3 bg-[#4f55c7] text-white font-semibold rounded-xl hover:bg-[#3e44a8] transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/10">
+                    <VideoCameraFront sx={{ fontSize: 20 }} />
+                    Join Meeting
+                </button>
+                <button 
+                    onClick={() => onReschedule(booking)}
+                    className="w-full px-6 py-3 bg-white border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all"
+                >
+                    Reschedule Session
+                </button>
+            </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// --- Sub-Component: Request List Item (Preserved for Tab 2) ---
 const IncomingRequestItem = ({ item, isSelected, onClick }) => (
   <div
     onClick={onClick}
@@ -41,7 +173,7 @@ const IncomingRequestItem = ({ item, isSelected, onClick }) => (
   </div>
 );
 
-// --- Sub-Component: Request Detail View (Right Side of Tab 2) ---
+// --- Sub-Component: Request Detail View (Preserved for Tab 2) ---
 const RequestDetailView = ({ request, onApprove, onDelete }) => {
   if (!request) {
     return (
@@ -131,67 +263,18 @@ const RequestDetailView = ({ request, onApprove, onDelete }) => {
   );
 };
 
-// --- Sub-Component: Confirmed Booking Card (Tabs 0 & 1) ---
-const BookingCard = ({ booking, onReschedule }) => (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all mb-4">
-      <div className="flex flex-col md:flex-row md:items-center gap-6">
-        {/* Visual Decoration Pill */}
-        <div className="hidden md:block w-1 h-20 bg-[#4f55c7] rounded-full flex-shrink-0 opacity-80"></div>
-        
-        {/* Date / Time */}
-        <div className="w-24 flex-shrink-0">
-             <p className="text-xs text-gray-500 font-bold uppercase mb-1 tracking-wider">
-                {dayjs(booking.startDateTime).format("MMM D")}
-             </p>
-             <p className="font-bold text-gray-900 text-xl">
-                {new Date(booking.startDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-             </p>
-        </div>
-        
-        {/* User Info */}
-        <div className="flex items-center gap-4 flex-shrink-0 min-w-[200px]">
-          <img 
-            alt="User" 
-            className="w-14 h-14 rounded-full object-cover border border-gray-200" 
-            src={booking.userId?.image?.url || "/profile.png"} 
-          />
-          <div>
-            <p className="font-bold text-gray-900">{booking.userId?.userName || "Unknown"}</p>
-            <p className="text-xs text-gray-500 truncate max-w-[150px]">{booking.userId?.email || "No Email"}</p>
-          </div>
-        </div>
-
-        {/* Session Details */}
-        <div className="flex-1">
-          <p className="font-bold text-gray-900 mb-1">{booking.title || "Session"}</p>
-          <p className="text-sm text-gray-600 flex items-center gap-2">
-            <AccessTime sx={{ fontSize: 14 }} /> {booking.duration} mins | ₹ {booking.amount}
-          </p>
-        </div>
-
-        {/* Action Button */}
-        <div className="flex items-center gap-3 flex-shrink-0 mt-4 md:mt-0">
-          <button 
-            onClick={() => onReschedule(booking)}
-            // Changed this to SOLID style to fix the "color change" issue and make it visible
-            className="px-6 py-2.5 bg-[#4f55c7] text-white font-semibold rounded-lg hover:bg-[#3e44a8] transition-colors shadow-md shadow-[#4f55c7]/20"
-          >
-            Reschedule
-          </button>
-        </div>
-      </div>
-    </div>
-);
-
 const MentorBooking = () => {
   // --- Logic State (Preserved) ---
   const [tabValue, setTabValue] = useState(0);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
   const [completedBookings, setCompletedBookings] = useState([]);
   
+  // New State for Split View Selection in Tab 0 and 1
+  const [selectedBooking, setSelectedBooking] = useState(null);
+
   // Reschedule Dialog Logic
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [bookingToReschedule, setBookingToReschedule] = useState(null);
   const [rescheduleReason, setRescheduleReason] = useState("");
 
   const {
@@ -225,12 +308,28 @@ const MentorBooking = () => {
 
         setUpcomingBookings(upcoming);
         setCompletedBookings(completed);
+        
+        // Default selection for split view
+        if(upcoming.length > 0) setSelectedBooking(upcoming[0]);
+
       } catch (error) {
         console.error("Error fetching bookings:", error);
       }
     };
     fetchBookings();
   }, [user_id, userName]);
+
+  // When changing tabs, reset selection to first item if available
+  useEffect(() => {
+    if (tabValue === 0 && upcomingBookings.length > 0) {
+        setSelectedBooking(upcomingBookings[0]);
+    } else if (tabValue === 1 && completedBookings.length > 0) {
+        setSelectedBooking(completedBookings[0]);
+    } else {
+        setSelectedBooking(null);
+    }
+  }, [tabValue, upcomingBookings, completedBookings]);
+
 
   // --- Fetch Requests Logic ---
   const [mentorBookingRequests, setMentorBookingRequests] = useState([]);
@@ -240,6 +339,8 @@ const MentorBooking = () => {
     try {
       let res = await CalendarServices.mentorBookingRequest();
       setMentorBookingRequests(res);
+      // Default select first request
+      if(res && res.length > 0) setSelectedReq(res[0]);
     } catch (err) {
       console.log(err);
     }
@@ -251,7 +352,7 @@ const MentorBooking = () => {
 
   // --- Action Handlers ---
   const handleOpenDialog = (booking) => {
-    setSelectedBooking(booking);
+    setBookingToReschedule(booking);
     setOpenDialog(true);
   };
 
@@ -262,7 +363,7 @@ const MentorBooking = () => {
 
   const handleReschedule = async () => {
     await CalendarServices.mentorReschedule({
-      id: selectedBooking._id,
+      id: bookingToReschedule._id,
       rescheduleReason,
       booleanValue: true,
     });
@@ -306,7 +407,7 @@ const MentorBooking = () => {
         
         <h1 className="text-2xl font-bold text-gray-900 mb-6 font-roboto">Mentor Bookings</h1>
 
-        {/* Navigation Pills (Styled exactly like AllUsers.js) */}
+        {/* Navigation Pills */}
         <div className="flex flex-wrap gap-3 mb-8">
             {[
                 { label: "Upcoming", value: 0 },
@@ -330,50 +431,61 @@ const MentorBooking = () => {
 
         {/* --- Tab Content --- */}
         
-        {/* Tab 0: Upcoming */}
-        {tabValue === 0 && (
-            <div className="w-full animate-in fade-in duration-300">
-                {upcomingBookings.length > 0 ? (
-                    upcomingBookings.map((booking) => (
-                        <BookingCard 
-                            key={booking._id} 
-                            booking={booking} 
-                            onReschedule={handleOpenDialog} 
-                        />
-                    ))
-                ) : (
-                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
-                         <img src="/Search.gif" alt="Empty" className="w-24 opacity-60 mb-2"/>
-                         <p className="text-gray-500 font-medium">No upcoming bookings found.</p>
-                    </div>
-                )}
-            </div>
-        )}
+        {/* Tab 0 (Upcoming) & Tab 1 (Completed) - Now using Split View */}
+        {(tabValue === 0 || tabValue === 1) && (
+             <div className="flex flex-col lg:flex-row gap-6 relative items-start animate-in fade-in duration-300">
+                {/* Left Panel: List */}
+                <div className="w-full lg:w-5/12 h-[calc(100vh-200px)] overflow-y-auto pr-2">
+                    {tabValue === 0 ? (
+                        upcomingBookings.length > 0 ? (
+                            upcomingBookings.map((booking) => (
+                                <BookingListItem 
+                                    key={booking._id} 
+                                    booking={booking} 
+                                    isSelected={selectedBooking?._id === booking._id}
+                                    onClick={() => setSelectedBooking(booking)}
+                                />
+                            ))
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                                <img src="/Search.gif" alt="Empty" className="w-24 opacity-60 mb-2"/>
+                                <p className="text-gray-500 font-medium">No upcoming bookings found.</p>
+                            </div>
+                        )
+                    ) : (
+                        completedBookings.length > 0 ? (
+                            completedBookings.map((booking) => (
+                                <BookingListItem 
+                                    key={booking._id} 
+                                    booking={booking} 
+                                    isSelected={selectedBooking?._id === booking._id}
+                                    onClick={() => setSelectedBooking(booking)}
+                                />
+                            ))
+                        ) : (
+                             <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                                  <p className="text-gray-500 font-medium">No completed bookings found.</p>
+                             </div>
+                        )
+                    )}
+                </div>
 
-        {/* Tab 1: Completed */}
-        {tabValue === 1 && (
-             <div className="w-full animate-in fade-in duration-300">
-                {completedBookings.length > 0 ? (
-                    completedBookings.map((booking) => (
-                        <BookingCard 
-                            key={booking._id} 
-                            booking={booking} 
-                            onReschedule={handleOpenDialog} 
-                        />
-                    ))
-                ) : (
-                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
-                         <p className="text-gray-500 font-medium">No completed bookings found.</p>
-                    </div>
-                )}
-            </div>
+                {/* Right Panel: Details */}
+                <div className="hidden lg:block lg:w-7/12">
+                     <BookingDetailView 
+                        booking={selectedBooking} 
+                        isCompleted={tabValue === 1}
+                        onReschedule={handleOpenDialog}
+                     />
+                </div>
+             </div>
         )}
 
         {/* Tab 2: Requests (Split View) */}
         {tabValue === 2 && (
              <div className="flex flex-col lg:flex-row gap-6 relative items-start animate-in fade-in duration-300">
                 {/* Left Panel: List */}
-                <div className="w-full lg:w-5/12">
+                <div className="w-full lg:w-5/12 h-[calc(100vh-200px)] overflow-y-auto pr-2">
                    {mentorBookingRequests.length > 0 ? (
                        mentorBookingRequests.map((req) => (
                            <IncomingRequestItem 
@@ -385,7 +497,7 @@ const MentorBooking = () => {
                        ))
                    ) : (
                        <div className="text-center py-10 text-gray-500 bg-white rounded-xl border border-dashed border-gray-200">
-                            No requests found
+                           No requests found
                        </div>
                    )}
                 </div>
@@ -412,7 +524,7 @@ const MentorBooking = () => {
                         <Close />
                     </button>
                     
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Request Reschedule</h2>
+                    <h2 className="text-xl font-bold text-gray-900 mb-6">Reschedule Session</h2>
                     
                     <div className="mb-6">
                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
@@ -438,7 +550,7 @@ const MentorBooking = () => {
                             onClick={handleReschedule}
                             className="px-5 py-2.5 bg-[#4f55c7] text-white font-semibold rounded-xl hover:bg-[#3e44a8] transition-colors shadow-lg shadow-[#4f55c7]/20"
                         >
-                            Submit Request
+                            Confirm Reschedule
                         </button>
                     </div>
                 </div>
