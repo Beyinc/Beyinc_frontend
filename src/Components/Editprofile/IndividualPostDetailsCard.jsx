@@ -1,27 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { convertToDate, formatedDate, postTypes, socket_io } from "../../Utils";
+import { formatedDate, socket_io } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
 import { ToastColors } from "../Toast/ToastColors";
 import { io } from "socket.io-client";
-import CloseIcon from "@mui/icons-material/Close";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import EditPost from "./Activities/Posts/EditPost";
-import PostComments from "./PostComments";
 import { Link } from "react-router-dom";
 import useWindowDimensions from "../Common/WindowSize";
 import { gridCSS } from "../CommonStyles";
 import "./IndividualPostDetailsCard.css";
 import ShareButton from "./ShareButton";
 import { Dialog, DialogContent } from "@mui/material";
+import PostComments from "./PostComments";
 import { LiveChat } from "./LiveChat";
 import { useAuthAction } from "../../hooks/useAuthAction";
 
 const IndividualPostDetailsCard = () => {
-  const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -182,7 +177,6 @@ const IndividualPostDetailsCard = () => {
     if (post?._id) {
       ApiServices.getPostComments({ postId: post?._id })
         .then((res) => {
-          // console.log(res.data);
           setAllComments(
             res.data.sort(
               (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -310,7 +304,6 @@ const IndividualPostDetailsCard = () => {
                             }}
                             onClick={() => {
                               setEditPostCount((prev) => prev + 1);
-                              // setEditPostPopup(true);
                               navigate(`/editPostPage/${post?._id}`);
                             }}
                           >
@@ -333,7 +326,13 @@ const IndividualPostDetailsCard = () => {
                         <div
                           id="menu"
                           style={{ color: "black" }}
-                          onClick={() => setReportPopup(true)}
+                          onClick={() => {
+                            if (!user_id) {
+                              navigate("/signup");
+                            } else {
+                              setReportPopup(true);
+                            }
+                          }}
                         >
                           Report
                         </div>
@@ -342,14 +341,6 @@ const IndividualPostDetailsCard = () => {
                   </div>
                 </div>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  color: "black",
-                }}
-              ></div>
             </div>
             {/* post desc */}
             <div className="postDescContainer">
@@ -372,6 +363,7 @@ const IndividualPostDetailsCard = () => {
               <div className="tagsContainer">
                 {post?.tags?.map((t) => (
                   <div
+                    key={t?._id}
                     className="indiTag"
                     onClick={() => navigate(`/user/${t?._id}`)}
                   >
@@ -381,7 +373,7 @@ const IndividualPostDetailsCard = () => {
               </div>
 
               <div className="PostimageContainer">
-                {post?.image?.url && ( // Check if the image URL is available
+                {post?.image?.url && (
                   <img
                     src={post.image.url}
                     style={{ objectFit: "contain" }}
@@ -391,14 +383,9 @@ const IndividualPostDetailsCard = () => {
                   />
                 )}
               </div>
-              {(post?.openDiscussion === true ||
-                post?.openDiscussionTeam?.map((o) => o._id).includes(user_id) ||
-                post?.createdBy?._id === user_id ||
-                role === "Admin") && (
-                  <div className="postDesc w-[850px]" style={{ whiteSpace: "pre-wrap" }}>
-                    {post?.fullDetails}
-                  </div>
-                )}
+              <div className="postDesc w-[850px]" style={{ whiteSpace: "pre-wrap" }}>
+                {post?.fullDetails}
+              </div>
 
               <div className="likeCommentDetails">
                 <div className="likeTotal">
@@ -454,7 +441,6 @@ const IndividualPostDetailsCard = () => {
               <div className="actionsHolder">
                 <div className="actionsHolder-leftContent">
                   <div className="likeActionHolder">
-                    {/* LIKE ACTION */}
                     <div onClick={likingpost}>
                       <svg
                         width="30"
@@ -475,7 +461,6 @@ const IndividualPostDetailsCard = () => {
                     </div>
                     <div className="actionText hidden sm:block">upvote</div>
                   </div>
-                  {/* DISLIKE ACTION */}
                   <div className="likeActionHolder">
                     <div onClick={dislikePost}>
                       <svg
@@ -497,7 +482,6 @@ const IndividualPostDetailsCard = () => {
                     </div>
                     <div className="actionText hidden sm:block">downvote</div>
                   </div>
-                  {/* COMMENT ACTION */}
                   <div className="likeActionHolder">
                     <div className="actionText">
                       <ShareButton url={window.location.href} />
@@ -627,19 +611,6 @@ const IndividualPostDetailsCard = () => {
                     <b>Post type : </b> <span> {post?.visibility}</span>
                   </div>
 
-                  {/* <div style={{ marginBottom: "10px" }}>
-                    <b>Tags :</b>{" "}
-                    <span 
-                    
-                      style={{
-                        background: "var( --tag-bg-right)",
-                        padding: "5px 10px",
-                        borderRadius: "20px",
-                      }}
-                    >
-                      {post?.tags?.map((p) => p.userName)?.join(", ")}
-                    </span>
-                  </div> */}
                   <div
                     style={{
                       display: "flex",
@@ -651,6 +622,7 @@ const IndividualPostDetailsCard = () => {
                     <div className="tagsContainer">
                       {post?.tags?.map((t) => (
                         <div
+                          key={t?._id}
                           style={{
                             background: "var( --tag-bg-right)",
                             padding: "5px 10px",
@@ -659,7 +631,6 @@ const IndividualPostDetailsCard = () => {
                           className="indiTag"
                           onClick={() => navigate(`/user/${t._id}`)}
                         >
-                          {/* {`@${t?.userName}`} */}
                           {t?.userName}
                         </div>
                       ))}
@@ -709,7 +680,7 @@ const IndividualPostDetailsCard = () => {
                   {post?.link && (
                     <div style={{ marginBottom: "10px" }}>
                       <b>Link :</b>{" "}
-                      <a href={post?.link} target="_blank">
+                      <a href={post?.link} target="_blank" rel="noreferrer">
                         Link
                       </a>
                     </div>
@@ -739,7 +710,6 @@ const IndividualPostDetailsCard = () => {
           maxWidth="xl"
           sx={{
             ...gridCSS.tabContainer,
-            // Setting width to auto
           }}
         >
           <DialogContent

@@ -18,7 +18,6 @@ const PostComments = ({ fetchComments, postId }) => {
   const [file, setFile] = useState(null);
   const [postTrigger, setpostTrigger] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const authenticated = useAuthAction();
   const [allComments, setAllComments] = useState([]);
   const socket = useRef();
@@ -47,7 +46,7 @@ const PostComments = ({ fetchComments, postId }) => {
           );
         });
     }
-  }, [postId, postTrigger, fetchComments]);
+  }, [postId, postTrigger, fetchComments, dispatch]);
 
   const handleFileUpload = (selectedFile) => {
     console.log("file selected");
@@ -106,7 +105,7 @@ const PostComments = ({ fetchComments, postId }) => {
     }
 
     try {
-      const response = await ApiServices.addPostComment({
+      await ApiServices.addPostComment({
         postId,
         commentBy: user_id,
         comment,

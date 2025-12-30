@@ -125,7 +125,7 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(apicallloginDetails());
-  }, []);
+  }, [dispatch]);
 
   // intialize socket io
   const socket = useRef();
@@ -389,8 +389,8 @@ const App = () => {
             <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
             {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
-            <Route path="/connections" element={<ConnectionsWithSuggestions />} />
-            <Route path="/notification-page" element={<NotificationPage />} />
+            <Route path="/connections" Component={AuthHoc(ConnectionsWithSuggestions)} />
+            <Route path="/notification-page" Component={AuthHoc(NotificationPage)} />
           </Routes>
         </div>
 

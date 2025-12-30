@@ -20,7 +20,7 @@ export const useAuthAction = () => {
         return (...args) => {
             if (!user_id) {
                 // If no user_id, redirect to signup/login
-                navigate("/login");
+                navigate("/signup");
                 return;
             }
             // If authenticated, execute the original action with args

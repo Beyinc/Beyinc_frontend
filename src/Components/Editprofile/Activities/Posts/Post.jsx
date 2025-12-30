@@ -78,7 +78,7 @@ const Post = ({
 
     const likingpost = async () => {
         if (!user_id) {
-            window.location.href = "/login";
+            navigate("/signup");
             return;
         }
         if (isLiking) return;
@@ -125,7 +125,7 @@ const Post = ({
 
     const dislikePost = async () => {
         if (!user_id) {
-            window.location.href = "/login";
+            navigate("/signup");
             return;
         }
         if (isDisliking) return;
@@ -402,7 +402,13 @@ const Post = ({
                                     <div
                                         style={{ color: "black" }}
                                         className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => setreportpopUp(true)}
+                                        onClick={() => {
+                                            if (!user_id) {
+                                                navigate("/signup");
+                                            } else {
+                                                setreportpopUp(true);
+                                            }
+                                        }}
                                     >
                                         Report
                                     </div>
@@ -523,95 +529,102 @@ const Post = ({
                             <div className="commentTotal">{allComments?.length} comments</div>
                         </div>
                     </div>
-                    <div className="actionsHolder font-semibold">
-                        <div className="actionsHolder-leftContent">
-                            <div className="likeActionHolder" onClick={likingpost}>
-                                <div>
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        className="w-7 h-7 sm:w-5 sm:h-5"
-                                        viewBox="0 0 40 40"
-                                        fill={"none"}
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            d="M34.6055 20.8477C35.2617 19.9805 35.625 18.918 35.625 17.8125C35.625 16.0586 34.6445 14.3985 33.0664 13.4727C32.6601 13.2344 32.1976 13.109 31.7266 13.1094H22.3594L22.5938 8.30862C22.6484 7.14847 22.2383 6.0469 21.4414 5.20706C21.0503 4.79311 20.5785 4.46375 20.0551 4.23935C19.5318 4.01494 18.9679 3.90025 18.3984 3.90237C16.3672 3.90237 14.5703 5.26956 14.0312 7.22659L10.6758 19.375H5.625C4.93359 19.375 4.375 19.9336 4.375 20.625V34.8438C4.375 35.5352 4.93359 36.0938 5.625 36.0938H29.1133C29.4727 36.0938 29.8242 36.0235 30.1484 35.8828C32.0078 35.0899 33.207 33.2735 33.207 31.2578C33.207 30.7657 33.1367 30.2813 32.9961 29.8125C33.6523 28.9453 34.0156 27.8828 34.0156 26.7774C34.0156 26.2852 33.9453 25.8008 33.8047 25.3321C34.4609 24.4649 34.8242 23.4024 34.8242 22.2969C34.8164 21.8047 34.7461 21.3164 34.6055 20.8477ZM7.1875 33.2813V22.1875H10.3516V33.2813H7.1875ZM32.0469 19.4922L31.1914 20.2344L31.7344 21.2266C31.9133 21.5534 32.006 21.9204 32.0039 22.293C32.0039 22.9375 31.7227 23.5508 31.2383 23.9727L30.3828 24.7149L30.9258 25.7071C31.1047 26.0339 31.1974 26.4009 31.1953 26.7735C31.1953 27.418 30.9141 28.0313 30.4297 28.4532L29.5742 29.1953L30.1172 30.1875C30.2961 30.5144 30.3888 30.8814 30.3867 31.2539C30.3867 32.1289 29.8711 32.918 29.0742 33.2774H12.8516V22.0625L16.7383 7.9805C16.8385 7.61956 17.0536 7.30113 17.3511 7.07345C17.6486 6.84577 18.0121 6.72126 18.3867 6.71878C18.6836 6.71878 18.9766 6.80472 19.2109 6.9805C19.5977 7.26956 19.8047 7.70706 19.7812 8.1719L19.4062 15.9219H31.6875C32.3828 16.3477 32.8125 17.0664 32.8125 17.8125C32.8125 18.4571 32.5312 19.0664 32.0469 19.4922Z"
-                                            fill={
-                                                localLikes.some((like) => like._id === user_id)
-                                                    ? "var(--followBtn-bg)"
-                                                    : "var(--likeAction-bg)"
-                                            }
-                                        />
-                                    </svg>
-                                </div>
-                                <div className="actionText hidden sm:block  font-semibold">
-                                    upvote
-                                </div>
+                </div>
+                <div className="actionsHolder font-semibold">
+                    <div className="actionsHolder-leftContent">
+                        <div className="likeActionHolder" onClick={likingpost}>
+                            <div>
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    className="w-7 h-7 sm:w-5 sm:h-5"
+                                    viewBox="0 0 40 40"
+                                    fill={"none"}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M34.6055 20.8477C35.2617 19.9805 35.625 18.918 35.625 17.8125C35.625 16.0586 34.6445 14.3985 33.0664 13.4727C32.6601 13.2344 32.1976 13.109 31.7266 13.1094H22.3594L22.5938 8.30862C22.6484 7.14847 22.2383 6.0469 21.4414 5.20706C21.0503 4.79311 20.5785 4.46375 20.0551 4.23935C19.5318 4.01494 18.9679 3.90025 18.3984 3.90237C16.3672 3.90237 14.5703 5.26956 14.0312 7.22659L10.6758 19.375H5.625C4.93359 19.375 4.375 19.9336 4.375 20.625V34.8438C4.375 35.5352 4.93359 36.0938 5.625 36.0938H29.1133C29.4727 36.0938 29.8242 36.0235 30.1484 35.8828C32.0078 35.0899 33.207 33.2735 33.207 31.2578C33.207 30.7657 33.1367 30.2813 32.9961 29.8125C33.6523 28.9453 34.0156 27.8828 34.0156 26.7774C34.0156 26.2852 33.9453 25.8008 33.8047 25.3321C34.4609 24.4649 34.8242 23.4024 34.8242 22.2969C34.8164 21.8047 34.7461 21.3164 34.6055 20.8477ZM7.1875 33.2813V22.1875H10.3516V33.2813H7.1875ZM32.0469 19.4922L31.1914 20.2344L31.7344 21.2266C31.9133 21.5534 32.006 21.9204 32.0039 22.293C32.0039 22.9375 31.7227 23.5508 31.2383 23.9727L30.3828 24.7149L30.9258 25.7071C31.1047 26.0339 31.1974 26.4009 31.1953 26.7735C31.1953 27.418 30.9141 28.0313 30.4297 28.4532L29.5742 29.1953L30.1172 30.1875C30.2961 30.5144 30.3888 30.8814 30.3867 31.2539C30.3867 32.1289 29.8711 32.918 29.0742 33.2774H12.8516V22.0625L16.7383 7.9805C16.8385 7.61956 17.0536 7.30113 17.3511 7.07345C17.6486 6.84577 18.0121 6.72126 18.3867 6.71878C18.6836 6.71878 18.9766 6.80472 19.2109 6.9805C19.5977 7.26956 19.8047 7.70706 19.7812 8.1719L19.4062 15.9219H31.6875C32.3828 16.3477 32.8125 17.0664 32.8125 17.8125C32.8125 18.4571 32.5312 19.0664 32.0469 19.4922Z"
+                                        fill={
+                                            localLikes.some((like) => like._id === user_id)
+                                                ? "var(--followBtn-bg)"
+                                                : "var(--likeAction-bg)"
+                                        }
+                                    />
+                                </svg>
                             </div>
-                            <div className="likeActionHolder " onClick={dislikePost}>
-                                <div>
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 40 40"
-                                        fill={"none"}
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-7 h-7 sm:w-5 sm:h-5"
-                                    >
-                                        <path
-                                            d="M34.6055 19.1524C34.7461 18.6836 34.8164 18.1993 34.8164 17.7071C34.8164 16.6016 34.4531 15.5391 33.7969 14.6719C33.9375 14.2032 34.0078 13.7188 34.0078 13.2266C34.0078 12.1211 33.6445 11.0586 32.9883 10.1914C33.1289 9.72269 33.1992 9.23831 33.1992 8.74613C33.1992 6.7305 32 4.91409 30.1406 4.12113C29.8138 3.98022 29.4614 3.90841 29.1055 3.91019H5.625C4.93359 3.91019 4.375 4.46878 4.375 5.16019V19.3789C4.375 20.0703 4.93359 20.6289 5.625 20.6289H10.6758L14.0273 32.7696C14.5664 34.7266 16.3633 36.0938 18.3945 36.0938C19.5547 36.0938 20.6367 35.6328 21.4375 34.7891C22.2383 33.9493 22.6484 32.8477 22.5898 31.6875L22.3555 26.8868H31.7266C32.1992 26.8868 32.6602 26.7618 33.0664 26.5235C34.6445 25.6055 35.625 23.9414 35.625 22.1875C35.625 21.0821 35.2617 20.0196 34.6055 19.1524ZM7.1875 17.8125V6.71878H10.3516V17.8125H7.1875ZM31.6875 24.0782H19.4062L19.7812 31.8282C19.8047 32.293 19.5977 32.7305 19.2109 33.0196C18.9727 33.1953 18.6797 33.2852 18.3867 33.2813C18.0124 33.2777 17.6494 33.1527 17.3522 32.9252C17.0549 32.6977 16.8395 32.3799 16.7383 32.0196L12.8516 17.9375V6.71878H29.0781C29.4686 6.89377 29.8002 7.17783 30.033 7.53679C30.2659 7.89576 30.39 8.31435 30.3906 8.74222C30.3906 9.12113 30.3008 9.4805 30.1211 9.80863L29.5781 10.8008L30.4336 11.543C30.6744 11.7515 30.8674 12.0095 30.9995 12.2994C31.1316 12.5892 31.1998 12.9041 31.1992 13.2227C31.1992 13.6016 31.1094 13.961 30.9297 14.2891L30.3867 15.2813L31.2422 16.0235C31.483 16.232 31.676 16.49 31.8081 16.7798C31.9402 17.0697 32.0083 17.3846 32.0078 17.7032C32.0078 18.0821 31.918 18.4414 31.7383 18.7696L31.1914 19.7657L32.0469 20.5078C32.2877 20.7164 32.4807 20.9744 32.6128 21.2642C32.7449 21.5541 32.813 21.869 32.8125 22.1875C32.8125 22.9336 32.3828 23.6524 31.6875 24.0782Z"
-                                            fill={
-                                                localDislikes.some((dislike) => dislike._id === user_id)
-                                                    ? "var(--followBtn-bg)"
-                                                    : "var(--likeAction-bg)"
-                                            }
-                                        />
-                                    </svg>
-                                </div>
-                                <div className="actionText hidden sm:block">downvote</div>
+                            <div className="actionText hidden sm:block  font-semibold">
+                                upvote
                             </div>
-                            <div
-                                className="likeActionHolder"
-                                onClick={() => navigate(`/posts/${post?._id}`)}
-                            >
-                                <div>
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 34 34"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-7 h-7 sm:w-5 sm:h-5"
-                                    >
-                                        <path
-                                            d="M17 32C19.9667 32 22.8668 31.1203 25.3336 29.4721C27.8003 27.8238 29.7229 25.4811 30.8582 22.7403C31.9935 19.9994 32.2906 16.9834 31.7118 14.0737C31.133 11.1639 29.7044 8.49119 27.6066 6.3934C25.5088 4.29562 22.8361 2.86701 19.9264 2.28823C17.0166 1.70945 14.0006 2.0065 11.2597 3.14181C8.51886 4.27713 6.17618 6.19972 4.52796 8.66645C2.87973 11.1332 2 14.0333 2 17C2 19.48 2.6 21.8183 3.66667 23.8783L2 32L10.1217 30.3333C12.1817 31.4 14.5217 32 17 32Z"
-                                            stroke="var(--likeAction-bg)"
-                                            strokeWidth="2.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                    </svg>
-                                </div>
-                                <div className="actionText  hidden sm:block font-thin">
-                                    Comment
-                                </div>
+                        </div>
+                        <div className="likeActionHolder " onClick={dislikePost}>
+                            <div>
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 40 40"
+                                    fill={"none"}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-7 h-7 sm:w-5 sm:h-5"
+                                >
+                                    <path
+                                        d="M34.6055 19.1524C34.7461 18.6836 34.8164 18.1993 34.8164 17.7071C34.8164 16.6016 34.4531 15.5391 33.7969 14.6719C33.9375 14.2032 34.0078 13.7188 34.0078 13.2266C34.0078 12.1211 33.6445 11.0586 32.9883 10.1914C33.1289 9.72269 33.1992 9.23831 33.1992 8.74613C33.1992 6.7305 32 4.91409 30.1406 4.12113C29.8138 3.98022 29.4614 3.90841 29.1055 3.91019H5.625C4.93359 3.91019 4.375 4.46878 4.375 5.16019V19.3789C4.375 20.0703 4.93359 20.6289 5.625 20.6289H10.6758L14.0273 32.7696C14.5664 34.7266 16.3633 36.0938 18.3945 36.0938C19.5547 36.0938 20.6367 35.6328 21.4375 34.7891C22.2383 33.9493 22.6484 32.8477 22.5898 31.6875L22.3555 26.8868H31.7266C32.1992 26.8868 32.6602 26.7618 33.0664 26.5235C34.6445 25.6055 35.625 23.9414 35.625 22.1875C35.625 21.0821 35.2617 20.0196 34.6055 19.1524ZM7.1875 17.8125V6.71878H10.3516V17.8125H7.1875ZM31.6875 24.0782H19.4062L19.7812 31.8282C19.8047 32.293 19.5977 32.7305 19.2109 33.0196C18.9727 33.1953 18.6797 33.2852 18.3867 33.2813C18.0124 33.2777 17.6494 33.1527 17.3522 32.9252C17.0549 32.6977 16.8395 32.3799 16.7383 32.0196L12.8516 17.9375V6.71878H29.0781C29.4686 6.89377 29.8002 7.17783 30.033 7.53679C30.2659 7.89576 30.39 8.31435 30.3906 8.74222C30.3906 9.12113 30.3008 9.4805 30.1211 9.80863L29.5781 10.8008L30.4336 11.543C30.6744 11.7515 30.8674 12.0095 30.9995 12.2994C31.1316 12.5892 31.1998 12.9041 31.1992 13.2227C31.1992 13.6016 31.1094 13.961 30.9297 14.2891L30.3867 15.2813L31.2422 16.0235C31.483 16.232 31.676 16.49 31.8081 16.7798C31.9402 17.0697 32.0083 17.3846 32.0078 17.7032C32.0078 18.0821 31.918 18.4414 31.7383 18.7696L31.1914 19.7657L32.0469 20.5078C32.2877 20.7164 32.4807 20.9744 32.6128 21.2642C32.7449 21.5541 32.813 21.869 32.8125 22.1875C32.8125 22.9336 32.3828 23.6524 31.6875 24.0782Z"
+                                        fill={
+                                            localDislikes.some((dislike) => dislike._id === user_id)
+                                                ? "var(--followBtn-bg)"
+                                                : "var(--likeAction-bg)"
+                                        }
+                                    />
+                                </svg>
                             </div>
-
-                            <div className="likeActionHolder">
-                                <ShareButton url={`${window.location.href}/${post?._id}`} />
+                            <div className="actionText hidden sm:block">downvote</div>
+                        </div>
+                        <div
+                            className="likeActionHolder"
+                            onClick={() => {
+                                if (!user_id) {
+                                    navigate("/signup");
+                                } else {
+                                    navigate(`/posts/${post?._id}`);
+                                }
+                            }}
+                        >
+                            <div>
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 34 34"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-7 h-7 sm:w-5 sm:h-5"
+                                >
+                                    <path
+                                        d="M17 32C19.9667 32 22.8668 31.1203 25.3336 29.4721C27.8003 27.8238 29.7229 25.4811 30.8582 22.7403C31.9935 19.9994 32.2906 16.9834 31.7118 14.0737C31.133 11.1639 29.7044 8.49119 27.6066 6.3934C25.5088 4.29562 22.8361 2.86701 19.9264 2.28823C17.0166 1.70945 14.0006 2.0065 11.2597 3.14181C8.51886 4.27713 6.17618 6.19972 4.52796 8.66645C2.87973 11.1332 2 14.0333 2 17C2 19.48 2.6 21.8183 3.66667 23.8783L2 32L10.1217 30.3333C12.1817 31.4 14.5217 32 17 32Z"
+                                        stroke="var(--likeAction-bg)"
+                                        strokeWidth="2.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            </div>
+                            <div className="actionText  hidden sm:block font-thin">
+                                Comment
                             </div>
                         </div>
 
-                        <div className="join-button-container">
-                            {/* <button
+                        <div className="likeActionHolder">
+                            <ShareButton url={`${window.location.href}/${post?._id}`} />
+                        </div>
+                    </div>
+
+                    <div className="join-button-container">
+                        {/* <button
                 className="join-button"
                 onClick={() => navigate(`/posts/${post?._id}`)}
               >
                 Join
               </button> */}
 
-                            {/* {!(post?.createdBy._id == user_id) && (
+                        {/* {!(post?.createdBy._id == user_id) && (
                     <div className="openDiscussion-Buttons">
                       {post?.openDiscussionRequests
                         .map((o) => o._id)
@@ -628,133 +641,132 @@ const Post = ({
                       )}
                     </div>
                   )} */}
-                        </div>
                     </div>
-                </div>
 
-                <Dialog
-                    open={deletePop}
-                    onClose={() => {
-                        setdeletePopUp(false);
-                    }}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                    maxWidth="xl"
-                    sx={{
-                        ...gridCSS.tabContainer,
-                        // Setting width to auto
-                    }}
-                >
-                    <DialogContent
-                        style={{
-                            padding: "10px",
-                            position: "relative",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "10px",
+                    <Dialog
+                        open={deletePop}
+                        onClose={() => {
+                            setdeletePopUp(false);
+                        }}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth="xl"
+                        sx={{
+                            ...gridCSS.tabContainer,
+                            // Setting width to auto
                         }}
                     >
-                        Are you sure to delete the post?
-                        <div
+                        <DialogContent
                             style={{
+                                padding: "10px",
+                                position: "relative",
                                 display: "flex",
-                                alignItems: "center",
+                                flexDirection: "column",
                                 gap: "10px",
-                                justifyContent: "center",
                             }}
                         >
-                            <button
-                                onClick={(e) => {
-                                    deletePost(e);
-                                }}
-                            >
-                                Yes
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setdeletePopUp(false);
-                                }}
-                            >
-                                No
-                            </button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
-
-                <Dialog
-                    open={reportpopup}
-                    onClose={() => {
-                        setreportpopUp(false);
-                        setReportText("");
-                    }}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                    maxWidth="xl"
-                    sx={{
-                        ...gridCSS.tabContainer,
-                        // Setting width to auto
-                    }}
-                >
-                    <DialogContent
-                        style={{
-                            padding: "10px",
-                            position: "relative",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "10px",
-                        }}
-                    >
-                        <div>
-                            <select
-                                className="select"
-                                value={reportType}
-                                onChange={(e) => setReportType(e.target.value)}
+                            Are you sure to delete the post?
+                            <div
                                 style={{
-                                    width: "100%",
-                                    padding: "6px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #ccc",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                    justifyContent: "center",
                                 }}
                             >
-                                <option value="">Select Report Type</option>
-                                <option value="spam">Spam</option>
-                                <option value="abuse">Irrelevant content</option>
-                            </select>
-                        </div>
+                                <button
+                                    onClick={(e) => {
+                                        deletePost(e);
+                                    }}
+                                >
+                                    Yes
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setdeletePopUp(false);
+                                    }}
+                                >
+                                    No
+                                </button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
 
-                        <div>
-                            <textarea
-                                className="textarea"
-                                rows={2}
-                                cols={50}
-                                value={reportText}
-                                onChange={(e) => {
-                                    setReportText(e.target.value);
-                                }}
-                                placeholder="Report reason"
-                                style={{ resize: "none" }}
-                            />
-                        </div>
-
-                        <div
+                    <Dialog
+                        open={reportpopup}
+                        onClose={() => {
+                            setreportpopUp(false);
+                            setReportText("");
+                        }}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth="xl"
+                        sx={{
+                            ...gridCSS.tabContainer,
+                            // Setting width to auto
+                        }}
+                    >
+                        <DialogContent
                             style={{
+                                padding: "10px",
+                                position: "relative",
                                 display: "flex",
-                                alignItems: "center",
+                                flexDirection: "column",
                                 gap: "10px",
-                                justifyContent: "center",
                             }}
                         >
-                            <button
-                                disabled={reportText == "" && reportType == ""}
-                                onClick={(e) => {
-                                    reportPost(e);
+                            <div>
+                                <select
+                                    className="select"
+                                    value={reportType}
+                                    onChange={(e) => setReportType(e.target.value)}
+                                    style={{
+                                        width: "100%",
+                                        padding: "6px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #ccc",
+                                    }}
+                                >
+                                    <option value="">Select Report Type</option>
+                                    <option value="spam">Spam</option>
+                                    <option value="abuse">Irrelevant content</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <textarea
+                                    className="textarea"
+                                    rows={2}
+                                    cols={50}
+                                    value={reportText}
+                                    onChange={(e) => {
+                                        setReportText(e.target.value);
+                                    }}
+                                    placeholder="Report reason"
+                                    style={{ resize: "none" }}
+                                />
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                    justifyContent: "center",
                                 }}
                             >
-                                Report
-                            </button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                                <button
+                                    disabled={reportText == "" && reportType == ""}
+                                    onClick={(e) => {
+                                        reportPost(e);
+                                    }}
+                                >
+                                    Report
+                                </button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </div>
         </section>
     );
