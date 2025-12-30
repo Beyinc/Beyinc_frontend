@@ -1,15 +1,8 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import BoxCategories from "./BoxCategories";
 import { ApiServices } from "../../Services/ApiServices";
-import {
-  INDUSTRY_EXPERTISE,
-  ROLE_LEVELS,
-  COMPANY_STAGES,
-} from "../../Utils";
+import { INDUSTRY_EXPERTISE, ROLE_LEVELS, COMPANY_STAGES } from "../../Utils";
 import { CheckCircle2 } from "lucide-react";
 import Startup from "../OnboardComponents/Startup";
 
@@ -103,21 +96,26 @@ const EntryDetails = () => {
     selectedCategory === "Individual/Entrepreneur"
       ? 3
       : 2;
+  const progressPercentage = (step / totalSteps) * 100;
 
   /* ---------------- UI ---------------- */
 
   return (
     <div className="bg-white md:m-10 p-6 shadow-lg rounded-lg">
-      {/* Progress */}
-      <div className="mb-6">
-        <div className="flex justify-between text-sm mb-2">
-          <span>Step {step} of {totalSteps}</span>
-          <span>{Math.round((step / totalSteps) * 100)}%</span>
+      {/* Progress Bar */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm font-semibold text-slate-700">
+            Step {step} of {totalSteps}
+          </span>
+          <span className="text-sm text-slate-600">
+            {Math.round(progressPercentage)}%
+          </span>
         </div>
-        <div className="w-full bg-gray-200 h-2 rounded">
+        <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
           <div
-            className="h-full bg-blue-600 rounded transition-all"
-            style={{ width: `${(step / totalSteps) * 100}%` }}
+            className="h-full bg-indigo-600 transition-all duration-500"
+            style={{ width: `${progressPercentage}%` }}
           />
         </div>
       </div>
@@ -136,7 +134,7 @@ const EntryDetails = () => {
             <button
               disabled={!selectedCategory}
               onClick={() => setStep(2)}
-              className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              className="bg-indigo-600-600 text-white px-6 py-2 rounded disabled:opacity-50"
             >
               Next
             </button>
@@ -204,7 +202,9 @@ const EntryDetails = () => {
                             <span className="text-2xl">{stage.icon}</span>
                             <div className="flex-1">
                               <div className="flex items-center justify-between mb-1">
-                                <span className="font-bold text-sm">{stage.label}</span>
+                                <span className="font-bold text-sm">
+                                  {stage.label}
+                                </span>
                               </div>
                               <p
                                 className={`text-xs mt-1 ${
@@ -236,7 +236,7 @@ const EntryDetails = () => {
             <button
               disabled={!roleLevel || !image || !username}
               onClick={() => setStep(3)}
-              className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              className="bg-indigo-600 text-white px-6 py-2 rounded disabled:opacity-50"
             >
               Next
             </button>
@@ -284,7 +284,7 @@ const EntryDetails = () => {
 
             <button
               disabled={!username || !image || !headline}
-              className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              className="bg-indigo-600 text-white px-6 py-2 rounded disabled:opacity-50"
               onClick={() => setStep(3)}
             >
               Next
@@ -299,10 +299,6 @@ const EntryDetails = () => {
           selectedCategory === "Individual/Entrepreneur" ||
           selectedCategory === "Startup") && (
           <>
-            {selectedCategory === "Startup" && (
-              <Startup step={step} setStep={setStep} />
-            )}
-
             {(selectedCategory === "Mentor" ||
               selectedCategory === "Individual/Entrepreneur") && (
               <>
@@ -334,7 +330,7 @@ const EntryDetails = () => {
                                 }
                                 className={`p-2 border rounded cursor-pointer ${
                                   selectedExpertise[industry]?.includes(skill)
-                                    ? "bg-blue-600 text-white"
+                                    ? "bg-indigo-600 text-white"
                                     : ""
                                 }`}
                               >
@@ -344,7 +340,7 @@ const EntryDetails = () => {
                           </div>
                         )}
                       </div>
-                    )
+                    ),
                   )}
                 </div>
 
@@ -358,7 +354,7 @@ const EntryDetails = () => {
                   <button
                     disabled={Object.keys(selectedExpertise).length === 0}
                     onClick={handleSubmit}
-                    className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+                    className="bg-indigo-600 text-white px-6 py-2 rounded disabled:opacity-50"
                   >
                     Submit
                   </button>
@@ -367,6 +363,11 @@ const EntryDetails = () => {
             )}
           </>
         )}
+
+      {/* For Startup Onboarding Flow step 2 and 3 is being handled separately in this component */}
+      {step > 1 && selectedCategory === "Startup" && (
+        <Startup step={step} setStep={setStep} />
+      )}
     </div>
   );
 };

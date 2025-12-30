@@ -92,7 +92,6 @@ const Profile = () => {
 
   return (
     <div className="h-full bg-customBackground relative ">
-      {/* <StartupProfileCard /> */}
       <div className="relative">
         <div>
           <img
@@ -135,38 +134,40 @@ const Profile = () => {
             )}
 
             <TabContext value={value}>
-              <StartupProfileCard userId={user_id} />
-              {/* <Box> */}
-              {/*   <TabList */}
-              {/*     onChange={handleChange} */}
-              {/*     aria-label="profile tabs" */}
-              {/*     sx={{ */}
-              {/*       display: "flex", */}
-              {/*       justifyContent: "space-around", */}
-              {/*       width: "90%", */}
-              {/*       margin: "0 auto", */}
-              {/*       color: "#4E54C6", */}
-              {/*     }} */}
-              {/*   > */}
-              {/*     {["About", "Activity"].map((label, idx) => ( */}
-              {/*       <Tab */}
-              {/*         key={label} */}
-              {/*         label={label} */}
-              {/*         value={`${idx + 1}`} */}
-              {/*         sx={{ */}
-              {/*           fontSize: "20px", */}
-              {/*           color: "gray", */}
-              {/*           flex: 1, */}
-              {/*           fontWeight: "bold", */}
-              {/*           textAlign: "center", */}
-              {/*           textTransform: "none", */}
-              {/*           "&.Mui-selected": { color: "#4E54C6" }, */}
-              {/*           "&:hover": { color: "white" }, // 👈 added */}
-              {/*         }} */}
-              {/*       /> */}
-              {/*     ))} */}
-              {/*   </TabList> */}
-              {/* </Box> */}
+              {profileData?.role === "Startup" && (
+                <StartupProfileCard userId={user_id} />
+              )}
+              <Box>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="profile tabs"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    width: "90%",
+                    margin: "0 auto",
+                    color: "#4E54C6",
+                  }}
+                >
+                  {["About", "Activity"].map((label, idx) => (
+                    <Tab
+                      key={label}
+                      label={label}
+                      value={`${idx + 1}`}
+                      sx={{
+                        fontSize: "20px",
+                        color: "gray",
+                        flex: 1,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        textTransform: "none",
+                        "&.Mui-selected": { color: "#4E54C6" },
+                        "&:hover": { color: "white" }, // 👈 added
+                      }}
+                    />
+                  ))}
+                </TabList>
+              </Box>
 
               <TabPanel value="1">
                 <About
