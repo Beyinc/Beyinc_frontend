@@ -18,6 +18,9 @@ import "./IndividualPostDetailsCard.css";
 import ShareButton from "./ShareButton";
 import { Dialog, DialogContent } from "@mui/material";
 import { LiveChat } from "./LiveChat";
+import { ReactionDisplay } from "../Posts/components/ReactionDisplay";
+import ReactionButton from "../components/ReactionButton";
+import { ReactionServices } from "../../Services/PostServices";
 
 const IndividualPostDetailsCard = () => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
@@ -217,6 +220,20 @@ const IndividualPostDetailsCard = () => {
 
   const createMarkup = (html) => {
     return { __html: html };
+  };
+
+  const handleReaction = async (type, postId) => {
+      const response = await ReactionServices.addOrUpdate({
+        postId,
+        reactionType: type,
+      });
+      // console.log(response.data.userReaction);
+
+      setPost((prev) => ({
+        ...prev,
+        userReaction: response.data.userReaction,
+        reactions: response.data.reactions
+      }));
   };
 
   return (
@@ -419,7 +436,7 @@ const IndividualPostDetailsCard = () => {
               )}
 
               <div className="likeCommentDetails">
-                <div className="likeTotal">
+                {/* <div className="likeTotal">
                   <div>
                     <div>
                       <svg
@@ -464,15 +481,16 @@ const IndividualPostDetailsCard = () => {
                         `and ${post?.disLikes?.length - 1} other`}
                     </div>
                   </div>
-                </div>
+                </div> */}
+                <ReactionDisplay reactions={post?.reactions} />
                 <div className="commentTotal">
                   {allComments?.length} comments
                 </div>
               </div>
               <div className="actionsHolder">
                 <div className="actionsHolder-leftContent">
-                  <div className="likeActionHolder">
-                    {/* LIKE ACTION */}
+                  {/* <div className="likeActionHolder">
+                    LIKE ACTION
                     <div onClick={likingpost}>
                       <svg
                         width="30"
@@ -493,7 +511,7 @@ const IndividualPostDetailsCard = () => {
                     </div>
                     <div className="actionText hidden sm:block">upvote</div>
                   </div>
-                  {/* DISLIKE ACTION */}
+                  DISLIKE ACTION
                   <div className="likeActionHolder">
                     <div onClick={dislikePost}>
                       <svg
@@ -514,8 +532,14 @@ const IndividualPostDetailsCard = () => {
                       </svg>
                     </div>
                     <div className="actionText hidden sm:block">downvote</div>
-                  </div>
+                  </div> */}
                   {/* COMMENT ACTION */}
+                  <ReactionButton
+                    postId={post._id}
+                    onReact={handleReaction}
+                    userReaction={post.userReaction}
+                    post={post}
+                  />
                   <div className="likeActionHolder">
                     <div className="actionText">
                       <ShareButton url={window.location.href} />

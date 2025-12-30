@@ -12,7 +12,7 @@ const SkillsCard = ({selfProfile ,setSelfProfile}) => {
         image: loggedImage,
     } = useSelector((store) => store.auth.loginDetails);
 
-    const [skills, setSkills] = useState([]);
+    const [skills, setSkills] = useState({});
     const [errorMessage, setErrorMessage] = useState(""); 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,6 +20,7 @@ const SkillsCard = ({selfProfile ,setSelfProfile}) => {
     const fetchSkills = async () => {
         try {
             const fetchedSkills = await aboutService.fetchSkills({user_id,id});
+            console.log("Fetched skills:", fetchedSkills);
             setSkills(fetchedSkills);
         } catch (error) {
             setErrorMessage("Failed to load Skills data. Please try again.");

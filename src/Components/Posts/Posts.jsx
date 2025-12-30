@@ -65,6 +65,7 @@ const Posts = () => {
 
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
+        // console.log("all posts:",allPosts);
         console.log("all posts:", allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
@@ -81,6 +82,9 @@ const Posts = () => {
   }, [loadingTrigger]);
 
 
+  // useEffect(()=>{
+  //   console.log("all posts-:",allPosts);
+  // },[allPosts])
   useEffect(() => {
     console.log("all posts-:", allPosts);
   }, [allPosts])
@@ -102,6 +106,10 @@ const Posts = () => {
   }, [dispatch]);
 
 
+  // useEffect(()=>{
+  //           console.log("top trending posts are :",topTrendingPosts);
+
+  // },[topTrendingPosts])
   useEffect(() => {
     console.log("top trending posts are :", topTrendingPosts);
 
@@ -177,7 +185,7 @@ const Posts = () => {
     setIsPrivate(event.target.checked);
   };
 
-  console.log("filteredposts: ", filteredPosts);
+  // console.log("filteredposts: ", filteredPosts);
   // const [checkedValues, setCheckedValues] = useState({
   //   public: false,
   //   private: false,
@@ -237,7 +245,7 @@ const Posts = () => {
   };
 
   const clearAllTags = () => {
-    console.log("Tags changed", selectedTags, filteredPosts);
+    // console.log("Tags changed", selectedTags, filteredPosts);
     setSelectedTags([]);
     setFilteredPosts([]);
   };

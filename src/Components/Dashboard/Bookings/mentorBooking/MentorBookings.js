@@ -65,7 +65,7 @@ const MentorBooking = () => {
 
         console.log("Upcoming Bookings:", upcomingBookings);
         console.log("Completed Bookings:", completedBookings);
-
+      
         setUpcomingBookings(upcomingBookings);
         setCompletedBookings(completedBookings);
       } catch (error) {
@@ -139,6 +139,9 @@ useEffect(() => {
   const [selectedReq, setSelectedReq] = useState(null);
  const [selectedRew, setSelectedRow] = useState(null);
 
+  const [openDeclineDialog, setOpenDeclineDialog] = useState(false);
+  const [declineReasonText, setDeclineReasonText] = useState("");
+
   const handleOpenReqDialog = (req) => {
     setSelectedReq(req);
     setOpenReqDialog(true);
@@ -190,6 +193,34 @@ const handleDeleteRequest=async (id)=>{
     alert("Failed to delete request");
   }
 }
+
+const handleOpenDeclineDialog = (req) => {
+  setSelectedReq(req);
+  setDeclineReasonText("");
+  setOpenDeclineDialog(true);
+};
+
+const handleCloseDeclineDialog = () => {
+  setOpenDeclineDialog(false);
+  setDeclineReasonText("");
+};
+
+const handleConfirmDecline = async () => {
+  try {
+    if (!selectedReq) return;
+    const res = await CalendarServices.declineRequestByMentor({
+      requestId: selectedReq._id,
+      declineReason: declineReasonText,
+    });
+
+    alert(res.message || "Request declined successfully");
+    handleCloseDeclineDialog();
+    fetchMentorRequests();
+  } catch (err) {
+    console.error("Error declining request:", err);
+    alert("Failed to decline request");
+  }
+};
 
 
   return (
@@ -431,9 +462,15 @@ const handleDeleteRequest=async (id)=>{
               mt={0.5}
               fontSize={12}
               fontWeight={600}
-              color={req.requestStatus ? "green" : "orange"}
+              color={
+                req.requestDeclined
+                  ? "red"
+                  : req.requestStatus
+                  ? "green"
+                  : "orange"
+              }
             >
-              {req.requestStatus ? "Approved" : "Pending"}
+              {req.requestDeclined ? "Declined" : req.requestStatus ? "Approved" : "Pending"}
             </Typography>
           </Box>
         ))
@@ -485,23 +522,20 @@ const handleDeleteRequest=async (id)=>{
           <Typography
             mt={2}
             fontWeight={600}
-            color={selectedReq.requestStatus ? "green" : "orange"}
+            color={
+              selectedReq.requestDeclined
+                ? "red"
+                : selectedReq.requestStatus
+                ? "green"
+                : "orange"
+            }
           >
-            Status: {selectedReq.requestStatus ? "Approved" : "Pending"}
+            Status: {selectedReq.requestDeclined ? "Declined" : selectedReq.requestStatus ? "Approved" : "Pending"}
           </Typography>
 
           {/* ACTIONS */}
           <Box mt={3} display="flex" gap={2}>
-            {!selectedReq.requestStatus && (
-              <Button
-                variant="contained"
-                onClick={handleApproveRequest}
-              >
-                Approve Request
-              </Button>
-            )}
-
-            {selectedReq.requestStatus && (
+            {selectedReq.requestDeclined ? (
               <Button
                 variant="contained"
                 color="error"
@@ -509,6 +543,31 @@ const handleDeleteRequest=async (id)=>{
               >
                 Delete Request
               </Button>
+            ) : selectedReq.requestStatus ? (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDeleteRequest(selectedReq._id)}
+              >
+                Delete Request
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  onClick={handleApproveRequest}
+                >
+                  Approve Request
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => handleOpenDeclineDialog(selectedReq)}
+                >
+                  Decline Request
+                </Button>
+              </>
             )}
           </Box>
         </Box>
@@ -552,6 +611,36 @@ const handleDeleteRequest=async (id)=>{
             </Button>
           </DialogActions>
         </Dialog> */}
+
+        {/* Dialog for Decline Confirmation */}
+        <Dialog open={openDeclineDialog} onClose={handleCloseDeclineDialog}>
+          <DialogTitle>Decline Request</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to cancel this request?
+            </Typography>
+
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Reason (optional)"
+              type="text"
+              fullWidth
+              multiline
+              rows={3}
+              value={declineReasonText}
+              onChange={(e) => setDeclineReasonText(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDeclineDialog} color="primary">
+              Keep Request
+            </Button>
+            <Button onClick={handleConfirmDecline} color="error" variant="contained">
+              Confirm Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );

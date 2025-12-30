@@ -128,7 +128,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--post-outer-border);
-  padding-bottom: 13px;
+  /* padding-bottom: 13px; */
   font-size: 14px !important;
 }
 

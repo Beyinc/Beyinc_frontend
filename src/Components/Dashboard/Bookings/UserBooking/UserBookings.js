@@ -497,7 +497,12 @@ const UserBooking = () => {
                 {userBookingRequest && userBookingRequest.length > 0 ? (
                   <List>
                     {userBookingRequest.map((req) => (
-                      <Box key={req._id} mb={3}>
+                      <Box
+                        key={req._id}
+                        mb={3}
+                        onClick={() => setSelectedReq(req)}
+                        sx={{ cursor: "pointer" }}
+                      >
                         <Typography variant="h6" mb={1}>
                           Request Type: {req.requestType.toUpperCase()}
                         </Typography>
@@ -532,19 +537,16 @@ const UserBooking = () => {
                             </Typography>
                             <Typography>
                               <strong>Status:</strong>{" "}
-                              {req.requestStatus ? (
-                                <span
-                                  style={{ color: "green", fontWeight: "bold" }}
-                                >
+                              {req.requestDeclined ? (
+                                <span style={{ color: "red", fontWeight: "bold" }}>
+                                  Declined
+                                </span>
+                              ) : req.requestStatus ? (
+                                <span style={{ color: "green", fontWeight: "bold" }}>
                                   Approved
                                 </span>
                               ) : (
-                                <span
-                                  style={{
-                                    color: "orange",
-                                    fontWeight: "bold",
-                                  }}
-                                >
+                                <span style={{ color: "orange", fontWeight: "bold" }}>
                                   Pending
                                 </span>
                               )}
@@ -581,7 +583,7 @@ const UserBooking = () => {
 
               {/* RIGHT SIDE – 30% */}
               <Box width="30%" marginTop={4}>
-                {selectedReq && (
+                {selectedReq && selectedReq.requestStatus ? (
                   <Box className="BookSessionCard">
                     <BookSession
                       name={selectedReq.mentorId.userName}
@@ -590,7 +592,50 @@ const UserBooking = () => {
                       selectedDuration={selectedReq.duration}
                     />
                   </Box>
-                )}
+                ) : selectedReq && (selectedReq.requestDeclined || !selectedReq.requestStatus) ? (
+                  <Box p={3} borderRadius={2} boxShadow={2} bgcolor="#fff">
+                    <Typography variant="h6" mb={1}>
+                      Request Details
+                    </Typography>
+                    <Typography>
+                      <strong>Mentor:</strong> {selectedReq.mentorId?.userName}
+                    </Typography>
+                    <Typography>
+                      <strong>Email:</strong> {selectedReq.mentorId?.email}
+                    </Typography>
+                    <Typography mt={1}>
+                      <strong>Type:</strong> {selectedReq.requestType}
+                    </Typography>
+                    <Typography mt={1}>
+                      <strong>Amount:</strong> ₹{selectedReq.amount || "N/A"}
+                    </Typography>
+                    <Typography mt={1}>
+                      <strong>Duration:</strong> {selectedReq.duration || "N/A"} minutes
+                    </Typography>
+                    <Typography mt={1}>
+                      <strong>Message:</strong>
+                    </Typography>
+                    <Typography color="text.secondary">{selectedReq.requestMessage}</Typography>
+
+                    <Typography mt={2} fontWeight={600}>
+                      <strong>Status:</strong>{' '}
+                      {selectedReq.requestDeclined ? (
+                        <span style={{ color: 'red', fontWeight: 'bold' }}>Declined</span>
+                      ) : selectedReq.requestStatus ? (
+                        <span style={{ color: 'green', fontWeight: 'bold' }}>Approved</span>
+                      ) : (
+                        <span style={{ color: 'orange', fontWeight: 'bold' }}>Pending</span>
+                      )}
+                    </Typography>
+
+                    {selectedReq.requestDeclined && (
+                      <Box mt={2} p={2} bgcolor="#FFF6F6" borderRadius={1}>
+                        <Typography fontWeight={600} color="error">Decline Reason</Typography>
+                        <Typography color="text.secondary">{selectedReq.declineReason || selectedReq.declineMessage || 'No reason provided'}</Typography>
+                      </Box>
+                    )}
+                  </Box>
+                ) : null}
               </Box>
             </Box>
           )}

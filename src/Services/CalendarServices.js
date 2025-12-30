@@ -272,6 +272,15 @@ export const CalendarServices = {
   });
 },
 
+  declineRequestByMentor: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .put("/calendar/decline-request", obj)
+        .then((res) => resolve(res.data))
+        .catch((err) => reject(err));
+    });
+  },
+
   deleteRequestByMentor: (obj) => {
   return new Promise((resolve, reject) => {
     axiosInstance

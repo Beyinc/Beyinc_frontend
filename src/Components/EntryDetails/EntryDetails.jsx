@@ -268,176 +268,7 @@
 //   "Principal Researcher",
 // ];
 
-// export const INDUSTRY_EXPERTISE = {
-//   "Technology / Software": [
-//     "Backend Development",
-//     "Frontend Development",
-//     "Full Stack",
-//     "AI/ML",
-//     "DevOps",
-//     "Cloud Architecture",
-//     "Cybersecurity",
-//     "Mobile Development",
-//   ],
-//   Engineering: [
-//     "Mechanical Engineering",
-//     "Electrical Engineering",
-//     "Civil Engineering",
-//     "Software Architecture",
-//     "Systems Design",
-//     "IoT",
-//     "Embedded Systems",
-//     "Automotive Engineering",
-//     "Electronics Engineering",
-//     "Robotics Engineering",
-//     "EV (Electric Vehicle) Technology",
-//     "Aerospace Engineering",
-//     "Chemical Engineering",
-//     "Biomedical Engineering",
-//     "Petroleum Engineering",
-//     "Environmental Engineering",
-//   ],
-//   Product: [
-//     "Product Strategy",
-//     "Product Roadmap",
-//     "User Research",
-//     "Product Launch",
-//     "Market Analysis",
-//     "Feature Prioritization",
-//     "Analytics",
-//     "Product Management",
-//   ],
-//   Finance: [
-//     "Financial Planning",
-//     "Investment Strategy",
-//     "Risk Management",
-//     "Portfolio Management",
-//     "Corporate Finance",
-//     "FP&A",
-//     "Treasury Management",
-//     "Mergers & Acquisitions",
-//   ],
-//   Marketing: [
-//     "Digital Marketing",
-//     "Content Strategy",
-//     "Brand Building",
-//     "Growth Hacking",
-//     "SEO/SEM",
-//     "Social Media Strategy",
-//     "Marketing Analytics",
-//     "Campaign Management",
-//   ],
-//   Legal: [
-//     "Contract Law",
-//     "Intellectual Property",
-//     "Corporate Law",
-//     "Compliance",
-//     "Litigation",
-//     "Regulatory Affairs",
-//     "Employment Law",
-//     "Privacy Law",
-//   ],
-//   "HR / Talent": [
-//     "Talent Acquisition",
-//     "Employee Development",
-//     "Compensation & Benefits",
-//     "Organizational Design",
-//     "Culture & Engagement",
-//     "Performance Management",
-//     "Learning & Development",
-//     "Labor Relations",
-//   ],
-//   Healthcare: [
-//     "Clinical Practice",
-//     "Healthcare Management",
-//     "Medical Research",
-//     "Health Policy",
-//     "Pharmaceuticals",
-//     "Medical Device",
-//     "Healthcare Technology",
-//     "Public Health",
-//   ],
-//   Manufacturing: [
-//     "Supply Chain",
-//     "Operations Management",
-//     "Quality Control",
-//     "Lean Manufacturing",
-//     "Automation",
-//     "Production Planning",
-//     "Maintenance Management",
-//     "Industrial Engineering",
-//   ],
-//   EdTech: [
-//     "Curriculum Design",
-//     "Learning Analytics",
-//     "Instructional Design",
-//     "EdTech Strategy",
-//     "Digital Learning",
-//     "Assessment Design",
-//     "Student Engagement",
-//     "EdTech Product",
-//   ],
-//   Consulting: [
-//     "Strategy Consulting",
-//     "Operations Consulting",
-//     "Digital Transformation",
-//     "Change Management",
-//     "Business Analysis",
-//     "Process Improvement",
-//     "Client Relations",
-//     "Project Management",
-//   ],
-//   SaaS: [
-//     "SaaS Product Strategy",
-//     "Customer Success",
-//     "Sales & Revenue",
-//     "SaaS Marketing",
-//     "Subscription Model",
-//     "Churn Reduction",
-//     "Pricing Strategy",
-//     "SaaS Operations",
-//   ],
-//   "E-commerce": [
-//     "E-commerce Strategy",
-//     "Conversion Optimization",
-//     "User Experience",
-//     "Inventory Management",
-//     "Logistics & Fulfillment",
-//     "Payment Processing",
-//     "Customer Retention",
-//     "Marketplace Management",
-//   ],
-//   "Mobility / Logistics": [
-//     "Supply Chain Optimization",
-//     "Fleet Management",
-//     "Route Optimization",
-//     "Warehouse Management",
-//     "Last-Mile Delivery",
-//     "Mobility Solutions",
-//     "Transportation",
-//     "Logistics Technology",
-//   ],
-//   "Real Estate": [
-//     "Real Estate Development",
-//     "Property Management",
-//     "Commercial Real Estate",
-//     "Residential Real Estate",
-//     "Real Estate Investment",
-//     "Valuation",
-//     "Real Estate Finance",
-//     "Urban Planning",
-//   ],
-//   "Web3 / AI": [
-//     "Blockchain Development",
-//     "Smart Contracts",
-//     "DeFi Strategy",
-//     "NFT Strategy",
-//     "AI Strategy",
-//     "Machine Learning",
-//     "Web3 Product",
-//     "Cryptocurrency",
-//   ],
-// }
+
 
 // const EntryDetails = () => {
 
@@ -938,13 +769,15 @@
 
 // export default EntryDetails;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import BoxCategories from "./BoxCategories";
 import { allskills, dataEntry } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
 import { INDUSTRY_EXPERTISE } from "../../Utils";
 import { ROLE_LEVELS } from "../../Utils";
+import { COMPANY_STAGES } from "../../Utils";
+import { CheckCircle2 } from "lucide-react";
 import Startup from "../OnboardComponents/Startup";
 /* ------------------ CONSTANTS ------------------ */
 
@@ -987,7 +820,9 @@ import Startup from "../OnboardComponents/Startup";
 /* ------------------ COMPONENT ------------------ */
 
 const EntryDetails = () => {
-  const { email, user_id } = useSelector((s) => s.auth.loginDetails);
+  // const loginDetails = useSelector((store) => store.auth.loginDetails);
+  // const email = loginDetails?.email;
+  // const user_id = loginDetails?.user_id;
 
   /* -------- COMMON -------- */
   const [step, setStep] = useState(1);
@@ -1009,8 +844,20 @@ const EntryDetails = () => {
   const [selectedExpertise, setSelectedExpertise] = useState({});
   const [customExpertise, setCustomExpertise] = useState({});
   const [showOtherInput, setShowOtherInput] = useState({});
-
+  const [companyStage, setCompanyStage] = useState("");
   /* ------------------ HANDLERS ------------------ */
+
+  const loginDetails = useSelector((store) => store.auth.loginDetails);
+
+  const [email, setEmail] = useState(null);
+  const [user_id, setUserId] = useState(null);
+
+  useEffect(() => {
+    if (loginDetails?.email && loginDetails?.user_id) {
+      setEmail(loginDetails.email);
+      setUserId(loginDetails.user_id);
+    }
+  }, [loginDetails]);
 
   const onCategoryClick = (title) => {
     setSelectedCategory(title);
@@ -1081,6 +928,7 @@ const EntryDetails = () => {
   const handleSubmit = async () => {
     try {
       if (image) {
+        console.log("user id from frontend:", user_id, "email:", email);
         await ApiServices.updateuserProfileImage({
           userId: user_id,
           image,
@@ -1105,6 +953,7 @@ const EntryDetails = () => {
         interests,
         selectedCategory,
         role_level: roleLevel,
+        companyStage: companyStage,
         mentorExpertise: selectedExpertise,
       });
 
@@ -1159,100 +1008,110 @@ const EntryDetails = () => {
             selectedCategory={selectedCategory}
           />
 
-          <div className="flex justify-end">
-            <button
-              onClick={() => {
-                setStep(selectedCategory === "Mentor" || "Startup" ? 2 : 1);
-              }}
-              className="mt-6 bg-indigo-600 hover:bg-indigo-800 text-white px-6 py-2 rounded disabled:opacity-50 w-[100px]"
-              disabled={!selectedCategory}
-            >
-              Next
-            </button>
+          <div className="mt-4">
+            <div className="flex justify-end">
+              <button
+                onClick={() => {
+                  setStep(2);
+                }}
+                className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 w-[100px]"
+                disabled={!selectedCategory}
+              >
+                Next
+              </button>
+            </div>
           </div>
 
-          {/* {selectedCategory && selectedCategory !== "Mentor" && (
-            <>
-              <input
-                className="mt-6 w-full border p-2 rounded"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-
-              <input
-                className="mt-4 w-full border p-2 rounded"
-                placeholder="Headline"
-                value={headline}
-                onChange={(e) => setHeadline(e.target.value)}
-              />
-
-              <h3 className="mt-6 font-semibold">Skills (max 5)</h3>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {allskills.map((skill) => (
-                  <div
-                    key={skill}
-                    onClick={() => handleSkillToggle(skill)}
-                    className={`cursor-pointer px-3 py-1 rounded border
-                      ${
-                        skills.includes(skill)
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white border-gray-300"
-                      }`}
-                  >
-                    {skill}
-                  </div>
-                ))}
-              </div>
-
-              <h3 className="mt-6 font-semibold">Interests</h3>
-              {dataEntry.map((item) => (
-                <label key={item.key} className="block">
-                  <input
-                    type="checkbox"
-                    checked={interests.includes(item.key)}
-                    onChange={() => handleInterestToggle(item.key)}
-                  />
-                  <span className="ml-2">{item.title}</span>
-                </label>
-              ))}
-
-              <h3 className="mt-6 font-semibold">Profile Image</h3>
-              <input type="file" onChange={handleImageChange} />
-
-              <button
-                className="mt-8 bg-blue-600 text-white px-6 py-2 rounded"
-                onClick={handleSubmit}
-              >
-                Submit
-              </button>
-            </>
-          )} */}
+         
         </>
       )}
 
       {/* STEP 2 — ROLE */}
       {step === 2 && selectedCategory === "Mentor" && (
         <>
+          {selectedCategory === "Mentor" && (
+            <input
+              className="mt-2 w-full border p-2 rounded"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          )}
+
+          <input
+            type="file"
+            accept="image/*"
+            className="ml-6 w-[840px] h-[20px] mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
+            onChange={handleImageChange}
+          />
+
           <h3 className="font-semibold mb-4">Select your role</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {ROLE_LEVELS.map((role) => (
-              <div
-                style={{
-                  border: "1px solid gray",
-                }}
-                key={role}
-                onClick={() => setRoleLevel(role)}
-                className={`cursor-pointer text-center p-3 rounded-lg border-2
-                  ${
-                    roleLevel === role
-                      ? "border-blue-600 bg-blue-500 text-white"
-                      : "border-gray-400 bg-white"
-                  }`}
-              >
-                {role}
-              </div>
+              <React.Fragment key={role}>
+                <div
+                  onClick={() => setRoleLevel(role)}
+                  className={`relative cursor-pointer text-center p-3 rounded-lg border-2 transition-all
+    ${
+      roleLevel === role
+        ? "border-blue-600 bg-blue-500 text-white"
+        : "border-gray-400 bg-white"
+    }`}
+                >
+                  {/* Check Icon */}
+
+                  <span> {role}</span>
+                  {roleLevel === role && (
+                    <CheckCircle2 className="w-5 h-5 text-white ml-10 mt-2" />
+                  )}
+                </div>
+
+                {role === "CXO" && roleLevel === "CXO" && (
+                  <div className="col-span-2 md:col-span-3 mt-8 pt-8 border-t-2 border-slate-200">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                      What stage is your company at?
+                    </h3>
+                    <p className="text-slate-600 mb-6">
+                      This helps us understand your company context and match
+                      you with relevant mentors
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {COMPANY_STAGES.map((stage) => (
+                        <button
+                          key={stage.id}
+                          onClick={() => setCompanyStage(stage.label)}
+                          className={`px-5 py-5 rounded-xl font-medium transition-all text-left border-2 ${
+                            companyStage === stage.label
+                              ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
+                              : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md"
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="text-2xl">{stage.icon}</span>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-bold text-sm">
+                                  {stage.label}
+                                </span>
+                              </div>
+                              <p
+                                className={`text-xs mt-1 ${
+                                  companyStage === stage.label
+                                    ? "text-blue-100"
+                                    : "text-slate-500"
+                                }`}
+                              >
+                                {stage.description}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
 
@@ -1261,14 +1120,21 @@ const EntryDetails = () => {
             onClick={() => {
               setStep(1);
               setRoleLevel("");
+              setCompanyStage("");
               setSelectedCategory("");
+              setUsername("");
             }}
           >
             Prev
           </button>
 
           <button
-            disabled={!roleLevel}
+            disabled={
+              !roleLevel ||
+              (roleLevel === "CXO" && !companyStage) ||
+              !image ||
+              !username
+            }
             className="mt-6 bg-blue-600 text-white px-6 py-2 rounded  ml-4 w-[100px] disabled:opacity-50"
             onClick={() => setStep(3)}
           >
@@ -1277,6 +1143,65 @@ const EntryDetails = () => {
         </>
       )}
 
+
+
+{/* STEP 2 — INDIVIDUAL / ENTREPRENEUR */}
+{step === 2 && selectedCategory === "Individual/Entrepreneur" && (
+  <>
+    <h3 className="font-semibold mb-4">
+      Tell us about yourself
+    </h3>
+
+    {/* Name */}
+    <input
+      className="mt-2 w-full border p-2 rounded"
+      placeholder="Your Name"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+    />
+
+    {/* Photo */}
+    <input
+      type="file"
+      accept="image/*"
+      className="mt-4 w-full mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
+      onChange={handleImageChange}
+    />
+
+    {/* Tagline */}
+    <input
+      className="mt-2 w-full border p-2 rounded"
+      placeholder="Your headline (e.g. Founder | SaaS Builder)"
+      value={headline}
+      onChange={(e) => setHeadline(e.target.value)}
+    />
+
+    {/* Buttons */}
+    <button
+      className="mt-6 bg-blue-600 text-white px-6 py-2 rounded w-[100px]"
+      onClick={() => {
+        setStep(1);
+        setUsername("");
+        setHeadline("");
+      }}
+    >
+      Prev
+    </button>
+
+    <button
+      disabled={!username || !image || !headline}
+      className="mt-6 bg-blue-600 text-white px-6 py-2 rounded ml-4 w-[100px] disabled:opacity-50"
+      onClick={() => setStep(3)}
+    >
+      Next
+    </button>
+  </>
+)}
+
+      {/* STEP 3 — MENTOR EXPERTISE  & individual expertise */}
+{step === 3 &&
+  (selectedCategory === "Mentor" ||
+    selectedCategory === "Individual/Entrepreneur") && (
       {/* ROLE Startup for any steps*/}
       {selectedCategory === "Startup" && (
         <Startup
@@ -1336,6 +1261,7 @@ const EntryDetails = () => {
             onClick={() => {
               setStep(2);
               setSelectedExpertise({});
+              setCompanyStage("");
             }}
           >
             Prev

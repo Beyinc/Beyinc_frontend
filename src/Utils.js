@@ -479,6 +479,27 @@ export const convertToDate = (inputDate) => {
 };
 
 export const postTypes = [
+    { 'value': 'Idea Discussion', 'color': '#0d2c52' },
+    { 'value': 'Co-founder Needed', 'color': '#af1dd8' },
+    { 'value': 'Tech Partner Needed', 'color': '#60d441' },
+    { 'value': 'Mentor Needed', 'color': '#9f1f04' },
+    { 'value': 'General Post', 'color': '#05eb1b' },
+    { 'value': 'Question and Answer', 'color': '#6920a9' },
+    { 'value': 'Announcement', 'color': '#70b9d5' },
+    { 'value': 'News', 'color': '#f14edf' },
+    { 'value': 'Hiring', 'color': '#e1265d' },
+    { 'value': 'Opportunities', 'color': '#5e8d7c' },
+    { 'value': 'Investment', 'color': '#207b6a' },
+    
+    { 'value': 'Startup Expo', 'color': '#ff9800' },
+    { 'value': 'Startup Journey', 'color': '#4caf50' },
+    { 'value': 'OpenToWork', 'color': '#2196f3' }, 
+    { 'value': 'Connect', 'color': '#9c27b0' },
+    { 'value': 'Event', 'color': '#795548' },
+    { 'value': 'Potential Problem', 'color': '#f44336' },
+    { 'value': 'Portfolio', 'color': '#3f51b5' },
+    { 'value': 'Open-To-Build', 'color': '#009688' },
+]
   { value: "Idea Discussion", color: "#0d2c52" },
   { value: "Co-founder Needed", color: "#af1dd8" },
   { value: "Tech Partner Needed", color: "#60d441" },
@@ -676,6 +697,38 @@ export const ROLE_LEVELS = [
   "Principal Researcher",
 ];
 
+export const COMPANY_STAGES = [
+  {
+    id: "early-stage",
+    label: "Early Stage Startup",
+    description: "Pre-seed, Seed, Bootstrapped (0-$1M funding)",
+    icon: "🌱",
+  },
+  {
+    id: "funded-startup",
+    label: "Funded Startup",
+    description: "Series A/B/C+ ($1M+ funding)",
+    icon: "🚀",
+  },
+  {
+    id: "revenue-stage",
+    label: "Revenue Stage",
+    description: "Generating revenue, profitable, scaling",
+    icon: "📈",
+  },
+  {
+    id: "established",
+    label: "Established Company",
+    description: "Mature, stable operations",
+    icon: "🏢",
+  },
+  {
+    id: "enterprise",
+    label: "Enterprise",
+    description: "Large corporation (1000+ employees)",
+    icon: "🏛️",
+  },
+]
 export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace"];
 export const STARTUP_TEAM_SIZES = [
   "Solo Founder",
