@@ -500,6 +500,7 @@ export const postTypes = [
     { 'value': 'Portfolio', 'color': '#3f51b5' },
     { 'value': 'Open-To-Build', 'color': '#009688' },
 ]
+export const postTypeOptions = [
   { value: "Idea Discussion", color: "#0d2c52" },
   { value: "Co-founder Needed", color: "#af1dd8" },
   { value: "Tech Partner Needed", color: "#60d441" },
