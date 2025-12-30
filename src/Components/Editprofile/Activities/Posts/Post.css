@@ -8,6 +8,9 @@
   background-color: #ffffff;
 
 }
+.ProfilepostContainer:hover {
+  background-color: hsla(0, 13%, 94%, 0.541);
+}
 .allPostShowContainer {
   display: flex;
   flex-direction: column;
@@ -223,7 +226,8 @@ background: var( --button-background);
     padding: 0px;
     gap: 2px;
     border: none;
-
+    margin-left: 15px;
+    width: 95%;
   }
   .PostHeaderContainer {
     display: flex;

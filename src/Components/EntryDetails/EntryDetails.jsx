@@ -778,6 +778,46 @@ import { INDUSTRY_EXPERTISE } from "../../Utils";
 import { ROLE_LEVELS } from "../../Utils";
 import { COMPANY_STAGES } from "../../Utils";
 import { CheckCircle2 } from "lucide-react";
+import Startup from "../OnboardComponents/Startup";
+/* ------------------ CONSTANTS ------------------ */
+
+// export const INDUSTRY_EXPERTISE = {
+//   "Technology / Software": [
+//     "Backend Development",
+//     "Frontend Development",
+//     "Full Stack",
+//     "AI/ML",
+//     "DevOps",
+//     "Cloud Architecture",
+//     "Cybersecurity",
+//     "Mobile Development",
+//   ],
+//   Engineering: [
+//     "Mechanical Engineering",
+//     "Electrical Engineering",
+//     "Civil Engineering",
+//     "Software Architecture",
+//     "Systems Design",
+//     "IoT",
+//     "Embedded Systems",
+//   ],
+//   Product: [
+//     "Product Strategy",
+//     "Product Roadmap",
+//     "User Research",
+//     "Product Launch",
+//     "Market Analysis",
+//   ],
+//   Marketing: [
+//     "Digital Marketing",
+//     "SEO",
+//     "Content Strategy",
+//     "Brand Building",
+//     "Growth Hacking",
+//   ],
+// };
+
+/* ------------------ COMPONENT ------------------ */
 
 const EntryDetails = () => {
   // const loginDetails = useSelector((store) => store.auth.loginDetails);
@@ -822,6 +862,10 @@ const EntryDetails = () => {
   const onCategoryClick = (title) => {
     setSelectedCategory(title);
   };
+
+  const totalSteps =
+    selectedCategory === "Mentor" || selectedCategory === "Startup" ? 3 : 1;
+  const progressPercentage = (step / totalSteps) * 100;
 
   const handleSkillToggle = (skill) => {
     if (skills.includes(skill)) {
@@ -921,7 +965,7 @@ const EntryDetails = () => {
         "expertise: ",
         selectedExpertise,
         "selected category:",
-        selectedCategory
+        selectedCategory,
       );
 
       alert("Profile created successfully!");
@@ -934,8 +978,26 @@ const EntryDetails = () => {
 
   /* ------------------ UI ------------------ */
 
+  // console.log(selectedCategory);
   return (
     <div className="bg-white md:m-10 p-6 shadow-lg rounded-lg">
+      {/* Progress Bar */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm font-semibold text-slate-700">
+            Step {step} of {totalSteps}
+          </span>
+          <span className="text-sm text-slate-600">
+            {Math.round(progressPercentage)}%
+          </span>
+        </div>
+        <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+          <div
+            className="h-full bg-blue-600 transition-all duration-500"
+            style={{ width: `${progressPercentage}%` }}
+          />
+        </div>
+      </div>
       <h2 className="font-bold text-xl mb-6">Tell us who you are *</h2>
 
       {/* STEP 1 */}
@@ -1140,6 +1202,16 @@ const EntryDetails = () => {
 {step === 3 &&
   (selectedCategory === "Mentor" ||
     selectedCategory === "Individual/Entrepreneur") && (
+      {/* ROLE Startup for any steps*/}
+      {selectedCategory === "Startup" && (
+        <Startup
+          step={step}
+          setStep={setStep}
+          selectedCategory={selectedCategory}
+        />
+      )}
+      {/* STEP 3 — MENTOR EXPERTISE */}
+      {step === 3 && selectedCategory === "Mentor" && (
         <>
           <h2 className="text-xl font-bold mb-4">
             Select your industry and expertise

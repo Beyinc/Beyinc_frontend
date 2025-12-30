@@ -243,121 +243,140 @@ const IndividualPostDetailsCard = () => {
           <div className="post-details-content-left grow">
             <div style={{ position: "relative" }}>
               <div className="PostHeaderContainer">
-                <div className="individualPostTotalDetails gap-2">
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      navigate(`/user/${post?.createdBy?._id}`);
-                    }}
-                  >
-                    <img
-                      src={
-                        post?.createdBy?.image !== "" &&
-                        post?.createdBy?.image !== undefined &&
-                        post?.createdBy?.image?.url !== ""
-                          ? post?.createdBy?.image?.url
-                          : "/profile.png"
-                      }
-                      alt=""
-                      className="size-8 rounded-full"
-                    />
-                  </div>
-                  <div className="IndividualPostDetailsContainer">
-                    <div
-                      className="postCardUserName"
-                      onClick={() => {
-                        navigate(`/user/${post?.createdBy?._id}`);
-                      }}
-                    >
-                      {post?.createdBy?.userName[0]?.toUpperCase() +
-                        post?.createdBy?.userName?.slice(1)}
-                    </div>
-                    <div className="postCardRole">{post?.createdBy?.role}</div>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <span className="postType"> {post?.type}</span>
+  {/* ROW 1: User Info (Left) and Menu (Right) */}
+  <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "flex-start" }}>
+    
+    {/* LEFT SIDE: Image and User Details */}
+    <div className="individualPostTotalDetails gap-2">
+      <div
+        className="cursor-pointer"
+        onClick={() => {
+          navigate(`/user/${post?.createdBy?._id}`);
+        }}
+      >
+        <img
+          src={
+            post?.createdBy?.image?.url
+              ? post?.createdBy?.image?.url
+              : "/profile.png"
+          }
+          alt=""
+          className="size-10 rounded-full"
+          style={{ width: "45px", height: "45px", objectFit: "cover" }}
+        />
+      </div>
+      <div className="IndividualPostDetailsContainer">
+        <div
+          className="postCardUserName"
+          onClick={() => {
+            navigate(`/user/${post?.createdBy?._id}`);
+          }}
+        >
+          {post?.createdBy?.userName[0]?.toUpperCase() +
+            post?.createdBy?.userName?.slice(1)}
+        </div>
+        <div className="postCardRole">{post?.createdBy?.role}</div>
+        
+        {/* Date moved here inside the header */}
+        <div className="postCardDate">
+          {new Date(post?.createdAt).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+          <span style={{ marginLeft: "6px", fontSize: "14px" }}>
+            {post?.visibility === "public" ? "🌍" : "👥"}
+          </span>
+        </div>
+      </div>
+    </div>
 
-                  <div
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      gap: "20px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      className="editpostSubActions"
-                      style={{ cursor: "pointer" }}
-                      id="menu"
-                      onClick={() => {
-                        document
-                          .getElementsByClassName(`editpostSubActions${id}`)[0]
-                          ?.classList.toggle("show");
-                      }}
-                    >
-                      <svg
-                        id="menu"
-                        width="30"
-                        height="30"
-                        viewBox="0 0 30 30"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M8.75 15C8.75 15.663 8.48661 16.2989 8.01777 16.7678C7.54893 17.2366 6.91304 17.5 6.25 17.5C5.58696 17.5 4.95107 17.2366 4.48223 16.7678C4.01339 16.2989 3.75 15.663 3.75 15C3.75 14.337 4.01339 13.7011 4.48223 13.2322C4.95107 12.7634 5.58696 12.5 6.25 12.5C6.91304 12.5 7.54893 12.7634 8.01777 13.2322C8.48661 13.7011 8.75 14.337 8.75 15ZM17.5 15C17.5 15.663 17.2366 16.2989 16.7678 16.7678C16.2989 17.2366 15.663 17.5 15 17.5C14.337 17.5 13.7011 17.2366 13.2322 16.7678C12.7634 16.2989 12.5 15.663 12.5 15C12.5 14.337 12.7634 13.7011 13.2322 13.2322C13.7011 12.7634 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.7634 16.7678 13.2322C17.2366 13.7011 17.5 14.337 17.5 15ZM26.25 15C26.25 15.663 25.9866 16.2989 25.5178 16.7678C25.0489 17.2366 24.413 17.5 23.75 17.5C23.087 17.5 22.4511 17.2366 21.9822 16.7678C21.5134 16.2989 21.25 15.663 21.25 15C21.25 14.337 21.5134 13.7011 21.9822 13.2322C22.4511 12.7634 23.087 12.5 23.75 12.5C24.413 12.5 25.0489 12.7634 25.5178 13.2322C25.9866 13.7011 26.25 14.337 26.25 15Z"
-                          fill="var(--text-total-color)"
-                        />
-                      </svg>
-                    </div>
-                    <div
-                      id="menu"
-                      className={`subMenu editpostSubActions${id}`}
-                      ref={userDetailsRef}
-                    >
-                      {post?.createdBy?._id == user_id && (
-                        <>
-                          <div
-                            id="menu"
-                            style={{
-                              color: "black",
-                              fontSize: "16px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => {
-                              setEditPostCount((prev) => prev + 1);
-                              // setEditPostPopup(true);
-                              navigate(`/editPostPage/${post?._id}`);
-                            }}
-                          >
-                            Edit
-                          </div>
-                          <div
-                            id="menu"
-                            style={{
-                              color: "black",
-                              fontSize: "16px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => setDeletePopUp(true)}
-                          >
-                            Delete
-                          </div>
-                        </>
-                      )}
-                      {post?.createdBy?._id !== user_id && (
-                        <div
-                          id="menu"
-                          style={{ color: "black" }}
-                          onClick={() => setReportPopup(true)}
-                        >
-                          Report
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+    {/* RIGHT SIDE: Menu Only */}
+    <div style={{ position: "relative" }}>
+      <div
+        className="editpostSubActions"
+        style={{ cursor: "pointer" }}
+        id="menu"
+        onClick={() => {
+          document
+            .getElementsByClassName(`editpostSubActions${id}`)[0]
+            ?.classList.toggle("show");
+        }}
+      >
+        {/* Your Original SVG Icon */}
+        <svg
+          id="menu"
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.75 15C8.75 15.663 8.48661 16.2989 8.01777 16.7678C7.54893 17.2366 6.91304 17.5 6.25 17.5C5.58696 17.5 4.95107 17.2366 4.48223 16.7678C4.01339 16.2989 3.75 15.663 3.75 15C3.75 14.337 4.01339 13.7011 4.48223 13.2322C4.95107 12.7634 5.58696 12.5 6.25 12.5C6.91304 12.5 7.54893 12.7634 8.01777 13.2322C8.48661 13.7011 8.75 14.337 8.75 15ZM17.5 15C17.5 15.663 17.2366 16.2989 16.7678 16.7678C16.2989 17.2366 15.663 17.5 15 17.5C14.337 17.5 13.7011 17.2366 13.2322 16.7678C12.7634 16.2989 12.5 15.663 12.5 15C12.5 14.337 12.7634 13.7011 13.2322 13.2322C13.7011 12.7634 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.7634 16.7678 13.2322C17.2366 13.7011 17.5 14.337 17.5 15ZM26.25 15C26.25 15.663 25.9866 16.2989 25.5178 16.7678C25.0489 17.2366 24.413 17.5 23.75 17.5C23.087 17.5 22.4511 17.2366 21.9822 16.7678C21.5134 16.2989 21.25 15.663 21.25 15C21.25 14.337 21.5134 13.7011 21.9822 13.2322C22.4511 12.7634 23.087 12.5 23.75 12.5C24.413 12.5 25.0489 12.7634 25.5178 13.2322C25.9866 13.7011 26.25 14.337 26.25 15Z"
+            fill="var(--text-total-color)"
+          />
+        </svg>
+      </div>
+      
+      {/* Dropdown Menu Logic */}
+      <div
+        id="menu"
+        className={`subMenu editpostSubActions${id}`}
+        ref={userDetailsRef}
+      >
+        {post?.createdBy?._id == user_id && (
+          <>
+            <div
+              id="menu"
+              style={{ color: "black", fontSize: "16px", cursor: "pointer" }}
+              onClick={() => {
+                setEditPostCount((prev) => prev + 1);
+                navigate(`/editPostPage/${post?._id}`);
+              }}
+            >
+              Edit
+            </div>
+            <div
+              id="menu"
+              style={{ color: "black", fontSize: "16px", cursor: "pointer" }}
+              onClick={() => setDeletePopUp(true)}
+            >
+              Delete
+            </div>
+          </>
+        )}
+        {post?.createdBy?._id !== user_id && (
+          <div
+            id="menu"
+            style={{ color: "black", cursor: "pointer" }}
+            onClick={() => setReportPopup(true)}
+          >
+            Report
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+
+  {/* ROW 2: The Tag (Pink Pill) on a new line */}
+  <div style={{ marginTop: '10px', marginBottom: '5px', width: '100%' }}>
+    <span 
+      style={{
+        backgroundColor: '#fbcbcb', /* The Pink Color */
+        color: '#000',
+        padding: '5px 16px',        /* Size of the pill */
+        borderRadius: '20px',       /* Rounded edges */
+        fontSize: '14px',
+        fontWeight: '500',
+        display: 'inline-block'     /* Ensures the background wraps the text */
+      }}
+    >
+       {/* If post.type is empty, this placeholder ensures the pill still shows up for testing */}
+       {post?.type ? post.type : "no tags"} 
+    </span>
+  </div>
+</div>
               <div
                 style={{
                   display: "flex",
