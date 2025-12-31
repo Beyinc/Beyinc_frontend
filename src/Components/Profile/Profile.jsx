@@ -18,6 +18,7 @@ import { CalendarServices } from "../../Services/CalendarServices";
 
 import "../Editprofile/EditProfile.css";
 import StartupProfileCard from "../Startup/StartupProfileCard";
+import MainContent from "../OnboardComponents/Startup/MainContent";
 
 const Profile = () => {
   const location = useLocation();
@@ -134,47 +135,52 @@ const Profile = () => {
             )}
 
             <TabContext value={value}>
-              {profileData?.role === "Startup" && (
+              {profileData?.role === "Startup" ? (
                 <StartupProfileCard userId={user_id} />
+              ) : (
+                <Box>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="profile tabs"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      width: "90%",
+                      margin: "0 auto",
+                      color: "#4E54C6",
+                    }}
+                  >
+                    {["About", "Activity"].map((label, idx) => (
+                      <Tab
+                        key={label}
+                        label={label}
+                        value={`${idx + 1}`}
+                        sx={{
+                          fontSize: "20px",
+                          color: "gray",
+                          flex: 1,
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          textTransform: "none",
+                          "&.Mui-selected": { color: "#4E54C6" },
+                          "&:hover": { color: "white" }, // 👈 added
+                        }}
+                      />
+                    ))}
+                  </TabList>
+                </Box>
               )}
-              <Box>
-                <TabList
-                  onChange={handleChange}
-                  aria-label="profile tabs"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    width: "90%",
-                    margin: "0 auto",
-                    color: "#4E54C6",
-                  }}
-                >
-                  {["About", "Activity"].map((label, idx) => (
-                    <Tab
-                      key={label}
-                      label={label}
-                      value={`${idx + 1}`}
-                      sx={{
-                        fontSize: "20px",
-                        color: "gray",
-                        flex: 1,
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        textTransform: "none",
-                        "&.Mui-selected": { color: "#4E54C6" },
-                        "&:hover": { color: "white" }, // 👈 added
-                      }}
-                    />
-                  ))}
-                </TabList>
-              </Box>
 
               <TabPanel value="1">
-                <About
-                  selfProfile={selfProfile}
-                  setSelfProfile={setSelfProfile}
-                  profileData={profileData}
-                />
+                {profileData?.role === "Startup" ? (
+                  <MainContent profileData={profileData} />
+                ) : (
+                  <About
+                    selfProfile={selfProfile}
+                    setSelfProfile={setSelfProfile}
+                    profileData={profileData}
+                  />
+                )}
               </TabPanel>
               <TabPanel value="2">
                 <Activity allPosts={allPosts} setAllPosts={setAllPosts} />

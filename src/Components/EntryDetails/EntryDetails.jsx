@@ -91,6 +91,7 @@ const EntryDetails = () => {
   };
 
   const totalSteps =
+    selectedCategory === "" ||
     selectedCategory === "Mentor" ||
     selectedCategory === "Startup" ||
     selectedCategory === "Individual/Entrepreneur"
