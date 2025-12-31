@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Button, Box, Grid, Typography, Dialog,IconButton, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import TimeSlotDropdowns from './TimeSlotDropdown';
 import dayjs from 'dayjs';
@@ -8,6 +8,8 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import CloseIcon from '@mui/icons-material/Close';
 import './FormControlStyles.css';
 
+import { CalendarServices } from '../../../Services/CalendarServices';
+import { useSelector } from 'react-redux';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -18,6 +20,43 @@ const Week = ({ selectedDayTimeUtc, setSelectedDayTimeUtc, handleSaveSchedule })
     const [selectedDay, setSelectedDay] = useState(null); // Initialize with null
     const [selectedTimes, setSelectedTimes] = useState({});
     const [timeSlotsPerDay, setTimeSlotsPerDay] = useState({});
+
+    const { user_id: mentorId } = useSelector(
+    (store) => store.auth.loginDetails
+);
+
+
+    useEffect(() => {
+    const fetchAvailability = async () => {
+        if (!mentorId) return;
+
+        try {
+            const { data } = await CalendarServices.getAvailabilityData({ mentorId });
+
+            const availableUtc =
+                data?.availabilityData?.availableDayTimeUtc || {};
+
+            // normalize keys to numbers & ensure arrays
+            const normalized = {};
+            Object.entries(availableUtc).forEach(([day, slots]) => {
+                normalized[Number(day)] = Array.isArray(slots) ? slots : [];
+            });
+
+            // ✅ show slots on load
+            setTimeSlotsPerDay(normalized);
+
+            // ✅ keep existing save flow working
+            setSelectedDayTimeUtc(normalized);
+
+        } catch (error) {
+            console.error("Error fetching availability:", error);
+        }
+    };
+
+    fetchAvailability();
+}, [mentorId]);
+
+ 
 
     const handleOpen = (value) => {
         console.log('clicked create timeslot', value);

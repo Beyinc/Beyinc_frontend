@@ -43,7 +43,7 @@ const Startup = ({ step, setStep, selectedCategory }) => {
       }
     }
   };
-  // console.log(step);
+  console.log(step);
   return (
     <>
       {step === 2 && (

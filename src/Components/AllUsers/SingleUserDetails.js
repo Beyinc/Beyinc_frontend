@@ -45,7 +45,7 @@ const SingleUserDetails = ({
         // Logging the availability data
         console.log(
           "Availability data found here:",
-          JSON.stringify(data.availability.sessions)
+          JSON.stringify(data.availability)
         );
         setSession(data.availability.sessions);
         const availabilityData = data.availability;
