@@ -1,58 +1,159 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import PopupModal from "./PopupModal";
 import "./TabsAndInvestment.css";
 import "../../BeyincProfessional/BeyincProfessional";
 import { Link, useNavigate } from "react-router-dom";
 
-const TabsAndInvestment = ({selfProfile, industries, stages, expertise }) => {
-  const [activeTab, setActiveTab] = useState("Expertise");
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
-
-  const navigate = useNavigate()
+const TabsAndInvestment = ({
+  role,
+  selfProfile,
+  setSelfProfile,
+  profileData,
+}) => {
+  const [activeTab, setActiveTab] = useState("Industries");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   const handleEditButtonClick = () => {
-    navigate("/beyincProfesional", {state: {edit: true}});
-    // setIsPopupOpen(true); // Show popup
+    navigate("/beyincProfesional", { state: { edit: true } });
   };
 
   const handleClosePopup = () => {
-    setIsPopupOpen(false); // Hide popup
+    setIsPopupOpen(false);
   };
+
+  // Extract data based on role
+  const extractedData = useMemo(() => {
+    if (!profileData) return null;
+    const userRole = profileData.role;
+    if (userRole === "Individual/Entrepreneur" || userRole === "Mentor") {
+      // Extract from mentorExpertise
+      const mentorExpertise = profileData.mentorExpertise || [];
+      const extractedIndustries = mentorExpertise.map((item) => item.industry);
+      const extractedSkills = mentorExpertise.flatMap(
+        (item) => item.skills || [],
+      );
+      const mentorRole = userRole === "Mentor" ? profileData.role_level : null;
+      return {
+        industries: extractedIndustries,
+        skills: extractedSkills,
+        mentorRole: mentorRole,
+        role: userRole,
+      };
+    } else if (userRole === "Startup") {
+      // Extract from startupProfile
+      const startupProfile = profileData.startupProfile || {};
+      return {
+        industries: startupProfile.industries || [],
+        targetMarket: startupProfile.targetMarket,
+        stage: startupProfile.stage,
+        role: userRole,
+      };
+    }
+    return null;
+  }, [profileData]);
+
+  // console.log(profileData);
+  // console.log("Extracted Data:", extractedData);
 
   return (
     <div className="tabs-and-investment-container mt-0 bg-white">
       <div>
-        <div className="tabs-container ">
-          <div
-            className={`Ttab ${activeTab === "Expertise" ? "Tactive" : ""}`}
-            onClick={() => handleTabClick("Expertise")}
-          >
-            Expertise
-          </div>
+        <div className="tabs-container">
           <div
             className={`Ttab ${activeTab === "Industries" ? "Tactive" : ""}`}
             onClick={() => handleTabClick("Industries")}
           >
             Industries
           </div>
+
+          {extractedData?.role === "Startup" ? (
+            <div
+              className={`Ttab ${activeTab === "TargetMarket" ? "Tactive" : ""}`}
+              onClick={() => handleTabClick("TargetMarket")}
+            >
+              Target Market
+            </div>
+          ) : (
+            <div
+              className={`Ttab ${activeTab === "Skills" ? "Tactive" : ""}`}
+              onClick={() => handleTabClick("Skills")}
+            >
+              Skills
+            </div>
+          )}
+
+          {extractedData?.role === "Startup" && (
+            <div
+              className={`Ttab ${activeTab === "Stage" ? "Tactive" : ""}`}
+              onClick={() => handleTabClick("Stage")}
+            >
+              Stage
+            </div>
+          )}
+
+          {extractedData?.role === "Mentor" && (
+            <div
+              className={`Ttab ${activeTab === "Role" ? "Tactive" : ""}`}
+              onClick={() => handleTabClick("Role")}
+            >
+              Role
+            </div>
+          )}
+
           <span>
-          { selfProfile && ( <i
-              style={{ color: "var(--followBtn-bg)", cursor: "pointer" }}
-              onClick={handleEditButtonClick}
-              className="fas fa-pen"
-            ></i>)
-            }
+            {selfProfile && (
+              <i
+                style={{ color: "var(--followBtn-bg)", cursor: "pointer" }}
+                onClick={handleEditButtonClick}
+                className="fas fa-pen"
+              ></i>
+            )}
           </span>
         </div>
 
         <div className="content-container">
-          {activeTab === "Expertise" && <p>{expertise.join(", ")}</p>}
-          {activeTab === "Industries" && <p>{industries.join(", ")}</p>}
-          {activeTab === "Stages" && <p>{stages.join(", ")}</p>}
+          {/* Industries Tab */}
+          {activeTab === "Industries" && (
+            <p>
+              {extractedData?.industries?.length
+                ? extractedData.industries.filter((ind) => ind).join(", ")
+                : "No industries added"}
+            </p>
+          )}
+
+          {/* Skills Tab - For Individual/Entrepreneur and Mentor */}
+          {(extractedData?.role === "Individual/Entrepreneur" ||
+            extractedData?.role === "Mentor") &&
+            activeTab === "Skills" && (
+              <p>
+                {extractedData?.skills?.length
+                  ? extractedData.skills.join(", ")
+                  : "No skills added"}
+              </p>
+            )}
+
+          {/* Role Tab - For Mentor only */}
+          {extractedData?.role === "Mentor" && activeTab === "Role" && (
+            <p>{extractedData?.mentorRole || "No role added"}</p>
+          )}
+
+          {/* Target Market Tab - For Startup */}
+          {extractedData?.role === "Startup" &&
+            activeTab === "TargetMarket" && (
+              <p>
+                {extractedData?.targetMarket || "No target market selected"}
+              </p>
+            )}
+
+          {/* Stage Tab - For Startup */}
+          {extractedData?.role === "Startup" && activeTab === "Stage" && (
+            <p>{extractedData?.stage || "No stage selected"}</p>
+          )}
         </div>
       </div>
 

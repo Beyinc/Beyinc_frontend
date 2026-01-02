@@ -40,6 +40,7 @@ const Profile = () => {
   const [expertise, setExpertise] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [profileData, setProfileData] = useState({});
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     setSelfProfile(!id);
@@ -55,6 +56,7 @@ const Profile = () => {
         const { expertise, industries, stages } = response.data;
 
         setProfileData(response.data);
+        setRole(response.data.role);
         if (expertise) setExpertise(expertise);
         if (industries) setIndustries(industries);
         if (stages) setStages(stages);
@@ -123,64 +125,52 @@ const Profile = () => {
           </div>
 
           <div className="grow">
-            {(profileData.beyincProfile === "Mentor" ||
-              profileData.beyincProfile === "Co-Founder") && (
-              <TabsAndInvestment
-                selfProfile={selfProfile}
-                setSelfProfile={setSelfProfile}
-                expertise={expertise}
-                industries={industries}
-                stages={stages}
-              />
-            )}
+            <TabsAndInvestment
+              role={role}
+              selfProfile={selfProfile}
+              setSelfProfile={setSelfProfile}
+              profileData={profileData}
+            />
 
             <TabContext value={value}>
-              {profileData?.role === "Startup" ? (
-                <StartupProfileCard userId={user_id} />
-              ) : (
-                <Box>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="profile tabs"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      width: "90%",
-                      margin: "0 auto",
-                      color: "#4E54C6",
-                    }}
-                  >
-                    {["About", "Activity"].map((label, idx) => (
-                      <Tab
-                        key={label}
-                        label={label}
-                        value={`${idx + 1}`}
-                        sx={{
-                          fontSize: "20px",
-                          color: "gray",
-                          flex: 1,
-                          fontWeight: "bold",
-                          textAlign: "center",
-                          textTransform: "none",
-                          "&.Mui-selected": { color: "#4E54C6" },
-                          "&:hover": { color: "white" }, // 👈 added
-                        }}
-                      />
-                    ))}
-                  </TabList>
-                </Box>
-              )}
+              <Box>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="profile tabs"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    width: "90%",
+                    margin: "0 auto",
+                    color: "#4E54C6",
+                  }}
+                >
+                  {["About", "Activity"].map((label, idx) => (
+                    <Tab
+                      key={label}
+                      label={label}
+                      value={`${idx + 1}`}
+                      sx={{
+                        fontSize: "20px",
+                        color: "gray",
+                        flex: 1,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        textTransform: "none",
+                        "&.Mui-selected": { color: "#4E54C6" },
+                        "&:hover": { color: "white" }, // 👈 added
+                      }}
+                    />
+                  ))}
+                </TabList>
+              </Box>
 
               <TabPanel value="1">
-                {profileData?.role === "Startup" ? (
-                  <MainContent profileData={profileData} />
-                ) : (
-                  <About
-                    selfProfile={selfProfile}
-                    setSelfProfile={setSelfProfile}
-                    profileData={profileData}
-                  />
-                )}
+                <About
+                  selfProfile={selfProfile}
+                  setSelfProfile={setSelfProfile}
+                  profileData={profileData}
+                />
               </TabPanel>
               <TabPanel value="2">
                 <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
