@@ -94,9 +94,20 @@ const ProfileImageUpdate = ({ open, setOpen }) => {
     setIsLoading(true);
     try {
       const res = await ApiServices.deleteuserProfileImage({ userId: user_id });
-
       localStorage.setItem("user", JSON.stringify(res.data));
-      dispatch(setLoginData(jwtDecode(res.data.accessToken)));
+      const decodedUser = jwtDecode(res.data.accessToken);
+
+      // ✅ UPDATE BOTH PLACES
+      dispatch(setLoginData(decodedUser));
+
+      // ✅ Set image to empty object or undefined
+      dispatch(
+        setUserDetails({
+          ...userDetails,
+          image: undefined, // ✅ CHANGED from { url: "" } to undefined
+        }),
+      );
+
       await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
       dispatch(
         setToast({
@@ -117,7 +128,6 @@ const ProfileImageUpdate = ({ open, setOpen }) => {
     }
     setIsLoading(false);
   };
-
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle style={{ display: "flex", justifyContent: "center" }}>

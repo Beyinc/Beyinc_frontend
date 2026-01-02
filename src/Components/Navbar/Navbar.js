@@ -1791,11 +1791,7 @@ const Navbar = () => {
                     <img
                       id="Profile-img"
                       className="Profile-img"
-                      src={
-                        image !== undefined && image !== ""
-                          ? image.url
-                          : "/profile.png"
-                      }
+                      src={image?.url || "/profile.png"}
                       alt=""
                     />
                     {verification === "approved" && (
