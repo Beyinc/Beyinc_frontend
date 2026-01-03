@@ -640,6 +640,8 @@ const ProfileCard = ({ selfProfile, setSelfProfile, profileRole }) => {
                 profileRole={profileRole}
               />
             )}
+
+            {/* mentor/Individual profile info detils for other fields */}
             {(profileRole === "Mentor" ||
               profileRole === "Individual/Entrepreneur") && (
               <MentorCardInfo

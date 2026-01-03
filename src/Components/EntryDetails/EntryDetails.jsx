@@ -5,6 +5,7 @@ import { ApiServices } from "../../Services/ApiServices";
 import { INDUSTRY_EXPERTISE, ROLE_LEVELS, COMPANY_STAGES } from "../../Utils";
 import { CheckCircle2 } from "lucide-react";
 import Startup from "../OnboardComponents/Startup";
+import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
 
 const EntryDetails = () => {
   /* ---------------- COMMON ---------------- */
@@ -34,6 +35,23 @@ const EntryDetails = () => {
     }
   }, [loginDetails]);
 
+  //image update helper states
+
+  const [openEditPfp, setOpenEditPfp] = useState(false);
+
+  const [formState, setFormState] = useState({
+    fullName: "",
+    headline: "",
+    role: null,
+    image: null,
+    mobileNumber: "",
+    twitter: "",
+    linkedin: "",
+    country: "",
+    state: "",
+    town: "",
+    languages: [],
+  });
   /* ---------------- HELPERS ---------------- */
 
   const toggleIndustry = (industry) => {
@@ -121,7 +139,7 @@ const EntryDetails = () => {
         </div>
       </div>
 
-      <h2 className="font-bold text-xl mb-6">Tell us who you are *</h2>
+      {/* <h2 className="font-bold text-xl mb-6">Tell us who you are *</h2> */}
 
       {/* ---------------- STEP 1 ---------------- */}
       {step === 1 && (
@@ -159,6 +177,16 @@ const EntryDetails = () => {
             className="mb-4"
             onChange={handleImageChange}
           />
+
+          {image && (
+            <div className="mb-4">
+              <img
+                src={image}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded"
+              />
+            </div>
+          )}
 
           <h3 className="font-semibold mb-4">Select your role</h3>
 
@@ -265,6 +293,15 @@ const EntryDetails = () => {
             className="mt-4 w-full mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
             onChange={handleImageChange}
           />
+          {image && (
+            <div className="mb-4">
+              <img
+                src={image}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded"
+              />
+            </div>
+          )}
 
           {/* Tagline */}
           <input
