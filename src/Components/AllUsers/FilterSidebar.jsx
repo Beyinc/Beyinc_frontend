@@ -1,335 +1,219 @@
 import React, { useState, useEffect } from "react";
-import { stages, allskills, domain_subdomain, categories } from "../../Utils";
-import { RxCaretDown } from "react-icons/rx";
+import { ROLE_LEVELS, INDUSTRY_EXPERTISE } from "../../Utils";
+
+const scrollbarStyles = `
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 20px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #d1d5db;
+  }
+`;
+
+// 2. Button Reset Style
+const cleanButtonStyle = {
+  backgroundColor: "transparent",
+  color: "inherit",
+  border: "none",
+  padding: "0",
+  margin: "0",
+  width: "100%",
+  textAlign: "left",
+  boxShadow: "none",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  cursor: "pointer",
+};
+
 const FilterSidebar = ({ updateFilters, open }) => {
-  const [userName, setUserName] = useState("");
-  const [expertise, setExpertise] = useState("");
-  const [industries, setIndustries] = useState("");
-  const [stage, setStage] = useState("");
-  const [category, setCategory] = useState("");
-
-  const subdomains = Object.values(domain_subdomain).flat();
-
+  // --- STATE ---
+  const [selectedRole, setSelectedRole] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState([]);
-  const [selectedIndustry, setSelectedIndustry] = useState([]);
-  const [selectedStage, setSelectedStage] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  
+  // Accordion State
+  const [expandedSections, setExpandedSections] = useState({
+    roleLevel: true,
+    expertise: true,
+    // Initialize specific industries as closed
+    ...Object.keys(INDUSTRY_EXPERTISE || {}).reduce((acc, key) => {
+      acc[`industry-${key}`] = false; 
+      return acc;
+    }, {})
+  });
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isStageOpen, setIsStageOpen] = useState(false);
-  const [isExpertiseOpen, setIsExpertiseOpen] = useState(false);
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  // --- HANDLERS ---
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
-  // Update filters in useEffect instead of outside
+  const handleRoleChange = (e) => {
+    setSelectedRole(e.target.value);
+  };
+
+  const handleExpertiseToggle = (skill) => {
+    setSelectedExpertise((prev) => {
+      if (prev.includes(skill)) {
+        return prev.filter((item) => item !== skill);
+      } else {
+        return [...prev, skill];
+      }
+    });
+  };
+
+  // --- SAFE EFFECT (DEBOUNCED) ---
   useEffect(() => {
-    // console.log("hello" + selectedCategories);
+    // Wait 500ms after user stops clicking before calling API
+    const handler = setTimeout(() => {
+      const filters = {
+        role: selectedRole, 
+        expertise: selectedExpertise, 
+        // Default empty values to satisfy backend structure
+        userName: "", 
+        industries: [], 
+        stages: [],
+        categories: [], 
+      };
+      
+      // console.log("Syncing filters to parent...");
+      updateFilters(filters);
+    }, 500); 
 
-    const filters = {
-      userName,
-      expertise: selectedExpertise,
-      industries: selectedIndustry,
-      stages: selectedStage,
-      categories: selectedCategories,
-    };
+    return () => clearTimeout(handler);
+  }, [selectedRole, selectedExpertise, updateFilters]);
 
-    // Call the updateFilters function whenever the filters change
-    updateFilters(filters);
-  }, [
-    userName,
-    selectedExpertise,
-    selectedIndustry,
-    selectedStage,
-    selectedCategories,
-  ]);
-
-
-  const clearAllExpertise = () => {
-    setSelectedExpertise([]);
-  };
-
-  const clearAllCategories = () => {
-    setSelectedCategories([]);
-  };
-
-  const clearAllIndustry = () => {
-    setSelectedIndustry([]);
-  };
-
-  const handleExpertiseChange = (event) => {
-    const { value, checked } = event.target;
-    setSelectedExpertise((prev) =>
-      checked ? [...prev, value] : prev.filter((option) => option !== value)
-    );
-  };
-
-  const handleIndustryChange = (event) => {
-    const { value, checked } = event.target;
-    setSelectedIndustry((prev) =>
-      checked ? [...prev, value] : prev.filter((option) => option !== value)
-    );
-  };
-
-  const handleCategoryChange = (e) => {
-    const { value, checked } = e.target;
-
-    if (checked) {
-      // Add the selected category if checked
-      setSelectedCategories((prev) => [...prev, value]);
-    } else {
-      // Remove the unselected category
-      setSelectedCategories((prev) =>
-        prev.filter((category) => category !== value)
-      );
-    }
-  };
-
-  const handleStageChange = (event) => {
-    const { value, checked } = event.target;
-    setSelectedStage((prev) =>
-      checked ? [...prev, value] : prev.filter((option) => option !== value)
-    );
-  };
-
-  const filteredExpertiseOptions = allskills.filter((option) =>
-    option.toLowerCase().includes(expertise.toLowerCase())
-  );
-
-  const filteredIndustryOptions = subdomains.filter((option) =>
-    option.toLowerCase().includes(industries.toLowerCase())
-  );
-
-  const filteredStageOptions = stages.filter((option) =>
-    option.toLowerCase().includes(stage.toLowerCase())
-  );
-
-  const filteredCategories = categories.filter((option) =>
-    option.toLowerCase().includes(category.toLowerCase())
-  );
-  return (
-    <div
-      className={`filter-sidebar `}
+  // --- SVG ICON ---
+  const ChevronDown = ({ className }) => (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="16" 
+      height="16" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
     >
-      {/* <h2>Filter</h2> */}
-      <hr className={`mt-2 mb-6 ${open ? "hidden" : "w-full"}`} />
-      <h4 className="mt-3 mb-2">Username</h4>
-      <input
-        className="2xl:w-72 xl:w-72 lg:w-40 md:w-40 "
-        type="text"
-        placeholder="Enter username"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-      />
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  );
 
-      <hr className="mt-4 mb-6" />
-      <h4 className="mt-3 mb-2">Category</h4>
-      <div className="relative">
-        <button
-          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
-            isCategoryOpen ? "rotate-180" : "rotate-0"
-          }`}
-          onClick={() => setIsCategoryOpen(!isCategoryOpen)} // Toggle dropdown visibility
-        >
-          <RxCaretDown />
-        </button>
-      </div>
+  return (
+    <>
+      {/* Inject Styles Here */}
+      <style>{scrollbarStyles}</style>
 
-      {/* Category checkboxes, shown only if isCategoryOpen is true */}
-      {isCategoryOpen && (
-        <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
-          
-          <input
-            type="text"
-            className="w-64 mt-3"
-            placeholder="Search Category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)} // Update state on change
-          />
+      <aside className={`w-64 flex-shrink-0 !bg-white ${open ? "block" : "hidden"} md:block pr-2`}>
+        <div className="flex flex-col">
+          {/* Main Title */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold !text-gray-900 m-0">Filter By:</h2>
+          </div>
 
-          {/* Clear All Section */}
-          {selectedCategories.length > 0 && (
-            <div className="flex items-center justify-between mt-3 px-4 mb-4">
-              <a
-                onClick={clearAllCategories} // Call clearAllTags when clicked
-                className="flex items-center cursor-pointer text-sm text-gray-500 hover:text-gray-700"
-              >
-                <div className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 mr-2">
-                  X
-                </div>
-                Clear All
-              </a>
-            </div>
-          )}
+          {/* ================= ROLE LEVEL SECTION ================= */}
+          <div className="mb-6 border-b border-gray-100 pb-4">
+            <button 
+              type="button" 
+              onClick={() => toggleSection("roleLevel")} 
+              style={cleanButtonStyle}
+              className="group mb-2"
+            >
+              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-blue-600 transition-colors">Role Level</h3>
+              <ChevronDown 
+                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.roleLevel ? "rotate-180" : ""}`} 
+              />
+            </button>
+            
+            {expandedSections.roleLevel && (
+              <div className="mt-2 pl-1">
+                <select
+                  value={selectedRole}
+                  onChange={handleRoleChange}
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm !bg-white !text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer hover:border-blue-400"
+                >
+                  <option value="">All Levels</option>
+                  {ROLE_LEVELS.map((level) => (
+                    <option key={level} value={level}>{level}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
 
-          {filteredCategories.map((option) => (
-            <div key={option} className="p-0">
-              <label>
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={selectedCategories.includes(option)} // Check if option is selected
-                  onChange={handleCategoryChange} // Handle checkbox change
-                />
-                {option}
-              </label>
-            </div>
-          ))}
+          {/* ================= EXPERTISE SECTION ================= */}
+          <div className="mb-4">
+            <button 
+              type="button" 
+              onClick={() => toggleSection("expertise")} 
+              style={cleanButtonStyle}
+              className="group mb-4"
+            >
+              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-blue-600 transition-colors">Expertise</h3>
+              <ChevronDown 
+                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.expertise ? "rotate-180" : ""}`} 
+              />
+            </button>
+
+            {expandedSections.expertise && (
+              <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                
+                {/* Dynamic Categories */}
+                {Object.entries(INDUSTRY_EXPERTISE || {}).map(([industry, skills]) => (
+                  <div key={industry} className="mb-1">
+                    
+                    {/* Category Header (Level 2) */}
+                    <button
+                      type="button"
+                      onClick={() => toggleSection(`industry-${industry}`)}
+                      style={cleanButtonStyle}
+                      className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors"
+                    >
+                      <span className="text-sm font-semibold !text-gray-700">{industry}</span>
+                      <ChevronDown 
+                        className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
+                          expandedSections[`industry-${industry}`] ? "rotate-180" : ""
+                        }`} 
+                      />
+                    </button>
+
+                    {/* Skills List (Level 3) - Nested */}
+                    {expandedSections[`industry-${industry}`] && (
+                      <div className="ml-2 pl-4 border-l-2 border-gray-100 space-y-2 py-2 mb-2">
+                        {skills.map((skill) => (
+                          <label key={skill} className="flex items-start gap-3 cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={selectedExpertise.includes(skill)}
+                              onChange={() => handleExpertiseToggle(skill)}
+                              className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
+                            />
+                            <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
+                              {skill}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      )}
-
-      {/* Expertise Input Field */}
-      <hr className="mt-4 mb-6" />
-      <h4 className="mt-3 mb-2">Expertise</h4>
-
-      <div className="relative">
-        <button
-          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
-            isExpertiseOpen ? "rotate-180" : "rotate-0"
-          }`}
-          onClick={() => setIsExpertiseOpen(!isExpertiseOpen)}
-        >
-          <RxCaretDown />
-        </button>
-      </div>
-
-      {/* Expertise checkboxes, shown only if isExpertiseOpen is true */}
-      {isExpertiseOpen && (
-        <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
-          <input
-            type="text"
-            className="w-64 mt-3"
-            placeholder="Search Expertise"
-            value={expertise}
-            onChange={(e) => setExpertise(e.target.value)}
-          />
-
-          {/* Clear All Section */}
-          {selectedExpertise.length > 0 && (
-            <div className="flex items-center justify-between mt-3 px-4 mb-4">
-              <a
-                onClick={clearAllExpertise} // Call clearAllTags when clicked
-                className="flex items-center cursor-pointer text-sm text-gray-500 hover:text-gray-700"
-              >
-                <div className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 mr-2">
-                  X
-                </div>
-                Clear All
-              </a>
-            </div>
-          )}
-
-          {filteredExpertiseOptions.map((option) => (
-            <div key={option} className="p-0">
-              <label>
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={selectedExpertise.includes(option)}
-                  onChange={handleExpertiseChange}
-                />
-                {option}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Input field */}
-      <hr className="mt-4 mb-6" />
-      <h4 className="mt-3 mb-2">Industries</h4>
-      <div className="relative">
-        {/* Caret icon to toggle the dropdown with rotation */}
-        <button
-          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <RxCaretDown />
-        </button>
-      </div>
-
-      {/* Industry checkboxes with vertical scroll, shown only if isOpen is true */}
-      {isOpen && (
-        <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
-          <input
-            type="text"
-            className="w-64 mt-3"
-            placeholder="Search Industry"
-            value={industries}
-            onChange={(e) => setIndustries(e.target.value)}
-          />
-
-          {/* Clear All Section */}
-          {selectedIndustry.length > 0 && (
-            <div className="flex items-center justify-between mt-3 px-4 mb-4">
-              <a
-                onClick={clearAllIndustry} // Call clearAllTags when clicked
-                className="flex items-center cursor-pointer text-sm text-gray-500 hover:text-gray-700"
-              >
-                <div className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 mr-2">
-                  X
-                </div>
-                Clear All
-              </a>
-            </div>
-          )}
-
-          {filteredIndustryOptions.map((option) => (
-            <div key={option} className="p-0">
-              <label>
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={selectedIndustry.includes(option)}
-                  onChange={handleIndustryChange}
-                />
-                {option}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Stage Input Field */}
-      {/* <hr className="mt-4 mb-6" />
-      <h4 className="mt-3 mb-2">Stages</h4>
-      <div className="relative">
-        <button
-          className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
-            isStageOpen ? "rotate-180" : "rotate-0"
-          }`}
-          onClick={() => setIsStageOpen(!isStageOpen)}
-        >
-          <RxCaretDown />
-        </button>
-      </div> */}
-
-      {/* Stage checkboxes, shown only if isStageOpen is true */}
-      {/* {isStageOpen && (
-        <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
-          <input
-            type="text"
-            className="w-64 mt-3"
-            placeholder="Search Stage"
-            value={stage}
-            onChange={(e) => setStage(e.target.value)}
-          />
-          {filteredStageOptions.map((option) => (
-            <div key={option} className="p-0">
-              <label>
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={selectedStage.includes(option)}
-                  onChange={handleStageChange}
-                />
-                {option}
-              </label>
-            </div>
-          ))}
-        </div>
-      )} */}
-    </div>
+      </aside>
+    </>
   );
 };
 
