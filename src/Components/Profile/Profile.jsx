@@ -146,7 +146,11 @@ const Profile = () => {
                     color: "#4E54C6",
                   }}
                 >
-                  {["About", "Activity", "Reviews"].map((label, idx) => (
+                  {[
+                    "About",
+                    "Activity",
+                    ...(role === "Startup" ? ["Reviews"] : []),
+                  ].map((label, idx) => (
                     <Tab
                       key={label}
                       label={label}
@@ -159,7 +163,7 @@ const Profile = () => {
                         textAlign: "center",
                         textTransform: "none",
                         "&.Mui-selected": { color: "#4E54C6" },
-                        "&:hover": { color: "white" }, // 👈 added
+                        "&:hover": { color: "white" },
                       }}
                     />
                   ))}
