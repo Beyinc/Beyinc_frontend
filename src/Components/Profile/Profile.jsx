@@ -145,7 +145,7 @@ const Profile = () => {
                     color: "#4E54C6",
                   }}
                 >
-                  {["About", "Activity"].map((label, idx) => (
+                  {["About", "Activity", "Reviews"].map((label, idx) => (
                     <Tab
                       key={label}
                       label={label}
@@ -175,9 +175,11 @@ const Profile = () => {
               <TabPanel value="2">
                 <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
               </TabPanel>
-              {/* <TabPanel value="3">
-                <Comment />
-              </TabPanel> */}
+              {role === "Startup" && (
+                <TabPanel value="3">
+                  <Comment />
+                </TabPanel>
+              )}
             </TabContext>
           </div>
         </div>

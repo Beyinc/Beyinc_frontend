@@ -162,7 +162,11 @@ const ProfileImageUpdate = ({ open, setOpen }) => {
           </div>
 
           <div
-            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+            style={{
+              display: "flex",
+              gap: "10px",
+              justifyContent: "center",
+            }}
           >
             <button onClick={submit} disabled={!changeImage || isLoading}>
               {isLoading ? "Updating..." : "Update"}
