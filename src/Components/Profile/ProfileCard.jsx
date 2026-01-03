@@ -14,7 +14,7 @@ import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 
-const ProfileCard = ({ selfProfile, setSelfProfile }) => {
+const ProfileCard = ({ selfProfile, setSelfProfile, profileRole }) => {
   const [profileData, setProfileData] = useState({}); // Initialize as an empty object
   const [averageReview, setAverageReview] = useState(0); // State to hold the average review
   const [filledStars, setFilledStars] = useState(0); // State to store the filled stars for the review
@@ -628,7 +628,8 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
               <span>Following</span> <span>{following.length}</span>
             </div>
 
-            {role === "Startup" && profileData.startupProfile && (
+            {/* startup profile info */}
+            {profileRole === "Startup" && profileData.startupProfile && (
               <div className="space-y-3 text-gray-600 text-sm">
                 {/* Startup Name */}
                 {profileData.startupProfile.startupName && (
@@ -759,7 +760,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                   )}
               </div>
             )}
-
             {country && (
               <div className="locationdetails">
                 <div>
@@ -780,7 +780,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 <div className="mt-2">{country}</div>
               </div>
             )}
-
             {formState.linkedin && (
               <div className="locationdetails">
                 <div>
@@ -802,7 +801,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 </a>
               </div>
             )}
-
             {formState.twitter && (
               <div className="locationdetails">
                 <div>
@@ -824,7 +822,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 </a>
               </div>
             )}
-
             {/* <div>
               {user_id == undefined ? (
                 <ReviewStars />

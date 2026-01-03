@@ -109,6 +109,7 @@ const Profile = () => {
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
               profileData={profileData}
+              profileRole={role}
             />
 
             {(profileData.beyincProfile === "Mentor" ||
