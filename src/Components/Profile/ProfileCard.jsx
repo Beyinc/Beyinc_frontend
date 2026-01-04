@@ -626,13 +626,18 @@ const ProfileCard = ({ selfProfile, setSelfProfile, profileRole }) => {
           w-full"
         >
           <div className="px-4 lg:px-28 gap-4 flex flex-col">
-            <div className="flex justify-between">
-              <span>Followers</span> <span>{follower.length}</span>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-600">Followers</span>
+              <span className="font-semibold text-gray-700">
+                {follower.length}
+              </span>
             </div>
-            <div className="flex justify-between">
-              <span>Following</span> <span>{following.length}</span>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-600">Following</span>
+              <span className="font-semibold text-gray-700">
+                {following.length}
+              </span>
             </div>
-
             {/* startup profile info detils for other fields */}
             {profileRole === "Startup" && profileData.startupProfile && (
               <ProfileCardInfo

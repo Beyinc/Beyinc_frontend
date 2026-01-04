@@ -120,9 +120,11 @@ const TabsAndInvestment = ({
           {/* Industries Tab */}
           {activeTab === "Industries" && (
             <p>
-              {extractedData?.industries?.length
-                ? extractedData.industries.filter((ind) => ind).join(", ")
-                : "No industries added"}
+              <span className="font-semibold text-gray-700">
+                {extractedData?.industries?.length
+                  ? extractedData.industries.filter((ind) => ind).join(", ")
+                  : "No industries added"}
+              </span>
             </p>
           )}
 
@@ -146,13 +148,22 @@ const TabsAndInvestment = ({
           {extractedData?.role === "Startup" &&
             activeTab === "TargetMarket" && (
               <p>
-                {extractedData?.targetMarket || "No target market selected"}
+                <span className="font-semibold text-gray-700">
+                  {extractedData?.targetMarket || "No target market selected"}
+                </span>
               </p>
             )}
 
           {/* Stage Tab - For Startup */}
           {extractedData?.role === "Startup" && activeTab === "Stage" && (
-            <p>{extractedData?.stage || "No stage selected"}</p>
+            <p>
+              <span className="font-semibold text-gray-700 text-sm">
+                {extractedData?.stage
+                  ?.split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ") || "No stage selected"}
+              </span>
+            </p>
           )}
         </div>
       </div>

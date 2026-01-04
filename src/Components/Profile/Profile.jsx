@@ -125,7 +125,7 @@ const Profile = () => {
               )}
           </div>
 
-          <div className="grow">
+          <div className="grow space-y-4">
             <TabsAndInvestment
               role={role}
               selfProfile={selfProfile}
