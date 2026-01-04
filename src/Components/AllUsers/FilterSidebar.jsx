@@ -24,6 +24,7 @@ const cleanButtonStyle = {
   border: "none",
   padding: "0",
   margin: "0",
+  marginBottom: "10px",
   width: "100%",
   textAlign: "left",
   boxShadow: "none",
@@ -130,7 +131,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
               style={cleanButtonStyle}
               className="group mb-2"
             >
-              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-blue-600 transition-colors">Role Level</h3>
+              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">Role Level</h3>
               <ChevronDown 
                 className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.roleLevel ? "rotate-180" : ""}`} 
               />
@@ -141,7 +142,8 @@ const FilterSidebar = ({ updateFilters, open }) => {
                 <select
                   value={selectedRole}
                   onChange={handleRoleChange}
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm !bg-white !text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer hover:border-blue-400"
+                  // Added 'accent-[#4f55c7]' and made the ring solid to ensure no blue remains
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm !bg-white !text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#4f55c7] focus:border-[#4f55c7] accent-[#4f55c7] transition-all cursor-pointer hover:border-[#4f55c7]"
                 >
                   <option value="">All Levels</option>
                   {ROLE_LEVELS.map((level) => (
@@ -160,7 +162,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
               style={cleanButtonStyle}
               className="group mb-4"
             >
-              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-blue-600 transition-colors">Expertise</h3>
+              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">Expertise</h3>
               <ChevronDown 
                 className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.expertise ? "rotate-180" : ""}`} 
               />
@@ -197,7 +199,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
                               type="checkbox"
                               checked={selectedExpertise.includes(skill)}
                               onChange={() => handleExpertiseToggle(skill)}
-                              className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
+                              className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
                             />
                             <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
                               {skill}
