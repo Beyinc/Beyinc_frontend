@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { ApiServices } from "../../Services/ApiServices";
 
 const Navigation = ({
@@ -14,13 +15,59 @@ const Navigation = ({
   startupTeamSize,
   selectedStartupIndustries,
   targetMarket,
+  image,
 }) => {
   const [submitting, setSubmitting] = useState(false);
+
+  /* ---------------- AUTH ---------------- */
+  const loginDetails = useSelector((store) => store.auth.loginDetails);
+  const [email, setEmail] = useState(null);
+  const [user_id, setUserId] = useState(null);
+
+  useEffect(() => {
+    if (loginDetails?.email && loginDetails?.user_id) {
+      setEmail(loginDetails.email);
+      setUserId(loginDetails.user_id);
+    }
+  }, [loginDetails]);
+
+  const handleSubmit = async () => {
+    try {
+      setSubmitting(true);
+      if (image) {
+        await ApiServices.updateuserProfileImage({
+          userId: user_id,
+          image,
+          email,
+        });
+      }
+      await ApiServices.StartupEntryData({
+        startupName,
+        startupTagline,
+        founderName,
+        startupEmail,
+        visibilityMode,
+        startupStage,
+        startupTeamSize,
+        industries: selectedStartupIndustries,
+        targetMarket,
+      });
+      alert("Startup created successfully!");
+      window.location.href = "/posts";
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const isStep2Invalid =
-    !startupName.trim() ||
-    !founderName.trim() ||
-    !startupEmail.trim() ||
-    !visibilityMode.trim();
+    !startupName?.trim() ||
+    !founderName?.trim() ||
+    !startupEmail?.trim() ||
+    !visibilityMode?.trim() ||
+    !image;
 
   const isStep3Invalid =
     !startupStage.trim() ||
@@ -34,32 +81,6 @@ const Navigation = ({
 
   const handlePrevious = () => {
     if (step > 1) setStep(step - 1);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      setSubmitting(true);
-
-      await ApiServices.StartupEntryData({
-        startupName,
-        startupTagline,
-        founderName,
-        startupEmail,
-        visibilityMode,
-        startupStage,
-        startupTeamSize,
-        industries: selectedStartupIndustries,
-        targetMarket,
-      });
-
-      alert("Startup created successfully!");
-      window.location.href = "/posts";
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
-    } finally {
-      setSubmitting(false);
-    }
   };
 
   const handleNext = () => {

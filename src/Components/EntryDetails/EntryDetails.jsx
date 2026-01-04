@@ -41,8 +41,6 @@ const EntryDetails = () => {
     }
   }, [loginDetails]);
 
-  //image update helper states
-
   const [openEditPfp, setOpenEditPfp] = useState(false);
 
   const [formState, setFormState] = useState({

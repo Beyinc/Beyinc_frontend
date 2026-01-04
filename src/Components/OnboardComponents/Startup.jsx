@@ -20,6 +20,17 @@ const Startup = ({ step, setStep, selectedCategory }) => {
   const [startupStage, setStartupStage] = useState("");
   const [startupTeamSize, setStartupTeamSize] = useState("");
 
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file || file.size > 4 * 1024 * 1024) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => setImage(reader.result);
+    reader.readAsDataURL(file);
+  };
+
   // Calculate progress based on total steps (3 for mentor/service-partner/startup, 1 for others currently)
 
   const totalSteps =
@@ -107,6 +118,28 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 placeholder="e.g. John Doe, Jane Smith"
                 className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
               />
+            </div>
+
+            {/* Photo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Profile Photo <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                className="w-full p-2.5 border-2 border-dashed border-gray-300 rounded cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
+                onChange={handleImageChange}
+              />
+              {image && (
+                <div className="mt-3">
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="w-24 h-24 object-cover rounded border border-gray-200"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Email */}
@@ -333,6 +366,7 @@ const Startup = ({ step, setStep, selectedCategory }) => {
           startupStage={startupStage}
           startupTeamSize={startupTeamSize}
           selectedStartupIndustries={selectedStartupIndustries}
+          image={image}
           targetMarket={targetMarket}
         />
       )}
