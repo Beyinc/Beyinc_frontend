@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 import { useDispatch, useSelector } from "react-redux";
 import { Country } from "country-state-city";
@@ -294,12 +294,12 @@ const AllUsers = () => {
   }, [filters]);
 
   // Function to update filters based on user input
-  const updateFilters = (newFilters) => {
+  const updateFilters = useCallback((newFilters) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       ...newFilters,
     }));
-  };
+  }, []);
 
   return (
     <>
