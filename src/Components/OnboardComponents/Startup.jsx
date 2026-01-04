@@ -43,22 +43,23 @@ const Startup = ({ step, setStep, selectedCategory }) => {
       }
     }
   };
+
   return (
     <>
       {step === 2 && (
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Tell us about your startup
-          </h2>
-          <p className="text-slate-600 mb-8">
+          </h3>
+          <p className="text-sm text-gray-600 mb-6">
             Provide basic information about your startup. Don't worry, you can
             add more details later.
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Startup Name */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Startup Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -66,15 +67,15 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 value={startupName}
                 onChange={(e) => setStartupName(e.target.value)}
                 placeholder="e.g. TechVenture"
-                className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
               />
             </div>
 
             {/* Tagline */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Tagline
-                <span className="text-xs font-normal text-slate-500 ml-2">
+                <span className="text-xs font-normal text-gray-500 ml-2">
                   (Max 100 characters)
                 </span>
               </label>
@@ -86,16 +87,16 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 }
                 placeholder="e.g. Revolutionizing healthcare through AI"
                 maxLength={100}
-                className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 {startupTagline.length}/100 characters
               </p>
             </div>
 
             {/* Founder Name */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Founder/Co-founder Name(s){" "}
                 <span className="text-red-500">*</span>
               </label>
@@ -104,13 +105,13 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 value={founderName}
                 onChange={(e) => setFounderName(e.target.value)}
                 placeholder="e.g. John Doe, Jane Smith"
-                className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Contact Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -118,42 +119,42 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 value={startupEmail}
                 onChange={(e) => setStartupEmail(e.target.value)}
                 placeholder="contact@startup.com"
-                className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
               />
             </div>
 
             {/* Visibility Mode */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Visibility Mode <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {STARTUP_VISIBILITY_MODES.map((mode) => (
                   <button
                     key={mode.id}
                     type="button"
                     onClick={() => setVisibilityMode(mode.id)}
-                    className={`p-5 rounded-xl text-left transition-all border-2 ${
+                    className={`p-4 rounded-lg text-left transition-all border-2 ${
                       visibilityMode === mode.id
-                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
-                        : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="text-2xl">{mode.icon}</span>
+                      <span className="text-xl">{mode.icon}</span>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
                           <span
-                            className={`font-bold text-sm ${visibilityMode === mode.id ? "text-white" : "text-slate-900"}`}
+                            className={`font-semibold text-sm ${visibilityMode === mode.id ? "text-white" : "text-gray-800"}`}
                           >
                             {mode.label}
                           </span>
                           {visibilityMode === mode.id && (
-                            <CheckCircle2 className="w-5 h-5 text-white" />
+                            <CheckCircle2 className="w-4 h-4 text-white" />
                           )}
                         </div>
                         <p
-                          className={`text-xs mt-1 ${visibilityMode === mode.id ? "text-blue-100" : "text-slate-500"}`}
+                          className={`text-xs mt-1 ${visibilityMode === mode.id ? "text-indigo-100" : "text-gray-500"}`}
                         >
                           {mode.description}
                         </p>
@@ -166,47 +167,48 @@ const Startup = ({ step, setStep, selectedCategory }) => {
           </div>
         </div>
       )}
+
       {step === 3 && (
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Startup Stage & Industry
-          </h2>
-          <p className="text-slate-600 mb-8">
+          </h3>
+          <p className="text-sm text-gray-600 mb-6">
             Tell us about your startup stage and select your industries. You can
             add more details in your profile later.
           </p>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Startup Stage */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Current Stage <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {STARTUP_STAGES.map((stage) => (
                   <button
                     key={stage.id}
                     type="button"
                     onClick={() => setStartupStage(stage.id)}
-                    className={`px-5 py-5 rounded-xl font-medium transition-all text-left border-2 ${
+                    className={`p-4 rounded-lg font-medium transition-all text-left border-2 ${
                       startupStage === stage.id
-                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
-                        : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md"
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="text-2xl">{stage.icon}</span>
+                      <span className="text-xl">{stage.icon}</span>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-bold text-sm">
+                          <span className="font-semibold text-sm">
                             {stage.label}
                           </span>
                           {startupStage === stage.id && (
-                            <CheckCircle2 className="w-5 h-5 text-white" />
+                            <CheckCircle2 className="w-4 h-4 text-white" />
                           )}
                         </div>
                         <p
-                          className={`text-xs mt-1 ${startupStage === stage.id ? "text-blue-100" : "text-slate-500"}`}
+                          className={`text-xs mt-1 ${startupStage === stage.id ? "text-indigo-100" : "text-gray-500"}`}
                         >
                           {stage.description}
                         </p>
@@ -216,9 +218,10 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 ))}
               </div>
             </div>
+
             {/* Team Size */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Team Size <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -227,13 +230,13 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                     key={size}
                     type="button"
                     onClick={() => setStartupTeamSize(size)}
-                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
+                    className={`p-3 rounded-lg text-sm font-medium transition-all border-2 ${
                       startupTeamSize === size
-                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
-                        : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-center gap-2">
                       <span>{size}</span>
                       {startupTeamSize === size && (
                         <CheckCircle2 className="w-4 h-4 text-white" />
@@ -243,15 +246,16 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 ))}
               </div>
             </div>
-            {/* Industry Selection - Reuse the industry selector */}
+
+            {/* Industry Selection */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Industries <span className="text-red-500">*</span>
-                <span className="text-xs font-normal text-slate-500 ml-2">
+                <span className="text-xs font-normal text-gray-500 ml-2">
                   (Select at least one, max 5)
                 </span>
               </label>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {Object.keys(INDUSTRY_EXPERTISE).map((industry) => {
                   const isSelected =
                     selectedStartupIndustries.includes(industry);
@@ -260,16 +264,16 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                       key={industry}
                       type="button"
                       onClick={() => handleStartupIndustryToggle(industry)}
-                      className={`w-full px-5 py-4 rounded-lg text-left transition-all border-2 ${
+                      className={`w-full p-3 rounded-lg text-left transition-all border-2 ${
                         isSelected
-                          ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
-                          : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
+                          ? "bg-indigo-600 text-white border-indigo-600"
+                          : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold">{industry}</span>
+                        <span className="font-medium text-sm">{industry}</span>
                         {isSelected && (
-                          <CheckCircle2 className="w-5 h-5 text-white" />
+                          <CheckCircle2 className="w-4 h-4 text-white" />
                         )}
                       </div>
                     </button>
@@ -277,17 +281,18 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                 })}
               </div>
 
-              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-700 font-semibold">
+              <div className="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                <p className="text-sm text-indigo-700 font-medium">
                   {selectedStartupIndustries.length === 1
                     ? "No industry selected"
-                    : `Selected ${selectedStartupIndustries.length - 1} Industries`}
+                    : `Selected ${selectedStartupIndustries.length - 1} ${selectedStartupIndustries.length - 1 === 1 ? "Industry" : "Industries"}`}
                 </p>
               </div>
             </div>
+
             {/* Target Market */}
             <div>
-              <label className="block text-sm font-bold text-slate-900 mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Target Market <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -296,13 +301,13 @@ const Startup = ({ step, setStep, selectedCategory }) => {
                     key={market}
                     type="button"
                     onClick={() => setTargetMarket(market)}
-                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
+                    className={`p-3 rounded-lg text-sm font-medium transition-all border-2 ${
                       targetMarket === market
-                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
-                        : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-center gap-2">
                       <span>{market}</span>
                       {targetMarket === market && (
                         <CheckCircle2 className="w-4 h-4 text-white" />

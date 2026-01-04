@@ -3,7 +3,13 @@ import { useSelector } from "react-redux";
 import BoxCategories from "./BoxCategories";
 import { ApiServices } from "../../Services/ApiServices";
 import { INDUSTRY_EXPERTISE, ROLE_LEVELS, COMPANY_STAGES } from "../../Utils";
-import { CheckCircle2 } from "lucide-react";
+import {
+  Briefcase,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
 import Startup from "../OnboardComponents/Startup";
 import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
 
@@ -149,11 +155,11 @@ const EntryDetails = () => {
             selectedCategory={selectedCategory}
           />
 
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-end mt-8">
             <button
               disabled={!selectedCategory}
               onClick={() => setStep(2)}
-              className="bg-indigo-600-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              className="flex-1 md:flex-none px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               Next
             </button>
@@ -164,82 +170,105 @@ const EntryDetails = () => {
       {/* ---------------- STEP 2 (MENTOR) ---------------- */}
       {step === 2 && selectedCategory === "Mentor" && (
         <>
-          <input
-            className="w-full border p-2 rounded mb-3"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <h3 className="text-lg font-semibold text-gray-800 mb-6">
+            Tell us about yourself
+          </h3>
 
-          <input
-            type="file"
-            accept="image/*"
-            className="mb-4"
-            onChange={handleImageChange}
-          />
-
-          {image && (
-            <div className="mb-4">
-              <img
-                src={image}
-                alt="Preview"
-                className="w-32 h-32 object-cover rounded"
+          <div className="space-y-4 mb-6">
+            {/* Username */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Your Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="Enter your full name"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-          )}
 
-          <h3 className="font-semibold mb-4">Select your role</h3>
+            {/* Photo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Profile Photo <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                className="w-full p-2.5 border-2 border-dashed border-gray-300 rounded cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
+                onChange={handleImageChange}
+              />
+              {image && (
+                <div className="mt-3">
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="w-24 h-24 object-cover rounded border border-gray-200"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {/* Role Level Selection */}
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Select your role <span className="text-red-500">*</span>
+          </h3>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
             {ROLE_LEVELS.map((role) => (
               <React.Fragment key={role}>
                 <div
                   onClick={() => setRoleLevel(role)}
-                  className={`cursor-pointer p-3 rounded-lg border-2 text-center ${
+                  className={`cursor-pointer p-4 rounded-lg border-2 text-center transition-all ${
                     roleLevel === role
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "border-gray-300"
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                   }`}
                 >
-                  {role}
-                  {roleLevel === role && (
-                    <CheckCircle2 className="w-4 h-4 mx-auto mt-1" />
-                  )}
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="font-medium">{role}</span>
+                    {roleLevel === role && <CheckCircle2 className="w-4 h-4" />}
+                  </div>
                 </div>
 
                 {role === "CXO" && roleLevel === "CXO" && (
-                  <div className="col-span-2 md:col-span-3 mt-8 pt-8 border-t-2 border-slate-200">
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                  <div className="col-span-2 md:col-span-3 mt-6 pt-6 border-t-2 border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
                       What stage is your company at?
                     </h3>
-                    <p className="text-slate-600 mb-6">
+                    <p className="text-sm text-gray-600 mb-4">
                       This helps us understand your company context and match
-                      you with relevant mentors
+                      you with relevant opportunities
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                       {COMPANY_STAGES.map((stage) => (
                         <button
                           key={stage.id}
                           onClick={() => setCompanyStage(stage.label)}
-                          className={`px-5 py-5 rounded-xl font-medium transition-all text-left border-2 ${
+                          className={`p-4 rounded-lg font-medium transition-all text-left border-2 ${
                             companyStage === stage.label
-                              ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg scale-105"
-                              : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md"
+                              ? "bg-indigo-600 text-white border-indigo-600"
+                              : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
                           }`}
                         >
                           <div className="flex items-start gap-3">
-                            <span className="text-2xl">{stage.icon}</span>
+                            <span className="text-xl">{stage.icon}</span>
                             <div className="flex-1">
                               <div className="flex items-center justify-between mb-1">
-                                <span className="font-bold text-sm">
+                                <span className="font-semibold text-sm">
                                   {stage.label}
                                 </span>
+                                {companyStage === stage.label && (
+                                  <CheckCircle2 className="w-4 h-4" />
+                                )}
                               </div>
                               <p
-                                className={`text-xs mt-1 ${
+                                className={`text-xs ${
                                   companyStage === stage.label
-                                    ? "text-blue-100"
-                                    : "text-slate-500"
+                                    ? "text-indigo-100"
+                                    : "text-gray-500"
                                 }`}
                               >
                                 {stage.description}
@@ -254,18 +283,18 @@ const EntryDetails = () => {
               </React.Fragment>
             ))}
           </div>
-
-          <div className="flex gap-4 mt-6">
+          {/* Buttons */}
+          <div className="flex gap-4 mt-8">
             <button
               onClick={() => setStep(1)}
-              className="px-6 py-2 border rounded"
+              className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all bg-slate-200 hover:bg-slate-300 text-slate-900"
             >
-              Prev
+              Previous
             </button>
             <button
               disabled={!roleLevel || !image || !username}
               onClick={() => setStep(3)}
-              className="bg-indigo-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               Next
             </button>
@@ -276,54 +305,72 @@ const EntryDetails = () => {
       {/* ---------------- STEP 2 (INDIVIDUAL / ENTREPRENEUR) ---------------- */}
       {step === 2 && selectedCategory === "Individual/Entrepreneur" && (
         <>
-          <h3 className="font-semibold mb-4">Tell us about yourself</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-6">
+            Tell us about yourself
+          </h3>
 
-          {/* Name */}
-          <input
-            className="mt-2 w-full border p-2 rounded"
-            placeholder="Your Name"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-
-          {/* Photo */}
-          <input
-            type="file"
-            accept="image/*"
-            className="mt-4 w-full mb-4 p-2 border-2 border-gray-400 rounded-md focus:border-gray-600 outline-none"
-            onChange={handleImageChange}
-          />
-          {image && (
-            <div className="mb-4">
-              <img
-                src={image}
-                alt="Preview"
-                className="w-32 h-32 object-cover rounded"
+          <div className="space-y-4">
+            {/* Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Your Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="Enter your full name"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-          )}
 
-          {/* Tagline */}
-          <input
-            className="mt-2 w-full border p-2 rounded"
-            placeholder="Your headline (e.g. Founder | SaaS Builder)"
-            value={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-          />
+            {/* Photo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Profile Photo <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                className="w-full p-2.5 border-2 border-dashed border-gray-300 rounded cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
+                onChange={handleImageChange}
+              />
+              {image && (
+                <div className="mt-3">
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="w-24 h-24 object-cover rounded border border-gray-200"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Headline */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Professional Headline <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="e.g., Founder | SaaS Builder"
+                value={headline}
+                onChange={(e) => setHeadline(e.target.value)}
+              />
+            </div>
+          </div>
 
           {/* Buttons */}
-          <div className="flex gap-4 mt-6">
+          <div className="flex gap-4 mt-8">
             <button
-              className="px-6 py-2 border rounded"
               onClick={() => setStep(1)}
+              className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all bg-slate-200 hover:bg-slate-300 text-slate-900"
             >
-              Prev
+              Previous
             </button>
-
             <button
               disabled={!username || !image || !headline}
-              className="bg-indigo-600 text-white px-6 py-2 rounded disabled:opacity-50"
               onClick={() => setStep(3)}
+              className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               Next
             </button>
@@ -340,61 +387,122 @@ const EntryDetails = () => {
             {(selectedCategory === "Mentor" ||
               selectedCategory === "Individual/Entrepreneur") && (
               <>
-                <h2 className="text-xl font-bold mb-4">
-                  Select your industry and expertise
-                </h2>
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                    Select your industry and expertise
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    Choose the industries you're experienced in and select
+                    specific skills
+                  </p>
+                </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 mb-6">
                   {Object.entries(INDUSTRY_EXPERTISE).map(
-                    ([industry, skills]) => (
-                      <div key={industry} className="border rounded-lg">
-                        <div
-                          onClick={() => toggleIndustry(industry)}
-                          className="flex justify-between p-4 cursor-pointer"
-                        >
-                          <strong>{industry}</strong>
-                          <span>
-                            {expandedIndustries[industry] ? "▲" : "▼"}
-                          </span>
-                        </div>
+                    ([industry, skills]) => {
+                      const selectedCount =
+                        selectedExpertise[industry]?.length || 0;
 
-                        {expandedIndustries[industry] && (
-                          <div className="p-4 grid grid-cols-3 gap-2 border-t">
-                            {skills.map((skill) => (
-                              <div
-                                key={skill}
-                                onClick={() =>
-                                  handleExpertiseToggle(industry, skill)
-                                }
-                                className={`p-2 border rounded cursor-pointer ${
-                                  selectedExpertise[industry]?.includes(skill)
-                                    ? "bg-indigo-600 text-white"
-                                    : ""
-                                }`}
-                              >
-                                {skill}
-                              </div>
-                            ))}
+                      return (
+                        <div
+                          key={industry}
+                          className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-indigo-300 transition-all"
+                        >
+                          <div
+                            onClick={() => toggleIndustry(industry)}
+                            className="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="flex items-center gap-3">
+                              <Briefcase className="w-5 h-5 text-indigo-600" />
+                              <span className="font-semibold text-gray-800">
+                                {industry}
+                              </span>
+                              {selectedCount > 0 && (
+                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
+                                  {selectedCount} selected
+                                </span>
+                              )}
+                            </div>
+                            {expandedIndustries[industry] ? (
+                              <ChevronUp className="w-5 h-5 text-gray-500" />
+                            ) : (
+                              <ChevronDown className="w-5 h-5 text-gray-500" />
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ),
+
+                          {expandedIndustries[industry] && (
+                            <div className="p-4 bg-white border-t-2 border-gray-100">
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                {skills.map((skill) => {
+                                  const isSelected =
+                                    selectedExpertise[industry]?.includes(
+                                      skill,
+                                    );
+
+                                  return (
+                                    <div
+                                      key={skill}
+                                      onClick={() =>
+                                        handleExpertiseToggle(industry, skill)
+                                      }
+                                      className={`p-3 border-2 rounded-lg cursor-pointer transition-all text-sm font-medium text-center ${
+                                        isSelected
+                                          ? "bg-indigo-600 text-white border-indigo-600"
+                                          : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50 text-gray-700"
+                                      }`}
+                                    >
+                                      <div className="flex items-center justify-center gap-2">
+                                        <span>{skill}</span>
+                                        {isSelected && (
+                                          <CheckCircle2 className="w-4 h-4" />
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    },
                   )}
                 </div>
 
-                <div className="flex gap-4 mt-6">
+                {/* Summary */}
+                {Object.keys(selectedExpertise).length > 0 && (
+                  <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-indigo-600 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium text-indigo-900">
+                          {Object.values(selectedExpertise).flat().length}{" "}
+                          skills selected across{" "}
+                          {Object.keys(selectedExpertise).length}{" "}
+                          {Object.keys(selectedExpertise).length === 1
+                            ? "industry"
+                            : "industries"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Buttons */}
+                <div className="flex gap-4 mt-8">
                   <button
                     onClick={() => setStep(2)}
-                    className="px-6 py-2 border rounded"
+                    className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all bg-slate-200 hover:bg-slate-300 text-slate-900"
                   >
-                    Prev
+                    Previous
                   </button>
                   <button
                     disabled={Object.keys(selectedExpertise).length === 0}
                     onClick={handleSubmit}
-                    className="bg-indigo-600 text-white px-6 py-2 rounded disabled:opacity-50"
+                    className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-2"
                   >
-                    Submit
+                    <span>Complete Profile</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </>

@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { ApiServices } from "../../Services/ApiServices";
 
@@ -101,7 +102,14 @@ const Navigation = ({
     bg-indigo-600 hover:bg-indigo-700 text-white
     flex items-center justify-center gap-2"
           >
-            {step === 3 ? "Submit" : "Next"}
+            {step === 3 ? (
+              <>
+                <span>Complete Profile</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            ) : (
+              "Next"
+            )}
           </button>
         </div>
       </div>

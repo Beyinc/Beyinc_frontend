@@ -80,10 +80,10 @@ const TabsAndInvestment = ({
             </div>
           ) : (
             <div
-              className={`Ttab ${activeTab === "Skills" ? "Tactive" : ""}`}
-              onClick={() => handleTabClick("Skills")}
+              className={`Ttab ${activeTab === "Expertise" ? "Tactive" : ""}`}
+              onClick={() => handleTabClick("Expertise")}
             >
-              Skills
+              Expertise
             </div>
           )}
 
@@ -98,10 +98,10 @@ const TabsAndInvestment = ({
 
           {extractedData?.role === "Mentor" && (
             <div
-              className={`Ttab ${activeTab === "Role" ? "Tactive" : ""}`}
-              onClick={() => handleTabClick("Role")}
+              className={`Ttab ${activeTab === "Level" ? "Tactive" : ""}`}
+              onClick={() => handleTabClick("Level")}
             >
-              Role
+              Level
             </div>
           )}
 
@@ -127,21 +127,26 @@ const TabsAndInvestment = ({
               </span>
             </p>
           )}
-
-          {/* Skills Tab - For Individual/Entrepreneur and Mentor */}
+          {/* Expertise Tab - For Individual/Entrepreneur and Mentor */}
           {(extractedData?.role === "Individual/Entrepreneur" ||
             extractedData?.role === "Mentor") &&
-            activeTab === "Skills" && (
+            activeTab === "Expertise" && (
               <p>
-                {extractedData?.skills?.length
-                  ? extractedData.skills.join(", ")
-                  : "No skills added"}
+                <span className="font-semibold text-gray-700 text-sm">
+                  {extractedData?.skills?.length
+                    ? extractedData.skills.join(", ")
+                    : "No skills added"}
+                </span>
               </p>
             )}
 
           {/* Role Tab - For Mentor only */}
-          {extractedData?.role === "Mentor" && activeTab === "Role" && (
-            <p>{extractedData?.mentorRole || "No role added"}</p>
+          {extractedData?.role === "Mentor" && activeTab === "Level" && (
+            <p>
+              <span className="font-semibold text-gray-700 text-sm">
+                {extractedData?.mentorRole || "No role added"}
+              </span>
+            </p>
           )}
 
           {/* Target Market Tab - For Startup */}
