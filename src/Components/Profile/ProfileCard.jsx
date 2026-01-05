@@ -13,8 +13,10 @@ import { ToastColors } from "../Toast/ToastColors";
 import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
+import ProfileCardInfo from "./ProfileCardInfo";
+import MentorCardInfo from "./MentorCardInfo";
 
-const ProfileCard = ({ selfProfile, setSelfProfile }) => {
+const ProfileCard = ({ selfProfile, setSelfProfile, profileRole }) => {
   const [profileData, setProfileData] = useState({}); // Initialize as an empty object
   const [averageReview, setAverageReview] = useState(0); // State to hold the average review
   const [filledStars, setFilledStars] = useState(0); // State to store the filled stars for the review
@@ -54,7 +56,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
   console.log("self", selfProfile);
 
   const { email, role, userName, image, verification, user_id } = useSelector(
-    (store) => store.auth.loginDetails
+    (store) => store.auth.loginDetails,
   );
 
   const socket = useRef();
@@ -103,7 +105,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
           message: "Error in following user",
           bgColor: ToastColors.failure,
           visible: "yes",
-        })
+        }),
       );
     } finally {
       e.target.disabled = false;
@@ -144,7 +146,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
           message: "Error while trying to unfollow",
           bgColor: ToastColors.failure,
           visible: "yes",
-        })
+        }),
       );
     } finally {
       e.target.disabled = false;
@@ -199,7 +201,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
           : await ApiServices.getProfile({ id: user_id });
 
         const profileData = profileResponse.data;
-        console.log("profiledata", profileData);
+        // console.log("profiledata", profileData);
         setProfileData(profileData);
 
         if (profileData.review !== undefined && profileData.review.length > 0) {
@@ -245,7 +247,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
             message: error?.response?.data?.message,
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       }
     };
@@ -255,6 +257,8 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
 
   console.log("follower", follower);
   console.log("following", following);
+
+  // console.log("profileData", profileData);
   // console.log('popup',isInputPopupVisible)
 
   const handleCountryChange = (e) => {
@@ -336,13 +340,10 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
     }
   };
 
-
   const trimHeadline = (text) => {
-  const words = text.trim().split(/\s+/);
-  return words.length > 4
-    ? words.slice(0, 4).join(" ") + " . . . ."
-    : text;
-};
+    const words = text.trim().split(/\s+/);
+    return words.length > 4 ? words.slice(0, 4).join(" ") + " . . . ." : text;
+  };
   return (
     <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
       <div className="absolute lg:relative">
@@ -371,43 +372,34 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
             {selfProfile && <i className="fas fa-pen"></i>}
           </span>
         </div>
-
         <div className="font-bold text-sm text-gray-500">{formState?.role}</div>
         {/* <div>{formState.headline}</div> */}
-
         <div className="flex justify-center">
-  <div className="text-center">
-    {trimHeadline(formState.headline)}
-  </div>
-</div>
-
+          <div className="text-center">{trimHeadline(formState.headline)}</div>
+        </div>
         {profileData?.beyincProfile && (
           <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
             {profileData.beyincProfile} at Beyinc
           </div>
         )}
-
         <div className="flex flex-col gap-4 mt-2 ">
-          {!selfProfile && <div className="flex items-center gap-2">
-
-            <button
-              className="rounded-full p-[7px_37px]"
-              onClick={(e) => {
-                follower.some((follower) => follower._id === user_id)
-                  ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
-                  : followerController(e, id); // Call followerController if "Follow"
-              }}
-            >
-              {follower.some((follower) => follower._id === user_id)
-                ? "Unfollow"
-                : "Follow"}
-            </button>
-            <RecommendedConnectButton
-              id={id}
-              btnClassname='!p-[7px_37px]'
-            />
-          </div>
-          }
+          {!selfProfile && (
+            <div className="flex items-center gap-2">
+              <button
+                className="rounded-full p-[7px_37px]"
+                onClick={(e) => {
+                  follower.some((follower) => follower._id === user_id)
+                    ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
+                    : followerController(e, id); // Call followerController if "Follow"
+                }}
+              >
+                {follower.some((follower) => follower._id === user_id)
+                  ? "Unfollow"
+                  : "Follow"}
+              </button>
+              <RecommendedConnectButton id={id} btnClassname="!p-[7px_37px]" />
+            </div>
+          )}
 
           {isInputPopupVisible && (
             <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
@@ -420,7 +412,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                         className="text-gray-500 cursor-pointer"
                         onClick={() => {
                           document.getElementsByTagName(
-                            "body"
+                            "body",
                           )[0].style.overflowY = "scroll";
                           setIsInputPopupVisible(false);
                         }}
@@ -460,12 +452,13 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                         </label>
                         <input
                           type="text"
-                          className={`border rounded-md p-2 w-full ${formState.mobileNumber
+                          className={`border rounded-md p-2 w-full ${
+                            formState.mobileNumber
                               ? formState.mobileNumber.length === 10
                                 ? "border-green-500"
                                 : "border-red-500"
                               : "border-gray-300"
-                            }`}
+                          }`}
                           name="mobileNumber"
                           id="mobile"
                           value={formState.mobileNumber}
@@ -628,16 +621,39 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
             </div>
           )}
         </div>
-
-        <div className="flex flex-col mt-4 font-bold w-full">
+        <div
+          className="flex flex-col mt-4 font-medium
+          w-full"
+        >
           <div className="px-4 lg:px-28 gap-4 flex flex-col">
-            <div className="flex justify-between">
-              <span>Followers</span> <span>{follower.length}</span>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-600">Followers</span>
+              <span className="font-semibold text-gray-700">
+                {follower.length}
+              </span>
             </div>
-            <div className="flex justify-between">
-              <span>Following</span> <span>{following.length}</span>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-600">Following</span>
+              <span className="font-semibold text-gray-700">
+                {following.length}
+              </span>
             </div>
+            {/* startup profile info detils for other fields */}
+            {profileRole === "Startup" && profileData.startupProfile && (
+              <ProfileCardInfo
+                profileData={profileData}
+                profileRole={profileRole}
+              />
+            )}
 
+            {/* mentor/Individual profile info detils for other fields */}
+            {(profileRole === "Mentor" ||
+              profileRole === "Individual/Entrepreneur") && (
+              <MentorCardInfo
+                profileData={profileData}
+                profileRole={profileRole}
+              />
+            )}
             {country && (
               <div className="locationdetails">
                 <div>
@@ -658,7 +674,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 <div className="mt-2">{country}</div>
               </div>
             )}
-
             {formState.linkedin && (
               <div className="locationdetails">
                 <div>
@@ -680,7 +695,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 </a>
               </div>
             )}
-
             {formState.twitter && (
               <div className="locationdetails">
                 <div>
@@ -702,7 +716,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 </a>
               </div>
             )}
-
             {/* <div>
               {user_id == undefined ? (
                 <ReviewStars />

@@ -66,7 +66,7 @@ const Navbar = () => {
   const navigate1 = useNavigate();
   const location = useLocation();
   const { beyincProfile, email, role, userName, image } = useSelector(
-    (store) => store.auth.userDetails
+    (store) => store.auth.userDetails,
   );
 
   const handleSearch = (e) => {
@@ -77,7 +77,7 @@ const Navbar = () => {
   };
 
   const { verification, user_id } = useSelector(
-    (store) => store.auth.loginDetails
+    (store) => store.auth.loginDetails,
   );
 
   // console.log(beyincProfile,image.url)
@@ -123,7 +123,7 @@ const Navbar = () => {
   }, []);
 
   const notificationAlert = useSelector(
-    (state) => state.conv.notificationAlert
+    (state) => state.conv.notificationAlert,
   );
   useEffect(() => {
     if (notificationAlert) {
@@ -171,7 +171,7 @@ const Navbar = () => {
     await ApiServices.getPostRequestDiscussion({ user_id: user_id }).then(
       (res) => {
         setpostDiscussionRequest(res.data);
-      }
+      },
     );
     dispatch(getAllNotifications(user_id));
   };
@@ -658,7 +658,7 @@ const Navbar = () => {
               day: "2-digit",
               month: "short",
               year: "numeric",
-            }
+            },
           );
 
           return (
@@ -1695,9 +1695,6 @@ const Navbar = () => {
                 <div className="navbar-title">Notifications</div>
               </div> */}
 
-
-
-
               {/* NOTIFICATION ICON */}
               {user_id && (
                 <div
@@ -1748,6 +1745,14 @@ const Navbar = () => {
                 </div>
               )}
 
+                <div
+                  className={`navbar-title${
+                    selectedIcon === "notifications" ? " selected-title" : ""
+                  }`}
+                >
+                  Notifications
+                </div>
+              </div>
 
               {/* <Drawer
                 anchor="right"
