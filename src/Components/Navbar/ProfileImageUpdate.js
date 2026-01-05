@@ -45,8 +45,10 @@ const ProfileImageUpdate = ({ open, setOpen}) => {
         e.target.disabled = true;
         setIsLoading(true);
         await ApiServices.updateuserProfileImage({
-          userId: user_id,
-          image: changeImage, email: email
+          
+          // userId: user_id, commented unsercure
+          image: changeImage, 
+          // email: email //unsecure commented
         })
           .then(async (res) => {
             // console.log(res.data);

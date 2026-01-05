@@ -214,6 +214,20 @@ const IndividualPostDetailsCard = () => {
     return { __html: html };
   };
 
+  const handleReaction = async (type, postId) => {
+      const response = await ReactionServices.addOrUpdate({
+        postId,
+        reactionType: type,
+      });
+      // console.log(response.data.userReaction);
+
+      setPost((prev) => ({
+        ...prev,
+        userReaction: response.data.userReaction,
+        reactions: response.data.reactions
+      }));
+  };
+
   return (
     <div className="post-details-main-container sm:p-4 p-2">
       {post !== null && (
@@ -388,7 +402,7 @@ const IndividualPostDetailsCard = () => {
               </div>
 
               <div className="likeCommentDetails">
-                <div className="likeTotal">
+                {/* <div className="likeTotal">
                   <div>
                     <div>
                       <svg
@@ -433,7 +447,8 @@ const IndividualPostDetailsCard = () => {
                         `and ${post?.disLikes?.length - 1} other`}
                     </div>
                   </div>
-                </div>
+                </div> */}
+                <ReactionDisplay reactions={post?.reactions} />
                 <div className="commentTotal">
                   {allComments?.length} comments
                 </div>

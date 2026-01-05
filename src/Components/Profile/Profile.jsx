@@ -17,6 +17,7 @@ import { ApiServices } from "../../Services/ApiServices";
 import { CalendarServices } from "../../Services/CalendarServices";
 
 import "../Editprofile/EditProfile.css";
+import StartupProfileCard from "../Startup/StartupProfileCard";
 
 const Profile = () => {
   const location = useLocation();
@@ -90,8 +91,6 @@ const Profile = () => {
   };
 
   return (
-
-
     <div className="h-full bg-customBackground relative ">
       <div className="relative">
         <div>
@@ -101,7 +100,6 @@ const Profile = () => {
             className="w-full h-48 lg:h-80 object-cover rounded-none m-2"
           />
         </div>
-
         <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:ml-10 relative">
           <div className="mb-4 -mt-36 ml-2">
             <ProfileCard
@@ -136,6 +134,9 @@ const Profile = () => {
             )}
 
             <TabContext value={value}>
+              {profileData?.role === "Startup" && (
+                <StartupProfileCard userId={user_id} />
+              )}
               <Box>
                 <TabList
                   onChange={handleChange}
@@ -161,8 +162,7 @@ const Profile = () => {
                         textAlign: "center",
                         textTransform: "none",
                         "&.Mui-selected": { color: "#4E54C6" },
-                            "&:hover": { color: "white" },   // 👈 added
-
+                        "&:hover": { color: "white" }, // 👈 added
                       }}
                     />
                   ))}
@@ -191,4 +191,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

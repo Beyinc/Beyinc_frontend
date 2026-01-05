@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
 import { CiGlobe } from "react-icons/ci";
 import { BsCircleFill } from "react-icons/bs";
-import { CalendarServices } from '../../Services/CalendarServices';
+import { CalendarServices } from "../../Services/CalendarServices";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 const SingleUserDetails = ({
@@ -32,24 +32,34 @@ const SingleUserDetails = ({
   const [averagereview, setAverageReview] = useState(0);
   const navigate = useNavigate();
 
+  const [requestPopup, setRequestPopup] = useState(false);
+  const [requestType, setRequestType] = useState("");
+  const [requestMessage, setRequestMessage] = useState("");
+  const [session, setSession] = useState([]);
+  useEffect(() => {
+    const fetchAvailabilityData = async () => {
+      try {
+        const { data } = await CalendarServices.getAvailabilityData({
+          mentorId: user._id,
+        });
+        // Logging the availability data
+        console.log(
+          "Availability data found here:",
+          JSON.stringify(data.availability)
+        );
+        setSession(data.availability.sessions);
+        const availabilityData = data.availability;
+        // Perform additional operations with availabilityData here
+      } catch (error) {
+        console.error("Error fetching availability data:", error);
+      }
+    };
 
-//   useEffect(() => {
-//     const fetchAvailabilityData = async () => {
-//         try {
-//             const { data } = await CalendarServices.getAvailabilityData({ mentorId:id });
-//             // Logging the availability data
-//             console.log('Availability data:', JSON.stringify(data.availability));
-//             setService(data.availability.sessions)
-//             const availabilityData = data.availability;
-//             // Perform additional operations with availabilityData here
-//         } catch (error) {
-//             console.error("Error fetching availability data:", error);
-//         }
-//     };
-
-//     fetchAvailabilityData();
-// }, [id]); // Add dependencies if required
-
+    fetchAvailabilityData();
+  }, [user._id]); // Add dependencies if required
+  useEffect(() => {
+    console.log("user data", user);
+  }, []);
 
   useEffect(() => {
     setAverageReview(0);
@@ -84,6 +94,45 @@ const SingleUserDetails = ({
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+  const handleSendRequest = async () => {
+    if (!requestMessage) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    const requestPayload = {
+      userId: user_id,
+      mentorId: user._id,
+      requestType,
+      requestMessage,
+      amount: selectedSession?.amount,
+      duration: selectedSession?.duration,
+    };
+
+    try {
+      await console.log("frontend data", requestPayload);
+      const response = await CalendarServices.createRequest(requestPayload);
+
+      console.log("Request Sent:", response);
+      alert("Request Sent Successfully!");
+
+      setRequestPopup(false);
+      setRequestType("");
+      setRequestMessage("");
+    } catch (error) {
+      console.error("Error sending request:", error.message);
+      // alert("Failed to send request",error.message);
+      alert("Failed to send request: " + error.response.data.message);
+    }
+  };
+
+  // useEffect(()=>{
+  //   console.log("card details",user._id);
+  // })
+
+  const [selectedSessionId, setSelectedSessionId] = useState("");
+  const [selectedSession, setSelectedSession] = useState(null);
 
   return (
     <>
@@ -233,6 +282,16 @@ const SingleUserDetails = ({
                       <span className="mr-3">45 minutes</span>
                       <span>$200 per month</span>
                     </div>
+
+                    <div className="request div">
+                      <button
+                        onClick={() => {
+                          setRequestPopup(true);
+                        }}
+                      >
+                        Request a call
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -243,6 +302,105 @@ const SingleUserDetails = ({
           </div>
         </div>
       </div>
+
+      {requestPopup && (
+        <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
+          <div className="bg-white w-[400px] rounded-lg shadow-lg p-6 relative">
+            {/* Close Icon */}
+            <div
+              className="absolute top-3 right-3 text-gray-500 cursor-pointer"
+              onClick={() => {
+                document.body.style.overflowY = "scroll";
+                setRequestPopup(false);
+              }}
+            >
+              <i className="fas fa-times text-blue-600"></i>
+            </div>
+
+            <h2 className="text-xl font-semibold text-center mb-4">
+              Request a Call
+            </h2>
+
+            {/* Dropdown */}
+            {/* <label className="text-sm font-semibold text-blue-600">
+              Request Type
+            </label> */}
+            {/* <select
+              className="border border-gray-300 rounded-md p-2 w-full mt-1"
+              value={requestType}
+              onChange={(e) => setRequestType(e.target.value)}
+            >
+              <option value="">Select Request Type</option>
+              <option value="session">Session</option>
+              <option value="webinar" disabled>
+                Webinar
+              </option>
+              <option value="priority_dm" disabled>
+                Priority DM
+              </option>
+            </select> */}
+
+            {/* Duration Dropdown */}
+        
+              <div className="mt-4">
+                <label className="text-sm font-semibold text-blue-600">
+                  Select Session Type
+                </label>
+
+                <select
+                  className="border border-gray-300 rounded-md p-2 w-full mt-1"
+                  value={selectedSessionId}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    setSelectedSessionId(id);
+                    const sessionData = session.find((s) => s._id === id);
+                    setSelectedSession(sessionData);
+                  }}
+                >
+                  <option value="">Select </option>
+                  {session.map((s) => (
+                    <option key={s._id} value={s._id}>
+                      {s.duration} minutes - ₹{s.amount}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            
+
+            {selectedSession && (
+              <div className="mt-4 p-3 bg-blue-50 rounded-md text-center">
+                <p className="text-sm text-gray-600">Price</p>
+                <p className="text-xl font-bold text-blue-600">
+                  ₹{selectedSession.amount}
+                </p>
+              </div>
+            )}
+
+            {/* Message Box */}
+            <div className="mt-4">
+              <label className="text-sm font-semibold text-blue-600">
+                Message
+              </label>
+              <textarea
+                className="border border-gray-300 rounded-md w-full p-2 mt-1"
+                rows="4"
+                placeholder="Describe your request..."
+                value={requestMessage}
+                onChange={(e) => setRequestMessage(e.target.value)}
+              ></textarea>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700"
+              onClick={handleSendRequest}
+              disabled={session.length==0}
+            >
+              Send Request
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

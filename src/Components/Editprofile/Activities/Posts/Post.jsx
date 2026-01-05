@@ -12,8 +12,10 @@ import {
 } from "../../../../redux/AuthReducers/AuthReducer";
 import { Dialog, DialogContent } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import EditPost from "./EditPost";
 import ShareButton from "../../ShareButton";
+import ReactionButton from "../../../components/ReactionButton";
+import { ReactionServices } from "../../../../Services/PostServices";
+import { ReactionDisplay } from "../../../Posts/components/ReactionDisplay";
 
 const Post = ({
     filteredPosts,

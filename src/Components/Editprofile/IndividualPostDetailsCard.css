@@ -335,4 +335,69 @@ background: var( --button-background);
     padding: 6px 12px;
   }
 }
-  
+/* 1. Header Layout */
+.PostHeaderContainer {
+    display: flex;
+    flex-direction: column; /* Stacks the Top Row and the Tag vertically */
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* 2. User Details Stack (Name, Role, Date) */
+.IndividualPostDetailsContainer {
+    display: flex;
+    flex-direction: column; /* Forces vertical stack */
+    justify-content: center;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.postCardUserName {
+    font-weight: 700;
+    font-size: 16px;
+    color: #000;
+}
+
+.postCardRole {
+    font-size: 13px;
+    color: #666; /* Gray color for role */
+    margin-bottom: 2px;
+}
+
+.postCardDate {
+    font-size: 12px;
+    color: #888; /* Lighter gray for date */
+    display: flex;
+    align-items: center;
+}
+
+/* 3. The Pink "Idea Discussion" Tag */
+.postTypeContainer {
+    margin-top: 10px; /* Space between user info and tag */
+    margin-bottom: 5px;
+}
+
+.postType {
+  background-color: #fbcbcb; /* The Pink Color */
+  color: #000;               /* Text Color */
+  padding: 5px 16px;         /* Size of the pill */
+  border-radius: 20px;       /* Rounded edges */
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-block;     /* Ensures padding works */
+}
+
+/* 4. Menu Icon alignment */
+.editpostSubActions {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 5px; /* Aligns menu icon with the top of profile image */
+}
+
+/* 5. Typography Fixes for Title */
+.postDesc b {
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 8px;
+    color: #000;
+}

@@ -1,0 +1,20 @@
+
+
+.login-bg-wrapper {
+  min-height: 100vh;
+  min-width: screen;
+  height: auto;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  overflow-y: hidden;
+  background: linear-gradient(
+    117.74deg,
+    rgba(155, 248, 244, 1) 0%,
+    rgba(138, 201, 245, 1) 60.52%,
+    rgba(111, 123, 247, 1) 100%
+  );
+}
+
+

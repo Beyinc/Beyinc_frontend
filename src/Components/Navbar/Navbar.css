@@ -685,6 +685,21 @@ img {
     white-space: nowrap;
     font-weight: 400;
   }
+  .search-container {
+    display: flex !important;  
+    flex: 1;                  
+    margin-left: 18px;    
+    margin-right: 10px;      
+    max-width: 100%;          
+  }
+
+  .search-container form {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100% !important;     
+  }
   /* .search-container {
     display: none;
   } */
