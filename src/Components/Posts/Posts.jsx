@@ -109,14 +109,16 @@ const Posts = () => {
     }, [topTrendingPosts])
 
     useEffect(() => {
-        ApiServices.getNewProfiles()
-            .then((res) => {
-                setRecommendedUsers(res.data);
-            })
-            .catch((err) => {
-                console.log("Error fetching recommendations", err);
-            });
-    }, [recommendedUserTrigger]);
+        if (user_id) {
+            ApiServices.getNewProfiles()
+                .then((res) => {
+                    setRecommendedUsers(res.data);
+                })
+                .catch((err) => {
+                    console.log("Error fetching recommendations", err);
+                });
+        }
+    }, [recommendedUserTrigger, user_id]);
 
     // const [page, setPage] = useState(0);
     // const [pageSize, setPageSize] = useState(10);

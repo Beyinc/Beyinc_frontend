@@ -289,9 +289,9 @@ const Navbar = () => {
                     <path
                       fill="none"
                       stroke="var(--nav-head-icons)"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                       strokeLinejoin="round"
-                      stroke-width="2"
+                      strokeWidth="2"
                       d="M12 4V2m0 18v2M6.414 6.414L5 5m12.728 12.728l1.414 1.414M4 12H2m18 0h2m-4.271-5.586L19.143 5M6.415 17.728L5 19.142M12 17a5 5 0 1 1 0-10a5 5 0 0 1 0 10"
                     />
                   </svg>
@@ -304,7 +304,7 @@ const Navbar = () => {
                 e.currentTarget.title = `${mode} Mode`;
               }}
             >
-            
+
               <ListItemIcon>
                 {localStorage.getItem("theme") === "light" ? (
                   <svg
@@ -342,9 +342,8 @@ const Navbar = () => {
               </ListItemIcon>
 
               <ListItemText
-                primary={`${
-                  localStorage.getItem("theme") === "light" ? "Dark" : "Light"
-                } Mode`}
+                primary={`${localStorage.getItem("theme") === "light" ? "Dark" : "Light"
+                  } Mode`}
               />
             </ListItem>
 
@@ -387,14 +386,14 @@ const Navbar = () => {
                   <path
                     fill="none"
                     stroke="var(--nav-head-icons)"
-                    stroke-width="2"
+                    strokeWidth="2"
                     d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 16a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"
                   />
                 </svg>
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            
+
             <ListItem
               button
               key="dashboard"
@@ -411,15 +410,15 @@ const Navbar = () => {
                   <path
                     fill="none"
                     stroke="var(--nav-head-icons)"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M8 16v-5m4 5V8m4 8v-2m2-10H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"
                   />
                 </svg>
               </ListItemIcon>
               {/* NOTE: In your code this says Pitches, but based on the URL /dashboard it might be Dashboard */}
-              <ListItemText primary="Dashboard" /> 
+              <ListItemText primary="Dashboard" />
             </ListItem>
 
             <ListItem
@@ -443,7 +442,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Mentors" />
             </ListItem>
-            
+
             <ListItem
               button
               key="conversations"
@@ -485,7 +484,7 @@ const Navbar = () => {
                   id="notifications"
                   className="menu-icon"
                 >
-                  <g fill="none" fill-rule="evenodd">
+                  <g fill="none" fillRule="evenodd">
                     <path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
                     <path
                       fill="var(--nav-head-icons)"
@@ -885,9 +884,9 @@ const Navbar = () => {
                 <path
                   fill="none"
                   stroke="var(--nav-head-icons)"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
 ]strokeLinejoin="round"
-                  stroke-width="2"
+                  strokeWidth="2"
                   d="M12 4V2m0 18v2M6.414 6.414L5 5m12.728 12.728l1.414 1.414M4 12H2m18 0h2m-4.271-5.586L19.143 5M6.415 17.728L5 19.142M12 17a5 5 0 1 1 0-10a5 5 0 0 1 0 10"
                 />
               </svg>

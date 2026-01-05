@@ -310,8 +310,7 @@ const App = () => {
         }
       >
         <Toast />
-        <LoadingData />
-kml,  m;        {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes(location.pathname) && <Navbar />}
+        <LoadingData />   {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes(location.pathname) && <Navbar />}
 
         <div className=" max-w-[1550px] m-auto">
 
