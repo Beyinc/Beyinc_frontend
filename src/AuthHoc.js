@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home";
-import { useSelector } from 'react-redux';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import {  useNavigate } from "react-router";
 import { ApiServices } from "./Services/ApiServices";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
 
@@ -14,7 +14,7 @@ export const LoginAuth = (Component) => {
         navigate("/posts");
       }
     }, []);
-    return <Component />;
+    return  <Component />;
   };
 };
 
@@ -60,16 +60,16 @@ const AuthHoc = (Component) => {
 
     return localStorage.getItem("user") &&
       JSON.parse(localStorage.getItem("user")).accessToken ? (
-      firstTime !== null && (firstTime ? (
-        // <UserDetails />
-        <EntryDetails />
-      ) : (
-        <Component />
-      ))
+        firstTime !== null && (firstTime ? (
+          // <UserDetails />
+          <EntryDetails/>
+        ) : (
+          <Component />
+        )) 
     ) : loading ? (
       <></>
     ) : (
-      <Navigate to="/posts" />
+      <Login />
     );
   };
 };
