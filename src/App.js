@@ -5,7 +5,6 @@ import {
   Routes,
   useParams,
   useLocation,
-  Navigate,
 } from "react-router-dom";
 import "./App.css";
 import AuthHoc, { AdminDeciderHoc, LoginAuth } from "./AuthHoc";
@@ -126,7 +125,7 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(apicallloginDetails());
-  }, [dispatch]);
+  }, []);
 
   // intialize socket io
   const socket = useRef();
@@ -245,24 +244,22 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      ApiServices.getAllRoles()
-        .then((res) => {
-          dispatch(setTotalRoles(res.data));
-        })
-        .catch((err) => {
-          // console.log(err);
-          if (err.message == "Network Error") {
-            dispatch(
-              setToast({
-                message: "Check your network connection",
-                bgColor: ToastColors.failure,
-                visible: "yes",
-              })
-            );
-          }
-        });
-    }
+    ApiServices.getAllRoles()
+      .then((res) => {
+        dispatch(setTotalRoles(res.data));
+      })
+      .catch((err) => {
+        // console.log(err);
+        if (err.message == "Network Error") {
+          dispatch(
+            setToast({
+              message: "Check your network connection",
+              bgColor: ToastColors.failure,
+              visible: "yes",
+            })
+          );
+        }
+      });
   }, []);
 
 
@@ -311,7 +308,7 @@ const App = () => {
       >
         <Toast />
         <LoadingData />
-kml,  m;        {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes(location.pathname) && <Navbar />}
+{!['/login', '/signup',"/","/newlogin","/newsignup","/verify-otp"].includes(location.pathname) && <Navbar />}
 
         <div className=" max-w-[1550px] m-auto">
 
@@ -320,12 +317,15 @@ kml,  m;        {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes
             <Route path="/userDetails" Component={AuthHoc(UserDetails)} />
             <Route path="/login" Component={LoginAuth(NewLogin)} />
             // new login - signup routes
-            <Route path="/newlogin" Component={LoginAuth(NewLogin)} />
-            <Route path="/newsignup" Component={LoginAuth(NewSignup)} />
+            {/* <Route path="/newlogin" Component={LoginAuth(NewLogin)}/>
+            <Route path="/newsignup" Component={LoginAuth(NewSignup)}/> */}
+            <Route path="/verify-otp" Component={LoginAuth(VerifyOtp)}/>
+
+            
             <Route path="/forgotpassword" Component={LoginAuth(ForgotPassword)} />
-            <Route path="/" element={<Navigate to="/posts" />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
-            <Route path="/posts" Component={Posts} />
+            <Route path="/posts" Component={AuthHoc(Posts)} />
             <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
             <Route path="/editPostPage/:postId" Component={AuthHoc(CreatePostPage)} />
             <Route path="/beyincProfesional" Component={AuthHoc(BeyincProfessional)} />
@@ -349,7 +349,7 @@ kml,  m;        {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes
             <Route path="/notifications" Component={AuthHoc(Notifications)} />
             <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
             <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
-            <Route path="/posts/:id" Component={IndividualPostDetailsCard} />
+            <Route path="/posts/:id" Component={AuthHoc(IndividualPostDetailsCard)} />
 
             <Route
               path="/livePitches/:pitchId"
@@ -390,8 +390,8 @@ kml,  m;        {!['/login', '/signup', "/", "/newlogin", "/newsignup"].includes
             <Route path="/oauth-popup-handler" element={<OAuthPopupHandler />} />
             {/* <Route path="/see-all-users" element={<SeeAllUsers/>}></Route> */}
             <Route path="/about" element={<About />} />
-            <Route path="/connections" Component={AuthHoc(ConnectionsWithSuggestions)} />
-            <Route path="/notification-page" Component={AuthHoc(NotificationPage)} />
+            <Route path="/connections" element={<ConnectionsWithSuggestions />} />
+            <Route path="/notification-page" element={<NotificationPage/>}/>
           </Routes>
         </div>
 
