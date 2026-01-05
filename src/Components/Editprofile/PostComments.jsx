@@ -9,15 +9,16 @@ import { socket_io } from "../../Utils";
 import "../LivePitches/IndividualPitch.css";
 import IndividualPostComments from "./IndividualPostComments";
 import "./PostComments.css";
+import { useAuthAction } from "../../hooks/useAuthAction";
 
 const PostComments = ({ fetchComments, postId }) => {
-  const [pitch, setpitch] = useState("");
-  const { user_id, image } = useSelector((state) => state.auth.loginDetails);
+  const loginDetails = useSelector((state) => state.auth.loginDetails || {});
+  const { user_id, image } = loginDetails;
   const [comment, setComment] = useState("");
   const [file, setFile] = useState(null);
   const [postTrigger, setpostTrigger] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const authenticated = useAuthAction();
   const [allComments, setAllComments] = useState([]);
   const socket = useRef();
 
@@ -45,7 +46,7 @@ const PostComments = ({ fetchComments, postId }) => {
           );
         });
     }
-  }, [postId, postTrigger, fetchComments]);
+  }, [postId, postTrigger, fetchComments, dispatch]);
 
   const handleFileUpload = (selectedFile) => {
     console.log("file selected");
@@ -83,7 +84,7 @@ const PostComments = ({ fetchComments, postId }) => {
       reader.onerror = reject;
     });
 
-  const sendText = async () => {
+  const sendText = authenticated(async () => {
     if (!comment.trim() && !file) return;
 
     dispatch(setLoading({ visible: "yes" }));
@@ -104,7 +105,7 @@ const PostComments = ({ fetchComments, postId }) => {
     }
 
     try {
-      const response = await ApiServices.addPostComment({
+      await ApiServices.addPostComment({
         postId,
         commentBy: user_id,
         comment,
@@ -119,9 +120,9 @@ const PostComments = ({ fetchComments, postId }) => {
     } finally {
       dispatch(setLoading({ visible: "no" }));
     }
-  };
+  });
 
-  const onLike = async (commentId) => {
+  const onLike = authenticated(async (commentId) => {
     dispatch(setLoading({ visible: "yes" }));
     try {
       await ApiServices.likePostComment({ comment_id: commentId });
@@ -136,9 +137,9 @@ const PostComments = ({ fetchComments, postId }) => {
     } finally {
       dispatch(setLoading({ visible: "no" }));
     }
-  };
+  });
 
-  const onDisLike = async (commentId) => {
+  const onDisLike = authenticated(async (commentId) => {
     dispatch(setLoading({ visible: "yes" }));
     try {
       await ApiServices.DislikePostComment({ comment_id: commentId });
@@ -153,15 +154,12 @@ const PostComments = ({ fetchComments, postId }) => {
     } finally {
       dispatch(setLoading({ visible: "no" }));
     }
-  };
+  });
 
   const deleteComment = async (id) => {
     try {
       await ApiServices.removePitchComment({ postId, commentId: id });
-      setpitch((prev) => ({
-        ...prev,
-        comments: pitch.comments.filter((f) => f._id !== id),
-      }));
+      setAllComments((prev) => prev.filter((c) => c._id !== id));
     } catch {
       dispatch(
         setToast({
@@ -192,7 +190,11 @@ const PostComments = ({ fetchComments, postId }) => {
             <img
               id="Profile-img"
               className="Profile-img"
-              src={image !== undefined && image !== "" ? image : "/profile.png"}
+              src={
+                image?.url !== undefined && image?.url !== ""
+                  ? image.url
+                  : "/profile.png"
+              }
               alt=""
             />
           </div>
@@ -312,9 +314,9 @@ const PostComments = ({ fetchComments, postId }) => {
         {allComments.length > 0 &&
           allComments.map(
             (c) =>
-              c.parentCommentId === undefined && (
+              c?.parentCommentId === undefined && (
                 <IndividualPostComments
-                  key={c._id}
+                  key={c?._id}
                   c={c}
                   deleteComment={deleteComment}
                   setpostTrigger={setpostTrigger}

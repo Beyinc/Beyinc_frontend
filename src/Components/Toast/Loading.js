@@ -8,7 +8,7 @@ const LoadingData = () => {
     if (visible == "yes") {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth' 
+        behavior: 'smooth'
       });
       document.getElementsByTagName("body")[0].style.overflowY = "hidden";
     } else {
@@ -21,14 +21,14 @@ const LoadingData = () => {
       style={{ display: visible == "yes" ? "block" : "none" }}
     >
       <div className="Loading">
-            <div class="loader">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-          </div>
+        <div className="loader">
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+        </div>
+      </div>
     </div>
   );
 };

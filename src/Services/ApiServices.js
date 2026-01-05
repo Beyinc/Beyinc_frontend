@@ -162,19 +162,6 @@ export const ApiServices = {
       axiosInstance
         .post(`/userDetails/getUser`, obj)
         .then((res) => {
-          if (res) {
-            resolve(res);
-          }
-        })
-        .catch((err) => reject(err));
-    });
-  },
-
-  getProfile: (obj) => {
-    return new Promise((resolve, reject) => {
-      axiosInstance
-        .post(`/userDetails/getUser`, obj)
-        .then((res) => {
           if (res.data) {
             resolve(res);
           }
