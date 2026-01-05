@@ -151,6 +151,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
+
     // Fetch the user data on which profile is clicked
     const fetchUserData = async () => {
       try {
@@ -582,12 +583,10 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchAvailabilityData = async () => {
       try {
-        const { data } = await CalendarServices.getAvailabilityData({
-          mentorId,
-        });
+        const { data } = await CalendarServices.getAvailabilityData({ mentorId });
         // Logging the availability data
-        console.log("Availability data:", JSON.stringify(data.availability));
-        setService(data.availability.sessions);
+        console.log('Availability data:', JSON.stringify(data.availability));
+        setService(data.availability.sessions)
         const availabilityData = data.availability;
         // Perform additional operations with availabilityData here
       } catch (error) {
@@ -597,6 +596,7 @@ const EditProfile = () => {
 
     fetchAvailabilityData();
   }, []); // Add dependencies if required
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -658,7 +658,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     setTotalExperienceData(experienceDetails);
-  }, [experienceDetails]);
+  }, [experienceDetails])
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
   const [requestUserId, setRequestedUserId] = useState("");
@@ -1332,19 +1332,19 @@ const EditProfile = () => {
 
   const [isFormValid, setIsFormValid] = useState(
     mobileVerified &&
-      (isNameValid ||
-        oldDocs.resume !== "" ||
-        oldDocs.expertise !== "" ||
-        oldDocs.acheivements !== "" ||
-        oldDocs.working !== "" ||
-        oldDocs.degree !== "" ||
-        changeResume.resume !== "" ||
-        changeResume.expertise !== "" ||
-        changeResume.acheivements !== "" ||
-        changeResume.working !== "" ||
-        changeResume.degree !== "") &&
-      totalEducationData.length > 0 &&
-      totalExperienceData.length > 0,
+    (isNameValid ||
+      oldDocs.resume !== "" ||
+      oldDocs.expertise !== "" ||
+      oldDocs.acheivements !== "" ||
+      oldDocs.working !== "" ||
+      oldDocs.degree !== "" ||
+      changeResume.resume !== "" ||
+      changeResume.expertise !== "" ||
+      changeResume.acheivements !== "" ||
+      changeResume.working !== "" ||
+      changeResume.degree !== "") &&
+    totalEducationData.length > 0 &&
+    totalExperienceData.length > 0
   );
 
   const handleChangeRadio = (e) => {
@@ -1602,7 +1602,7 @@ const EditProfile = () => {
   };
 
   ///////////////////////////////////////////////////////////////
-  console.log("education details", educationDetails);
+  console.log('education details', educationDetails)
   const saveEducationDetails = () => {
     // Check if the required fields are filled
     if (
@@ -1907,6 +1907,7 @@ const EditProfile = () => {
             )}
 
             {userpage === true && (
+
               <button
                 onClick={followerController}
                 className="mb-5 profileFollowBtn"
@@ -2073,56 +2074,49 @@ const EditProfile = () => {
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-          {(dbbeyincProfile === "Mentor" ||
-            mentorId !== "editProfile" ||
-            dbbeyincProfile === "Co-Founder") &&
+          {(dbbeyincProfile === "Mentor" || mentorId !== 'editProfile' || dbbeyincProfile === "Co-Founder") &&
             service.length > 0 && (
               <div className="BookSessionCard">
-                <BookSession
-                  name={name}
-                  mentorId={mentorId}
-                  reschedule={false}
-                />
+                <BookSession name={name} mentorId={mentorId} reschedule={false} />
               </div>
             )}
+
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
           {(dbbeyincProfile === "Mentor" ||
             dbbeyincProfile === "Co-Founder" ||
             dbbeyincProfile === "Investor") && (
-            <div>
-              <TabsAndInvestment
-                industries={industries}
-                stages={Stages}
-                expertise={expertise}
-                investmentRange={investmentRange}
-              />
-            </div>
-          )}
+              <div>
+                <TabsAndInvestment
+                  industries={industries}
+                  stages={Stages}
+                  expertise={expertise}
+                  investmentRange={investmentRange}
+                />
+              </div>
+            )}
+
           <div className="toggleContainer">
             <div
-              className={`ActivtyDetailsCardToggle ${
-                editPostToggler == "profile" &&
+              className={`ActivtyDetailsCardToggle ${editPostToggler == "profile" &&
                 "ActivtyDetailsCardToggleSelected"
-              }`}
+                }`}
               onClick={() => seteditPostToggler("profile")}
             >
               About
             </div>
             <div
-              className={`ActivtyDetailsCardToggle ${
-                editPostToggler == "posts" && "ActivtyDetailsCardToggleSelected"
-              }`}
+              className={`ActivtyDetailsCardToggle ${editPostToggler == "posts" && "ActivtyDetailsCardToggleSelected"
+                }`}
               onClick={() => seteditPostToggler("posts")}
             >
               Activity
             </div>
             <div
-              className={`ActivtyDetailsCardToggle ${
-                editPostToggler == "comment" &&
+              className={`ActivtyDetailsCardToggle ${editPostToggler == "comment" &&
                 "ActivtyDetailsCardToggleSelected"
-              }`}
+                }`}
               onClick={() => seteditPostToggler("comment")}
             >
               Reviews
@@ -2654,7 +2648,7 @@ const EditProfile = () => {
                                 {oldDocs.acheivements !== "" &&
                                   oldDocs.acheivements !== undefined &&
                                   Object.keys(oldDocs.acheivements).length !==
-                                    0 && (
+                                  0 && (
                                     <attr title="view previous acheivements">
                                       <a
                                         href={oldDocs.acheivements?.secure_url}
@@ -2912,6 +2906,7 @@ const EditProfile = () => {
                   </div>
                 </section>
               )}
+
             </div>
           )}
           {/* POSTS SECTION */}
@@ -2965,10 +2960,10 @@ const EditProfile = () => {
                   </div>
 
                   {convExits ||
-                  id == undefined ||
-                  jwtDecode(
-                    JSON.parse(localStorage.getItem("user")).accessToken,
-                  ).role == "Admin" ? (
+                    id == undefined ||
+                    jwtDecode(
+                      JSON.parse(localStorage.getItem("user")).accessToken
+                    ).role == "Admin" ? (
                     <div
                       style={{
                         display: "flex",
@@ -3016,9 +3011,9 @@ const EditProfile = () => {
                               <path
                                 d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2"
                                 stroke="var(--post-outer-border)"
-                                stroke-width="2.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                             </svg>
                           </div>
@@ -3235,7 +3230,7 @@ const EditProfile = () => {
                               <option
                                 key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                // selected={country?.split("-")[0] == op.name}
+                              // selected={country?.split("-")[0] == op.name}
                               >
                                 {op.name}
                               </option>
@@ -3257,7 +3252,7 @@ const EditProfile = () => {
                               <option
                                 key={op.isoCode}
                                 value={`${op.name}-${op.isoCode}`}
-                                // selected={state?.split("-")[0] === op.name}
+                              // selected={state?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -3280,7 +3275,7 @@ const EditProfile = () => {
                               <option
                                 key={op.name}
                                 value={op.name}
-                                // selected={town?.split("-")[0] === op.name}
+                              // selected={town?.split("-")[0] === op.name}
                               >
                                 {op.name}
                               </option>
@@ -4069,32 +4064,32 @@ const EditProfile = () => {
                     {/*Industry Expert Mentor  &  Entrepreneur */}
                     {(mentorCategories === "Industry Expert Mentor" ||
                       role === "Entrepreneur") && (
-                      <div>
                         <div>
-                          <label className="Input-Label">
-                            Current Working Status*
-                          </label>
+                          <div>
+                            <label className="Input-Label">
+                              Current Working Status*
+                            </label>
+                          </div>
+                          <div className="Exp_Input_Fields">
+                            <select
+                              name="workingStatus"
+                              className={
+                                tempExperienceDetails.workingStatus == ""
+                                  ? "editErrors"
+                                  : "editSuccess"
+                              }
+                              id=""
+                              value={tempExperienceDetails.workingStatus}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select</option>
+                              {["Job", "Self Employed"].map((op) => (
+                                <option>{op}</option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
-                        <div className="Exp_Input_Fields">
-                          <select
-                            name="workingStatus"
-                            className={
-                              tempExperienceDetails.workingStatus == ""
-                                ? "editErrors"
-                                : "editSuccess"
-                            }
-                            id=""
-                            value={tempExperienceDetails.workingStatus}
-                            onChange={handleChange}
-                          >
-                            <option value="">Select</option>
-                            {["Job", "Self Employed"].map((op) => (
-                              <option>{op}</option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    )}
+                      )}
 
                     {tempExperienceDetails.workingStatus == "Job" && (
                       <>
@@ -4233,123 +4228,123 @@ const EditProfile = () => {
 
                     {(tempExperienceDetails.workingStatus == "Self Employed" ||
                       role === "Technology Partner") && (
-                      <>
-                        <div>
+                        <>
                           <div>
-                            <label className="Input-Label">
-                              Startup / Business name*
-                            </label>
+                            <div>
+                              <label className="Input-Label">
+                                Startup / Business name*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="text"
+                                name="startupName"
+                                className={
+                                  tempExperienceDetails.startupName == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                }
+                                value={tempExperienceDetails.startupName}
+                                id=""
+                                onChange={handleChange}
+                                placeholder="Enter Your Business name"
+                              />
+                            </div>
                           </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="startupName"
-                              className={
-                                tempExperienceDetails.startupName == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={tempExperienceDetails.startupName}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Business name"
-                            />
-                          </div>
-                        </div>
 
-                        <div>
                           <div>
-                            <label className="Input-Label">
-                              Startup description in short*
-                            </label>
+                            <div>
+                              <label className="Input-Label">
+                                Startup description in short*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <textarea
+                                type="text"
+                                name="Description"
+                                className={
+                                  tempExperienceDetails.Description == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                }
+                                value={tempExperienceDetails.Description}
+                                id=""
+                                onChange={handleChange}
+                              />
+                            </div>
                           </div>
-                          <div className="Exp_Input_Fields">
-                            <textarea
-                              type="text"
-                              name="Description"
-                              className={
-                                tempExperienceDetails.Description == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={tempExperienceDetails.Description}
-                              id=""
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
 
-                        <div>
                           <div>
-                            <label className="Input-Label">
-                              Current Designation*
-                            </label>
+                            <div>
+                              <label className="Input-Label">
+                                Current Designation*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <select
+                                name="designation"
+                                className={
+                                  tempExperienceDetails.designation == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                }
+                                value={tempExperienceDetails.designation}
+                                onChange={handleChange}
+                              >
+                                <option value="">Select</option>
+                                {itPositions.map((op) => (
+                                  <option value={op}>{op}</option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
-                          <div className="Exp_Input_Fields">
-                            <select
-                              name="designation"
-                              className={
-                                tempExperienceDetails.designation == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={tempExperienceDetails.designation}
-                              onChange={handleChange}
-                            >
-                              <option value="">Select</option>
-                              {itPositions.map((op) => (
-                                <option value={op}>{op}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
 
-                        <div>
                           <div>
-                            <label className="Input-Label">Profession*</label>
+                            <div>
+                              <label className="Input-Label">Profession*</label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="text"
+                                name="Profession"
+                                className={
+                                  tempExperienceDetails.Profession == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                }
+                                value={tempExperienceDetails.Profession}
+                                id=""
+                                onChange={handleChange}
+                                placeholder="Enter Your Profession"
+                              />
+                            </div>
                           </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="text"
-                              name="Profession"
-                              className={
-                                tempExperienceDetails.Profession == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              value={tempExperienceDetails.Profession}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Profession"
-                            />
-                          </div>
-                        </div>
 
-                        <div>
                           <div>
-                            <label className="Input-Label">
-                              Total Work Experience*
-                            </label>
+                            <div>
+                              <label className="Input-Label">
+                                Total Work Experience*
+                              </label>
+                            </div>
+                            <div className="Exp_Input_Fields">
+                              <input
+                                type="number"
+                                min={0}
+                                className={
+                                  tempExperienceDetails.TotalWorkExperience == ""
+                                    ? "editErrors"
+                                    : "editSuccess"
+                                }
+                                name="TotalWorkExperience"
+                                value={tempExperienceDetails.TotalWorkExperience}
+                                id=""
+                                onChange={handleChange}
+                                placeholder="Enter Your Total Work Experience"
+                              />
+                            </div>
                           </div>
-                          <div className="Exp_Input_Fields">
-                            <input
-                              type="number"
-                              min={0}
-                              className={
-                                tempExperienceDetails.TotalWorkExperience == ""
-                                  ? "editErrors"
-                                  : "editSuccess"
-                              }
-                              name="TotalWorkExperience"
-                              value={tempExperienceDetails.TotalWorkExperience}
-                              id=""
-                              onChange={handleChange}
-                              placeholder="Enter Your Total Work Experience"
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
+                        </>
+                      )}
 
                     {role === "Technology Partner" && (
                       <>
@@ -4428,11 +4423,10 @@ const EditProfile = () => {
                           </div>
                           <label
                             htmlFor="Banner"
-                            className={`resume ${
-                              tempExperienceDetails.Banner == ""
+                            className={`resume ${tempExperienceDetails.Banner == ""
                                 ? "editErrors"
                                 : "editSuccess"
-                            }`}
+                              }`}
                           >
                             <CloudUploadIcon />
                             <span className="fileName">
@@ -4456,11 +4450,10 @@ const EditProfile = () => {
                           </div>
                           <label
                             htmlFor="Logo"
-                            className={`resume ${
-                              tempExperienceDetails.Logo == ""
+                            className={`resume ${tempExperienceDetails.Logo == ""
                                 ? "editErrors"
                                 : "editSuccess"
-                            }`}
+                              }`}
                           >
                             <CloudUploadIcon />
                             <span className="fileName">{Logo || "Upload"}</span>
@@ -4606,7 +4599,7 @@ const EditProfile = () => {
                               tempExperienceDetails.designation === "" ||
                               tempExperienceDetails.Profession === "" ||
                               tempExperienceDetails.TotalWorkExperience ===
-                                "" ||
+                              "" ||
                               tempExperienceDetails.Customers === "" ||
                               tempExperienceDetails.CompanyLocation === "" ||
                               tempExperienceDetails.business === "" ||
@@ -4619,7 +4612,7 @@ const EditProfile = () => {
                                 tempExperienceDetails.designation === "" ||
                                 tempExperienceDetails.start === "" ||
                                 tempExperienceDetails.TotalWorkExperience ===
-                                  "" ||
+                                "" ||
                                 tempExperienceDetails.Profession === "")) ||
                               (tempExperienceDetails.workingStatus ===
                                 "Self Employed" &&
@@ -4628,7 +4621,7 @@ const EditProfile = () => {
                                   tempExperienceDetails.designation === "" ||
                                   tempExperienceDetails.Profession === "" ||
                                   tempExperienceDetails.TotalWorkExperience ===
-                                    "")))) ||
+                                  "")))) ||
                           (role === "Mentor" &&
                             ((mentorCategories === "Academia Mentor" &&
                               (tempExperienceDetails.institute === "" ||
@@ -4645,18 +4638,18 @@ const EditProfile = () => {
                                     tempExperienceDetails.designation === "" ||
                                     tempExperienceDetails.start === "" ||
                                     tempExperienceDetails.TotalWorkExperience ===
-                                      "" ||
+                                    "" ||
                                     tempExperienceDetails.Profession === "")) ||
                                   (tempExperienceDetails.workingStatus ===
                                     "Self Employed" &&
                                     (tempExperienceDetails.startupName === "" ||
                                       tempExperienceDetails.Description ===
-                                        "" ||
+                                      "" ||
                                       tempExperienceDetails.designation ===
-                                        "" ||
+                                      "" ||
                                       tempExperienceDetails.Profession === "" ||
                                       tempExperienceDetails.TotalWorkExperience ===
-                                        ""))))))
+                                      ""))))))
                         }
                       >
                         {editingExperienceId == "" ? "Add" : "Update"}
@@ -4682,7 +4675,7 @@ const EditProfile = () => {
         aria-describedby="alert-dialog-description"
         sx={gridCSS.tabContainer}
 
-        // sx={ gridCSS.tabContainer }
+      // sx={ gridCSS.tabContainer }
       >
         <DialogContent
           style={{
