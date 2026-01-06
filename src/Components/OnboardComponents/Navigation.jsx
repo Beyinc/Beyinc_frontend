@@ -66,8 +66,7 @@ const Navigation = ({
     !startupName?.trim() ||
     !founderName?.trim() ||
     !startupEmail?.trim() ||
-    !visibilityMode?.trim() ||
-    !image;
+    !visibilityMode?.trim();
 
   const isStep3Invalid =
     !startupStage.trim() ||

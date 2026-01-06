@@ -13,6 +13,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
   const [profileAbout, setProfileAbout] = useState("");
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); // New state for error handling
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     aboutService.fetchAbout();
@@ -23,6 +24,10 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
     setErrorMessage(""); // Clear any previous error message
   };
   console.log("profile role", profileData.role);
+  useEffect(() => {
+    setRole(profileData?.role);
+  }, [profileData]);
+
   return (
     <div>
       {/* <div className="EditProfileImageContainer">
@@ -37,6 +42,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
             <AboutCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
+              role={role}
             />
           </div>
 

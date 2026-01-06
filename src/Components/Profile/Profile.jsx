@@ -108,7 +108,7 @@ const Profile = () => {
             <ProfileCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
-              profileData={profileData}
+              profileDataObj={profileData}
               profileRole={role}
             />
 
