@@ -4,7 +4,7 @@ import { CalendarServices } from "../../../../Services/CalendarServices.js";
 import dayjs from "dayjs";
 import { AccessTime, CalendarMonth, Close, VideoCameraFront, Event } from "@mui/icons-material";
 
-// --- 1. NEW COMPONENT: Styled Booking List Item (Based on your provided HTML) ---
+// --- 1. COMPONENT: Booking List Item (Left Sidebar for Tabs 0 & 1) ---
 const BookingListItem = ({ booking, isSelected, onClick }) => {
   return (
     <div
@@ -16,7 +16,6 @@ const BookingListItem = ({ booking, isSelected, onClick }) => {
       `}
     >
       <div className="flex items-start gap-4">
-        {/* Profile Image */}
         <img
           alt={booking.userId?.userName || "User"}
           className="w-12 h-12 rounded-full object-cover flex-shrink-0"
@@ -24,7 +23,6 @@ const BookingListItem = ({ booking, isSelected, onClick }) => {
         />
         
         <div className="flex-1 min-w-0">
-          {/* Header: Name + Badge */}
           <div className="flex items-center justify-between mb-1">
             <p className="font-semibold text-gray-900">
               {booking.userId?.userName || "Unknown User"}
@@ -33,18 +31,12 @@ const BookingListItem = ({ booking, isSelected, onClick }) => {
               1:1 Call
             </span>
           </div>
-
-          {/* Subtitle / Title */}
           <p className="text-sm font-medium text-gray-800 mb-1">
             {booking.title || "Mentorship Session"}
           </p>
-
-          {/* Description (Truncated) */}
-          <p className="text-xs text-gray-600 line-clamp-2 mb-2">
-            {booking.description || "No specific topic description provided for this session."}
+          <p className="text-xs text-gray-500 line-clamp-2 mb-2">
+            {booking.description || "No specific topic description provided."}
           </p>
-
-          {/* Date Footer */}
           <p className="text-xs text-gray-500 mt-2 font-medium flex items-center gap-1">
              <Event sx={{ fontSize: 14 }} />
              {dayjs(booking.startDateTime).format("MMM D, YYYY")} • {dayjs(booking.startDateTime).format("h:mm A")} ({booking.duration} mins)
@@ -55,7 +47,7 @@ const BookingListItem = ({ booking, isSelected, onClick }) => {
   );
 };
 
-// --- 2. NEW COMPONENT: Booking Detail View (Right Side for Tabs 0 & 1) ---
+// --- 2. COMPONENT: Booking Detail View (Right Side for Tabs 0 & 1) ---
 const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
   if (!booking) {
     return (
@@ -70,7 +62,6 @@ const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-8 sticky top-6 shadow-sm h-fit">
-      {/* Header Section */}
       <div className="flex flex-col items-center text-center mb-8 pb-6 border-b border-gray-100">
         <img
           alt={booking.userId?.userName}
@@ -84,7 +75,6 @@ const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
         </span>
       </div>
 
-      {/* Session Info Grid */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="bg-gray-50 p-4 rounded-xl">
              <p className="text-xs text-gray-500 uppercase font-bold mb-1">Date</p>
@@ -104,7 +94,6 @@ const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
         </div>
       </div>
 
-      {/* Agenda / Topic */}
       <div className="mb-8">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Topic / Agenda</p>
         <div className="bg-white border border-gray-100 p-4 rounded-lg shadow-sm">
@@ -115,7 +104,6 @@ const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
         </div>
       </div>
 
-      {/* Actions */}
       <div className="space-y-3">
         {!isCompleted && (
             <>
@@ -136,7 +124,7 @@ const BookingDetailView = ({ booking, onReschedule, isCompleted }) => {
   );
 };
 
-// --- Sub-Component: Request List Item (Preserved for Tab 2) ---
+// --- 3. COMPONENT: Request List Item (Left Sidebar for Tab 2) ---
 const IncomingRequestItem = ({ item, isSelected, onClick }) => (
   <div
     onClick={onClick}
@@ -157,8 +145,16 @@ const IncomingRequestItem = ({ item, isSelected, onClick }) => (
           <p className={`font-bold text-base ${isSelected ? 'text-[#4f55c7]' : 'text-gray-900'}`}>
             {item.userId?.userName || "Unknown User"}
           </p>
-          <span className={`text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider ${item.requestStatus ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-            {item.requestStatus ? "Approved" : "Pending"}
+          <span 
+            className={`text-[10px] px-2 py-1 rounded-md font-bold uppercase tracking-wider 
+                ${item.requestDeclined 
+                    ? "bg-red-100 text-red-700" 
+                    : item.requestStatus 
+                        ? "bg-green-100 text-green-700" 
+                        : "bg-yellow-100 text-yellow-700"
+                }`}
+            >
+            {item.requestDeclined ? "Declined" : item.requestStatus ? "Approved" : "Pending"}
           </span>
         </div>
         <p className="text-sm font-medium text-gray-800 mb-1">{item.requestType}</p>
@@ -173,8 +169,9 @@ const IncomingRequestItem = ({ item, isSelected, onClick }) => (
   </div>
 );
 
-// --- Sub-Component: Request Detail View (Preserved for Tab 2) ---
-const RequestDetailView = ({ request, onApprove, onDelete }) => {
+// --- 4. COMPONENT: Request Detail View (Right Side for Tab 2) ---
+// THIS IS WHERE WE FIX THE LOGIC TO MATCH YOUR OLD CODE
+const RequestDetailView = ({ request, onApprove, onDecline, onDelete }) => {
   if (!request) {
     return (
       <div className="h-full flex flex-col items-center justify-center text-gray-400 border border-dashed border-gray-300 rounded-2xl bg-gray-50/50 p-10 min-h-[400px]">
@@ -185,6 +182,14 @@ const RequestDetailView = ({ request, onApprove, onDelete }) => {
       </div>
     );
   }
+
+  // Helper to determine status color and text
+  const getStatusInfo = () => {
+    if (request.requestDeclined) return { text: "Declined", color: "text-red-600" };
+    if (request.requestStatus) return { text: "Approved", color: "text-green-600" };
+    return { text: "Pending", color: "text-yellow-600" };
+  };
+  const statusInfo = getStatusInfo();
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-8 sticky top-6 shadow-sm">
@@ -206,13 +211,11 @@ const RequestDetailView = ({ request, onApprove, onDelete }) => {
         </div>
       </div>
       
-      {/* Title */}
       <div className="mb-6">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Request Type</p>
         <p className="font-semibold text-gray-800 text-lg">{request.requestType}</p>
       </div>
 
-      {/* Message */}
       <div className="mb-8">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Message</p>
         <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-[#4f55c7]">
@@ -222,7 +225,6 @@ const RequestDetailView = ({ request, onApprove, onDelete }) => {
         </div>
       </div>
 
-      {/* Duration Grid */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="bg-white border border-gray-100 p-3 rounded-lg shadow-sm">
              <p className="text-xs text-gray-500 mb-1">Duration</p>
@@ -233,24 +235,34 @@ const RequestDetailView = ({ request, onApprove, onDelete }) => {
         </div>
         <div className="bg-white border border-gray-100 p-3 rounded-lg shadow-sm">
              <p className="text-xs text-gray-500 mb-1">Status</p>
-             <p className={`font-semibold ${request.requestStatus ? 'text-green-600' : 'text-yellow-600'}`}>
-                {request.requestStatus ? "Approved" : "Pending"}
+             <p className={`font-semibold ${statusInfo.color}`}>
+                {statusInfo.text}
              </p>
         </div>
       </div>
 
-      {/* Actions */}
+      {/* --- LOGIC MATCHING YOUR OLD CODE --- */}
       <div className="space-y-3 pt-2">
-        {!request.requestStatus && (
-            <button 
-                onClick={onApprove}
-                className="w-full px-6 py-3 bg-[#4f55c7] text-white font-semibold rounded-xl hover:bg-[#3e44a8] transition-all shadow-md shadow-[#4f55c7]/20 flex items-center justify-center gap-2"
-            >
-                Approve Request
-            </button>
+        {/* State 1: PENDING (Show Approve & Decline) */}
+        {!request.requestDeclined && !request.requestStatus && (
+             <div className="flex gap-3">
+                <button 
+                    onClick={onApprove}
+                    className="flex-1 px-6 py-3 bg-[#4f55c7] text-white font-semibold rounded-xl hover:bg-[#3e44a8] transition-all shadow-md shadow-[#4f55c7]/20 flex items-center justify-center gap-2"
+                >
+                    Approve Request
+                </button>
+                <button 
+                    onClick={() => onDecline(request)}
+                    className="flex-1 px-6 py-3 border border-red-200 text-red-500 font-semibold rounded-xl hover:bg-red-50 transition-all flex items-center justify-center gap-2"
+                >
+                    Decline
+                </button>
+             </div>
         )}
         
-        {request.requestStatus && (
+        {/* State 2 & 3: APPROVED or DECLINED (Show Delete) */}
+        {(request.requestStatus || request.requestDeclined) && (
             <button 
                 onClick={() => onDelete(request._id)}
                 className="w-full px-4 py-3 border border-red-200 text-red-500 font-semibold rounded-xl hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center gap-2"
@@ -263,26 +275,26 @@ const RequestDetailView = ({ request, onApprove, onDelete }) => {
   );
 };
 
+// --- 5. MAIN COMPONENT: MentorBooking ---
 const MentorBooking = () => {
-  // --- Logic State (Preserved) ---
   const [tabValue, setTabValue] = useState(0);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
   const [completedBookings, setCompletedBookings] = useState([]);
   
-  // New State for Split View Selection in Tab 0 and 1
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedReq, setSelectedReq] = useState(null);
 
-  // Reschedule Dialog Logic
   const [openDialog, setOpenDialog] = useState(false);
   const [bookingToReschedule, setBookingToReschedule] = useState(null);
   const [rescheduleReason, setRescheduleReason] = useState("");
 
-  const {
-    user_id,
-    userName,
-  } = useSelector((store) => store.auth.loginDetails);
+  const [openDeclineDialog, setOpenDeclineDialog] = useState(false);
+  const [declineReasonText, setDeclineReasonText] = useState("");
 
-  // --- Fetch Bookings Logic ---
+  const [mentorBookingRequests, setMentorBookingRequests] = useState([]);
+
+  const { user_id, userName } = useSelector((store) => store.auth.loginDetails);
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -309,7 +321,6 @@ const MentorBooking = () => {
         setUpcomingBookings(upcoming);
         setCompletedBookings(completed);
         
-        // Default selection for split view
         if(upcoming.length > 0) setSelectedBooking(upcoming[0]);
 
       } catch (error) {
@@ -319,7 +330,6 @@ const MentorBooking = () => {
     fetchBookings();
   }, [user_id, userName]);
 
-  // When changing tabs, reset selection to first item if available
   useEffect(() => {
     if (tabValue === 0 && upcomingBookings.length > 0) {
         setSelectedBooking(upcomingBookings[0]);
@@ -331,16 +341,11 @@ const MentorBooking = () => {
   }, [tabValue, upcomingBookings, completedBookings]);
 
 
-  // --- Fetch Requests Logic ---
-  const [mentorBookingRequests, setMentorBookingRequests] = useState([]);
-  const [selectedReq, setSelectedReq] = useState(null);
-
   const fetchMentorRequests = async () => {
     try {
       let res = await CalendarServices.mentorBookingRequest();
       setMentorBookingRequests(res);
-      // Default select first request
-      if(res && res.length > 0) setSelectedReq(res[0]);
+      if(res && res.length > 0 && !selectedReq) setSelectedReq(res[0]);
     } catch (err) {
       console.log(err);
     }
@@ -350,7 +355,6 @@ const MentorBooking = () => {
     fetchMentorRequests();
   }, []);
 
-  // --- Action Handlers ---
   const handleOpenDialog = (booking) => {
     setBookingToReschedule(booking);
     setOpenDialog(true);
@@ -368,7 +372,6 @@ const MentorBooking = () => {
       booleanValue: true,
     });
     handleCloseDialog();
-    // Refresh logic could go here if needed
   };
 
   const handleApproveRequest = async () => {
@@ -400,14 +403,40 @@ const MentorBooking = () => {
     }
   };
 
-  // --- Main Render ---
+  const handleOpenDeclineDialog = (req) => {
+    setSelectedReq(req);
+    setDeclineReasonText("");
+    setOpenDeclineDialog(true);
+  };
+
+  const handleCloseDeclineDialog = () => {
+    setOpenDeclineDialog(false);
+    setDeclineReasonText("");
+  };
+
+  const handleConfirmDecline = async () => {
+    try {
+      if (!selectedReq) return;
+      
+      const res = await CalendarServices.declineRequestByMentor({
+        requestId: selectedReq._id,
+        declineReason: declineReasonText,
+      });
+
+      alert(res.message || "Request declined successfully");
+      handleCloseDeclineDialog();
+      fetchMentorRequests();
+    } catch (err) {
+      console.error("Error declining request:", err);
+      alert("Failed to decline request");
+    }
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen p-4 md:p-8">
       <div className="max-w-[1400px] mx-auto">
-        
         <h1 className="text-2xl font-bold text-gray-900 mb-6 font-roboto">Mentor Bookings</h1>
 
-        {/* Navigation Pills */}
         <div className="flex flex-wrap gap-3 mb-8">
             {[
                 { label: "Upcoming", value: 0 },
@@ -429,12 +458,8 @@ const MentorBooking = () => {
             ))}
         </div>
 
-        {/* --- Tab Content --- */}
-        
-        {/* Tab 0 (Upcoming) & Tab 1 (Completed) - Now using Split View */}
         {(tabValue === 0 || tabValue === 1) && (
              <div className="flex flex-col lg:flex-row gap-6 relative items-start animate-in fade-in duration-300">
-                {/* Left Panel: List */}
                 <div className="w-full lg:w-5/12 h-[calc(100vh-200px)] overflow-y-auto pr-2">
                     {tabValue === 0 ? (
                         upcomingBookings.length > 0 ? (
@@ -469,22 +494,18 @@ const MentorBooking = () => {
                         )
                     )}
                 </div>
-
-                {/* Right Panel: Details */}
                 <div className="hidden lg:block lg:w-7/12">
-                     <BookingDetailView 
+                      <BookingDetailView 
                         booking={selectedBooking} 
                         isCompleted={tabValue === 1}
                         onReschedule={handleOpenDialog}
-                     />
+                      />
                 </div>
              </div>
         )}
 
-        {/* Tab 2: Requests (Split View) */}
         {tabValue === 2 && (
              <div className="flex flex-col lg:flex-row gap-6 relative items-start animate-in fade-in duration-300">
-                {/* Left Panel: List */}
                 <div className="w-full lg:w-5/12 h-[calc(100vh-200px)] overflow-y-auto pr-2">
                    {mentorBookingRequests.length > 0 ? (
                        mentorBookingRequests.map((req) => (
@@ -501,19 +522,17 @@ const MentorBooking = () => {
                        </div>
                    )}
                 </div>
-
-                {/* Right Panel: Details */}
                 <div className="hidden lg:block lg:w-7/12">
                     <RequestDetailView 
                         request={selectedReq} 
                         onApprove={handleApproveRequest}
+                        onDecline={handleOpenDeclineDialog}
                         onDelete={handleDeleteRequest}
                     />
                 </div>
              </div>
         )}
 
-        {/* Reschedule Modal (Tailwind Styled) */}
         {openDialog && (
             <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
                 <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl relative animate-in zoom-in duration-200">
@@ -523,9 +542,7 @@ const MentorBooking = () => {
                     >
                         <Close />
                     </button>
-                    
                     <h2 className="text-xl font-bold text-gray-900 mb-6">Reschedule Session</h2>
-                    
                     <div className="mb-6">
                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
                             Reason for Reschedule
@@ -538,7 +555,6 @@ const MentorBooking = () => {
                             onChange={(e) => setRescheduleReason(e.target.value)}
                         />
                     </div>
-                    
                     <div className="flex justify-end gap-3">
                         <button 
                             onClick={handleCloseDialog}
@@ -557,6 +573,46 @@ const MentorBooking = () => {
             </div>
         )}
 
+        {openDeclineDialog && (
+            <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl relative animate-in zoom-in duration-200">
+                    <button 
+                        onClick={handleCloseDeclineDialog}
+                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                    >
+                        <Close />
+                    </button>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">Decline Request</h2>
+                    <p className="text-sm text-gray-500 mb-6">Are you sure you want to decline this request?</p>
+                    <div className="mb-6">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                            Reason for Decline (Optional)
+                        </label>
+                        <textarea 
+                            className="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-red-500/20 focus:border-red-500 outline-none resize-none bg-gray-50"
+                            rows="3"
+                            placeholder="Briefly explain why..."
+                            value={declineReasonText}
+                            onChange={(e) => setDeclineReasonText(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex justify-end gap-3">
+                        <button 
+                            onClick={handleCloseDeclineDialog}
+                            className="px-5 py-2.5 text-gray-600 font-medium hover:bg-gray-100 rounded-xl transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            onClick={handleConfirmDecline}
+                            className="px-5 py-2.5 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20"
+                        >
+                            Confirm Decline
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
       </div>
     </div>
   );

@@ -83,7 +83,7 @@ const SingleUserDetails = ({ user, connectStatus }) => {
   return (
     <>
       {/* --- Main Card Container --- */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-[#4f55c7]/30 hover:scale-[1.02] mb-6">
+      <div className="w-full bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-[#4f55c7]/30 hover:scale-[1.02] mb-6">
         <div className="flex flex-col md:flex-row gap-6">
           
           {/* 1. Image Section */}
@@ -126,7 +126,7 @@ const SingleUserDetails = ({ user, connectStatus }) => {
 
             {/* Bio */}
             <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
-               {user.about ? (user.about.length > 150 ? user.about.slice(0, 150) + "..." : user.about) : "No bio available."}
+                {user.about || "No bio available."}
             </p>
 
             {/* Tabs - Fixed Styling */}
