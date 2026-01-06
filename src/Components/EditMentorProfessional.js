@@ -133,31 +133,33 @@ const EditMentorProfessional = ({ isOpen, onClose, currentProfile }) => {
         <div className="px-6 py-6 overflow-y-auto max-h-[calc(90vh-140px)]">
           <div className="space-y-8">
             {/* Role Level Selection */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Your Role
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {ROLE_LEVELS.map((role) => (
-                  <div
-                    key={role}
-                    onClick={() => setRoleLevel(role)}
-                    className={`cursor-pointer p-4 rounded-lg border-2 text-center transition-all ${
-                      roleLevel === role
-                        ? "bg-indigo-600 text-white border-indigo-600"
-                        : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
-                    }`}
-                  >
-                    <div className="flex items-center justify-center gap-2">
-                      <span className="font-medium">{role}</span>
-                      {roleLevel === role && (
-                        <CheckCircle2 className="w-4 h-4" />
-                      )}
+            {currentProfile.role === "Mentor" && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Your Role
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {ROLE_LEVELS.map((role) => (
+                    <div
+                      key={role}
+                      onClick={() => setRoleLevel(role)}
+                      className={`cursor-pointer p-4 rounded-lg border-2 text-center transition-all ${
+                        roleLevel === role
+                          ? "bg-indigo-600 text-white border-indigo-600"
+                          : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="font-medium">{role}</span>
+                        {roleLevel === role && (
+                          <CheckCircle2 className="w-4 h-4" />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Company Stage (only for CXO) */}
             {roleLevel === "CXO" && (
