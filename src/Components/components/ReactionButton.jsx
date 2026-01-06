@@ -115,7 +115,7 @@ export default function ReactionButton({
             {/* Hover reaction menu */}
             {showMenu && (
                 <div
-                    className="absolute  -left-20 sm:left-0 -top-40 sm:-top-16 bg-white shadow-lg px-3 py-2 rounded-2xl border z-50 w-[90vw] sm:w-auto"
+                    className="absolute -top-40 sm:-top-16 bg-white shadow-lg px-3 py-2 rounded-2xl border z-50 w-[90vw] sm:w-auto"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
