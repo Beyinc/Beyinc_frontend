@@ -8,6 +8,7 @@ import {
   STARTUP_TEAM_SIZES,
 } from "../../Utils";
 import { CheckCircle2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
   const [singlelanguagesKnown, setSinglelanguagesKnown] = useState("");
@@ -17,6 +18,7 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
     (store) => store.auth.loginDetails,
   );
 
+  const navigate = useNavigate();
   const [places, setPlaces] = useState({
     country: Country.getAllCountries(),
     state: [],
@@ -166,7 +168,9 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
       alert("Data saved successfully!");
       handleClose();
 
-      window.location.href = "/editProfile";
+      // window.location.href = "/editProfile";
+
+      navigate("/editProfile");
     } catch (error) {
       console.error("Error saving data:", error);
       alert("There was an error saving your data. Please try again.");

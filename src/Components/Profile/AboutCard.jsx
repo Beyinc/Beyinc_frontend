@@ -68,6 +68,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [isAboutLoading, setIsAboutLoading] = useState(true);
   const { id } = useParams(); // Get the `id` from route params
   // console.log('id: ' + id);
 
@@ -80,15 +81,19 @@ const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
   const defaultTemplate = getDefaultTemplate(role);
   const getAbout = async () => {
     try {
+      setIsAboutLoading(true);
+
       const about = await aboutService.fetchAbout({ id, user_id });
 
-      if (!about || about.trim() === "") {
-        setProfileAbout(""); // important: keep empty state
-      } else {
+      if (about && about.trim() !== "") {
         setProfileAbout(about);
+      } else {
+        setProfileAbout(""); // empty but intentional
       }
     } catch (error) {
       setErrorMessage(error.message);
+    } finally {
+      setIsAboutLoading(false);
     }
   };
 
@@ -121,10 +126,15 @@ const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
             whiteSpace: "pre-wrap",
           }}
         >
-          {profileAbout && profileAbout.trim() !== ""
-            ? profileAbout
-            : defaultTemplate}
+          {isAboutLoading ? (
+            <div className="text-gray-300 italic">Loading about…</div>
+          ) : profileAbout && profileAbout.trim() !== "" ? (
+            profileAbout
+          ) : (
+            defaultTemplate
+          )}
         </div>
+
         {errorMessage && (
           <div className="text-red-500 mt-4">{errorMessage}</div>
         )}

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { STARTUP_STAGES, TARGET_MARKETS, INDUSTRY_EXPERTISE } from "../Utils";
 import { CheckCircle2, X } from "lucide-react";
 import { ApiServices } from "../Services/ApiServices";
+import { useNavigate } from "react-router-dom";
 
 const EditProfessional = ({ isOpen, onClose, currentProfile }) => {
+  const navigate = useNavigate();
   // Initialize with current profile data
   const [startupStage, setStartupStage] = useState(
     currentProfile?.startupProfile?.stage || "",
@@ -66,7 +68,8 @@ const EditProfessional = ({ isOpen, onClose, currentProfile }) => {
       onClose();
       // Refresh the page or update parent component
       // window.location.reload();
-      window.location.href = "/editProfile";
+      //window.location.href = "/editProfile";
+      navigate("/editProfile");
     } catch (err) {
       console.error(err);
       alert("Something went wrong. Please try again.");
