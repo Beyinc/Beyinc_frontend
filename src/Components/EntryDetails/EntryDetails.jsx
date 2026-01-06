@@ -189,7 +189,8 @@ const EntryDetails = () => {
             {/* Photo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Profile Photo <span className="text-red-500">*</span>
+                Profile Photo
+                {/* <span className="text-red-500">*</span> */}
               </label>
               <input
                 type="file"
@@ -290,7 +291,7 @@ const EntryDetails = () => {
               Previous
             </button>
             <button
-              disabled={!roleLevel || !image || !username}
+              disabled={!roleLevel || !username}
               onClick={() => setStep(3)}
               className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >
@@ -324,7 +325,8 @@ const EntryDetails = () => {
             {/* Photo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Profile Photo <span className="text-red-500">*</span>
+                Profile Photo
+                {/* <span className="text-red-500">*</span> */}
               </label>
               <input
                 type="file"
@@ -346,7 +348,8 @@ const EntryDetails = () => {
             {/* Headline */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Professional Headline <span className="text-red-500">*</span>
+                Professional Headline
+                {/* <span className="text-red-500">*</span> */}
               </label>
               <input
                 className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
@@ -366,7 +369,7 @@ const EntryDetails = () => {
               Previous
             </button>
             <button
-              disabled={!username || !image || !headline}
+              disabled={!username}
               onClick={() => setStep(3)}
               className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >

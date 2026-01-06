@@ -2,15 +2,15 @@ const MentorCardInfo = ({ profileData, profileRole }) => {
   return (
     <div className="space-y-3 text-gray-600 text-sm">
       {/* Role Level - Only for Mentor */}
-      {profileRole === "Mentor" && profileData.role_level && (
-        <div className="flex items-center gap-2">
-          <span className="text-lg">💼</span>
-          <span className="font-medium text-gray-600">Level:</span>
-          <span className="font-semibold text-gray-700">
-            {profileData.role_level}
-          </span>
-        </div>
-      )}
+      {/* {profileRole === "Mentor" && profileData.role_level && ( */}
+      {/*   <div className="flex items-center gap-2"> */}
+      {/*     <span className="text-lg">💼</span> */}
+      {/*     <span className="font-medium text-gray-600">Level:</span> */}
+      {/*     <span className="font-semibold text-gray-700"> */}
+      {/*       {profileData.role_level} */}
+      {/*     </span> */}
+      {/*   </div> */}
+      {/* )} */}
 
       {/* Skills */}
       {/* {profileData.skills && profileData.skills.length > 0 && ( */}

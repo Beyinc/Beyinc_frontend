@@ -3,6 +3,8 @@ import PopupModal from "./PopupModal";
 import "./TabsAndInvestment.css";
 import "../../BeyincProfessional/BeyincProfessional";
 import { Link, useNavigate } from "react-router-dom";
+import EditProfessional from "../../EditProfessional";
+import EditMentorProfessional from "../../EditMentorProfessional";
 
 const TabsAndInvestment = ({
   role,
@@ -12,6 +14,8 @@ const TabsAndInvestment = ({
 }) => {
   const [activeTab, setActiveTab] = useState("Industries");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
@@ -19,9 +23,12 @@ const TabsAndInvestment = ({
   };
 
   const handleEditButtonClick = () => {
-    navigate("/beyincProfesional", { state: { edit: true } });
+    setIsEditModalOpen(true);
   };
 
+  const handleCloseModal = () => {
+    setIsEditModalOpen(false);
+  };
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
@@ -59,6 +66,7 @@ const TabsAndInvestment = ({
 
   // console.log(profileData);
   // console.log("Extracted Data:", extractedData);
+  // console.log(selfProfile);
 
   return (
     <div className="tabs-and-investment-container mt-0 bg-white">
@@ -111,9 +119,28 @@ const TabsAndInvestment = ({
                 style={{ color: "var(--followBtn-bg)", cursor: "pointer" }}
                 onClick={handleEditButtonClick}
                 className="fas fa-pen"
-              ></i>
+              >
+                {/* Edit icon */}
+              </i>
             )}
           </span>
+          {/* Edit Professional Modal */}
+          {profileData.role === "Startup" && (
+            <EditProfessional
+              isOpen={isEditModalOpen}
+              onClose={handleCloseModal}
+              currentProfile={profileData}
+            />
+          )}
+
+          {(profileData.role === "Mentor" ||
+            profileData.role === "Individual/Entrepreneur") && (
+            <EditMentorProfessional
+              isOpen={isEditModalOpen}
+              onClose={handleCloseModal}
+              currentProfile={profileData}
+            />
+          )}
         </div>
 
         <div className="content-container">
