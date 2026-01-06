@@ -4,6 +4,7 @@ import "./TabsAndInvestment.css";
 import "../../BeyincProfessional/BeyincProfessional";
 import { Link, useNavigate } from "react-router-dom";
 import EditProfessional from "../../EditProfessional";
+import EditMentorProfessional from "../../EditMentorProfessional";
 
 const TabsAndInvestment = ({
   role,
@@ -63,9 +64,9 @@ const TabsAndInvestment = ({
     return null;
   }, [profileData]);
 
-  console.log(profileData);
+  // console.log(profileData);
   // console.log("Extracted Data:", extractedData);
-  console.log(selfProfile);
+  // console.log(selfProfile);
 
   return (
     <div className="tabs-and-investment-container mt-0 bg-white">
@@ -124,11 +125,22 @@ const TabsAndInvestment = ({
             )}
           </span>
           {/* Edit Professional Modal */}
-          <EditProfessional
-            isOpen={isEditModalOpen}
-            onClose={handleCloseModal}
-            currentProfile={profileData}
-          />
+          {profileData.role === "Startup" && (
+            <EditProfessional
+              isOpen={isEditModalOpen}
+              onClose={handleCloseModal}
+              currentProfile={profileData}
+            />
+          )}
+
+          {(profileData.role === "Mentor" ||
+            profileData.role === "Individual/Entrepreneur") && (
+            <EditMentorProfessional
+              isOpen={isEditModalOpen}
+              onClose={handleCloseModal}
+              currentProfile={profileData}
+            />
+          )}
         </div>
 
         <div className="content-container">
