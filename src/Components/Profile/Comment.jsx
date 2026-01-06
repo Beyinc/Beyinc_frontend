@@ -9,66 +9,66 @@ const Comment = ({ id, user_id }) => {
   const [error, setError] = useState({ rating: "", review: "" });
   const [reviews, setReviews] = useState([]);
 
-  const onSubmit = async () => {
-    // Reset errors at the start
-    setError({ rating: "", review: "" });
-
-    let errors = { rating: "", review: "" };
-    let hasError = false;
-
-    if (!rating || rating === 0) {
-      errors.rating = "Please provide a rating.";
-      hasError = true;
-    }
-
-    if (!review || review.trim() === "") {
-      errors.review = "Please write a review.";
-      hasError = true;
-    }
-
-    if (hasError) {
-      setError(errors);
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      // Current date in IST
-      const istTime = new Date();
-      const istOffset = 5.5 * 60 * 60 * 1000;
-      istTime.setTime(
-        istTime.getTime() + istTime.getTimezoneOffset() * 60 * 1000 + istOffset
-      );
-
-      console.log("user_id", user_id, id);
-
-      const reviewData = {
-        user_id: id,
-        reviewByID: user_id,
-        rating: rating,
-        review: review.trim(),
-      };
-
-      const response = await ApiServices.addReview(reviewData);
-
-      if (response?.status === 200) {
-        setRating(0);
-        setReview("");
-        getReviews();
-      } else {
-        throw new Error("Failed to submit review");
-      }
-    } catch (err) {
-      console.error("Error submitting review:", err);
-      setError({
-        rating: "",
-        review: err.response?.data?.message || "Failed to submit review",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const onSubmit = async () => {
+  //   // Reset errors at the start
+  //   setError({ rating: "", review: "" });
+  //
+  //   let errors = { rating: "", review: "" };
+  //   let hasError = false;
+  //
+  //   if (!rating || rating === 0) {
+  //     errors.rating = "Please provide a rating.";
+  //     hasError = true;
+  //   }
+  //
+  //   if (!review || review.trim() === "") {
+  //     errors.review = "Please write a review.";
+  //     hasError = true;
+  //   }
+  //
+  //   if (hasError) {
+  //     setError(errors);
+  //     return;
+  //   }
+  //
+  //   try {
+  //     setLoading(true);
+  //
+  //     // Current date in IST
+  //     const istTime = new Date();
+  //     const istOffset = 5.5 * 60 * 60 * 1000;
+  //     istTime.setTime(
+  //       istTime.getTime() + istTime.getTimezoneOffset() * 60 * 1000 + istOffset,
+  //     );
+  //
+  //     console.log("user_id", user_id, id);
+  //
+  //     const reviewData = {
+  //       user_id: id,
+  //       reviewByID: user_id,
+  //       rating: rating,
+  //       review: review.trim(),
+  //     };
+  //
+  //     const response = await ApiServices.addReview(reviewData);
+  //
+  //     if (response?.status === 200) {
+  //       setRating(0);
+  //       setReview("");
+  //       getReviews();
+  //     } else {
+  //       throw new Error("Failed to submit review");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error submitting review:", err);
+  //     setError({
+  //       rating: "",
+  //       review: err.response?.data?.message || "Failed to submit review",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const getReviews = async () => {
     console.log("id", id);
@@ -81,12 +81,13 @@ const Comment = ({ id, user_id }) => {
   };
 
   useEffect(() => {
-    getReviews();
+    // getReviews();
   }, []);
 
   return (
     <div className="w-[60vw]">
-      {(id!==user_id) && (
+      <p className="text-center text-gray-500">Reviews are coming soon</p>
+      {id !== user_id && (
         <div>
           <div className="mb-4">
             <p className="mb-2 text-gray-700 font-medium">
@@ -131,7 +132,7 @@ const Comment = ({ id, user_id }) => {
             )}
           </div>
           <button
-            onClick={onSubmit}
+            // onClick={onSubmit}
             disabled={loading}
             className="rounded-lg mb-3"
           >

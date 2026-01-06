@@ -24,7 +24,7 @@ import { Country, State, City } from "country-state-city";
 import { AdminServices } from "../../Services/AdminServices";
 import { jwtDecode } from "jwt-decode";
 import { format } from "timeago.js";
-import { CalendarServices } from '../../../src/Services/CalendarServices';
+import { CalendarServices } from "../../../src/Services/CalendarServices";
 import { Box, Dialog, DialogContent, Divider } from "@mui/material";
 import {
   allLanguages,
@@ -52,6 +52,7 @@ import Post from "./Activities/Posts/Post";
 import UserComment from "./Activities/userComment/UserComment";
 import BookSession from "./BookSession/BookSession2";
 import TabsAndInvestment from "./TabsAndInvestment/TabsAndInvestment";
+import StartupProfileCard from "../Startup/StartupProfileCard";
 
 const EditProfile = () => {
   const { id } = useParams();
@@ -83,11 +84,10 @@ const EditProfile = () => {
   const [Stages, setStages] = useState([]);
   const [expertise, setExpertise] = useState([]);
   const [investmentRange, setInvestmentRange] = useState(0);
-  const [service, setService] = useState([])
+  const [service, setService] = useState([]);
   //  console.log('db profile, ownProfile ', dbProfile[0], dbProfile)
 
   useEffect(() => {
-
     if (dbbio) setBio(dbbio);
     // if (userName) setName(userName);
     if (dbEducation) setEducationDetails(dbEducation);
@@ -151,7 +151,6 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-  
     // Fetch the user data on which profile is clicked
     const fetchUserData = async () => {
       try {
@@ -194,7 +193,7 @@ const EditProfile = () => {
             message: "Error occurred!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       }
     };
@@ -213,7 +212,7 @@ const EditProfile = () => {
               message: "Error Occurred!",
               bgColor: ToastColors.failure,
               visible: "yes",
-            })
+            }),
           );
         });
     }
@@ -279,7 +278,7 @@ const EditProfile = () => {
   const [totalExperienceData, setTotalExperienceData] = useState([]);
   const [totalEducationData, setTotalEducationData] = useState([]);
   const [experienceDetails, setExperience] = useState([]);
-  
+
   // Temporary state to hold user input
   const [tempExperienceDetails, setTempExperienceDetails] = useState({
     business: "",
@@ -334,7 +333,7 @@ const EditProfile = () => {
   const [editingExperienceId, seteditingExperienceId] = useState("");
   const [editingEducationId, seteditingEducationId] = useState("");
   const followerNotification = useSelector(
-    (state) => state.conv.followerNotification
+    (state) => state.conv.followerNotification,
   );
   const [typeOfOpen, setTypeOfOpen] = useState(null);
   const [places, setPlaces] = useState({
@@ -364,9 +363,9 @@ const EditProfile = () => {
       setIsInputPopupVisible(true);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     console.log(editPostToggler);
-  },[editPostToggler]);
+  }, [editPostToggler]);
 
   const handleAboutButtonClick = () => {
     window.scrollTo({
@@ -415,7 +414,7 @@ const EditProfile = () => {
     const file = e.target.files[0];
     if (file.size > 4 * 1024 * 1024) {
       alert(
-        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
+        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`,
       );
       e.target.value = null; // Clear the selected file
       return;
@@ -432,7 +431,7 @@ const EditProfile = () => {
     const file = e.target.files[0];
     if (file.size > 4 * 1024 * 1024) {
       alert(
-        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
+        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`,
       );
       e.target.value = null; // Clear the selected file
       return;
@@ -451,7 +450,7 @@ const EditProfile = () => {
           message: "Please select Mentor Categories in Personal Information",
           bgColor: ToastColors.failure,
           visible: "yes",
-        })
+        }),
       );
       return;
     }
@@ -488,7 +487,7 @@ const EditProfile = () => {
       setTotalExperienceData(
         totalExperienceData.map((t, i) => {
           return i + 1 === editingExperienceId ? experienceDetails : t;
-        })
+        }),
       );
       setIsExperiencePopupVisible(false);
       seteditingExperienceId("");
@@ -577,29 +576,29 @@ const EditProfile = () => {
   const [editPostToggler, seteditPostToggler] = useState("profile");
 
   const pathSegments = location.pathname.split("/");
-  const mentorId = pathSegments[pathSegments.length - 1]; 
+  const mentorId = pathSegments[pathSegments.length - 1];
   console.log("mentorId", mentorId);
 
   useEffect(() => {
     const fetchAvailabilityData = async () => {
-        try {
-            const { data } = await CalendarServices.getAvailabilityData({ mentorId });
-            // Logging the availability data
-            console.log('Availability data:', JSON.stringify(data.availability));
-            setService(data.availability.sessions)
-            const availabilityData = data.availability;
-            // Perform additional operations with availabilityData here
-        } catch (error) {
-            console.error("Error fetching availability data:", error);
-        }
+      try {
+        const { data } = await CalendarServices.getAvailabilityData({
+          mentorId,
+        });
+        // Logging the availability data
+        console.log("Availability data:", JSON.stringify(data.availability));
+        setService(data.availability.sessions);
+        const availabilityData = data.availability;
+        // Perform additional operations with availabilityData here
+      } catch (error) {
+        console.error("Error fetching availability data:", error);
+      }
     };
 
     fetchAvailabilityData();
-}, []); // Add dependencies if required
-
+  }, []); // Add dependencies if required
 
   useEffect(() => {
-
     const params = new URLSearchParams(location.search);
     const toggler = params.get("editPostToggler");
     if (toggler) {
@@ -658,8 +657,8 @@ const EditProfile = () => {
   }, [totalEducationData]);
 
   useEffect(() => {
-      setTotalExperienceData(experienceDetails);
-  }, [experienceDetails])
+    setTotalExperienceData(experienceDetails);
+  }, [experienceDetails]);
   const [reasonPop, setReasonPop] = useState(false);
   const [reason, setReason] = useState("");
   const [requestUserId, setRequestedUserId] = useState("");
@@ -698,7 +697,7 @@ const EditProfile = () => {
             message: "Error Occurred",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -721,7 +720,7 @@ const EditProfile = () => {
               visible: "yes",
               message: "Error Occurred while adding comment",
               bgColor: ToastColors.failure,
-            })
+            }),
           );
         });
     }
@@ -741,7 +740,7 @@ const EditProfile = () => {
             message: "Error Occurred",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -754,7 +753,7 @@ const EditProfile = () => {
           setAllComments(
             res.data.sort((a, b) => {
               return new Date(b.createdAt) - new Date(a.createdAt);
-            })
+            }),
           );
         })
         .catch((err) => {
@@ -763,7 +762,7 @@ const EditProfile = () => {
               message: "Error Occurred",
               bgColor: ToastColors.failure,
               visible: "yes",
-            })
+            }),
           );
           // console.log(err);
           // navigate("/searchusers");
@@ -774,7 +773,7 @@ const EditProfile = () => {
           setAllComments(
             res.data.sort((a, b) => {
               return new Date(b.createdAt) - new Date(a.createdAt);
-            })
+            }),
           );
         })
         .catch((err) => {
@@ -783,7 +782,7 @@ const EditProfile = () => {
               message: "Error Occurred",
               bgColor: ToastColors.failure,
               visible: "yes",
-            })
+            }),
           );
           // console.log(err);
           // navigate("/searchusers");
@@ -819,7 +818,7 @@ const EditProfile = () => {
             message: "Review Updated",
             visible: "yes",
             bgColor: ToastColors.success,
-          })
+          }),
         );
         setemailTrigger(!emailTrigger);
       })
@@ -829,7 +828,7 @@ const EditProfile = () => {
             message: "Error Occurred",
             visible: "yes",
             bgColor: ToastColors.failure,
-          })
+          }),
         );
       });
   };
@@ -911,7 +910,7 @@ const EditProfile = () => {
                 town:
                   City.getCitiesOfState(
                     res.data.country?.split("-")[1],
-                    res.data.state?.split("-")[1]
+                    res.data.state?.split("-")[1],
                   ) || [],
               });
             }
@@ -923,7 +922,7 @@ const EditProfile = () => {
                 message: error?.response?.data?.message,
                 bgColor: ToastColors.failure,
                 visible: "yes",
-              })
+              }),
             );
           });
       } else if (id !== undefined && userpage == false) {
@@ -988,7 +987,7 @@ const EditProfile = () => {
                 message: "No User Found For Request",
                 bgColor: ToastColors.failure,
                 visible: "yes",
-              })
+              }),
             );
             dispatch(setLoading({ visible: "no" }));
             navigate("/profileRequests");
@@ -1064,7 +1063,7 @@ const EditProfile = () => {
                 town:
                   City.getCitiesOfState(
                     res.data.country?.split("-")[1],
-                    res.data.state?.split("-")[1]
+                    res.data.state?.split("-")[1],
                   ) || [],
               });
             }
@@ -1076,7 +1075,7 @@ const EditProfile = () => {
                 message: error?.response?.data?.message,
                 bgColor: ToastColors.failure,
                 visible: "yes",
-              })
+              }),
             );
           });
       }
@@ -1100,7 +1099,7 @@ const EditProfile = () => {
               message: `Profile Status changed to ${status}`,
               bgColor: ToastColors.success,
               visible: "yes",
-            })
+            }),
           );
           socket.current.emit("sendNotification", {
             senderId: user_id,
@@ -1119,7 +1118,7 @@ const EditProfile = () => {
               message: "Error occured when changing status",
               bgColor: ToastColors.failure,
               visible: "yes",
-            })
+            }),
           );
           // setIsLoading(false);
         });
@@ -1138,7 +1137,7 @@ const EditProfile = () => {
       setInputs((prev) => ({
         ...prev,
         isEmailValid: /[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+/.test(
-          e.target.value
+          e.target.value,
         ),
       }));
     }
@@ -1171,7 +1170,7 @@ const EditProfile = () => {
             message: "OTP sent successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         // setIsEmailOtpSent(true);
         setInputs((prev) => ({ ...prev, isMobileOtpSent: true }));
@@ -1182,7 +1181,7 @@ const EditProfile = () => {
             message: err.response.data,
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
         e.target.disabled = true;
       });
@@ -1200,7 +1199,7 @@ const EditProfile = () => {
             message: "Mobile verified successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         document.getElementById("mobileVerify").style.display = "none";
         document.getElementById("mobileOtpInput").disabled = true;
@@ -1213,7 +1212,7 @@ const EditProfile = () => {
             message: "Incorrect OTP",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -1231,7 +1230,7 @@ const EditProfile = () => {
             visible: "yes",
             message: "Error Occurred",
             bgColor: "red",
-          })
+          }),
         );
       });
   };
@@ -1286,7 +1285,7 @@ const EditProfile = () => {
             message: "Profile Updated",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         setInputs({
           email: null,
@@ -1316,7 +1315,7 @@ const EditProfile = () => {
             message: "Error occurred while sending profile to approval",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
         setIsLoading(false);
       });
@@ -1345,7 +1344,7 @@ const EditProfile = () => {
         changeResume.working !== "" ||
         changeResume.degree !== "") &&
       totalEducationData.length > 0 &&
-      totalExperienceData.length > 0
+      totalExperienceData.length > 0,
   );
 
   const handleChangeRadio = (e) => {
@@ -1366,7 +1365,7 @@ const EditProfile = () => {
               message: "Check your network connection",
               bgColor: ToastColors.failure,
               visible: "yes",
-            })
+            }),
           );
         }
       });
@@ -1391,7 +1390,7 @@ const EditProfile = () => {
               // console.log(res.data.college.length);
               setUniversities(res.data.college);
             }),
-        500
+        500,
       );
       return () => clearTimeout(timeoutId);
     } else setUniversities([]);
@@ -1430,14 +1429,14 @@ const EditProfile = () => {
         documents: changeResume,
         experienceDetails: totalExperienceData,
         educationDetails: totalEducationData,
-      })
+      }),
     );
     dispatch(
       setToast({
         message: "Data Saved Locally",
         bgColor: ToastColors.success,
         visible: "yes",
-      })
+      }),
     );
   };
 
@@ -1492,7 +1491,7 @@ const EditProfile = () => {
           town:
             City.getCitiesOfState(
               local?.country?.split("-")[1],
-              local?.state?.split("-")[1]
+              local?.state?.split("-")[1],
             ) || [],
         });
       }
@@ -1502,7 +1501,7 @@ const EditProfile = () => {
           message: "Data Retrived Locally",
           bgColor: ToastColors.success,
           visible: "yes",
-        })
+        }),
       );
     }
   };
@@ -1521,7 +1520,7 @@ const EditProfile = () => {
             message: "Error in update status",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -1564,7 +1563,7 @@ const EditProfile = () => {
             message: "Error in update status",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
     e.target.disabled = false;
@@ -1572,7 +1571,7 @@ const EditProfile = () => {
 
   const [connectStatus, setConnectStatus] = useState(null);
   const historicalConversations = useSelector(
-    (state) => state.conv.historicalConversations
+    (state) => state.conv.historicalConversations,
   );
   useEffect(() => {
     if (id !== undefined) {
@@ -1583,15 +1582,15 @@ const EditProfile = () => {
     let obj = {};
     if (
       historicalConversations?.filter((f) =>
-        f.members.map((m) => m._id).includes(id)
+        f.members.map((m) => m._id).includes(id),
       ).length > 0
     ) {
       obj[id] = {
         status: historicalConversations?.filter((f) =>
-          f.members.map((m) => m._id).includes(id)
+          f.members.map((m) => m._id).includes(id),
         )[0]?.status,
         id: historicalConversations?.filter((f) =>
-          f.members.map((m) => m._id).includes(id)
+          f.members.map((m) => m._id).includes(id),
         )[0]?._id,
       };
     }
@@ -1603,7 +1602,7 @@ const EditProfile = () => {
   };
 
   ///////////////////////////////////////////////////////////////
-console.log('education details', educationDetails)
+  console.log("education details", educationDetails);
   const saveEducationDetails = () => {
     // Check if the required fields are filled
     if (
@@ -1908,7 +1907,6 @@ console.log('education details', educationDetails)
             )}
 
             {userpage === true && (
-           
               <button
                 onClick={followerController}
                 className="mb-5 profileFollowBtn"
@@ -2075,13 +2073,18 @@ console.log('education details', educationDetails)
               <BookSession name={name} mentorId={mentorId} reschedule={false} />
             </div>
           )} */}
-      {(dbbeyincProfile === "Mentor" || mentorId !== 'editProfile' || dbbeyincProfile === "Co-Founder") && 
- service.length > 0 && (
-  <div className="BookSessionCard">
-    <BookSession name={name} mentorId={mentorId} reschedule={false} />
-  </div>
-)}
-
+          {(dbbeyincProfile === "Mentor" ||
+            mentorId !== "editProfile" ||
+            dbbeyincProfile === "Co-Founder") &&
+            service.length > 0 && (
+              <div className="BookSessionCard">
+                <BookSession
+                  name={name}
+                  mentorId={mentorId}
+                  reschedule={false}
+                />
+              </div>
+            )}
         </div>
         {/* RIGHT PART */}
         <div className="ActivtyDetailsCard">
@@ -2097,7 +2100,6 @@ console.log('education details', educationDetails)
               />
             </div>
           )}
-
           <div className="toggleContainer">
             <div
               className={`ActivtyDetailsCardToggle ${
@@ -2887,33 +2889,31 @@ console.log('education details', educationDetails)
 
               {/* Buttons for save data */}
               {userpage === false && id === undefined && (
-              <section className="EditProfile-Buttons-Section">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "15px",
-                    marginBottom: "15px",
-                  }}
-                >
-                  <button
+                <section className="EditProfile-Buttons-Section">
+                  <div
                     style={{
-                      fontSize: "10px",
-                      background: "var(--button-background)",
-                      color: "var(--button-color)",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: "15px",
+                      marginBottom: "15px",
                     }}
-                    onClick={submitAllData}
                   >
-                    Save
-                  </button>
-                </div>
-              </section>
-            )}
-
+                    <button
+                      style={{
+                        fontSize: "10px",
+                        background: "var(--button-background)",
+                        color: "var(--button-color)",
+                      }}
+                      onClick={submitAllData}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </section>
+              )}
             </div>
           )}
-
           {/* POSTS SECTION */}
           {editPostToggler == "posts" && (
             <div
@@ -2952,7 +2952,6 @@ console.log('education details', educationDetails)
               </div>
             </div>
           )}
-
           {/* Comment SECTION */}
           {editPostToggler == "comment" && (
             <div
@@ -2968,7 +2967,7 @@ console.log('education details', educationDetails)
                   {convExits ||
                   id == undefined ||
                   jwtDecode(
-                    JSON.parse(localStorage.getItem("user")).accessToken
+                    JSON.parse(localStorage.getItem("user")).accessToken,
                   ).role == "Admin" ? (
                     <div
                       style={{
@@ -3079,7 +3078,7 @@ console.log('education details', educationDetails)
                       className="close-icon"
                       onClick={() => {
                         document.getElementsByTagName(
-                          "body"
+                          "body",
                         )[0].style.overflowY = "scroll";
                         setIsInputPopupVisible(false);
                       }}
@@ -3408,7 +3407,6 @@ console.log('education details', educationDetails)
             </div>
           </div>
         )}
-
         {isAboutPopupVisible && (
           <div className="popup-container">
             <div className="popup-content">
@@ -3478,7 +3476,6 @@ console.log('education details', educationDetails)
             </div>
           </div>
         )}
-
         {isSkillsPopupVisibile && (
           <div className="popup-container">
             <div className="popup-content">
@@ -3499,7 +3496,7 @@ console.log('education details', educationDetails)
                           className="close-icon"
                           onClick={() => {
                             document.getElementsByTagName(
-                              "body"
+                              "body",
                             )[0].style.overflowY = "scroll";
                             setisSkillsPopupVisibile(false);
                           }}
@@ -3518,7 +3515,7 @@ console.log('education details', educationDetails)
                               <div
                                 onClick={(e) => {
                                   setTempSkills(
-                                    tempSkills.filter((f, j) => i !== j)
+                                    tempSkills.filter((f, j) => i !== j),
                                   );
                                 }}
                               >
@@ -3597,7 +3594,6 @@ console.log('education details', educationDetails)
             </div>
           </div>
         )}
-
         {isEducationPopupVisible && (
           <div className="popup-container">
             <div className="popup-content">
@@ -3772,7 +3768,7 @@ console.log('education details', educationDetails)
                     <button
                       className="add-button"
                       // onClick={addEducation}
-                       onClick={saveEducationDetails}
+                      onClick={saveEducationDetails}
                       disabled={
                         tempEducationDetails.Edstart == "" ||
                         tempEducationDetails.grade == "" ||
@@ -3788,7 +3784,6 @@ console.log('education details', educationDetails)
             </div>
           </div>
         )}
-
         {isExperiencePopupVisible && (
           <div className=" popup-container">
             <div className="popup-content">
@@ -3800,7 +3795,7 @@ console.log('education details', educationDetails)
                       className="close-icon"
                       onClick={() => {
                         document.getElementsByTagName(
-                          "body"
+                          "body",
                         )[0].style.overflowY = "scroll";
 
                         setIsExperiencePopupVisible(false);
@@ -4744,8 +4739,8 @@ console.log('education details', educationDetails)
           typeOfOpen == null
             ? []
             : typeOfOpen == "followers"
-            ? followers
-            : followering
+              ? followers
+              : followering
         }
       />
     </div>

@@ -17,6 +17,8 @@ import { ApiServices } from "../../Services/ApiServices";
 import { CalendarServices } from "../../Services/CalendarServices";
 
 import "../Editprofile/EditProfile.css";
+import StartupProfileCard from "../Startup/StartupProfileCard";
+import MainContent from "../OnboardComponents/Startup/MainContent";
 
 const Profile = () => {
   const location = useLocation();
@@ -38,6 +40,7 @@ const Profile = () => {
   const [expertise, setExpertise] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [profileData, setProfileData] = useState({});
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     setSelfProfile(!id);
@@ -53,6 +56,7 @@ const Profile = () => {
         const { expertise, industries, stages } = response.data;
 
         setProfileData(response.data);
+        setRole(response.data.role);
         if (expertise) setExpertise(expertise);
         if (industries) setIndustries(industries);
         if (stages) setStages(stages);
@@ -90,8 +94,6 @@ const Profile = () => {
   };
 
   return (
-
-
     <div className="h-full bg-customBackground relative ">
       <div className="relative">
         <div>
@@ -101,13 +103,13 @@ const Profile = () => {
             className="w-full h-48 lg:h-80 object-cover rounded-none m-2"
           />
         </div>
-
         <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:ml-10 relative">
           <div className="mb-4 -mt-36 ml-2">
             <ProfileCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
-              profileData={profileData}
+              profileDataObj={profileData}
+              profileRole={role}
             />
 
             {(profileData.beyincProfile === "Mentor" ||
@@ -123,17 +125,13 @@ const Profile = () => {
               )}
           </div>
 
-          <div className="grow">
-            {(profileData.beyincProfile === "Mentor" ||
-              profileData.beyincProfile === "Co-Founder") && (
-              <TabsAndInvestment
-                selfProfile={selfProfile}
-                setSelfProfile={setSelfProfile}
-                expertise={expertise}
-                industries={industries}
-                stages={stages}
-              />
-            )}
+          <div className="grow space-y-4">
+            <TabsAndInvestment
+              role={role}
+              selfProfile={selfProfile}
+              setSelfProfile={setSelfProfile}
+              profileData={profileData}
+            />
 
             <TabContext value={value}>
               <Box>
@@ -161,8 +159,7 @@ const Profile = () => {
                         textAlign: "center",
                         textTransform: "none",
                         "&.Mui-selected": { color: "#4E54C6" },
-                            "&:hover": { color: "white" },   // 👈 added
-
+                        "&:hover": { color: "white" },
                       }}
                     />
                   ))}
@@ -179,9 +176,11 @@ const Profile = () => {
               <TabPanel value="2">
                 <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
               </TabPanel>
-              {/* <TabPanel value="3">
-                <Comment />
-              </TabPanel> */}
+              {/* {role === "Startup" && ( */}
+              {/*   <TabPanel value="3"> */}
+              {/*     <Comment /> */}
+              {/*   </TabPanel> */}
+              {/* )} */}
             </TabContext>
           </div>
         </div>
@@ -191,4 +190,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

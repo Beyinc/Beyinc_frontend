@@ -25,6 +25,11 @@ const SingleUserDetails = ({ user, connectStatus }) => {
         const { data } = await CalendarServices.getAvailabilityData({
           mentorId: user._id,
         });
+        // Logging the availability data
+        console.log(
+          "Availability data found here:",
+          JSON.stringify(data.availability)
+        );
         setSession(data.availability.sessions);
       } catch (error) {
         console.error("Error fetching availability data:", error);
