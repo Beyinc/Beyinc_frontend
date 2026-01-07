@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Box, Typography, Modal, Button, TextField, Alert, Divider, Grid } from '@mui/material';
 import { CalendarServices } from '../../../Services/CalendarServices.js';
@@ -22,7 +23,7 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
   const [discountPercent, setDiscountPercent] = useState(null);
   const [error, setError] = useState('');
   const [coupon, setCoupon] = useState('');
-
+  const navigate = useNavigate();
   const { duration } = durationId;
   const { email: userEmail, user_id, userName } = useSelector((store) => store.auth.loginDetails);
 
@@ -186,6 +187,8 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
       if (!reschedule) {
         const bookingResponse = await CalendarServices.bookSession({ eventDetails, mentorId, bookingData });
         console.log('Booking successful:', bookingResponse);
+        // navigate('/dashboard/userBookings');
+window.location.href = '/dashboard/userBookings';
       } else {
         const rescheduleResponse = await CalendarServices.reschedule({ eventDetails, mentorId, bookingData, rescheduleBooking });
         console.log('Rescheduling response:', rescheduleResponse);
