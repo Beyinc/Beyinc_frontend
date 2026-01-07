@@ -16,6 +16,7 @@ import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 import ProfileCardInfo from "./ProfileCardInfo";
 import MentorCardInfo from "./MentorCardInfo";
 import EditProfileCardPopup from "./EditProfileCardPopup";
+import ProfileCompletionStatus from "./ProfileCompletionStatus";
 
 const ProfileCard = ({
   selfProfile,
@@ -58,6 +59,11 @@ const ProfileCard = ({
     languages: [],
   });
 
+  const [isEditAboutOpen, setIsEditAboutOpen] = useState(false);
+
+  const handleToggleListing = (isListed) => {
+    setProfileData({ ...profileData, isListed });
+  };
   const { id } = useParams();
 
   const { email, role, userName, image, verification, user_id } = useSelector(
@@ -425,6 +431,13 @@ const ProfileCard = ({
                 </a>
               </div>
             )}
+
+            {/* Profile Completion Status */}
+            <ProfileCompletionStatus
+              profileData={profileDataObj}
+              profileType="Startup"
+              onToggleListing={handleToggleListing}
+            />
             {/* <div>
               {user_id == undefined ? (
                 <ReviewStars />
