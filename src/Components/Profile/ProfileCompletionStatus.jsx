@@ -178,7 +178,6 @@ export default function ProfileCompletionStatus({
                 }}
               />
             </svg>
-
             {/* Center Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <div
@@ -193,11 +192,10 @@ export default function ProfileCompletionStatus({
                 <CheckCircle2 className="w-6 h-6 text-green-600 mt-2" />
               )}
             </div>
-
             {/* Hover Tooltip - Completion Steps */}
             {isHovered && (
               <div
-                className="absolute left-full ml-4 top-1/2 -translate-y-1/2 bg-white border-2 border-gray-200 rounded-lg shadow-xl p-4 w-80 z-10 transition-opacity duration-200"
+                className="absolute left-full ml-4 top-0 bg-white border-2 border-gray-200 rounded-lg shadow-xl p-4 w-80 z-10 transition-opacity duration-200"
                 style={{ opacity: isHovered ? 1 : 0 }}
               >
                 <div className="flex items-center gap-2 mb-3">
