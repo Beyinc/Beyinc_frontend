@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import aboutService from "./aboutPageApi"; // Import the fetchAbout function from the api.js file
 import EditAboutModal from "./EditAboutModal";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ABOUT_TEMPLATES = {
   startup: `🚀 About
@@ -71,6 +71,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
   const [isAboutLoading, setIsAboutLoading] = useState(true);
   const { id } = useParams(); // Get the `id` from route params
   // console.log('id: ' + id);
+  const navigate = useNavigate();
 
   const getDefaultTemplate = (role) => {
     if (role === "Startup") return ABOUT_TEMPLATES.startup;
@@ -104,6 +105,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
   const handleAboutSave = (updatedAbout) => {
     setProfileAbout(updatedAbout);
     setErrorMessage("");
+    navigate("/editProfile");
   };
 
   // console.log(role);
