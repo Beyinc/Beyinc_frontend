@@ -9,48 +9,90 @@ export default function ProfileCompletionStatus({
   const [isListed, setIsListed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Define the 4 completion checks
+  // Define the completion checks based on role
   const getCompletionChecks = () => {
-    const startupProfile = profileData?.startupProfile || {};
+    const role = profileData?.role;
 
-    const checks = [
-      {
-        key: "about",
-        label: "About",
-        completed: !!(
-          profileData?.about && profileData.about.trim().length > 0
-        ),
-        fieldValue: profileData?.about,
-      },
-      {
-        key: "industries",
-        label: "Industries",
-        completed: !!(
-          startupProfile.industries &&
-          startupProfile.industries.filter((i) => i && i.trim()).length > 0
-        ),
-        fieldValue: startupProfile.industries,
-      },
-      {
-        key: "targetMarket",
-        label: "Target Market",
-        completed: !!(
-          startupProfile.targetMarket &&
-          startupProfile.targetMarket.trim().length > 0
-        ),
-        fieldValue: startupProfile.targetMarket,
-      },
-      {
-        key: "stage",
-        label: "Stage",
-        completed: !!(
-          startupProfile.stage && startupProfile.stage.trim().length > 0
-        ),
-        fieldValue: startupProfile.stage,
-      },
-    ];
+    // For Startup
+    if (role === "Startup") {
+      const startupProfile = profileData?.startupProfile || {};
 
-    return checks;
+      return [
+        {
+          key: "about",
+          label: "About",
+          completed: !!(
+            profileData?.about && profileData.about.trim().length > 0
+          ),
+          fieldValue: profileData?.about,
+        },
+        {
+          key: "industries",
+          label: "Industries",
+          completed: !!(
+            startupProfile.industries &&
+            startupProfile.industries.filter((i) => i && i.trim()).length > 0
+          ),
+          fieldValue: startupProfile.industries,
+        },
+        {
+          key: "targetMarket",
+          label: "Target Market",
+          completed: !!(
+            startupProfile.targetMarket &&
+            startupProfile.targetMarket.trim().length > 0
+          ),
+          fieldValue: startupProfile.targetMarket,
+        },
+        {
+          key: "stage",
+          label: "Stage",
+          completed: !!(
+            startupProfile.stage && startupProfile.stage.trim().length > 0
+          ),
+          fieldValue: startupProfile.stage,
+        },
+      ];
+    }
+
+    // For Mentor or Individual/Entrepreneur
+    if (role === "Mentor" || role === "Individual/Entrepreneur") {
+      return [
+        {
+          key: "about",
+          label: "About",
+          completed: !!(
+            profileData?.about && profileData.about.trim().length > 0
+          ),
+          fieldValue: profileData?.about,
+        },
+        {
+          key: "mentorExpertise",
+          label: "Industry",
+          completed: !!(
+            profileData?.mentorExpertise &&
+            profileData.mentorExpertise.length > 0 &&
+            profileData.mentorExpertise.some(
+              (exp) => exp.industry && exp.industry.trim().length > 0,
+            )
+          ),
+          fieldValue: profileData?.mentorExpertise,
+        },
+        {
+          key: "skills",
+          label: "Skills",
+          completed: !!(
+            profileData?.skills &&
+            profileData.skills.length > 0 &&
+            profileData.skills.some((skill) => skill && skill.trim().length > 0)
+          ),
+          fieldValue: profileData?.skills,
+        },
+      ];
+    }
+
+    // Default fallback (shouldn't reach here)
+    return [];
   };
 
   const checks = getCompletionChecks();
