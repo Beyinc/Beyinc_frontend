@@ -1,41 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-// import Card from "@mui/material/Card";
-// import CardActions from "@mui/material/CardActions";
-// import CardContent from "@mui/material/CardContent";
-// import CardMedia from "@mui/material/CardMedia";
-// import Button from "@mui/material/Button";
-
-// import Typography from "@mui/material/Typography";
-// import AddPitch from "../Common/AddPitch";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
-import { CiGlobe } from "react-icons/ci";
-import { BsCircleFill } from "react-icons/bs";
 import { CalendarServices } from "../../Services/CalendarServices";
-import { ConnectingAirportsOutlined } from "@mui/icons-material";
+import { FaLinkedin, FaTwitter, FaGithub, FaStar, FaGlobe, FaTimes, FaChevronDown, FaClock, FaTags } from "react-icons/fa";
 
-const SingleUserDetails = ({
-  // d,
-  user,
-  setIsAdmin,
-  connectStatus,
-  setPitchSendTo,
-  pitchSendTo,
-  receiverRole,
-  setreceiverRole,
-}) => {
-  // console.log(d);
+const SingleUserDetails = ({ user, connectStatus }) => {
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
-  const dispatch = useDispatch();
-
-  const [averagereview, setAverageReview] = useState(0);
   const navigate = useNavigate();
 
+  // --- Logic State ---
+  const [averagereview, setAverageReview] = useState(0);
   const [requestPopup, setRequestPopup] = useState(false);
-  const [requestType, setRequestType] = useState("");
   const [requestMessage, setRequestMessage] = useState("");
   const [session, setSession] = useState([]);
+  const [selectedSessionId, setSelectedSessionId] = useState("");
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [activeTab, setActiveTab] = useState("Expertise");
+
+  // --- Effects ---
   useEffect(() => {
     const fetchAvailabilityData = async () => {
       try {
@@ -48,51 +31,31 @@ const SingleUserDetails = ({
           JSON.stringify(data.availability)
         );
         setSession(data.availability.sessions);
-        const availabilityData = data.availability;
-        // Perform additional operations with availabilityData here
       } catch (error) {
         console.error("Error fetching availability data:", error);
       }
     };
-
-    fetchAvailabilityData();
-  }, [user._id]); // Add dependencies if required
-  useEffect(() => {
-    console.log("user data", user);
-  }, []);
+    if (user._id) fetchAvailabilityData();
+  }, [user._id]);
 
   useEffect(() => {
     setAverageReview(0);
-    if (user.review !== undefined && user.review.length > 0) {
+    if (user.review && user.review.length > 0) {
       let avgR = 0;
-      user.review?.map((rev) => {
+      user.review.forEach((rev) => {
         avgR += rev.review;
       });
-      setAverageReview(avgR / user.review.length);
+      setAverageReview((avgR / user.review.length).toFixed(1));
     }
   }, [user]);
 
+  // --- Handlers ---
   const openUser = () => {
     if (user_id === user._id) {
       navigate(`/editProfile`);
     } else {
       navigate(`/user/${user._id}`);
     }
-  };
-
-  const isCurrentUser = email === user.email;
-
-  const openChat = async (e) => {
-    // await ApiServices.getProfile({ email: a.members.filter((f) => f.email !== email)[0].email }).then((res) => {
-    dispatch(setReceiverId(user));
-    // })
-    navigate(`/conversations/${connectStatus[user._id]?.id}`);
-  };
-
-  const [activeTab, setActiveTab] = useState("Expertise");
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
   };
 
   const handleSendRequest = async () => {
@@ -104,300 +67,244 @@ const SingleUserDetails = ({
     const requestPayload = {
       userId: user_id,
       mentorId: user._id,
-      requestType,
+      requestType: "session",
       requestMessage,
       amount: selectedSession?.amount,
       duration: selectedSession?.duration,
     };
 
     try {
-      await console.log("frontend data", requestPayload);
-      const response = await CalendarServices.createRequest(requestPayload);
-
-      console.log("Request Sent:", response);
+      await CalendarServices.createRequest(requestPayload);
       alert("Request Sent Successfully!");
-
       setRequestPopup(false);
-      setRequestType("");
       setRequestMessage("");
     } catch (error) {
       console.error("Error sending request:", error.message);
-      // alert("Failed to send request",error.message);
-      alert("Failed to send request: " + error.response.data.message);
+      const errorMsg = error.response?.data?.message || error.message;
+      alert("Failed to send request: " + errorMsg);
     }
   };
 
-  // useEffect(()=>{
-  //   console.log("card details",user._id);
-  // })
-
-  const [selectedSessionId, setSelectedSessionId] = useState("");
-  const [selectedSession, setSelectedSession] = useState(null);
-
   return (
     <>
-      <div className="user-card-main-container flex-col">
-        <div>
-          <div className="flex flex-col xl:flex-row justify-center items-center p-5">
-            {/* New Container Wrap */}
-            <div className="container flex flex-col xl:flex-row w-full gap-7">
-              {/* Left Side Content */}
-              <div className="flex flex-col w-full xl:w-2/3">
-                <div className="w-full">
-                  <div className="flex flex-col xl:flex-row xl:gap-7">
-                    <div className="user-card-image mt-4" onClick={openUser}>
-                      <img
-                        alt="user-pic"
-                        src={
-                          user.image !== "" &&
-                          user.image !== undefined &&
-                          user.image.url !== ""
-                            ? user.image.url
-                            : "/profile.png"
-                        }
-                      />
-                    </div>
-                    <div className="user-card-details-text pt-2">
-                      <div className="flex items-center justify-between w-full max-w-[550px]">
-                        <div className="flex">
-                          <h2
-                            className="text-black font-bold text-l"
-                            onClick={openUser}
-                          >
-                            {user.userName}
-                          </h2>
-                          <span className="">
-                            <img
-                              className="size-5 xl:size-5 mt-2 "
-                              src="/verify.png"
-                              alt=""
-                            />
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex flex-col md:flex-row md:space-x-12">
-                        <span className="text-gray-500 font-semibold">
-                          {user.role}
-                        </span>
-                        {user.languagesKnown.length > 0 && (
-                          <span className="text-gray-500 font-semibold flex">
-                            <CiGlobe className="md:mr-3 text-lg" />{" "}
-                            {user.languagesKnown?.join(", ")}
-                          </span>
-                        )}
-                      </div>
-                      {user.beyincProfile && (
-                        <h5
-                          className="text-neutral-600 mt-1"
-                          style={{ color: "#4F55C7" }}
+      {/* --- Main Card Container --- */}
+      <div className="w-full bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-[#4f55c7]/30 hover:scale-[1.02] mb-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          
+          {/* 1. Image Section */}
+          <div className="flex-shrink-0 group cursor-pointer" onClick={openUser}>
+            <img
+              src={
+                user.image?.url && user.image.url !== ""
+                  ? user.image.url
+                  : "/profile.png"
+              }
+              alt={user.userName}
+              className="w-24 h-24 rounded-lg object-cover transition-transform duration-300 group-hover:scale-110 shadow-sm"
+            />
+          </div>
+
+          {/* 2. Middle Content Section */}
+          <div className="flex-1">
+            {/* Header: Name & Verify */}
+            <div className="flex items-center justify-between mb-2">
+              <h3 
+                className="text-xl font-bold text-gray-900 cursor-pointer hover:text-[#4f55c7] transition-colors"
+                onClick={openUser}
+              >
+                {user.userName}
+              </h3>
+              <span className="text-[#4f55c7]">
+                 <img className="w-5 h-5" src="/verify.png" alt="Verified" />
+              </span>
+            </div>
+
+            {/* Role */}
+            <p className="text-sm font-medium text-[#4f55c7] mb-1">
+              {user.role || "Individual/Entrepreneur"}
+            </p>
+
+             {/* Headline */}
+             <p className="text-sm font-semibold text-gray-900 mb-2">
+               {user.headline || "No headline available"}
+            </p>
+
+            {/* Bio */}
+            <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
+                {user.about || "No bio available."}
+            </p>
+
+            {/* Tabs - Fixed Styling */}
+            <div className="mb-3">
+                <div className="flex gap-2 mb-2">
+                    {["Expertise", "Industries"].map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
+                                activeTab === tab
+                                ? "bg-[#4f55c7] text-white border-[#4f55c7]"
+                                : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                            }`}
                         >
-                          {user.beyincProfile} at Beyinc
-                        </h5>
-                      )}
-                      <p>{user.headline}</p>
-                      <span
-                        className="mt-2 break-words text-ellipsis overflow-hidden 2xl:w-full lg:w-3/5 md:w-3/5 sm:w-1/2 w-1/3"
-                        style={{
-                          wordWrap: "break-word",
-                          overflowWrap: "break-word",
-                          whiteSpace: "normal",
-                        }}
-                      >
-                        {user.about
-                          ? user.about.slice(0, 150) + " . . ."
-                          : "No bio available"}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col h-auto mt-4 ml-3">
-                    <div>
-                      <div className="mt-4 max-w-[650px] tabsandinvestement">
-                        <div>
-                          <div className="tabs-container">
-                            <div
-                              className={`Ttab ${
-                                activeTab === "Expertise" ? "Tactive" : ""
-                              }`}
-                              onClick={() => handleTabClick("Expertise")}
-                            >
-                              Expertise
-                            </div>
-                            <div
-                              className={`Ttab ${
-                                activeTab === "Industries" ? "Tactive" : ""
-                              }`}
-                              onClick={() => handleTabClick("Industries")}
-                            >
-                              Industries
-                            </div>
-                          </div>
-                          <div className="content-container">
-                            {activeTab === "Expertise" && (
-                              <p>{user.expertise?.join(", ")}</p>
-                            )}
-                            {activeTab === "Industries" && (
-                              <p>{user.industries?.join(", ")}</p>
-                            )}
-                            {activeTab === "Stages" && (
-                              <p>{user.stages?.join(", ")}</p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                            {tab}
+                        </button>
+                    ))}
                 </div>
-              </div>
+                <p className="text-xs text-gray-500 h-4">
+                    {activeTab === "Expertise" && (user.expertise?.length > 0 ? user.expertise.join(", ") : "N/A")}
+                    {activeTab === "Industries" && (user.industries?.length > 0 ? user.industries.join(", ") : "N/A")}
+                </p>
+            </div>
 
-              {/* Separator */}
-              <div className="w-px h-72 bg-neutral-300 hidden xl:block"></div>
-
-              {/* Right Side Content */}
-              <div className="user-card-actions mt-2 lg:mt-0 w-full xl:w-1/3">
-                <div className="w-full">
-                  <div className="font-bold text-lg">Book a session</div>
-                  <div className="mt-5">
-                    <div className="flex">
-                      <BsCircleFill
-                        className="mr-4 mt-1"
-                        style={{ fontSize: "7px" }}
-                      />
-                      Introduction
-                    </div>
-                    <div className="mt-3 text-neutral-500 ml-5">
-                      <span className="mr-3">45 minutes</span>
-                      <span>$200 per month</span>
-                    </div>
-                  </div>
-                  <hr className="border-gray-300 my-4" />
-                  <div className="mt-5">
-                    <div className="flex">
-                      <BsCircleFill
-                        className="mr-4 mt-1"
-                        style={{ fontSize: "7px" }}
-                      />
-                      Introduction
-                    </div>
-                    <div className="mt-3 text-neutral-500 ml-5">
-                      <span className="mr-3">45 minutes</span>
-                      <span>$200 per month</span>
-                    </div>
-
-                    <div className="request div">
-                      <button
-                        onClick={() => {
-                          setRequestPopup(true);
-                        }}
-                      >
-                        Request a call
-                      </button>
-                    </div>
-                  </div>
+            {/* Socials & Reviews */}
+            <div className="flex flex-wrap gap-4 items-center mt-4">
+                <div className="flex gap-2">
+                    <FaLinkedin size={16} className="text-gray-400 hover:text-[#0077b5] transition-all hover:scale-125 cursor-pointer" />
+                    <FaTwitter size={16} className="text-gray-400 hover:text-[#1da1f2] transition-all hover:scale-125 cursor-pointer" />
+                    <FaGithub size={16} className="text-gray-400 hover:text-gray-700 transition-all hover:scale-125 cursor-pointer" />
                 </div>
-              </div>
+                
+                <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-1">
+                        <FaStar size={14} className="text-yellow-400 fill-yellow-400" />
+                        <span className="font-semibold text-gray-700">
+                             {averagereview > 0 ? averagereview : "New"}
+                        </span>
+                    </div>
+                    <span className="text-gray-600 text-xs">
+                         {user.review?.length || 0} Reviews • {session.length > 0 ? "Available" : "Unavailable"}
+                    </span>
+                </div>
             </div>
           </div>
-          <div className="user-card-rating space-y-2 mx-9">
-            <span className="text-xs">62 Reviews/47 Sessions</span>
+
+          {/* 3. Right Action Section */}
+          <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-40 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+            <button
+                onClick={() => setRequestPopup(true)}
+                disabled={session.length === 0}
+                className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
+                    session.length === 0 
+                    ? "bg-[#4f55c7]/60 cursor-not-allowed" 
+                    : "bg-[#4f55c7] hover:bg-[#3e44a8]"
+                }`}
+            >
+                Request a Call
+            </button>
+            <div className="text-center text-xs text-gray-600">
+                <p className="mb-1">
+                    {session.length > 0 ? "Starts from" : "Session info"}
+                </p>
+                <p className="font-bold text-lg text-[#4f55c7]">
+                     {session.length > 0 
+                      ? `₹ ${Math.min(...session.map(s => s.amount))}` 
+                      : "Not Listed"}
+                </p>
+            </div>
           </div>
+
         </div>
       </div>
 
+      {/* --- MODAL (Purple Theme Applied) --- */}
       {requestPopup && (
-        <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
-          <div className="bg-white w-[400px] rounded-lg shadow-lg p-6 relative">
-            {/* Close Icon */}
-            <div
-              className="absolute top-3 right-3 text-gray-500 cursor-pointer"
-              onClick={() => {
-                document.body.style.overflowY = "scroll";
-                setRequestPopup(false);
-              }}
-            >
-              <i className="fas fa-times text-blue-600"></i>
-            </div>
-
-            <h2 className="text-xl font-semibold text-center mb-4">
-              Request a Call
-            </h2>
-
-            {/* Dropdown */}
-            {/* <label className="text-sm font-semibold text-blue-600">
-              Request Type
-            </label> */}
-            {/* <select
-              className="border border-gray-300 rounded-md p-2 w-full mt-1"
-              value={requestType}
-              onChange={(e) => setRequestType(e.target.value)}
-            >
-              <option value="">Select Request Type</option>
-              <option value="session">Session</option>
-              <option value="webinar" disabled>
-                Webinar
-              </option>
-              <option value="priority_dm" disabled>
-                Priority DM
-              </option>
-            </select> */}
-
-            {/* Duration Dropdown */}
-        
-              <div className="mt-4">
-                <label className="text-sm font-semibold text-blue-600">
-                  Select Session Type
-                </label>
-
-                <select
-                  className="border border-gray-300 rounded-md p-2 w-full mt-1"
-                  value={selectedSessionId}
-                  onChange={(e) => {
-                    const id = e.target.value;
-                    setSelectedSessionId(id);
-                    const sessionData = session.find((s) => s._id === id);
-                    setSelectedSession(sessionData);
-                  }}
-                >
-                  <option value="">Select </option>
-                  {session.map((s) => (
-                    <option key={s._id} value={s._id}>
-                      {s.duration} minutes - ₹{s.amount}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl relative animate-in fade-in zoom-in duration-200 flex flex-col overflow-hidden">
             
-
-            {selectedSession && (
-              <div className="mt-4 p-3 bg-blue-50 rounded-md text-center">
-                <p className="text-sm text-gray-600">Price</p>
-                <p className="text-xl font-bold text-blue-600">
-                  ₹{selectedSession.amount}
-                </p>
-              </div>
-            )}
-
-            {/* Message Box */}
-            <div className="mt-4">
-              <label className="text-sm font-semibold text-blue-600">
-                Message
-              </label>
-              <textarea
-                className="border border-gray-300 rounded-md w-full p-2 mt-1"
-                rows="4"
-                placeholder="Describe your request..."
-                value={requestMessage}
-                onChange={(e) => setRequestMessage(e.target.value)}
-              ></textarea>
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <div>
+                    <h2 className="text-lg font-bold text-gray-800">Request a Call</h2>
+                    <p className="text-xs text-gray-500 mt-0.5">Book a 1:1 session with {user.userName}</p>
+                </div>
+                <button 
+                    onClick={() => setRequestPopup(false)}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-red-500 transition-colors"
+                >
+                    <FaTimes size={14} />
+                </button>
             </div>
 
-            {/* Submit Button */}
-            <button
-              className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700"
-              onClick={handleSendRequest}
-              disabled={session.length==0}
-            >
-              Send Request
-            </button>
+            {/* Modal Body */}
+            <div className="p-6 space-y-5">
+                
+                {/* Session Type Selection */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">
+                    Select Session Duration
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 rounded-xl p-3 pl-4 pr-10 focus:ring-2 focus:ring-[#4f55c7]/20 focus:border-[#4f55c7] outline-none transition-all cursor-pointer font-medium"
+                      value={selectedSessionId}
+                      onChange={(e) => {
+                        const id = e.target.value;
+                        setSelectedSessionId(id);
+                        const sessionData = session.find((s) => s._id === id);
+                        setSelectedSession(sessionData);
+                      }}
+                    >
+                      <option value="">Choose a duration...</option>
+                      {session.map((s) => (
+                        <option key={s._id} value={s._id}>
+                          {s.duration} minutes (₹{s.amount})
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                        <FaChevronDown size={12} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Selected Session Summary */}
+                {selectedSession && (
+                    <div className="bg-[#4f55c7]/5 border border-[#4f55c7]/20 rounded-xl p-4 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#4f55c7] shadow-sm">
+                                <FaClock size={16} />
+                            </div>
+                            <div>
+                                <p className="text-sm font-bold text-gray-800">{selectedSession.duration} Minutes</p>
+                                <p className="text-xs text-gray-500">Video Consultation</p>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                             <p className="text-lg font-bold text-[#4f55c7]">₹{selectedSession.amount}</p>
+                             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">Total</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Message Input */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block flex justify-between">
+                    <span>Message</span>
+                    <span className="text-gray-300 font-normal normal-case">Optional</span>
+                  </label>
+                  <textarea
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-[#4f55c7]/20 focus:border-[#4f55c7] outline-none resize-none text-sm transition-all placeholder:text-gray-400"
+                    rows="4"
+                    placeholder="Hi! I'd like to discuss my project regarding..."
+                    value={requestMessage}
+                    onChange={(e) => setRequestMessage(e.target.value)}
+                  ></textarea>
+                </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 pt-2">
+                <button
+                  className="w-full bg-[#4f55c7] text-white py-3.5 rounded-xl font-bold shadow-lg shadow-[#4f55c7]/20 hover:bg-[#3e44a8] hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0 flex justify-center items-center gap-2"
+                  onClick={handleSendRequest}
+                  disabled={!selectedSessionId}
+                >
+                  <span>Send Request</span>
+                  <span className="text-white/60">→</span>
+                </button>
+            </div>
+
           </div>
         </div>
       )}

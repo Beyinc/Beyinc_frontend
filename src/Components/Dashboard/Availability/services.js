@@ -31,6 +31,8 @@ export default function ServicesTab({ selectedTimezone }) {
   const [sessions, setSessions] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
+  const [editingSessionId, setEditingSessionId] = useState(null);
+
   const [data, setData] = useState({
     title: '',
     description: '',
@@ -99,19 +101,28 @@ export default function ServicesTab({ selectedTimezone }) {
 
 
   const handleSaveOneToOne = useCallback(async () => {
-  
-      console.log('data', data);
-          CalendarServices.saveSingleService(data)
-            .then(() => {
-              alert('1:1 service data saved successfully!');
-              resetForm();
-              fetchSessions();
-            })
-            .catch(() => {
-              alert('Error saving 1:1 service data. Please try again.');
-            });
+  const payload = {
+    ...data,
+    ...(editingSessionId && { sessionId: editingSessionId }) // ✅ KEY LINE
+  };
 
-    }, [fetchSessions, handleChange]);
+  CalendarServices.saveSingleService(payload)
+    .then(() => {
+      alert(
+        editingSessionId
+          ? 'Service updated successfully!'
+          : 'Service created successfully!'
+      );
+
+      resetForm();
+      setEditingSessionId(null); // ✅ clear after save
+      fetchSessions();
+    })
+    .catch(() => {
+      alert('Error saving service. Please try again.');
+    });
+}, [fetchSessions, data, editingSessionId]);
+
 
     const handleDeleteClick = useCallback(async () => {
       console.log('Updated selectedSessionId:', selectedSessionId);
@@ -155,21 +166,24 @@ export default function ServicesTab({ selectedTimezone }) {
     resetForm();
   };
 
-  const resetForm = () => {
-    setData({
-      title: '',
-      description: '',
-      duration: '',
-      amount: '',
-      hostingLink: '',
-      webinarDate: null,
-      startTime: null,
-      endTime: null,
-      responseTime: '',
-    });
-    setIsFreeSession(false);
-    setShowForm(false); // Hide form when resetting
-  };
+const resetForm = () => {
+  setData({
+    title: '',
+    description: '',
+    duration: '',
+    amount: '',
+    hostingLink: '',
+    webinarDate: null,
+    startTime: null,
+    endTime: null,
+    responseTime: '',
+  });
+
+  setIsFreeSession(false);
+  setShowForm(false);
+  setEditingSessionId(null); // ✅ IMPORTANT
+};
+
 
   const renderSaveButton = () => {
     switch (activeSubTab) {
@@ -495,21 +509,25 @@ const renderServiceList = () => (
 );
 
 
-  const handleEditService = (service) => {
-    setData({
-      title: service.title,
-      description: service.description,
-      duration: service.duration,
-      amount: service.amount,
-      hostingLink: service.hostingLink,
-      webinarDate: service.webinarDate ? dayjs(service.webinarDate) : null,
-      startTime: service.startTime ? dayjs(service.startTime) : null,
-      endTime: service.endTime ? dayjs(service.endTime) : null,
-      responseTime: service.responseTime,
-    });
-    setIsFreeSession(service.amount === 0);
-    setShowForm(true);
-  };
+ const handleEditService = (service) => {
+  setEditingSessionId(service._id); // ✅ VERY IMPORTANT
+
+  setData({
+    title: service.title,
+    description: service.description,
+    duration: service.duration,
+    amount: service.amount,
+    hostingLink: service.hostingLink,
+    webinarDate: service.webinarDate ? dayjs(service.webinarDate) : null,
+    startTime: service.startTime ? dayjs(service.startTime) : null,
+    endTime: service.endTime ? dayjs(service.endTime) : null,
+    responseTime: service.responseTime,
+  });
+
+  setIsFreeSession(service.amount === 0);
+  setShowForm(true);
+};
+
 
 
 

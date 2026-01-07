@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Box, Typography, Modal, Button, TextField, Alert, Divider, Grid } from '@mui/material';
 import { CalendarServices } from '../../../Services/CalendarServices.js';
@@ -22,7 +23,7 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
   const [discountPercent, setDiscountPercent] = useState(null);
   const [error, setError] = useState('');
   const [coupon, setCoupon] = useState('');
-
+  const navigate = useNavigate();
   const { duration } = durationId;
   const { email: userEmail, user_id, userName } = useSelector((store) => store.auth.loginDetails);
 
@@ -186,6 +187,8 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
       if (!reschedule) {
         const bookingResponse = await CalendarServices.bookSession({ eventDetails, mentorId, bookingData });
         console.log('Booking successful:', bookingResponse);
+        // navigate('/dashboard/userBookings');
+window.location.href = '/dashboard/userBookings';
       } else {
         const rescheduleResponse = await CalendarServices.reschedule({ eventDetails, mentorId, bookingData, rescheduleBooking });
         console.log('Rescheduling response:', rescheduleResponse);
@@ -211,147 +214,91 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
       Book Session Now
     </button>
   
-    <Modal
-      open={isModalOpen}
-      onClose={handleCloseModal}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
+    <Modal open={isModalOpen} onClose={handleCloseModal}>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 700,
+      bgcolor: '#fff',
+      borderRadius: 3,
+      boxShadow: 24,
+      overflow: 'hidden',
+    }}
+  >
+    {/* Header */}
+    <Box
+      sx={{
+        px: 3,
+        py: 2,
+        borderBottom: '1px solid #eee',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 800,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <Grid container spacing={2}>
-          {/* Left Section with Session Details */}
-          <Grid item xs={8}>
-            <Typography variant="h6" component="h2" id="modal-title">
-              Booking Confirmation
-            </Typography>
-  
-     
-  
-            {selectedSession ? (
-              <>
-                <Typography variant="body1">
-                  <strong>Start DateTime:</strong> {readableStartDateTime}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>End DateTime:</strong> {readableEndDateTime}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Title:</strong> {selectedSession.title}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Description:</strong> {selectedSession.description}
-                </Typography>
-                <Typography variant="body1">
-                  <strong>Duration:</strong> {selectedSession.duration} minutes
-                </Typography>
-                {selectedSession.amount !== null && (
-                  <>
-                    <Typography variant="body1">
-                      <strong>Original Amount:</strong> Rs {selectedSession.amount}
-                    </Typography>
-                    {discountedAmount !== null && (
-                      <>
-                        <Typography variant="body1">
-                          <strong>Discount:</strong> {discountPercent}% (Rs {discountedAmount})
-                        </Typography>
-                        <Typography variant="body1">
-                          <strong>Final Amount:</strong> Rs {finalAmount}
-                        </Typography>
-                      </>
-                    )}
-                  </>
-                )}
-              </>
-            ) : (
-              <Typography variant="body1">No session selected.</Typography>
-            )}
-          </Grid>
-  
-          {/* Right Section with Coupons */}
-          <Grid item xs={4} sx={{ borderLeft: '1px solid #ddd', pl: 2 }}>
-            {selectedSession && selectedSession.amount > 0 && (
-              <>
-                <Typography variant="h6" component="h3" gutterBottom>
-                  Available Coupons
-                </Typography>
-                {coupons.map(coupon => (
-                  <Box key={coupon._id} sx={{ mb: 2 }}>
-                    <Typography variant="body1">
-                      <strong>Code:</strong> {coupon.code}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Discount:</strong> {coupon.discount}%
-                    </Typography>
-                    <Divider sx={{ my: 1 }} />
-                  </Box>
-                ))}
-  
-                <TextField
-                  label="Enter coupon code"
-                  variant="outlined"
-                  fullWidth
-                  value={couponCode}
-                  onChange={e => setCouponCode(e.target.value)}
-                  disabled={discountedAmount !== null}
-                  sx={{ mb: 2 }}
-                />
-  
-                <Grid container justifyContent="space-between" spacing={2}>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      disabled={discountedAmount !== null}
-                      onClick={applyCoupon}
-                    >
-                      Apply Coupon
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      disabled={discountedAmount === null}
-                      onClick={handleClearCoupon}
-                    >
-                      Clear Coupon
-                    </Button>
-                  </Grid>
-                </Grid>
-              </>
-            )}
-          </Grid>
-        </Grid>
-  
-        {/* Bottom Section for Confirm and Cancel Buttons */}
-        <Grid container justifyContent="center" sx={{ mt: 4 }}>
-          <Grid item>
-            <Button variant="contained" color="primary" onClick={handleConfirmBooking} sx={{ mx: 2 }}>
-              Confirm Booking
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button variant="contained"  color="secondary" onClick={handleCloseModal} sx={{ mx: 2 }}>
-              Cancel
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-    </Modal>
+      <Typography variant="h6" fontWeight={600}>
+        Booking Confirmation
+      </Typography>
+
+      <Button onClick={handleCloseModal} sx={{ minWidth: 'auto' }}>
+        ✕
+      </Button>
+    </Box>
+
+    {/* Content */}
+    <Box sx={{ p: 3 }}>
+      {selectedSession ? (
+        <>
+          <Typography><b>Start:</b> {readableStartDateTime}</Typography>
+          <Typography><b>End:</b> {readableEndDateTime}</Typography>
+
+          <Divider sx={{ my: 2 }} />
+
+          <Typography><b>Title:</b> {selectedSession.title}</Typography>
+          <Typography><b>Description:</b> {selectedSession.description}</Typography>
+          <Typography><b>Duration:</b> {selectedSession.duration} minutes</Typography>
+
+          <Divider sx={{ my: 2 }} />
+
+          <Typography fontSize={18}>
+            <b>Amount:</b> ₹{selectedSession.amount}
+          </Typography>
+        </>
+      ) : (
+        <Typography>No session selected.</Typography>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
+    </Box>
+
+    {/* Footer */}
+    <Box
+      sx={{
+        px: 3,
+        py: 2,
+        borderTop: '1px solid #eee',
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 2,
+      }}
+    >
+      <Button variant="contained" onClick={handleConfirmBooking}>
+        Confirm Booking
+      </Button>
+      <Button variant="outlined" color="secondary" onClick={handleCloseModal}>
+        Cancel
+      </Button>
+    </Box>
+  </Box>
+</Modal>
+
   </div>
   
   );

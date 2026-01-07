@@ -13,8 +13,16 @@ import { ToastColors } from "../Toast/ToastColors";
 import { socket_io, postTypes } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
+import ProfileCardInfo from "./ProfileCardInfo";
+import MentorCardInfo from "./MentorCardInfo";
+import EditProfileCardPopup from "./EditProfileCardPopup";
 
-const ProfileCard = ({ selfProfile, setSelfProfile }) => {
+const ProfileCard = ({
+  selfProfile,
+  setSelfProfile,
+  profileDataObj,
+  profileRole,
+}) => {
   const [profileData, setProfileData] = useState({}); // Initialize as an empty object
   const [averageReview, setAverageReview] = useState(0); // State to hold the average review
   const [filledStars, setFilledStars] = useState(0); // State to store the filled stars for the review
@@ -51,10 +59,9 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
   });
 
   const { id } = useParams();
-  console.log("self", selfProfile);
 
   const { email, role, userName, image, verification, user_id } = useSelector(
-    (store) => store.auth.loginDetails
+    (store) => store.auth.loginDetails,
   );
 
   const socket = useRef();
@@ -103,7 +110,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
           message: "Error in following user",
           bgColor: ToastColors.failure,
           visible: "yes",
-        })
+        }),
       );
     } finally {
       e.target.disabled = false;
@@ -144,7 +151,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
           message: "Error while trying to unfollow",
           bgColor: ToastColors.failure,
           visible: "yes",
-        })
+        }),
       );
     } finally {
       e.target.disabled = false;
@@ -199,7 +206,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
           : await ApiServices.getProfile({ id: user_id });
 
         const profileData = profileResponse.data;
-        console.log("profiledata", profileData);
+        // console.log("profiledata", profileData);
         setProfileData(profileData);
 
         if (profileData.review !== undefined && profileData.review.length > 0) {
@@ -245,7 +252,7 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
             message: error?.response?.data?.message,
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       }
     };
@@ -253,96 +260,10 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
     fetchProfileData();
   }, [email, id, user_id]); // Include user_id in the dependencies
 
-  console.log("follower", follower);
-  console.log("following", following);
-  // console.log('popup',isInputPopupVisible)
-
-  const handleCountryChange = (e) => {
-    const selectedCountry = e.target.value;
-    const countryCode = selectedCountry.split("-")[1]; // Extract country code
-    const states = State.getStatesOfCountry(countryCode) || [];
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      country: selectedCountry, // Update the selected country
-      state: "", // Reset state
-      town: "", // Reset town
-    }));
-    setPlaces({
-      ...places,
-      state: states,
-      town: [],
-    });
-    // No need to set `places` directly here, the `useEffect` will handle fetching states.
-  };
-
-  // Handle state change
-  const handleStateChange = (e) => {
-    const selectedState = e.target.value;
-    const countryCode = formState.country.split("-")[1]; // Extract country code
-    const stateCode = selectedState.split("-")[1]; // Extract state code
-    const towns = City.getCitiesOfState(countryCode, stateCode) || [];
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      state: selectedState,
-      town: "",
-    }));
-    setPlaces({
-      ...places,
-      town: towns,
-    });
-  };
-
-  // Handle town change
-  const handleTownChange = (e) => {
-    const selectedTown = e.target.value;
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      town: selectedTown,
-    }));
-  };
-
-  // Remove selected language
-  const removeLanguage = (index) => {
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      languages: prevFormState.languages.filter((_, i) => i !== index),
-    }));
-  };
-
-  // Handle language selection
-  const handleAddLanguage = () => {
-    if (
-      singlelanguagesKnown &&
-      !formState.languages.includes(singlelanguagesKnown)
-    ) {
-      setFormState((prevFormState) => ({
-        ...prevFormState,
-        languages: [...prevFormState.languages, singlelanguagesKnown],
-      }));
-      setSinglelanguagesKnown("");
-    }
-  };
-
-  const handleFormSubmit = async (e) => {
-    console.log(formState);
-    e.preventDefault();
-    try {
-      await ApiServices.InputFormData({ ...formState, user_id: user_id });
-      alert("Data saved successfully!");
-      setIsInputPopupVisible(false);
-    } catch (error) {
-      console.error("Error saving data:", error);
-      alert("There was an error saving your data. Please try again.");
-    }
-  };
-
-
   const trimHeadline = (text) => {
-  const words = text.trim().split(/\s+/);
-  return words.length > 4
-    ? words.slice(0, 4).join(" ") + " . . . ."
-    : text;
-};
+    const words = text.trim().split(/\s+/);
+    return words.length > 4 ? words.slice(0, 4).join(" ") + " . . . ." : text;
+  };
   return (
     <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
       <div className="absolute lg:relative">
@@ -366,278 +287,82 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
       <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-20 lg:mt-0 pt-16 lg:pt-0">
         <div className="font-bold text-xl ml-3">
           {/* {userName && userName[0]?.toUpperCase() + userName?.slice(1)} */}
-          {formState?.fullName}
+          {profileDataObj.role === "Startup"
+            ? profileDataObj?.startupProfile?.startupName
+            : formState?.fullName}
           <span onClick={() => setIsInputPopupVisible(true)}>
             {selfProfile && <i className="fas fa-pen"></i>}
           </span>
         </div>
-
         <div className="font-bold text-sm text-gray-500">{formState?.role}</div>
         {/* <div>{formState.headline}</div> */}
-
         <div className="flex justify-center">
-  <div className="text-center">
-    {trimHeadline(formState.headline)}
-  </div>
-</div>
-
+          <div className="text-center">{trimHeadline(formState.headline)}</div>
+        </div>
         {profileData?.beyincProfile && (
           <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
             {profileData.beyincProfile} at Beyinc
           </div>
         )}
-
         <div className="flex flex-col gap-4 mt-2 ">
-          {!selfProfile && <div className="flex items-center gap-2">
-
-            <button
-              className="rounded-full p-[7px_37px]"
-              onClick={(e) => {
-                follower.some((follower) => follower._id === user_id)
-                  ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
-                  : followerController(e, id); // Call followerController if "Follow"
-              }}
-            >
-              {follower.some((follower) => follower._id === user_id)
-                ? "Unfollow"
-                : "Follow"}
-            </button>
-            <RecommendedConnectButton
-              id={id}
-              btnClassname='!p-[7px_37px]'
-            />
-          </div>
-          }
-
-          {isInputPopupVisible && (
-            <div className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center">
-              <div className="flex justify-between bg-white rounded-lg shadow-lg p-5 overflow-y-scroll">
-                <div className="flex justify-center mt-2">
-                  <div className="flex flex-col">
-                    <div className="flex justify-between items-center">
-                      <h3>Personal Information</h3>
-                      <div
-                        className="text-gray-500 cursor-pointer"
-                        onClick={() => {
-                          document.getElementsByTagName(
-                            "body"
-                          )[0].style.overflowY = "scroll";
-                          setIsInputPopupVisible(false);
-                        }}
-                      >
-                        <i className="fas fa-times text-blue-600"></i>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="max-w-xs">
-                        <label className="text-sm font-semibold text-blue-600">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          name="fullName"
-                          value={formState.fullName}
-                          onChange={handleInputChange}
-                          className="border border-gray-300 rounded-md p-2 w-full"
-                        />
-                      </div>
-                      <div className="max-w-xs">
-                        <label className="text-sm font-semibold text-blue-600">
-                          Headline
-                        </label>
-                        <input
-                          type="text"
-                          name="headline"
-                          value={formState.headline}
-                          onChange={handleInputChange}
-                          className="border border-gray-300 rounded-md p-2 w-full"
-                        />
-                      </div>
-                      <div className="max-w-xs">
-                        <label className="text-sm font-semibold text-blue-600">
-                          Mobile Number
-                        </label>
-                        <input
-                          type="text"
-                          className={`border rounded-md p-2 w-full ${formState.mobileNumber
-                              ? formState.mobileNumber.length === 10
-                                ? "border-green-500"
-                                : "border-red-500"
-                              : "border-gray-300"
-                            }`}
-                          name="mobileNumber"
-                          id="mobile"
-                          value={formState.mobileNumber}
-                          onChange={handleInputChange}
-                          placeholder="Mobile Number"
-                        />
-                      </div>
-
-                      <div className="max-w-xs">
-                        <label className="text-sm font-semibold text-blue-600">
-                          Twitter
-                        </label>
-                        <input
-                          type="text"
-                          name="twitter"
-                          value={formState.twitter}
-                          onChange={handleInputChange}
-                          className="border border-gray-300 rounded-md p-2 w-full"
-                        />
-                      </div>
-                      <div className="max-w-xs">
-                        <label className="text-sm font-semibold text-blue-600">
-                          LinkedIn
-                        </label>
-                        <input
-                          type="text"
-                          name="linkedin"
-                          value={formState.linkedin}
-                          onChange={handleInputChange}
-                          className="border border-gray-300 rounded-md p-2 w-full"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mb-2 mt-2">
-                      <h4>Location Info</h4>
-                      <form className="flex flex-wrap items-center gap-2 w-[700px]">
-                        <div>
-                          <label className="text-sm font-semibold text-blue-600">
-                            Country
-                          </label>
-                          <select
-                            name="country"
-                            value={formState.country}
-                            onChange={handleCountryChange}
-                            className="border border-gray-300 rounded-md p-2 w-full"
-                          >
-                            <option value="">Select</option>
-                            {places.country?.map((op) => (
-                              <option
-                                key={op.isoCode}
-                                value={`${op.name}-${op.isoCode}`}
-                              >
-                                {op.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="ml-10">
-                          <label className="text-sm font-semibold text-blue-600">
-                            State
-                          </label>
-                          <select
-                            name="state"
-                            value={formState.state}
-                            onChange={handleStateChange}
-                            className="border border-gray-300 rounded-md p-2 w-full"
-                          >
-                            <option value="">Select</option>
-                            {places.state?.map((op) => (
-                              <option
-                                key={op.isoCode}
-                                value={`${op.name}-${op.isoCode}`}
-                              >
-                                {op.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="text-sm font-semibold text-blue-600">
-                            Town/City
-                          </label>
-                          <select
-                            name="town"
-                            value={formState.town}
-                            onChange={handleTownChange}
-                            className="border border-gray-300 rounded-md p-2 w-full"
-                          >
-                            <option value="">Select</option>
-                            {places.town?.map((op) => (
-                              <option key={op.name} value={op.name}>
-                                {op.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </form>
-
-                      <div>
-                        <label className="text-sm font-semibold text-blue-600">
-                          Languages Known
-                        </label>
-                        {formState.languages?.length > 0 && (
-                          <div className="flex flex-wrap gap-2 w-[300px]">
-                            {formState.languages.map((t, i) => (
-                              <div
-                                key={i}
-                                className="bg-gray-100 px-2 py-1 flex items-center text-sm gap-2 rounded-lg relative"
-                              >
-                                <div>{t}</div>
-                                <div
-                                  onClick={() => removeLanguage(i)}
-                                  className="absolute top-0 right-0 bg-red-400 text-white text-xs rounded-full cursor-pointer transition-transform transform hover:scale-110"
-                                >
-                                  X
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        <div className="flex flex-col gap-2">
-                          <select
-                            name="languagesKnown"
-                            value={singlelanguagesKnown}
-                            onChange={(e) =>
-                              setSinglelanguagesKnown(e.target.value)
-                            }
-                            className="border border-gray-300 rounded-md p-2 w-full"
-                          >
-                            <option value="">Select</option>
-                            {allLanguages.map((language) => (
-                              <option key={language} value={language}>
-                                {language}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="flex gap-4 mt-2">
-                            <button
-                              type="button"
-                              onClick={handleAddLanguage}
-                              style={{ backgroundColor: "#4e54c7" }}
-                              className="py-2 px-4 text-white font-semibold rounded-md"
-                            >
-                              Add Language
-                            </button>
-                            <button
-                              onClick={handleFormSubmit}
-                              className="py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
-                            >
-                              Save
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {!selfProfile && (
+            <div className="flex items-center gap-2">
+              <button
+                className="rounded-full p-[7px_37px]"
+                onClick={(e) => {
+                  follower.some((follower) => follower._id === user_id)
+                    ? unfollowHandler(e, id) // Call unfollowHandler if "Unfollow"
+                    : followerController(e, id); // Call followerController if "Follow"
+                }}
+              >
+                {follower.some((follower) => follower._id === user_id)
+                  ? "Unfollow"
+                  : "Follow"}
+              </button>
+              <RecommendedConnectButton id={id} btnClassname="!p-[7px_37px]" />
             </div>
           )}
+
+          {isInputPopupVisible && (
+            <EditProfileCardPopup
+              setIsInputPopupVisible={setIsInputPopupVisible}
+              profileData={profileData}
+            />
+          )}
         </div>
-
-        <div className="flex flex-col mt-4 font-bold w-full">
+        <div
+          className="flex flex-col mt-4 font-medium
+          w-full"
+        >
           <div className="px-4 lg:px-28 gap-4 flex flex-col">
-            <div className="flex justify-between">
-              <span>Followers</span> <span>{follower.length}</span>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-600">Followers</span>
+              <span className="font-semibold text-gray-700">
+                {follower.length}
+              </span>
             </div>
-            <div className="flex justify-between">
-              <span>Following</span> <span>{following.length}</span>
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-600">Following</span>
+              <span className="font-semibold text-gray-700">
+                {following.length}
+              </span>
             </div>
+            {/* startup profile info detils for other fields */}
+            {profileRole === "Startup" && profileData.startupProfile && (
+              <ProfileCardInfo
+                profileData={profileData}
+                profileRole={profileRole}
+              />
+            )}
 
+            {/* mentor/Individual profile info detils for other fields */}
+            {(profileRole === "Mentor" ||
+              profileRole === "Individual/Entrepreneur") && (
+              <MentorCardInfo
+                profileData={profileData}
+                profileRole={profileRole}
+              />
+            )}
             {country && (
               <div className="locationdetails">
                 <div>
@@ -658,7 +383,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 <div className="mt-2">{country}</div>
               </div>
             )}
-
             {formState.linkedin && (
               <div className="locationdetails">
                 <div>
@@ -680,7 +404,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 </a>
               </div>
             )}
-
             {formState.twitter && (
               <div className="locationdetails">
                 <div>
@@ -702,7 +425,6 @@ const ProfileCard = ({ selfProfile, setSelfProfile }) => {
                 </a>
               </div>
             )}
-
             {/* <div>
               {user_id == undefined ? (
                 <ReviewStars />
