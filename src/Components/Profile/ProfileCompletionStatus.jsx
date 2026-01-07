@@ -78,15 +78,21 @@ export default function ProfileCompletionStatus({
           ),
           fieldValue: profileData?.mentorExpertise,
         },
+
         {
           key: "skills",
           label: "Skills",
-          completed: !!(
-            profileData?.skills &&
-            profileData.skills.length > 0 &&
-            profileData.skills.some((skill) => skill && skill.trim().length > 0)
-          ),
-          fieldValue: profileData?.skills,
+          completed:
+            Array.isArray(profileData?.mentorExpertise) &&
+            profileData.mentorExpertise.some(
+              (item) =>
+                Array.isArray(item?.skills) &&
+                item.skills.some(
+                  (skill) =>
+                    typeof skill === "string" && skill.trim().length > 0,
+                ),
+            ),
+          fieldValue: profileData?.mentorExpertise,
         },
       ];
     }
@@ -125,9 +131,9 @@ export default function ProfileCompletionStatus({
   console.log(profileData);
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
+    <div className="bg-white rounded-2xl  p-6 ">
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">
+        <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">
           Profile Completion
         </h3>
 
@@ -318,72 +324,76 @@ export default function ProfileCompletionStatus({
         </div>
 
         {/* Status Message */}
-        <div className="text-center">
-          {completionPercentage >= 80 ? (
-            <p className="text-sm text-green-700 font-medium">
-              ✓ You're eligible to list as a{" "}
-              {profileType === "service-partner"
-                ? "partner"
-                : profileType === "Startup"
-                  ? "startup"
-                  : "mentor"}
-              ! (80%+ required)
-            </p>
-          ) : (
-            <p className="text-sm text-amber-700 font-medium">
-              Hover over the circle to see steps • Complete{" "}
-              {80 - completionPercentage}% more to become eligible
-            </p>
-          )}
-        </div>
+        {profileData.role === "Startup" && (
+          <div className="text-center">
+            {completionPercentage >= 80 ? (
+              <p className="text-sm text-green-700 font-medium">
+                ✓ You're eligible to list as a{" "}
+                {profileType === "service-partner"
+                  ? "partner"
+                  : profileType === "Startup"
+                    ? "startup"
+                    : "mentor"}
+                ! (80%+ required)
+              </p>
+            ) : (
+              <p className="text-sm text-amber-700 font-medium">
+                Hover over the circle to see steps • Complete{" "}
+                {80 - completionPercentage}% more to become eligible
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Listing Toggle */}
-      <div className="pt-4 border-t border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {isListed ? (
-              <Eye className="w-5 h-5 text-green-600" />
-            ) : (
-              <EyeOff className="w-5 h-5 text-gray-400" />
-            )}
-            <div>
-              <h4 className="font-semibold text-gray-900">
-                {isListed
-                  ? `Listed as ${profileType === "service-partner" ? "Partner" : profileType === "Startup" ? "Startup" : "Mentor"}`
-                  : "Unlisted"}
-              </h4>
-              <p className="text-sm text-gray-600">
-                {isListed
-                  ? "Your profile is visible in the listing page"
-                  : "Your profile is hidden from the listing page"}
-              </p>
+      {profileData.role === "Startup" && (
+        <div className="pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {isListed ? (
+                <Eye className="w-5 h-5 text-green-600" />
+              ) : (
+                <EyeOff className="w-5 h-5 text-gray-400" />
+              )}
+              <div>
+                <h4 className="font-semibold text-gray-900">
+                  {isListed
+                    ? `Listed as ${profileType === "service-partner" ? "Partner" : profileType === "Startup" ? "Startup" : "Mentor"}`
+                    : "Unlisted"}
+                </h4>
+                <p className="text-sm text-gray-600">
+                  {isListed
+                    ? "Your profile is visible in the listing page"
+                    : "Your profile is hidden from the listing page"}
+                </p>
+              </div>
             </div>
-          </div>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={isListed}
-              onChange={handleToggleListing}
-              disabled={!isEligible && completionPercentage < 80}
-              className="sr-only peer"
-            />
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isListed}
+                onChange={handleToggleListing}
+                disabled={!isEligible && completionPercentage < 80}
+                className="sr-only peer"
+              />
 
-            <div
-              className={`w-14 h-7 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all ${
-                isListed
-                  ? "bg-green-600"
-                  : "bg-gray-200 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"
-              } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300`}
-            ></div>
-          </label>
+              <div
+                className={`w-14 h-7 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all ${
+                  isListed
+                    ? "bg-green-600"
+                    : "bg-gray-200 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"
+                } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300`}
+              ></div>
+            </label>
+          </div>
+          {!isEligible && completionPercentage < 80 && (
+            <p className="text-xs text-amber-600 mt-2">
+              Complete 80% of your profile to enable listing
+            </p>
+          )}
         </div>
-        {!isEligible && completionPercentage < 80 && (
-          <p className="text-xs text-amber-600 mt-2">
-            Complete 80% of your profile to enable listing
-          </p>
-        )}
-      </div>
+      )}
     </div>
   );
 }

@@ -46,9 +46,11 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
               role={role}
             />
           </div>
-          <div>
-            <SeekingCard selfProfile={selfProfile} />
-          </div>
+          {profileData.role === "Startup" && (
+            <div>
+              <SeekingCard selfProfile={selfProfile} />
+            </div>
+          )}
 
           {(profileData.role === "Mentor" ||
             profileData.role === "Individual/Entrepreneur") && (

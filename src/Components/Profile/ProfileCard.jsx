@@ -445,14 +445,14 @@ const ProfileCard = ({
             <div className="reviewSessionText">
               <b>{formState.review?.length}</b> Reviews / 0 Sessions
             </div> */}
-
-            {/* Profile Completion Status */}
-            <ProfileCompletionStatus
-              profileData={profileDataObj}
-              profileType="Startup"
-              onToggleListing={handleToggleListing}
-            />
           </div>
+
+          {/* Profile Completion Status */}
+          <ProfileCompletionStatus
+            profileData={profileDataObj}
+            profileType="Startup"
+            onToggleListing={handleToggleListing}
+          />
         </div>
 
         <ProfileImageUpdate open={openEditPfp} setOpen={setOpenEditPfp} />
