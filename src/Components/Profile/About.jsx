@@ -8,6 +8,7 @@ import ExperiencesCard from "./ExperienceCard";
 import aboutService from "./aboutPageApi";
 import ProfileCard from "./ProfileCard";
 import UploadCard from "./UploadCard";
+import SeekingCard from "./SeekingCard";
 
 const About = ({ profileData, selfProfile, setSelfProfile }) => {
   const [profileAbout, setProfileAbout] = useState("");
@@ -44,6 +45,9 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
               setSelfProfile={setSelfProfile}
               role={role}
             />
+          </div>
+          <div>
+            <SeekingCard selfProfile={selfProfile} />
           </div>
 
           {(profileData.role === "Mentor" ||

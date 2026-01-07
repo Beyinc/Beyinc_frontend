@@ -479,27 +479,27 @@ export const convertToDate = (inputDate) => {
 };
 
 export const postTypes = [
-    { 'value': 'Idea Discussion', 'color': '#0d2c52' },
-    { 'value': 'Co-founder Needed', 'color': '#af1dd8' },
-    { 'value': 'Tech Partner Needed', 'color': '#60d441' },
-    { 'value': 'Mentor Needed', 'color': '#9f1f04' },
-    { 'value': 'General Post', 'color': '#05eb1b' },
-    { 'value': 'Question and Answer', 'color': '#6920a9' },
-    { 'value': 'Announcement', 'color': '#70b9d5' },
-    { 'value': 'News', 'color': '#f14edf' },
-    { 'value': 'Hiring', 'color': '#e1265d' },
-    { 'value': 'Opportunities', 'color': '#5e8d7c' },
-    { 'value': 'Investment', 'color': '#207b6a' },
-    
-    { 'value': 'Startup Expo', 'color': '#ff9800' },
-    { 'value': 'Startup Journey', 'color': '#4caf50' },
-    { 'value': 'OpenToWork', 'color': '#2196f3' }, 
-    { 'value': 'Connect', 'color': '#9c27b0' },
-    { 'value': 'Event', 'color': '#795548' },
-    { 'value': 'Potential Problem', 'color': '#f44336' },
-    { 'value': 'Portfolio', 'color': '#3f51b5' },
-    { 'value': 'Open-To-Build', 'color': '#009688' },
-]
+  { value: "Idea Discussion", color: "#0d2c52" },
+  { value: "Co-founder Needed", color: "#af1dd8" },
+  { value: "Tech Partner Needed", color: "#60d441" },
+  { value: "Mentor Needed", color: "#9f1f04" },
+  { value: "General Post", color: "#05eb1b" },
+  { value: "Question and Answer", color: "#6920a9" },
+  { value: "Announcement", color: "#70b9d5" },
+  { value: "News", color: "#f14edf" },
+  { value: "Hiring", color: "#e1265d" },
+  { value: "Opportunities", color: "#5e8d7c" },
+  { value: "Investment", color: "#207b6a" },
+
+  { value: "Startup Expo", color: "#ff9800" },
+  { value: "Startup Journey", color: "#4caf50" },
+  { value: "OpenToWork", color: "#2196f3" },
+  { value: "Connect", color: "#9c27b0" },
+  { value: "Event", color: "#795548" },
+  { value: "Potential Problem", color: "#f44336" },
+  { value: "Portfolio", color: "#3f51b5" },
+  { value: "Open-To-Build", color: "#009688" },
+];
 export const postTypeOptions = [
   { value: "Idea Discussion", color: "#0d2c52" },
   { value: "Co-founder Needed", color: "#af1dd8" },
@@ -729,7 +729,7 @@ export const COMPANY_STAGES = [
     description: "Large corporation (1000+ employees)",
     icon: "🏛️",
   },
-]
+];
 export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace"];
 export const STARTUP_TEAM_SIZES = [
   "Solo Founder",
@@ -807,6 +807,20 @@ export const STARTUP_VISIBILITY_MODES = [
   },
 ];
 
+// Startup Seeking Options
+
+export const STARTUP_SEEKING_OPTIONS = [
+  "Mentorship",
+  "Co-founders",
+  "Investors/Funding",
+  "Technical Talent",
+  "Business Development Partners",
+  "Marketing/PR Help",
+  "Legal/Compliance Advice",
+  "Product Feedback",
+  "Beta Testers",
+  "Strategic Partnerships",
+];
 // January 15, 2024
 export const MMDDYYFormat = (date) => {
   const formattedDate = moment(date).format("MMMM D, YYYY"); // "January 15, 2024"
