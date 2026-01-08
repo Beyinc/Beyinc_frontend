@@ -237,12 +237,28 @@ const IndividualPostDetailsCard = () => {
   };
 
   return (
+
     <div className="post-details-main-container sm:p-4 p-2">
+      <button
+        onClick={() => navigate("/posts")}
+        className="
+          inline-flex items-center gap-1
+          text-sm font-medium
+          !text-white
+          bg-[#4f55c7]
+          hover:bg-[#4349b3]
+          transition-colors duration-200
+          px-3 py-1.5
+          rounded-md
+        "
+      >
+        ← back
+      </button>
       {post !== null && (
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">
             <div style={{ position: "relative" }}>
-              <div className="PostHeaderContainer">
+              <div className="PostHeaderContainer" style={{ flexDirection: "column" }} >
   {/* ROW 1: User Info (Left) and Menu (Right) */}
   <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "flex-start" }}>
     
