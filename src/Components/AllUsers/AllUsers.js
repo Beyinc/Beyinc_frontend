@@ -82,6 +82,7 @@ const AllUsers = () => {
   const [data, setData] = useState([]);
   const [tag, settag] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] = useState({});
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
   const [filledStars, setFilledStars] = useState(0);
   const [search, setSearch] = useState("");
@@ -102,108 +103,57 @@ const AllUsers = () => {
   useEffect(() => {
     setFilters((prev) => ({ ...prev, review: filledStars }));
   }, [filledStars]);
-  // const [universities, setUniversities] = useState([])
-  // useEffect(() => {
-  //     axios.get('http://universities.hipolabs.com/search').then(res => {
-  //         setUniversities(res.data)
-  //     })
-  // }, [])
+
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
-    ApiServices.getAllUsers({ type: "" }).then((res) => {
-      console.log(JSON.stringify(res.data));
-      const filteredUsers = res.data.filter(user => 
-        user.beyincProfile && user.beyincProfile.trim() !== ''
-    );
     
-       
-      console.log(filteredUsers);
-      
+ApiServices.getAllUsers({ type: "" }).then((res) => {
+  console.log(JSON.stringify(res.data));
 
-      setData(filteredUsers);
-      dispatch(setLoading({ visible: "no" }));
-    });
+  // 1️⃣ Filter FIRST
+  const filteredUsers = res.data.filter(
+    (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
+  );
+
+  const industrySkillCounts = {};
+  // exclude the currently logged-in user from the computed counts
+  const usersForCounts = filteredUsers.filter(
+    (u) => u._id !== user_id && u.id !== user_id
+  );
+  usersForCounts.forEach((u) => {
+    const me = u.mentorExpertise;
+    if (Array.isArray(me)) {
+      me.forEach((entry) => {
+        const industry = entry.industry;
+        if (!industry) return;
+
+        if (!industrySkillCounts[industry]) {
+          industrySkillCounts[industry] = { industryCount: 0, skills: {} };
+        }
+
+        industrySkillCounts[industry].industryCount += 1;
+
+        const skills = Array.isArray(entry.skills) ? entry.skills : [];
+        skills.forEach((s) => {
+          if (!industrySkillCounts[industry].skills[s]) {
+            industrySkillCounts[industry].skills[s] = 0;
+          }
+          industrySkillCounts[industry].skills[s] += 1;
+        });
+      });
+    }
+  });
+
+  setData(filteredUsers);
+  setComputedIndustrySkillCounts(industrySkillCounts);
+  dispatch(setLoading({ visible: "no" }));
+});
+
+
+
   }, []);
 
-  // useEffect(() => {
-  //   if (data.length > 0) {
-  //     filterUsers();
-  //   }
-  // }, [data, filters]);
-
-  // const filterUsers = () => {
-  //   let filteredData = [...data];
-  //   // console.log(filters);
-  //   if (Object.keys(filters).length > 0) {
-  //     Object.keys(filters).map((ob) => {
-  //       if (filters[ob].length > 0 || ob === "verification" || ob === "review") {
-  //         if (
-  //           ob !== "tags" &&
-  //           ob !== "verification" &&
-  //           ob !== "email" &&
-  //           ob !== "userName" &&
-  //           ob !== "industry2" &&
-  //           ob !== "userColleges" &&
-  //           ob !== "country" &&
-  //           ob !== "state" &&
-  //           ob !== "skills" &&
-  //           ob !== "languagesKnown" &&
-  //           ob !== "review" &&
-  //           ob !== "role"
-  //         ) {
-  //           filteredData = filteredData.filter((f) =>
-  //             filters[ob].includes(f[ob])
-  //           );
-  //         } else if (
-  //           ob === "tags" ||
-  //           ob == "skills" ||
-  //           ob == "languagesKnown"
-  //         ) {
-  //           filteredData = filteredData.filter((item) => {
-  //             const itemdata = item[ob].map((t) => t.toLowerCase()) || [];
-  //             return filters[ob].some((tag) =>
-  //               itemdata.includes(tag.toLowerCase())
-  //             );
-  //           });
-  //         } else if (ob == "userColleges") {
-  //           filteredData = filteredData.filter((item) => {
-  //             const itemdata =
-  //               item["educationDetails"]?.map((t) => t.college) || [];
-  //             return filters[ob].some((tag) => itemdata.includes(tag));
-  //           });
-  //         } else if (ob == "verification") {
-  //           if (filters[ob]) {
-  //             filteredData = filteredData.filter((item) => {
-  //               return item.verification == "approved";
-  //             });
-  //           }
-  //         } else if (
-  //           ob == "userName" ||
-  //           ob == "industry2" ||
-  //           ob == "country" ||
-  //           ob == "state" ||
-  //           ob == "email" ||
-  //           ob == "role"
-  //         ) {
-  //           filteredData = filteredData.filter((f) => {
-  //             return filters[ob].some((fs) => fs === f[ob]);
-  //           });
-  //         } else if (ob == "review") {
-  //           if (filters[ob] !== 0) {
-  //             filteredData = filteredData.filter((f) => {
-  //               return fetchRating(f) <= filters[ob];
-  //             });
-  //           }
-  //         }
-
-  //       }
-  //     });
-  //   }
-  //   filteredData.sort((a, b) => {
-  //     return fetchRating(b) - fetchRating(a);
-  //   });
-  //   setFilteredData(filteredData);
-  // };
+  
 
   const [isSpinning, setSpinning] = useState(false);
   const handleReloadClick = () => {
@@ -326,7 +276,7 @@ const AllUsers = () => {
             }}
           />
         </DialogTitle>
-        <FilterSidebar updateFilters={updateFilters} open={open}/>
+          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
 
        
         <DialogActions>
@@ -343,7 +293,7 @@ const AllUsers = () => {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <div className="bg-white shadow-md m-3">
           <h2 className="mt-4 px-20">Filter</h2>
-          <FilterSidebar updateFilters={updateFilters} open={open} />
+          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
           <Button
             sx={{ width: "fit-content", marginLeft: "100px",marginBottom:"30px" }}
             variant="contained"
@@ -411,7 +361,7 @@ const AllUsers = () => {
                   />
                 </div>
               </div>
-              <FilterSidebar updateFilters={updateFilters} />
+              <FilterSidebar updateFilters={updateFilters} industrySkillCounts={computedIndustrySkillCounts} />
               {/* Role */}
               {/* <div className="tagFilter">
                 <div className="filter-header">

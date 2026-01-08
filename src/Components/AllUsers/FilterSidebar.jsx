@@ -34,7 +34,7 @@ const cleanButtonStyle = {
   cursor: "pointer",
 };
 
-const FilterSidebar = ({ updateFilters, open }) => {
+const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
   // --- STATE ---
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState([]);
@@ -116,7 +116,7 @@ const FilterSidebar = ({ updateFilters, open }) => {
       {/* Inject Styles Here */}
       <style>{scrollbarStyles}</style>
 
-      <aside className={`w-64 flex-shrink-0 !bg-white ${open ? "block" : "hidden"} md:block pr-2`}>
+      <aside className={`w-72 flex-shrink-0 !bg-white ${open ? "block" : "hidden"} md:block pr-2`}>
         <div className="flex flex-col">
           {/* Main Title */}
           <div className="flex items-center justify-between mb-6">
@@ -180,30 +180,39 @@ const FilterSidebar = ({ updateFilters, open }) => {
                       type="button"
                       onClick={() => toggleSection(`industry-${industry}`)}
                       style={cleanButtonStyle}
-                      className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors"
+                      className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors flex items-center justify-between"
                     >
                       <span className="text-sm font-semibold !text-gray-700">{industry}</span>
-                      <ChevronDown 
-                        className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
-                          expandedSections[`industry-${industry}`] ? "rotate-180" : ""
-                        }`} 
-                      />
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-400">({industrySkillCounts[industry]?.industryCount || 0})</span>
+                        <ChevronDown 
+                          className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
+                            expandedSections[`industry-${industry}`] ? "rotate-180" : ""
+                          }`} 
+                        />
+                      </div>
                     </button>
 
                     {/* Skills List (Level 3) - Nested */}
                     {expandedSections[`industry-${industry}`] && (
                       <div className="ml-2 pl-4 border-l-2 border-gray-100 space-y-2 py-2 mb-2">
                         {skills.map((skill) => (
-                          <label key={skill} className="flex items-start gap-3 cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors">
-                            <input
-                              type="checkbox"
-                              checked={selectedExpertise.includes(skill)}
-                              onChange={() => handleExpertiseToggle(skill)}
-                              className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
-                            />
-                            <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
-                              {skill}
-                            </span>
+                          <label
+                            key={skill}
+                            className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                          >
+                            <div className="flex items-center gap-3">
+                              <input
+                                type="checkbox"
+                                checked={selectedExpertise.includes(skill)}
+                                onChange={() => handleExpertiseToggle(skill)}
+                                className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
+                              />
+                              <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
+                                {skill}
+                              </span>
+                            </div>
+                            <span className="text-xs text-gray-400 ml-4">({industrySkillCounts[industry]?.skills?.[skill] || 0})</span>
                           </label>
                         ))}
                       </div>

@@ -20,6 +20,8 @@ const SingleUserDetails = ({ user, connectStatus }) => {
 
   // --- Effects ---
   useEffect(() => {
+    console.log("user data", user);
+
     const fetchAvailabilityData = async () => {
       try {
         const { data } = await CalendarServices.getAvailabilityData({
@@ -84,6 +86,17 @@ const SingleUserDetails = ({ user, connectStatus }) => {
       alert("Failed to send request: " + errorMsg);
     }
   };
+
+  // derive industries and expertise from mentorExpertise when available
+  const industriesFromMentorExpertise =
+    user?.mentorExpertise && Array.isArray(user.mentorExpertise)
+      ? user.mentorExpertise.map((m) => m.industry).filter(Boolean)
+      : [];
+
+  const expertiseFromMentorExpertise =
+    user?.mentorExpertise && Array.isArray(user.mentorExpertise)
+      ? user.mentorExpertise.flatMap((m) => (Array.isArray(m.skills) ? m.skills : [])).filter(Boolean)
+      : [];
 
   return (
     <>
@@ -152,8 +165,16 @@ const SingleUserDetails = ({ user, connectStatus }) => {
                     ))}
                 </div>
                 <p className="text-xs text-gray-500 h-4">
-                    {activeTab === "Expertise" && (user.expertise?.length > 0 ? user.expertise.join(", ") : "N/A")}
-                    {activeTab === "Industries" && (user.industries?.length > 0 ? user.industries.join(", ") : "N/A")}
+                    {activeTab === "Expertise" && (
+                        expertiseFromMentorExpertise.length > 0
+                          ? expertiseFromMentorExpertise.join(", ")
+                          : "N/A"
+                    )}
+                    {activeTab === "Industries" && (
+                        industriesFromMentorExpertise.length > 0
+                          ? industriesFromMentorExpertise.join(", ")
+                          : "N/A"
+                    )}
                 </p>
             </div>
 
