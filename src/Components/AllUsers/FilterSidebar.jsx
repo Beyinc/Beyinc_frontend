@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ROLE_LEVELS, INDUSTRY_EXPERTISE } from "../../Utils";
+import { ROLE_LEVELS, INDUSTRY_EXPERTISE, STARTUP_STAGES } from "../../Utils";
 
 const scrollbarStyles = `
   .custom-scrollbar::-webkit-scrollbar {
@@ -49,10 +49,13 @@ const FilterSidebar = ({
   const [selectedStartupIndustries, setSelectedStartupIndustries] = useState(
     [],
   );
+  const [selectedStartupStage, setSelectedStartupStage] = useState(""); // NEW STATE FOR STAGE
+
   // Accordion State
   const [expandedSections, setExpandedSections] = useState({
     roleLevel: true,
     expertise: true,
+    startupStage: true,
     // Initialize specific industries as closed
     ...Object.keys(INDUSTRY_EXPERTISE || {}).reduce((acc, key) => {
       acc[`industry-${key}`] = false;
@@ -81,7 +84,8 @@ const FilterSidebar = ({
       }
     });
   };
-  // --- NEW HANDLER FOR STARTUP INDUSTRIES ---
+
+  // --- HANDLER FOR STARTUP INDUSTRIES ---
   const handleStartupIndustryToggle = (industry) => {
     setSelectedStartupIndustries((prev) => {
       if (prev.includes(industry)) {
@@ -90,6 +94,10 @@ const FilterSidebar = ({
         return [...prev, industry];
       }
     });
+  };
+  // --- NEW HANDLER FOR STARTUP STAGE ---
+  const handleStartupStageChange = (e) => {
+    setSelectedStartupStage(e.target.value);
   };
 
   // --- SAFE EFFECT (DEBOUNCED) ---
@@ -114,23 +122,26 @@ const FilterSidebar = ({
   }, [selectedRole, selectedExpertise, updateFilters]);
   // --- NEW EFFECT FOR STARTUPS ---
 
-  // UPDATE THIS EFFECT FOR STARTUPS
+  // --- EFFECT FOR STARTUPS (UPDATED) ---
   useEffect(() => {
     if (viewMode !== "startups") return;
-
     const handler = setTimeout(() => {
       const filters = {
         userName: "",
         industries: selectedStartupIndustries,
-        stage: "",
+        stage: selectedStartupStage, // NOW USING THE SELECTED STAGE
         targetMarket: [],
         seekingOptions: [],
       };
-      updateStartupFilters(filters); // Use updateStartupFilters here
+      updateStartupFilters(filters);
     }, 500);
     return () => clearTimeout(handler);
-  }, [selectedStartupIndustries, updateStartupFilters, viewMode]);
-
+  }, [
+    selectedStartupIndustries,
+    selectedStartupStage,
+    updateStartupFilters,
+    viewMode,
+  ]); // ADDED selectedStartupStage
   // --- SVG ICON ---
   const ChevronDown = ({ className }) => (
     <svg
@@ -326,6 +337,40 @@ const FilterSidebar = ({
                       </div>
                     </label>
                   ))}
+                </div>
+              )}
+            </div>
+          )}
+          {/* ================= STARTUP STAGE SECTION ================= */}
+          {viewMode === "startups" && (
+            <div className="mb-6 border-b border-gray-100 pb-4">
+              <button
+                type="button"
+                onClick={() => toggleSection("startupStage")}
+                style={cleanButtonStyle}
+                className="group mb-2"
+              >
+                <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                  Startup Stage
+                </h3>
+                <ChevronDown
+                  className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.startupStage ? "rotate-180" : ""}`}
+                />
+              </button>
+              {expandedSections.startupStage && (
+                <div className="mt-2 pl-1">
+                  <select
+                    value={selectedStartupStage}
+                    onChange={handleStartupStageChange}
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm !bg-white !text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#4f55c7] focus:border-[#4f55c7] accent-[#4f55c7] transition-all cursor-pointer hover:border-[#4f55c7]"
+                  >
+                    <option value="">All Stages</option>
+                    {STARTUP_STAGES.map((stage) => (
+                      <option key={stage.id} value={stage.id}>
+                        {stage.icon} {stage.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               )}
             </div>
