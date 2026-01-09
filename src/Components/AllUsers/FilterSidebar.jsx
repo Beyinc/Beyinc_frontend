@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ROLE_LEVELS, INDUSTRY_EXPERTISE, STARTUP_STAGES } from "../../Utils";
+import {
+  ROLE_LEVELS,
+  INDUSTRY_EXPERTISE,
+  STARTUP_STAGES,
+  STARTUP_SEEKING_OPTIONS,
+} from "../../Utils";
 
 const scrollbarStyles = `
   .custom-scrollbar::-webkit-scrollbar {
@@ -45,17 +50,19 @@ const FilterSidebar = ({
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState([]);
 
-  // --- NEW STATE FOR STARTUPS ---
+  // --- STATE FOR STARTUPS ---
   const [selectedStartupIndustries, setSelectedStartupIndustries] = useState(
     [],
   );
-  const [selectedStartupStage, setSelectedStartupStage] = useState(""); // NEW STATE FOR STAGE
+  const [selectedStartupStage, setSelectedStartupStage] = useState("");
+  const [selectedSeekingOptions, setSelectedSeekingOptions] = useState([]); // NEW STATE
 
   // Accordion State
   const [expandedSections, setExpandedSections] = useState({
     roleLevel: true,
     expertise: true,
     startupStage: true,
+    seekingOptions: true,
     // Initialize specific industries as closed
     ...Object.keys(INDUSTRY_EXPERTISE || {}).reduce((acc, key) => {
       acc[`industry-${key}`] = false;
@@ -99,6 +106,16 @@ const FilterSidebar = ({
   const handleStartupStageChange = (e) => {
     setSelectedStartupStage(e.target.value);
   };
+  // --- NEW HANDLER FOR SEEKING OPTIONS ---
+  const handleSeekingOptionToggle = (option) => {
+    setSelectedSeekingOptions((prev) => {
+      if (prev.includes(option)) {
+        return prev.filter((item) => item !== option);
+      } else {
+        return [...prev, option];
+      }
+    });
+  };
 
   // --- SAFE EFFECT (DEBOUNCED) ---
   useEffect(() => {
@@ -129,9 +146,9 @@ const FilterSidebar = ({
       const filters = {
         userName: "",
         industries: selectedStartupIndustries,
-        stage: selectedStartupStage, // NOW USING THE SELECTED STAGE
+        stage: selectedStartupStage,
         targetMarket: [],
-        seekingOptions: [],
+        seekingOptions: selectedSeekingOptions, // NOW USING SELECTED SEEKING OPTIONS
       };
       updateStartupFilters(filters);
     }, 500);
@@ -139,9 +156,11 @@ const FilterSidebar = ({
   }, [
     selectedStartupIndustries,
     selectedStartupStage,
+    selectedSeekingOptions,
     updateStartupFilters,
     viewMode,
-  ]); // ADDED selectedStartupStage
+  ]); // ADDED selectedSeekingOptions
+
   // --- SVG ICON ---
   const ChevronDown = ({ className }) => (
     <svg
@@ -371,6 +390,46 @@ const FilterSidebar = ({
                       </option>
                     ))}
                   </select>
+                </div>
+              )}
+            </div>
+          )}
+          {/* ================= SEEKING OPTIONS FILTER ================= */}
+          {viewMode === "startups" && (
+            <div className="mb-4">
+              <button
+                type="button"
+                onClick={() => toggleSection("seekingOptions")}
+                style={cleanButtonStyle}
+                className="group mb-4"
+              >
+                <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                  Seeking
+                </h3>
+                <ChevronDown
+                  className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.seekingOptions ? "rotate-180" : ""}`}
+                />
+              </button>
+              {expandedSections.seekingOptions && (
+                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                  {STARTUP_SEEKING_OPTIONS.map((option) => (
+                    <label
+                      key={option}
+                      className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedSeekingOptions.includes(option)}
+                          onChange={() => handleSeekingOptionToggle(option)}
+                          className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
+                        />
+                        <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
+                          {option}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
                 </div>
               )}
             </div>
