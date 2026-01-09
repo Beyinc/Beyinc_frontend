@@ -34,11 +34,21 @@ const cleanButtonStyle = {
   cursor: "pointer",
 };
 
-const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
+const FilterSidebar = ({
+  viewMode,
+  updateFilters,
+  updateStartupFilters,
+  open,
+  industrySkillCounts = {},
+}) => {
   // --- STATE ---
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState([]);
 
+  // --- NEW STATE FOR STARTUPS ---
+  const [selectedStartupIndustries, setSelectedStartupIndustries] = useState(
+    [],
+  );
   // Accordion State
   const [expandedSections, setExpandedSections] = useState({
     roleLevel: true,
@@ -71,6 +81,16 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
       }
     });
   };
+  // --- NEW HANDLER FOR STARTUP INDUSTRIES ---
+  const handleStartupIndustryToggle = (industry) => {
+    setSelectedStartupIndustries((prev) => {
+      if (prev.includes(industry)) {
+        return prev.filter((item) => item !== industry);
+      } else {
+        return [...prev, industry];
+      }
+    });
+  };
 
   // --- SAFE EFFECT (DEBOUNCED) ---
   useEffect(() => {
@@ -92,6 +112,24 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
 
     return () => clearTimeout(handler);
   }, [selectedRole, selectedExpertise, updateFilters]);
+  // --- NEW EFFECT FOR STARTUPS ---
+
+  // UPDATE THIS EFFECT FOR STARTUPS
+  useEffect(() => {
+    if (viewMode !== "startups") return;
+
+    const handler = setTimeout(() => {
+      const filters = {
+        userName: "",
+        industries: selectedStartupIndustries,
+        stage: "",
+        targetMarket: [],
+        seekingOptions: [],
+      };
+      updateStartupFilters(filters); // Use updateStartupFilters here
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [selectedStartupIndustries, updateStartupFilters, viewMode]);
 
   // --- SVG ICON ---
   const ChevronDown = ({ className }) => (
@@ -122,129 +160,176 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
         <div className="flex flex-col">
           {/* Main Title */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold !text-gray-900 m-0">
-              Filter By: hello
-            </h2>
+            <h2 className="text-xl font-bold !text-gray-900 m-0">Filter By:</h2>
           </div>
 
           {/* ================= ROLE LEVEL SECTION ================= */}
-          <div className="mb-6 border-b border-gray-100 pb-4">
-            <button
-              type="button"
-              onClick={() => toggleSection("roleLevel")}
-              style={cleanButtonStyle}
-              className="group mb-2"
-            >
-              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
-                Role Level
-              </h3>
-              <ChevronDown
-                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.roleLevel ? "rotate-180" : ""}`}
-              />
-            </button>
+          {viewMode === "mentors" && (
+            <div className="mb-6 border-b border-gray-100 pb-4">
+              <button
+                type="button"
+                onClick={() => toggleSection("roleLevel")}
+                style={cleanButtonStyle}
+                className="group mb-2"
+              >
+                <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                  Role Level
+                </h3>
+                <ChevronDown
+                  className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.roleLevel ? "rotate-180" : ""}`}
+                />
+              </button>
 
-            {expandedSections.roleLevel && (
-              <div className="mt-2 pl-1">
-                <select
-                  value={selectedRole}
-                  onChange={handleRoleChange}
-                  // Added 'accent-[#4f55c7]' and made the ring solid to ensure no blue remains
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm !bg-white !text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#4f55c7] focus:border-[#4f55c7] accent-[#4f55c7] transition-all cursor-pointer hover:border-[#4f55c7]"
-                >
-                  <option value="">All Levels</option>
-                  {ROLE_LEVELS.map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
+              {expandedSections.roleLevel && (
+                <div className="mt-2 pl-1">
+                  <select
+                    value={selectedRole}
+                    onChange={handleRoleChange}
+                    // Added 'accent-[#4f55c7]' and made the ring solid to ensure no blue remains
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm !bg-white !text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#4f55c7] focus:border-[#4f55c7] accent-[#4f55c7] transition-all cursor-pointer hover:border-[#4f55c7]"
+                  >
+                    <option value="">All Levels</option>
+                    {ROLE_LEVELS.map((level) => (
+                      <option key={level} value={level}>
+                        {level}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* ================= EXPERTISE SECTION ================= */}
-          <div className="mb-4">
-            <button
-              type="button"
-              onClick={() => toggleSection("expertise")}
-              style={cleanButtonStyle}
-              className="group mb-4"
-            >
-              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
-                Expertise
-              </h3>
-              <ChevronDown
-                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.expertise ? "rotate-180" : ""}`}
-              />
-            </button>
+          {viewMode === "mentors" && (
+            <div className="mb-4">
+              <button
+                type="button"
+                onClick={() => toggleSection("expertise")}
+                style={cleanButtonStyle}
+                className="group mb-4"
+              >
+                <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                  Expertise
+                </h3>
+                <ChevronDown
+                  className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.expertise ? "rotate-180" : ""}`}
+                />
+              </button>
 
-            {expandedSections.expertise && (
-              <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-                {/* Dynamic Categories */}
-                {Object.entries(INDUSTRY_EXPERTISE || {}).map(
-                  ([industry, skills]) => (
-                    <div key={industry} className="mb-1">
-                      {/* Category Header (Level 2) */}
-                      <button
-                        type="button"
-                        onClick={() => toggleSection(`industry-${industry}`)}
-                        style={cleanButtonStyle}
-                        className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors flex items-center justify-between"
-                      >
-                        <span className="text-sm font-semibold !text-gray-700">
+              {expandedSections.expertise && (
+                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                  {/* Dynamic Categories */}
+                  {Object.entries(INDUSTRY_EXPERTISE || {}).map(
+                    ([industry, skills]) => (
+                      <div key={industry} className="mb-1">
+                        {/* Category Header (Level 2) */}
+                        <button
+                          type="button"
+                          onClick={() => toggleSection(`industry-${industry}`)}
+                          style={cleanButtonStyle}
+                          className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors flex items-center justify-between"
+                        >
+                          <span className="text-sm font-semibold !text-gray-700">
+                            {industry}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-400">
+                              (
+                              {industrySkillCounts[industry]?.industryCount ||
+                                0}
+                              )
+                            </span>
+                            <ChevronDown
+                              className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
+                                expandedSections[`industry-${industry}`]
+                                  ? "rotate-180"
+                                  : ""
+                              }`}
+                            />
+                          </div>
+                        </button>
+
+                        {/* Skills List (Level 3) - Nested */}
+                        {expandedSections[`industry-${industry}`] && (
+                          <div className="ml-2 pl-4 border-l-2 border-gray-100 space-y-2 py-2 mb-2">
+                            {skills.map((skill) => (
+                              <label
+                                key={skill}
+                                className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedExpertise.includes(skill)}
+                                    onChange={() =>
+                                      handleExpertiseToggle(skill)
+                                    }
+                                    className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
+                                  />
+                                  <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
+                                    {skill}
+                                  </span>
+                                </div>
+                                <span className="text-xs text-gray-400 ml-4">
+                                  (
+                                  {industrySkillCounts[industry]?.skills?.[
+                                    skill
+                                  ] || 0}
+                                  )
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ),
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          {/* NEW STARTUP INDUSTRIES FILTER */}
+          {viewMode === "startups" && (
+            <div className="mb-4">
+              <button
+                type="button"
+                onClick={() => toggleSection("startupIndustries")}
+                style={cleanButtonStyle}
+                className="group mb-4"
+              >
+                <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                  Industries
+                </h3>
+                <ChevronDown
+                  className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.startupIndustries ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {expandedSections.startupIndustries && (
+                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                  {Object.keys(INDUSTRY_EXPERTISE || {}).map((industry) => (
+                    <label
+                      key={industry}
+                      className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedStartupIndustries.includes(industry)}
+                          onChange={() => handleStartupIndustryToggle(industry)}
+                          className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
+                        />
+                        <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
                           {industry}
                         </span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-400">
-                            ({industrySkillCounts[industry]?.industryCount || 0}
-                            )
-                          </span>
-                          <ChevronDown
-                            className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
-                              expandedSections[`industry-${industry}`]
-                                ? "rotate-180"
-                                : ""
-                            }`}
-                          />
-                        </div>
-                      </button>
-
-                      {/* Skills List (Level 3) - Nested */}
-                      {expandedSections[`industry-${industry}`] && (
-                        <div className="ml-2 pl-4 border-l-2 border-gray-100 space-y-2 py-2 mb-2">
-                          {skills.map((skill) => (
-                            <label
-                              key={skill}
-                              className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
-                            >
-                              <div className="flex items-center gap-3">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedExpertise.includes(skill)}
-                                  onChange={() => handleExpertiseToggle(skill)}
-                                  className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
-                                />
-                                <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
-                                  {skill}
-                                </span>
-                              </div>
-                              <span className="text-xs text-gray-400 ml-4">
-                                (
-                                {industrySkillCounts[industry]?.skills?.[
-                                  skill
-                                ] || 0}
-                                )
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ),
-                )}
-              </div>
-            )}
-          </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </aside>
     </>
@@ -252,4 +337,3 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
 };
 
 export default FilterSidebar;
-

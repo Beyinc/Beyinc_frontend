@@ -259,7 +259,7 @@ const AllUsers = () => {
 
   // iqra
   // Add this with your other useState declarations
-  const [viewMode, setViewMode] = useState("mentors"); // Hardcoded to "startups" for now
+  const [viewMode, setViewMode] = useState("startups"); // Hardcoded to "startups" for now
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -299,20 +299,13 @@ const AllUsers = () => {
     }
   };
 
-  // NEW FUNCTION FOR STARTUPS - ADD THIS
+  // NEW FUNCTION FOR STARTUPS -
   const fetchStartups = async () => {
     console.log("Current startup filters:", startupFilters);
     try {
       const response = await ApiServices.FilterStartups(startupFilters);
-      console.log("Startups data:", response.data);
-
-      // Filter to only show beyincProfile: "Startup"
-      const filteredStartups = response.data.filter((startup) => {
-        return startup.beyincProfile === "Startup";
-      });
-
-      console.log("Filtered startups:", filteredStartups);
-      setStartups(filteredStartups);
+      console.log("Filtered startups from backend:", response.data);
+      setStartups(response.data); // Backend already filtered by beyincProfile: "Startup"
     } catch (error) {
       console.error("Error fetching startups:", error);
     }
@@ -333,6 +326,14 @@ const AllUsers = () => {
       ...newFilters,
     }));
   }, []);
+  // NEW - for startups
+  const updateStartupFilters = useCallback((newFilters) => {
+    setStartupFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters,
+    }));
+  }, []);
+  console.log(startupFilters);
 
   return (
     <>
@@ -448,7 +449,11 @@ const AllUsers = () => {
                   />
                 </div>
               </div>
-              <FilterSidebar updateFilters={updateFilters} />
+              <FilterSidebar
+                updateFilters={updateFilters}
+                updateStartupFilters={updateStartupFilters}
+                viewMode={viewMode}
+              />
               {/* Role */}
               {/* <div className="tagFilter">
                 <div className="filter-header">
