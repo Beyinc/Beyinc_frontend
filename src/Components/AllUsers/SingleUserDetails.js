@@ -109,20 +109,19 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
           .flatMap((m) => (Array.isArray(m.skills) ? m.skills : []))
           .filter(Boolean)
       : [];
-  // NEW - derive industries, stage, and seeking from startupProfile
+
+  // NEW - derive industries, stage, seeking, AND target market from startupProfile
   const industriesFromStartup =
     user?.startupProfile?.industries &&
     Array.isArray(user.startupProfile.industries)
       ? user.startupProfile.industries.filter((ind) => ind !== "")
       : [];
-
   const stageFromStartup = user?.startupProfile?.stage || null;
-
   const seekingFromStartup =
     user?.seekingOptions && Array.isArray(user.seekingOptions)
       ? user.seekingOptions
       : [];
-
+  const targetMarketFromStartup = user?.startupProfile?.targetMarket || null; // NEW
   return (
     <>
       {/* --- Main Card Container --- */}
@@ -194,19 +193,21 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                   ))}
 
                 {viewMode === "startups" &&
-                  ["Industries", "Stage", "Seeking"].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
-                        activeTab === tab
-                          ? "bg-[#4f55c7] text-white border-[#4f55c7]"
-                          : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
+                  ["Industries", "Stage", "Seeking", "Target Market"].map(
+                    (tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
+                          activeTab === tab
+                            ? "bg-[#4f55c7] text-white border-[#4f55c7]"
+                            : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ),
+                  )}
               </div>
 
               <p className="text-xs text-gray-500 h-4">
@@ -234,6 +235,9 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                       (seekingFromStartup.length > 0
                         ? seekingFromStartup.join(", ")
                         : "N/A")}
+                    {activeTab === "Target Market" &&
+                      (targetMarketFromStartup || "N/A")}{" "}
+                    {/* NEW */}
                   </>
                 )}
               </p>

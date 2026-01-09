@@ -4,6 +4,7 @@ import {
   INDUSTRY_EXPERTISE,
   STARTUP_STAGES,
   STARTUP_SEEKING_OPTIONS,
+  TARGET_MARKETS,
 } from "../../Utils";
 
 const scrollbarStyles = `
@@ -55,8 +56,8 @@ const FilterSidebar = ({
     [],
   );
   const [selectedStartupStage, setSelectedStartupStage] = useState("");
-  const [selectedSeekingOptions, setSelectedSeekingOptions] = useState([]); // NEW STATE
-
+  const [selectedSeekingOptions, setSelectedSeekingOptions] = useState([]);
+  const [selectedTargetMarkets, setSelectedTargetMarkets] = useState([]); // NEW STATE
   // Accordion State
   const [expandedSections, setExpandedSections] = useState({
     roleLevel: true,
@@ -116,6 +117,16 @@ const FilterSidebar = ({
       }
     });
   };
+  // --- NEW HANDLER FOR TARGET MARKET ---
+  const handleTargetMarketToggle = (market) => {
+    setSelectedTargetMarkets((prev) => {
+      if (prev.includes(market)) {
+        return prev.filter((item) => item !== market);
+      } else {
+        return [...prev, market];
+      }
+    });
+  };
 
   // --- SAFE EFFECT (DEBOUNCED) ---
   useEffect(() => {
@@ -147,8 +158,8 @@ const FilterSidebar = ({
         userName: "",
         industries: selectedStartupIndustries,
         stage: selectedStartupStage,
-        targetMarket: [],
-        seekingOptions: selectedSeekingOptions, // NOW USING SELECTED SEEKING OPTIONS
+        targetMarket: selectedTargetMarkets, // NOW USING SELECTED TARGET MARKETS
+        seekingOptions: selectedSeekingOptions,
       };
       updateStartupFilters(filters);
     }, 500);
@@ -157,9 +168,10 @@ const FilterSidebar = ({
     selectedStartupIndustries,
     selectedStartupStage,
     selectedSeekingOptions,
+    selectedTargetMarkets, // ADDED
     updateStartupFilters,
     viewMode,
-  ]); // ADDED selectedSeekingOptions
+  ]);
 
   // --- SVG ICON ---
   const ChevronDown = ({ className }) => (
@@ -352,6 +364,46 @@ const FilterSidebar = ({
                         />
                         <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
                           {industry}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {/* ================= TARGET MARKET FILTER ================= */}
+          {viewMode === "startups" && (
+            <div className="mb-4">
+              <button
+                type="button"
+                onClick={() => toggleSection("targetMarket")}
+                style={cleanButtonStyle}
+                className="group mb-4"
+              >
+                <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                  Target Market
+                </h3>
+                <ChevronDown
+                  className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.targetMarket ? "rotate-180" : ""}`}
+                />
+              </button>
+              {expandedSections.targetMarket && (
+                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                  {TARGET_MARKETS.map((market) => (
+                    <label
+                      key={market}
+                      className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedTargetMarkets.includes(market)}
+                          onChange={() => handleTargetMarketToggle(market)}
+                          className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
+                        />
+                        <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
+                          {market}
                         </span>
                       </div>
                     </label>
