@@ -177,7 +177,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
               <div className="flex gap-2 mb-2">
-                {viewMode === "mentors" &&
+                {(viewMode === "mentors" || viewMode === "all") &&
                   ["Expertise", "Industries"].map((tab) => (
                     <button
                       key={tab}
@@ -192,7 +192,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                     </button>
                   ))}
 
-                {viewMode === "startups" &&
+                {(viewMode === "startups" || viewMode === "all") &&
                   ["Industries", "Stage", "Seeking", "Target Market"].map(
                     (tab) => (
                       <button

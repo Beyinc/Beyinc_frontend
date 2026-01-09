@@ -1,15 +1,6 @@
 import { useState } from "react";
 
 const TopFilterBar = () => {
-  const categories = [
-    "Engineering Mentor",
-    "Design Mentor",
-    "Startup Mentor",
-    "Marketing Mentor",
-    "Career Mentor",
-    "Top Mentors",
-  ];
-
   // JS version: no generics, no union types
   const [selectedProfileType, setSelectedProfileType] = useState("All");
 

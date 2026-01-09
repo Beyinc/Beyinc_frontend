@@ -147,7 +147,7 @@ const FilterSidebar = ({
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [selectedRole, selectedExpertise, updateFilters]);
+  }, [selectedRole, selectedExpertise, updateFilters, viewMode]);
   // --- NEW EFFECT FOR STARTUPS ---
 
   // --- EFFECT FOR STARTUPS (UPDATED) ---
@@ -206,7 +206,7 @@ const FilterSidebar = ({
           </div>
 
           {/* ================= ROLE LEVEL SECTION ================= */}
-          {viewMode === "mentors" && (
+          {(viewMode === "mentors" || viewMode === "all") && (
             <div className="mb-6 border-b border-gray-100 pb-4">
               <button
                 type="button"
@@ -243,7 +243,7 @@ const FilterSidebar = ({
           )}
 
           {/* ================= EXPERTISE SECTION ================= */}
-          {viewMode === "mentors" && (
+          {(viewMode === "mentors" || viewMode === "all") && (
             <div className="mb-4">
               <button
                 type="button"
@@ -332,7 +332,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* NEW STARTUP INDUSTRIES FILTER */}
-          {viewMode === "startups" && (
+          {(viewMode === "startups" || viewMode === "all") && (
             <div className="mb-4">
               <button
                 type="button"
@@ -373,7 +373,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* ================= TARGET MARKET FILTER ================= */}
-          {viewMode === "startups" && (
+          {(viewMode === "startups" || viewMode === "all") && (
             <div className="mb-4">
               <button
                 type="button"
@@ -413,7 +413,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* ================= STARTUP STAGE SECTION ================= */}
-          {viewMode === "startups" && (
+          {(viewMode === "startups" || viewMode === "all") && (
             <div className="mb-6 border-b border-gray-100 pb-4">
               <button
                 type="button"
@@ -447,7 +447,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* ================= SEEKING OPTIONS FILTER ================= */}
-          {viewMode === "startups" && (
+          {(viewMode === "startups" || viewMode === "all") && (
             <div className="mb-4">
               <button
                 type="button"

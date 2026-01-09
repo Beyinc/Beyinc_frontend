@@ -259,7 +259,7 @@ const AllUsers = () => {
 
   // iqra
   // Add this with your other useState declarations
-  const [viewMode, setViewMode] = useState("startups"); // Hardcoded to "startups" for now
+  const [viewMode, setViewMode] = useState("all"); // Hardcoded to "startups" for now
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -333,7 +333,6 @@ const AllUsers = () => {
       ...newFilters,
     }));
   }, []);
-  console.log(startupFilters);
 
   return (
     <>
@@ -428,6 +427,46 @@ const AllUsers = () => {
             </div>
           </div>
         )}
+        {/* NEW TABS SECTION - Add this right after mobile nav */}
+        <div
+          className="w-full bg-white border-b border-gray-200 sticky top-0 z-10 ml-60
+        "
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex space-x-8 py-4">
+              <button
+                onClick={() => setViewMode("all")}
+                className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
+                  viewMode === "all"
+                    ? "text-black"
+                    : "border-transparent text-gray-700 "
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setViewMode("mentors")}
+                className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
+                  viewMode === "mentors"
+                    ? "text-black"
+                    : "border-transparent text-gray-700"
+                }`}
+              >
+                Mentor
+              </button>
+              <button
+                onClick={() => setViewMode("startups")}
+                className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
+                  viewMode === "startups"
+                    ? "text-black"
+                    : "border-transparent text-gray-700 "
+                }`}
+              >
+                Startup
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="usersWrapper">
           {width > 770 && (
             <div className="filterContainer">
@@ -576,11 +615,15 @@ const AllUsers = () => {
           {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
             <div className="mt-4 userscontainer">
-              {viewMode === "mentors" ? (
+              {(viewMode === "mentors" || viewMode === "all") &&
                 // RENDER MENTORS
-                users.length > 0 ? (
+                (users.length > 0 ? (
                   users.map((user) => (
-                    <SingleUserDetails key={user.id} user={user} />
+                    <SingleUserDetails
+                      key={user.id}
+                      user={user}
+                      viewMode={viewMode}
+                    />
                   ))
                 ) : (
                   <div
@@ -595,30 +638,31 @@ const AllUsers = () => {
                     <img src="/Search.gif" />
                     <div>No users available</div>
                   </div>
-                )
-              ) : // RENDER STARTUPS
-              startups.length > 0 ? (
-                startups.map((startup) => (
-                  <SingleUserDetails
-                    key={startup._id}
-                    user={startup}
-                    viewMode={viewMode}
-                  />
-                ))
-              ) : (
-                <div
-                  className="no-users"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <img src="/Search.gif" />
-                  <div>No startups available</div>
-                </div>
-              )}
+                ))}
+              {(viewMode === "startups" || viewMode === "all") &&
+                // RENDER STARTUPS
+                (startups.length > 0 ? (
+                  startups.map((startup) => (
+                    <SingleUserDetails
+                      key={startup._id}
+                      user={startup}
+                      viewMode={viewMode}
+                    />
+                  ))
+                ) : (
+                  <div
+                    className="no-users"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src="/Search.gif" />
+                    <div>No startups available</div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
