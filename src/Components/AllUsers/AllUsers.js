@@ -33,6 +33,8 @@ import { getAllHistoricalConversations } from "../../redux/Conversationreducer/C
 // import AddPitch from "../Common/AddPitch";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import FilterSidebar from "./FilterSidebar";
+import TopFilterBar from "./TopFilterBar";
+import StartupFilter from "./StartupFilter";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -82,7 +84,6 @@ const AllUsers = () => {
   const [data, setData] = useState([]);
   const [tag, settag] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] = useState({});
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
   const [filledStars, setFilledStars] = useState(0);
   const [search, setSearch] = useState("");
@@ -103,57 +104,106 @@ const AllUsers = () => {
   useEffect(() => {
     setFilters((prev) => ({ ...prev, review: filledStars }));
   }, [filledStars]);
-
+  // const [universities, setUniversities] = useState([])
+  // useEffect(() => {
+  //     axios.get('http://universities.hipolabs.com/search').then(res => {
+  //         setUniversities(res.data)
+  //     })
+  // }, [])
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
-    
-ApiServices.getAllUsers({ type: "" }).then((res) => {
-  console.log(JSON.stringify(res.data));
+    ApiServices.getAllUsers({ type: "" }).then((res) => {
+      // console.log(JSON.stringify(res.data));
+      const filteredUsers = res.data.filter(
+        (user) => user.beyincProfile && user.beyincProfile.trim() !== "",
+      );
 
-  // 1️⃣ Filter FIRST
-  const filteredUsers = res.data.filter(
-    (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
-  );
+      console.log(filteredUsers);
 
-  const industrySkillCounts = {};
-  // exclude the currently logged-in user from the computed counts
-  const usersForCounts = filteredUsers.filter(
-    (u) => u._id !== user_id && u.id !== user_id
-  );
-  usersForCounts.forEach((u) => {
-    const me = u.mentorExpertise;
-    if (Array.isArray(me)) {
-      me.forEach((entry) => {
-        const industry = entry.industry;
-        if (!industry) return;
-
-        if (!industrySkillCounts[industry]) {
-          industrySkillCounts[industry] = { industryCount: 0, skills: {} };
-        }
-
-        industrySkillCounts[industry].industryCount += 1;
-
-        const skills = Array.isArray(entry.skills) ? entry.skills : [];
-        skills.forEach((s) => {
-          if (!industrySkillCounts[industry].skills[s]) {
-            industrySkillCounts[industry].skills[s] = 0;
-          }
-          industrySkillCounts[industry].skills[s] += 1;
-        });
-      });
-    }
-  });
-
-  setData(filteredUsers);
-  setComputedIndustrySkillCounts(industrySkillCounts);
-  dispatch(setLoading({ visible: "no" }));
-});
-
-
-
+      setData(filteredUsers);
+      dispatch(setLoading({ visible: "no" }));
+    });
   }, []);
 
-  
+  // useEffect(() => {
+  //   if (data.length > 0) {
+  //     filterUsers();
+  //   }
+  // }, [data, filters]);
+
+  // const filterUsers = () => {
+  //   let filteredData = [...data];
+  //   // console.log(filters);
+  //   if (Object.keys(filters).length > 0) {
+  //     Object.keys(filters).map((ob) => {
+  //       if (filters[ob].length > 0 || ob === "verification" || ob === "review") {
+  //         if (
+  //           ob !== "tags" &&
+  //           ob !== "verification" &&
+  //           ob !== "email" &&
+  //           ob !== "userName" &&
+  //           ob !== "industry2" &&
+  //           ob !== "userColleges" &&
+  //           ob !== "country" &&
+  //           ob !== "state" &&
+  //           ob !== "skills" &&
+  //           ob !== "languagesKnown" &&
+  //           ob !== "review" &&
+  //           ob !== "role"
+  //         ) {
+  //           filteredData = filteredData.filter((f) =>
+  //             filters[ob].includes(f[ob])
+  //           );
+  //         } else if (
+  //           ob === "tags" ||
+  //           ob == "skills" ||
+  //           ob == "languagesKnown"
+  //         ) {
+  //           filteredData = filteredData.filter((item) => {
+  //             const itemdata = item[ob].map((t) => t.toLowerCase()) || [];
+  //             return filters[ob].some((tag) =>
+  //               itemdata.includes(tag.toLowerCase())
+  //             );
+  //           });
+  //         } else if (ob == "userColleges") {
+  //           filteredData = filteredData.filter((item) => {
+  //             const itemdata =
+  //               item["educationDetails"]?.map((t) => t.college) || [];
+  //             return filters[ob].some((tag) => itemdata.includes(tag));
+  //           });
+  //         } else if (ob == "verification") {
+  //           if (filters[ob]) {
+  //             filteredData = filteredData.filter((item) => {
+  //               return item.verification == "approved";
+  //             });
+  //           }
+  //         } else if (
+  //           ob == "userName" ||
+  //           ob == "industry2" ||
+  //           ob == "country" ||
+  //           ob == "state" ||
+  //           ob == "email" ||
+  //           ob == "role"
+  //         ) {
+  //           filteredData = filteredData.filter((f) => {
+  //             return filters[ob].some((fs) => fs === f[ob]);
+  //           });
+  //         } else if (ob == "review") {
+  //           if (filters[ob] !== 0) {
+  //             filteredData = filteredData.filter((f) => {
+  //               return fetchRating(f) <= filters[ob];
+  //             });
+  //           }
+  //         }
+
+  //       }
+  //     });
+  //   }
+  //   filteredData.sort((a, b) => {
+  //     return fetchRating(b) - fetchRating(a);
+  //   });
+  //   setFilteredData(filteredData);
+  // };
 
   const [isSpinning, setSpinning] = useState(false);
   const handleReloadClick = () => {
@@ -176,7 +226,7 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
   const { height, width } = useWindowDimensions();
   const dispatch = useDispatch();
   const historicalConversations = useSelector(
-    (state) => state.conv.historicalConversations
+    (state) => state.conv.historicalConversations,
   );
   useEffect(() => {
     dispatch(getAllHistoricalConversations(user_id));
@@ -202,13 +252,14 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
             id: cur._id,
           },
         }),
-        {}
-      )
+        {},
+      ),
     );
   }, [historicalConversations]);
 
   // iqra
-
+  // Add this with your other useState declarations
+  const [viewMode, setViewMode] = useState("mentors"); // Hardcoded to "startups" for now
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -216,6 +267,15 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
     stages: [],
     industries: [],
     categories: [], // Added categories filter
+  });
+  // NEW STATE FOR STARTUPS - ADD THIS
+  const [startups, setStartups] = useState([]);
+  const [startupFilters, setStartupFilters] = useState({
+    userName: "",
+    industries: [],
+    stage: "",
+    targetMarket: [],
+    seekingOptions: [],
   });
 
   // Function to fetch user data from backend based on filters
@@ -239,10 +299,33 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
     }
   };
 
+  // NEW FUNCTION FOR STARTUPS - ADD THIS
+  const fetchStartups = async () => {
+    console.log("Current startup filters:", startupFilters);
+    try {
+      const response = await ApiServices.FilterStartups(startupFilters);
+      console.log("Startups data:", response.data);
+
+      // Filter to only show beyincProfile: "Startup"
+      const filteredStartups = response.data.filter((startup) => {
+        return startup.beyincProfile === "Startup";
+      });
+
+      console.log("Filtered startups:", filteredStartups);
+      setStartups(filteredStartups);
+    } catch (error) {
+      console.error("Error fetching startups:", error);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, [filters]);
 
+  // NEW useEffect FOR STARTUPS - ADD THIS
+  useEffect(() => {
+    fetchStartups();
+  }, [startupFilters]);
   // Function to update filters based on user input
   const updateFilters = useCallback((newFilters) => {
     setFilters((prevFilters) => ({
@@ -276,7 +359,7 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
             }}
           />
         </DialogTitle>
-          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
+        <FilterSidebar updateFilters={updateFilters} open={open}/>
 
        
         <DialogActions>
@@ -292,20 +375,24 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
       {width < 770 && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <div className="bg-white shadow-md m-3">
-          <h2 className="mt-4 px-20">Filter</h2>
-          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
-          <Button
-            sx={{ width: "fit-content", marginLeft: "100px",marginBottom:"30px" }}
-            variant="contained"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
+            <h2 className="mt-4 px-20">Filter</h2>
+            <FilterSidebar updateFilters={updateFilters} open={open} />
+            <Button
+              sx={{
+                width: "fit-content",
+                marginLeft: "100px",
+                marginBottom: "30px",
+              }}
+              variant="contained"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
           </div>
         </Collapse>
       )}
 
-      <div className="users-main-box">
+      <div className="users-main-box bg-red-500">
         {width < 770 && (
           <div className="user-nav-bar">
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -328,7 +415,7 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
                     setFilteredData(
                       filteredData.filter((f) => {
                         return f.userName.includes(e.target.value);
-                      })
+                      }),
                     );
                   } else {
                     setFilteredData(data);
@@ -361,7 +448,7 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
                   />
                 </div>
               </div>
-              <FilterSidebar updateFilters={updateFilters} industrySkillCounts={computedIndustrySkillCounts} />
+              <FilterSidebar updateFilters={updateFilters} />
               {/* Role */}
               {/* <div className="tagFilter">
                 <div className="filter-header">
@@ -481,21 +568,33 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
               </div> */}
             </div>
           )}
+          {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
             <div className="mt-4 userscontainer">
-              {users.length > 0 ? (
-                // filteredData?.map((user) => (
-                //   <SingleUserDetails
-                //     d={d} setIsAdmin={setIsAdmin}
-                //     connectStatus={connectStatus}
-                //     setPitchSendTo={setPitchSendTo}
-                //     pitchSendTo={pitchSendTo}
-                //     receiverRole={receiverRole}
-                //     setreceiverRole={setreceiverRole}
-                //   />
-                // ))
-                users.map((user) => (
-                  <SingleUserDetails key={user.id} user={user} />
+              {viewMode === "mentors" ? (
+                // RENDER MENTORS
+                users.length > 0 ? (
+                  users.map((user) => (
+                    <SingleUserDetails key={user.id} user={user} />
+                  ))
+                ) : (
+                  <div
+                    className="no-users"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src="/Search.gif" />
+                    <div>No users available</div>
+                  </div>
+                )
+              ) : // RENDER STARTUPS
+              startups.length > 0 ? (
+                startups.map((startup) => (
+                  <SingleUserDetails key={startup._id} user={startup} />
                 ))
               ) : (
                 <div
@@ -508,7 +607,7 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
                   }}
                 >
                   <img src="/Search.gif" />
-                  <div>No users available</div>
+                  <div>No startups available</div>
                 </div>
               )}
             </div>

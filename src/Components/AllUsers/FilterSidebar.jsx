@@ -38,16 +38,16 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
   // --- STATE ---
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState([]);
-  
+
   // Accordion State
   const [expandedSections, setExpandedSections] = useState({
     roleLevel: true,
     expertise: true,
     // Initialize specific industries as closed
     ...Object.keys(INDUSTRY_EXPERTISE || {}).reduce((acc, key) => {
-      acc[`industry-${key}`] = false; 
+      acc[`industry-${key}`] = false;
       return acc;
-    }, {})
+    }, {}),
   });
 
   // --- HANDLERS ---
@@ -77,37 +77,37 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
     // Wait 500ms after user stops clicking before calling API
     const handler = setTimeout(() => {
       const filters = {
-        role: selectedRole, 
-        expertise: selectedExpertise, 
+        role: selectedRole,
+        expertise: selectedExpertise,
         // Default empty values to satisfy backend structure
-        userName: "", 
-        industries: [], 
+        userName: "",
+        industries: [],
         stages: [],
-        categories: [], 
+        categories: [],
       };
-      
+
       // console.log("Syncing filters to parent...");
       updateFilters(filters);
-    }, 500); 
+    }, 500);
 
     return () => clearTimeout(handler);
   }, [selectedRole, selectedExpertise, updateFilters]);
 
   // --- SVG ICON ---
   const ChevronDown = ({ className }) => (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="16" 
-      height="16" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={className}
     >
-      <path d="m6 9 6 6 6-6"/>
+      <path d="m6 9 6 6 6-6" />
     </svg>
   );
 
@@ -116,27 +116,33 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
       {/* Inject Styles Here */}
       <style>{scrollbarStyles}</style>
 
-      <aside className={`w-72 flex-shrink-0 !bg-white ${open ? "block" : "hidden"} md:block pr-2`}>
+      <aside
+        className={`w-72 flex-shrink-0 !bg-white ${open ? "block" : "hidden"} md:block pr-2`}
+      >
         <div className="flex flex-col">
           {/* Main Title */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold !text-gray-900 m-0">Filter By:</h2>
+            <h2 className="text-xl font-bold !text-gray-900 m-0">
+              Filter By: hello
+            </h2>
           </div>
 
           {/* ================= ROLE LEVEL SECTION ================= */}
           <div className="mb-6 border-b border-gray-100 pb-4">
-            <button 
-              type="button" 
-              onClick={() => toggleSection("roleLevel")} 
+            <button
+              type="button"
+              onClick={() => toggleSection("roleLevel")}
               style={cleanButtonStyle}
               className="group mb-2"
             >
-              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">Role Level</h3>
-              <ChevronDown 
-                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.roleLevel ? "rotate-180" : ""}`} 
+              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                Role Level
+              </h3>
+              <ChevronDown
+                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.roleLevel ? "rotate-180" : ""}`}
               />
             </button>
-            
+
             {expandedSections.roleLevel && (
               <div className="mt-2 pl-1">
                 <select
@@ -147,7 +153,9 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
                 >
                   <option value="">All Levels</option>
                   {ROLE_LEVELS.map((level) => (
-                    <option key={level} value={level}>{level}</option>
+                    <option key={level} value={level}>
+                      {level}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -156,69 +164,84 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
 
           {/* ================= EXPERTISE SECTION ================= */}
           <div className="mb-4">
-            <button 
-              type="button" 
-              onClick={() => toggleSection("expertise")} 
+            <button
+              type="button"
+              onClick={() => toggleSection("expertise")}
               style={cleanButtonStyle}
               className="group mb-4"
             >
-              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">Expertise</h3>
-              <ChevronDown 
-                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.expertise ? "rotate-180" : ""}`} 
+              <h3 className="text-base font-bold !text-gray-800 group-hover:!text-[#4f55c7] transition-colors">
+                Expertise
+              </h3>
+              <ChevronDown
+                className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.expertise ? "rotate-180" : ""}`}
               />
             </button>
 
             {expandedSections.expertise && (
               <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-                
                 {/* Dynamic Categories */}
-                {Object.entries(INDUSTRY_EXPERTISE || {}).map(([industry, skills]) => (
-                  <div key={industry} className="mb-1">
-                    
-                    {/* Category Header (Level 2) */}
-                    <button
-                      type="button"
-                      onClick={() => toggleSection(`industry-${industry}`)}
-                      style={cleanButtonStyle}
-                      className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors flex items-center justify-between"
-                    >
-                      <span className="text-sm font-semibold !text-gray-700">{industry}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-400">({industrySkillCounts[industry]?.industryCount || 0})</span>
-                        <ChevronDown 
-                          className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
-                            expandedSections[`industry-${industry}`] ? "rotate-180" : ""
-                          }`} 
-                        />
-                      </div>
-                    </button>
+                {Object.entries(INDUSTRY_EXPERTISE || {}).map(
+                  ([industry, skills]) => (
+                    <div key={industry} className="mb-1">
+                      {/* Category Header (Level 2) */}
+                      <button
+                        type="button"
+                        onClick={() => toggleSection(`industry-${industry}`)}
+                        style={cleanButtonStyle}
+                        className="py-2 px-2 hover:bg-gray-50 rounded-md transition-colors flex items-center justify-between"
+                      >
+                        <span className="text-sm font-semibold !text-gray-700">
+                          {industry}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-400">
+                            ({industrySkillCounts[industry]?.industryCount || 0}
+                            )
+                          </span>
+                          <ChevronDown
+                            className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
+                              expandedSections[`industry-${industry}`]
+                                ? "rotate-180"
+                                : ""
+                            }`}
+                          />
+                        </div>
+                      </button>
 
-                    {/* Skills List (Level 3) - Nested */}
-                    {expandedSections[`industry-${industry}`] && (
-                      <div className="ml-2 pl-4 border-l-2 border-gray-100 space-y-2 py-2 mb-2">
-                        {skills.map((skill) => (
-                          <label
-                            key={skill}
-                            className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
-                          >
-                            <div className="flex items-center gap-3">
-                              <input
-                                type="checkbox"
-                                checked={selectedExpertise.includes(skill)}
-                                onChange={() => handleExpertiseToggle(skill)}
-                                className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
-                              />
-                              <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
-                                {skill}
+                      {/* Skills List (Level 3) - Nested */}
+                      {expandedSections[`industry-${industry}`] && (
+                        <div className="ml-2 pl-4 border-l-2 border-gray-100 space-y-2 py-2 mb-2">
+                          {skills.map((skill) => (
+                            <label
+                              key={skill}
+                              className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                            >
+                              <div className="flex items-center gap-3">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedExpertise.includes(skill)}
+                                  onChange={() => handleExpertiseToggle(skill)}
+                                  className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
+                                />
+                                <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
+                                  {skill}
+                                </span>
+                              </div>
+                              <span className="text-xs text-gray-400 ml-4">
+                                (
+                                {industrySkillCounts[industry]?.skills?.[
+                                  skill
+                                ] || 0}
+                                )
                               </span>
-                            </div>
-                            <span className="text-xs text-gray-400 ml-4">({industrySkillCounts[industry]?.skills?.[skill] || 0})</span>
-                          </label>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ),
+                )}
               </div>
             )}
           </div>
@@ -229,3 +252,4 @@ const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
 };
 
 export default FilterSidebar;
+
