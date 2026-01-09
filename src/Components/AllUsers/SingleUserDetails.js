@@ -177,7 +177,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
               <div className="flex gap-2 mb-2">
-                {(viewMode === "mentors" || viewMode === "all") &&
+                {user.role === "Mentor" &&
+                  (viewMode === "mentors" || viewMode === "all") &&
                   ["Expertise", "Industries"].map((tab) => (
                     <button
                       key={tab}
@@ -192,7 +193,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                     </button>
                   ))}
 
-                {(viewMode === "startups" || viewMode === "all") &&
+                {user.role === "Startup" &&
+                  (viewMode === "startups" || viewMode === "all") &&
                   ["Industries", "Stage", "Seeking", "Target Market"].map(
                     (tab) => (
                       <button
@@ -211,35 +213,37 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               </div>
 
               <p className="text-xs text-gray-500 h-4">
-                {viewMode === "mentors" && (
-                  <>
-                    {activeTab === "Expertise" &&
-                      (expertiseFromMentorExpertise.length > 0
-                        ? expertiseFromMentorExpertise.join(", ")
-                        : "N/A")}
-                    {activeTab === "Industries" &&
-                      (industriesFromMentorExpertise.length > 0
-                        ? industriesFromMentorExpertise.join(", ")
-                        : "N/A")}
-                  </>
-                )}
+                {user.role === "Mentor" &&
+                  (viewMode === "mentors" || viewMode === "all") && (
+                    <>
+                      {activeTab === "Expertise" &&
+                        (expertiseFromMentorExpertise.length > 0
+                          ? expertiseFromMentorExpertise.join(", ")
+                          : "N/A")}
+                      {activeTab === "Industries" &&
+                        (industriesFromMentorExpertise.length > 0
+                          ? industriesFromMentorExpertise.join(", ")
+                          : "N/A")}
+                    </>
+                  )}
 
-                {viewMode === "startups" && (
-                  <>
-                    {activeTab === "Industries" &&
-                      (industriesFromStartup.length > 0
-                        ? industriesFromStartup.join(", ")
-                        : "N/A")}
-                    {activeTab === "Stage" && (stageFromStartup || "N/A")}
-                    {activeTab === "Seeking" &&
-                      (seekingFromStartup.length > 0
-                        ? seekingFromStartup.join(", ")
-                        : "N/A")}
-                    {activeTab === "Target Market" &&
-                      (targetMarketFromStartup || "N/A")}{" "}
-                    {/* NEW */}
-                  </>
-                )}
+                {user.role === "Startup" &&
+                  (viewMode === "startups" || viewMode === "all") && (
+                    <>
+                      {activeTab === "Industries" &&
+                        (industriesFromStartup.length > 0
+                          ? industriesFromStartup.join(", ")
+                          : "N/A")}
+                      {activeTab === "Stage" && (stageFromStartup || "N/A")}
+                      {activeTab === "Seeking" &&
+                        (seekingFromStartup.length > 0
+                          ? seekingFromStartup.join(", ")
+                          : "N/A")}
+                      {activeTab === "Target Market" &&
+                        (targetMarketFromStartup || "N/A")}{" "}
+                      {/* NEW */}
+                    </>
+                  )}
               </p>
             </div>
 
