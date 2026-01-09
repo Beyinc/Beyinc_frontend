@@ -15,7 +15,7 @@ import {
   FaTags,
 } from "react-icons/fa";
 
-const SingleUserDetails = ({ user, connectStatus }) => {
+const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
   const navigate = useNavigate();
 
@@ -109,6 +109,19 @@ const SingleUserDetails = ({ user, connectStatus }) => {
           .flatMap((m) => (Array.isArray(m.skills) ? m.skills : []))
           .filter(Boolean)
       : [];
+  // NEW - derive industries, stage, and seeking from startupProfile
+  const industriesFromStartup =
+    user?.startupProfile?.industries &&
+    Array.isArray(user.startupProfile.industries)
+      ? user.startupProfile.industries.filter((ind) => ind !== "")
+      : [];
+
+  const stageFromStartup = user?.startupProfile?.stage || null;
+
+  const seekingFromStartup =
+    user?.seekingOptions && Array.isArray(user.seekingOptions)
+      ? user.seekingOptions
+      : [];
 
   return (
     <>
@@ -162,32 +175,67 @@ const SingleUserDetails = ({ user, connectStatus }) => {
               {user.about || "No bio available."}
             </p>
 
-            {/* Tabs - Fixed Styling */}
+            {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
               <div className="flex gap-2 mb-2">
-                {["Expertise", "Industries"].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
-                      activeTab === tab
-                        ? "bg-[#4f55c7] text-white border-[#4f55c7]"
-                        : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
+                {viewMode === "mentors" &&
+                  ["Expertise", "Industries"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
+                        activeTab === tab
+                          ? "bg-[#4f55c7] text-white border-[#4f55c7]"
+                          : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+
+                {viewMode === "startups" &&
+                  ["Industries", "Stage", "Seeking"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
+                        activeTab === tab
+                          ? "bg-[#4f55c7] text-white border-[#4f55c7]"
+                          : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
               </div>
+
               <p className="text-xs text-gray-500 h-4">
-                {activeTab === "Expertise" &&
-                  (expertiseFromMentorExpertise.length > 0
-                    ? expertiseFromMentorExpertise.join(", ")
-                    : "N/A")}
-                {activeTab === "Industries" &&
-                  (industriesFromMentorExpertise.length > 0
-                    ? industriesFromMentorExpertise.join(", ")
-                    : "N/A")}
+                {viewMode === "mentors" && (
+                  <>
+                    {activeTab === "Expertise" &&
+                      (expertiseFromMentorExpertise.length > 0
+                        ? expertiseFromMentorExpertise.join(", ")
+                        : "N/A")}
+                    {activeTab === "Industries" &&
+                      (industriesFromMentorExpertise.length > 0
+                        ? industriesFromMentorExpertise.join(", ")
+                        : "N/A")}
+                  </>
+                )}
+
+                {viewMode === "startups" && (
+                  <>
+                    {activeTab === "Industries" &&
+                      (industriesFromStartup.length > 0
+                        ? industriesFromStartup.join(", ")
+                        : "N/A")}
+                    {activeTab === "Stage" && (stageFromStartup || "N/A")}
+                    {activeTab === "Seeking" &&
+                      (seekingFromStartup.length > 0
+                        ? seekingFromStartup.join(", ")
+                        : "N/A")}
+                  </>
+                )}
               </p>
             </div>
 

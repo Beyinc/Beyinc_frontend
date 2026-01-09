@@ -594,7 +594,11 @@ const AllUsers = () => {
               ) : // RENDER STARTUPS
               startups.length > 0 ? (
                 startups.map((startup) => (
-                  <SingleUserDetails key={startup._id} user={startup} />
+                  <SingleUserDetails
+                    key={startup._id}
+                    user={startup}
+                    viewMode={viewMode}
+                  />
                 ))
               ) : (
                 <div
