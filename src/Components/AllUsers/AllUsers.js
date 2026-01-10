@@ -266,6 +266,8 @@ const AllUsers = () => {
     industries: [],
     categories: [], // Added categories filter
   });
+  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] =
+    useState({});
   // NEW STATE FOR STARTUPS - ADD THIS
   const [startups, setStartups] = useState([]);
   const [startupFilters, setStartupFilters] = useState({
@@ -290,7 +292,7 @@ const AllUsers = () => {
           // || (user.investmentRange !== undefined)
         );
       });
-      setUsers(filteredUsers);
+      console.log();
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -305,10 +307,58 @@ const AllUsers = () => {
       console.error("Error fetching startups:", error);
     }
   };
-
   useEffect(() => {
-    fetchUsers();
-  }, [filters]);
+    dispatch(setLoading({ visible: "yes" }));
+
+    ApiServices.getAllUsers({ type: "" }).then((res) => {
+      console.log(JSON.stringify(res.data));
+
+      // 1️⃣ Filter FIRST
+      const filteredUsers = res.data.filter(
+        (user) =>
+          user.beyincProfile &&
+          user.beyincProfile.trim() !== "" &&
+          user.beyincProfile === "Mentor",
+      );
+
+      const industrySkillCounts = {};
+      // exclude the currently logged-in user from the computed counts
+      const usersForCounts = filteredUsers.filter(
+        (u) => u._id !== user_id && u.id !== user_id,
+      );
+      usersForCounts.forEach((u) => {
+        const me = u.mentorExpertise;
+        if (Array.isArray(me)) {
+          me.forEach((entry) => {
+            const industry = entry.industry;
+            if (!industry) return;
+
+            if (!industrySkillCounts[industry]) {
+              industrySkillCounts[industry] = { industryCount: 0, skills: {} };
+            }
+
+            industrySkillCounts[industry].industryCount += 1;
+
+            const skills = Array.isArray(entry.skills) ? entry.skills : [];
+            skills.forEach((s) => {
+              if (!industrySkillCounts[industry].skills[s]) {
+                industrySkillCounts[industry].skills[s] = 0;
+              }
+              industrySkillCounts[industry].skills[s] += 1;
+            });
+          });
+        }
+      });
+
+      // setData(filteredUsers);
+      setUsers(filteredUsers);
+      setComputedIndustrySkillCounts(industrySkillCounts);
+      dispatch(setLoading({ visible: "no" }));
+    });
+  }, []);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, [filters]);
 
   // NEW useEffect FOR STARTUPS - ADD THIS
   useEffect(() => {
@@ -476,6 +526,7 @@ const AllUsers = () => {
                 updateFilters={updateFilters}
                 updateStartupFilters={updateStartupFilters}
                 viewMode={viewMode}
+                industrySkillCounts={computedIndustrySkillCounts}
               />
               {/* Role */}
               {/* <div className="tagFilter">
@@ -599,7 +650,7 @@ const AllUsers = () => {
           {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
             <div className="mt-4 userscontainer h-60">
-              {(viewMode === "mentors" || viewMode === "all") &&
+              {viewMode === "mentors" &&
                 // RENDER MENTORS
                 (users.length > 0 ? (
                   users.map((user) => (
@@ -623,7 +674,7 @@ const AllUsers = () => {
                     <div>No users available</div>
                   </div>
                 ))}
-              {(viewMode === "startups" || viewMode === "all") &&
+              {viewMode === "startups" &&
                 // RENDER STARTUPS
                 (startups.length > 0 ? (
                   startups.map((startup) => (

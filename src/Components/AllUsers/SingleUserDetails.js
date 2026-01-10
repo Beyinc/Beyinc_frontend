@@ -28,6 +28,9 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   const [selectedSession, setSelectedSession] = useState(null);
   const [activeTab, setActiveTab] = useState("Expertise");
 
+  useEffect(() => {
+    console.log("mentor data coming", user);
+  });
   // --- Effects ---
   useEffect(() => {
     const fetchAvailabilityData = async () => {
