@@ -82,7 +82,8 @@ const AllUsers = () => {
   const [data, setData] = useState([]);
   const [tag, settag] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] = useState({});
+  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] =
+    useState({});
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
   const [filledStars, setFilledStars] = useState(0);
   const [search, setSearch] = useState("");
@@ -106,54 +107,49 @@ const AllUsers = () => {
 
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
-    
-ApiServices.getAllUsers({ type: "" }).then((res) => {
-  console.log(JSON.stringify(res.data));
 
-  // 1️⃣ Filter FIRST
-  const filteredUsers = res.data.filter(
-    (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
-  );
+    ApiServices.getAllUsers({ type: "" }).then((res) => {
+      console.log(JSON.stringify(res.data));
 
-  const industrySkillCounts = {};
-  // exclude the currently logged-in user from the computed counts
-  const usersForCounts = filteredUsers.filter(
-    (u) => u._id !== user_id && u.id !== user_id
-  );
-  usersForCounts.forEach((u) => {
-    const me = u.mentorExpertise;
-    if (Array.isArray(me)) {
-      me.forEach((entry) => {
-        const industry = entry.industry;
-        if (!industry) return;
+      // 1️⃣ Filter FIRST
+      const filteredUsers = res.data.filter(
+        (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
+      );
 
-        if (!industrySkillCounts[industry]) {
-          industrySkillCounts[industry] = { industryCount: 0, skills: {} };
+      const industrySkillCounts = {};
+      // exclude the currently logged-in user from the computed counts
+      const usersForCounts = filteredUsers.filter(
+        (u) => u._id !== user_id && u.id !== user_id
+      );
+      usersForCounts.forEach((u) => {
+        const me = u.mentorExpertise;
+        if (Array.isArray(me)) {
+          me.forEach((entry) => {
+            const industry = entry.industry;
+            if (!industry) return;
+
+            if (!industrySkillCounts[industry]) {
+              industrySkillCounts[industry] = { industryCount: 0, skills: {} };
+            }
+
+            industrySkillCounts[industry].industryCount += 1;
+
+            const skills = Array.isArray(entry.skills) ? entry.skills : [];
+            skills.forEach((s) => {
+              if (!industrySkillCounts[industry].skills[s]) {
+                industrySkillCounts[industry].skills[s] = 0;
+              }
+              industrySkillCounts[industry].skills[s] += 1;
+            });
+          });
         }
-
-        industrySkillCounts[industry].industryCount += 1;
-
-        const skills = Array.isArray(entry.skills) ? entry.skills : [];
-        skills.forEach((s) => {
-          if (!industrySkillCounts[industry].skills[s]) {
-            industrySkillCounts[industry].skills[s] = 0;
-          }
-          industrySkillCounts[industry].skills[s] += 1;
-        });
       });
-    }
-  });
 
-  setData(filteredUsers);
-  setComputedIndustrySkillCounts(industrySkillCounts);
-  dispatch(setLoading({ visible: "no" }));
-});
-
-
-
+      setData(filteredUsers);
+      setComputedIndustrySkillCounts(industrySkillCounts);
+      dispatch(setLoading({ visible: "no" }));
+    });
   }, []);
-
-  
 
   const [isSpinning, setSpinning] = useState(false);
   const handleReloadClick = () => {
@@ -292,15 +288,23 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
       {width < 770 && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <div className="bg-white shadow-md m-3">
-          <h2 className="mt-4 px-20">Filter</h2>
-          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
-          <Button
-            sx={{ width: "fit-content", marginLeft: "100px",marginBottom:"30px" }}
-            variant="contained"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
+            <h2 className="mt-4 px-20">Filter</h2>
+            <FilterSidebar
+              updateFilters={updateFilters}
+              open={open}
+              industrySkillCounts={computedIndustrySkillCounts}
+            />
+            <Button
+              sx={{
+                width: "fit-content",
+                marginLeft: "100px",
+                marginBottom: "30px",
+              }}
+              variant="contained"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
           </div>
         </Collapse>
       )}
@@ -361,7 +365,10 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
                   />
                 </div>
               </div>
-              <FilterSidebar updateFilters={updateFilters} industrySkillCounts={computedIndustrySkillCounts} />
+              <FilterSidebar
+                updateFilters={updateFilters}
+                industrySkillCounts={computedIndustrySkillCounts}
+              />
               {/* Role */}
               {/* <div className="tagFilter">
                 <div className="filter-header">

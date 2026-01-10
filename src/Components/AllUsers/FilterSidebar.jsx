@@ -36,6 +36,11 @@ const cleanButtonStyle = {
 
 const FilterSidebar = ({ updateFilters, open, industrySkillCounts = {} }) => {
   // --- STATE ---
+useEffect(() => {
+    console.log("Industry Skill Counts:", industrySkillCounts);
+  }, [industrySkillCounts]);
+
+
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState([]);
   
