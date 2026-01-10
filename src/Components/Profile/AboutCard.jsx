@@ -4,6 +4,7 @@ import aboutService from "./aboutPageApi"; // Import the fetchAbout function fro
 import EditAboutModal from "./EditAboutModal";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { ApiServices } from "../../Services/ApiServices";
 
 export const ABOUT_TEMPLATES = {
   startup: `🚀 About
@@ -57,7 +58,7 @@ Highlight your professional background, key roles, or notable achievements.
 Explain how you support founders, teams, or individuals and the impact you aim to create.
 `,
 };
-const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
+const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
   const {
     user_id,
     userName: loggedUserName,
@@ -102,15 +103,31 @@ const AboutCard = ({ selfProfile, setSelfProfile, role }) => {
     getAbout();
   }, []);
 
-  const handleAboutSave = (updatedAbout) => {
+  const handleAboutSave = async (updatedAbout) => {
     setProfileAbout(updatedAbout);
     setErrorMessage("");
+
+    // console.log("normal call");
+    const hasAboutField =
+      profileData && Object.prototype.hasOwnProperty.call(profileData, "about");
+
+    if (!hasAboutField) {
+      try {
+        // console.log("calling when no about");
+        await ApiServices.UpdateBeyincProfile({
+          beyincProfile: role,
+        });
+      } catch (error) {
+        console.error("Error updating beyincProfile:", error);
+      }
+    }
+
     navigate("/editProfile");
   };
 
   // console.log(role);
   return (
-    <div className="w-full grow bg-white rounded-xl">
+    <div className="w-full grow bg-white rounded-xl h-32 ">
       <div className="min-h-[100px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl">
         <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           About

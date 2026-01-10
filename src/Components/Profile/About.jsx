@@ -44,6 +44,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
               role={role}
+              profileData={profileData}
             />
           </div>
           {profileData.role === "Startup" && (

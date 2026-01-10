@@ -59,11 +59,6 @@ const ProfileCard = ({
     languages: [],
   });
 
-  const [isEditAboutOpen, setIsEditAboutOpen] = useState(false);
-
-  const handleToggleListing = (isListed) => {
-    setProfileData({ ...profileData, isListed });
-  };
   const { id } = useParams();
 
   const { email, role, userName, image, verification, user_id } = useSelector(
@@ -451,7 +446,6 @@ const ProfileCard = ({
           <ProfileCompletionStatus
             profileData={profileDataObj}
             profileType="Startup"
-            onToggleListing={handleToggleListing}
           />
         </div>
 
