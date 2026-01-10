@@ -201,12 +201,10 @@ const FilterSidebar = ({
       >
         <div className="flex flex-col">
           {/* Main Title */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold !text-gray-900 m-0">Filter By:</h2>
-          </div>
+          <div className="flex items-center justify-between mb-6"></div>
 
           {/* ================= ROLE LEVEL SECTION ================= */}
-          {(viewMode === "mentors" || viewMode === "all") && (
+          {viewMode === "mentors" && (
             <div className="mb-6 border-b border-gray-100 pb-4">
               <button
                 type="button"
@@ -243,7 +241,7 @@ const FilterSidebar = ({
           )}
 
           {/* ================= EXPERTISE SECTION ================= */}
-          {(viewMode === "mentors" || viewMode === "all") && (
+          {viewMode === "mentors" && (
             <div className="mb-4">
               <button
                 type="button"
@@ -332,7 +330,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* NEW STARTUP INDUSTRIES FILTER */}
-          {(viewMode === "startups" || viewMode === "all") && (
+          {viewMode === "startups" && (
             <div className="mb-4">
               <button
                 type="button"
@@ -347,9 +345,8 @@ const FilterSidebar = ({
                   className={`!text-gray-500 transform transition-transform duration-200 ${expandedSections.startupIndustries ? "rotate-180" : ""}`}
                 />
               </button>
-
               {expandedSections.startupIndustries && (
-                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-1 max-h-[600px] overflow-y-auto overflow-x-hidden pr-2 custom-scrollbar">
                   {Object.keys(INDUSTRY_EXPERTISE || {}).map((industry) => (
                     <label
                       key={industry}
@@ -373,7 +370,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* ================= TARGET MARKET FILTER ================= */}
-          {(viewMode === "startups" || viewMode === "all") && (
+          {viewMode === "startups" && (
             <div className="mb-4">
               <button
                 type="button"
@@ -389,19 +386,21 @@ const FilterSidebar = ({
                 />
               </button>
               {expandedSections.targetMarket && (
-                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar overflow-x-hidden">
                   {TARGET_MARKETS.map((market) => (
                     <label
                       key={market}
-                      className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                      className="flex items-center justify-between w-full cursor-pointer group p-1 hover:bg-gray-50 rounded transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedTargetMarkets.includes(market)}
-                          onChange={() => handleTargetMarketToggle(market)}
-                          className="mt-0.5 w-4 h-4 rounded border-gray-300 !text-[#4f55c7] focus:ring-[#4f55c7] accent-[#4f55c7] cursor-pointer"
-                        />
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={selectedTargetMarkets.includes(market)}
+                            onChange={() => handleTargetMarketToggle(market)}
+                            className="appearance-none w-4 h-4 rounded-full border-2 border-gray-300 checked:bg-[#4f55c7] checked:border-[#4f55c7] cursor-pointer focus:ring-2 focus:ring-[#4f55c7] focus:ring-offset-0"
+                          />
+                        </div>
                         <span className="text-sm !text-gray-600 group-hover:!text-gray-900 leading-tight select-none">
                           {market}
                         </span>
@@ -413,7 +412,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* ================= STARTUP STAGE SECTION ================= */}
-          {(viewMode === "startups" || viewMode === "all") && (
+          {viewMode === "startups" && (
             <div className="mb-6 border-b border-gray-100 pb-4">
               <button
                 type="button"
@@ -447,7 +446,7 @@ const FilterSidebar = ({
             </div>
           )}
           {/* ================= SEEKING OPTIONS FILTER ================= */}
-          {(viewMode === "startups" || viewMode === "all") && (
+          {viewMode === "startups" && (
             <div className="mb-4">
               <button
                 type="button"
@@ -463,11 +462,11 @@ const FilterSidebar = ({
                 />
               </button>
               {expandedSections.seekingOptions && (
-                <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-1 max-h-[600px] overflow-y-auto overflow-x-hidden pr-2 custom-scrollbar">
                   {STARTUP_SEEKING_OPTIONS.map((option) => (
                     <label
                       key={option}
-                      className="flex items-center justify-between w-full cursor-pointer group p-1 -ml-1 hover:bg-gray-50 rounded transition-colors"
+                      className="flex items-center justify-between w-full cursor-pointer group p-1 hover:bg-gray-50 rounded transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <input

@@ -814,13 +814,14 @@ export const STARTUP_SEEKING_OPTIONS = [
   "Co-founders",
   "Investors/Funding",
   "Technical Talent",
+  "Legal/Compliance Advice",
   "Business Development Partners",
   "Marketing/PR Help",
-  "Legal/Compliance Advice",
   "Product Feedback",
   "Beta Testers",
   "Strategic Partnerships",
 ];
+
 // January 15, 2024
 export const MMDDYYFormat = (date) => {
   const formattedDate = moment(date).format("MMMM D, YYYY"); // "January 15, 2024"

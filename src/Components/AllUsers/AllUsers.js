@@ -259,7 +259,7 @@ const AllUsers = () => {
 
   // iqra
   // Add this with your other useState declarations
-  const [viewMode, setViewMode] = useState("all"); // Hardcoded to "startups" for now
+  const [viewMode, setViewMode] = useState("mentors");
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -435,16 +435,6 @@ const AllUsers = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex space-x-8 py-4">
               <button
-                onClick={() => setViewMode("all")}
-                className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
-                  viewMode === "all"
-                    ? "text-black"
-                    : "border-transparent text-gray-700 "
-                }`}
-              >
-                All
-              </button>
-              <button
                 onClick={() => setViewMode("mentors")}
                 className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
                   viewMode === "mentors"
@@ -477,7 +467,9 @@ const AllUsers = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <div className="filterHeader">Filter By:</div>
+                <h2 className="text-xl font-bold !text-gray-900 m-0">
+                  Filter By :
+                </h2>
                 <div title="Reset filters">
                   <CachedIcon
                     style={{ cursor: "pointer" }}
