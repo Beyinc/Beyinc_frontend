@@ -1752,8 +1752,6 @@ const Navbar = () => {
                 >
                   Notifications
                 </div>
-              </div>
-
               {/* <Drawer
                 anchor="right"
                 open={notificationDrawerState["right"]}
