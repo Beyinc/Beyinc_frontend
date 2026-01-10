@@ -16,6 +16,7 @@ import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 import ProfileCardInfo from "./ProfileCardInfo";
 import MentorCardInfo from "./MentorCardInfo";
 import EditProfileCardPopup from "./EditProfileCardPopup";
+import ProfileCompletionStatus from "./ProfileCompletionStatus";
 
 const ProfileCard = ({
   selfProfile,
@@ -425,6 +426,7 @@ const ProfileCard = ({
                 </a>
               </div>
             )}
+
             {/* <div>
               {user_id == undefined ? (
                 <ReviewStars />
@@ -439,7 +441,14 @@ const ProfileCard = ({
               <b>{formState.review?.length}</b> Reviews / 0 Sessions
             </div> */}
           </div>
+
+          {/* Profile Completion Status */}
+          <ProfileCompletionStatus
+            profileData={profileDataObj}
+            profileType="Startup"
+          />
         </div>
+
         <ProfileImageUpdate open={openEditPfp} setOpen={setOpenEditPfp} />
       </div>
     </div>
