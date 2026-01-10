@@ -30,8 +30,6 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
   // --- Effects ---
   useEffect(() => {
-    console.log("user data", user);
-
     const fetchAvailabilityData = async () => {
       try {
         const { data } = await CalendarServices.getAvailabilityData({
@@ -125,7 +123,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   return (
     <>
       {/* --- Main Card Container --- */}
-      <div className="w-full bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-[#4f55c7]/30 hover:scale-[1.02] mb-6">
+      <div className="w-full bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-[#4f55c7]/30 hover:scale-[1.02] mb-6 ">
         {/* user details */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* 1. Image Section */}
@@ -147,13 +145,21 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
           {/* 2. Middle Content Section */}
           <div className="flex-1">
             {/* Header: Name & Verify */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-start mb-2">
               <h3
                 className="text-xl font-bold text-gray-900 cursor-pointer hover:text-[#4f55c7] transition-colors"
                 onClick={openUser}
               >
-                {user.userName}
+                {user?.role === "Startup"
+                  ? (user?.startupProfile?.startupName ?? "Unnamed Startup")
+                  : (user?.userName ?? "Unknown User")}
               </h3>
+              {user?.role === "Startup" &&
+                user?.startupProfile?.targetMarket && (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    {user.startupProfile.targetMarket}
+                  </span>
+                )}
               <span className="text-[#4f55c7]">
                 <img className="w-5 h-5" src="/verify.png" alt="Verified" />
               </span>
@@ -165,9 +171,12 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             </p>
 
             {/* Headline */}
-            <p className="text-sm font-semibold text-gray-900 mb-2">
-              {user.headline || "No headline available"}
-            </p>
+
+            {user?.headline && (
+              <p className="text-sm font-semibold text-gray-900 mb-2">
+                {user.headline}
+              </p>
+            )}
 
             {/* Bio */}
             <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
@@ -176,77 +185,92 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
-              <div className="flex gap-2 mb-2">
+              <div className="flex gap-2 mb-6 p-1 shadow-[0_2px_8px_rgba(0,0,0,0.1)] bg-gray-100 rounded-full w-fit border border-gray-400">
                 {user.role === "Mentor" &&
-                  (viewMode === "mentors" || viewMode === "all") &&
+                  viewMode === "mentors" &&
                   ["Expertise", "Industries"].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
+                      className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
                         activeTab === tab
-                          ? "bg-[#4f55c7] text-white border-[#4f55c7]"
-                          : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                          ? "bg-white text-[#4f55c7] shadow-sm"
+                          : "bg-transparent text-black "
                       }`}
                     >
                       {tab}
                     </button>
                   ))}
-
                 {user.role === "Startup" &&
-                  (viewMode === "startups" || viewMode === "all") &&
-                  ["Industries", "Stage", "Seeking", "Target Market"].map(
-                    (tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-3 py-1 rounded-md text-xs font-semibold transition-all duration-200 border ${
-                          activeTab === tab
-                            ? "bg-[#4f55c7] text-white border-[#4f55c7]"
-                            : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                        }`}
-                      >
-                        {tab}
-                      </button>
-                    ),
-                  )}
+                  viewMode === "startups" &&
+                  ["Industries", "Stage", "Seeking"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
+                        activeTab === tab
+                          ? "bg-white text-[#4f55c7] shadow-sm"
+                          : "bg-transparent text-black "
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
               </div>
-
-              <p className="text-xs text-gray-500 h-4">
-                {user.role === "Mentor" &&
-                  (viewMode === "mentors" || viewMode === "all") && (
-                    <>
-                      {activeTab === "Expertise" &&
-                        (expertiseFromMentorExpertise.length > 0
-                          ? expertiseFromMentorExpertise.join(", ")
-                          : "N/A")}
-                      {activeTab === "Industries" &&
-                        (industriesFromMentorExpertise.length > 0
-                          ? industriesFromMentorExpertise.join(", ")
-                          : "N/A")}
-                    </>
-                  )}
-
+              <p className="text-md text-gray-900 font-medium">
+                {user.role === "Mentor" && viewMode === "mentors" && (
+                  <>
+                    {activeTab === "Expertise" &&
+                      (expertiseFromMentorExpertise.length > 0
+                        ? expertiseFromMentorExpertise.map((item, index) => (
+                            <span key={index}>
+                              {item}
+                              {index <
+                                expertiseFromMentorExpertise.length - 1 &&
+                                " • "}
+                            </span>
+                          ))
+                        : "N/A")}
+                    {activeTab === "Industries" &&
+                      (industriesFromMentorExpertise.length > 0
+                        ? industriesFromMentorExpertise.map((item, index) => (
+                            <span key={index}>
+                              {item}
+                              {index <
+                                industriesFromMentorExpertise.length - 1 &&
+                                " • "}
+                            </span>
+                          ))
+                        : "N/A")}
+                  </>
+                )}
                 {user.role === "Startup" &&
                   (viewMode === "startups" || viewMode === "all") && (
                     <>
                       {activeTab === "Industries" &&
                         (industriesFromStartup.length > 0
-                          ? industriesFromStartup.join(", ")
+                          ? industriesFromStartup.map((item, index) => (
+                              <span key={index}>
+                                {item}
+                                {index < industriesFromStartup.length - 1 &&
+                                  " • "}
+                              </span>
+                            ))
                           : "N/A")}
                       {activeTab === "Stage" && (stageFromStartup || "N/A")}
                       {activeTab === "Seeking" &&
                         (seekingFromStartup.length > 0
-                          ? seekingFromStartup.join(", ")
+                          ? seekingFromStartup.map((item, index) => (
+                              <span key={index}>
+                                {item}
+                                {index < seekingFromStartup.length - 1 && " • "}
+                              </span>
+                            ))
                           : "N/A")}
-                      {activeTab === "Target Market" &&
-                        (targetMarketFromStartup || "N/A")}{" "}
-                      {/* NEW */}
                     </>
                   )}
               </p>
             </div>
-
             {/* Socials & Reviews */}
             <div className="flex flex-wrap gap-4 items-center mt-4">
               <div className="flex gap-2">

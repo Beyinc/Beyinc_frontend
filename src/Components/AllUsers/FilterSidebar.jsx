@@ -275,10 +275,8 @@ const FilterSidebar = ({
                           </span>
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-400">
-                              (
                               {industrySkillCounts[industry]?.industryCount ||
                                 0}
-                              )
                             </span>
                             <ChevronDown
                               className={`w-3.5 h-3.5 !text-gray-400 transform transition-transform duration-200 ${
@@ -312,11 +310,9 @@ const FilterSidebar = ({
                                   </span>
                                 </div>
                                 <span className="text-xs text-gray-400 ml-4">
-                                  (
                                   {industrySkillCounts[industry]?.skills?.[
                                     skill
                                   ] || 0}
-                                  )
                                 </span>
                               </label>
                             ))}

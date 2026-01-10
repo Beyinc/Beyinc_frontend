@@ -118,8 +118,6 @@ const AllUsers = () => {
         (user) => user.beyincProfile && user.beyincProfile.trim() !== "",
       );
 
-      console.log(filteredUsers);
-
       setData(filteredUsers);
       dispatch(setLoading({ visible: "no" }));
     });
@@ -280,7 +278,6 @@ const AllUsers = () => {
 
   // Function to fetch user data from backend based on filters
   const fetchUsers = async () => {
-    console.log("Current filters:", filters);
     try {
       const response = await ApiServices.FilterData(filters);
       // Filter users to only include those with the desired fields
@@ -301,10 +298,8 @@ const AllUsers = () => {
 
   // NEW FUNCTION FOR STARTUPS -
   const fetchStartups = async () => {
-    console.log("Current startup filters:", startupFilters);
     try {
       const response = await ApiServices.FilterStartups(startupFilters);
-      console.log("Filtered startups from backend:", response.data);
       setStartups(response.data); // Backend already filtered by beyincProfile: "Startup"
     } catch (error) {
       console.error("Error fetching startups:", error);
@@ -428,28 +423,25 @@ const AllUsers = () => {
           </div>
         )}
         {/* NEW TABS SECTION - Add this right after mobile nav */}
-        <div
-          className="w-full bg-white border-b border-gray-200 sticky top-0 z-10 ml-60
-        "
-        >
+        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 ml-60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex space-x-8 py-4">
+            <div className="flex gap-2 mt-4 p-1 bg-gray-100 rounded-full w-fit border border-gray-300">
               <button
                 onClick={() => setViewMode("mentors")}
-                className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
+                className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
                   viewMode === "mentors"
-                    ? "text-black"
-                    : "border-transparent text-gray-700"
+                    ? "bg-white text-[#4f55c7] shadow-sm hover:text-white hover:bg-[#4f55c7]"
+                    : "bg-transparent text-gray-900 hover:text-white hover:bg-[#4f55c7]"
                 }`}
               >
                 Mentor
               </button>
               <button
                 onClick={() => setViewMode("startups")}
-                className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors bg-white ${
+                className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
                   viewMode === "startups"
-                    ? "text-black"
-                    : "border-transparent text-gray-700 "
+                    ? "bg-white text-[#4f55c7] shadow-sm hover:text-white hover:bg-[#4f55c7]"
+                    : "bg-transparent text-gray-900 hover:text-white hover:bg-[#4f55c7]"
                 }`}
               >
                 Startup
@@ -606,7 +598,7 @@ const AllUsers = () => {
           )}
           {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
-            <div className="mt-4 userscontainer">
+            <div className="mt-4 userscontainer h-60">
               {(viewMode === "mentors" || viewMode === "all") &&
                 // RENDER MENTORS
                 (users.length > 0 ? (
