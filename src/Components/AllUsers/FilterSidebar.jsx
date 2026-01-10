@@ -191,7 +191,6 @@ const FilterSidebar = ({
     </svg>
   );
 
-  console.log(industrySkillCounts);
   return (
     <>
       {/* Inject Styles Here */}
