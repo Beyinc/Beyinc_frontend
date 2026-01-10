@@ -3,7 +3,12 @@ import { useSelector } from "react-redux";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import "./Posts.css";
 
-const RecommendedConnectButton = ({ id, handleFollower, btnClassname }) => {
+const RecommendedConnectButton = ({
+  id,
+  handleFollower,
+  btnClassname,
+  viewMode,
+}) => {
   const [receiverRole, setreceiverRole] = useState("");
   const [pitchSendTo, setPitchSendTo] = useState("");
   const [IsAdmin, setIsAdmin] = useState(false);
@@ -14,12 +19,13 @@ const RecommendedConnectButton = ({ id, handleFollower, btnClassname }) => {
       <button
         className={`connect-btn ${btnClassname} w-[100px] h-[30px] ml-2`}
         onClick={() => {
+          // console.log("chat clicked");
           setPitchSendTo(id);
           setreceiverRole(role);
           setIsAdmin(email == process.env.REACT_APP_ADMIN_MAIL);
         }}
       >
-        Chat
+        {viewMode === "startups" ? "Connect" : "Chat"}
       </button>
 
       <AddConversationPopup

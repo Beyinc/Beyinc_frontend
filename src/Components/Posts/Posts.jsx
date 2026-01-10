@@ -27,7 +27,6 @@ const Posts = () => {
 
   // console.log(role, userName, image)
 
-
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
@@ -75,19 +74,18 @@ const Posts = () => {
             message: "Error Occured!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
         // dispatch(setLoading({ visible: "no" }));
       });
   }, [loadingTrigger]);
-
 
   // useEffect(()=>{
   //   console.log("all posts-:",allPosts);
   // },[allPosts])
   useEffect(() => {
     console.log("all posts-:", allPosts);
-  }, [allPosts])
+  }, [allPosts]);
 
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
@@ -100,11 +98,10 @@ const Posts = () => {
             message: "Error Occurred!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   }, [dispatch]);
-
 
   // useEffect(()=>{
   //           console.log("top trending posts are :",topTrendingPosts);
@@ -112,8 +109,7 @@ const Posts = () => {
   // },[topTrendingPosts])
   useEffect(() => {
     console.log("top trending posts are :", topTrendingPosts);
-
-  }, [topTrendingPosts])
+  }, [topTrendingPosts]);
   const truncateDescription = (description, maxLength = 100) => {
     if (description.length <= maxLength) return description;
     const truncated = description.slice(0, maxLength);
@@ -131,7 +127,7 @@ const Posts = () => {
             message: "Error Occured!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   }, [recommendedUserTrigger]);
@@ -158,7 +154,7 @@ const Posts = () => {
   }, []);
 
   const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => { });
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
     dispatch(getAllNotifications(user_id));
   };
 
@@ -202,8 +198,6 @@ const Posts = () => {
 
   // };
 
-
-
   useEffect(() => {
     const fetchFilteredPosts = async () => {
       try {
@@ -213,8 +207,8 @@ const Posts = () => {
           people: people,
           public: isPublic,
           private: isPrivate,
-          page: filterPage,       // send page
-          pageSize,               // send pageSize
+          page: filterPage, // send page
+          pageSize, // send pageSize
         };
 
         const response = await ApiServices.getFilterPosts(filterData);
@@ -230,7 +224,14 @@ const Posts = () => {
     };
 
     fetchFilteredPosts();
-  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
+  }, [
+    people,
+    selectedSortOption,
+    selectedTags,
+    isPublic,
+    isPrivate,
+    filterPage,
+  ]);
 
   // Load More for filtered posts
   const handleLoadMore = () => {
@@ -240,7 +241,7 @@ const Posts = () => {
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
     setSelectedTags((prev) =>
-      checked ? [...prev, value] : prev.filter((option) => option !== value)
+      checked ? [...prev, value] : prev.filter((option) => option !== value),
     );
   };
 
@@ -251,14 +252,12 @@ const Posts = () => {
   };
 
   const filteredTagsOptions = postTypes.filter((option) =>
-    option.value.toLowerCase().includes(tags.toLowerCase())
+    option.value.toLowerCase().includes(tags.toLowerCase()),
   );
-
 
   const createMarkup = (html) => {
     return { __html: html };
   };
-
 
   const getDescription = (post) => {
     {
@@ -272,8 +271,13 @@ const Posts = () => {
       <div className="mobile-menu-icon" onClick={() => setIsSidebarOpen(true)}>
         <RxHamburgerMenu />
       </div>
-      <div className={`Homepage-left-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <div className="mobile-close-icon" onClick={() => setIsSidebarOpen(false)}>
+      <div
+        className={`Homepage-left-container ${isSidebarOpen ? "sidebar-open" : ""}`}
+      >
+        <div
+          className="mobile-close-icon"
+          onClick={() => setIsSidebarOpen(false)}
+        >
           <RxCross2 />
         </div>
         <div className="sidebar-menu shadow-lg">
@@ -436,8 +440,9 @@ const Posts = () => {
             <h4 className="mt-3 mb-2">Tags</h4>
             <div className="relative">
               <button
-                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${isTagsOpen ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+                  isTagsOpen ? "rotate-180" : "rotate-0"
+                }`}
                 onClick={() => setIsTagsOpen(!isTagsOpen)}
               >
                 <RxCaretDown />
@@ -572,7 +577,11 @@ const Posts = () => {
         </div>
 
         <div className="loadMore-Container">
-          <button className="loadMore" onClick={handleLoadMore} hidden={filteredPosts.length <= 10}>
+          <button
+            className="loadMore"
+            onClick={handleLoadMore}
+            hidden={filteredPosts.length <= 10}
+          >
             Load More
           </button>
         </div>
@@ -597,7 +606,9 @@ const Posts = () => {
                   <b>{post?.postTitle}</b>
                 </h4>
 
-                <div dangerouslySetInnerHTML={createMarkup(getDescription(post))}></div>
+                <div
+                  dangerouslySetInnerHTML={createMarkup(getDescription(post))}
+                ></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}
@@ -609,7 +620,7 @@ const Posts = () => {
         <div className="suggestions-section shadow-lg">
           <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             {" "}
-            <h4 className="label">Suggestions for you</h4>
+            <h4 className="label">Suggestions for you </h4>
             <span
               style={{
                 width: " 90px",
@@ -639,7 +650,10 @@ const Posts = () => {
               </div>
               <div className="right-section">
                 <h4
-                  style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
+                  style={{
+                    fontFamily: '"Gentium Book Basic", serif',
+                    fontWeight: 700,
+                  }}
                   onClick={() => {
                     if (rec._id == user_id) {
                       navigate("/editProfile");
@@ -647,7 +661,6 @@ const Posts = () => {
                       navigate(`/user/${rec._id}`);
                     }
                   }}
-
                 >
                   {rec?.userName}
                 </h4>
@@ -707,5 +720,3 @@ const Posts = () => {
 };
 
 export default Posts;
-
-
