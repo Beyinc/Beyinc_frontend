@@ -15,9 +15,10 @@ import WebinarModal from './webinar.jsx'; // Adjust the import path as needed
 
 
 
-const BookSession = ({ name, mentorId, reschedule, rescheduleBooking,selectedDuration }) => {
+const BookSession = ({ name, mentorId, reschedule, rescheduleBooking,selectedDuration ,requestId}) => {
 
   console.log('mentorId', mentorId)
+  console.log("requetsId in booksession",requestId)
 //  console.log('reschedule', reschedule);
 
   const [selectedDate, setSelectedDate] = useState(null);
@@ -434,6 +435,7 @@ const handleDurationChange = (selectedId) => {
             mentorId={mentorId}
             reschedule={reschedule}
             rescheduleBooking={rescheduleBooking}
+            requestId={requestId}
           />
         ) : (
           <button className="grey">

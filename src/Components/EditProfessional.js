@@ -36,7 +36,7 @@ const EditProfessional = ({ isOpen, onClose, currentProfile }) => {
         selectedStartupIndustries.filter((ind) => ind !== industry),
       );
     } else {
-      if (selectedStartupIndustries.length < 5) {
+      if (selectedStartupIndustries.length < 6) {
         setSelectedStartupIndustries([...selectedStartupIndustries, industry]);
       }
     }
@@ -158,7 +158,7 @@ const EditProfessional = ({ isOpen, onClose, currentProfile }) => {
                   const isSelected =
                     selectedStartupIndustries.includes(industry);
                   const isDisabled =
-                    !isSelected && selectedStartupIndustries.length >= 5;
+                    !isSelected && selectedStartupIndustries.length >= 6;
                   return (
                     <button
                       key={industry}

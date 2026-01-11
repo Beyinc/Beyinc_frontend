@@ -79,6 +79,34 @@ useEffect(() => {
   });
 
   // --- HANDLERS ---
+
+// Check if selections are updating correctly
+useEffect(() => {
+  console.log("Selected Role:", selectedRole);
+}, [selectedRole]);
+
+useEffect(() => {
+  console.log("Selected Expertise:", selectedExpertise);
+}, [selectedExpertise]);
+
+useEffect(() => {
+  console.log("Selected Startup Industries:", selectedStartupIndustries);
+}, [selectedStartupIndustries]);
+
+useEffect(() => {
+  console.log("Selected Startup Stage:", selectedStartupStage);
+}, [selectedStartupStage]);
+
+useEffect(() => {
+  console.log("Selected Seeking Options:", selectedSeekingOptions);
+}, [selectedSeekingOptions]);
+
+useEffect(() => {
+  console.log("Selected Target Markets:", selectedTargetMarkets);
+}, [selectedTargetMarkets]);
+
+
+
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -93,6 +121,7 @@ useEffect(() => {
   const handleExpertiseToggle = (skill) => {
     setSelectedExpertise((prev) => {
       if (prev.includes(skill)) {
+
         return prev.filter((item) => item !== skill);
       } else {
         return [...prev, skill];
