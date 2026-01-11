@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
 import { CalendarServices } from "../../Services/CalendarServices";
+import SessionSelector from "../AllUsers/SessionSelector";
 import {
   FaLinkedin,
   FaTwitter,
@@ -27,10 +28,10 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   const [selectedSessionId, setSelectedSessionId] = useState("");
   const [selectedSession, setSelectedSession] = useState(null);
   const [activeTab, setActiveTab] = useState("Expertise");
-
-  useEffect(() => {
-    console.log("mentor data coming", user);
-  });
+  const [sessionTitle, setSessionTitle] = useState("");
+  // useEffect(() => {
+  //   console.log("mentor data coming", user);
+  // });
   // --- Effects ---
   useEffect(() => {
     const fetchAvailabilityData = async () => {
@@ -43,6 +44,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
         //   "Availability data found here:",
         //   JSON.stringify(data.availability),
         // );
+        console.log("Availability sessions:", data.availability.sessions);
         setSession(data.availability.sessions);
       } catch (error) {
         console.error("Error fetching availability data:", error);
@@ -84,6 +86,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
       requestMessage,
       amount: selectedSession?.amount,
       duration: selectedSession?.duration,
+      title: sessionTitle,
     };
 
     try {
@@ -154,8 +157,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 onClick={openUser}
               >
                 {user?.role === "Startup"
-                  ? (user?.startupProfile?.startupName ?? "Unnamed Startup")
-                  : (user?.userName ?? "Unknown User")}
+                  ? user?.startupProfile?.startupName ?? "Unnamed Startup"
+                  : user?.userName ?? "Unknown User"}
               </h3>
               {user?.role === "Startup" &&
                 user?.startupProfile?.targetMarket && (
@@ -361,33 +364,14 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             {/* Modal Body */}
             <div className="p-6 space-y-5">
               {/* Session Type Selection */}
-              <div>
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">
-                  Select Session Duration
-                </label>
-                <div className="relative">
-                  <select
-                    className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 rounded-xl p-3 pl-4 pr-10 focus:ring-2 focus:ring-[#4f55c7]/20 focus:border-[#4f55c7] outline-none transition-all cursor-pointer font-medium"
-                    value={selectedSessionId}
-                    onChange={(e) => {
-                      const id = e.target.value;
-                      setSelectedSessionId(id);
-                      const sessionData = session.find((s) => s._id === id);
-                      setSelectedSession(sessionData);
-                    }}
-                  >
-                    <option value="">Choose a duration...</option>
-                    {session.map((s) => (
-                      <option key={s._id} value={s._id}>
-                        {s.duration} minutes (₹{s.amount})
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                    <FaChevronDown size={12} />
-                  </div>
-                </div>
-              </div>
+<SessionSelector
+  session={session}
+  selectedSessionId={selectedSessionId}
+  setSelectedSessionId={setSelectedSessionId}
+  setSelectedSession={setSelectedSession}
+  setSessionTitle={setSessionTitle}
+/>
+
 
               {/* Selected Session Summary */}
               {selectedSession && (

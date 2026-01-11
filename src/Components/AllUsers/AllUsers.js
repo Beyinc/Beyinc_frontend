@@ -292,7 +292,8 @@ const AllUsers = () => {
           // || (user.investmentRange !== undefined)
         );
       });
-      console.log();
+      setUsers(filteredUsers);
+      console.log("data that is coming after filter :",filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -378,6 +379,27 @@ const AllUsers = () => {
       ...newFilters,
     }));
   }, []);
+
+const fetchFilteredMentors = async () => {
+  try {
+    dispatch(setLoading({ visible: "yes" }));
+
+    const response = await ApiServices.FilterData(filters);
+
+    setUsers(response.data); // update mentors list
+
+    dispatch(setLoading({ visible: "no" }));
+  } catch (error) {
+    dispatch(setLoading({ visible: "no" }));
+    console.log("Error in mentor filtering:", error);
+  }
+};
+
+  useEffect(() => {
+  // fetchFilteredMentors();
+fetchUsers();
+console.log("Filters updated:", filters);
+}, [filters]);
 
   return (
     <>
