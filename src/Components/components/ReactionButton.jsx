@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { reactionTypes } from "../../constants/reactions";
 
@@ -8,6 +10,10 @@ export default function ReactionButton({
     userReaction = null,
     post,
 }) {
+    // Check if user is authenticated
+    const { _id: userId } = useSelector((state) => state.auth.userDetails || {});
+    const isAuthenticated = Boolean(userId);
+    const navigate = useNavigate();
     const [selected, setSelected] = useState(userReaction);
     const [showMenu, setShowMenu] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -25,6 +31,12 @@ export default function ReactionButton({
     }, [userReaction, isProcessing]);
 
     const handleSelect = (reaction) => {
+        // Redirect unauthenticated users to signup
+        if (!isAuthenticated) {
+            navigate("/signup");
+            return;
+        }
+
         const newReaction = reaction.type;
 
         setSelected((prev) => (prev === newReaction ? null : newReaction));
@@ -82,9 +94,13 @@ export default function ReactionButton({
         <div className="relative inline-block select-none">
             {/* Main reaction button */}
             <button
-                onClick={() =>
-                    handleSelect({ type: selected ? selected : "like" })
-                }
+                onClick={() => {
+                    if (!isAuthenticated) {
+                        navigate("/signup");
+                        return;
+                    }
+                    handleSelect({ type: selected ? selected : "like" });
+                }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 disabled={isProcessing}

@@ -115,7 +115,6 @@ export default function ProfileCompletionStatus({
 
   const updateBeyincProfile = async (newValue) => {
     try {
-      console.log("update calling");
       await ApiServices.UpdateBeyincProfile({
         beyincProfile: newValue,
       });
@@ -145,10 +144,8 @@ export default function ProfileCompletionStatus({
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const strokeDasharray = circumference;
-  // Add validation to ensure completionPercentage is a valid number
-  const validPercentage = Number(completionPercentage) || 0;
   const strokeDashoffset =
-    circumference - (validPercentage / 100) * circumference;
+    circumference - (completionPercentage / 100) * circumference;
 
   return (
     <div className="bg-white rounded-2xl  p-6 ">
@@ -186,7 +183,9 @@ export default function ProfileCompletionStatus({
                 fill="none"
                 strokeLinecap="round"
                 className={`transition-all duration-500 ${
-                  validPercentage >= 80 ? "text-green-600" : "text-amber-500"
+                  completionPercentage >= 80
+                    ? "text-green-600"
+                    : "text-amber-500"
                 }`}
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}

@@ -127,7 +127,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
 
   // console.log(role);
   return (
-    <div className="w-full rounded-xl ">
+    <div className="w-full grow bg-white rounded-xl h-32 ">
       <div className="min-h-[100px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl">
         <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           About
@@ -135,6 +135,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
             {selfProfile && <i className="fas fa-pen"></i>}
           </span>
         </div>
+
         <div
           className="mt-4 text-container"
           style={{
@@ -152,6 +153,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
             defaultTemplate
           )}
         </div>
+
         {errorMessage && (
           <div className="text-red-500 mt-4">{errorMessage}</div>
         )}

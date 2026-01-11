@@ -24,6 +24,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
     setProfileAbout(updatedAbout); // Update the profileAbout state with the new text
     setErrorMessage(""); // Clear any previous error message
   };
+  console.log("profile role", profileData.role);
   useEffect(() => {
     setRole(profileData?.role);
   }, [profileData]);
@@ -38,7 +39,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
                     <ProfileCard />
                 </div> */}
         <div>
-          <div className="">
+          <div>
             <AboutCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
