@@ -93,7 +93,6 @@ const EditMentorProfessional = ({ isOpen, onClose, currentProfile }) => {
         }
       }
 
-      console.log(updateData);
       await ApiServices.InputEntryData(updateData);
       alert("Profile Updated Successfully!");
       onClose();

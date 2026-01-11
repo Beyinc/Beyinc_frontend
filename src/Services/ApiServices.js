@@ -1305,6 +1305,33 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  // Add these two methods to your ApiServices
+
+  getUsersByVerifiedStatusByAdmin: (status) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/users/verified/${status}`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  updateVerifiedStatusByAdmin: (userId, verified) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch(`/users/${userId}/verify`, { verified })
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   StartupEntryData: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance

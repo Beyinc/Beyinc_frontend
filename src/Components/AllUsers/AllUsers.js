@@ -549,6 +549,7 @@ console.log("Filters updated:", filters);
                 updateStartupFilters={updateStartupFilters}
                 viewMode={viewMode}
                 industrySkillCounts={computedIndustrySkillCounts}
+                startups={startups}
               />
               {/* Role */}
               {/* <div className="tagFilter">
