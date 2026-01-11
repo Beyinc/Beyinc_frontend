@@ -27,7 +27,6 @@ const EditAboutModal = ({ isOpen, onClose, initialValue, onSave }) => {
         "675e7e41e424505620d8faee",
         aboutText,
       ); // Update API call
-      console.log("About saved successfully", updatedAbout);
       onSave(aboutText); // Update parent with the new about text
       onClose(); // Close the modal
     } catch (error) {
@@ -93,4 +92,3 @@ const EditAboutModal = ({ isOpen, onClose, initialValue, onSave }) => {
 };
 
 export default EditAboutModal;
-
