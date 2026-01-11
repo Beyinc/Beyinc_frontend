@@ -115,6 +115,7 @@ export default function ProfileCompletionStatus({
 
   const updateBeyincProfile = async (newValue) => {
     try {
+      console.log("update calling");
       await ApiServices.UpdateBeyincProfile({
         beyincProfile: newValue,
       });

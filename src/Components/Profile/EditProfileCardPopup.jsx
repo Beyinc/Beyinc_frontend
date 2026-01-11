@@ -137,7 +137,6 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(formState);
     try {
       // Save personal and location data
       await ApiServices.InputFormData({
