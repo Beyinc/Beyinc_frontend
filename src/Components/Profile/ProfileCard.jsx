@@ -443,10 +443,12 @@ const ProfileCard = ({
           </div>
 
           {/* Profile Completion Status */}
-          <ProfileCompletionStatus
-            profileData={profileDataObj}
-            profileType="Startup"
-          />
+          {selfProfile && (
+            <ProfileCompletionStatus
+              profileData={profileDataObj}
+              profileType="Startup"
+            />
+          )}
         </div>
 
         <ProfileImageUpdate open={openEditPfp} setOpen={setOpenEditPfp} />

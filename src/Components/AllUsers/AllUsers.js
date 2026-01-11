@@ -527,6 +527,7 @@ const AllUsers = () => {
                 updateStartupFilters={updateStartupFilters}
                 viewMode={viewMode}
                 industrySkillCounts={computedIndustrySkillCounts}
+                startups={startups}
               />
               {/* Role */}
               {/* <div className="tagFilter">

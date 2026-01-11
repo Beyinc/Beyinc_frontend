@@ -39,7 +39,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
                     <ProfileCard />
                 </div> */}
         <div>
-          <div>
+          <div className="">
             <AboutCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
