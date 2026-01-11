@@ -10,7 +10,6 @@ import SearchFilter from "../Searching/SearchFilter";
 import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import "./ConnectionsWithSuggestions.css";
-import { useAuthAction } from "../../hooks/useAuthAction";
 
 export default function ConnectionsWithSuggestions() {
   // ---------------- CONNECTIONS ----------------
@@ -28,7 +27,6 @@ export default function ConnectionsWithSuggestions() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authenticated = useAuthAction();
   const socket = useRef();
 
   const auth = useSelector((store) => store.auth || {});
@@ -62,7 +60,7 @@ export default function ConnectionsWithSuggestions() {
       // cleanup when component unmounts
       try {
         socket.current?.disconnect();
-      } catch { }
+      } catch {}
     };
   }, []);
 
@@ -187,8 +185,12 @@ export default function ConnectionsWithSuggestions() {
 
   // ---------------- FETCH SUGGESTIONS ----------------
   useEffect(() => {
-    // We can fetch suggestions even if not logged in now
-    ApiServices.getNewProfiles()
+    if (!user_id) {
+      console.log("getNewProfiles skipped - user_id not ready");
+      return;
+    }
+
+    ApiServices.getNewProfiles({ userId: user_id })
       .then((res) => {
         const arr = getArrayFromResponse(res);
         setRecommendedUsers(arr);
@@ -196,6 +198,13 @@ export default function ConnectionsWithSuggestions() {
       })
       .catch((err) => {
         console.error("getNewProfiles error", err);
+        dispatch(
+          setToast({
+            message: "Error Occurred!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recommendedUserTrigger, user_id]);
@@ -248,12 +257,12 @@ export default function ConnectionsWithSuggestions() {
           // </button>
 
           <button
-            className="!rounded-full !px-4 !py-1 !w-[100px] !h-[30px] !text-[rgb(79,85,199)] !border-2 !border-[rgb(79,85,199)] !bg-white border-solid shadow-lg"
+ className="!rounded-full !px-4 !py-1 !w-[100px] !h-[30px] !text-[rgb(79,85,199)] !border-2 !border-[rgb(79,85,199)] !bg-white border-solid shadow-lg"
 
-            onClick={() => setReceiverId(user._id)}
-          >
-            Chat
-          </button>
+  onClick={() => setReceiverId(user._id)}
+>
+  Chat
+</button>
 
         )}
       </div>
@@ -317,20 +326,22 @@ export default function ConnectionsWithSuggestions() {
 
             <div className="flex gap-4 ml-10 mb-4 sticky top-[48px] bg-white z-10">
               <button
-                className={`px-4 py-2 rounded-full ${activeTab === "followers"
-                  ? "bg-custom text-white"
-                  : "bg-gray-200 text-gray-700"
-                  }`}
+                className={`px-4 py-2 rounded-full ${
+                  activeTab === "followers"
+                    ? "bg-custom text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
                 onClick={() => setActiveTab("followers")}
               >
                 Followers ({followers.length})
               </button>
 
               <button
-                className={`px-4 py-2 rounded-full ${activeTab === "following"
-                  ? "bg-custom text-white"
-                  : "bg-gray-200 text-gray-700"
-                  }`}
+                className={`px-4 py-2 rounded-full ${
+                  activeTab === "following"
+                    ? "bg-custom text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
                 onClick={() => setActiveTab("following")}
               >
                 Following ({following.length})
@@ -450,7 +461,7 @@ export default function ConnectionsWithSuggestions() {
                     <div className="flex gap-1">
                       <button
                         className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm w-[100px] h-[30px]"
-                        onClick={authenticated((e) => {
+                        onClick={(e) =>
                           followerController({
                             dispatch,
                             e,
@@ -459,17 +470,17 @@ export default function ConnectionsWithSuggestions() {
                             setRecommendedUserTrigger,
                             socket,
                             user: { id: user_id, userName, image, role },
-                          });
-                        })}
+                          })
+                        }
                       >
                         Follow
                       </button>
 
                       <RecommendedConnectButton
                         id={rec._id}
-                        handleFollower={authenticated(() => {
-                          setRecommendedUserTrigger(!recommendedUserTrigger);
-                        })}
+                        handleFollower={() =>
+                          setRecommendedUserTrigger(!recommendedUserTrigger)
+                        }
                       />
                     </div>
                   </div>

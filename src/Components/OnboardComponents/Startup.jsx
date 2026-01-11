@@ -123,7 +123,8 @@ const Startup = ({ step, setStep, selectedCategory }) => {
             {/* Photo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Profile Photo <span className="text-red-500">*</span>
+                Profile Photo
+                {/* <span className="text-red-500">*</span> */}
               </label>
               <input
                 type="file"

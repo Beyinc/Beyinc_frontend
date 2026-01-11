@@ -1256,7 +1256,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
+  FilterStartups: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/filterstartups`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   getFilterPosts: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1284,7 +1295,18 @@ export const ApiServices = {
   StartupEntryData: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post("/startupEntryData", obj) // ✅ correct backend route
+        .post("/startupEntryData", obj)
+        .then((res) => {
+          if (res) resolve(res);
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  //for updateing beyincProfile
+  UpdateBeyincProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch("/updateBeyincProfile", obj) // Using PATCH for partial update
         .then((res) => {
           if (res) resolve(res);
         })

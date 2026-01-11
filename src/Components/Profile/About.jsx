@@ -8,11 +8,13 @@ import ExperiencesCard from "./ExperienceCard";
 import aboutService from "./aboutPageApi";
 import ProfileCard from "./ProfileCard";
 import UploadCard from "./UploadCard";
+import SeekingCard from "./SeekingCard";
 
 const About = ({ profileData, selfProfile, setSelfProfile }) => {
   const [profileAbout, setProfileAbout] = useState("");
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); // New state for error handling
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     aboutService.fetchAbout();
@@ -23,6 +25,10 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
     setErrorMessage(""); // Clear any previous error message
   };
   console.log("profile role", profileData.role);
+  useEffect(() => {
+    setRole(profileData?.role);
+  }, [profileData]);
+
   return (
     <div>
       {/* <div className="EditProfileImageContainer">
@@ -37,18 +43,25 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
             <AboutCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
+              role={role}
+              profileData={profileData}
             />
           </div>
+          {profileData.role === "Startup" && (
+            <div>
+              <SeekingCard selfProfile={selfProfile} />
+            </div>
+          )}
 
           {(profileData.role === "Mentor" ||
             profileData.role === "Individual/Entrepreneur") && (
             <div>
-              <div className="">
-                <SkillsCard
-                  selfProfile={selfProfile}
-                  setSelfProfile={setSelfProfile}
-                />
-              </div>
+              {/* <div className=""> */}
+              {/*   <SkillsCard */}
+              {/*     selfProfile={selfProfile} */}
+              {/*     setSelfProfile={setSelfProfile} */}
+              {/*   /> */}
+              {/* </div> */}
 
               <div>
                 <ExperiencesCard

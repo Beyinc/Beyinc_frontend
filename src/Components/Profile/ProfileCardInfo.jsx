@@ -2,15 +2,15 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
   return (
     <div className="space-y-3 text-gray-600 text-sm">
       {/* Startup Name */}
-      {profileData.startupProfile.startupName && (
-        <div className="flex items-center gap-2">
-          <span className="text-lg">🏢</span>
-          <span className="font-medium text-gray-600">Startup:</span>
-          <span className="font-semibold text-gray-700">
-            {profileData.startupProfile.startupName}
-          </span>
-        </div>
-      )}
+      {/* {profileData.startupProfile.startupName && ( */}
+      {/*   <div className="flex items-center gap-2"> */}
+      {/*     <span className="text-lg">🏢</span> */}
+      {/*     <span className="font-medium text-gray-600">Startup:</span> */}
+      {/*     <span className="font-semibold text-gray-700"> */}
+      {/*       {profileData.startupProfile.startupName} */}
+      {/*     </span> */}
+      {/*   </div> */}
+      {/* )} */}
 
       {/* Tagline */}
       {profileData.startupProfile.startupTagline && (
@@ -33,18 +33,6 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
           </span>
         </div>
       )}
-
-      {/* Stage */}
-      <div className="flex items-center gap-2 w-full whitespace-nowrap">
-        <span className="text-lg">🚀</span>
-        <span className="font-medium text-gray-600">Stage:</span>
-        <span className="font-semibold text-gray-700 text-sm">
-          {profileData.startupProfile.stage
-            ?.split("-")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ") || "N/A"}
-        </span>
-      </div>
 
       {/* Team Size */}
       <div className="flex items-center gap-2">
@@ -75,17 +63,6 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
         </div>
       )}
 
-      {/* Target Market */}
-      {profileData.startupProfile.targetMarket && (
-        <div className="flex items-center gap-2">
-          <span className="text-lg">🎯</span>
-          <span className="font-medium text-gray-600">Market:</span>
-          <span className="font-semibold text-gray-700">
-            {profileData.startupProfile.targetMarket}
-          </span>
-        </div>
-      )}
-
       {/* Email */}
       {profileData.startupProfile.startupEmail && (
         <div className="flex items-center gap-2">
@@ -95,32 +72,6 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
           </span>
         </div>
       )}
-
-      {/* Industries */}
-      {profileData.startupProfile.industries &&
-        profileData.startupProfile.industries.filter((ind) => ind.trim() !== "")
-          .length > 0 && (
-          <div className="flex items-start gap-2">
-            <span className="text-lg mt-0.5">🏭</span>
-            <div className="flex-1">
-              <span className="font-medium text-gray-600 block mb-2">
-                Industries:
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {profileData.startupProfile.industries
-                  .filter((industry) => industry.trim() !== "")
-                  .map((industry, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200"
-                    >
-                      {industry}
-                    </span>
-                  ))}
-              </div>
-            </div>
-          </div>
-        )}
     </div>
   );
 };

@@ -1,117 +1,188 @@
-import React, { useState, useEffect } from 'react';
-import {Button,Switch,  Tabs,InputLabel, FormControl, Select, MenuItem, Grid, TextField, FormControlLabel } from '@mui/material';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import MultiDatePicker from './MultiDateCalendar.js'; // Adjust the import path accordingly
-import { CalendarServices } from '../../../Services/CalendarServices.js'; // Adjust the import path as needed
-import Week from './week.js';
-import { convertToUTCAndShift } from './convertUtc.js';
-import Typography from '@mui/material/Typography';
-import './ScheduleComponent.css'; // Import the CSS file
-import dayjs from 'dayjs';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import { Autocomplete } from '@mui/material';
-import timezones from 'timezones-list';              // A popular package to provide timezones list.
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import ServicesTab from './services.js';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Switch,
+  Tabs,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+  Grid,
+  TextField,
+  FormControlLabel,
+} from "@mui/material";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import MultiDatePicker from "./MultiDateCalendar.js"; // Adjust the import path accordingly
+import { CalendarServices } from "../../../Services/CalendarServices.js"; // Adjust the import path as needed
+import Week from "./week.js";
+import { convertToUTCAndShift } from "./convertUtc.js";
+import Typography from "@mui/material/Typography";
+import "./ScheduleComponent.css"; // Import the CSS file
+import dayjs from "dayjs";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import { Autocomplete } from "@mui/material";
+import timezones from "timezones-list"; // A popular package to provide timezones list.
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import ServicesTab from "./services.js";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useSelector } from "react-redux";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 
-
 export default function AvailabilityForm() {
   const [selectedDayTimeUtc, setSelectedDayTimeUtc] = useState({});
-  const [selectedDuration, setSelectedDuration] = useState('');
+  const [selectedDuration, setSelectedDuration] = useState("");
   const [unavailableDates, setUnavailableDates] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({});
   const [activeTab, setActiveTab] = useState(0);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [noticePeriod, setNoticePeriod] = useState('');
-  const [selectedTimezone, setSelectedTimezone] = useState('');
-  const [bufferTime, setBufferTime] = useState('');
+  const [noticePeriod, setNoticePeriod] = useState("");
+  const [selectedTimezone, setSelectedTimezone] = useState("");
+  const [bufferTime, setBufferTime] = useState("");
   const [isRescheduleAllowed, setRescheduleAllowed] = useState(false);
-  const [rescheduleNotice, setRescheduleNotice] = useState('');
+  const [rescheduleNotice, setRescheduleNotice] = useState("");
+const { user_id: mentorId } = useSelector((store) => store.auth.loginDetails);
 
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      if (!mentorId) return;
+
+      try {
+        const { data } = await CalendarServices.getAvailabilityData({
+          mentorId,
+        });
+
+        const availableUtc = data?.availabilityData?.availableDayTimeUtc || {};
+
+        // normalize keys to numbers & ensure arrays
+        const normalized = {};
+        // Object.entries(availableUtc).forEach(([day, slots]) => {
+        //     normalized[Number(day)] = Array.isArray(slots) ? slots : [];
+        // });
+
+        // ✅ show slots on load
+        // setTimeSlotsPerDay(normalized);
+
+        // ✅ keep existing save flow working
+        // setSelectedDayTimeUtc(normalized);
+        console.log("fetched availability data:", data);
+        // Try multiple possible response shapes to find stored start/end dates
+        const startFromDb = data?.availability?.startDate || data?.availabilityData?.startDate || data?.startDate;
+        const endFromDb = data?.availability?.endDate || data?.availabilityData?.endDate || data?.endDate;
+        if (startFromDb) {
+          setStartDate(dayjs(startFromDb));
+        }
+        if (endFromDb) {
+          setEndDate(dayjs(endFromDb));
+        }
+        console.log("loaded start/end from DB:", startFromDb, endFromDb);
+      } catch (error) {
+        console.error("Error fetching availability:", error);
+      }
+    };
+
+    fetchAvailability();
+  }, [mentorId]);
 
   const handleAuth = async () => {
-    console.log('handleAuth working');
+    console.log("handleAuth working");
     try {
       // Fetch the OAuth URL from the service
       const obj = await CalendarServices.calenderAuth();
-      console.log('OAuth URL fetched:', obj.data.url);
-  
+      console.log("OAuth URL fetched:", obj.data.url);
+
       // Open the OAuth URL in a popup window
-      const authWindow = window.open(obj.data.url, 'OAuthPopup', 'width=600,height=600');
-      console.log('Popup window opened:', authWindow);
-  
+      const authWindow = window.open(
+        obj.data.url,
+        "OAuthPopup",
+        "width=600,height=600"
+      );
+      console.log("Popup window opened:", authWindow);
+
       const handleMessage = (event) => {
-     
         // Check if the event comes from the expected origin
-        if (event.origin === 'http://localhost:3000') { // Replace with actual origin
+        if (event.origin === "http://localhost:3000") {
+          // Replace with actual origin
           // Ensure the message data contains the expected content
-          if (typeof event.data === 'string' && event.data === 'Authorization successful') {
+          if (
+            typeof event.data === "string" &&
+            event.data === "Authorization successful"
+          ) {
             // console.log('Authorization successful, closing window...');
             if (authWindow && !authWindow.closed) {
               authWindow.close(); // Close the popup window
               // console.log('Popup window closed');
-            } 
-      
+            }
+
             // Optionally, reload or update the page after successful authorization
             window.location.reload(); // Reloads the current page
           } else {
-            console.warn('Unexpected message data:', event.data);
+            console.warn("Unexpected message data:", event.data);
           }
         } else {
-          console.warn('Unexpected origin:', event.origin);
+          console.warn("Unexpected origin:", event.origin);
         }
       };
-      
+
       // Add event listener to handle messages from the popup
-      window.addEventListener('message', handleMessage, false);
-  
-   
+      window.addEventListener("message", handleMessage, false);
     } catch (error) {
-      console.error('Error fetching the auth URL:', error.message);
+      console.error("Error fetching the auth URL:", error.message);
     }
   };
-  
-  
+
   useEffect(() => {
     // Get the user's current timezone
     const defaultTimezone = dayjs.tz.guess();
-    console.log('Guessed default timezone:', defaultTimezone);
-  
+    console.log("Guessed default timezone:", defaultTimezone);
+
     // Mapping old timezone names to modern ones
     const timezoneMapping = {
-      'Asia/Calcutta': 'Asia/Kolkata',
+      "Asia/Calcutta": "Asia/Kolkata",
       // Add more mappings as required
     };
-  
+
     // Map the guessed timezone to the tzCode in your list, if needed
     const mappedTimezone = timezoneMapping[defaultTimezone] || defaultTimezone;
-  
+
     // Ensure the mapped timezone exists in the timezones list
-    const matchingTimezone = timezones.find((tz) => tz.tzCode === mappedTimezone);
-  
+    const matchingTimezone = timezones.find(
+      (tz) => tz.tzCode === mappedTimezone
+    );
+
     if (matchingTimezone) {
       setSelectedTimezone(mappedTimezone);
-      console.log('Default timezone set:', mappedTimezone);
+      console.log("Default timezone set:", mappedTimezone);
     } else {
-      console.error('Default timezone does not match any tzCode in timezones list:', mappedTimezone);
+      console.error(
+        "Default timezone does not match any tzCode in timezones list:",
+        mappedTimezone
+      );
     }
   }, []);
-  
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
   const handleTimeChange = (day, type) => (event) => {
-    const newSelectedTimes = { ...selectedTimes, [day]: { ...selectedTimes[day], [type]: event.target.value } };
+    const newSelectedTimes = {
+      ...selectedTimes,
+      [day]: { ...selectedTimes[day], [type]: event.target.value },
+    };
     setSelectedTimes(newSelectedTimes);
   };
 
@@ -121,71 +192,81 @@ export default function AvailabilityForm() {
   };
 
   useEffect(() => {
-    console.log('Updated selectedDayTimeUtc:', selectedDayTimeUtc);
+    console.log("Updated selectedDayTimeUtc:", selectedDayTimeUtc);
   }, [selectedDayTimeUtc]);
 
-
-
   const handleSaveSchedule = () => {
-    console.log('unavailable dates:', unavailableDates);
-    console.log('selectedDaytimeUtc:', selectedDayTimeUtc);
+    console.log("unavailable dates:", unavailableDates);
+    console.log("selectedDaytimeUtc:", selectedDayTimeUtc);
     const obj = {
-       unavailableDates,
-       selectedDayTimeUtc,
+      unavailableDates,
+      selectedDayTimeUtc,
     };
 
     CalendarServices.saveSettingsData(obj)
       .then((response) => {
-        alert("saved shedule data")
-        console.log('Availability data successfully sent:', response);
+        alert("saved shedule data");
+        console.log("Availability data successfully sent:", response);
       })
       .catch((error) => {
-        console.error('Error sending availability data:', error);
+        console.error("Error sending availability data:", error);
       });
-
   };
 
   const handleTimezoneChange = (event) => {
     const newTimezone = event.target.value;
-    console.log('Selected timezone:', newTimezone);
+    console.log("Selected timezone:", newTimezone);
     setSelectedTimezone(newTimezone);
-    console.log('Timezone state updated to:', newTimezone);
+    console.log("Timezone state updated to:", newTimezone);
   };
-
 
   const handleSaveSettings = () => {
-    console.log('reschedule',rescheduleNotice)
-    console.log('reschedule allowed', isRescheduleAllowed)
+    console.log("reschedule", rescheduleNotice);
+    console.log("reschedule allowed", isRescheduleAllowed);
     const obj = {
-       unavailableDates,
-       selectedDayTimeUtc,
-       selectedTimezone,
-       startDate,
-       endDate,
-       noticePeriod,
-       bufferTime,
-       reschedulePolicy: [isRescheduleAllowed, rescheduleNotice],
+      unavailableDates,
+      selectedDayTimeUtc,
+      selectedTimezone,
+      startDate,
+      endDate,
+      noticePeriod,
+      bufferTime,
+      reschedulePolicy: [isRescheduleAllowed, rescheduleNotice],
     };
-  
+
     CalendarServices.saveSettingsData(obj)
-    .then((response) => {
-      console.log('Availability data successfully sent:', response);
-      alert('Availability data saved successfully!');
-    })
-    .catch((error) => {
-      console.error('Error sending availability data:', error);
-      alert('Error saving availability data. Please try again.');
-    });
-  
+      .then((response) => {
+        console.log("Availability data successfully sent:", response);
+        alert("Availability data saved successfully!");
+      })
+      .catch((error) => {
+        console.error("Error sending availability data:", error);
+        alert("Error saving availability data. Please try again.");
+      });
   };
 
-  const columns = ['Type', 'Transaction Date', 'Customer','Amount']; // Define column names
+  const columns = ["Type", "Transaction Date", "Customer", "Amount"]; // Define column names
   const rows = [
-    { type: '1:1 Call', transactionDate: '24 sep 2024', customer: 'John',Amount:'$0' },
-    { type: 'Priority DM', transactionDate: '24 sep 2024', customer: 'abc',Amount:'$0' },
-    { type: '1:1 Call', transactionDate: '24 sep 2024',customer: 'aliza',Amount:'$0' },
+    {
+      type: "1:1 Call",
+      transactionDate: "24 sep 2024",
+      customer: "John",
+      Amount: "$0",
+    },
+    {
+      type: "Priority DM",
+      transactionDate: "24 sep 2024",
+      customer: "abc",
+      Amount: "$0",
+    },
+    {
+      type: "1:1 Call",
+      transactionDate: "24 sep 2024",
+      customer: "aliza",
+      Amount: "$0",
+    },
   ];
-  
+
   return (
     <Box sx={{ px: { xs: 0, sm: 4 }, py: { xs: 0, sm: 3 } }}>
       <Box className="p-8 bg-white shadow-lg rounded-xl">

@@ -108,7 +108,7 @@ const Profile = () => {
             <ProfileCard
               selfProfile={selfProfile}
               setSelfProfile={setSelfProfile}
-              profileData={profileData}
+              profileDataObj={profileData}
               profileRole={role}
             />
 
@@ -146,11 +146,7 @@ const Profile = () => {
                     color: "#4E54C6",
                   }}
                 >
-                  {[
-                    "About",
-                    "Activity",
-                    ...(role === "Startup" ? ["Reviews"] : []),
-                  ].map((label, idx) => (
+                  {["About", "Activity"].map((label, idx) => (
                     <Tab
                       key={label}
                       label={label}
@@ -180,11 +176,11 @@ const Profile = () => {
               <TabPanel value="2">
                 <Activity allPosts={allPosts} setAllPosts={setAllPosts} />
               </TabPanel>
-              {role === "Startup" && (
-                <TabPanel value="3">
-                  <Comment />
-                </TabPanel>
-              )}
+              {/* {role === "Startup" && ( */}
+              {/*   <TabPanel value="3"> */}
+              {/*     <Comment /> */}
+              {/*   </TabPanel> */}
+              {/* )} */}
             </TabContext>
           </div>
         </div>
