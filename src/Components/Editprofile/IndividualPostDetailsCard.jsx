@@ -21,11 +21,13 @@ import { LiveChat } from "./LiveChat";
 import { ReactionDisplay } from "../Posts/components/ReactionDisplay";
 import ReactionButton from "../components/ReactionButton";
 import { ReactionServices } from "../../Services/PostServices";
+import { useLocation } from "react-router-dom";
 
 const IndividualPostDetailsCard = () => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
   const { id } = useParams();
+  const location = useLocation();
 
   const [post, setPost] = useState(null);
 
@@ -240,19 +242,25 @@ const IndividualPostDetailsCard = () => {
 
     <div className="post-details-main-container sm:p-4 p-2">
       <button
-        onClick={() => navigate("/posts")}
+        onClick={() => {
+          if (location.state?.from) {
+            navigate(-1);
+          } else {
+            navigate("/posts");
+          }
+        }}
         className="
           inline-flex items-center gap-1
           text-sm font-medium
           !text-white
-          bg-[#4f55c7]
-          hover:bg-[#4349b3]
+          bg-[#f0f1f5]
+          hover:bg-[#9A979796]
           transition-colors duration-200
           px-3 py-1.5
           rounded-md
         "
       >
-        ← back
+        ← 
       </button>
       {post !== null && (
         <div className="post-details-container  ">

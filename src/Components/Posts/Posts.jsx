@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Posts.css";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
-import { Await, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import Post from "../Editprofile/Activities/Posts/Post";
 import { setLoading, setToast } from "../../redux/AuthReducers/AuthReducer";
@@ -15,9 +15,6 @@ import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
 
 const Posts = () => {
-  // const { role, userName, image, user_id } = useSelector(
-  //   (store) => store.auth.loginDetails
-  // );
   const {
     role,
     userName,
@@ -25,48 +22,97 @@ const Posts = () => {
     _id: user_id,
   } = useSelector((store) => store.auth.userDetails);
 
-  // console.log(role, userName, image)
-
-
+  const location = useLocation();
   const notifications = useSelector((state) => state.conv.notifications);
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const dispatch = useDispatch();
+
+  const [allPosts, setAllPosts] = useState([]);
+  const [topTrendingPosts, setTopTrendingPosts] = useState([]);
+  const [loadingTrigger, setLoadingTrigger] = useState(false);
+  const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const [filterPage, setFilterPage] = useState(1);
+  const pageSize = 10;
+  const [people, setPeople] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [isTagsOpen, setIsTagsOpen] = useState(true);
+  const [tags, setTags] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedSortOption, setSelectedSortOption] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
+
+  const feedRef = useRef(null);
+  const scrollRestorationAttempted = useRef(false);
+  const isNavigatingAway = useRef(false);
+
+  // Save scroll position helper
+  const saveScrollPosition = () => {
+    if (feedRef.current && !isNavigatingAway.current) {
+      const scrollPos = feedRef.current.scrollTop;
+      sessionStorage.setItem("feedScrollTop", scrollPos.toString());
+      sessionStorage.setItem("feedScrollSaved", "true");
+    }
+  };
+
+  // Restore scroll position helper
+  const restoreScrollPosition = () => {
+    const savedScroll = sessionStorage.getItem("feedScrollTop");
+    const wasScrollSaved = sessionStorage.getItem("feedScrollSaved");
+
+    if (savedScroll && wasScrollSaved === "true" && feedRef.current && !scrollRestorationAttempted.current) {
+      const scrollValue = Number(savedScroll);
+
+      if (scrollValue > 0) {
+        // Try multiple times with increasing delays to handle async content loading
+        const attemptScroll = (delay) => {
+          setTimeout(() => {
+            if (feedRef.current && feedRef.current.scrollHeight > scrollValue) {
+              feedRef.current.scrollTop = scrollValue;
+            }
+          }, delay);
+        };
+
+        // Multiple restoration attempts
+        attemptScroll(0);
+        attemptScroll(100);
+        attemptScroll(200);
+        attemptScroll(400);
+        attemptScroll(600);
+
+        scrollRestorationAttempted.current = true;
+
+        // Clear the flag after restoration
+        setTimeout(() => {
+          sessionStorage.removeItem("feedScrollSaved");
+        }, 1000);
+      }
+    }
+  };
+
+  // Dashboard details
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
     ApiServices.getDashboardDetails()
       .then((res) => {
-        // console.log(res.data);
         setData(res.data);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
-        console.log(err);
         dispatch(setLoading({ visible: "no" }));
       });
   }, []);
 
-  const [allPosts, setAllPosts] = useState([]);
-  const [topTrendingPosts, setTopTrendingPosts] = useState([]);
-
-  const [loadingTrigger, setLoadingTrigger] = useState(false);
-  const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const [recommendedUsers, setRecommendedUsers] = useState([]);
-
-  const [filterPage, setFilterPage] = useState(1); // start page for filtered posts
-  const pageSize = 10; // fixed page size
+  // Get all posts
   useEffect(() => {
-    // dispatch(setLoading({ visible: "yes" }));
-    if (filterPage === 1) setAllPosts([]); // clear previous posts on first load
+    if (filterPage === 1) setAllPosts([]);
 
     ApiServices.getAllPosts({ page: filterPage, pageSize: pageSize })
-
       .then((res) => {
         setAllPosts((prev) => [...prev, ...res.data]);
-        // console.log("all posts:",allPosts);
-        console.log("all posts:", allPosts);
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
@@ -77,18 +123,10 @@ const Posts = () => {
             visible: "yes",
           })
         );
-        // dispatch(setLoading({ visible: "no" }));
       });
   }, [loadingTrigger]);
 
-
-  // useEffect(()=>{
-  //   console.log("all posts-:",allPosts);
-  // },[allPosts])
-  useEffect(() => {
-    console.log("all posts-:", allPosts);
-  }, [allPosts])
-
+  // Get top trending posts
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
       .then((res) => {
@@ -105,21 +143,7 @@ const Posts = () => {
       });
   }, [dispatch]);
 
-
-  // useEffect(()=>{
-  //           console.log("top trending posts are :",topTrendingPosts);
-
-  // },[topTrendingPosts])
-  useEffect(() => {
-    console.log("top trending posts are :", topTrendingPosts);
-
-  }, [topTrendingPosts])
-  const truncateDescription = (description, maxLength = 100) => {
-    if (description.length <= maxLength) return description;
-    const truncated = description.slice(0, maxLength);
-    return truncated.slice(0, truncated.lastIndexOf(" ")) + "...";
-  };
-
+  // Get recommended users
   useEffect(() => {
     ApiServices.getRecommendedUsers({ userId: user_id })
       .then((res) => {
@@ -136,29 +160,15 @@ const Posts = () => {
       });
   }, [recommendedUserTrigger]);
 
-  // const [page, setPage] = useState(0);
-  // const [pageSize, setPageSize] = useState(10);
-
-  // const handleLoadMore = () => {
-  //   setPage(pageSize);
-  //   setPageSize(pageSize + 10);
-  //   setLoadingTrigger(!loadingTrigger);
-  // };
-  //   const [page, setPage] = useState(1); // start from page 1
-  // const pageSize = 10; // fixed
-
-  // const handleLoadMore = () => {
-  //   setPage(prev => prev + 1); // increment page
-  //   setLoadingTrigger(!loadingTrigger);
-  // };
-
+  // Socket setup
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
   }, []);
 
+  // Get notifications
   const getNotifys = async () => {
-    await ApiServices.getUserRequest({ userId: user_id }).then((res) => { });
+    await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
     dispatch(getAllNotifications(user_id));
   };
 
@@ -166,44 +176,7 @@ const Posts = () => {
     getNotifys();
   }, []);
 
-  ////////////////////////////////
-
-  const [people, setPeople] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState([]);
-  const [isTagsOpen, setIsTagsOpen] = useState(true);
-  const [tags, setTags] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedSortOption, setSelectedSortOption] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
-
-  const handlePublicCheckboxChange = (event) => {
-    setIsPublic(event.target.checked);
-  };
-
-  const handlePrivateCheckboxChange = (event) => {
-    setIsPrivate(event.target.checked);
-  };
-
-  // console.log("filteredposts: ", filteredPosts);
-  // const [checkedValues, setCheckedValues] = useState({
-  //   public: false,
-  //   private: false,
-  // });
-
-  // Handle checkbox change
-  // const handleCheckboxChange = (event) => {
-  //   const { name, checked } = event.target;
-
-  //   setCheckedValues((prev) => ({
-  //     ...prev,
-  //     [name]: checked,
-  //   }));
-
-  // };
-
-
-
+  // Fetch filtered posts
   useEffect(() => {
     const fetchFilteredPosts = async () => {
       try {
@@ -213,26 +186,73 @@ const Posts = () => {
           people: people,
           public: isPublic,
           private: isPrivate,
-          page: filterPage,       // send page
-          pageSize,               // send pageSize
+          page: filterPage,
+          pageSize,
         };
 
         const response = await ApiServices.getFilterPosts(filterData);
 
         if (filterPage === 1) {
-          setFilteredPosts(response.data); // first page replaces
+          setFilteredPosts(response.data);
         } else {
-          setFilteredPosts((prev) => [...prev, ...response.data]); // append next pages
+          setFilteredPosts((prev) => [...prev, ...response.data]);
         }
       } catch (error) {
-        console.error("Error filtering posts:", error);
+        // Error handling if needed
       }
     };
 
     fetchFilteredPosts();
   }, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
 
-  // Load More for filtered posts
+  // ============ SCROLL RESTORATION LOGIC ============
+  // This runs after posts are loaded
+  useEffect(() => {
+    const hasData = filteredPosts.length > 0 || allPosts.length > 0;
+    if (hasData) {
+      restoreScrollPosition();
+    }
+  }, [filteredPosts, allPosts]);
+
+  // Save scroll position on unmount
+  useEffect(() => {
+    // Set up scroll listener to continuously save position
+    const handleScroll = () => {
+      if (feedRef.current) {
+        const scrollPos = feedRef.current.scrollTop;
+        sessionStorage.setItem("feedScrollTop", scrollPos.toString());
+      }
+    };
+
+    const feedElement = feedRef.current;
+    if (feedElement) {
+      feedElement.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    return () => {
+      if (feedElement) {
+        feedElement.removeEventListener('scroll', handleScroll);
+        saveScrollPosition();
+        sessionStorage.setItem("feedScrollSaved", "true");
+      }
+    };
+  }, []);
+
+  // Reset scroll restoration flag when navigating away and back
+  useEffect(() => {
+    scrollRestorationAttempted.current = false;
+    isNavigatingAway.current = false;
+  }, [location.pathname]);
+  // ============ END SCROLL RESTORATION LOGIC ============
+
+  const handlePublicCheckboxChange = (event) => {
+    setIsPublic(event.target.checked);
+  };
+
+  const handlePrivateCheckboxChange = (event) => {
+    setIsPrivate(event.target.checked);
+  };
+
   const handleLoadMore = () => {
     setFilterPage((prev) => prev + 1);
   };
@@ -245,7 +265,6 @@ const Posts = () => {
   };
 
   const clearAllTags = () => {
-    // console.log("Tags changed", selectedTags, filteredPosts);
     setSelectedTags([]);
     setFilteredPosts([]);
   };
@@ -254,19 +273,16 @@ const Posts = () => {
     option.value.toLowerCase().includes(tags.toLowerCase())
   );
 
-
   const createMarkup = (html) => {
     return { __html: html };
   };
 
-
   const getDescription = (post) => {
-    {
-      return post?.description?.length > 100
-        ? post?.description.slice(0, 150) + "..."
-        : post?.description;
-    }
+    return post?.description?.length > 100
+      ? post?.description.slice(0, 150) + "..."
+      : post?.description;
   };
+
   return (
     <div className="Homepage-Container">
       <div className="mobile-menu-icon" onClick={() => setIsSidebarOpen(true)}>
@@ -323,23 +339,6 @@ const Posts = () => {
             <div>Create post</div>
           </div>
 
-          {/* <div className="sidebar-menu-items">
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M4 21q-.825 0-1.412-.587T2 19V5q0-.825.588-1.412T4 3h16q.825 0 1.413.588T22 5v14q0 .825-.587 1.413T20 21zm0-2h16V5H4zm2-2h12v-2H6zm0-4h4V7H6zm6 0h6v-2h-6zm0-4h6V7h-6zM4 19V5z"
-                />
-              </svg>
-            </div>
-            <div>Newsfeed</div>
-          </div> */}
-
           <div
             className="sidebar-menu-items"
             onClick={() => navigate("/conversations")}
@@ -380,23 +379,6 @@ const Posts = () => {
               {data?.connections_approved || 0}
             </div>
           </div>
-          {/* 
-          <div className="sidebar-menu-items">
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-                viewBox="0 0 256 256"
-              >
-                <path
-                  fill="currentColor"
-                  d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h13.39a8 8 0 0 0 7.23-4.57a48 48 0 0 1 86.76 0a8 8 0 0 0 7.23 4.57H216a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16M80 144a24 24 0 1 1 24 24a24 24 0 0 1-24-24m136 56h-56.57a64.4 64.4 0 0 0-28.83-26.16a40 40 0 1 0-53.2 0A64.4 64.4 0 0 0 48.57 200H40V56h176ZM56 96V80a8 8 0 0 1 8-8h128a8 8 0 0 1 8 8v96a8 8 0 0 1-8 8h-16a8 8 0 0 1 0-16h8V88H72v8a8 8 0 0 1-16 0"
-                />
-              </svg>
-            </div>
-            <div>Expertise</div>
-          </div> */}
 
           <div className="sidebar-menu-items">
             <div>
@@ -430,21 +412,18 @@ const Posts = () => {
               onChange={(e) => setPeople(e.target.value)}
             />
 
-            {/* <h5>Tags</h5>
-            <input type="text" placeholder="Search tags" /> */}
-
             <h4 className="mt-3 mb-2">Tags</h4>
             <div className="relative">
               <button
-                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${isTagsOpen ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`absolute right-1 top-[-45px] text-xl transform transition-transform duration-300 focus:outline-none focus:ring-0 border-none bg-transparent hover:bg-transparent text-gray-500 ${
+                  isTagsOpen ? "rotate-180" : "rotate-0"
+                }`}
                 onClick={() => setIsTagsOpen(!isTagsOpen)}
               >
                 <RxCaretDown />
               </button>
             </div>
 
-            {/* Stage checkboxes, shown only if isStageOpen is true */}
             {isTagsOpen && (
               <div className="max-h-48 overflow-y-scroll overflow-x-hidden mt-2 border border-gray-300 rounded-md">
                 <input
@@ -456,7 +435,6 @@ const Posts = () => {
                 />
 
                 {selectedTags.length > 0 && (
-                  //added onclick handler in x-box to make it work
                   <div className="clear-container">
                     <div onClick={clearAllTags} className="x-box">
                       X
@@ -484,7 +462,6 @@ const Posts = () => {
               </div>
             )}
 
-            {/* <span class="see-all">See All</span> */}
             <hr className=" mt-4 mb-6" />
 
             <h4 className="mt-3 mb-2">Post Type</h4>
@@ -509,70 +486,34 @@ const Posts = () => {
               <span className="text-sm mt-1 ml-2">Private Post</span>
             </label>
             <hr className=" mt-4 mb-6" />
-
-            {/* <h4 className="mt-3 mb-2">Sort by</h4>
-            <select
-              value={selectedSortOption}
-              onChange={(event) => setSelectedSortOption(event.target.value)}
-            >
-              <option value="">Select an option</option>
-              <option value="recent">Recent</option>
-            </select> */}
           </div>
         </div>
       </div>
 
-      <div className="main-content">
+      <div className="main-content" ref={feedRef}>
         <div className="allPostShowContainer">
           {filteredPosts.length > 0 &&
             filteredPosts
-              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((p) => {
                 return (
                   <Post
                     filteredPosts={filteredPosts}
                     key={p.id}
-                    post={p} // Passing only id and title
+                    post={p}
                     setAllPosts={setAllPosts}
                     screenDecider={"home"}
                   />
                 );
               })}
-
-          {/* Render filtered posts if available */}
-          {/* {filteredPosts.length > 0 && 
-          filteredPosts
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
-            
-            .map((p) => (
-              <Post
-                filteredPosts={filteredPosts}
-                key={p.id}
-                p={p} // Passing only id and title
-                setAllPosts={setAllPosts}
-                screenDecider={"home"}
-              />
-            ))
-        } */}
-
-          {/* If filteredPosts is empty, render top 2 posts from allPosts */}
-          {/* {filteredPosts.length === 0 && 
-          allPosts // Limiting to top 2 posts
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by date
-            .map((p) => (
-              <Post
-                filteredPosts={filteredPosts}
-                key={p.id}
-                post={p} // Passing only id and title
-                setAllPosts={setAllPosts}
-                screenDecider={"home"}
-              />
-            ))
-        } */}
         </div>
 
         <div className="loadMore-Container">
-          <button className="loadMore" onClick={handleLoadMore} hidden={filteredPosts.length <= 10}>
+          <button
+            className="loadMore"
+            onClick={handleLoadMore}
+            hidden={filteredPosts.length <= 10}
+          >
             Load More
           </button>
         </div>
@@ -588,6 +529,8 @@ const Posts = () => {
               <div
                 key={post?._id}
                 onClick={() => {
+                  isNavigatingAway.current = true;
+                  saveScrollPosition();
                   navigate(`/posts/${post._id}`);
                 }}
                 className="hover:cursor-pointer"
@@ -597,7 +540,9 @@ const Posts = () => {
                   <b>{post?.postTitle}</b>
                 </h4>
 
-                <div dangerouslySetInnerHTML={createMarkup(getDescription(post))}></div>
+                <div
+                  dangerouslySetInnerHTML={createMarkup(getDescription(post))}
+                ></div>
                 {index === topTrendingPosts.length - 1 ? null : (
                   <div className="line"></div>
                 )}
@@ -608,7 +553,6 @@ const Posts = () => {
 
         <div className="suggestions-section shadow-lg">
           <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
-            {" "}
             <h4 className="label">Suggestions for you</h4>
             <span
               style={{
@@ -639,7 +583,10 @@ const Posts = () => {
               </div>
               <div className="right-section">
                 <h4
-                  style={{ fontFamily: '"Gentium Book Basic", serif', fontWeight: 700 }}
+                  style={{
+                    fontFamily: '"Gentium Book Basic", serif',
+                    fontWeight: 700,
+                  }}
                   onClick={() => {
                     if (rec._id == user_id) {
                       navigate("/editProfile");
@@ -647,7 +594,6 @@ const Posts = () => {
                       navigate(`/user/${rec._id}`);
                     }
                   }}
-
                 >
                   {rec?.userName}
                 </h4>
@@ -707,5 +653,3 @@ const Posts = () => {
 };
 
 export default Posts;
-
-

@@ -16,6 +16,7 @@ import ShareButton from "../../ShareButton";
 import ReactionButton from "../../../components/ReactionButton";
 import { ReactionServices } from "../../../../Services/PostServices";
 import { ReactionDisplay } from "../../../Posts/components/ReactionDisplay";
+import {useLocation } from "react-router-dom";
 
 const Post = ({
   filteredPosts,
@@ -40,6 +41,7 @@ const Post = ({
   // const [post, setPost] = useState(null);
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     if (initialPost) {
@@ -455,7 +457,10 @@ const Post = ({
           {post?.type}
         </div>
           {/* Post container */}
-          <div onClick={() => navigate(`/posts/${post?._id}`)}>
+          <div onClick={() => {
+            sessionStorage.setItem("feedScrollY", window.scrollY.toString());
+            navigate(`/posts/${post?._id}`);
+          }}>
             <div className="postDesc">
               <b>{post?.postTitle}</b>
             </div>
@@ -493,7 +498,12 @@ const Post = ({
                     }
                     style={{ objectFit: "contain" }}
                     alt=""
-                    onClick={() => navigate(`/posts/${post?._id}`)}
+                    onClick={() => {
+                      if (!location.pathname.includes("/posts/")) {
+                        sessionStorage.setItem("feedScrollY", window.scrollY.toString());
+                        navigate(`/posts/${post?._id}`);
+                      }
+                    }}
                   />
                 )}
 
@@ -622,7 +632,12 @@ const Post = ({
               </div> */}
               <div
                 className="likeActionHolder"
-                onClick={() => navigate(`/posts/${post?._id}`)}
+                onClick={() => {
+                  if (!location.pathname.includes("/posts/")) {
+                    sessionStorage.setItem("feedScrollY", window.scrollY.toString());
+                    navigate(`/posts/${post?._id}`);
+                  }
+                }}
               >
                 <div>
                   <svg
