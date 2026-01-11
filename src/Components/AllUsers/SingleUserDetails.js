@@ -317,41 +317,45 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
           {/* 3. Right Action Section */}
           <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-40 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
-            {user.role === "Mentor" && (
-              <button
-                onClick={() => setRequestPopup(true)}
-                disabled={session.length === 0}
-                className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
-                  session.length === 0
-                    ? "bg-[#4f55c7]/60 cursor-not-allowed"
-                    : "bg-[#4f55c7] hover:bg-[#3e44a8]"
-                }`}
-              >
-                Request a Call
-              </button>
-            )}
-            {user.role === "Startup" && (
-              <RecommendedConnectButton
-                id={user._id}
-                viewMode={viewMode}
-                handleFollower={() => {
-                  setRecommendedUserTrigger(!recommendedUserTrigger);
-                }}
-              />
-            )}
-            {user.role === "Mentor" && (
-              <div className="text-center text-xs text-gray-600">
-                <p className="mb-1">
-                  {session.length > 0 ? "Starts from" : "Session info"}
-                </p>
-                <p className="font-bold text-lg text-[#4f55c7]">
-                  {session.length > 0
-                    ? `₹ ${Math.min(...session.map((s) => s.amount))}`
-                    : "Not Listed"}
-                </p>
-              </div>
-            )}
-          </div>
+
+  {(user.role === "Mentor" || user.beyincProfile === "Mentor") && (
+    <button
+      onClick={() => setRequestPopup(true)}
+      disabled={session.length === 0}
+      className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
+        session.length === 0
+          ? "bg-[#4f55c7]/60 cursor-not-allowed"
+          : "bg-[#4f55c7] hover:bg-[#3e44a8]"
+      }`}
+    >
+      Request a Call
+    </button>
+  )}
+
+  {user.role === "Startup" && (
+    <RecommendedConnectButton
+      id={user._id}
+      viewMode={viewMode}
+      handleFollower={() => {
+        setRecommendedUserTrigger(!recommendedUserTrigger);
+      }}
+    />
+  )}
+
+  {(user.role === "Mentor" || user.beyincProfile === "Mentor") && (
+    <div className="text-center text-xs text-gray-600">
+      <p className="mb-1">
+        {session.length > 0 ? "Starts from" : "Session info"}
+      </p>
+      <p className="font-bold text-lg text-[#4f55c7]">
+        {session.length > 0
+          ? `₹ ${Math.min(...session.map((s) => s.amount))}`
+          : "Not Listed"}
+      </p>
+    </div>
+  )}
+</div>
+
         </div>
       </div>
 
