@@ -293,6 +293,7 @@ const AllUsers = () => {
         );
       });
       setUsers(filteredUsers);
+      setData(filteredUsers);
       console.log("data that is coming after filter :",filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
