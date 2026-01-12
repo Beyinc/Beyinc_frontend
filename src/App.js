@@ -211,7 +211,7 @@ const App = () => {
           console.log(d);
           dispatch(setMessageCount(d));
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   }, [user_id]);
 
@@ -300,7 +300,6 @@ const App = () => {
         }
       >
         <Toast />
-        <LoadingData />
         {![
           "/login",
           "/signup",
@@ -324,8 +323,8 @@ const App = () => {
               Component={LoginAuth(ForgotPassword)}
             />
             <Route path="/" element={<LandingPage />} />
+            <Route path="/posts" element={<Posts />} />
             <Route path="/BeyIncprivacypolicy" element={<PrivacyPolicy />} />
-            <Route path="/posts" Component={AuthHoc(Posts)} />
             <Route path="/createPostPage" Component={AuthHoc(CreatePostPage)} />
             <Route
               path="/editPostPage/:postId"
@@ -355,7 +354,7 @@ const App = () => {
             <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
             <Route
               path="/posts/:id"
-              Component={AuthHoc(IndividualPostDetailsCard)}
+              element={<IndividualPostDetailsCard />}
             />
             <Route
               path="/livePitches/:pitchId"

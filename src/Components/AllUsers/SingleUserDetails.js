@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
 import { CalendarServices } from "../../Services/CalendarServices";
-import SessionSelector from "../AllUsers/SessionSelector";
 import {
   FaLinkedin,
   FaTwitter,
@@ -29,10 +28,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   const [selectedSessionId, setSelectedSessionId] = useState("");
   const [selectedSession, setSelectedSession] = useState(null);
   const [activeTab, setActiveTab] = useState("Expertise");
-  const [sessionTitle, setSessionTitle] = useState("");
-  // useEffect(() => {
-  //   console.log("mentor data coming", user);
-  // });
+
   // --- Effects ---
   useEffect(() => {
     const fetchAvailabilityData = async () => {
@@ -45,7 +41,6 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
         //   "Availability data found here:",
         //   JSON.stringify(data.availability),
         // );
-        console.log("Availability sessions:", data.availability.sessions);
         setSession(data.availability.sessions);
       } catch (error) {
         console.error("Error fetching availability data:", error);
@@ -87,7 +82,6 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
       requestMessage,
       amount: selectedSession?.amount,
       duration: selectedSession?.duration,
-      title: sessionTitle,
     };
 
     try {
@@ -160,8 +154,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 onClick={openUser}
               >
                 {user?.role === "Startup"
-                  ? user?.startupProfile?.startupName ?? "Unnamed Startup"
-                  : user?.userName ?? "Unknown User"}
+                  ? (user?.startupProfile?.startupName ?? "Unnamed Startup")
+                  : (user?.userName ?? "Unknown User")}
               </h3>
               {user?.role === "Startup" &&
                 user?.startupProfile?.targetMarket && (
@@ -317,45 +311,41 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
           {/* 3. Right Action Section */}
           <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-40 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
-
-  {(user.role === "Mentor" || user.beyincProfile === "Mentor") && (
-    <button
-      onClick={() => setRequestPopup(true)}
-      disabled={session.length === 0}
-      className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
-        session.length === 0
-          ? "bg-[#4f55c7]/60 cursor-not-allowed"
-          : "bg-[#4f55c7] hover:bg-[#3e44a8]"
-      }`}
-    >
-      Request a Call
-    </button>
-  )}
-
-  {user.role === "Startup" && (
-    <RecommendedConnectButton
-      id={user._id}
-      viewMode={viewMode}
-      handleFollower={() => {
-        setRecommendedUserTrigger(!recommendedUserTrigger);
-      }}
-    />
-  )}
-
-  {(user.role === "Mentor" || user.beyincProfile === "Mentor") && (
-    <div className="text-center text-xs text-gray-600">
-      <p className="mb-1">
-        {session.length > 0 ? "Starts from" : "Session info"}
-      </p>
-      <p className="font-bold text-lg text-[#4f55c7]">
-        {session.length > 0
-          ? `₹ ${Math.min(...session.map((s) => s.amount))}`
-          : "Not Listed"}
-      </p>
-    </div>
-  )}
-</div>
-
+            {user.role === "Mentor" && (
+              <button
+                onClick={() => setRequestPopup(true)}
+                disabled={session.length === 0}
+                className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
+                  session.length === 0
+                    ? "bg-[#4f55c7]/60 cursor-not-allowed"
+                    : "bg-[#4f55c7] hover:bg-[#3e44a8]"
+                }`}
+              >
+                Request a Call
+              </button>
+            )}
+            {user.role === "Startup" && (
+              <RecommendedConnectButton
+                id={user._id}
+                viewMode={viewMode}
+                handleFollower={() => {
+                  setRecommendedUserTrigger(!recommendedUserTrigger);
+                }}
+              />
+            )}
+            {user.role === "Mentor" && (
+              <div className="text-center text-xs text-gray-600">
+                <p className="mb-1">
+                  {session.length > 0 ? "Starts from" : "Session info"}
+                </p>
+                <p className="font-bold text-lg text-[#4f55c7]">
+                  {session.length > 0
+                    ? `₹ ${Math.min(...session.map((s) => s.amount))}`
+                    : "Not Listed"}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -384,14 +374,33 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             {/* Modal Body */}
             <div className="p-6 space-y-5">
               {/* Session Type Selection */}
-<SessionSelector
-  session={session}
-  selectedSessionId={selectedSessionId}
-  setSelectedSessionId={setSelectedSessionId}
-  setSelectedSession={setSelectedSession}
-  setSessionTitle={setSessionTitle}
-/>
-
+              <div>
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">
+                  Select Session Duration
+                </label>
+                <div className="relative">
+                  <select
+                    className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 rounded-xl p-3 pl-4 pr-10 focus:ring-2 focus:ring-[#4f55c7]/20 focus:border-[#4f55c7] outline-none transition-all cursor-pointer font-medium"
+                    value={selectedSessionId}
+                    onChange={(e) => {
+                      const id = e.target.value;
+                      setSelectedSessionId(id);
+                      const sessionData = session.find((s) => s._id === id);
+                      setSelectedSession(sessionData);
+                    }}
+                  >
+                    <option value="">Choose a duration...</option>
+                    {session.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.duration} minutes (₹{s.amount})
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                    <FaChevronDown size={12} />
+                  </div>
+                </div>
+              </div>
 
               {/* Selected Session Summary */}
               {selectedSession && (

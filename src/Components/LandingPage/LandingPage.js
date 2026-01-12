@@ -14,6 +14,11 @@ const LandingPage = () => {
     (store) => store.auth.loginDetails
   );
 
+  // Redirect all users to /posts (public feed)
+  useEffect(() => {
+    navigate("/posts");
+  }, [navigate]);
+
   useEffect(() => {
     AOS.init({
       duration: 2000,

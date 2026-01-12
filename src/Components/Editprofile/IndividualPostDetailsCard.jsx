@@ -21,13 +21,11 @@ import { LiveChat } from "./LiveChat";
 import { ReactionDisplay } from "../Posts/components/ReactionDisplay";
 import ReactionButton from "../components/ReactionButton";
 import { ReactionServices } from "../../Services/PostServices";
-import { useLocation } from "react-router-dom";
 
 const IndividualPostDetailsCard = () => {
   const userPitches = useSelector((state) => state.conv.userLivePitches);
   const dispatch = useDispatch();
   const { id } = useParams();
-  const location = useLocation();
 
   const [post, setPost] = useState(null);
 
@@ -242,26 +240,31 @@ const IndividualPostDetailsCard = () => {
 
     <div className="post-details-main-container sm:p-4 p-2">
       <button
-        onClick={() => {
-          if (location.state?.from) {
-            navigate(-1);
-          } else {
-            navigate("/posts");
-          }
-        }}
-        className="
-          inline-flex items-center gap-1
-          text-sm font-medium
-          !text-white
-          bg-[#f0f1f5]
-          hover:bg-[#9A979796]
-          transition-colors duration-200
-          px-3 py-1.5
-          rounded-md
-        "
-      >
-        ← 
-      </button>
+          onClick={() => navigate("/posts")}
+          className="
+            group
+            flex items-center justify-center
+            w-9 h-9
+            rounded-full
+            bg-transparent
+            hover:bg-gray-200 dark:hover:bg-[#2D2D2E]
+            text-[#1A1A1B] dark:text-[#D7DADC]
+            transition-colors duration-200
+          "
+          aria-label="Go back"
+        >
+          {/* Standard Left Arrow SVG sized to match Reddit's iconography */}
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            strokeWidth={2} 
+            stroke="currentColor" 
+            className="w-5 h-5"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
       {post !== null && (
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">
