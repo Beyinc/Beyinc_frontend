@@ -9,7 +9,7 @@ import { convertToLocalTimeZone } from './helper.js';
 import dayjs from 'dayjs';
 import './BookSession.css'; 
 
-export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData, selectedTimezone, mentorId, reschedule, rescheduleBooking }) => {
+export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData, selectedTimezone, mentorId, reschedule, rescheduleBooking ,requestId}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
   const [readableStartDateTime, setReadableStartDateTime] = useState('');
@@ -155,6 +155,7 @@ export const BookButton = ({ selectedDate, selectedTime, durationId, mentorData,
     const endDateTimeUTC = dayjs(localEndDateTime).utc().format();
 
     const bookingData = {
+      requestId,
       mentorId,
       user_id,
       mentorTimezone: mentorData.mentorTimezone,

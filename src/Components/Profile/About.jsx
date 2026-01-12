@@ -24,13 +24,12 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
     setProfileAbout(updatedAbout); // Update the profileAbout state with the new text
     setErrorMessage(""); // Clear any previous error message
   };
-  console.log("profile role", profileData.role);
   useEffect(() => {
     setRole(profileData?.role);
   }, [profileData]);
 
   return (
-    <div>
+    <div className="">
       {/* <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
             </div> */}
@@ -39,13 +38,12 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
                     <ProfileCard />
                 </div> */}
         <div>
-          <div>
-            <AboutCard
-              selfProfile={selfProfile}
-              setSelfProfile={setSelfProfile}
-              role={role}
-            />
-          </div>
+          <AboutCard
+            selfProfile={selfProfile}
+            setSelfProfile={setSelfProfile}
+            role={role}
+            profileData={profileData}
+          />
           {profileData.role === "Startup" && (
             <div>
               <SeekingCard selfProfile={selfProfile} />

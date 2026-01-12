@@ -103,7 +103,7 @@ const Profile = () => {
             className="w-full h-48 lg:h-80 object-cover rounded-none m-2"
           />
         </div>
-        <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:ml-10 relative">
+        <div className="flex flex-col lg:flex-row lg:gap-5 justify-center items-start lg:ml-10 relative ">
           <div className="mb-4 -mt-36 ml-2">
             <ProfileCard
               selfProfile={selfProfile}
@@ -125,7 +125,7 @@ const Profile = () => {
               )}
           </div>
 
-          <div className="grow space-y-4">
+          <div className="grow space-y-3">
             <TabsAndInvestment
               role={role}
               selfProfile={selfProfile}
@@ -134,7 +134,7 @@ const Profile = () => {
             />
 
             <TabContext value={value}>
-              <Box>
+              <Box className="">
                 <TabList
                   onChange={handleChange}
                   aria-label="profile tabs"

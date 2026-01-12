@@ -33,6 +33,8 @@ import { getAllHistoricalConversations } from "../../redux/Conversationreducer/C
 // import AddPitch from "../Common/AddPitch";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import FilterSidebar from "./FilterSidebar";
+import TopFilterBar from "./TopFilterBar";
+import StartupFilter from "./StartupFilter";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -82,7 +84,6 @@ const AllUsers = () => {
   const [data, setData] = useState([]);
   const [tag, settag] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] = useState({});
   const { email, user_id } = useSelector((state) => state.auth.loginDetails);
   const [filledStars, setFilledStars] = useState(0);
   const [search, setSearch] = useState("");
@@ -103,57 +104,104 @@ const AllUsers = () => {
   useEffect(() => {
     setFilters((prev) => ({ ...prev, review: filledStars }));
   }, [filledStars]);
-
+  // const [universities, setUniversities] = useState([])
+  // useEffect(() => {
+  //     axios.get('http://universities.hipolabs.com/search').then(res => {
+  //         setUniversities(res.data)
+  //     })
+  // }, [])
   useEffect(() => {
     dispatch(setLoading({ visible: "yes" }));
-    
-ApiServices.getAllUsers({ type: "" }).then((res) => {
-  console.log(JSON.stringify(res.data));
+    ApiServices.getAllUsers({ type: "" }).then((res) => {
+      // console.log(JSON.stringify(res.data));
+      const filteredUsers = res.data.filter(
+        (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
+      );
 
-  // 1️⃣ Filter FIRST
-  const filteredUsers = res.data.filter(
-    (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
-  );
-
-  const industrySkillCounts = {};
-  // exclude the currently logged-in user from the computed counts
-  const usersForCounts = filteredUsers.filter(
-    (u) => u._id !== user_id && u.id !== user_id
-  );
-  usersForCounts.forEach((u) => {
-    const me = u.mentorExpertise;
-    if (Array.isArray(me)) {
-      me.forEach((entry) => {
-        const industry = entry.industry;
-        if (!industry) return;
-
-        if (!industrySkillCounts[industry]) {
-          industrySkillCounts[industry] = { industryCount: 0, skills: {} };
-        }
-
-        industrySkillCounts[industry].industryCount += 1;
-
-        const skills = Array.isArray(entry.skills) ? entry.skills : [];
-        skills.forEach((s) => {
-          if (!industrySkillCounts[industry].skills[s]) {
-            industrySkillCounts[industry].skills[s] = 0;
-          }
-          industrySkillCounts[industry].skills[s] += 1;
-        });
-      });
-    }
-  });
-
-  setData(filteredUsers);
-  setComputedIndustrySkillCounts(industrySkillCounts);
-  dispatch(setLoading({ visible: "no" }));
-});
-
-
-
+      setData(filteredUsers);
+      dispatch(setLoading({ visible: "no" }));
+    });
   }, []);
 
-  
+  // useEffect(() => {
+  //   if (data.length > 0) {
+  //     filterUsers();
+  //   }
+  // }, [data, filters]);
+
+  // const filterUsers = () => {
+  //   let filteredData = [...data];
+  //   // console.log(filters);
+  //   if (Object.keys(filters).length > 0) {
+  //     Object.keys(filters).map((ob) => {
+  //       if (filters[ob].length > 0 || ob === "verification" || ob === "review") {
+  //         if (
+  //           ob !== "tags" &&
+  //           ob !== "verification" &&
+  //           ob !== "email" &&
+  //           ob !== "userName" &&
+  //           ob !== "industry2" &&
+  //           ob !== "userColleges" &&
+  //           ob !== "country" &&
+  //           ob !== "state" &&
+  //           ob !== "skills" &&
+  //           ob !== "languagesKnown" &&
+  //           ob !== "review" &&
+  //           ob !== "role"
+  //         ) {
+  //           filteredData = filteredData.filter((f) =>
+  //             filters[ob].includes(f[ob])
+  //           );
+  //         } else if (
+  //           ob === "tags" ||
+  //           ob == "skills" ||
+  //           ob == "languagesKnown"
+  //         ) {
+  //           filteredData = filteredData.filter((item) => {
+  //             const itemdata = item[ob].map((t) => t.toLowerCase()) || [];
+  //             return filters[ob].some((tag) =>
+  //               itemdata.includes(tag.toLowerCase())
+  //             );
+  //           });
+  //         } else if (ob == "userColleges") {
+  //           filteredData = filteredData.filter((item) => {
+  //             const itemdata =
+  //               item["educationDetails"]?.map((t) => t.college) || [];
+  //             return filters[ob].some((tag) => itemdata.includes(tag));
+  //           });
+  //         } else if (ob == "verification") {
+  //           if (filters[ob]) {
+  //             filteredData = filteredData.filter((item) => {
+  //               return item.verification == "approved";
+  //             });
+  //           }
+  //         } else if (
+  //           ob == "userName" ||
+  //           ob == "industry2" ||
+  //           ob == "country" ||
+  //           ob == "state" ||
+  //           ob == "email" ||
+  //           ob == "role"
+  //         ) {
+  //           filteredData = filteredData.filter((f) => {
+  //             return filters[ob].some((fs) => fs === f[ob]);
+  //           });
+  //         } else if (ob == "review") {
+  //           if (filters[ob] !== 0) {
+  //             filteredData = filteredData.filter((f) => {
+  //               return fetchRating(f) <= filters[ob];
+  //             });
+  //           }
+  //         }
+
+  //       }
+  //     });
+  //   }
+  //   filteredData.sort((a, b) => {
+  //     return fetchRating(b) - fetchRating(a);
+  //   });
+  //   setFilteredData(filteredData);
+  // };
 
   const [isSpinning, setSpinning] = useState(false);
   const handleReloadClick = () => {
@@ -208,7 +256,8 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
   }, [historicalConversations]);
 
   // iqra
-
+  // Add this with your other useState declarations
+  const [viewMode, setViewMode] = useState("mentors");
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -217,10 +266,20 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
     industries: [],
     categories: [], // Added categories filter
   });
+  const [computedIndustrySkillCounts, setComputedIndustrySkillCounts] =
+    useState({});
+  // NEW STATE FOR STARTUPS - ADD THIS
+  const [startups, setStartups] = useState([]);
+  const [startupFilters, setStartupFilters] = useState({
+    userName: "",
+    industries: [],
+    stage: "",
+    targetMarket: [],
+    seekingOptions: [],
+  });
 
   // Function to fetch user data from backend based on filters
   const fetchUsers = async () => {
-    console.log("Current filters:", filters);
     try {
       const response = await ApiServices.FilterData(filters);
       // Filter users to only include those with the desired fields
@@ -234,15 +293,79 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
         );
       });
       setUsers(filteredUsers);
+      setData(filteredUsers);
+      console.log("data that is coming after filter :", filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
+  // NEW FUNCTION FOR STARTUPS -
+  const fetchStartups = async () => {
+    try {
+      const response = await ApiServices.FilterStartups(startupFilters);
+      setStartups(response.data); // Backend already filtered by beyincProfile: "Startup"
+    } catch (error) {
+      console.error("Error fetching startups:", error);
+    }
+  };
   useEffect(() => {
-    fetchUsers();
-  }, [filters]);
+    dispatch(setLoading({ visible: "yes" }));
 
+    ApiServices.getAllUsers({ type: "" }).then((res) => {
+      console.log(JSON.stringify(res.data));
+
+      // 1️⃣ Filter FIRST
+      const filteredUsers = res.data.filter(
+        (user) =>
+          user.beyincProfile &&
+          user.beyincProfile.trim() !== "" &&
+          user.beyincProfile === "Mentor"
+      );
+
+      const industrySkillCounts = {};
+      // exclude the currently logged-in user from the computed counts
+      const usersForCounts = filteredUsers.filter(
+        (u) => u._id !== user_id && u.id !== user_id
+      );
+      usersForCounts.forEach((u) => {
+        const me = u.mentorExpertise;
+        if (Array.isArray(me)) {
+          me.forEach((entry) => {
+            const industry = entry.industry;
+            if (!industry) return;
+
+            if (!industrySkillCounts[industry]) {
+              industrySkillCounts[industry] = { industryCount: 0, skills: {} };
+            }
+
+            industrySkillCounts[industry].industryCount += 1;
+
+            const skills = Array.isArray(entry.skills) ? entry.skills : [];
+            skills.forEach((s) => {
+              if (!industrySkillCounts[industry].skills[s]) {
+                industrySkillCounts[industry].skills[s] = 0;
+              }
+              industrySkillCounts[industry].skills[s] += 1;
+            });
+          });
+        }
+      });
+
+      // setData(filteredUsers);
+      setUsers(filteredUsers);
+      setComputedIndustrySkillCounts(industrySkillCounts);
+      dispatch(setLoading({ visible: "no" }));
+    });
+  }, []);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, [filters]);
+
+  // NEW useEffect FOR STARTUPS - ADD THIS
+  useEffect(() => {
+    fetchStartups();
+  }, [startupFilters]);
   // Function to update filters based on user input
   const updateFilters = useCallback((newFilters) => {
     setFilters((prevFilters) => ({
@@ -250,6 +373,34 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
       ...newFilters,
     }));
   }, []);
+  // NEW - for startups
+  const updateStartupFilters = useCallback((newFilters) => {
+    setStartupFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters,
+    }));
+  }, []);
+
+  const fetchFilteredMentors = async () => {
+    try {
+      dispatch(setLoading({ visible: "yes" }));
+
+      const response = await ApiServices.FilterData(filters);
+
+      setUsers(response.data); // update mentors list
+
+      dispatch(setLoading({ visible: "no" }));
+    } catch (error) {
+      dispatch(setLoading({ visible: "no" }));
+      console.log("Error in mentor filtering:", error);
+    }
+  };
+
+  useEffect(() => {
+    // fetchFilteredMentors();
+    fetchUsers();
+    console.log("Filters updated:", filters);
+  }, [filters]);
 
   return (
     <>
@@ -276,7 +427,7 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
             }}
           />
         </DialogTitle>
-          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
+        <FilterSidebar updateFilters={updateFilters} open={open}/>
 
        
         <DialogActions>
@@ -292,20 +443,24 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
       {width < 770 && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <div className="bg-white shadow-md m-3">
-          <h2 className="mt-4 px-20">Filter</h2>
-          <FilterSidebar updateFilters={updateFilters} open={open} industrySkillCounts={computedIndustrySkillCounts} />
-          <Button
-            sx={{ width: "fit-content", marginLeft: "100px",marginBottom:"30px" }}
-            variant="contained"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
+            <h2 className="mt-4 px-20">Filter</h2>
+            <FilterSidebar updateFilters={updateFilters} open={open} />
+            <Button
+              sx={{
+                width: "fit-content",
+                marginLeft: "100px",
+                marginBottom: "30px",
+              }}
+              variant="contained"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
           </div>
         </Collapse>
       )}
 
-      <div className="users-main-box">
+      <div className="users-main-box bg-red-500">
         {width < 770 && (
           <div className="user-nav-bar">
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -340,6 +495,33 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
             </div>
           </div>
         )}
+        {/* NEW TABS SECTION - Add this right after mobile nav */}
+        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 ml-60">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex gap-2 mt-4 p-1 bg-gray-100 rounded-full w-fit border border-gray-300">
+              <button
+                onClick={() => setViewMode("mentors")}
+                className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  viewMode === "mentors"
+                    ? "bg-white text-[#4f55c7] shadow-sm hover:text-white hover:bg-[#4f55c7]"
+                    : "bg-transparent text-gray-900 hover:text-white hover:bg-[#4f55c7]"
+                }`}
+              >
+                Mentor
+              </button>
+              <button
+                onClick={() => setViewMode("startups")}
+                className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  viewMode === "startups"
+                    ? "bg-white text-[#4f55c7] shadow-sm hover:text-white hover:bg-[#4f55c7]"
+                    : "bg-transparent text-gray-900 hover:text-white hover:bg-[#4f55c7]"
+                }`}
+              >
+                Startup
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="usersWrapper">
           {width > 770 && (
             <div className="filterContainer">
@@ -350,7 +532,9 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
                   justifyContent: "space-between",
                 }}
               >
-                <div className="filterHeader">Filter By:</div>
+                <h2 className="text-xl font-bold !text-gray-900 m-0">
+                  Filter By :
+                </h2>
                 <div title="Reset filters">
                   <CachedIcon
                     style={{ cursor: "pointer" }}
@@ -361,7 +545,13 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
                   />
                 </div>
               </div>
-              <FilterSidebar updateFilters={updateFilters} industrySkillCounts={computedIndustrySkillCounts} />
+              <FilterSidebar
+                updateFilters={updateFilters}
+                updateStartupFilters={updateStartupFilters}
+                viewMode={viewMode}
+                industrySkillCounts={computedIndustrySkillCounts}
+                startups={startups}
+              />
               {/* Role */}
               {/* <div className="tagFilter">
                 <div className="filter-header">
@@ -481,36 +671,59 @@ ApiServices.getAllUsers({ type: "" }).then((res) => {
               </div> */}
             </div>
           )}
+          {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
-            <div className="mt-4 userscontainer">
-              {users.length > 0 ? (
-                // filteredData?.map((user) => (
-                //   <SingleUserDetails
-                //     d={d} setIsAdmin={setIsAdmin}
-                //     connectStatus={connectStatus}
-                //     setPitchSendTo={setPitchSendTo}
-                //     pitchSendTo={pitchSendTo}
-                //     receiverRole={receiverRole}
-                //     setreceiverRole={setreceiverRole}
-                //   />
-                // ))
-                users.map((user) => (
-                  <SingleUserDetails key={user.id} user={user} />
-                ))
-              ) : (
-                <div
-                  className="no-users"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <img src="/Search.gif" />
-                  <div>No users available</div>
-                </div>
-              )}
+            <div className="mt-4 userscontainer h-60">
+              {viewMode === "mentors" &&
+                // RENDER MENTORS
+                (users.length > 0 ? (
+                  users
+                    .filter((user) => user.beyincProfile === "Mentor")
+                    .map((user) => (
+                      <SingleUserDetails
+                        key={user.id}
+                        user={user}
+                        viewMode={viewMode}
+                      />
+                    ))
+                ) : (
+                  <div
+                    className="no-users"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src="/Search.gif" />
+                    <div>No users available</div>
+                  </div>
+                ))}
+              {viewMode === "startups" &&
+                // RENDER STARTUPS
+                (startups.length > 0 ? (
+                  startups.map((startup) => (
+                    <SingleUserDetails
+                      key={startup._id}
+                      user={startup}
+                      viewMode={viewMode}
+                    />
+                  ))
+                ) : (
+                  <div
+                    className="no-users"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src="/Search.gif" />
+                    <div>No startups available</div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

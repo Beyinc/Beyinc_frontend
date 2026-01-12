@@ -1,12 +1,11 @@
 import { CheckCircle2, XCircle, Eye, EyeOff, Info } from "lucide-react";
 import { useState, useEffect } from "react";
+import { ApiServices } from "../../Services/ApiServices";
 
 export default function ProfileCompletionStatus({
   profileData,
   profileType = "Startup",
-  onToggleListing,
 }) {
-  const [isListed, setIsListed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   // Define the completion checks based on role
@@ -105,30 +104,51 @@ export default function ProfileCompletionStatus({
   const completedCount = checks.filter((c) => c.completed).length;
   const totalSteps = checks.length;
   const completionPercentage = Math.round((completedCount / totalSteps) * 100);
+
+  const [forceDisable, setForceDisable] = useState(() => {
+    // Initialize based on database value
+    return profileData.beyincProfile === "";
+  });
+
   const isEligible = completionPercentage >= 80;
+  const isListed = isEligible && !forceDisable;
 
-  // Auto-list when 80%+ and eligible
-  useEffect(() => {
-    if (isEligible && !isListed) {
-      setIsListed(true);
-      onToggleListing(true);
+  const updateBeyincProfile = async (newValue) => {
+    try {
+      console.log("update calling");
+      await ApiServices.UpdateBeyincProfile({
+        beyincProfile: newValue,
+      });
+    } catch (error) {
+      console.error("Error updating beyincProfile:", error);
     }
-  }, [isEligible, isListed, onToggleListing]);
-
-  const handleToggleListing = () => {
-    const newValue = !isListed;
-    setIsListed(newValue);
-    onToggleListing(newValue);
   };
 
+  const handleForceToggle = async () => {
+    const newForceDisable = !forceDisable;
+    setForceDisable(newForceDisable);
+
+    if (newForceDisable) {
+      // User explicitly disables listing
+      await updateBeyincProfile("");
+    } else {
+      // User enables listing
+      await updateBeyincProfile("Startup");
+    }
+  };
+
+  // Sync with database when profileData changes (from About component save or page refresh)
+  useEffect(() => {
+    setForceDisable(profileData.beyincProfile === "");
+  }, [profileData.beyincProfile]);
   // Calculate circumference for SVG circle
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const strokeDasharray = circumference;
+  // Add validation to ensure completionPercentage is a valid number
+  const validPercentage = Number(completionPercentage) || 0;
   const strokeDashoffset =
-    circumference - (completionPercentage / 100) * circumference;
-
-  console.log(profileData);
+    circumference - (validPercentage / 100) * circumference;
 
   return (
     <div className="bg-white rounded-2xl  p-6 ">
@@ -166,9 +186,7 @@ export default function ProfileCompletionStatus({
                 fill="none"
                 strokeLinecap="round"
                 className={`transition-all duration-500 ${
-                  completionPercentage >= 80
-                    ? "text-green-600"
-                    : "text-amber-500"
+                  validPercentage >= 80 ? "text-green-600" : "text-amber-500"
                 }`}
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}
@@ -370,22 +388,15 @@ export default function ProfileCompletionStatus({
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                checked={isListed}
-                onChange={handleToggleListing}
-                disabled={!isEligible && completionPercentage < 80}
+                checked={isListed} // Changed: use isListed directly
+                disabled={!isEligible}
+                onChange={handleForceToggle}
                 className="sr-only peer"
               />
-
-              <div
-                className={`w-14 h-7 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all ${
-                  isListed
-                    ? "bg-green-600"
-                    : "bg-gray-200 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"
-                } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300`}
-              ></div>
+              <div className="w-14 h-7 bg-gray-200 peer-checked:bg-green-600 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all"></div>
             </label>
           </div>
-          {!isEligible && completionPercentage < 80 && (
+          {!isEligible && (
             <p className="text-xs text-amber-600 mt-2">
               Complete 80% of your profile to enable listing
             </p>

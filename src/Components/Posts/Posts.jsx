@@ -121,12 +121,18 @@ const Posts = () => {
             message: "Error Occured!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   }, [loadingTrigger]);
 
-  // Get top trending posts
+  // useEffect(()=>{
+  //   console.log("all posts-:",allPosts);
+  // },[allPosts])
+  useEffect(() => {
+    console.log("all posts-:", allPosts);
+  }, [allPosts]);
+
   useEffect(() => {
     ApiServices.getTopTrendingPosts()
       .then((res) => {
@@ -138,7 +144,7 @@ const Posts = () => {
             message: "Error Occurred!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   }, [dispatch]);
@@ -155,7 +161,7 @@ const Posts = () => {
             message: "Error Occured!",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   }, [recommendedUserTrigger]);
@@ -186,8 +192,8 @@ const Posts = () => {
           people: people,
           public: isPublic,
           private: isPrivate,
-          page: filterPage,
-          pageSize,
+          page: filterPage, // send page
+          pageSize, // send pageSize
         };
 
         const response = await ApiServices.getFilterPosts(filterData);
@@ -203,7 +209,14 @@ const Posts = () => {
     };
 
     fetchFilteredPosts();
-  }, [people, selectedSortOption, selectedTags, isPublic, isPrivate, filterPage]);
+  }, [
+    people,
+    selectedSortOption,
+    selectedTags,
+    isPublic,
+    isPrivate,
+    filterPage,
+  ]);
 
   // ============ SCROLL RESTORATION LOGIC ============
   // This runs after posts are loaded
@@ -260,7 +273,7 @@ const Posts = () => {
   const handleTagsChange = (event) => {
     const { value, checked } = event.target;
     setSelectedTags((prev) =>
-      checked ? [...prev, value] : prev.filter((option) => option !== value)
+      checked ? [...prev, value] : prev.filter((option) => option !== value),
     );
   };
 
@@ -270,7 +283,7 @@ const Posts = () => {
   };
 
   const filteredTagsOptions = postTypes.filter((option) =>
-    option.value.toLowerCase().includes(tags.toLowerCase())
+    option.value.toLowerCase().includes(tags.toLowerCase()),
   );
 
   const createMarkup = (html) => {
@@ -288,8 +301,13 @@ const Posts = () => {
       <div className="mobile-menu-icon" onClick={() => setIsSidebarOpen(true)}>
         <RxHamburgerMenu />
       </div>
-      <div className={`Homepage-left-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        <div className="mobile-close-icon" onClick={() => setIsSidebarOpen(false)}>
+      <div
+        className={`Homepage-left-container ${isSidebarOpen ? "sidebar-open" : ""}`}
+      >
+        <div
+          className="mobile-close-icon"
+          onClick={() => setIsSidebarOpen(false)}
+        >
           <RxCross2 />
         </div>
         <div className="sidebar-menu shadow-lg">

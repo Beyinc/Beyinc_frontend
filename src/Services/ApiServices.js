@@ -1269,7 +1269,18 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
-
+  FilterStartups: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/filterstartups`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   getFilterPosts: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1294,10 +1305,48 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  // Add these two methods to your ApiServices
+
+  getUsersByVerifiedStatusByAdmin: (status) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/users/verified/${status}`)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  updateVerifiedStatusByAdmin: (userId, verified) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch(`/users/${userId}/verify`, { verified })
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   StartupEntryData: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post("/startupEntryData", obj) // ✅ correct backend route
+        .post("/startupEntryData", obj)
+        .then((res) => {
+          if (res) resolve(res);
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  //for updateing beyincProfile
+  UpdateBeyincProfile: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .patch("/updateBeyincProfile", obj) // Using PATCH for partial update
         .then((res) => {
           if (res) resolve(res);
         })
