@@ -28,8 +28,6 @@ const EntryDetails = () => {
   const [companyStage, setCompanyStage] = useState("");
   const [expandedIndustries, setExpandedIndustries] = useState({});
   const [selectedExpertise, setSelectedExpertise] = useState({});
-  const [experienceYears, setExperienceYears] = useState("");
-  const [linkedinProfile, setLinkedinProfile] = useState("");
 
   /* ---------------- AUTH ---------------- */
   const loginDetails = useSelector((store) => store.auth.loginDetails);
@@ -104,9 +102,6 @@ const EntryDetails = () => {
         role_level: roleLevel,
         companyStage,
         mentorExpertise: selectedExpertise,
-        experienceYears,
-        linkedinProfile,
-        verified: false,
       });
 
       alert("Profile created successfully!");
@@ -287,67 +282,6 @@ const EntryDetails = () => {
               </React.Fragment>
             ))}
           </div>
-
-          {/* Experience & LinkedIn Section */}
-          <div className="mt-8 pt-8 border-t-2 border-slate-200">
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
-              Professional Details
-            </h3>
-            <p className="text-slate-600 mb-6">
-              Share your experience and LinkedIn profile to help mentees connect
-              with you
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Experience in Years */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Experience in Years <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  {/* <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" /> */}
-                  <input
-                    type="number"
-                    min="0"
-                    max="50"
-                    value={experienceYears}
-                    onChange={(e) => setExperienceYears(e.target.value)}
-                    placeholder="e.g. 10"
-                    className="w-full pl-12 pr-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-600 focus:outline-none transition-colors"
-                  />
-                </div>
-                <p className="text-xs text-slate-500 mt-1">
-                  Years of professional experience in your field
-                </p>
-              </div>
-
-              {/* LinkedIn Profile */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  LinkedIn Profile <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  {/* <svg */}
-                  {/*   className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" */}
-                  {/*   viewBox="0 0 24 24" */}
-                  {/*   fill="currentColor" */}
-                  {/* > */}
-                  {/*   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /> */}
-                  {/* </svg> */}
-                  <input
-                    type="url"
-                    value={linkedinProfile}
-                    onChange={(e) => setLinkedinProfile(e.target.value)}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                    className="w-full pl-12 pr-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-600 focus:outline-none transition-colors"
-                  />
-                </div>
-                <p className="text-xs text-slate-500 mt-1">
-                  Your LinkedIn profile URL
-                </p>
-              </div>
-            </div>
-          </div>
           {/* Buttons */}
           <div className="flex gap-4 mt-8">
             <button
@@ -357,9 +291,7 @@ const EntryDetails = () => {
               Previous
             </button>
             <button
-              disabled={
-                !roleLevel || !username || !linkedinProfile || !experienceYears
-              }
+              disabled={!roleLevel || !username}
               onClick={() => setStep(3)}
               className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >

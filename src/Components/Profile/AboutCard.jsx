@@ -135,6 +135,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
             {selfProfile && <i className="fas fa-pen"></i>}
           </span>
         </div>
+
         <div
           className="mt-4 text-container"
           style={{
@@ -152,6 +153,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
             defaultTemplate
           )}
         </div>
+
         {errorMessage && (
           <div className="text-red-500 mt-4">{errorMessage}</div>
         )}
