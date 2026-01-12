@@ -240,20 +240,31 @@ const IndividualPostDetailsCard = () => {
 
     <div className="post-details-main-container sm:p-4 p-2">
       <button
-        onClick={() => navigate("/posts")}
-        className="
-          inline-flex items-center gap-1
-          text-sm font-medium
-          !text-white
-          bg-[#4f55c7]
-          hover:bg-[#4349b3]
-          transition-colors duration-200
-          px-3 py-1.5
-          rounded-md
-        "
-      >
-        ← back
-      </button>
+          onClick={() => navigate("/posts")}
+          className="
+            group
+            flex items-center justify-center
+            w-9 h-9
+            rounded-full
+            bg-transparent
+            hover:bg-gray-200 dark:hover:bg-[#2D2D2E]
+            text-[#1A1A1B] dark:text-[#D7DADC]
+            transition-colors duration-200
+          "
+          aria-label="Go back"
+        >
+          {/* Standard Left Arrow SVG sized to match Reddit's iconography */}
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            strokeWidth={2} 
+            stroke="currentColor" 
+            className="w-5 h-5"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
       {post !== null && (
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">

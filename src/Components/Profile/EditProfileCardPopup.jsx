@@ -137,6 +137,7 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    console.log(formState);
     try {
       // Save personal and location data
       await ApiServices.InputFormData({
@@ -267,19 +268,19 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
                   className="border border-gray-300 rounded-md p-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-blue-600 mb-1.5">
-                  LinkedIn
-                </label>
-                <input
-                  type="text"
-                  name="linkedin"
-                  value={formState.linkedin}
-                  onChange={handleInputChange}
-                  placeholder="linkedin.com/in/username"
-                  className="border border-gray-300 rounded-md p-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                />
-              </div>
+              {/* <div> */}
+              {/*   <label className="block text-sm font-semibold text-blue-600 mb-1.5"> */}
+              {/*     LinkedIn */}
+              {/*   </label> */}
+              {/*   <input */}
+              {/*     type="text" */}
+              {/*     name="linkedin" */}
+              {/*     value={formState.linkedin} */}
+              {/*     onChange={handleInputChange} */}
+              {/*     placeholder="linkedin.com/in/username" */}
+              {/*     className="border border-gray-300 rounded-md p-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" */}
+              {/*   /> */}
+              {/* </div> */}
             </div>
           </div>
 
