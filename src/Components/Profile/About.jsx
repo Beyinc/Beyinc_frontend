@@ -30,7 +30,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
   }, [profileData]);
 
   return (
-    <div>
+    <div className="">
       {/* <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
             </div> */}
@@ -39,14 +39,12 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
                     <ProfileCard />
                 </div> */}
         <div>
-          <div>
-            <AboutCard
-              selfProfile={selfProfile}
-              setSelfProfile={setSelfProfile}
-              role={role}
-              profileData={profileData}
-            />
-          </div>
+          <AboutCard
+            selfProfile={selfProfile}
+            setSelfProfile={setSelfProfile}
+            role={role}
+            profileData={profileData}
+          />
           {profileData.role === "Startup" && (
             <div>
               <SeekingCard selfProfile={selfProfile} />
