@@ -127,8 +127,8 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
 
   // console.log(role);
   return (
-    <div className="w-full rounded-xl ">
-      <div className="min-h-[100px] shadow-xl mt-6 border-2 border-black p-5 pt-2 rounded-xl">
+    <div className="w-full rounded-xl  h-full">
+      <div className="min-h-[100px] shadow-xl  border-2 border-black p-5  rounded-xl">
         <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           About
           <span onClick={() => setAboutModalOpen(true)}>
