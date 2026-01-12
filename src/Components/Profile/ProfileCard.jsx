@@ -266,7 +266,7 @@ const ProfileCard = ({
     return words.length > 4 ? words.slice(0, 4).join(" ") + " . . . ." : text;
   };
   return (
-    <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative">
+    <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative ">
       <div className="absolute lg:relative">
         <div className="relative group mt-4 flex items-center justify-center">
           <img
@@ -300,11 +300,38 @@ const ProfileCard = ({
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
         </div>
-        {profileData?.beyincProfile && (
+        {profileData?.verified === true && (
           <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
-            {profileData.beyincProfile} at Beyinc
+            Verified by Bloomr
           </div>
         )}
+        {profileData?.verified === false &&
+          profileData?.beyincProfile.length === 0 && (
+            <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
+              Verification Pending
+            </div>
+          )}
+
+        {profileData.verified === false &&
+          profileData?.beyincProfile?.length !== 0 && (
+            <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Will Verify Soon
+            </div>
+          )}
         <div className="flex flex-col gap-4 mt-2 ">
           {!selfProfile && (
             <div className="flex items-center gap-2">
