@@ -29,7 +29,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
   }, [profileData]);
 
   return (
-    <div>
+    <div className="">
       {/* <div className="EditProfileImageContainer">
                 <img src="/Banner.png" alt="Banner" />
             </div> */}
