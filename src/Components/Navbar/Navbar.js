@@ -1274,9 +1274,9 @@ const Navbar = () => {
                       handleItemClick("beyinc");
                     }}
                   >
-                    <button className="navbar-btn rounded-2xl h-12 w-50 py-1 text-xs font-normal">
+                    {/* <button className="navbar-btn rounded-2xl h-12 w-50 py-1 text-xs font-normal">
                       Become Professional
-                    </button>
+                    </button> */}
 
                   </div>
                 )

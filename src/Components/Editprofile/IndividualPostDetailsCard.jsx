@@ -240,31 +240,31 @@ const IndividualPostDetailsCard = () => {
 
     <div className="post-details-main-container sm:p-4 p-2">
       <button
-          onClick={() => navigate("/posts")}
-          className="
-            group
-            flex items-center justify-center
-            w-9 h-9
-            rounded-full
-            bg-transparent
-            hover:bg-gray-200 dark:hover:bg-[#2D2D2E]
-            text-[#1A1A1B] dark:text-[#D7DADC]
-            transition-colors duration-200
-          "
-          aria-label="Go back"
+        onClick={() => navigate("/posts")}
+        className="
+          group
+          flex items-center gap-2
+          px-4 py-2
+          rounded-lg
+          text-sm font-medium
+          text-gray-600 dark:text-gray-300
+          bg-gray-300 dark:bg-zinc-700
+          hover:bg-gray-100 dark:hover:bg-zinc-800
+          hover:text-gray-900 dark:hover:text-white
+          transition-colors duration-200
+        "
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          strokeWidth={2} 
+          stroke="currentColor" 
+          className="w-4 h-4 transition-transform group-hover:-translate-x-1"
         >
-          {/* Standard Left Arrow SVG sized to match Reddit's iconography */}
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            strokeWidth={2} 
-            stroke="currentColor" 
-            className="w-5 h-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-        </button>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      </button>
       {post !== null && (
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">
