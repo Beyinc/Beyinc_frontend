@@ -470,8 +470,9 @@ button.connect {
     z-index: 999;
     color: var(--primary, #333);
   }
+
   .Homepage-Container {
-    padding-top: 60px; 
+    padding-top: 0; 
   }
 
   .Homepage-left-container {
@@ -503,7 +504,7 @@ button.connect {
   }
 
   .main-content {
-    margin-top: 50px; 
+    margin-top: 0; 
     width: 100%;
     padding: 10px;
   }
