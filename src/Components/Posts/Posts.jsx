@@ -13,7 +13,6 @@ import { socket_io, postTypes, followerController } from "../../Utils";
 import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
-import GuestNoticeModal from "./components/GuestNoticeModal";
 
 const Posts = () => {
   const {
@@ -45,7 +44,6 @@ const Posts = () => {
   const [selectedSortOption, setSelectedSortOption] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
-  const [showGuestModal, setShowGuestModal] = useState(false);
 
   const feedRef = useRef(null);
   const scrollRestorationAttempted = useRef(false);
@@ -97,18 +95,16 @@ const Posts = () => {
 
   // Dashboard details
   useEffect(() => {
-    if (user_id) { // Only fetch if user is logged in
-        dispatch(setLoading({ visible: "yes" }));
-        ApiServices.getDashboardDetails()
-        .then((res) => {
-            setData(res.data);
-            dispatch(setLoading({ visible: "no" }));
-        })
-        .catch((err) => {
-            dispatch(setLoading({ visible: "no" }));
-        });
-    }
-  }, [user_id]);
+    dispatch(setLoading({ visible: "yes" }));
+    ApiServices.getDashboardDetails()
+      .then((res) => {
+        setData(res.data);
+        dispatch(setLoading({ visible: "no" }));
+      })
+      .catch((err) => {
+        dispatch(setLoading({ visible: "no" }));
+      });
+  }, []);
 
   // Get all posts
   useEffect(() => {
@@ -120,24 +116,15 @@ const Posts = () => {
         dispatch(setLoading({ visible: "no" }));
       })
       .catch((err) => {
-        //  Handle 401 Unauthorized 
-        if (err.response && err.response.status === 401) {
-          console.log("Guest user detected");
-          setShowGuestModal(true); // Show the popup
-          dispatch(setLoading({ visible: "no" }));
-
-        } else {
-          // Only show error toast if it's NOT a 401 error
-          dispatch(
-            setToast({
-              message: "Error Occured!",
-              bgColor: ToastColors.failure,
-              visible: "yes",
-            })
-          );
-        }
+        dispatch(
+          setToast({
+            message: "Error Occured!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          }),
+        );
       });
-  }, [loadingTrigger, filterPage]);
+  }, [loadingTrigger]);
 
   // useEffect(()=>{
   //   console.log("all posts-:",allPosts);
@@ -164,17 +151,20 @@ const Posts = () => {
 
   // Get recommended users
   useEffect(() => {
-    if (user_id) { // Check if user exists first
-        ApiServices.getRecommendedUsers({ userId: user_id })
-        .then((res) => {
-            setRecommendedUsers(res.data);
-        })
-        .catch((err) => {
-             // Silently fail or log for guests
-             console.log("Could not fetch recommendations (Guest mode)");
-        });
-    }
-  }, [recommendedUserTrigger, user_id]);
+    ApiServices.getRecommendedUsers({ userId: user_id })
+      .then((res) => {
+        setRecommendedUsers(res.data);
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Error Occured!",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          }),
+        );
+      });
+  }, [recommendedUserTrigger]);
 
   // Socket setup
   const socket = useRef();
@@ -184,7 +174,6 @@ const Posts = () => {
 
   // Get notifications
   const getNotifys = async () => {
-    if (!user_id) return;
     await ApiServices.getUserRequest({ userId: user_id }).then((res) => {});
     dispatch(getAllNotifications(user_id));
   };
@@ -309,9 +298,6 @@ const Posts = () => {
 
   return (
     <div className="Homepage-Container">
-      {showGuestModal && (
-        <GuestNoticeModal onClose={() => setShowGuestModal(false)} />
-      )}
       <div className="mobile-menu-icon" onClick={() => setIsSidebarOpen(true)}>
         <RxHamburgerMenu />
       </div>
@@ -461,7 +447,7 @@ const Posts = () => {
                 <input
                   type="text"
                   className="w-60 mt-3"
-                  placeholder="Search Stage"
+                  placeholder="Search Tags"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                 />
