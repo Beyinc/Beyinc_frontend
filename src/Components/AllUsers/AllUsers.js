@@ -115,7 +115,7 @@ const AllUsers = () => {
     ApiServices.getAllUsers({ type: "" }).then((res) => {
       // console.log(JSON.stringify(res.data));
       const filteredUsers = res.data.filter(
-        (user) => user.beyincProfile && user.beyincProfile.trim() !== "",
+        (user) => user.beyincProfile && user.beyincProfile.trim() !== ""
       );
 
       setData(filteredUsers);
@@ -224,7 +224,7 @@ const AllUsers = () => {
   const { height, width } = useWindowDimensions();
   const dispatch = useDispatch();
   const historicalConversations = useSelector(
-    (state) => state.conv.historicalConversations,
+    (state) => state.conv.historicalConversations
   );
   useEffect(() => {
     dispatch(getAllHistoricalConversations(user_id));
@@ -250,8 +250,8 @@ const AllUsers = () => {
             id: cur._id,
           },
         }),
-        {},
-      ),
+        {}
+      )
     );
   }, [historicalConversations]);
 
@@ -292,6 +292,7 @@ const AllUsers = () => {
           // || (user.investmentRange !== undefined)
         );
       });
+      setUsers(filteredUsers);
       console.log();
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -318,13 +319,13 @@ const AllUsers = () => {
         (user) =>
           user.beyincProfile &&
           user.beyincProfile.trim() !== "" &&
-          user.beyincProfile === "Mentor",
+          user.beyincProfile === "Mentor"
       );
 
       const industrySkillCounts = {};
       // exclude the currently logged-in user from the computed counts
       const usersForCounts = filteredUsers.filter(
-        (u) => u._id !== user_id && u.id !== user_id,
+        (u) => u._id !== user_id && u.id !== user_id
       );
       usersForCounts.forEach((u) => {
         const me = u.mentorExpertise;
@@ -356,9 +357,9 @@ const AllUsers = () => {
       dispatch(setLoading({ visible: "no" }));
     });
   }, []);
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, [filters]);
+  useEffect(() => {
+    fetchUsers();
+  }, [filters]);
 
   // NEW useEffect FOR STARTUPS - ADD THIS
   useEffect(() => {
@@ -460,7 +461,7 @@ const AllUsers = () => {
                     setFilteredData(
                       filteredData.filter((f) => {
                         return f.userName.includes(e.target.value);
-                      }),
+                      })
                     );
                   } else {
                     setFilteredData(data);
@@ -654,13 +655,16 @@ const AllUsers = () => {
               {viewMode === "mentors" &&
                 // RENDER MENTORS
                 (users.length > 0 ? (
-                  users.map((user) => (
-                    <SingleUserDetails
-                      key={user.id}
-                      user={user}
-                      viewMode={viewMode}
-                    />
-                  ))
+                  users
+                    .filter((user) => user.beyincProfile === "Mentor")
+
+                    .map((user) => (
+                      <SingleUserDetails
+                        key={user.id}
+                        user={user}
+                        viewMode={viewMode}
+                      />
+                    ))
                 ) : (
                   <div
                     className="no-users"

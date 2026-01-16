@@ -28,6 +28,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   const [selectedSessionId, setSelectedSessionId] = useState("");
   const [selectedSession, setSelectedSession] = useState(null);
   const [activeTab, setActiveTab] = useState("Expertise");
+  const [startupActiveTab, setStartupActiveTab] = useState("Industries");
 
   // --- Effects ---
   useEffect(() => {
@@ -42,6 +43,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
         //   JSON.stringify(data.availability),
         // );
         setSession(data.availability.sessions);
+        console.log("sessions are ", data.availability.sessions);
+        // console.log("Sessions data:", data.availability.sessions);
       } catch (error) {
         console.error("Error fetching availability data:", error);
       }
@@ -154,8 +157,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 onClick={openUser}
               >
                 {user?.role === "Startup"
-                  ? (user?.startupProfile?.startupName ?? "Unnamed Startup")
-                  : (user?.userName ?? "Unknown User")}
+                  ? user?.startupProfile?.startupName ?? "Unnamed Startup"
+                  : user?.userName ?? "Unknown User"}
               </h3>
               {user?.role === "Startup" &&
                 user?.startupProfile?.targetMarket && (
@@ -189,7 +192,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
               <div className="flex gap-2 mb-6 p-1 shadow-[0_2px_8px_rgba(0,0,0,0.1)] bg-gray-100 rounded-full w-fit border border-gray-400">
-                {user.role === "Mentor" &&
+                {user.beyincProfile === "Mentor" &&
                   viewMode === "mentors" &&
                   ["Expertise", "Industries"].map((tab) => (
                     <button
@@ -209,9 +212,9 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                   ["Industries", "Stage", "Seeking"].map((tab) => (
                     <button
                       key={tab}
-                      onClick={() => setActiveTab(tab)}
+                      onClick={() => setStartupActiveTab(tab)}
                       className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
-                        activeTab === tab
+                        startupActiveTab === tab
                           ? "bg-white text-[#4f55c7] shadow-sm"
                           : "bg-transparent text-black "
                       }`}
@@ -221,7 +224,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                   ))}
               </div>
               <p className="text-md text-gray-900 font-medium">
-                {user.role === "Mentor" && viewMode === "mentors" && (
+                {user.beyincProfile === "Mentor" && viewMode === "mentors" && (
                   <>
                     {activeTab === "Expertise" &&
                       (expertiseFromMentorExpertise.length > 0
@@ -250,7 +253,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 {user.role === "Startup" &&
                   (viewMode === "startups" || viewMode === "all") && (
                     <>
-                      {activeTab === "Industries" &&
+                      {startupActiveTab === "Industries" &&
                         (industriesFromStartup.length > 0
                           ? industriesFromStartup.map((item, index) => (
                               <span key={index}>
@@ -260,8 +263,9 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                               </span>
                             ))
                           : "N/A")}
-                      {activeTab === "Stage" && (stageFromStartup || "N/A")}
-                      {activeTab === "Seeking" &&
+                      {startupActiveTab === "Stage" &&
+                        (stageFromStartup || "N/A")}
+                      {startupActiveTab === "Seeking" &&
                         (seekingFromStartup.length > 0
                           ? seekingFromStartup.map((item, index) => (
                               <span key={index}>
@@ -310,8 +314,9 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
           </div>
 
           {/* 3. Right Action Section */}
-          <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-40 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
-            {user.role === "Mentor" && (
+          {/* <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-40 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+            {user.beyincProfile === "Mentor" && (
+              <>
               <button
                 onClick={() => setRequestPopup(true)}
                 disabled={session.length === 0}
@@ -323,7 +328,41 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               >
                 Request a Call
               </button>
+              <div>services offered:
+              {session.length === 0 ? (
+                <span className="text-sm text-gray-500"> No sessions available</span>
+              ) : (
+                <div className="flex flex-col gap-2 mt-2 max-h-40 overflow-y-auto">
+                  {session.map((s) => (
+                    <div
+                      key={s._id}
+                      className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-2"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">
+                          {s.title}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {s.duration} minutes
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold text-[#4f55c7]">
+                          ₹{s.amount}
+                        </p>
+                      </div>
+                    </div>
+                  ))} 
+              </div>
+              </>
+
+
+
+
             )}
+            </div>
+
+
             {user.role === "Startup" && (
               <RecommendedConnectButton
                 id={user._id}
@@ -345,6 +384,98 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 </p>
               </div>
             )}
+          </div> */}
+          <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+            {user.beyincProfile === "Mentor" && (
+              <>
+                <button
+                  onClick={() => setRequestPopup(true)}
+                  disabled={session.length === 0}
+                  className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
+                    session.length === 0
+                      ? "bg-[#4f55c7]/60 cursor-not-allowed"
+                      : "bg-[#4f55c7] hover:bg-[#3e44a8]"
+                  }`}
+                >
+                  Request a Call
+                </button>
+
+                <div className="text-center text-xs text-gray-600">
+                  <p className="mb-1">
+                    {session.length > 0 ? "Starts from" : "Session info"}
+                  </p>
+
+                  <p className="font-bold text-xs text-[#4f55c7]">
+                    {session.length > 0
+                      ? `₹ ${Math.min(...session.map((s) => s.amount))}`
+                      : "Not Listed"}
+                  </p>
+                </div>
+
+                <div>
+                  {session.length === 0 ? (
+                    <span className="align-middle text-sm font-medium text-gray-700 text-center w-full block">
+                      {" "}
+                      No sessions available
+                    </span>
+                  ) : (
+                    <div>
+                      <span className="align-middle text-sm font-medium text-gray-700 text-center w-full block">
+                        Services Offered:
+                      </span>
+                      <div className="flex flex-col gap-2 mt-2 max-h-40 overflow-y-auto scrollbar-hide">
+                        {session.map((s) => (
+                          <div
+                            key={s._id}
+                            className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs"
+                          >
+                            <div>
+                              <p className="font-medium text-gray-800">
+                                {s.title}
+                              </p>
+
+                              <p className="text-gray-500">
+                                {s.duration} minutes
+                              </p>
+                            </div>
+
+                            <div className="text-right">
+                              <p className="font-bold text-[#4f55c7]">
+                                ₹{s.amount}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {user.role === "Startup" && (
+              <RecommendedConnectButton
+                id={user._id}
+                viewMode={viewMode}
+                handleFollower={() => {
+                  setRecommendedUserTrigger(!recommendedUserTrigger);
+                }}
+              />
+            )}
+
+            {/* {user.beyincProfile === "Mentor" && (
+              <div className="text-center text-xs text-gray-600">
+                <p className="mb-1">
+                  {session.length > 0 ? "Starts from" : "Session info"}
+                </p>
+
+                <p className="font-bold text-lg text-[#4f55c7]">
+                  {session.length > 0
+                    ? `₹ ${Math.min(...session.map((s) => s.amount))}`
+                    : "Not Listed"}
+                </p>
+              </div>
+            )} */}
           </div>
         </div>
       </div>
