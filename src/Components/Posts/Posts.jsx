@@ -324,6 +324,7 @@ const Posts = () => {
         >
           <RxCross2 />
         </div>
+        {user_id ? (
         <div className="sidebar-menu shadow-lg">
           <div className="Homepage-left-container-profile">
             <div>
@@ -430,7 +431,7 @@ const Posts = () => {
               Activity
             </div>
           </div>
-        </div>
+        </div>): null }
 
         <div class="filter-sidebar shadow-lg">
           <div class="filter-section">
@@ -583,7 +584,7 @@ const Posts = () => {
           </div>
         </div>
 
-        <div className="suggestions-section shadow-lg">
+        {user_id ? (<div className="suggestions-section shadow-lg">
           <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
             <h4 className="label">Suggestions for you</h4>
             <span
@@ -658,9 +659,9 @@ const Posts = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div>): null }
 
-        <div className="activity-section shadow-lg">
+        {user_id ? (<div className="activity-section shadow-lg">
           <h3 className="label">Latest Activities</h3>
           <div className="activity-item">
             <div className="activity-single-item">
@@ -678,7 +679,7 @@ const Posts = () => {
               )}
             </div>
           </div>
-        </div>
+        </div>) : null }
       </div>
     </div>
   );
