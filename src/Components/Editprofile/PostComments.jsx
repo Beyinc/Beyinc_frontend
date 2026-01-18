@@ -84,6 +84,10 @@ const PostComments = ({ fetchComments, postId }) => {
     });
 
   const sendText = async () => {
+    if (!user_id) {
+      navigate("/login");
+      return;
+    }
     if (!comment.trim() && !file) return;
 
     dispatch(setLoading({ visible: "yes" }));
@@ -208,6 +212,9 @@ const PostComments = ({ fetchComments, postId }) => {
               <div className="flex">
                 <textarea
                   className="textarea grow !h-fit !p-[3px]"
+                  onClick={() => {
+                      if (!user_id) navigate("/login");
+                    }}
                   rows={2}
                   cols={80}
                   onKeyDown={handleKeyDown}
