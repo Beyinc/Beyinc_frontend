@@ -384,6 +384,7 @@ const Post = ({
           {post?.type}
         </div>
 
+        {user_id && (
         <div
           className="transition-transform menu-icon-wrapper cursor-pointer"
           onClick={() => {
@@ -406,12 +407,13 @@ const Post = ({
             />
           </svg>
         </div>
+        )}
       </div>
 
       {/* Submenu absolutely positioned */}
      <div className={`subMenu postSubActions${post?._id} absolute top-full left-0 mt-2 hidden bg-white border rounded-md shadow-md z-50`} ref={userDetailsRef} >
-
-        {post?.createdBy?._id == user_id ? (
+        {user_id && (
+          post?.createdBy?._id == user_id ? (
           <>
             <div
               style={{ color: "black" }}
@@ -439,6 +441,7 @@ const Post = ({
           >
             Report
           </div>
+        )
         )}
       </div>
     </div>

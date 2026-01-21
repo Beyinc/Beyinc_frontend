@@ -319,6 +319,7 @@ const IndividualPostDetailsCard = () => {
     </div>
 
     {/* RIGHT SIDE: Menu Only */}
+    {user_id && (
     <div style={{ position: "relative" }}>
       <div
         className="editpostSubActions"
@@ -384,6 +385,7 @@ const IndividualPostDetailsCard = () => {
         )}
       </div>
     </div>
+    )}
   </div>
 
   {/* ROW 2: The Tag (Pink Pill) on a new line */}
@@ -567,11 +569,13 @@ const IndividualPostDetailsCard = () => {
                     userReaction={post.userReaction}
                     post={post}
                   />
+                  {user_id && (
                   <div className="likeActionHolder">
                     <div className="actionText">
                       <ShareButton url={window.location.href} />
                     </div>
                   </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -786,6 +790,7 @@ const IndividualPostDetailsCard = () => {
                 </div>
               </div>
             </div>
+            {user_id && (
             <LiveChat
               post={post}
               onlineEmails={onlineEmails}
@@ -793,6 +798,7 @@ const IndividualPostDetailsCard = () => {
               user_id={user_id}
               isEnabled={post?.visibility==='public'?true:post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
             />
+            )}
           </div>
         </div>
       )}
