@@ -87,7 +87,8 @@ const EntryDetails = () => {
 
   const handleSubmit = async () => {
     try {
-      if (image) {
+          console.log('Before API call:', { user_id, email, hasImage: !!image });
+     if (image) {
         await ApiServices.updateuserProfileImage({
           userId: user_id,
           image,
