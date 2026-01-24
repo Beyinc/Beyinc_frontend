@@ -113,6 +113,10 @@ const IndividualPostComments = ({
   };
 
   const handleLike = (id) => {
+    if (!user_id) {
+      navigate("/login");
+      return;
+    }
     if (liked) {
       setLiked(false);
       setCount((prev) => prev - 1);
@@ -126,6 +130,10 @@ const IndividualPostComments = ({
   };
 
   const handleDisLike = (id) => {
+    if (!user_id) {
+      navigate("/login");
+      return;
+    }
     if (disliked) {
       setdisLiked(false);
       setdislikecount((prev) => prev - 1);
@@ -275,7 +283,7 @@ const IndividualPostComments = ({
                 )}
               </div>
             </div>
-
+                {user_id && (
             <div>
               <span
                 className="replyTag"
@@ -289,6 +297,7 @@ const IndividualPostComments = ({
                 Reply
               </span>
             </div>
+                )}
           </div>
 
           {c.subComments?.length > 0 && (

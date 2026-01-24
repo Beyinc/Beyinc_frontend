@@ -223,31 +223,36 @@ const PostComments = ({ fetchComments, postId }) => {
                   placeholder="Add a comment..."
                   style={{ resize: "none" }}
                 />
+                {user_id && (
                 <div className="flex gap-2 items-center ">
-                  <input
-                    id="file-upload"
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => handleFileUpload(e.target.files[0])}
-                  />
-                  <label htmlFor="file-upload">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="gray"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      style={{
-                        cursor: "pointer",
-                      }}
-                    >
-                      <path d="M21.44 11.05l-9.19 9.2a4 4 0 0 1-5.66-5.66l9.2-9.2a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.42-1.42l7.78-7.78" />
-                    </svg>
-                  </label>
+                  {user_id && (
+                  <>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => handleFileUpload(e.target.files[0])}
+                    />
+                    <label htmlFor="file-upload">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="gray"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <path d="M21.44 11.05l-9.19 9.2a4 4 0 0 1-5.66-5.66l9.2-9.2a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.42-1.42l7.78-7.78" />
+                      </svg>
+                    </label>
+                  </>
+                  )}
                   <svg
                     onClick={sendText}
                     className="send-button-svg w-[20px] h-[20px]"
@@ -271,6 +276,7 @@ const PostComments = ({ fetchComments, postId }) => {
                     />
                   </svg>
                 </div>
+                )}
               </div>
 
               {/* 📎 Attach File Icon (paperclip) */}

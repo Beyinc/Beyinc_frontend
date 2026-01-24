@@ -255,7 +255,9 @@ const VerifyOtp = () => {
       console.log("Registration response:", res);
       localStorage.setItem("user", JSON.stringify(res.data));
       await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-      navigate("/userDetails");
+      // navigate("/userDetails");
+            window.location.href = "/userDetails";
+
     } catch (err) {
       dispatch(
         setToast({
