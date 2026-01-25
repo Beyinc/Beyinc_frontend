@@ -474,6 +474,26 @@ const IndividualMessage = () => {
             ))}
         </div>
         <div className="messageBox" style={{ position: "relative" }}>
+          <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              padding: '10px', 
+              marginTop: '15px',
+              marginBottom: '15px',
+              color: '#132b3d', 
+              fontSize: '12px', 
+              background: '#c2e7ff', 
+              borderRadius: '8px', 
+              textAlign: 'center',
+              width: 'fit-content',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              gap: '6px'
+          }}>
+              <i className="fas fa-lock" style={{ fontSize: '12px' }}></i> 
+              <span>General Housekeeping: Please use Bloomr to chat and refrain<br/> from sharing any personal information here since this is a beta test and we're yet to verify profiles.</span>
+          </div>
           {messages.length > 6 && (
             <div
               className="downGoing"
