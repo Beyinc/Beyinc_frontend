@@ -390,7 +390,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
           </div> */}
         <div className="relative flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
           {IS_FEATURE_LOCKED && user.beyincProfile === "Mentor" && (
-            <div className="absolute inset-0 z-20 bg-white/90 backdrop-blur-[2px] rounded-lg flex flex-col items-center justify-center text-center p-4 border border-gray-100 select-none">
+            <div className="absolute inset-0 z-20 bg-white/70 backdrop-blur-[2px] rounded-lg flex flex-col items-center justify-center text-center p-4 border border-gray-100 select-none">
               <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
                 <FaClock className="text-gray-400" />
               </div>
