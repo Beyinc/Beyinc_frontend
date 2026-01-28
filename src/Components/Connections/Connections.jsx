@@ -146,7 +146,7 @@ export const Connections = () => {
         )}
         {user.beyincProfile && (
           <h5 className="text-neutral-600 mt-1 text-xs">
-            {user.beyincProfile} at Beyinc
+            {user.beyincProfile} at Beyincnn b
           </h5>
         )}
         <p className="mt-2 mb-2 text-center text-xs">{user.headline}</p>

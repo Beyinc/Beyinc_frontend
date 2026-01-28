@@ -57,6 +57,12 @@ function NewLogin() {
     if (name === "password") {
       setInputs((prev) => ({ ...prev, isPasswordValid: true }));
     }
+    if (name === "mobile") {
+      setInputs((prev) => ({
+        ...prev,
+        isMobileValid: /^[0-9]{10}$/.test(value),
+      }));
+    }
   };
 
   const handleLoginTypeChange = (type) => {
@@ -78,6 +84,95 @@ function NewLogin() {
       isPasswordValid: null,
     });
     setOtpVisible(false);
+  };
+
+  const sendMobileOtpF = async (e) => {
+    e.preventDefault();
+    e.target.disabled = true;
+    await ApiServices.sendMobileOtp({
+      phone: `+91${mobile}`,
+      type: "login",
+    })
+      .then((res) => {
+        dispatch(
+          setToast({
+            message: "OTP sent successfully !",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+        setOtpVisible(true);
+        setInputs((prev) => ({ ...prev, isMobileOtpSent: true }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "OTP sent failed !",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+        e.target.disabled = false;
+      });
+  };
+
+  const verifyMobileOtp = async (e) => {
+    e.preventDefault();
+    await ApiServices.verifyOtp({
+      email: `+91${mobile}`,
+      otp: mobileOtp,
+    })
+      .then((res) => {
+        dispatch(
+          setToast({
+            message: "Mobile verified successfully !",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+        setInputs((prev) => ({ ...prev, mobileVerified: true }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Incorrect OTP",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
+  };
+
+  const mobileLogin = async (e) => {
+    e.preventDefault();
+    e.target.disabled = true;
+    const obj = {
+      phone: mobile,
+      password: password,
+    };
+    await ApiServices.mobileLogin(obj)
+      .then(async (res) => {
+        dispatch(
+          setToast({
+            message: "User Logged In Successfully !",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          })
+        );
+        localStorage.setItem("user", JSON.stringify(res.data));
+        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
+        window.location.href = "/posts";
+      })
+      .catch((err) => {
+        e.target.disabled = false;
+        dispatch(
+          setToast({
+            message: err.response.data.message,
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          })
+        );
+      });
   };
 
   const login = async (e) => {
@@ -254,9 +349,76 @@ function NewLogin() {
               </button>
             </div>
           ) : (
-            <p className="text-center text-gray-500 mt-6">
-              Mobile login is under maintenance.
-            </p>
+            <div className="ml-6 mt-6 md:mt-6">
+              <p className="font-medium">Mobile Number</p>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  name="mobile"
+                  value={mobile || ""}
+                  onChange={handleChanges}
+                  placeholder="10 digit mobile number"
+                  disabled={mobileVerified}
+                  className="w-full h-6 mt-1 border rounded-md px-2 shadow-sm"
+                />
+                {isMobileValid && !otpVisible && (
+                  <button
+                    type="button"
+                    onClick={sendMobileOtpF}
+                    className="bg-[#4F55C7] text-white px-4 rounded-md mt-1 font-medium whitespace-nowrap"
+                  >
+                    Get OTP
+                  </button>
+                )}
+              </div>
+
+              {otpVisible && mobileVerified !== true && (
+                <>
+                  <p className="font-medium mt-4">Enter OTP</p>
+                  <input
+                    type="text"
+                    name="mobileOtp"
+                    value={mobileOtp || ""}
+                    onChange={handleChanges}
+                    placeholder="Enter 6 digit OTP"
+                    maxLength="6"
+                    className="w-full h-6 mt-1 border rounded-md px-2 shadow-sm"
+                  />
+                  {mobileOtp !== null && mobileOtp.length === 6 && (
+                    <button
+                      type="button"
+                      onClick={verifyMobileOtp}
+                      className="w-full md:w-full bg-[#4F55C7] text-white font-bold py-2 rounded-full mt-4"
+                    >
+                      Verify OTP
+                    </button>
+                  )}
+                </>
+              )}
+
+              {mobileVerified && (
+                <>
+                  <p className="font-medium mt-4">Password</p>
+                  <input
+                    type="password"
+                    name="password"
+                    value={password || ""}
+                    onChange={handleChanges}
+                    placeholder="Password"
+                    className="w-full h-6 mt-1 border rounded-md px-2 shadow-sm"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={!isFormValid || loading}
+                    onClick={mobileLogin}
+                    className="w-[80%] md:w-full bg-[#4F55C7] text-white font-bold py-2 rounded-full mt-6 flex justify-center items-center"
+                  >
+                    {loading ? "Logging in..." : "Login"}
+                  </button>
+                </>
+              )}
+            </div>
           )}
 
           <div className="mr-10 md:mr-0">
