@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   Checkbox,
   Collapse,
+  Drawer,
   FormControlLabel,
   Tab,
   Tabs,
@@ -418,25 +419,48 @@ const AllUsers = () => {
           </Button>
         </DialogActions>
       </Dialog> */}
-      {width < 770 && (
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <div className="bg-white shadow-md m-3">
-            <h2 className="mt-4 px-20">Filter</h2>
-            <FilterSidebar updateFilters={updateFilters} open={open} />
+      {/* MOBILE FILTER DRAWER (SLIDE-IN SIDEBAR) */}
+      <Drawer
+        anchor="left" // Slides in from the left
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          sx: { width: "85%", maxWidth: "320px" } // Width of the sidebar
+        }}
+      >
+        <div className="p-4 h-full overflow-y-auto bg-white">
+          {/* Header with Title and Close Button */}
+          <div className="flex justify-between items-center mb-4 border-b pb-2 border-gray-100">
+            <h2 className="text-lg font-bold text-gray-800 m-0">Filters</h2>
+            <CloseIcon 
+              onClick={handleClose} 
+              className="cursor-pointer text-gray-500 hover:text-red-500" 
+            />
+          </div>
+
+          {/* The Actual Filter Component */}
+          <FilterSidebar
+            updateFilters={updateFilters}
+            updateStartupFilters={updateStartupFilters}
+            open={true} // Always "open" inside the drawer
+            viewMode={viewMode}
+            industrySkillCounts={computedIndustrySkillCounts}
+            startups={startups}
+          />
+
+          {/* Footer Actions */}
+          <div className="mt-6 flex justify-center pb-4">
             <Button
-              sx={{
-                width: "fit-content",
-                marginLeft: "100px",
-                marginBottom: "30px",
-              }}
               variant="contained"
+              fullWidth
               onClick={handleClose}
+              sx={{ backgroundColor: "#4f55c7" }}
             >
-              Close
+              Apply Filters
             </Button>
           </div>
-        </Collapse>
-      )}
+        </div>
+      </Drawer>
 
       <div className="users-main-box bg-red-500">
         {width < 770 && (
@@ -474,7 +498,7 @@ const AllUsers = () => {
           </div>
         )}
         {/* NEW TABS SECTION - Add this right after mobile nav */}
-        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 ml-60">
+        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 lg:ml-60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex gap-2 mt-4 p-1 bg-gray-100 rounded-full w-fit border border-gray-300">
               <button
@@ -651,59 +675,57 @@ const AllUsers = () => {
           )}
           {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
-            <div className="mt-4 userscontainer h-60">
-              {viewMode === "mentors" &&
-                // RENDER MENTORS
-                (users.length > 0 ? (
-                  users
-                    .filter((user) => user.beyincProfile === "Mentor")
-
-                    .map((user) => (
-                      <SingleUserDetails
-                        key={user.id}
-                        user={user}
-                        viewMode={viewMode}
-                      />
-                    ))
-                ) : (
-                  <div
-                    className="no-users"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src="/Search.gif" />
-                    <div>No users available</div>
-                  </div>
-                ))}
-              {viewMode === "startups" &&
-                // RENDER STARTUPS
-                (startups.length > 0 ? (
-                  startups.map((startup) => (
-                    <SingleUserDetails
-                      key={startup._id}
-                      user={startup}
-                      viewMode={viewMode}
-                    />
-                  ))
-                ) : (
-                  <div
-                    className="no-users"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src="/Search.gif" />
-                    <div>No startups available</div>
-                  </div>
-                ))}
-            </div>
+            <div className="mt-4 userscontainer w-full !flex flex-wrap justify-center lg:justify-start gap-4">
+  {viewMode === "mentors" &&
+    (users.length > 0 ? (
+      users
+        .filter((user) => user.beyincProfile === "Mentor")
+        .map((user) => (
+          <SingleUserDetails
+            key={user.id}
+            user={user}
+            viewMode={viewMode}
+          />
+        ))
+    ) : (
+      <div
+        className="no-users w-full" 
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <img src="/Search.gif" alt="Loading" />
+        <div>No users available</div>
+      </div>
+    ))}
+    
+  {viewMode === "startups" &&
+    (startups.length > 0 ? (
+      startups.map((startup) => (
+        <SingleUserDetails
+          key={startup._id}
+          user={startup}
+          viewMode={viewMode}
+        />
+      ))
+    ) : (
+      <div
+        className="no-users w-full"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <img src="/Search.gif" alt="Loading" />
+        <div>No startups available</div>
+      </div>
+    ))}
+</div>
           </div>
         </div>
         <AddConversationPopup
