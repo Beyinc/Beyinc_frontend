@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
@@ -99,7 +97,7 @@ function NewLogin() {
             message: "OTP sent successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         setOtpVisible(true);
         setInputs((prev) => ({ ...prev, isMobileOtpSent: true }));
@@ -110,7 +108,7 @@ function NewLogin() {
             message: "OTP sent failed !",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
         e.target.disabled = false;
       });
@@ -128,7 +126,7 @@ function NewLogin() {
             message: "Mobile verified successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         setInputs((prev) => ({ ...prev, mobileVerified: true }));
       })
@@ -138,7 +136,7 @@ function NewLogin() {
             message: "Incorrect OTP",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -157,7 +155,7 @@ function NewLogin() {
             message: "User Logged In Successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
@@ -170,7 +168,7 @@ function NewLogin() {
             message: err.response.data.message,
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -193,7 +191,7 @@ function NewLogin() {
             message: "User Logged In Successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
@@ -207,7 +205,7 @@ function NewLogin() {
             message: err?.response?.data?.message || "Error Occurred",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -230,10 +228,10 @@ function NewLogin() {
         {/* Left Image (hidden on mobile) */}
         <div className="hidden md:block w-[40%] relative p-10">
           <img
- src="/Bloomr-login-signin.jpeg"            className="w-full h-full rounded-xl object-cover"
+            src="/Bloomr-login-signin.jpeg"
+            className="w-full h-full rounded-xl object-cover"
             alt="bg"
           />
-       
         </div>
 
         {/* Right Form */}
@@ -256,7 +254,7 @@ function NewLogin() {
               )}
             </p>
 
-{/* uncommnet this further for mobile otpo login */}
+            {/* uncommnet this further for mobile otpo login */}
             {/* <p
               className={`text-lg font-bold cursor-pointer pb-1 relative ${
                 activeTab === "mobile" ? "text-[#4F55C7]" : "text-gray-500"

@@ -227,12 +227,26 @@ export default function ConnectionsWithSuggestions() {
       style={{ border: "1px solid gainsboro" }}
       className="bg-white hover:shadow-lg border rounded-xl p-4 w-[190px] flex flex-col justify-center items-center"
     >
-      <img
-        src={user.image?.url || "/profile.png"}
-        onClick={() => navigate(`/user/${user._id}`)}
-        className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
-        alt="profile"
-      />
+      {user?.image?.url ? (
+                      <img
+                        src={user.image.url}
+                        onClick={() =>
+                          user._id === user_id
+                            ? navigate("/editProfile")
+                            : navigate(`/user/${user._id}`)
+                        }
+                        className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
+                        alt="profile"
+                      />
+                    ) : (
+                      <div className="cursor-pointer rounded-full h-[100px] w-[100px] bg-[#4E54C6] flex items-center justify-center text-white font-medium text-5xl" onClick={() =>
+                        user._id === user_id
+                          ? navigate("/editProfile")
+                          : navigate(`/user/${user._id}`)
+                      }>
+                        {user?.userName && user.userName.length > 0 ? user.userName.charAt(0).toUpperCase() : "?"}
+                      </div>
+                    )}
       <h3 className="mt-2 text-center text-sm font-medium">{user.userName}</h3>
       {user.role && (
         <h5 className="text-neutral-600 mt-1 text-xs">{user.role}</h5>
@@ -433,16 +447,26 @@ export default function ConnectionsWithSuggestions() {
                     style={{ border: "1px solid gainsboro" }}
                     className="bg-white hover:shadow-lg border rounded-xl p-4 w-[190px] flex flex-col justify-center items-center"
                   >
-                    <img
-                      src={rec?.image?.url || "/profile.png"}
-                      onClick={() =>
+                    {rec?.image?.url ? (
+                      <img
+                        src={rec.image.url}
+                        onClick={() =>
+                          rec._id === user_id
+                            ? navigate("/editProfile")
+                            : navigate(`/user/${rec._id}`)
+                        }
+                        className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
+                        alt="profile"
+                      />
+                    ) : (
+                      <div className="cursor-pointer rounded-full h-[100px] w-[100px] bg-[#4E54C6] flex items-center justify-center text-white font-medium text-5xl" onClick={() =>
                         rec._id === user_id
                           ? navigate("/editProfile")
                           : navigate(`/user/${rec._id}`)
-                      }
-                      className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
-                      alt="profile"
-                    />
+                      }>
+                        {rec?.userName && rec.userName.length > 0 ? rec.userName.charAt(0).toUpperCase() : "?"}
+                      </div>
+                    )}
 
                     <h3 className="mt-2 text-center text-sm font-medium">
                       {rec?.userName}
