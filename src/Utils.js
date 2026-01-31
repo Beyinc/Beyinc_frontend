@@ -739,7 +739,7 @@ export const COMPANY_STAGES = [
     icon: "🏛️",
   },
 ];
-export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace"];
+export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace","D2C"];
 export const STARTUP_TEAM_SIZES = [
   "Solo Founder",
   "2-5",

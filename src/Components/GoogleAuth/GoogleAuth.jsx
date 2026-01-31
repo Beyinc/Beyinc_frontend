@@ -1,49 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "../Login/Login.css";
 
-
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { ApiServices } from "../../Services/ApiServices";
 import axiosInstance from "../axiosInstance";
 
 const GoogleAuth = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    async function handleCallback(response) {
-        // console.log("Encoded", jwtDecode(response.credential));
-        await ApiServices.SSORegister({ email: jwtDecode(response.credential).email, userName: jwtDecode(response.credential).email.split('@')[0], role: '' }).then(async(res) => {
-            localStorage.setItem("user", JSON.stringify(res.data));
-            await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-            window.location.href = "/posts";
-        }).catch(err=>console.log(err))
+  async function handleCallback(response) {
+    try {
+      const decoded = jwtDecode(response.credential);
+
+      const res = await ApiServices.SSORegister({
+        email: decoded.email,
+        userName: decoded.email.split("@")[0],
+        role: "",
+      });
+
+      localStorage.setItem("user", JSON.stringify(res.data));
+
+      await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
+
+      // get profile using returned user_id
+      const profile = await ApiServices.getProfile({
+        user_id: res.data.user_id,
+      });
+
+      if (profile.data.isProfileComplete === false) {
+         window.location.href = "/editProfile";
+      } else {
+        window.location.href = "/posts";
+      }
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    useEffect(() => {
-        window?.google?.accounts?.id.initialize({
-            client_id: process.env.REACT_APP_CALENDER_CLIENT_ID,
-            callback: handleCallback,
-        });
+  useEffect(() => {
+    window?.google?.accounts?.id.initialize({
+      client_id: process.env.REACT_APP_CALENDER_CLIENT_ID,
+      callback: handleCallback,
+    });
 
-        window.google.accounts.id.renderButton(document.getElementById("signIn"), {
-            theme: "outline",
-            size: "large",
-        });
-    }, []);
-
-    return (
-        <div>
-            <main class="main">
-                <div class="container">
-                    <section class="wrapper">
-                        <div id="signIn" style={{}}></div>
-                    </section>
-                </div>
-            </main>
-        </div>
+    window.google.accounts.id.renderButton(
+      document.getElementById("signIn"),
+      {
+        theme: "outline",
+        size: "large",
+      }
     );
+  }, []);
+
+  return (
+    <main className="main">
+      <div className="container">
+        <section className="wrapper">
+          <div id="signIn"></div>
+        </section>
+      </div>
+    </main>
+  );
 };
 
 export default GoogleAuth;

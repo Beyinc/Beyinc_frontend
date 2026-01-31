@@ -306,11 +306,12 @@ const ProfileCard = ({
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
         </div>
-        {/* {profileData?.verified === true && (
-          <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
-            Verified by Bloomr
+       {(profileData.role==="Mentor"||profileData.role==="Startup") && (
+          <div className="font-bold text-md text-amber-600" >
+           Not Verified
           </div>
         )}
+  {/*
         {profileData?.verified === false &&
           profileData?.beyincProfile.length === 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">

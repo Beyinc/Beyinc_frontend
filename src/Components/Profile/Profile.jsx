@@ -53,7 +53,10 @@ const Profile = () => {
           ? await ApiServices.getProfile({ id })
           : await ApiServices.getProfile({ user_id });
 
-        const { expertise, industries, stages } = response.data;
+        const { expertise, industries, stages, isProfileComplete } = response.data;
+        // if(isProfileComplete === true){
+        //   window.location.href = "/posts";
+        // }
 
         setProfileData(response.data);
         setRole(response.data.role);
@@ -111,7 +114,7 @@ const Profile = () => {
               profileDataObj={profileData}
               profileRole={role}
             />
-
+{/* 
             {(profileData.beyincProfile === "Mentor" ||
               profileData.beyincProfile === "Co-Founder") &&
               service.length > 0 && (
@@ -122,7 +125,7 @@ const Profile = () => {
                     reschedule={false}
                   />
                 </div>
-              )}
+              )} */}
           </div>
 
           <div className="grow space-y-3">

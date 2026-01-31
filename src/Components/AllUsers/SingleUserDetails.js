@@ -486,7 +486,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               )}
 
                 {user.role === "Startup" && (
-                   <div className="max-h-48 overflow-y-auto scrollbar-hide bg-gray-50 border border-gray-200 rounded-lg p-4 ml-[-200px]">
+                   <div className="max-h-44 overflow-y-auto scrollbar-hide bg-gray-50 border border-gray-200 rounded-lg p-4 ml-[-200px]">
                     <h4 className="text-sm font-bold text-gray-800 mb-2">About</h4>
                     <p className="text-sm text-gray-600 leading-relaxed">
                       {user.about || "No bio available."}
