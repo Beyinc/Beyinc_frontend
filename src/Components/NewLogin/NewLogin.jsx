@@ -260,7 +260,8 @@ function NewLogin() {
               )}
             </p>
 
-            <p
+{/* uncommnet this further for mobile otpo login */}
+            {/* <p
               className={`text-lg font-bold cursor-pointer pb-1 relative ${
                 activeTab === "mobile" ? "text-[#4F55C7]" : "text-gray-500"
               }`}
@@ -270,7 +271,7 @@ function NewLogin() {
               {activeTab === "mobile" && (
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-[#4F55C7]"></span>
               )}
-            </p>
+            </p> */}
           </div>
 
           {/* Email Login */}

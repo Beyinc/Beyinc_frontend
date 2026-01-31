@@ -99,16 +99,14 @@ function Signup() {
             alt="bg"
           />
 
-          <div className="absolute inset-0 flex flex-col justify-center text-white text-left ml-20 mb-36">
+          <div className="absolute inset-0 flex flex-col justify-center text-white text-left ml-16 mb-36">
             <p className="font-gentium text-[35px] font-bold leading-[45px]">
-              Welcome to Social <br />
-              Entrepreneurship <br />
-              Platform
+            Welcome to Bloomr <br />
             </p>
 
             <p className="font-gentium font-bold text-[30px] leading-[40px] mt-2">
-              Increasing the success <br />
-              rate of startup
+              Where Networking is <br/>
+              Made Intentional
             </p>
           </div>
         </div>

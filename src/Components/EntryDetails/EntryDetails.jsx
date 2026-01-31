@@ -157,7 +157,17 @@ const EntryDetails = () => {
           <div className="flex justify-end mt-8">
             <button
               disabled={!selectedCategory}
-              onClick={() => setStep(2)}
+              onClick={() =>{
+setStep(2)
+               setUsername('');
+               setHeadline('');
+               setImage(null);
+               setSelectedExpertise({});
+                setRoleLevel('');
+  toggleIndustry({});
+  setExpandedIndustries({});
+              } 
+              }
               className="flex-1 md:flex-none px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               Next
