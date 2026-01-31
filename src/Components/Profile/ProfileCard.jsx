@@ -302,7 +302,7 @@ const ProfileCard = ({
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
         </div>
-        {profileData?.verified === true && (
+        {/* {profileData?.verified === true && (
           <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
             Verified by Bloomr
           </div>
@@ -314,7 +314,7 @@ const ProfileCard = ({
             </div>
           )}
 
-        {profileData.verified === false &&
+        {/* {profileData.verified === false &&
           profileData?.beyincProfile?.length !== 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               <svg
@@ -333,7 +333,7 @@ const ProfileCard = ({
               </svg>
               Will Verify Soon
             </div>
-          )}
+          )} */}
         <div className="flex flex-col gap-4 mt-2 ">
           {!selfProfile && (
             <div className="flex items-center gap-2">

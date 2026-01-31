@@ -176,7 +176,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
             {/* Role */}
             <p className="text-sm font-medium text-[#4f55c7] mb-1">
-              {user.role || "Individual/Entrepreneur"}
+              {user.beyincProfile || "Individual/Entrepreneur"}
             </p>
 
             {/* Headline */}

@@ -230,14 +230,10 @@ function NewLogin() {
         {/* Left Image (hidden on mobile) */}
         <div className="hidden md:block w-[40%] relative p-10">
           <img
-            src="/login-bg.png"
-            className="w-full h-full rounded-xl object-cover"
+ src="/Bloomr-login-signin.jpeg"            className="w-full h-full rounded-xl object-cover"
             alt="bg"
           />
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center font-gentium mr-10">
-            <p className="text-3xl font-bold justify-start">Get Started by</p>
-            <p className="text-3xl font-bold justify-start mr-12 mb-14">Logging In</p>
-          </div>
+       
         </div>
 
         {/* Right Form */}
