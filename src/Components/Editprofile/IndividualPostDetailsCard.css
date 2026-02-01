@@ -401,3 +401,9 @@ background: var( --button-background);
     margin-bottom: 8px;
     color: #000;
 }
+
+@media (max-width: 600px) {
+    .postType {
+        display: none;
+    }
+}
