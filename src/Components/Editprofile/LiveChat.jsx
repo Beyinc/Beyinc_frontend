@@ -9,11 +9,31 @@ export function LiveChat({ post, userName, user_id, onlineEmails,isEnabled }) {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [mentors, setMentors] = useState([]);
+  const [loadingMentors, setLoadingMentors] = useState(true);
   const navigate = useNavigate();
 
   const socket = useRef();
   useEffect(() => {
     socket.current = io(socket_io);
+  }, []);
+
+  // Fetch mentors when component mounts
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        setLoadingMentors(true);
+        const response = await ApiServices.getAllUsers({ type: "Mentor" });
+        if (response?.data) {
+          setMentors(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      } finally {
+        setLoadingMentors(false);
+      }
+    };
+    fetchMentors();
   }, []);
 
   // Load chat history when component mounts
@@ -141,55 +161,154 @@ export function LiveChat({ post, userName, user_id, onlineEmails,isEnabled }) {
         </div>
       ) : (
         <div className="openDiscussionUsers">
-          {post?.openDiscussionTeam?.map((p) => (
-            <div className="openDiscussionUser" key={p._id}>
-              <div className="openDiscussionUserContainer">
-                <img
-                  src={
-                    p?.image !== "" &&
-                    p?.image !== undefined &&
-                    p?.image?.url !== ""
-                      ? p?.image?.url
-                      : "/profile.png"
-                  }
-                  alt=""
-                  className="openDiscussionUserImage"
-                />
+          {/* Show Mentors Section */}
+          {mentors.length > 0 && (
+            <>
+              <div style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                color: "#4F55C7",
+                marginBottom: "10px",
+                borderBottom: "1px solid #e0e0e0",
+                paddingBottom: "8px"
+              }}>
+                Mentors ({mentors.length})
+              </div>
+              {loadingMentors ? (
+                <div style={{ textAlign: "center", padding: "10px", color: "#666" }}>
+                  Loading mentors...
+                </div>
+              ) : (
+                mentors.map((mentor) => (
+                  <div className="openDiscussionUser" key={mentor._id}>
+                    <div className="openDiscussionUserContainer">
+                      <img
+                        src={
+                          mentor?.image !== "" &&
+                          mentor?.image !== undefined &&
+                          mentor?.image?.url !== ""
+                            ? mentor?.image?.url
+                            : "/profile.png"
+                        }
+                        alt=""
+                        className="openDiscussionUserImage"
+                      />
 
-                <div>
-                  <div
-                    className="openDiscussionUserName"
-                    onClick={() => {
-                      if (p._id == user_id) {
-                        navigate("/editProfile");
-                      } else {
-                        navigate(`/user/${p._id}`);
+                      <div>
+                        <div
+                          className="openDiscussionUserName"
+                          onClick={() => {
+                            if (mentor._id === user_id) {
+                              navigate("/editProfile");
+                            } else {
+                              navigate(`/user/${mentor._id}`);
+                            }
+                          }}
+                        >
+                          {mentor?.userName}
+                        </div>
+                        <div className="openDiscussionUserrole">{mentor?.role}</div>
+                        {mentor?.mentorExpertise?.length > 0 && (
+                          <div style={{ fontSize: "11px", color: "#666", marginTop: "2px" }}>
+                            {mentor.mentorExpertise.map(e => e.industry).join(", ")}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginLeft: "10px",
+                      }}
+                    >
+                      <div
+                        title={onlineEmails.includes(mentor._id) ? "online" : "away"}
+                        style={{ position: "relative", marginLeft: "10px" }}
+                        className={onlineEmails.includes(mentor._id) ? "online" : "away"}
+                      ></div>
+                      <div style={{ marginLeft: "-16px", fontSize: "12px" }}>
+                        {onlineEmails.includes(mentor._id) ? "online" : "away"}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </>
+          )}
+
+          {/* Show Discussion Team Members Section */}
+          {post?.openDiscussionTeam?.length > 0 && (
+            <>
+              <div style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                color: "#4F55C7",
+                marginTop: mentors.length > 0 ? "15px" : "0",
+                marginBottom: "10px",
+                borderBottom: "1px solid #e0e0e0",
+                paddingBottom: "8px"
+              }}>
+                Discussion Members ({post?.openDiscussionTeam?.length})
+              </div>
+              {post?.openDiscussionTeam?.map((p) => (
+                <div className="openDiscussionUser" key={p._id}>
+                  <div className="openDiscussionUserContainer">
+                    <img
+                      src={
+                        p?.image !== "" &&
+                        p?.image !== undefined &&
+                        p?.image?.url !== ""
+                          ? p?.image?.url
+                          : "/profile.png"
                       }
+                      alt=""
+                      className="openDiscussionUserImage"
+                    />
+
+                    <div>
+                      <div
+                        className="openDiscussionUserName"
+                        onClick={() => {
+                          if (p._id == user_id) {
+                            navigate("/editProfile");
+                          } else {
+                            navigate(`/user/${p._id}`);
+                          }
+                        }}
+                      >
+                        {p?.userName}
+                      </div>
+                      <div className="openDiscussionUserrole">{p?.role}</div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginLeft: "10px",
                     }}
                   >
-                    {p?.userName}
+                    <div
+                      title={onlineEmails.includes(p._id) ? "online" : "away"}
+                      style={{ position: "relative", marginLeft: "10px" }}
+                      className={onlineEmails.includes(p._id) ? "online" : "away"}
+                    ></div>
+                    <div style={{ marginLeft: "-16px", fontSize: "12px" }}>
+                      {onlineEmails.includes(p._id) ? "online" : "away"}
+                    </div>
                   </div>
-                  <div className="openDiscussionUserrole">{p?.role}</div>
                 </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: "10px",
-                }}
-              >
-                <div
-                  title={onlineEmails.includes(p._id) ? "online" : "away"}
-                  style={{ position: "relative", marginLeft: "10px" }}
-                  className={onlineEmails.includes(p._id) ? "online" : "away"}
-                ></div>
-                <div style={{ marginLeft: "-16px", fontSize: "12px" }}>
-                  {onlineEmails.includes(p._id) ? "online" : "away"}
-                </div>
-              </div>
+              ))}
+            </>
+          )}
+
+          {/* Show empty state if no mentors and no discussion team */}
+          {mentors.length === 0 && !post?.openDiscussionTeam?.length && !loadingMentors && (
+            <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+              No members available
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
