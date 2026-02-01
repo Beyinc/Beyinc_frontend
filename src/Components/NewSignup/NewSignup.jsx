@@ -94,23 +94,12 @@ function Signup() {
         {/* Left Image */}
         <div className="hidden md:block w-[40%] relative p-10">
           <img
-            src="/sign-up-bg.jpg"
+            src="/Bloomr-login-signin.jpeg"
             className="w-full h-full rounded-xl object-cover"
             alt="bg"
           />
 
-          <div className="absolute inset-0 flex flex-col justify-center text-white text-left ml-20 mb-36">
-            <p className="font-gentium text-[35px] font-bold leading-[45px]">
-              Welcome to Social <br />
-              Entrepreneurship <br />
-              Platform
-            </p>
-
-            <p className="font-gentium font-bold text-[30px] leading-[40px] mt-2">
-              Increasing the success <br />
-              rate of startup
-            </p>
-          </div>
+       
         </div>
 
         {/* Right Form */}

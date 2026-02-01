@@ -235,16 +235,18 @@ const Navbar = () => {
         {width < 770 && (
           <>
             <div className="menubar-profile-container">
-              <img
-                id="Profile-img"
-                className="menu-profile-img"
-                src={
-                  image !== undefined && image !== ""
-                    ? image.url
-                    : "/profile.png"
-                }
-                alt=""
-              />
+              {image !== undefined && image !== "" ? (
+                <img
+                  id="Profile-img"
+                  className="menu-profile-img"
+                  src={image.url}
+                  alt=""
+                />
+              ) : (
+                <div className="menu-profile-img rounded-full bg-gradient-to-br from-[#4F55C7] to-[#6366F1] flex items-center justify-center text-white font-bold text-lg">
+                  {userName && userName.length > 0 ? userName.charAt(0).toUpperCase() : "?"}
+                </div>
+              )}
               <div className="menu-profile-content">
                 <div
                   style={{ fontWeight: "600", fontSize: "16px", color: "#fff" }}
@@ -420,7 +422,7 @@ const Navbar = () => {
                   />
                 </svg>
               </ListItemIcon>
-              <ListItemText primary="Mentors" />
+              <ListItemText primary="Connect" />
             </ListItem>
 
             <ListItem
@@ -796,16 +798,20 @@ const Navbar = () => {
     >
       <List>
         <div className="menubar-profile-container">
-          <img
-            id="Profile-img"
-            className="menu-profile-img"
-            src={
-              image !== undefined && image !== "" ? image.url : "/profile.png"
-            }
-            alt=""
-            onClick={() => navigate("/editProfile")}
-            style={{ cursor: "pointer" }}
-          />
+          {image !== undefined && image !== "" ? (
+            <img
+              id="Profile-img"
+              className="menu-profile-img"
+              src={image.url}
+              alt=""
+              onClick={() => navigate("/editProfile")}
+              style={{ cursor: "pointer" }}
+            />
+          ) : (
+            <div className="menu-profile-img rounded-full bg-gradient-to-br from-[#4F55C7] to-[#6366F1] flex items-center justify-center text-white font-bold text-lg cursor-pointer" onClick={() => navigate("/editProfile")}>
+              {userName && userName.length > 0 ? userName.charAt(0).toUpperCase() : "?"}
+            </div>
+          )}
           <div className="menu-profile-content">
             <div
               style={{
@@ -923,7 +929,7 @@ const Navbar = () => {
         </ListItem> */}
 
         {/* Conditional rendering of the Calendar button */}
-        {beyincProfile !== "" && (
+        {/* {beyincProfile !== "" && (
           <ListItem
             button
             key="calendar"
@@ -946,10 +952,10 @@ const Navbar = () => {
             </ListItemIcon>
             <ListItemText primary="Services" />
           </ListItem>
-        )}
+        )} */}
 
         {/* User Bookings */}
-        <ListItem
+        {/* <ListItem
           button
           key="userBookings"
           onClick={() => navigate("/dashboard/userBookings")}
@@ -965,10 +971,10 @@ const Navbar = () => {
             />
           </ListItemIcon>
           <ListItemText primary="User Bookings" />
-        </ListItem>
+        </ListItem> */}
 
         {/* Mentor Bookings - Render only if role === "Mentor" */}
-        {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
+        {/* {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
           <ListItem
             button
             key={
@@ -996,7 +1002,7 @@ const Navbar = () => {
               }
             />
           </ListItem>
-        )}
+        )} */}
 
         <ListItem
           button
@@ -1443,7 +1449,7 @@ const Navbar = () => {
                       className={`navbar-title${selectedIcon === "mentors" ? " selected-title" : ""
                         }`}
                     >
-                      Mentors
+                      Connect
                     </div>
                   </div >
                 )
@@ -1811,16 +1817,18 @@ const Navbar = () => {
                           </div>
                         ) : (
                           <>
-                            <img
-                              id="Profile-img"
-                              className="Profile-img"
-                              src={
-                                image !== undefined && image !== ""
-                                  ? image.url
-                                  : "/profile.png"
-                              }
-                              alt=""
-                            />
+                            {image !== undefined && image !== "" ? (
+                              <img
+                                id="Profile-img"
+                                className="Profile-img"
+                                src={image.url}
+                                alt=""
+                              />
+                            ) : (
+                              <div className="Profile-img rounded-full bg-gradient-to-br from-[#4F55C7] to-[#6366F1] flex items-center justify-center text-white font-bold text-2xl">
+                                {userName && userName.length > 0 ? userName.charAt(0).toUpperCase() : "?"}
+                              </div>
+                            )}
                             {verification === "approved" && (
                               <img
                                 src="/verify.png"
@@ -1896,16 +1904,23 @@ const Navbar = () => {
                   <>
                     <div className="icon" onClick={toggleDrawer("right", true)}>
                       <div id="editProfile" style={{ position: "relative" }}>
-                        <img
-                          id="Profile-img"
-                          className="Profile-img"
-                          src={
-                            image !== undefined && image !== ""
-                              ? image.url
-                              : "/profile.png"
-                          }
-                          alt=""
-                        />
+                        {image !== undefined && image !== "" ? (
+                          <img
+                            id="Profile-img"
+                            className="Profile-img"
+                            src={image.url}
+                            alt=""
+                          />
+                        ) : (
+                        <div className="Profile-img bg-[#4E54C6] text-white !font-bold !text-2xl flex items-center justify-center rounded-full">
+  {userName && userName.length > 0
+    ? userName.charAt(0).toUpperCase()
+    : "?"}
+</div>
+
+                        )}
+
+                       
                         {verification === "approved" && (
                           <img
                             src="/verify.png"

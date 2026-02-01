@@ -57,13 +57,21 @@ const SearchBox = () => {
     setFilteredUsers(allUsers);
   }, [allUsers]);
 
+  // useEffect(() => {
+  //   setFilteredUsers(
+  //     allUsers.filter((a) =>
+  //       a.userName.toLowerCase().includes(search.toLowerCase())
+  //     )
+  //   );
+  // }, [search]);
   useEffect(() => {
-    setFilteredUsers(
-      allUsers.filter((a) =>
-        a.userName.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search]);
+  setFilteredUsers(
+    allUsers.filter((a) =>
+      (a?.userName || "").toLowerCase().includes((search || "").toLowerCase())
+    )
+  );
+}, [search, allUsers]);
+
 
   const handleClickOutside = (event) => {
     if (

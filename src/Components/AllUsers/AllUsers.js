@@ -258,7 +258,7 @@ const AllUsers = () => {
 
   // iqra
   // Add this with your other useState declarations
-  const [viewMode, setViewMode] = useState("mentors");
+  const [viewMode, setViewMode] = useState("startups"); // Mentor disabled - upcoming feature
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -462,7 +462,7 @@ const AllUsers = () => {
         </div>
       </Drawer>
 
-      <div className="users-main-box bg-red-500">
+      <div className="users-main-box bg-red-500 overflow-x-hidden">
         {width < 770 && (
           <div className="user-nav-bar">
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -502,16 +502,6 @@ const AllUsers = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex gap-2 mt-4 p-1 bg-gray-100 rounded-full w-fit border border-gray-300">
               <button
-                onClick={() => setViewMode("mentors")}
-                className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
-                  viewMode === "mentors"
-                    ? "bg-white text-[#4f55c7] shadow-sm hover:text-white hover:bg-[#4f55c7]"
-                    : "bg-transparent text-gray-900 hover:text-white hover:bg-[#4f55c7]"
-                }`}
-              >
-                Mentor
-              </button>
-              <button
                 onClick={() => setViewMode("startups")}
                 className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
                   viewMode === "startups"
@@ -520,6 +510,16 @@ const AllUsers = () => {
                 }`}
               >
                 Startup
+              </button>
+              <button
+                disabled
+                title="Coming soon"
+                className="px-6 py-1.5 rounded-full text-sm font-semibold bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-1.5"
+              >
+                Mentor
+                <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-gray-300 text-gray-600">
+                  Upcoming
+                </span>
               </button>
             </div>
           </div>
@@ -676,31 +676,22 @@ const AllUsers = () => {
           {/* {viewMode} */}
           <div className="user-cards-panel w-[95%] lg:w-[80%]">
             <div className="mt-4 userscontainer w-full !flex flex-wrap justify-center lg:justify-start gap-4">
-  {viewMode === "mentors" &&
-    (users.length > 0 ? (
-      users
-        .filter((user) => user.beyincProfile === "Mentor")
-        .map((user) => (
-          <SingleUserDetails
-            key={user.id}
-            user={user}
-            viewMode={viewMode}
-          />
-        ))
-    ) : (
+  {viewMode === "mentors" && (
       <div
-        className="no-users w-full" 
+        className="no-users w-full"
         style={{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
           alignItems: "center",
+          padding: "2rem",
+          textAlign: "center",
         }}
       >
-        <img src="/Search.gif" alt="Loading" />
-        <div>No users available</div>
+        <div className="text-gray-500 font-medium text-lg">Mentor</div>
+        <div className="text-gray-400 text-sm mt-1">Upcoming feature — stay tuned!</div>
       </div>
-    ))}
+    )}
     
   {viewMode === "startups" &&
     (startups.length > 0 ? (

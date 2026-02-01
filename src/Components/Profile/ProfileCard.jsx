@@ -287,7 +287,7 @@ const ProfileCard = ({
         </div>
       </div>
 
-      <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-20 lg:mt-0 pt-16 lg:pt-0">
+      <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-24 lg:mt-4 pt-16 lg:pt-0">
         <div className="font-bold text-xl ml-3">
           {/* {userName && userName[0]?.toUpperCase() + userName?.slice(1)} */}
           {profileDataObj.role === "Startup"
@@ -304,19 +304,20 @@ const ProfileCard = ({
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
         </div>
-        {profileData?.verified === true && (
-          <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
-            Verified by Bloomr
+       {(profileData.role==="Mentor"||profileData.role==="Startup") && (
+          <div className="font-bold text-md text-amber-600" >
+           Not Verified
           </div>
         )}
+  {/*
         {profileData?.verified === false &&
           profileData?.beyincProfile.length === 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               Verification Pending
             </div>
-          )}
+          )} */}
 
-        {profileData.verified === false &&
+        {/* {profileData.verified === false &&
           profileData?.beyincProfile?.length !== 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               <svg
@@ -335,7 +336,7 @@ const ProfileCard = ({
               </svg>
               Will Verify Soon
             </div>
-          )}
+          )} */}
         <div className="flex flex-col gap-4 mt-2 ">
           {!selfProfile && (
             <div className="flex items-center gap-2">
