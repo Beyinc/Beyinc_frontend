@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { reactionTypes } from "../../constants/reactions";
 
+const LONG_PRESS_MS = 400;
+
 export default function ReactionButton({
     postId,
     onReact,
@@ -21,7 +23,10 @@ export default function ReactionButton({
     const timerRef = useRef(null);
     const debounceRef = useRef(null);
     const lastSentReactionRef = useRef(userReaction); 
-    const pendingReactionRef = useRef(null); 
+    const pendingReactionRef = useRef(null);
+    const longPressTimerRef = useRef(null);
+    const longPressTriggeredRef = useRef(false);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         if (!isProcessing) {
@@ -81,36 +86,86 @@ export default function ReactionButton({
         }, 200);
     };
 
+    // Long-press on touch devices to open reaction picker (mobile has no hover)
+    const handleTouchStart = () => {
+        longPressTriggeredRef.current = false;
+        longPressTimerRef.current = setTimeout(() => {
+            longPressTimerRef.current = null;
+            longPressTriggeredRef.current = true;
+            setShowMenu(true);
+        }, LONG_PRESS_MS);
+    };
+
+    const handleTouchEnd = () => {
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
+    };
+
+    const handleTouchMove = () => {
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
+    };
+
+    const handleMainButtonClick = () => {
+        if (!isAuthenticated) {
+            navigate("/signup");
+            return;
+        }
+        // If menu was just opened by long-press, don't toggle like (user wanted picker)
+        if (longPressTriggeredRef.current) {
+            longPressTriggeredRef.current = false;
+            return;
+        }
+        handleSelect({ type: selected ? selected : "like" });
+    };
+
+    // Close menu when tapping outside (mobile: menu opened by long-press has no hover to close)
+    useEffect(() => {
+        if (!showMenu) return;
+        const handlePointerDown = (e) => {
+            if (containerRef.current && !containerRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
+        };
+        document.addEventListener("pointerdown", handlePointerDown);
+        return () => document.removeEventListener("pointerdown", handlePointerDown);
+    }, [showMenu]);
+
     useEffect(() => {
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
             if (timerRef.current) clearTimeout(timerRef.current);
+            if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
         };
     }, []);
 
     const selectedReaction = reactionTypes.find((r) => r.type === selected);
 
     return (
-        <div className="relative inline-block select-none">
-            {/* Main reaction button */}
+        <div ref={containerRef} className="relative flex select-none shrink-0">
+            {/* Main reaction button - tap to like, long-press to open picker on mobile */}
             <button
-                onClick={() => {
-                    if (!isAuthenticated) {
-                        navigate("/signup");
-                        return;
-                    }
-                    handleSelect({ type: selected ? selected : "like" });
-                }}
+                type="button"
+                onClick={handleMainButtonClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onTouchMove={handleTouchMove}
+                onTouchCancel={handleTouchEnd}
                 disabled={isProcessing}
-                className={`flex items-center gap-1 px-5 py-3 mr-1 rounded-md bg-white text-black border hover:bg-[#f5f5f5] text-base transition-all ${
+                style={{ touchAction: "manipulation" }}
+                className={`flex items-center justify-start gap-1 px-5 py-3 mr-0 rounded-md bg-white text-black border hover:bg-[#f5f5f5] text-base transition-all min-h-[44px] min-w-[44px] shrink-0 ${
                     isProcessing ? "opacity-60 cursor-wait" : ""
                 }`}
             >
                 {selectedReaction ? (
                     <div
-                        className={`${selectedReaction.textColor} flex items-center justify-center gap-1`}
+                        className={`${selectedReaction.textColor} flex items-center justify-start gap-1`}
                     >
                         <Icon
                             icon={selectedReaction.icon}
@@ -121,7 +176,7 @@ export default function ReactionButton({
                         </span>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-start gap-1">
                         <Icon icon="mdi:thumb-up" />
                         <span>Like</span>
                     </div>
@@ -139,13 +194,15 @@ export default function ReactionButton({
                         {reactionTypes.map((reaction) => (
                             <button
                                 key={reaction.type}
+                                type="button"
                                 onClick={() => handleSelect(reaction)}
-                                className={`flex items-center justify-center sm:size-12 rounded-lg ${reaction.bg} ${reaction.hover} ${reaction.textColor} transition ring-1 ${reaction.ring}`}
+                                style={{ touchAction: "manipulation" }}
+                                className={`flex items-center justify-center min-w-[44px] min-h-[44px] sm:size-12 rounded-lg ${reaction.bg} ${reaction.hover} ${reaction.textColor} transition ring-1 ${reaction.ring}`}
                                 title={reaction.label}
                             >
                                 <Icon
                                     icon={reaction.icon}
-                                    className="  sm:size-4"
+                                    className="size-5 sm:size-4"
                                 />
                             </button>
                         ))}

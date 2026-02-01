@@ -207,18 +207,19 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
-              <div className="flex gap-2 mb-6 p-1 shadow-[0_2px_8px_rgba(0,0,0,0.1)] bg-gray-100 rounded-full w-fit border border-gray-400">
+              <div className="flex flex-row justify-center items-center gap-2.5 mb-6 p-2.5 rounded-[20px] w-fit max-w-full bg-white border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
                 {user.beyincProfile === "Mentor" &&
                   viewMode === "mentors" &&
                   ["Expertise", "Industries"].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
+                      className={`px-5 py-2.5 rounded-[20px] text-sm font-semibold transition-all ${
                         activeTab === tab
-                          ? "bg-white text-[#4f55c7] shadow-sm"
-                          : "bg-transparent text-black "
+                          ? "text-[#4f55c7] shadow-sm"
+                          : "bg-transparent text-gray-800 hover:bg-gray-100"
                       }`}
+                      style={activeTab === tab ? { background: '#E3E5FD' } : {}}
                     >
                       {tab}
                     </button>
@@ -229,11 +230,12 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                     <button
                       key={tab}
                       onClick={() => setStartupActiveTab(tab)}
-                      className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
+                      className={`px-5 py-2.5 rounded-[20px] text-sm font-semibold transition-all ${
                         startupActiveTab === tab
-                          ? "bg-white text-[#4f55c7] shadow-sm"
-                          : "bg-transparent text-black "
+                          ? "text-[#4f55c7] shadow-sm"
+                          : "bg-transparent text-gray-800 hover:bg-gray-100"
                       }`}
+                      style={startupActiveTab === tab ? { background: '#E3E5FD' } : {}}
                     >
                       {tab}
                     </button>
@@ -486,9 +488,9 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               )}
 
                 {user.role === "Startup" && (
-                   <div className="max-h-44 overflow-y-auto scrollbar-hide rounded-lg p-4 ml-[-200px]">
+                   <div className="max-h-44 overflow-y-auto overflow-x-hidden scrollbar-hide rounded-lg p-4 min-w-0 w-full">
                     <h4 className="text-sm font-bold text-gray-800 mb-2">About</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm text-gray-600 leading-relaxed break-words whitespace-normal">
                       {user.about || "No bio available."}
                     </p>
                   </div>

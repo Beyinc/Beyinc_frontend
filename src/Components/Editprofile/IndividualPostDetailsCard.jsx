@@ -49,6 +49,7 @@ const IndividualPostDetailsCard = () => {
   }, [id]);
 
   const { width } = useWindowDimensions();
+  const isMobile = width < 1024;
   const navigate = useNavigate();
   const { email, role, userName, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
@@ -98,9 +99,15 @@ const IndividualPostDetailsCard = () => {
 
   const userDetailsRef = useRef(null);
   const rightSectionRef = useRef(null);
+  const [membersStackFirst, setMembersStackFirst] = useState(false);
 
   const scrollToRightSection = () => {
+    setMembersStackFirst(true);
     rightSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const collapseRightSection = () => {
+    setMembersStackFirst(false);
   };
 
   const handleClickOutside = (event) => {
@@ -242,254 +249,72 @@ const IndividualPostDetailsCard = () => {
     }));
   };
 
-  // --- FIX HERE: Added "post &&" to prevent null pointer errors ---
-  const RightSectionContent = post && (
-    <div className="wholePostWrapper h-auto ">
-      <div style={{ flex: "1", margin: "10px" }}>
-        <div className="individualPostTotalDetailsRight gap-4">
-          <img
-            onClick={() => {
-              navigate(`/user/${post?.createdBy?._id}`);
-            }}
-            src={
-              post?.createdBy?.image !== "" &&
-              post?.createdBy?.image !== undefined &&
-              post?.createdBy?.image?.url !== ""
-                ? post?.createdBy?.image?.url
-                : "/profile.png"
-            }
-            alt=""
-            className="size-8 rounded-full"
-          />
-
-          <div className="IndividualPostDetailsContainer">
-            <div
-              className="postCardUserName"
-              onClick={() => {
-                navigate(`/user/${post?.createdBy?._id}`);
-              }}
-            >
-              {post?.createdBy?.userName[0]?.toUpperCase() +
-                post?.createdBy?.userName?.slice(1)}
-            </div>
-          </div>
-          {post?.createdBy._id !== user_id && post.visibility === "private" && (
-            <div className="openDiscussion-Buttons">
-              {post?.openDiscussionRequests
-                .map((o) => o._id)
-                .includes(user_id) ? (
-                <button>Discussion Request Pending</button>
-              ) : post?.openDiscussionTeam
-                  .map((o) => o._id)
-                  .includes(user_id) ? (
-                <button>Joined</button>
-              ) : (
-                <button onClick={addingRequestDiscussion}>
-                  Join for discussion
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-        {post?.openDiscussion == false &&
-          post?.openDiscussionTeam.length !== 0 && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "100px",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "5px",
-              }}
-            >
-              <div>
-                Members
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {post?.openDiscussionTeam?.length}
-                </div>
-              </div>
-              <div>
-                Online
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {
-                    post?.openDiscussionTeam
-                      ?.map((p) => p._id)
-                      ?.filter((op) => onlineEmails?.includes(op)).length
-                  }
-                </div>
-              </div>
-            </div>
-          )}
-
-        <div className="h-[1px] bg-gray-600 my-4 w-full"></div>
-        <div className="text-[12px] w-fit">
-          <div style={{ marginBottom: "10px" }}>
-            <b>Updated at :</b> {formatedDate(post?.updatedAt)}
-          </div>
-          <div style={{ marginBottom: "10px" }}>
-            <b>Post type : </b> <span> {post?.visibility}</span>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "5px",
-            }}
-          >
-            <b style={{ padding: "5px 0px" }}>Tags:</b>
-            <div className="tagsContainer">
-              {post?.tags?.map((t) => (
-                <div
-                  style={{
-                    background: "var( --tag-bg-right)",
-                    padding: "5px 10px",
-                    borderRadius: "20px",
-                  }}
-                  className="indiTag"
-                  onClick={() => navigate(`/user/${t._id}`)}
-                >
-                  {/* {`@${t?.userName}`} */}
-                  {t?.userName}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {post?.openDiscussion !== true && (
-            <div
-              style={{
-                marginBottom: "10px",
-                whiteSpace: "pre-wrap",
-                textAlign: "justify",
-              }}
-            >
-              <b>Group Discussion :</b> {post?.groupDiscussion}
-            </div>
-          )}
-
-          {post?.pitchId && (
-            <div style={{ marginBottom: "10px" }}>
-              <b>Pitch :</b> {post?.pitchId?.title}
-              {(post?.openDiscussion === true ||
-                post?.openDiscussionTeam
-                  .map((o) => o._id)
-                  .includes(user_id) ||
-                post?.createdBy._id === user_id ||
-                role === "Admin") && (
-                <Link to={`/livePitches/${post?.pitchId?._id}`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.4em"
-                    height="1.4em"
-                    viewBox="0 0 24 24"
-                    style={{ marginLeft: "10px", position: "absolute" }}
-                  >
-                    <title>View Pitch</title>
-                    <path
-                      fill="var( --button-background)"
-                      d="M17 18c.6 0 1 .4 1 1s-.4 1-1 1s-1-.4-1-1s.4-1 1-1m0-3c-2.7 0-5.1 1.7-6 4c.9 2.3 3.3 4 6 4s5.1-1.7 6-4c-.9-2.3-3.3-4-6-4m0 6.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5m-7.9-1.8l-.3-.7H4V8h16v5.6c.7.3 1.4.6 2 1.1V8c0-.5-.2-1-.6-1.4S20.6 6 20 6h-4V4c0-.6-.2-1-.6-1.4S14.6 2 14 2h-4c-.6 0-1 .2-1.4.6S8 3.4 8 4v2H4c-.6 0-1 .2-1.4.6S2 7.5 2 8v11c0 .5.2 1 .6 1.4s.8.6 1.4.6h5.8c-.3-.4-.5-.8-.7-1.3M10 4h4v2h-4z"
-                    />
-                  </svg>
-                </Link>
-              )}
-            </div>
-          )}
-
-          {post?.link && (
-            <div style={{ marginBottom: "10px" }}>
-              <b>Link :</b>{" "}
-              <a href={post?.link} target="_blank">
-                Link
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
-      {user_id && (
-        <LiveChat
-          post={post}
-          onlineEmails={onlineEmails}
-          userName={userName}
-          user_id={user_id}
-          isEnabled={
-            post?.visibility === "public"
-              ? true
-              : post?.openDiscussionTeam?.find((u) => u._id === user_id) ||
-                post?.createdBy?._id === user_id
-          }
-        />
-      )}
-    </div>
-  );
+  const topButtonClass = "flex items-center justify-center bg-[#ECE9FC] text-[#4F55C7] p-2 rounded-full shadow-md hover:bg-[#e0dbfa] transition-all";
+  const topIconClass = "w-5 h-5";
 
   return (
-    <div
-      id="individual-post-page"
-      className="post-details-main-container sm:p-4 p-2"
-    >
-      <button
-        onClick={() => navigate("/posts")}
-        className="
-          group
-          flex items-center gap-2
-          px-4 py-2
-          rounded-lg
-          text-sm font-medium
-          text-gray-600 dark:text-gray-300
-          bg-gray-300 dark:bg-zinc-700
-          hover:bg-gray-100 dark:hover:bg-zinc-800
-          hover:text-gray-900 dark:hover:text-white
-          transition-colors duration-200
-        "
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-4 h-4 transition-transform group-hover:-translate-x-1"
+    <div id="individual-post-page" className="post-details-main-container sm:p-4 pt-1 px-2 pb-2 sm:pt-4">
+      {/* Top row: Back + (mobile) Down/Up arrow — same distance from top */}
+      <div className="flex items-center justify-between w-full mb-2 mt-0">
+        <button
+          onClick={() => navigate("/posts")}
+          className={topButtonClass}
+          title="Back to posts"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-          />
-        </svg>
-      </button>
-      {post !== null && (
-        <div className="post-details-container">
-          <div className="post-details-content-left grow">
-            {/* Mobile View Info Button */}
-            <div className="lg:hidden flex justify-center w-full mb-4 mt-2">
-              <button
-                onClick={() => setInfoOpen(true)}
-                className="
-                  flex items-center justify-center gap-2
-                  bg-[#ECE9FC] text-[#4F55C7] 
-                  px-6 py-2 rounded-full shadow-md 
-                  hover:bg-[#e0dbfa] transition-all
-                  font-semibold text-sm
-                "
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2.5}
+            stroke="currentColor"
+            className={topIconClass}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
+        {/* Mobile: Down arrow (expand) / Up arrow (collapse) */}
+        <div className="lg:hidden">
+          {!membersStackFirst ? (
+            <button
+              onClick={scrollToRightSection}
+              className={topButtonClass}
+              title="Scroll to Discussion"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className={topIconClass}
               >
-                View Discussion & Info
-              </button>
-            </div>
-
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+          ) : (
+            <button
+              onClick={collapseRightSection}
+              className={topButtonClass}
+              title="Collapse"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className={topIconClass}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+              </svg>
+            </button>
+          )}
+        </div>
+        <div className="hidden lg:block w-10" aria-hidden />
+      </div>
+      {post !== null && (
+        <div className="post-details-container  ">
+          <div className="post-details-content-left grow">
             <div style={{ position: "relative" }}>
               <div
                 className="PostHeaderContainer"
@@ -765,31 +590,219 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-          
-          <Drawer
-            anchor="bottom"
-            open={infoOpen}
-            onClose={() => setInfoOpen(false)}
-            PaperProps={{
-              style: {
-                maxHeight: "85vh",
-                borderTopLeftRadius: "20px",
-                borderTopRightRadius: "20px",
-                padding: "10px",
-              },
-            }}
-          >
-            <div className="flex justify-center mb-2">
-              <div className="w-12 h-1.5 bg-gray-300 rounded-full"></div>
-            </div>
-            {RightSectionContent}
-          </Drawer>
-
           <div
             ref={rightSectionRef}
-            className="hidden lg:block post-details-content-right grow min-w-[450px] max-w-[600px]"
+            className={`post-details-content-right grow min-w-[450px] max-w-[600px] flex flex-col ${isMobile && !membersStackFirst ? "post-details-right-hidden-mobile" : ""} ${isMobile && membersStackFirst ? "post-details-right-stack-above-mobile" : ""}`}
           >
-            {RightSectionContent}
+            {membersStackFirst && user_id && (
+            <LiveChat
+              post={post}
+              onlineEmails={onlineEmails}
+              userName={userName}
+              user_id={user_id}
+              isEnabled={post?.visibility==='public'?true:post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
+            />
+            )}
+            <div className="wholePostWrapper h-auto ">
+              <div style={{ flex: "1", margin: "10px" }}>
+                <div className="individualPostTotalDetailsRight gap-4">
+                  <img
+                    onClick={() => {
+                      navigate(`/user/${post?.createdBy?._id}`);
+                    }}
+                    src={
+                      post?.createdBy?.image !== "" &&
+                      post?.createdBy?.image !== undefined &&
+                      post?.createdBy?.image?.url !== ""
+                        ? post?.createdBy?.image?.url
+                        : "/profile.png"
+                    }
+                    alt=""
+                    className="size-8 rounded-full"
+                  />
+
+                  <div className="IndividualPostDetailsContainer">
+                    <div
+                      className="postCardUserName"
+                      onClick={() => {
+                        navigate(`/user/${post?.createdBy?._id}`);
+                      }}
+                    >
+                      {post?.createdBy?.userName[0]?.toUpperCase() +
+                        post?.createdBy?.userName?.slice(1)}
+                    </div>
+                  </div>
+                  {(post?.createdBy._id !== user_id) &&
+                    post.visibility === "private" && (
+                      <div className="openDiscussion-Buttons">
+                        {post?.openDiscussionRequests
+                          .map((o) => o._id)
+                          .includes(user_id) ? (
+                          <button>Discussion Request Pending</button>
+                        ) : post?.openDiscussionTeam
+                            .map((o) => o._id)
+                            .includes(user_id) ? (
+                          <button>Joined</button>
+                        ) : (
+                          <button onClick={addingRequestDiscussion}>
+                            Join for discussion
+                          </button>
+                        )}
+                      </div>
+                    )}
+                </div>
+                {post?.openDiscussion == false &&
+                  post?.openDiscussionTeam.length !== 0 && (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "100px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: "5px",
+                      }}
+                    >
+                      <div>
+                        Members
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {post?.openDiscussionTeam?.length}
+                        </div>
+                      </div>
+                      <div>
+                        Online
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {
+                            post?.openDiscussionTeam
+                              ?.map((p) => p._id)
+                              ?.filter((op) => onlineEmails?.includes(op))
+                              .length
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                <div className="h-[1px] bg-gray-600 my-4 w-full"></div>
+                <div className="text-[12px] w-fit">
+                  <div style={{ marginBottom: "10px" }}>
+                    <b>Updated at :</b> {formatedDate(post?.updatedAt)}
+                  </div>
+                  <div style={{ marginBottom: "10px" }}>
+                    <b>Post type : </b> <span> {post?.visibility}</span>
+                  </div>
+
+                  {/* <div style={{ marginBottom: "10px" }}>
+                    <b>Tags :</b>{" "}
+                    <span 
+                    
+                      style={{
+                        background: "var( --tag-bg-right)",
+                        padding: "5px 10px",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      {post?.tags?.map((p) => p.userName)?.join(", ")}
+                    </span>
+                  </div> */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "5px",
+                    }}
+                  >
+                    <b style={{ padding: "5px 0px" }}>Tags:</b>
+                    <div className="tagsContainer">
+                      {post?.tags?.map((t) => (
+                        <div
+                          style={{
+                            background: "var( --tag-bg-right)",
+                            padding: "5px 10px",
+                            borderRadius: "20px",
+                          }}
+                          className="indiTag"
+                          onClick={() => navigate(`/user/${t._id}`)}
+                        >
+                          {/* {`@${t?.userName}`} */}
+                          {t?.userName}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {post?.openDiscussion !== true && (
+                    <div
+                      style={{
+                        marginBottom: "10px",
+                        whiteSpace: "pre-wrap",
+                        textAlign: "justify",
+                      }}
+                    >
+                      <b>Group Discussion :</b> {post?.groupDiscussion}
+                    </div>
+                  )}
+
+                  {post?.pitchId && (
+                    <div style={{ marginBottom: "10px" }}>
+                      <b>Pitch :</b> {post?.pitchId?.title}
+                      {(post?.openDiscussion === true ||
+                        post?.openDiscussionTeam
+                          .map((o) => o._id)
+                          .includes(user_id) ||
+                        post?.createdBy._id === user_id ||
+                        role === "Admin") && (
+                        <Link to={`/livePitches/${post?.pitchId?._id}`}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1.4em"
+                            height="1.4em"
+                            viewBox="0 0 24 24"
+                            style={{ marginLeft: "10px", position: "absolute" }}
+                          >
+                            <title>View Pitch</title>
+                            <path
+                              fill="var( --button-background)"
+                              d="M17 18c.6 0 1 .4 1 1s-.4 1-1 1s-1-.4-1-1s.4-1 1-1m0-3c-2.7 0-5.1 1.7-6 4c.9 2.3 3.3 4 6 4s5.1-1.7 6-4c-.9-2.3-3.3-4-6-4m0 6.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5m-7.9-1.8l-.3-.7H4V8h16v5.6c.7.3 1.4.6 2 1.1V8c0-.5-.2-1-.6-1.4S20.6 6 20 6h-4V4c0-.6-.2-1-.6-1.4S14.6 2 14 2h-4c-.6 0-1 .2-1.4.6S8 3.4 8 4v2H4c-.6 0-1 .2-1.4.6S2 7.5 2 8v11c0 .5.2 1 .6 1.4s.8.6 1.4.6h5.8c-.3-.4-.5-.8-.7-1.3M10 4h4v2h-4z"
+                            />
+                          </svg>
+                        </Link>
+                      )}
+                    </div>
+                  )}
+
+                  {post?.link && (
+                    <div style={{ marginBottom: "10px" }}>
+                      <b>Link :</b>{" "}
+                      <a href={post?.link} target="_blank">
+                        Link
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            {!membersStackFirst && !isMobile && user_id && (
+            <LiveChat
+              post={post}
+              onlineEmails={onlineEmails}
+              userName={userName}
+              user_id={user_id}
+              isEnabled={post?.visibility==='public'?true:post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
+            />
+            )}
           </div>
         </div>
       )}

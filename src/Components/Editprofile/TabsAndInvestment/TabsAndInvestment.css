@@ -20,22 +20,24 @@
 }
 
 .Ttab {
-  padding: 5px 10px;
-  border-radius: 12px;
+  padding: 10px 20px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
   transition: background-color 0.3s, color 0.3s;
+  color: #4b5563;
 }
 
 .Ttab.Tactive {
-  background-color: #4E54C6;
-  color: #fff;
-  border-radius: 30px;
+  background-color: #E3E5FD;
+  color: #4f55c7;
+  border-radius: 20px;
 }
 
 .Ttab:not(.Tactive):hover {
-  background-color: #e0e0e0;
-  border-radius: 30px;
+  background-color: #f3f4f6;
+  border-radius: 20px;
 }
 
 .content-container {
