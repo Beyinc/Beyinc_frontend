@@ -71,13 +71,14 @@ const TabsAndInvestment = ({
   return (
     <div className="tabs-and-investment-container mt-0 bg-white">
       <div>
-        <div className="inline-flex items-center bg-gray-100 rounded-full p-1.5 gap-2 shadow-md">
+        <div className="inline-flex items-center justify-center bg-white rounded-[20px] p-2.5 gap-2.5 border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
           <div
-            className={`px-5 py-2 rounded-full text-sm font-medium cursor-pointer transition-all ${
-  activeTab === "Industries" 
-    ? "bg-[#4F55C7] text-white shadow-sm"  // Active: Dark Blue + White Text
-    : "text-gray-600 hover:text-gray-900"   // Inactive: Grey Text
-}`}
+            className={`px-5 py-2.5 rounded-[20px] text-sm font-medium cursor-pointer transition-all ${
+              activeTab === "Industries"
+                ? "text-[#4f55c7] shadow-sm"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+            style={activeTab === "Industries" ? { background: "#E3E5FD" } : {}}
             onClick={() => handleTabClick("Industries")}
           >
             Industries
