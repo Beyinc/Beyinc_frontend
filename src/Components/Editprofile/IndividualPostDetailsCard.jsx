@@ -48,6 +48,7 @@ const IndividualPostDetailsCard = () => {
   }, [id]);
 
   const { width } = useWindowDimensions();
+  const isMobile = width < 1024;
   const navigate = useNavigate();
   const { email, role, userName, verification, user_id } = useSelector(
     (store) => store.auth.loginDetails
@@ -97,10 +98,16 @@ const IndividualPostDetailsCard = () => {
 
   const userDetailsRef = useRef(null);
   const rightSectionRef = useRef(null);
+  const [membersStackFirst, setMembersStackFirst] = useState(false);
 
   const scrollToRightSection = () => {
-  rightSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-};
+    setMembersStackFirst(true);
+    rightSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const collapseRightSection = () => {
+    setMembersStackFirst(false);
+  };
 
   const handleClickOutside = (event) => {
     if (
@@ -241,62 +248,72 @@ const IndividualPostDetailsCard = () => {
       }));
   };
 
-  return (
+  const topButtonClass = "flex items-center justify-center bg-[#ECE9FC] text-[#4F55C7] p-2 rounded-full shadow-md hover:bg-[#e0dbfa] transition-all";
+  const topIconClass = "w-5 h-5";
 
-    <div id="individual-post-page" className="post-details-main-container sm:p-4 p-2">
-      <button
-        onClick={() => navigate("/posts")}
-        className="
-          group
-          flex items-center gap-2
-          px-4 py-2
-          rounded-lg
-          text-sm font-medium
-          text-gray-600 dark:text-gray-300
-          bg-gray-300 dark:bg-zinc-700
-          hover:bg-gray-100 dark:hover:bg-zinc-800
-          hover:text-gray-900 dark:hover:text-white
-          transition-colors duration-200
-        "
-      >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          strokeWidth={2} 
-          stroke="currentColor" 
-          className="w-4 h-4 transition-transform group-hover:-translate-x-1"
+  return (
+    <div id="individual-post-page" className="post-details-main-container sm:p-4 pt-1 px-2 pb-2 sm:pt-4">
+      {/* Top row: Back + (mobile) Down/Up arrow — same distance from top */}
+      <div className="flex items-center justify-between w-full mb-2 mt-0">
+        <button
+          onClick={() => navigate("/posts")}
+          className={topButtonClass}
+          title="Back to posts"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2.5}
+            stroke="currentColor"
+            className={topIconClass}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
+        {/* Mobile: Down arrow (expand) / Up arrow (collapse) */}
+        <div className="lg:hidden">
+          {!membersStackFirst ? (
+            <button
+              onClick={scrollToRightSection}
+              className={topButtonClass}
+              title="Scroll to Discussion"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className={topIconClass}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+          ) : (
+            <button
+              onClick={collapseRightSection}
+              className={topButtonClass}
+              title="Collapse"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className={topIconClass}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+              </svg>
+            </button>
+          )}
+        </div>
+        <div className="hidden lg:block w-10" aria-hidden />
+      </div>
       {post !== null && (
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">
-            {/* Mobile Scroll Down Button (Icon Only) */}
-            <div className="lg:hidden flex justify-center w-full mb-4 mt-2">
-              <button
-                onClick={scrollToRightSection}
-                className="
-                  flex items-center justify-center 
-                  bg-[#ECE9FC] text-[#4F55C7] 
-                  p-3 rounded-full shadow-md 
-                  hover:bg-[#e0dbfa] transition-all
-                "
-                title="Scroll to Discussion"
-              >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  strokeWidth={2.5} 
-                  stroke="currentColor" 
-                  className="w-6 h-6"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </button>
-            </div>
             <div style={{ position: "relative" }}>
               <div className="PostHeaderContainer" style={{ flexDirection: "column" }} >
   {/* ROW 1: User Info (Left) and Menu (Right) */}
@@ -627,7 +644,19 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-          <div ref={rightSectionRef} className="post-details-content-right grow min-w-[450px] max-w-[600px]">
+          <div
+            ref={rightSectionRef}
+            className={`post-details-content-right grow min-w-[450px] max-w-[600px] flex flex-col ${isMobile && !membersStackFirst ? "post-details-right-hidden-mobile" : ""} ${isMobile && membersStackFirst ? "post-details-right-stack-above-mobile" : ""}`}
+          >
+            {membersStackFirst && user_id && (
+            <LiveChat
+              post={post}
+              onlineEmails={onlineEmails}
+              userName={userName}
+              user_id={user_id}
+              isEnabled={post?.visibility==='public'?true:post?.openDiscussionTeam?.find(u=>u._id===user_id)||post?.createdBy?._id===user_id} 
+            />
+            )}
             <div className="wholePostWrapper h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">
@@ -819,7 +848,7 @@ const IndividualPostDetailsCard = () => {
                 </div>
               </div>
             </div>
-            {user_id && (
+            {!membersStackFirst && !isMobile && user_id && (
             <LiveChat
               post={post}
               onlineEmails={onlineEmails}

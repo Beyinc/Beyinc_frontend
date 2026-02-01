@@ -146,7 +146,7 @@ export default function ReactionButton({
     const selectedReaction = reactionTypes.find((r) => r.type === selected);
 
     return (
-        <div ref={containerRef} className="relative inline-block select-none">
+        <div ref={containerRef} className="relative flex select-none shrink-0">
             {/* Main reaction button - tap to like, long-press to open picker on mobile */}
             <button
                 type="button"
@@ -159,13 +159,13 @@ export default function ReactionButton({
                 onTouchCancel={handleTouchEnd}
                 disabled={isProcessing}
                 style={{ touchAction: "manipulation" }}
-                className={`flex items-center gap-1 px-5 py-3 mr-1 rounded-md bg-white text-black border hover:bg-[#f5f5f5] text-base transition-all min-h-[44px] min-w-[44px] ${
+                className={`flex items-center justify-start gap-1 px-5 py-3 mr-0 rounded-md bg-white text-black border hover:bg-[#f5f5f5] text-base transition-all min-h-[44px] min-w-[44px] shrink-0 ${
                     isProcessing ? "opacity-60 cursor-wait" : ""
                 }`}
             >
                 {selectedReaction ? (
                     <div
-                        className={`${selectedReaction.textColor} flex items-center justify-center gap-1`}
+                        className={`${selectedReaction.textColor} flex items-center justify-start gap-1`}
                     >
                         <Icon
                             icon={selectedReaction.icon}
@@ -176,7 +176,7 @@ export default function ReactionButton({
                         </span>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-start gap-1">
                         <Icon icon="mdi:thumb-up" />
                         <span>Like</span>
                     </div>

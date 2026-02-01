@@ -163,20 +163,28 @@
 .actionsHolder {
   display: flex;
   align-items: center;
-  gap: 40px;
-  /* padding-top: 10px; */
-  justify-content: space-between;
+  gap: 12px;
+  justify-content: flex-start;
+  width: 100%;
 }
-.actionsHolder-leftContent{
+.actionsHolder-leftContent {
   display: flex;
   align-items: center;
-  /* padding-top: 10px; */
+  justify-content: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-right: auto;
+  flex: 0 0 auto;
+}
+.actionsHolder .join-button-container {
+  flex: 0 0 auto;
 }
 .likeActionHolder {
   display: flex;
   align-items: center;
-   padding: 10px 15px;
+  padding: 8px 12px;
   gap: 5px;
+  flex-shrink: 0;
 }
 .likeActionHolder:hover {
  background-color: #f5f5f5;
