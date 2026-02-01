@@ -422,7 +422,7 @@ const Navbar = () => {
                   />
                 </svg>
               </ListItemIcon>
-              <ListItemText primary="Mentors" />
+              <ListItemText primary="Connect" />
             </ListItem>
 
             <ListItem
@@ -929,7 +929,7 @@ const Navbar = () => {
         </ListItem> */}
 
         {/* Conditional rendering of the Calendar button */}
-        {beyincProfile !== "" && (
+        {/* {beyincProfile !== "" && (
           <ListItem
             button
             key="calendar"
@@ -952,10 +952,10 @@ const Navbar = () => {
             </ListItemIcon>
             <ListItemText primary="Services" />
           </ListItem>
-        )}
+        )} */}
 
         {/* User Bookings */}
-        <ListItem
+        {/* <ListItem
           button
           key="userBookings"
           onClick={() => navigate("/dashboard/userBookings")}
@@ -971,10 +971,10 @@ const Navbar = () => {
             />
           </ListItemIcon>
           <ListItemText primary="User Bookings" />
-        </ListItem>
+        </ListItem> */}
 
         {/* Mentor Bookings - Render only if role === "Mentor" */}
-        {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
+        {/* {(beyincProfile === "Mentor" || beyincProfile === "Co-Founder") && (
           <ListItem
             button
             key={
@@ -1002,7 +1002,7 @@ const Navbar = () => {
               }
             />
           </ListItem>
-        )}
+        )} */}
 
         <ListItem
           button
@@ -1449,7 +1449,7 @@ const Navbar = () => {
                       className={`navbar-title${selectedIcon === "mentors" ? " selected-title" : ""
                         }`}
                     >
-                      Mentors
+                      Connect
                     </div>
                   </div >
                 )
