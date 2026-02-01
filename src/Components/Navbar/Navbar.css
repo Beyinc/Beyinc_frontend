@@ -67,6 +67,16 @@
   cursor: pointer;
   padding: 4px;
   margin-left: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: white; /* Letter color */
+  background: linear-gradient(to bottom right, #4F55C7, #6366F1); /* Gradient background */
+  width: 35px; /* Avatar size */
+  height: 35px;
+  text-transform: uppercase; /* Capital letter */
 }
 .Profile-img:hover {
   background: var(--navbar-profile-hover);

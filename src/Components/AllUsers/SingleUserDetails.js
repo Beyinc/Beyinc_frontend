@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
@@ -15,10 +15,23 @@ import {
   FaTags,
 } from "react-icons/fa";
 import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
+import { followerController, socket_io } from "../../Utils";
+import { io } from "socket.io-client";
 
 const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
-  const { email, user_id } = useSelector((state) => state.auth.loginDetails);
+  const { email, user_id, userName: loggedInUserName, image: loggedInImage, role: loggedInRole } = useSelector((state) => state.auth.loginDetails);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io(socket_io);
+  }, []);
+
+  const [isFollowing, setIsFollowing] = useState(false);
+  useEffect(() => {
+    setIsFollowing(!!user?.followers?.some((f) => f._id === user_id));
+  }, [user, user_id]);
 
   // --- Logic State ---
   const [averagereview, setAverageReview] = useState(0);
@@ -152,20 +165,49 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               />
             </div>
 
-            {(user.role === "Startup"|| user.beyincProfile==="Mentor") && (
-              <RecommendedConnectButton
-                id={user._id}
-                viewMode={viewMode}
-                handleFollower={() => {
-                  setRecommendedUserTrigger(!recommendedUserTrigger);
-                }}
-              />
+            {(user.role === "Startup" || user.beyincProfile === "Mentor") && (
+              <div className="flex flex-col items-center gap-2 w-full">
+                {user._id !== user_id && (
+                  <button
+                    className={`connect-btn w-[100px] h-[30px] text-sm`}
+                    onClick={async (e) => {
+                      e.target.disabled = true;
+                      try {
+                        await followerController({
+                          dispatch,
+                          e,
+                          followingToId: user._id,
+                          recommendedUserTrigger,
+                          setRecommendedUserTrigger,
+                          socket,
+                          user: { id: user_id, userName: loggedInUserName, image: loggedInImage, role: loggedInRole },
+                        });
+                        setIsFollowing((prev) => !prev);
+                      } catch (err) {
+                        // followerController handles errors via toast
+                      } finally {
+                        e.target.disabled = false;
+                      }
+                    }}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                )}
+
+                <RecommendedConnectButton
+                  id={user._id}
+                  viewMode={viewMode}
+                  handleFollower={() => {
+                    setRecommendedUserTrigger(!recommendedUserTrigger);
+                  }}
+                />
+              </div>
             )}
           </div>
           {/* 2. Middle Content Section */}
           <div className="flex-1">
             {/* Header: Name & Verify */}
-            <div className="flex items-center justify-start gap-3 mb-2">
+            <div className="flex items-center justify-start mb-2">
               <h3
                 className="text-xl font-bold text-gray-900 cursor-pointer hover:text-[#4f55c7] transition-colors"
                 onClick={openUser}
