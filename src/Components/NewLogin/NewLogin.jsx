@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
@@ -57,6 +55,12 @@ function NewLogin() {
     if (name === "password") {
       setInputs((prev) => ({ ...prev, isPasswordValid: true }));
     }
+    if (name === "mobile") {
+      setInputs((prev) => ({
+        ...prev,
+        isMobileValid: /^[0-9]{10}$/.test(value),
+      }));
+    }
   };
 
   const handleLoginTypeChange = (type) => {
@@ -80,6 +84,95 @@ function NewLogin() {
     setOtpVisible(false);
   };
 
+  const sendMobileOtpF = async (e) => {
+    e.preventDefault();
+    e.target.disabled = true;
+    await ApiServices.sendMobileOtp({
+      phone: `+91${mobile}`,
+      type: "login",
+    })
+      .then((res) => {
+        dispatch(
+          setToast({
+            message: "OTP sent successfully !",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          }),
+        );
+        setOtpVisible(true);
+        setInputs((prev) => ({ ...prev, isMobileOtpSent: true }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "OTP sent failed !",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          }),
+        );
+        e.target.disabled = false;
+      });
+  };
+
+  const verifyMobileOtp = async (e) => {
+    e.preventDefault();
+    await ApiServices.verifyOtp({
+      email: `+91${mobile}`,
+      otp: mobileOtp,
+    })
+      .then((res) => {
+        dispatch(
+          setToast({
+            message: "Mobile verified successfully !",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          }),
+        );
+        setInputs((prev) => ({ ...prev, mobileVerified: true }));
+      })
+      .catch((err) => {
+        dispatch(
+          setToast({
+            message: "Incorrect OTP",
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          }),
+        );
+      });
+  };
+
+  const mobileLogin = async (e) => {
+    e.preventDefault();
+    e.target.disabled = true;
+    const obj = {
+      phone: mobile,
+      password: password,
+    };
+    await ApiServices.mobileLogin(obj)
+      .then(async (res) => {
+        dispatch(
+          setToast({
+            message: "User Logged In Successfully !",
+            bgColor: ToastColors.success,
+            visible: "yes",
+          }),
+        );
+        localStorage.setItem("user", JSON.stringify(res.data));
+        await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
+        window.location.href = "/posts";
+      })
+      .catch((err) => {
+        e.target.disabled = false;
+        dispatch(
+          setToast({
+            message: err.response.data.message,
+            bgColor: ToastColors.failure,
+            visible: "yes",
+          }),
+        );
+      });
+  };
+
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -98,7 +191,7 @@ function NewLogin() {
             message: "User Logged In Successfully !",
             bgColor: ToastColors.success,
             visible: "yes",
-          })
+          }),
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
@@ -112,7 +205,7 @@ function NewLogin() {
             message: err?.response?.data?.message || "Error Occurred",
             bgColor: ToastColors.failure,
             visible: "yes",
-          })
+          }),
         );
       });
   };
@@ -135,14 +228,10 @@ function NewLogin() {
         {/* Left Image (hidden on mobile) */}
         <div className="hidden md:block w-[40%] relative p-10">
           <img
-            src="/login-bg.png"
+            src="/Bloomr-login-signin.jpeg"
             className="w-full h-full rounded-xl object-cover"
             alt="bg"
           />
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center font-gentium mr-10">
-            <p className="text-3xl font-bold justify-start">Get Started by</p>
-            <p className="text-3xl font-bold justify-start mr-12 mb-14">Logging In</p>
-          </div>
         </div>
 
         {/* Right Form */}
@@ -165,7 +254,8 @@ function NewLogin() {
               )}
             </p>
 
-            <p
+            {/* uncommnet this further for mobile otpo login */}
+            {/* <p
               className={`text-lg font-bold cursor-pointer pb-1 relative ${
                 activeTab === "mobile" ? "text-[#4F55C7]" : "text-gray-500"
               }`}
@@ -175,7 +265,7 @@ function NewLogin() {
               {activeTab === "mobile" && (
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-[#4F55C7]"></span>
               )}
-            </p>
+            </p> */}
           </div>
 
           {/* Email Login */}
@@ -254,9 +344,76 @@ function NewLogin() {
               </button>
             </div>
           ) : (
-            <p className="text-center text-gray-500 mt-6">
-              Mobile login is under maintenance.
-            </p>
+            <div className="ml-6 mt-6 md:mt-6">
+              <p className="font-medium">Mobile Number</p>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  name="mobile"
+                  value={mobile || ""}
+                  onChange={handleChanges}
+                  placeholder="10 digit mobile number"
+                  disabled={mobileVerified}
+                  className="w-full h-6 mt-1 border rounded-md px-2 shadow-sm"
+                />
+                {isMobileValid && !otpVisible && (
+                  <button
+                    type="button"
+                    onClick={sendMobileOtpF}
+                    className="bg-[#4F55C7] text-white px-4 rounded-md mt-1 font-medium whitespace-nowrap"
+                  >
+                    Get OTP
+                  </button>
+                )}
+              </div>
+
+              {otpVisible && mobileVerified !== true && (
+                <>
+                  <p className="font-medium mt-4">Enter OTP</p>
+                  <input
+                    type="text"
+                    name="mobileOtp"
+                    value={mobileOtp || ""}
+                    onChange={handleChanges}
+                    placeholder="Enter 6 digit OTP"
+                    maxLength="6"
+                    className="w-full h-6 mt-1 border rounded-md px-2 shadow-sm"
+                  />
+                  {mobileOtp !== null && mobileOtp.length === 6 && (
+                    <button
+                      type="button"
+                      onClick={verifyMobileOtp}
+                      className="w-full md:w-full bg-[#4F55C7] text-white font-bold py-2 rounded-full mt-4"
+                    >
+                      Verify OTP
+                    </button>
+                  )}
+                </>
+              )}
+
+              {mobileVerified && (
+                <>
+                  <p className="font-medium mt-4">Password</p>
+                  <input
+                    type="password"
+                    name="password"
+                    value={password || ""}
+                    onChange={handleChanges}
+                    placeholder="Password"
+                    className="w-full h-6 mt-1 border rounded-md px-2 shadow-sm"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={!isFormValid || loading}
+                    onClick={mobileLogin}
+                    className="w-[80%] md:w-full bg-[#4F55C7] text-white font-bold py-2 rounded-full mt-6 flex justify-center items-center"
+                  >
+                    {loading ? "Logging in..." : "Login"}
+                  </button>
+                </>
+              )}
+            </div>
           )}
 
           <div className="mr-10 md:mr-0">

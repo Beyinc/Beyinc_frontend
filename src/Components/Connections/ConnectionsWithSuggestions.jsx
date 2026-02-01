@@ -11,487 +11,341 @@ import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 import AddConversationPopup from "../Common/AddConversationPopup";
 import "./ConnectionsWithSuggestions.css";
 
+// ---------------- HELPER COMPONENTS (Moved Outside) ----------------
+
+const UserAvatar = ({ user, onClick, size = "h-20 w-20 sm:h-24 sm:w-24" }) => {
+  const imageUrl = user?.image?.url;
+  const firstLetter = user?.userName?.[0]?.toUpperCase() || "?";
+
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        onClick={onClick}
+        className={`cursor-pointer object-cover rounded-full ${size}`}
+        alt="profile"
+      />
+    );
+  }
+
+  // Display first letter avatar when no image
+  return (
+    <div
+      onClick={onClick}
+      className={`cursor-pointer rounded-full ${size} bg-[rgb(79,85,199)] flex items-center justify-center text-white font-medium text-4xl sm:text-5xl`}
+    >
+      {firstLetter}
+    </div>
+  );
+};
+
+/** Left sidebar: only the role/interest filter (no search input) */
+const FilterOnly = ({ onFilterApply }) => (
+  <div className="connections-filter-wrapper">
+    <SearchFilter FilteredSearchProfiles={onFilterApply} />
+  </div>
+);
+
+const MobileFilterSidebar = ({ isOpen, onClose, onFilterApply, title }) => {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={onClose} />
+      <div className="fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-50 flex flex-col p-4 lg:hidden overflow-y-auto">
+        <div className="flex justify-between items-center mb-4 pb-3 border-b">
+          <h3 className="font-semibold text-lg">{title}</h3>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
+            ✕
+          </button>
+        </div>
+        <FilterOnly onFilterApply={onFilterApply} />
+      </div>
+    </>
+  );
+};
+
+// ---------------- MAIN COMPONENT ----------------
+
 export default function ConnectionsWithSuggestions() {
-  // ---------------- CONNECTIONS ----------------
+  // Connections State
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [activeTab, setActiveTab] = useState("followers");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [receiverId, setReceiverId] = useState("");
+  
+  // Search & Filter State (Connections)
   const [searchTerm, setSearchTerm] = useState("");
+  const [connectionInterests, setConnectionInterests] = useState([]); // FIX ADDED
 
+  // Suggestions State
   const [recommendedUsers, setRecommendedUsers] = useState([]);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
+  
+  // Search & Filter State (Suggestions)
   const [searchSuggestion, setSearchSuggestion] = useState("");
+  const [suggestionInterests, setSuggestionInterests] = useState([]); // FIX ADDED
+
+  // Sidebar Toggles
+  const [isConnectionsFilterOpen, setIsConnectionsFilterOpen] = useState(false);
+  const [isSuggestionsFilterOpen, setIsSuggestionsFilterOpen] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const socket = useRef();
 
   const auth = useSelector((store) => store.auth || {});
-  // derive userId from multiple possible shapes
-  const userIdFromRoot = auth?.user_id;
-  const userIdFromLoginDetails = auth?.loginDetails?.user_id;
-  const userIdFromDetails = auth?.userDetails?._id;
-  const localUser = (() => {
-    try {
-      return JSON.parse(localStorage.getItem("user")) || {};
-    } catch {
-      return {};
-    }
-  })();
-  const user_id =
-    userIdFromRoot ||
-    userIdFromLoginDetails ||
-    userIdFromDetails ||
-    localUser?.user_id ||
-    localUser?._id ||
-    null;
+  const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const user_id = auth?.user_id || auth?.loginDetails?.user_id || localUser?._id;
+  const { role, userName, image } = auth?.userDetails || localUser || {};
 
-  const userDetails = auth?.userDetails || localUser || {};
-  const { role, userName, image, _id } = userDetails || {};
-
-  // ---------------- SOCKET INIT ----------------
+  // ---------------- SOCKET ----------------
   useEffect(() => {
-    // create socket once
     socket.current = io(socket_io);
-    return () => {
-      // cleanup when component unmounts
-      try {
-        socket.current?.disconnect();
-      } catch {}
-    };
+    return () => socket.current?.disconnect();
   }, []);
 
-  const getArrayFromResponse = (res) => {
-    if (!res) return [];
-    if (Array.isArray(res)) return res;
-    if (Array.isArray(res.data)) return res.data;
-    if (Array.isArray(res.data?.data)) return res.data.data;
-    // sometimes backend returns object directly like { followers: [...]}
-    if (Array.isArray(res.followers)) return res.followers;
-    if (Array.isArray(res.data?.followers)) return res.data.followers;
-    return [];
+  const getArray = (res) => {
+    return Array.isArray(res) ? res : res?.data?.data || res?.data || res?.followers || [];
   };
 
   // ---------------- FETCH CONNECTIONS ----------------
   useEffect(() => {
-    // Runs whenever user_id changes. If user_id is falsy, we skip.
+    if (!user_id) return;
     const fetchConnections = async () => {
-      if (!user_id) {
-        console.log("fetchConnections skipped - user_id not available yet");
-        return;
-      }
-
-      console.log("fetchConnections called for user:", user_id);
       try {
-        const FollowersRes = await ApiServices.getFollowers({ user_id });
-        const followingRes = await ApiServices.getFollowings({ user_id });
+        const [followersRes, followingRes] = await Promise.all([
+          ApiServices.getFollowers({ user_id }),
+          ApiServices.getFollowings({ user_id })
+        ]);
 
-        const followersArr = getArrayFromResponse(FollowersRes);
-        const followingArr = getArrayFromResponse(followingRes);
-
-        const modFollowers = followersArr.map((u) => ({
+        const followersArr = getArray(followersRes);
+        const mapUser = (u) => ({
           ...u,
-          // be safe: ensure u.followers is an array
-          isFollowing: Array.isArray(u.followers)
-            ? u.followers.includes(user_id)
-            : false,
-        }));
+          isFollowing: Array.isArray(u.followers) ? u.followers.includes(user_id) : false,
+        });
 
-        const modFollowing = followingArr.map((u) => ({
-          ...u,
-          isFollowing: Array.isArray(u.followers)
-            ? u.followers.includes(user_id)
-            : false,
-        }));
-
-        setFollowers(modFollowers);
-        setFollowing(modFollowing);
-        setFilteredUsers(modFollowers);
-
-        // useful debug logs (remove in production)
-        console.log("modFollowers", modFollowers);
-        console.log("modFollowing", modFollowing);
+        setFollowers(followersArr.map(mapUser));
+        setFollowing(getArray(followingRes).map(mapUser));
       } catch (e) {
-        console.error("Error fetching connections:", e);
-        dispatch(
-          setToast({
-            message: "Failed to load connections",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
+        dispatch(setToast({ message: "Failed to load connections", bgColor: ToastColors.failure, visible: "yes" }));
       }
     };
-
     fetchConnections();
-  }, [user_id]); // re-run when user_id becomes available
+  }, [user_id, dispatch]);
 
+  // ---------------- FILTER LOGIC: CONNECTIONS ----------------
+  // This combines Search Text AND Checkbox Filters
   useEffect(() => {
     const base = activeTab === "followers" ? followers : following;
-    let filtered = base;
+    
+    const result = base.filter((u) => {
+      // 1. Check Search Term
+      const matchesSearch = !searchTerm.trim() || u.userName?.toLowerCase().includes(searchTerm.toLowerCase());
+      // 2. Check Roles
+      const matchesRole = connectionInterests.length === 0 || connectionInterests.includes(u.role);
+      
+      return matchesSearch && matchesRole;
+    });
 
-    // Optional: handle role-based filter later if you use SearchFilter interests
-    if (searchTerm && searchTerm.trim()) {
-      filtered = filtered.filter((u) =>
-        u.userName?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+    setFilteredUsers(result);
+  }, [followers, following, activeTab, searchTerm, connectionInterests]);
 
-    setFilteredUsers(filtered);
-  }, [followers, following, activeTab, searchTerm]);
-
+  // ---------------- FOLLOW TOGGLE ----------------
   const handleFollowToggle = async (e, userId, isFollowing) => {
-    // optimistic update
+    // Optimistic Update
+    const updateList = (list) => list.map(u => u._id === userId ? { ...u, isFollowing: !u.isFollowing } : u);
+    
     if (activeTab === "following") {
-      setFilteredUsers((prev) => prev.filter((u) => u._id !== userId));
+      setFollowing(prev => prev.filter(u => u._id !== userId)); // Remove from list immediately
     } else {
-      setFilteredUsers((prev) =>
-        prev.map((u) =>
-          u._id === userId ? { ...u, isFollowing: !u.isFollowing } : u
-        )
-      );
+      setFollowers(prev => updateList(prev));
+      setFollowing(prev => updateList(prev)); // Update following state too if they exist there
     }
 
     try {
       if (isFollowing) {
-        await ApiServices.unfollowUser({
-          unfollowReqBy: user_id,
-          unfollowReqTo: userId,
-        });
+        await ApiServices.unfollowUser({ unfollowReqBy: user_id, unfollowReqTo: userId });
       } else {
-        await ApiServices.saveFollowers({
-          followerReqBy: user_id,
-          followerReqTo: userId,
-        });
-        await socket.current.emit("sendNotification", {
-          senderId: user_id,
-          receiverId: userId,
-        });
+        await ApiServices.saveFollowers({ followerReqBy: user_id, followerReqTo: userId });
+        socket.current.emit("sendNotification", { senderId: user_id, receiverId: userId });
       }
     } catch (err) {
-      console.error("Follow error:", err);
-      dispatch(
-        setToast({
-          message: "Error while updating follow status",
-          bgColor: ToastColors.failure,
-          visible: "yes",
-        })
-      );
+      dispatch(setToast({ message: "Error updating follow", bgColor: ToastColors.failure, visible: "yes" }));
     }
   };
 
   // ---------------- FETCH SUGGESTIONS ----------------
   useEffect(() => {
-    if (!user_id) {
-      console.log("getNewProfiles skipped - user_id not ready");
-      return;
-    }
-
+    if (!user_id) return;
     ApiServices.getNewProfiles({ userId: user_id })
       .then((res) => {
-        const arr = getArrayFromResponse(res);
-        setRecommendedUsers(arr);
-        setFilteredSuggestions(arr);
+        setRecommendedUsers(getArray(res));
       })
-      .catch((err) => {
-        console.error("getNewProfiles error", err);
-        dispatch(
-          setToast({
-            message: "Error Occurred!",
-            bgColor: ToastColors.failure,
-            visible: "yes",
-          })
-        );
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      .catch(() => {});
   }, [recommendedUserTrigger, user_id]);
 
+  // ---------------- FILTER LOGIC: SUGGESTIONS ----------------
   useEffect(() => {
-    let filtered = recommendedUsers || [];
+    const result = (recommendedUsers || []).filter((u) => {
+      const matchesSearch = !searchSuggestion.trim() || u.userName?.toLowerCase().includes(searchSuggestion.toLowerCase());
+      const matchesRole = suggestionInterests.length === 0 || suggestionInterests.includes(u.role);
+      return matchesSearch && matchesRole;
+    });
+    setFilteredSuggestions(result);
+  }, [recommendedUsers, searchSuggestion, suggestionInterests]);
 
-    if (searchSuggestion && searchSuggestion.trim()) {
-      filtered = filtered.filter((u) =>
-        u.userName?.toLowerCase().includes(searchSuggestion.toLowerCase())
-      );
-    }
-
-    setFilteredSuggestions(filtered);
-  }, [recommendedUsers, searchSuggestion]);
-  // ---------------- USER CARD ----------------
-  const renderUserCard = (user) => (
-    <div
-      key={user._id}
-      style={{ border: "1px solid gainsboro" }}
-      className="bg-white hover:shadow-lg border rounded-xl p-4 w-[190px] flex flex-col justify-center items-center"
-    >
-      <img
-        src={user.image?.url || "/profile.png"}
-        onClick={() => navigate(`/user/${user._id}`)}
-        className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
-        alt="profile"
+  // ---------------- RENDER CARD ----------------
+  const renderUserCard = (user, isSuggestion = false) => (
+    <div key={user._id} className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-full max-w-[190px] mx-auto flex flex-col justify-center items-center">
+      <UserAvatar
+        user={user}
+        onClick={() => navigate(user._id === user_id ? "/editProfile" : `/user/${user._id}`)}
+        size="h-20 w-20 sm:h-24 sm:w-24"
       />
-      <h3 className="mt-2 text-center text-sm font-medium">{user.userName}</h3>
-      {user.role && (
-        <h5 className="text-neutral-600 mt-1 text-xs">{user.role}</h5>
-      )}
-      <p className="mt-2 mb-2 text-center text-xs">{user.headline}</p>
-      <div className="flex gap-4">
-        {user_id !== user._id && (
-          <button
-            className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm"
-            onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
-          >
-            {user.isFollowing ? "Unfollow" : "Follow"}
-          </button>
-        )}
-        {user_id !== user._id && user.isFollowing && (
-          // <button
-          //   className="rounded-full px-4 py-1 w-[100px] h-[30px] text-sm 
-          //    text-[rgb(79,85,199)]  bg-white border-black"
-          //   onClick={() => setReceiverId(user._id)}
-          // >
-          //   Chat
-          // </button>
-
-          <button
- className="!rounded-full !px-4 !py-1 !w-[100px] !h-[30px] !text-[rgb(79,85,199)] !border-2 !border-[rgb(79,85,199)] !bg-white border-solid shadow-lg"
-
-  onClick={() => setReceiverId(user._id)}
->
-  Chat
-</button>
-
+      <h3 className="mt-2 text-center text-sm font-medium line-clamp-2">{user.userName}</h3>
+      <h5 className="text-neutral-600 mt-1 text-xs line-clamp-1">{user.role}</h5>
+      <p className="mt-2 mb-2 text-center text-xs line-clamp-2">{user.headline}</p>
+      
+      <div className="flex flex-wrap gap-2 justify-center">
+        {/* Buttons logic */}
+        {isSuggestion ? (
+          <>
+             <button
+                className="rounded-full px-3 py-1 bg-[rgb(79,85,199)] text-white text-xs sm:text-sm"
+                onClick={(e) => followerController({
+                  dispatch, e, followingToId: user._id, 
+                  recommendedUserTrigger, setRecommendedUserTrigger, socket, 
+                  user: { id: user_id, userName, image, role }
+                })}
+              >
+                Follow
+              </button>
+              <RecommendedConnectButton id={user._id} handleFollower={() => setRecommendedUserTrigger(!recommendedUserTrigger)} />
+          </>
+        ) : (
+          user_id !== user._id && (
+            <>
+              <button
+                className="rounded-full px-3 py-1 bg-[rgb(79,85,199)] text-white text-xs sm:text-sm"
+                onClick={(e) => handleFollowToggle(e, user._id, user.isFollowing)}
+              >
+                {user.isFollowing ? "Unfollow" : "Follow"}
+              </button>
+              {user.isFollowing && (
+                <button
+                  className="rounded-full px-3 py-1 text-xs sm:text-sm text-[rgb(79,85,199)] border border-[rgb(79,85,199)] bg-white shadow-sm"
+                  onClick={() => setReceiverId(user._id)}
+                >
+                  Chat
+                </button>
+              )}
+            </>
+          )
         )}
       </div>
     </div>
   );
 
-  // keep filteredUsers in-sync when followers/following or active tab change
-  useEffect(() => {
-    setFilteredUsers(activeTab === "followers" ? followers : following);
-  }, [activeTab, followers, following]);
-
-  // ---------------- RETURN ----------------
+  // ---------------- JSX ----------------
   return (
-    <div className="flex flex-col items-center gap-12 p-6 w-full">
-      {/* CONNECTIONS SECTION */}
+    <div className="flex flex-col items-center gap-4 sm:gap-12 p-3 sm:p-6 w-full">
+      
+      {/* --- Mobile Sidebars --- */}
+      <MobileFilterSidebar
+        isOpen={isConnectionsFilterOpen}
+        onClose={() => setIsConnectionsFilterOpen(false)}
+        onFilterApply={({ interests }) => setConnectionInterests(interests)}
+        title="Filter Connections"
+      />
+      
+      <MobileFilterSidebar
+        isOpen={isSuggestionsFilterOpen}
+        onClose={() => setIsSuggestionsFilterOpen(false)}
+        onFilterApply={({ interests }) => setSuggestionInterests(interests)}
+        title="Filter Suggestions"
+      />
+
+      {/* --- CONNECTIONS SECTION --- */}
       <div className="flex flex-col w-full max-w-[1550px]">
-        <div className="flex gap-6 px-4">
-          {/* LEFT FILTER */}
-          <div className="w-full max-w-sm flex flex-col gap-4">
-            <input
-              type="text"
-              placeholder="Search Connections"
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-80 ml-10"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                // FilteredSearchProfiles({ interests: [] });
-              }}
-            />
-            {/* <SearchFilter FilteredSearchProfiles={FilteredSearchProfiles} /> */}
-            <SearchFilter
-              FilteredSearchProfiles={({ interests }) => {
-                const base = activeTab === "followers" ? followers : following;
-                let filtered = base;
-
-                if (interests && interests.length) {
-                  filtered = filtered.filter((u) => interests.includes(u.role));
-                }
-
-                if (searchTerm && searchTerm.trim()) {
-                  filtered = filtered.filter((u) =>
-                    u.userName?.toLowerCase().includes(searchTerm.toLowerCase())
-                  );
-                }
-
-                setFilteredUsers(filtered);
-              }}
-            />
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-6 lg:items-start">
+          {/* Desktop Filter (left) - filter only */}
+          <div className="hidden lg:block w-80 flex-shrink-0">
+            <FilterOnly onFilterApply={({ interests }) => setConnectionInterests(interests)} />
           </div>
 
-          {/* SCROLLABLE CONNECTIONS */}
-          <div
-            className="flex-1 bg-white p-8 rounded-lg h-[330px] overflow-hidden flex flex-col"
-            style={{
-              border: "1px solid lightgray",
-            }}
-          >
-            <h2 className="text-xl font-semibold mb-4 ml-10 sticky top-0 bg-white z-10">
-              Your Connections
-            </h2>
+          {/* List Area (right) - search inside card */}
+          <div className="flex-1 min-w-0 bg-white p-4 sm:p-6 rounded-lg border border-gray-300 max-h-[450px] lg:max-h-[600px] overflow-hidden flex flex-col">
+            <div className="flex flex-col gap-2 mb-2 sm:mb-4 sticky top-0 bg-white z-10">
+              <div className="flex items-center justify-between w-full">
+                <h2 className="text-lg sm:text-xl font-semibold">Your Connections</h2>
+                <button className="lg:hidden p-1.5 flex items-center justify-center bg-transparent hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 rounded-md flex-shrink-0" onClick={() => setIsConnectionsFilterOpen(true)} aria-label="Filter">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="Search Connections"
+                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-full sm:max-w-[14rem]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-            <div className="flex gap-4 ml-10 mb-4 sticky top-[48px] bg-white z-10">
-              <button
-                className={`px-4 py-2 rounded-full ${
-                  activeTab === "followers"
-                    ? "bg-custom text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
-                onClick={() => setActiveTab("followers")}
-              >
-                Followers ({followers.length})
-              </button>
-
-              <button
-                className={`px-4 py-2 rounded-full ${
-                  activeTab === "following"
-                    ? "bg-custom text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
-                onClick={() => setActiveTab("following")}
-              >
-                Following ({following.length})
-              </button>
+            <div className="flex flex-wrap gap-2 sm:gap-4 mb-2 sm:mb-4 sticky top-[48px] bg-white z-10">
+              {['followers', 'following'].map(tab => (
+                <button
+                  key={tab}
+                  className={`px-3 sm:px-4 py-2 rounded-full text-sm capitalize ${activeTab === tab ? "bg-custom text-white" : "bg-gray-200 text-gray-700"}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab} ({tab === 'followers' ? followers.length : following.length})
+                </button>
+              ))}
             </div>
 
             {filteredUsers.length > 0 ? (
-              <div
-                className="
-      grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
-      gap-6 overflow-y-auto pr-2 flex-1 hide-scrollbar overflow-x-hidden
-    "
-              >
-                {filteredUsers.map((user) => renderUserCard(user))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 overflow-y-auto pr-2 pb-2">
+                {filteredUsers.map((u) => renderUserCard(u, false))}
               </div>
             ) : (
-              <p>No {activeTab} found.</p>
+              <p className="text-gray-500 text-center mt-10">No users found.</p>
             )}
           </div>
         </div>
-
-        <AddConversationPopup
-          receiverId={receiverId}
-          setReceiverId={setReceiverId}
-          isNavigate={true}
-        />
       </div>
 
-      {/* SUGGESTIONS SECTION */}
+      {/* --- SUGGESTIONS SECTION --- */}
       <div className="flex flex-col w-full max-w-[1550px]">
-        <div className="flex gap-6 px-4">
-          {/* LEFT FILTER */}
-          <div className="w-full max-w-sm flex flex-col gap-4">
-            <input
-              type="text"
-              placeholder="Search Suggestions"
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-80 ml-10"
-              value={searchSuggestion}
-              onChange={(e) => {
-                setSearchSuggestion(e.target.value);
-                // FilteredSuggestionProfiles({ interests: [] });
-              }}
-            />
-            <SearchFilter
-              FilteredSearchProfiles={({ interests }) => {
-                let filtered = recommendedUsers || [];
-
-                if (interests && interests.length) {
-                  filtered = filtered.filter((u) => interests.includes(u.role));
-                }
-
-                if (searchSuggestion && searchSuggestion.trim()) {
-                  filtered = filtered.filter((u) =>
-                    u.userName
-                      ?.toLowerCase()
-                      .includes(searchSuggestion.toLowerCase())
-                  );
-                }
-
-                setFilteredSuggestions(filtered);
-              }}
-            />
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-6 lg:items-start">
+          {/* Desktop Filter (left) - filter only */}
+          <div className="hidden lg:block w-80 flex-shrink-0">
+            <FilterOnly onFilterApply={({ interests }) => setSuggestionInterests(interests)} />
           </div>
 
-          {/* SCROLLABLE SUGGESTIONS */}
-          <div
-            className="flex-1 bg-white p-8 rounded-lg overflow-hidden flex flex-col"
-            style={{
-              border: "1px solid lightgray",
-              maxHeight: "330px",
-            }}
-          >
-            {/* FIXED HEADING */}
-            <h2 className="text-xl font-semibold mb-4 ml-10 sticky top-0 bg-white z-10">
-              Suggestions for You
-            </h2>
+          {/* List Area (right) - search inside card */}
+          <div className="flex-1 min-w-0 bg-white p-4 sm:p-6 rounded-lg border border-gray-300 max-h-[450px] lg:max-h-[600px] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between w-full mb-2 sm:mb-4 sticky top-0 bg-white z-10">
+              <h2 className="text-lg sm:text-xl font-semibold">Suggestions for You</h2>
+              <button className="lg:hidden p-1.5 flex items-center justify-center bg-transparent hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 rounded-md flex-shrink-0" onClick={() => setIsSuggestionsFilterOpen(true)} aria-label="Filter">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+              </button>
+            </div>
 
-            {/* SCROLLABLE CARDS */}
             {filteredSuggestions.length > 0 ? (
-              <div
-                className="
-      grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 
-      gap-6 overflow-y-auto overflow-x-hidden pr-2 flex-1
-    "
-              >
-                {filteredSuggestions.map((rec) => (
-                  <div
-                    key={rec._id}
-                    style={{ border: "1px solid gainsboro" }}
-                    className="bg-white hover:shadow-lg border rounded-xl p-4 w-[190px] flex flex-col justify-center items-center"
-                  >
-                    <img
-                      src={rec?.image?.url || "/profile.png"}
-                      onClick={() =>
-                        rec._id === user_id
-                          ? navigate("/editProfile")
-                          : navigate(`/user/${rec._id}`)
-                      }
-                      className="cursor-pointer object-cover rounded-full h-[100px] w-[100px]"
-                      alt="profile"
-                    />
-
-                    <h3 className="mt-2 text-center text-sm font-medium">
-                      {rec?.userName}
-                    </h3>
-
-                    {rec.role && (
-                      <h5 className="text-neutral-600 mt-1 text-xs">
-                        {rec.role}
-                      </h5>
-                    )}
-
-                    <p className="mt-2 mb-2 text-center text-xs">
-                      {rec.headline}
-                    </p>
-
-                    <div className="flex gap-1">
-                      <button
-                        className="rounded-full px-4 py-1 bg-[rgb(79,85,199)] text-white text-sm w-[100px] h-[30px]"
-                        onClick={(e) =>
-                          followerController({
-                            dispatch,
-                            e,
-                            followingToId: rec._id,
-                            recommendedUserTrigger,
-                            setRecommendedUserTrigger,
-                            socket,
-                            user: { id: user_id, userName, image, role },
-                          })
-                        }
-                      >
-                        Follow
-                      </button>
-
-                      <RecommendedConnectButton
-                        id={rec._id}
-                        handleFollower={() =>
-                          setRecommendedUserTrigger(!recommendedUserTrigger)
-                        }
-                      />
-                    </div>
-                  </div>
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 overflow-y-auto pr-2 pb-2">
+                {filteredSuggestions.map((u) => renderUserCard(u, true))}
               </div>
             ) : (
-              <p>No suggestions available.</p>
+              <p className="text-gray-500 text-center mt-10">No suggestions available.</p>
             )}
           </div>
         </div>
       </div>
+
+      <AddConversationPopup receiverId={receiverId} setReceiverId={setReceiverId} isNavigate={true} />
     </div>
   );
 }

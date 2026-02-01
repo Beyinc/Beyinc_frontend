@@ -258,7 +258,7 @@ const AllUsers = () => {
 
   // iqra
   // Add this with your other useState declarations
-  const [viewMode, setViewMode] = useState("mentors");
+  const [viewMode, setViewMode] = useState("startups"); // Mentor disabled - upcoming feature
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
     expertise: [],
@@ -462,8 +462,8 @@ const AllUsers = () => {
         </div>
       </Drawer>
 
-      <div className="users-main-box bg-red-500">
-        {width < 770 && (
+      <div className="users-main-box bg-red-500 overflow-x-hidden pr-4 sm:pr-5 md:pr-6">
+        {width <= 1210 && (
           <div className="user-nav-bar">
             <div style={{ display: "flex", alignItems: "center" }}>
               <button className="nav-bar-buttons" onClick={handleClickOpen}>
@@ -498,19 +498,9 @@ const AllUsers = () => {
           </div>
         )}
         {/* NEW TABS SECTION - Add this right after mobile nav */}
-        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 lg:ml-60">
+        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 pr-4 sm:pr-5 md:pr-6" style={{ marginLeft: width > 1210 ? "15rem" : 0 }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex gap-2 mt-4 p-1 bg-gray-100 rounded-full w-fit border border-gray-300">
-              <button
-                onClick={() => setViewMode("mentors")}
-                className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
-                  viewMode === "mentors"
-                    ? "bg-white text-[#4f55c7] shadow-sm hover:text-white hover:bg-[#4f55c7]"
-                    : "bg-transparent text-gray-900 hover:text-white hover:bg-[#4f55c7]"
-                }`}
-              >
-                Mentor
-              </button>
               <button
                 onClick={() => setViewMode("startups")}
                 className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
@@ -521,11 +511,21 @@ const AllUsers = () => {
               >
                 Startup
               </button>
+              <button
+                disabled
+                title="Coming soon"
+                className="px-6 py-1.5 rounded-full text-sm font-semibold bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-1.5"
+              >
+                Mentor
+                <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-gray-300 text-gray-600">
+                  Upcoming
+                </span>
+              </button>
             </div>
           </div>
         </div>
         <div className="usersWrapper">
-          {width > 770 && (
+          {width > 1210 && (
             <div className="filterContainer">
               <div
                 style={{
@@ -674,33 +674,24 @@ const AllUsers = () => {
             </div>
           )}
           {/* {viewMode} */}
-          <div className="user-cards-panel w-[95%] lg:w-[80%]">
+          <div className="user-cards-panel pr-4 sm:pr-5 md:pr-6 box-border" style={{ width: width > 1210 ? "80%" : "100%", maxWidth: width > 1210 ? "none" : "100%" }}>
             <div className="mt-4 userscontainer w-full !flex flex-wrap justify-center lg:justify-start gap-4">
-  {viewMode === "mentors" &&
-    (users.length > 0 ? (
-      users
-        .filter((user) => user.beyincProfile === "Mentor")
-        .map((user) => (
-          <SingleUserDetails
-            key={user.id}
-            user={user}
-            viewMode={viewMode}
-          />
-        ))
-    ) : (
+  {viewMode === "mentors" && (
       <div
-        className="no-users w-full" 
+        className="no-users w-full"
         style={{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
           alignItems: "center",
+          padding: "2rem",
+          textAlign: "center",
         }}
       >
-        <img src="/Search.gif" alt="Loading" />
-        <div>No users available</div>
+        <div className="text-gray-500 font-medium text-lg">Mentor</div>
+        <div className="text-gray-400 text-sm mt-1">Upcoming feature — stay tuned!</div>
       </div>
-    ))}
+    )}
     
   {viewMode === "startups" &&
     (startups.length > 0 ? (

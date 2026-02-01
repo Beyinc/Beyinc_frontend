@@ -278,14 +278,16 @@ const ProfileCard = ({
                 : "/profile.png"
             }
           />
-          <i
-            onClick={() => setOpenEditPfp(true)}
-            className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full"
-          ></i>
+          {selfProfile && (
+    <i
+      onClick={() => setOpenEditPfp(true)}
+      className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full cursor-pointer"
+    ></i>
+  )}
         </div>
       </div>
 
-      <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-20 lg:mt-0 pt-16 lg:pt-0">
+      <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-24 lg:mt-4 pt-16 lg:pt-0">
         <div className="font-bold text-xl ml-3">
           {/* {userName && userName[0]?.toUpperCase() + userName?.slice(1)} */}
           {profileDataObj.role === "Startup"
@@ -302,19 +304,20 @@ const ProfileCard = ({
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
         </div>
-        {profileData?.verified === true && (
-          <div className="font-bold text-md" style={{ color: "#4F55C7" }}>
-            Verified by Bloomr
+       {(profileData.role==="Mentor"||profileData.role==="Startup") && (
+          <div className="font-bold text-md text-amber-600" >
+           Not Verified
           </div>
         )}
+  {/*
         {profileData?.verified === false &&
           profileData?.beyincProfile.length === 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               Verification Pending
             </div>
-          )}
+          )} */}
 
-        {profileData.verified === false &&
+        {/* {profileData.verified === false &&
           profileData?.beyincProfile?.length !== 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               <svg
@@ -333,7 +336,7 @@ const ProfileCard = ({
               </svg>
               Will Verify Soon
             </div>
-          )}
+          )} */}
         <div className="flex flex-col gap-4 mt-2 ">
           {!selfProfile && (
             <div className="flex items-center gap-2">
@@ -364,7 +367,7 @@ const ProfileCard = ({
           className="flex flex-col mt-4 font-medium
           w-full"
         >
-          <div className="px-4 lg:px-28 gap-4 flex flex-col">
+          <div className="px-6 gap-4 flex flex-col">
             <div className="flex justify-between items-center">
               <span className="font-medium text-slate-900">Followers</span>
               <span className="font-semibold text-gray-700">

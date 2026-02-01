@@ -1,8 +1,10 @@
-/* Hide scrollbar but keep scroll working
-.hide-scrollbar {
-  scrollbar-width: none;       
+/* Left filter alignment: remove SearchFilter's ml-10 so it aligns with content */
+.connections-filter-wrapper > div {
+  margin-left: 0;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;             
-} */
+.connections-filter-wrapper .bg-white {
+  margin-left: 0;
+  width: 100%;
+  max-width: 320px;
+}

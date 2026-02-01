@@ -108,8 +108,14 @@ background: var( --button-background);
   width: 100%;
   box-sizing: border-box;
   max-width: 1350px;
-  margin: 0 auto; 
-  margin-top: 42px;
+  margin: 0 auto;
+  margin-top: 16px;
+}
+
+@media (min-width: 1024px) {
+  .post-details-main-container {
+    margin-top: 42px;
+  }
 }
 .post-details-container {
   display: flex;
@@ -120,7 +126,7 @@ background: var( --button-background);
 }
 
 /* Responsive styles for mobile */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .post-details-container {
     flex-direction: column;
     gap: 0;
@@ -132,7 +138,32 @@ background: var( --button-background);
     min-width: 0;
   }
 
+  /* Hide right section (Members + post meta) by default on mobile */
+  .post-details-content-right.post-details-right-hidden-mobile {
+    display: none !important;
+  }
+
+  /* When down arrow clicked: show right section and stack it above the post */
+  .post-details-content-right.post-details-right-stack-above-mobile {
+    order: -1;
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .post-details-container {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-details-content-left,
   .post-details-content-right {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  .post-details-content-right:not(.post-details-right-hidden-mobile) {
     margin-top: 24px;
   }
 }
@@ -400,4 +431,10 @@ background: var( --button-background);
     display: block;
     margin-bottom: 8px;
     color: #000;
+}
+
+@media (max-width: 600px) {
+    .postType {
+        display: none;
+    }
 }
