@@ -315,8 +315,14 @@ useEffect(() => {
       <style>{scrollbarStyles}</style>
 
       <aside
-        className={`w-72 flex-shrink-0 !bg-white ${open ? "block" : "hidden"} md:block pr-2`}
-      >
+      className={`
+        w-full md:w-72 
+        flex-shrink-0 
+        !bg-white 
+        md:block 
+        pr-2
+      `}
+    >
         <div className="flex flex-col">
           {/* Main Title */}
           <div className="flex items-center justify-between mb-6"></div>

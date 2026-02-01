@@ -96,6 +96,11 @@ const IndividualPostDetailsCard = () => {
   };
 
   const userDetailsRef = useRef(null);
+  const rightSectionRef = useRef(null);
+
+  const scrollToRightSection = () => {
+  rightSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+};
 
   const handleClickOutside = (event) => {
     if (
@@ -238,7 +243,7 @@ const IndividualPostDetailsCard = () => {
 
   return (
 
-    <div className="post-details-main-container sm:p-4 p-2">
+    <div id="individual-post-page" className="post-details-main-container sm:p-4 p-2">
       <button
         onClick={() => navigate("/posts")}
         className="
@@ -268,6 +273,30 @@ const IndividualPostDetailsCard = () => {
       {post !== null && (
         <div className="post-details-container  ">
           <div className="post-details-content-left grow">
+            {/* Mobile Scroll Down Button (Icon Only) */}
+            <div className="lg:hidden flex justify-center w-full mb-4 mt-2">
+              <button
+                onClick={scrollToRightSection}
+                className="
+                  flex items-center justify-center 
+                  bg-[#ECE9FC] text-[#4F55C7] 
+                  p-3 rounded-full shadow-md 
+                  hover:bg-[#e0dbfa] transition-all
+                "
+                title="Scroll to Discussion"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  strokeWidth={2.5} 
+                  stroke="currentColor" 
+                  className="w-6 h-6"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+            </div>
             <div style={{ position: "relative" }}>
               <div className="PostHeaderContainer" style={{ flexDirection: "column" }} >
   {/* ROW 1: User Info (Left) and Menu (Right) */}
@@ -598,7 +627,7 @@ const IndividualPostDetailsCard = () => {
               )}
             </div>
           </div>
-<div className="post-details-content-right grow min-w-[450px] max-w-[600px]">
+          <div ref={rightSectionRef} className="post-details-content-right grow min-w-[450px] max-w-[600px]">
             <div className="wholePostWrapper h-auto ">
               <div style={{ flex: "1", margin: "10px" }}>
                 <div className="individualPostTotalDetailsRight gap-4">

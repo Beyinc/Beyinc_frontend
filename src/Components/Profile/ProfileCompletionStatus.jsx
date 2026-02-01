@@ -141,7 +141,7 @@ export default function ProfileCompletionStatus({
     setForceDisable(profileData.beyincProfile === "");
   }, [profileData.beyincProfile]);
   // Calculate circumference for SVG circle
-  const radius = 70;
+  const radius = 40;
   const circumference = 2 * Math.PI * radius;
   const strokeDasharray = circumference;
   const strokeDashoffset =
@@ -157,29 +157,30 @@ export default function ProfileCompletionStatus({
         {/* Circular Progress with Hover Details */}
         <div className="relative flex items-center justify-center mb-6">
           <div
-            className="relative cursor-pointer"
+            className="relative cursor-pointer group"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => setIsHovered(!isHovered)} // click toggle for mobile
           >
-            {/* Circular Progress Ring */}
-            <svg className="transform -rotate-90" width="180" height="180">
+            {/* Circular Progress Ring - Size reduced to 100x100 */}
+            <svg className="transform -rotate-90" width="100" height="100">
               {/* Background Circle */}
               <circle
-                cx="90"
-                cy="90"
+                cx="50"
+                cy="50"
                 r={radius}
                 stroke="currentColor"
-                strokeWidth="12"
+                strokeWidth="8" // Reduced stroke width
                 fill="none"
                 className="text-gray-200"
               />
               {/* Progress Circle */}
               <circle
-                cx="90"
-                cy="90"
+                cx="50"
+                cy="50"
                 r={radius}
                 stroke="currentColor"
-                strokeWidth="12"
+                strokeWidth="8" // Reduced stroke width
                 fill="none"
                 strokeLinecap="round"
                 className={`transition-all duration-500 ${
@@ -195,48 +196,57 @@ export default function ProfileCompletionStatus({
                 }}
               />
             </svg>
-            {/* Center Content */}
+
+            {/* Center Content - Text Scaled Down */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <div
-                className={`text-4xl font-bold ${completionPercentage >= 80 ? "text-green-600" : "text-amber-600"}`}
+                className={`text-2xl font-bold ${ // Reduced text size
+                  completionPercentage >= 80 ? "text-green-600" : "text-amber-600"
+                }`}
               >
                 {completionPercentage}%
               </div>
-              <div className="text-xs text-gray-500 mt-1">
-                {completedCount}/{totalSteps} Complete
+              <div className="text-[10px] text-gray-500 mt-0.5">
+                {completedCount}/{totalSteps} Steps
               </div>
-              {completionPercentage >= 80 && (
-                <CheckCircle2 className="w-6 h-6 text-green-600 mt-2" />
-              )}
             </div>
-            {/* Hover Tooltip - Completion Steps */}
+
+            {/* Hover Tooltip - FIXED RESPONSIVENESS */}
             {isHovered && (
               <div
-                className="absolute left-full ml-4 top-0 bg-white border-2 border-gray-200 rounded-lg shadow-xl p-4 w-80 z-10 transition-opacity duration-200"
-                style={{ opacity: isHovered ? 1 : 0 }}
+                className="absolute z-50 bg-white border-2 border-gray-200 rounded-lg shadow-xl p-4 w-72 transition-opacity duration-200
+                /* MOBILE: Center below the circle */
+                top-full left-1/2 -translate-x-1/2 mt-2
+                /* DESKTOP (md): Move to the right side */
+                md:top-0 md:left-full md:translate-x-0 md:ml-4"
               >
                 <div className="flex items-center gap-2 mb-3">
                   <Info className="w-4 h-4 text-blue-600" />
-                  <h4 className="font-semibold text-gray-900">
+                  <h4 className="font-semibold text-gray-900 text-sm">
                     Completion Steps
                   </h4>
                 </div>
 
+                {/* Keep existing tooltip content logic below... */}
                 {/* Progress indicator at top */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-xs font-medium text-gray-700">
                       Overall Progress
                     </span>
                     <span
-                      className={`text-sm font-bold ${completionPercentage >= 80 ? "text-green-600" : "text-amber-600"}`}
+                      className={`text-xs font-bold ${
+                        completionPercentage >= 80
+                          ? "text-green-600"
+                          : "text-amber-600"
+                      }`}
                     >
                       {completionPercentage}%
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 rounded-full h-1.5">
                     <div
-                      className={`h-2 rounded-full transition-all duration-500 ${
+                      className={`h-1.5 rounded-full transition-all duration-500 ${
                         completionPercentage >= 80
                           ? "bg-green-600"
                           : "bg-amber-500"
@@ -247,30 +257,28 @@ export default function ProfileCompletionStatus({
                 </div>
 
                 {/* Completion Steps with Checkboxes */}
-                <div className="space-y-3">
+                <div className="space-y-2 max-h-[200px] overflow-y-auto">
                   {checks.map((check, index) => {
-                    const fieldPercentage = Math.round((1 / totalSteps) * 100);
-
                     return (
                       <div
                         key={check.key}
-                        className={`flex items-start gap-3 p-3 rounded-lg transition-colors ${
+                        className={`flex items-start gap-2 p-2 rounded-lg transition-colors ${
                           check.completed ? "bg-green-50" : "bg-gray-50"
                         }`}
                       >
                         <div className="flex-shrink-0 mt-0.5">
                           {check.completed ? (
-                            <div className="w-5 h-5 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                            <div className="w-4 h-4 rounded border border-green-600 bg-green-600 flex items-center justify-center">
+                              <CheckCircle2 className="w-3 h-3 text-white" />
                             </div>
                           ) : (
-                            <div className="w-5 h-5 rounded border-2 border-gray-300 bg-white"></div>
+                            <div className="w-4 h-4 rounded border border-gray-300 bg-white"></div>
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center justify-between">
                             <span
-                              className={`text-sm font-medium ${
+                              className={`text-xs font-medium ${
                                 check.completed
                                   ? "text-green-900"
                                   : "text-gray-700"
@@ -278,60 +286,11 @@ export default function ProfileCompletionStatus({
                             >
                               {index + 1}. {check.label}
                             </span>
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`text-xs font-bold ${
-                                  check.completed
-                                    ? "text-green-600"
-                                    : "text-gray-500"
-                                }`}
-                              >
-                                {check.completed ? "100%" : "0%"}
-                              </span>
-                              <span className="text-xs text-gray-400">
-                                ({fieldPercentage}% total)
-                              </span>
-                            </div>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-1.5">
-                            <div
-                              className={`h-1.5 rounded-full transition-all ${
-                                check.completed ? "bg-green-500" : "bg-gray-300"
-                              }`}
-                              style={{ width: check.completed ? "100%" : "0%" }}
-                            ></div>
                           </div>
                         </div>
                       </div>
                     );
                   })}
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-gray-200">
-                  <p
-                    className={`text-xs font-medium ${
-                      completionPercentage >= 80
-                        ? "text-green-700"
-                        : "text-amber-700"
-                    }`}
-                  >
-                    {completionPercentage >= 80 ? (
-                      <>
-                        ✓ Eligible to list as{" "}
-                        {profileType === "service-partner"
-                          ? "partner"
-                          : profileType === "Startup"
-                            ? "startup"
-                            : "mentor"}{" "}
-                        (80%+ required)
-                      </>
-                    ) : (
-                      <>
-                        Complete {80 - completionPercentage}% more to become
-                        eligible
-                      </>
-                    )}
-                  </p>
                 </div>
               </div>
             )}

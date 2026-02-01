@@ -127,7 +127,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
 
   // console.log(role);
   return (
-    <div className="w-full rounded-xl  h-full">
+    <div className="w-full rounded-xl  h-full bg-white ">
       <div className="min-h-[100px] shadow-xl  border-2 border-black p-5  rounded-xl">
         <div className="text-xl font-extrabold text-customPurple mt-4 flex justify-between">
           About
@@ -139,7 +139,7 @@ const AboutCard = ({ selfProfile, setSelfProfile, role, profileData }) => {
         <div
           className="mt-4 text-container"
           style={{
-            maxHeight: "200px",
+            maxHeight: "400px",
             overflowY: "auto",
             wordWrap: "break-word",
             whiteSpace: "pre-wrap",
