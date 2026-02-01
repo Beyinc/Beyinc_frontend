@@ -462,7 +462,7 @@ const AllUsers = () => {
         </div>
       </Drawer>
 
-      <div className="users-main-box bg-red-500">
+      <div className="users-main-box bg-red-500 overflow-x-hidden">
         {width < 770 && (
           <div className="user-nav-bar">
             <div style={{ display: "flex", alignItems: "center" }}>

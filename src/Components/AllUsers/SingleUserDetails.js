@@ -136,21 +136,32 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
         {/* user details */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* 1. Image Section */}
-          <div
-            className="flex-shrink-0 group cursor-pointer"
-            onClick={openUser}
-          >
-            <img
-              src={
-                user.image?.url && user.image.url !== ""
-                  ? user.image.url
-                  : "/profile.png"
-              }
-              alt={user.userName}
-              className="w-24 h-24 rounded-lg object-cover transition-transform duration-300 group-hover:scale-110 shadow-sm"
-            />
-          </div>
+          <div className="flex-shrink-0 flex flex-col items-center md:items-start gap-4 w-full md:w-40">
+            <div
+              className="flex-shrink-0 group cursor-pointer"
+              onClick={openUser}
+            >
+              <img
+                src={
+                  user.image?.url && user.image.url !== ""
+                    ? user.image.url
+                    : "/profile.png"
+                }
+                alt={user.userName}
+                className="w-24 h-24 rounded-lg object-cover transition-transform duration-300 group-hover:scale-110 shadow-sm"
+              />
+            </div>
 
+            {user.role === "Startup" && (
+              <RecommendedConnectButton
+                id={user._id}
+                viewMode={viewMode}
+                handleFollower={() => {
+                  setRecommendedUserTrigger(!recommendedUserTrigger);
+                }}
+              />
+            )}
+          </div>
           {/* 2. Middle Content Section */}
           <div className="flex-1">
             {/* Header: Name & Verify */}
@@ -160,8 +171,8 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 onClick={openUser}
               >
                 {user?.role === "Startup"
-                  ? user?.startupProfile?.startupName ?? "Unnamed Startup"
-                  : user?.userName ?? "Unknown User"}
+                  ? (user?.startupProfile?.startupName ?? "Unnamed Startup")
+                  : (user?.userName ?? "Unknown User")}
               </h3>
               {user?.role === "Startup" &&
                 user?.startupProfile?.targetMarket && (
@@ -169,14 +180,14 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                     {user.startupProfile.targetMarket}
                   </span>
                 )}
-              <span className="text-[#4f55c7]">
+              {/* <span className="text-[#4f55c7]">
                 <img className="w-5 h-5" src="/verify.png" alt="Verified" />
-              </span>
+              </span> */}
             </div>
 
             {/* Role */}
             <p className="text-sm font-medium text-[#4f55c7] mb-1">
-              {user.role || "Individual/Entrepreneur"}
+              {user.beyincProfile || "Individual/Entrepreneur"}
             </p>
 
             {/* Headline */}
@@ -188,9 +199,11 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             )}
 
             {/* Bio */}
-            <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
-              {user.about || "No bio available."}
-            </p>
+            {user.role === "Mentor" && (
+              <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
+                {user.about || "No bio available."}
+              </p>
+            )}
 
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
@@ -388,95 +401,98 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               </div>
             )}
           </div> */}
-        <div className="relative flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
-          {IS_FEATURE_LOCKED && user.beyincProfile === "Mentor" && (
-            <div className="absolute inset-0 z-20 bg-white/70 backdrop-blur-[2px] rounded-lg flex flex-col items-center justify-center text-center p-4 border border-gray-100 select-none">
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                <FaClock className="text-gray-400" />
+          <div className="relative flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+            {IS_FEATURE_LOCKED && user.beyincProfile === "Mentor" && (
+              <div className="absolute inset-0 z-20 bg-white/70 backdrop-blur-[2px] rounded-lg flex flex-col items-center justify-center text-center p-4 border border-gray-100 select-none">
+                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
+                  <FaClock className="text-gray-400" />
+                </div>
+                <h4 className="text-gray-900 font-bold text-sm">
+                  Feature Coming Soon
+                </h4>
+                <p className="text-xs text-gray-500 mt-1">
+                  Booking sessions will be available shortly.
+                </p>
               </div>
-              <h4 className="text-gray-900 font-bold text-sm">Feature Coming Soon</h4>
-              <p className="text-xs text-gray-500 mt-1">
-                Booking sessions will be available shortly.
-              </p>
-            </div>
-          )}
-          <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
-            {user.beyincProfile === "Mentor" && (
-              <>
-                <button
-                  onClick={() => setRequestPopup(true)}
-                  disabled={session.length === 0}
-                  className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
-                    session.length === 0
-                      ? "bg-[#4f55c7]/60 cursor-not-allowed"
-                      : "bg-[#4f55c7] hover:bg-[#3e44a8]"
-                  }`}
-                >
-                  Request a Call
-                </button>
+            )}
+            <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+              {user.beyincProfile === "Mentor" && (
+                <>
+                  <button
+                    onClick={() => setRequestPopup(true)}
+                    disabled={session.length === 0}
+                    className={`w-full px-4 py-2 text-white font-medium rounded-lg transition-all hover:shadow-lg active:scale-95 ${
+                      session.length === 0
+                        ? "bg-[#4f55c7]/60 cursor-not-allowed"
+                        : "bg-[#4f55c7] hover:bg-[#3e44a8]"
+                    }`}
+                  >
+                    Request a Call
+                  </button>
 
-                <div className="text-center text-xs text-gray-600">
-                  <p className="mb-1">
-                    {session.length > 0 ? "Starts from" : "Session info"}
-                  </p>
+                  <div className="text-center text-xs text-gray-600">
+                    <p className="mb-1">
+                      {session.length > 0 ? "Starts from" : "Session info"}
+                    </p>
 
-                  <p className="font-bold text-xs text-[#4f55c7]">
-                    {session.length > 0
-                      ? `₹ ${Math.min(...session.map((s) => s.amount))}`
-                      : "Not Listed"}
-                  </p>
-                </div>
+                    <p className="font-bold text-xs text-[#4f55c7]">
+                      {session.length > 0
+                        ? `₹ ${Math.min(...session.map((s) => s.amount))}`
+                        : "Not Listed"}
+                    </p>
+                  </div>
 
-                <div>
-                  {session.length === 0 ? (
-                    <span className="align-middle text-sm font-medium text-gray-700 text-center w-full block">
-                      {" "}
-                      No sessions available
-                    </span>
-                  ) : (
-                    <div>
+                  <div>
+                    {session.length === 0 ? (
                       <span className="align-middle text-sm font-medium text-gray-700 text-center w-full block">
-                        Services Offered:
+                        {" "}
+                        No sessions available
                       </span>
-                      <div className="flex flex-col gap-2 mt-2 max-h-40 overflow-y-auto scrollbar-hide">
-                        {session.map((s) => (
-                          <div
-                            key={s._id}
-                            className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs"
-                          >
-                            <div>
-                              <p className="font-medium text-gray-800">
-                                {s.title}
-                              </p>
+                    ) : (
+                      <div>
+                        <span className="align-middle text-sm font-medium text-gray-700 text-center w-full block">
+                          Services Offered:
+                        </span>
+                        <div className="flex flex-col gap-2 mt-2 max-h-40 overflow-y-auto scrollbar-hide">
+                          {session.map((s) => (
+                            <div
+                              key={s._id}
+                              className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs"
+                            >
+                              <div>
+                                <p className="font-medium text-gray-800">
+                                  {s.title}
+                                </p>
 
-                              <p className="text-gray-500">
-                                {s.duration} minutes
-                              </p>
-                            </div>
+                                <p className="text-gray-500">
+                                  {s.duration} minutes
+                                </p>
+                              </div>
 
-                            <div className="text-right">
-                              <p className="font-bold text-[#4f55c7]">
-                                ₹{s.amount}
-                              </p>
+                              <div className="text-right">
+                                <p className="font-bold text-[#4f55c7]">
+                                  ₹{s.amount}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
+                    )}
+                  </div>
 
-            {user.role === "Startup" && (
-              <RecommendedConnectButton
-                id={user._id}
-                viewMode={viewMode}
-                handleFollower={() => {
-                  setRecommendedUserTrigger(!recommendedUserTrigger);
-                }}
-              />
-            )}
+                
+                </>
+              )}
+
+                {user.role === "Startup" && (
+                   <div className="max-h-44 overflow-y-auto scrollbar-hide bg-gray-50 border border-gray-200 rounded-lg p-4 ml-[-200px]">
+                    <h4 className="text-sm font-bold text-gray-800 mb-2">About</h4>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {user.about || "No bio available."}
+                    </p>
+                  </div>
+                  )}
             </div>
 
             {/* {user.beyincProfile === "Mentor" && (

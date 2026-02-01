@@ -739,7 +739,7 @@ export const COMPANY_STAGES = [
     icon: "🏛️",
   },
 ];
-export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace"];
+export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace","D2C"];
 export const STARTUP_TEAM_SIZES = [
   "Solo Founder",
   "2-5",
@@ -952,67 +952,67 @@ export const dataEntry = [
     icon: "material-symbols:rocket-launch-outline",
     paragraph: "A company in early stages of development and looking to scale.",
   },
-  {
-    id: 4,
-    title: "Incubator",
-    key: "Incubator",
-    icon: "clarity:organization-line",
-    paragraph:
-      "An organization that provides startups with workspace, mentorship, and resources.",
-  },
-  {
-    id: 5,
-    title: "Accelerator",
-    key: "Accelerator",
-    icon: "material-symbols:speed-outline-rounded",
-    paragraph:
-      "A program that helps startups grow rapidly through mentorship, funding and connections",
-  },
-  {
-    id: 6,
-    title: "Individual Investor",
-    key: "IndividualInvestor",
-    icon: "fluent:building-bank-16-filled",
-    paragraph: "An individual who invest their own money in companies",
-  },
-  {
-    id: 7,
-    title: "Institutional Investor",
-    key: "InstituteInvestor",
-    icon: "ph:building-apartment",
-    paragraph:
-      "An organization that invest money on behalf of others, such as pension funds or insurance companies.",
-  },
-  {
-    id: 8,
-    title: "Trade Bodies",
-    key: "TradeBody",
-    icon: "material-symbols:handshake-outline",
-    paragraph:
-      "Organizations that represent the interests of businesses in a particular sector.",
-  },
-  {
-    id: 9,
-    title: "Government body",
-    key: "GovernmentBody",
-    icon: "streamline:justice-hammer",
-    paragraph:
-      "A department or agency of the government that supports startups.",
-  },
-  {
-    id: 10,
-    title: "Corporate",
-    key: "Corporate",
-    icon: "material-symbols:corporate-fare-rounded",
-    paragraph: "A large company that invests in or partners with startups.",
-  },
-  {
-    id: 11,
-    title: "Technology partner",
-    key: "TechPartner",
-    icon: "material-symbols:laptop-mac-outline",
-    paragraph: "A company that provides technology or services to startups.",
-  },
+  // {
+  //   id: 4,
+  //   title: "Incubator",
+  //   key: "Incubator",
+  //   icon: "clarity:organization-line",
+  //   paragraph:
+  //     "An organization that provides startups with workspace, mentorship, and resources.",
+  // },
+  // {
+  //   id: 5,
+  //   title: "Accelerator",
+  //   key: "Accelerator",
+  //   icon: "material-symbols:speed-outline-rounded",
+  //   paragraph:
+  //     "A program that helps startups grow rapidly through mentorship, funding and connections",
+  // },
+  // {
+  //   id: 6,
+  //   title: "Individual Investor",
+  //   key: "IndividualInvestor",
+  //   icon: "fluent:building-bank-16-filled",
+  //   paragraph: "An individual who invest their own money in companies",
+  // },
+  // {
+  //   id: 7,
+  //   title: "Institutional Investor",
+  //   key: "InstituteInvestor",
+  //   icon: "ph:building-apartment",
+  //   paragraph:
+  //     "An organization that invest money on behalf of others, such as pension funds or insurance companies.",
+  // },
+  // {
+  //   id: 8,
+  //   title: "Trade Bodies",
+  //   key: "TradeBody",
+  //   icon: "material-symbols:handshake-outline",
+  //   paragraph:
+  //     "Organizations that represent the interests of businesses in a particular sector.",
+  // },
+  // {
+  //   id: 9,
+  //   title: "Government body",
+  //   key: "GovernmentBody",
+  //   icon: "streamline:justice-hammer",
+  //   paragraph:
+  //     "A department or agency of the government that supports startups.",
+  // },
+  // {
+  //   id: 10,
+  //   title: "Corporate",
+  //   key: "Corporate",
+  //   icon: "material-symbols:corporate-fare-rounded",
+  //   paragraph: "A large company that invests in or partners with startups.",
+  // },
+  // {
+  //   id: 11,
+  //   title: "Technology partner",
+  //   key: "TechPartner",
+  //   icon: "material-symbols:laptop-mac-outline",
+  //   paragraph: "A company that provides technology or services to startups.",
+  // },
 ];
 
 export const followerController = async ({
