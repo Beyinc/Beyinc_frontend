@@ -364,7 +364,7 @@ const ProfileCard = ({
           className="flex flex-col mt-4 font-medium
           w-full"
         >
-          <div className="px-4 lg:px-28 gap-4 flex flex-col">
+          <div className="px-6 gap-4 flex flex-col">
             <div className="flex justify-between items-center">
               <span className="font-medium text-slate-900">Followers</span>
               <span className="font-semibold text-gray-700">

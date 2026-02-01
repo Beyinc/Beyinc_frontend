@@ -71,9 +71,13 @@ const TabsAndInvestment = ({
   return (
     <div className="tabs-and-investment-container mt-0 bg-white">
       <div>
-        <div className="tabs-container">
+        <div className="inline-flex items-center bg-gray-100 rounded-full p-1.5 gap-2 shadow-md">
           <div
-            className={`Ttab ${activeTab === "Industries" ? "Tactive" : ""}`}
+            className={`px-5 py-2 rounded-full text-sm font-medium cursor-pointer transition-all ${
+  activeTab === "Industries" 
+    ? "bg-[#4F55C7] text-white shadow-sm"  // Active: Dark Blue + White Text
+    : "text-gray-600 hover:text-gray-900"   // Inactive: Grey Text
+}`}
             onClick={() => handleTabClick("Industries")}
           >
             Industries
