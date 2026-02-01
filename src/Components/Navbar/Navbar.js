@@ -1912,7 +1912,7 @@ const Navbar = () => {
                             alt=""
                           />
                         ) : (
-                        <div className="Profile-img !bg-[#4E54C6] text-[#4E54C6] !font-bold !text-2xl flex items-center justify-center rounded-full">
+                        <div className="Profile-img bg-[#4E54C6] text-white !font-bold !text-2xl flex items-center justify-center rounded-full">
   {userName && userName.length > 0
     ? userName.charAt(0).toUpperCase()
     : "?"}

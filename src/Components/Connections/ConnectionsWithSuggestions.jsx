@@ -13,6 +13,32 @@ import "./ConnectionsWithSuggestions.css";
 
 // ---------------- HELPER COMPONENTS (Moved Outside) ----------------
 
+const UserAvatar = ({ user, onClick, size = "h-20 w-20 sm:h-24 sm:w-24" }) => {
+  const imageUrl = user?.image?.url;
+  const firstLetter = user?.userName?.[0]?.toUpperCase() || "?";
+
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        onClick={onClick}
+        className={`cursor-pointer object-cover rounded-full ${size}`}
+        alt="profile"
+      />
+    );
+  }
+
+  // Display first letter avatar when no image
+  return (
+    <div
+      onClick={onClick}
+      className={`cursor-pointer rounded-full ${size} bg-[rgb(79,85,199)] flex items-center justify-center text-white font-medium text-4xl sm:text-5xl`}
+    >
+      {firstLetter}
+    </div>
+  );
+};
+
 const FilterContent = ({ searchValue, onSearchChange, onFilterApply, placeholder }) => {
   return (
     <div className="flex flex-col gap-4">
@@ -188,11 +214,10 @@ export default function ConnectionsWithSuggestions() {
   // ---------------- RENDER CARD ----------------
   const renderUserCard = (user, isSuggestion = false) => (
     <div key={user._id} className="bg-white hover:shadow-lg border border-gray-200 rounded-xl p-4 w-full max-w-[190px] mx-auto flex flex-col justify-center items-center">
-      <img
-        src={user.image?.url || "/profile.png"}
+      <UserAvatar
+        user={user}
         onClick={() => navigate(user._id === user_id ? "/editProfile" : `/user/${user._id}`)}
-        className="cursor-pointer object-cover rounded-full h-20 w-20 sm:h-24 sm:w-24"
-        alt="profile"
+        size="h-20 w-20 sm:h-24 sm:w-24"
       />
       <h3 className="mt-2 text-center text-sm font-medium line-clamp-2">{user.userName}</h3>
       <h5 className="text-neutral-600 mt-1 text-xs line-clamp-1">{user.role}</h5>
