@@ -329,8 +329,8 @@ const Post = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-16 h-16 bg-[#4E54C6] flex items-center justify-center">
-                  <span className="text-white text-5xl font-medium">
+                <div className=" w-12 h-12 md:w-16 md:h-16 bg-[#4E54C6] flex items-center justify-center">
+                  <span className="text-white text-3xl  md:text-5xl font-medium">
                     {post?.createdBy?.userName?.charAt(0).toUpperCase() || "U"}
                   </span>
                 </div>

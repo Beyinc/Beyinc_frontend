@@ -276,8 +276,8 @@ const ProfileCard = ({
               alt="Profile"
             />
           ) : (
-            <div className="size-28 lg:size-36 rounded-full m-0 bg-[#4E54C6] p-3 flex items-center justify-center">
-              <span className="text-white text-4xl lg:text-8xl font-medium">
+            <div className="size-28 lg:size-28 rounded-full m-0 bg-[#4E54C6] p-3 flex items-center justify-center">
+              <span className="text-white text-6xl lg:text-8xl font-medium">
                 {formState?.fullName?.charAt(0).toUpperCase() || "U"}
               </span>
             </div>
