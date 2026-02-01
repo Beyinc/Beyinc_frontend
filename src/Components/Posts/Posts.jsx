@@ -567,7 +567,7 @@ const Posts = () => {
           <button
             className="loadMore"
             onClick={handleLoadMore}
-            hidden={filteredPosts.length <= 10}
+            hidden={filteredPosts.length < 10}
           >
             Load More
           </button>

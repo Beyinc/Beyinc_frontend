@@ -318,31 +318,24 @@ const Post = ({
       <div className="ProfilepostContainer hover:cursor-pointer mt-1">
         <div className="PostHeaderContainer ">
           <div className="postTotaldetails ">
-            
-           <div
-  className="PostheaderimageContainer relative"
-  onClick={() => {
-    navigate(`/user/${post?.createdBy?._id}`);
-  }}
->
-  <img
-    src={
-      post?.createdBy?.image?.url ||
-      "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-    }
-    alt="profile"
-    style={{ opacity: post?.createdBy?.image?.url ? 1 : 0 }}
-  />
-
-  {!post?.createdBy?.image?.url && (
-    <div className="absolute inset-0 rounded-full bg-[#4E54C6] flex items-center justify-center">
-      <span className="text-white text-5xl font-meduim">
-        {post?.createdBy?.userName?.charAt(0).toUpperCase() || "U"}
-      </span>
-    </div>
-  )}
-</div>
-
+            <div
+              className="PostheaderimageContainer  relative  rounded-full overflow-hidden cursor-pointer"
+              onClick={() => navigate(`/user/${post?.createdBy?._id}`)}
+            >
+              {post?.createdBy?.image?.url ? (
+                <img
+                  src={post.createdBy.image.url}
+                  alt="profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-16 h-16 bg-[#4E54C6] flex items-center justify-center">
+                  <span className="text-white text-5xl font-medium">
+                    {post?.createdBy?.userName?.charAt(0).toUpperCase() || "U"}
+                  </span>
+                </div>
+              )}
+            </div>
 
             <div className="PostDetailsContainer">
               <div

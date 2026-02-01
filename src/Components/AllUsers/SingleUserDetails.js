@@ -152,7 +152,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               />
             </div>
 
-            {user.role === "Startup" && (
+            {(user.role === "Startup"|| user.beyincProfile==="Mentor") && (
               <RecommendedConnectButton
                 id={user._id}
                 viewMode={viewMode}
@@ -199,7 +199,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             )}
 
             {/* Bio */}
-            {user.role === "Mentor" && (
+            {user.beyincProfile === "Mentor" && (
               <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
                 {user.about || "No bio available."}
               </p>
@@ -486,7 +486,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               )}
 
                 {user.role === "Startup" && (
-                   <div className="max-h-44 overflow-y-auto scrollbar-hide bg-gray-50 border border-gray-200 rounded-lg p-4 ml-[-200px]">
+                   <div className="max-h-44 overflow-y-auto scrollbar-hide rounded-lg p-4 ml-[-200px]">
                     <h4 className="text-sm font-bold text-gray-800 mb-2">About</h4>
                     <p className="text-sm text-gray-600 leading-relaxed">
                       {user.about || "No bio available."}
