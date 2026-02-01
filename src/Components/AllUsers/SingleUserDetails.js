@@ -165,7 +165,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
           {/* 2. Middle Content Section */}
           <div className="flex-1">
             {/* Header: Name & Verify */}
-            <div className="flex items-center justify-start mb-2">
+            <div className="flex items-center justify-start gap-3 mb-2">
               <h3
                 className="text-xl font-bold text-gray-900 cursor-pointer hover:text-[#4f55c7] transition-colors"
                 onClick={openUser}
