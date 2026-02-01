@@ -268,19 +268,19 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
                   className="border border-gray-300 rounded-md p-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 />
               </div>
-              {/* <div> */}
-              {/*   <label className="block text-sm font-semibold text-blue-600 mb-1.5"> */}
-              {/*     LinkedIn */}
-              {/*   </label> */}
-              {/*   <input */}
-              {/*     type="text" */}
-              {/*     name="linkedin" */}
-              {/*     value={formState.linkedin} */}
-              {/*     onChange={handleInputChange} */}
-              {/*     placeholder="linkedin.com/in/username" */}
-              {/*     className="border border-gray-300 rounded-md p-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" */}
-              {/*   /> */}
-              {/* </div> */}
+              <div>
+                <label className="block text-sm font-semibold text-blue-600 mb-1.5">
+                  LinkedIn
+                </label>
+                <input
+                  type="text"
+                  name="linkedin"
+                  value={formState.linkedin}
+                  onChange={handleInputChange}
+                  placeholder="linkedin.com/in/username"
+                  className="border border-gray-300 rounded-md p-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                />
+              </div>
             </div>
           </div>
 
@@ -461,7 +461,7 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
                   ))}
                 </select>
               </div>
-              <div>
+              {/* <div>
                 <label className="block text-sm font-semibold text-blue-600 mb-1.5">
                   State
                 </label>
@@ -478,8 +478,8 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <label className="block text-sm font-semibold text-blue-600 mb-1.5">
                   Town/City
                 </label>
@@ -496,7 +496,7 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
             </div>
 
             {/* Languages */}
