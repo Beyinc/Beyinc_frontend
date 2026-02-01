@@ -278,10 +278,12 @@ const ProfileCard = ({
                 : "/profile.png"
             }
           />
-          <i
-            onClick={() => setOpenEditPfp(true)}
-            className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full"
-          ></i>
+          {selfProfile && (
+    <i
+      onClick={() => setOpenEditPfp(true)}
+      className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full cursor-pointer"
+    ></i>
+  )}
         </div>
       </div>
 
