@@ -158,9 +158,30 @@ background: var( --button-background);
 /* Responsive members list */
 .openDiscussionUsers {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 400px;
+  padding-right: 5px;
+}
+
+/* Custom scrollbar for members list */
+.openDiscussionUsers::-webkit-scrollbar {
+  width: 6px;
+}
+
+.openDiscussionUsers::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.openDiscussionUsers::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.openDiscussionUsers::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 /* Responsive text and buttons */
