@@ -462,8 +462,8 @@ const AllUsers = () => {
         </div>
       </Drawer>
 
-      <div className="users-main-box bg-red-500 overflow-x-hidden">
-        {width < 770 && (
+      <div className="users-main-box bg-red-500 overflow-x-hidden pr-4 sm:pr-5 md:pr-6">
+        {width <= 1210 && (
           <div className="user-nav-bar">
             <div style={{ display: "flex", alignItems: "center" }}>
               <button className="nav-bar-buttons" onClick={handleClickOpen}>
@@ -498,7 +498,7 @@ const AllUsers = () => {
           </div>
         )}
         {/* NEW TABS SECTION - Add this right after mobile nav */}
-        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 lg:ml-60">
+        <div className="w-full bg-gray-50 border-b border-gray-200 sticky top-0 z-10 pr-4 sm:pr-5 md:pr-6" style={{ marginLeft: width > 1210 ? "15rem" : 0 }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex gap-2 mt-4 p-1 bg-gray-100 rounded-full w-fit border border-gray-300">
               <button
@@ -525,7 +525,7 @@ const AllUsers = () => {
           </div>
         </div>
         <div className="usersWrapper">
-          {width > 770 && (
+          {width > 1210 && (
             <div className="filterContainer">
               <div
                 style={{
@@ -674,7 +674,7 @@ const AllUsers = () => {
             </div>
           )}
           {/* {viewMode} */}
-          <div className="user-cards-panel w-[95%] lg:w-[80%]">
+          <div className="user-cards-panel pr-4 sm:pr-5 md:pr-6 box-border" style={{ width: width > 1210 ? "80%" : "100%", maxWidth: width > 1210 ? "none" : "100%" }}>
             <div className="mt-4 userscontainer w-full !flex flex-wrap justify-center lg:justify-start gap-4">
   {viewMode === "mentors" && (
       <div
