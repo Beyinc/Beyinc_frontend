@@ -64,6 +64,13 @@
   white-space: nowrap;
 }
 
+/* Hide post type tag on the right of name in responsive/mobile only */
+@media (max-width: 767px) {
+  .postType-rightOfName {
+    display: none !important;
+  }
+}
+
 .postTypeM{
   background: var(--postType-bg);
   padding: 6px 10px;

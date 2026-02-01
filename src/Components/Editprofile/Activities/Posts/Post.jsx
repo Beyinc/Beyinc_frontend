@@ -385,7 +385,7 @@ const Post = ({
           >
             <div className="flex flex-col mt-0 space-y-3 relative">
               <div className="flex space-x-3">
-                <div className="postType hidden md:block text-xs mt-1 sm:text-sm sm:mt-0">
+                <div className="postType postType-rightOfName hidden md:block text-xs mt-1 sm:text-sm sm:mt-0">
                   {post?.type}
                 </div>
 

@@ -2,7 +2,6 @@
   /* position: fixed; */
   /* bottom: 30px; */
   width: 100%;
-  max-width: 320px;
 }
 .sendIcon {
   cursor: pointer;
@@ -25,6 +24,6 @@
   gap: 10px;
   align-items: center;
   width: 100%;
-  max-width: 320px;
+  max-width: 420px;
   margin-bottom: 20px;
 }

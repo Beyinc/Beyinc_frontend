@@ -191,8 +191,8 @@ const PostComments = ({ fetchComments, postId }) => {
   return (
     <div className="">
       <div className="postCommentAddSection ml-5">
-        <div className="flex flex-row items-start gap-2 max-w-[320px]">
-          <div className="shrink-0">
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <div>
             <img
               id="Profile-img"
               className="Profile-img"
@@ -200,13 +200,13 @@ const PostComments = ({ fetchComments, postId }) => {
               alt=""
             />
           </div>
-          <div className="relative min-w-0 flex-1">
+          <div className="relative w-full">
   {/* 1. MOVED STYLES HERE: This div is now the visual 'Box' */}
-  <div className="flex items-center w-full min-w-0 bg-gray-100 rounded-[30px] px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-[#4F55C7] focus-within:ring-2 focus-within:ring-[#ECE9FC] transition-all">
+  <div className="flex items-center w-full max-w-[420px] bg-gray-100 rounded-[30px] px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-[#4F55C7] focus-within:ring-2 focus-within:ring-[#ECE9FC] transition-all">
     
     <textarea
       // 2. MADE TRANSPARENT: Removed borders/shadows from textarea so it blends in
-      className="flex-1 min-w-0 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 !h-fit !p-0 focus:ring-0 w-full max-w-full"
+      className="grow bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 !h-fit !p-0 focus:ring-0 min-w-0"
       onClick={() => {
         if (!user_id) navigate("/login");
       }}
