@@ -281,11 +281,17 @@ const Posts = () => {
     setFilterPage((prev) => prev + 1);
   };
 
-  const handleTagsChange = (event) => {
-    const { value, checked } = event.target;
-    setSelectedTags((prev) =>
-      checked ? [...prev, value] : prev.filter((option) => option !== value),
-    );
+  const handleTagsChange = (e) => {
+    const value = e.target.value;
+    setSelectedTags(prev => {
+      if (prev.includes(value)) {
+        // Remove if already selected
+        return prev.filter(tag => tag !== value);
+      } else {
+        // Add if not selected - THIS SHOULD NOT DUPLICATE
+        return [...prev, value];
+      }
+    });
   };
 
   const clearAllTags = () => {
