@@ -269,23 +269,21 @@ const ProfileCard = ({
     <div className="  h-auto pb-9 w-screen lg:w-[360px] flex flex-col items-center lg:rounded-3xl shadow-lg lg:bg-white relative ">
       <div className="absolute lg:relative">
         <div className="relative group mt-4 flex items-center justify-center">
-          {formState?.image && formState.image !== "" ? (
-            <img
-              className="size-28 lg:size-36 rounded-full m-0 bg-white p-3"
-              src={formState.image.url}
-              alt="Profile"
-            />
-          ) : (
-            <div className="size-28 lg:size-36 rounded-full m-0 bg-[#4E54C6] p-3 flex items-center justify-center">
-              <span className="text-white text-4xl lg:text-8xl font-medium">
-                {formState?.fullName?.charAt(0).toUpperCase() || "U"}
-              </span>
-            </div>
-          )}
-          <i
-            onClick={() => setOpenEditPfp(true)}
-            className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full"
-          ></i>
+          <img
+            className="size-28 lg:size-36 rounded-full m-0 bg-white p-3"
+            // src={image !== undefined && image !== "" ? image : "/profile.png"}
+            src={
+              formState?.image && formState.image !== ""
+                ? formState.image.url
+                : "/profile.png"
+            }
+          />
+          {selfProfile && (
+    <i
+      onClick={() => setOpenEditPfp(true)}
+      className="fas fa-camera absolute flex items-center justify-center size-28 lg:size-36 ml-1 opacity-0 group-hover:bg-black/60 group-hover:opacity-100 group-hover:text-white group-hover:rounded-full cursor-pointer"
+    ></i>
+  )}
         </div>
       </div>
 

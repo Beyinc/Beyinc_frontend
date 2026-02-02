@@ -329,8 +329,8 @@ const Post = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-16 h-16 bg-[#4E54C6] flex items-center justify-center">
-                  <span className="text-white text-5xl font-medium">
+                <div className=" w-12 h-12 md:w-16 md:h-16 bg-[#4E54C6] flex items-center justify-center">
+                  <span className="text-white text-3xl  md:text-5xl font-medium">
                     {post?.createdBy?.userName?.charAt(0).toUpperCase() || "U"}
                   </span>
                 </div>
@@ -385,7 +385,7 @@ const Post = ({
           >
             <div className="flex flex-col mt-0 space-y-3 relative">
               <div className="flex space-x-3">
-                <div className="postType hidden md:block text-xs mt-1 sm:text-sm sm:mt-0">
+                <div className="postType postType-rightOfName hidden md:block text-xs mt-1 sm:text-sm sm:mt-0">
                   {post?.type}
                 </div>
 

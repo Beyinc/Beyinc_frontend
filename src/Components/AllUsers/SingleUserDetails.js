@@ -147,7 +147,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
       {/* --- Main Card Container --- */}
       <div className="w-full bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-[#4f55c7]/30 hover:scale-[1.02] mb-6 ">
         {/* user details */}
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 md:items-start">
           {/* 1. Image Section */}
           <div className="flex-shrink-0 flex flex-col items-center md:items-start gap-4 w-full md:w-40">
             <div
@@ -205,7 +205,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
             )}
           </div>
           {/* 2. Middle Content Section */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0 md:border-l md:border-gray-300 md:pl-6">
             {/* Header: Name & Verify */}
             <div className="flex items-center justify-start mb-2">
               <h3
@@ -249,18 +249,19 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
 
             {/* Tabs - Conditional based on viewMode */}
             <div className="mb-3">
-              <div className="flex gap-2 mb-6 p-1 shadow-[0_2px_8px_rgba(0,0,0,0.1)] bg-gray-100 rounded-full w-fit border border-gray-400">
+              <div className="flex flex-row justify-center items-center gap-2.5 mb-6 p-2.5 rounded-[20px] w-fit max-w-full bg-white border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
                 {user.beyincProfile === "Mentor" &&
                   viewMode === "mentors" &&
                   ["Expertise", "Industries"].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
+                      className={`px-5 py-2.5 rounded-[20px] text-sm font-semibold transition-all ${
                         activeTab === tab
-                          ? "bg-white text-[#4f55c7] shadow-sm"
-                          : "bg-transparent text-black "
+                          ? "text-[#4f55c7] shadow-sm"
+                          : "bg-transparent text-gray-800 hover:bg-gray-100"
                       }`}
+                      style={activeTab === tab ? { background: '#E3E5FD' } : {}}
                     >
                       {tab}
                     </button>
@@ -271,11 +272,12 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                     <button
                       key={tab}
                       onClick={() => setStartupActiveTab(tab)}
-                      className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all hover:text-white ${
+                      className={`px-5 py-2.5 rounded-[20px] text-sm font-semibold transition-all ${
                         startupActiveTab === tab
-                          ? "bg-white text-[#4f55c7] shadow-sm"
-                          : "bg-transparent text-black "
+                          ? "text-[#4f55c7] shadow-sm"
+                          : "bg-transparent text-gray-800 hover:bg-gray-100"
                       }`}
+                      style={startupActiveTab === tab ? { background: '#E3E5FD' } : {}}
                     >
                       {tab}
                     </button>
@@ -443,7 +445,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               </div>
             )}
           </div> */}
-          <div className="relative flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+          <div className="relative flex-shrink-0 flex flex-col gap-3 w-full md:w-[280px] md:min-w-0 lg:w-[420px] lg:min-w-[360px] border-t md:border-t-0 md:border-l md:border-gray-300 pt-4 md:pt-0 md:pl-6">
             {IS_FEATURE_LOCKED && user.beyincProfile === "Mentor" && (
               <div className="absolute inset-0 z-20 bg-white/70 backdrop-blur-[2px] rounded-lg flex flex-col items-center justify-center text-center p-4 border border-gray-100 select-none">
                 <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
@@ -457,7 +459,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                 </p>
               </div>
             )}
-            <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-60 border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+            <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-[280px] md:min-w-0 lg:w-[420px] lg:min-w-[360px] border-t md:border-t-0 pt-4 md:pt-0">
               {user.beyincProfile === "Mentor" && (
                 <>
                   <button
@@ -528,11 +530,13 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               )}
 
                 {user.role === "Startup" && (
-                   <div className="max-h-44 overflow-y-auto scrollbar-hide rounded-lg p-4 ml-[-200px]">
-                    <h4 className="text-sm font-bold text-gray-800 mb-2">About</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {user.about || "No bio available."}
-                    </p>
+                   <div className="flex flex-col min-w-0 w-full">
+                    <h4 className="text-xl font-bold text-gray-900 flex-shrink-0 mb-2 md:mt-0">About</h4>
+                    <div className="max-h-40 md:max-h-48 overflow-y-auto overflow-x-hidden scrollbar-hide rounded-lg min-w-0">
+                      <p className="text-sm text-gray-600 leading-relaxed break-words whitespace-normal pr-1">
+                        {user.about || "No bio available."}
+                      </p>
+                    </div>
                   </div>
                   )}
             </div>

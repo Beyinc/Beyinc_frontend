@@ -202,16 +202,16 @@ const PostComments = ({ fetchComments, postId }) => {
           </div>
           <div className="relative w-full">
   {/* 1. MOVED STYLES HERE: This div is now the visual 'Box' */}
-  <div className="flex items-center w-full bg-gray-100 rounded-[30px] px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-[#4F55C7] focus-within:ring-2 focus-within:ring-[#ECE9FC] transition-all">
+  <div className="flex items-center w-full max-w-[420px] bg-gray-100 rounded-[30px] px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-[#4F55C7] focus-within:ring-2 focus-within:ring-[#ECE9FC] transition-all">
     
     <textarea
       // 2. MADE TRANSPARENT: Removed borders/shadows from textarea so it blends in
-      className="grow bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 !h-fit !p-0 focus:ring-0"
+      className="grow bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 !h-fit !p-0 focus:ring-0 min-w-0"
       onClick={() => {
         if (!user_id) navigate("/login");
       }}
       rows={1} 
-      cols={80}
+      cols={35}
       onKeyDown={handleKeyDown}
       value={comment}
       onChange={(e) => setComment(e.target.value)}
