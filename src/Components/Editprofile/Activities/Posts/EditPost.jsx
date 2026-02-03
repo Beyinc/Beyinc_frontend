@@ -29,7 +29,7 @@ const EditPost = ({
     (store) => store.auth.loginDetails
   );
 
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
   const [posttype, setposttype] = useState("");
   const [description, setDescription] = useState("");
 
@@ -42,7 +42,7 @@ const EditPost = ({
 ////
   useEffect(() => {
     if (post || EditPostCount) {
-      setImage(post?.image);
+      setImages(post?.images ?? (post?.image ? [post.image] : []));
       setDescription(post?.description);
       setposttype(post?.type);
       setuserTags(post?.tags);
@@ -75,6 +75,28 @@ const EditPost = ({
     socket.current = io(socket_io);
   }, []);
 
+  const readFileAsDataURL = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+
+  const handleImageEdit = (e) => {
+    const files = Array.from(e.target.files || []);
+    const maxSize = 4 * 1024 * 1024;
+    const oversized = files.find((f) => f.size > maxSize);
+    if (oversized) {
+      alert(`Each file should be less than ${(maxSize) / (1024 * 1024)} MB.`);
+      e.target.value = null;
+      return;
+    }
+    Promise.all(files.map(readFileAsDataURL)).then((dataUrls) => {
+      setImages((prev) => [...prev, ...dataUrls]);
+    });
+  };
+
   const updatePost = async (e) => {
     e.target.disabled = true;
     setLoading(true);
@@ -83,7 +105,7 @@ const EditPost = ({
       link,
       tags: usertags,
       pitchId: userPitchId?._id,
-      image: image,
+      images: images.length ? images : null,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       id: post?._id,
@@ -103,7 +125,7 @@ const EditPost = ({
         setUserPitchid(null);
         setlink("");
         setuserTags([]);
-        setImage("");
+        setImages([]);
         setposttype("");
         setEditPostpopup(false);
 
@@ -140,7 +162,7 @@ const EditPost = ({
         setUserPitchid(null);
         setlink("");
         setuserTags([]);
-        setImage("");
+        setImages([]);
         setposttype("");
         setEditPostpopup(false);
       }}
@@ -175,7 +197,7 @@ const EditPost = ({
               setUserPitchid(null);
               setlink("");
               setuserTags([]);
-              setImage("");
+              setImages([]);
               setposttype("");
               setEditPostpopup(false);
             }}
@@ -184,27 +206,33 @@ const EditPost = ({
           </div>
         </div>
         <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-          {image !== undefined && image !== "" && image.url !== "" && (
-            <div style={{ position: "relative", marginTop: "140px"  }}>
-              <img
-                style={{
-                  cursor: "pointer",
-                  height: "200px",
-                  width: "200px",
-                  objectFit: "cover",
-                }}
-                src={image.url}
-                alt="Profile"
-              />
-              <div
-                style={{ position: "absolute", right: "10px", top: "10px" }}
-                onClick={() => setImage("")}
-              >
-                <i class="fas fa-times"></i>
-              </div>
+          {images && images.length > 0 && (
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+              {images.map((img, idx) => (
+                <div key={idx} style={{ position: 'relative' }}>
+                  <img
+                    style={{ cursor: 'pointer', height: '200px', width: '200px', objectFit: 'cover' }}
+                    src={img?.url ? img.url : img}
+                    alt={`img-${idx}`}
+                  />
+                  <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => setImages(prev => prev.filter((_, i) => i !== idx))}>
+                    <i class="fas fa-times"></i>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
           <div style={{border: '2px solid var(--light-border)'}}></div>
+
+          <div className="postUploadContainer" style={{ marginTop: '8px' }}>
+            <label htmlFor="editProfilePic" className="postUploadIcon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                <path fill="black" d="M2 12h2v5h16v-5h2v5c0 1.11-.89 2-2 2H4a2 2 0 0 1-2-2zM12 2L6.46 7.46l1.42 1.42L11 5.75V15h2V5.75l3.13 3.13l1.42-1.43z" />
+              </svg>
+              <button className="browseButton" onClick={() => document.getElementById('editProfilePic').click()}>Browse</button>
+            </label>
+            <input type="file" accept="image/*" id="editProfilePic" onChange={handleImageEdit} style={{ display: 'none' }} multiple />
+          </div>
 
           <div
             style={{

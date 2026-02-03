@@ -522,15 +522,16 @@ const IndividualPostDetailsCard = () => {
               </div>
 
               <div className="PostimageContainer">
-                {post?.image?.url && ( // Check if the image URL is available
+                {(post?.images && post.images.length ? post.images : post?.image ? [post.image] : []).map((img, i) => (
                   <img
-                    src={post.image.url}
+                    key={i}
+                    src={img?.url ? img.url : img}
                     style={{ objectFit: "contain" }}
                     alt=""
                     onClick={() => navigate(`/posts/${post?._id}`)}
                     className="w-[850px]"
                   />
-                )}
+                ))}
               </div>
               {(post?.openDiscussion === true ||
                 post?.openDiscussionTeam
