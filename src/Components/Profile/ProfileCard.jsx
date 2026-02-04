@@ -288,15 +288,31 @@ const ProfileCard = ({
       </div>
 
       <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-24 lg:mt-4 pt-16 lg:pt-0">
-        <div className="font-bold text-xl ml-3">
-          {/* {userName && userName[0]?.toUpperCase() + userName?.slice(1)} */}
-          {profileDataObj.role === "Startup"
-            ? profileDataObj?.startupProfile?.startupName
-            : formState?.fullName}
-          <span onClick={() => setIsInputPopupVisible(true)}>
-            {selfProfile && <i className="fas fa-pen"></i>}
-          </span>
-        </div>
+        {/* Updated Name Container: Flex to align Name + Badge + Pen */}
+<div className="flex items-center justify-center gap-2 font-bold text-xl mt-2">
+  <span>
+    {profileDataObj.role === "Startup"
+      ? profileDataObj?.startupProfile?.startupName
+      : formState?.fullName}
+  </span>
+
+  {/* Instagram-style Verification Badge */}
+  {profileData?.verified && (
+    <svg
+      className="w-5 h-5 text-green-600"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* "Seal" shape with checkmark */}
+      <path d="M23 12l-2.44-2.79.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.79-.34 3.68 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-10 5l-4-4 1.41-1.41L13 14.17l7.59-7.59L22 8l-9 9z" />
+    </svg>
+  )}
+
+  <span onClick={() => setIsInputPopupVisible(true)}>
+    {selfProfile && <i className="fas fa-pen ml-1 cursor-pointer text-sm"></i>}
+  </span>
+</div> 
         <div className="font-bold text-sm text-[#4F55C7]">
           {formState?.role}
         </div>
@@ -304,20 +320,50 @@ const ProfileCard = ({
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
         </div>
-       {(profileData.role==="Mentor"||profileData.role==="Startup") && (
+       {/* {(profileData.role==="Mentor"||profileData.role==="Startup") && (
           <div className="font-bold text-md text-amber-600" >
            Not Verified
           </div>
+        )} */}
+  
+        {profileData?.verified === true && (
+          <div className="flex items-center gap-2 font-bold text-md text-green-600">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+            Verified
+          </div>
         )}
-  {/*
+
+        {/* 2. UPDATE: Only show "Not Verified" if verified is FALSE (added check !profileData.verified) */}
+        {(profileData.role === "Mentor" || profileData.role === "Startup") &&
+          !profileData.verified && (
+            <div className="font-bold text-md text-amber-600">
+              Not Verified
+            </div>
+          )}
+
+        {/* 3. Existing "Verification Pending" logic */}
         {profileData?.verified === false &&
           profileData?.beyincProfile.length === 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               Verification Pending
             </div>
-          )} */}
+          )}
 
-        {/* {profileData.verified === false &&
+        {/* 4. Existing "Will Verify Soon" logic */}
+        {profileData.verified === false &&
           profileData?.beyincProfile?.length !== 0 && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               <svg
@@ -336,7 +382,7 @@ const ProfileCard = ({
               </svg>
               Will Verify Soon
             </div>
-          )} */}
+          )}
         <div className="flex flex-col gap-4 mt-2 ">
           {!selfProfile && (
             <div className="flex items-center gap-2">

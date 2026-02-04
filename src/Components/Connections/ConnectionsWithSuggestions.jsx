@@ -205,7 +205,19 @@ export default function ConnectionsWithSuggestions() {
         onClick={() => navigate(user._id === user_id ? "/editProfile" : `/user/${user._id}`)}
         size="h-20 w-20 sm:h-24 sm:w-24"
       />
-      <h3 className="mt-2 text-center text-sm font-medium line-clamp-2">{user.userName}</h3>
+      <h3 className="mt-2 flex items-center justify-center gap-1 text-sm font-medium w-full">
+        <span className="truncate max-w-[140px]">{user.userName}</span>
+        {user.verified && (
+          <svg
+            className="w-4 h-4 text-green-600 shrink-0"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M23 12l-2.44-2.79.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.79-.34 3.68 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-10 5l-4-4 1.41-1.41L13 14.17l7.59-7.59L22 8l-9 9z" />
+          </svg>
+        )}
+      </h3>
       <h5 className="text-neutral-600 mt-1 text-xs line-clamp-1">{user.role}</h5>
       <p className="mt-2 mb-2 text-center text-xs line-clamp-2">{user.headline}</p>
       
