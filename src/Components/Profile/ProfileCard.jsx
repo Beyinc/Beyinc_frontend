@@ -38,6 +38,9 @@ const ProfileCard = ({
   const [isInputPopupVisible, setIsInputPopupVisible] = useState(false);
   const [singlelanguagesKnown, setSinglelanguagesKnown] = useState("");
 
+  // --- NEW STATE FOR FOUNDING TEAM ---
+  const [foundingTeam, setFoundingTeam] = useState([]); 
+
   const [languagesKnown, setlanguagesKnown] = useState([]);
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
@@ -77,10 +80,26 @@ const ProfileCard = ({
     socket.current = io(socket_io);
   }, []);
 
-  const followerController = async (e, id) => {
-    console.log("Following user:", id);
-    console.log("Current userId:", user_id);
+  // --- NEW EFFECT TO FETCH FOUNDING TEAM ---
+  useEffect(() => {
+    // Only fetch if it's the logged-in user viewing their own startup profile
+    if (selfProfile && profileRole === "Startup") {
+      const fetchTeam = async () => {
+        try {
+          const response = await ApiServices.getFoundingTeam();
+          // Based on your backend controller, response.cofounders contains the array
+          setFoundingTeam(response.cofounders || []);
+        } catch (error) {
+          console.error("Error fetching founding team:", error);
+        }
+      };
+      fetchTeam();
+    }
+  }, [selfProfile, profileRole]);
 
+  const followerController = async (e, id) => {
+    // ... (Your existing follower logic) ...
+    console.log("Following user:", id);
     e.target.disabled = true;
 
     try {
@@ -108,7 +127,6 @@ const ProfileCard = ({
         userName: updatedUser.userName,
       });
 
-      console.log("Follow successful, updated user data:", updatedUser);
     } catch (err) {
       console.error("Error in followerController:", err);
       dispatch(
@@ -124,9 +142,8 @@ const ProfileCard = ({
   };
 
   const unfollowHandler = async (e, id) => {
+     // ... (Your existing unfollow logic) ...
     console.log("Unfollowing user:", id);
-    console.log("Current userId:", user_id);
-
     e.target.disabled = true;
 
     try {
@@ -147,7 +164,6 @@ const ProfileCard = ({
         _id: id,
       });
 
-      console.log("Unfollow successful, updated user data:", updatedUser);
     } catch (err) {
       console.error("Error in unfollowHandler:", err);
       dispatch(
@@ -430,9 +446,14 @@ const ProfileCard = ({
             )}
           </div>
 
+          {/* --- UPDATED FOUNDING TEAM WIDGET --- */}
           {selfProfile && profileRole === "Startup" && (
             <div className="px-6 mt-4">
-              <FoundingTeamWidget />
+              <FoundingTeamWidget 
+                userId={user_id}
+                startupName={profileDataObj?.startupProfile?.startupName || formState.fullName}
+                initialTeam={foundingTeam}
+              />
             </div>
           )}
 

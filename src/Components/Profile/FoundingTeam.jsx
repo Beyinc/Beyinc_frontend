@@ -7,26 +7,24 @@ import { ApiServices } from "../../Services/ApiServices";
 
 // --- Constants for Styles ---
 const COLORS = {
-  primary: 'bg-[#8B5CF6]', // Bloomr Purple
+  primary: 'bg-[#8B5CF6]',
   primaryHover: 'hover:bg-[#7C3AED]',
   textLink: 'text-[#8B5CF6]',
   gradient: 'bg-gradient-to-br from-blue-500 to-purple-600',
-  success: 'text-green-500',
-  pending: 'text-orange-500',
-  pendingBg: 'bg-orange-50',
 };
 
 const FoundingTeamWidget = ({ userId, startupName, initialTeam = [] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [team, setTeam] = useState(initialTeam);
 
+  // Sync with initialTeam from parent (backend data)
   useEffect(() => {
     setTeam(initialTeam);
   }, [initialTeam]);
 
   return (
     <>
-      {/* --- 1. DASHBOARD WIDGET (Image 1 Style) --- */}
+      {/* --- DASHBOARD WIDGET --- */}
       <div className="bg-white w-full rounded-2xl">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-bold text-gray-900">Founding Team</h3>
@@ -51,7 +49,7 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [] }) => {
         )}
       </div>
 
-      {/* --- 2. MODAL MANAGER --- */}
+      {/* --- MODAL --- */}
       {isModalOpen && (
         <ManageTeamModal 
           isOpen={isModalOpen} 
@@ -65,19 +63,24 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [] }) => {
   );
 };
 
-// --- Sub-Component: Small Widget Row ---
+// --- Widget Row Component ---
 const WidgetRow = ({ member }) => {
   const isVerified = member.verified || member.status === 'verified';
+  const avatarUrl = member.profileImage || member.avatar || member.image?.url;
   
   return (
     <div className="flex items-start gap-3">
       {/* Avatar */}
       <div className="relative">
-        {member.profileImage || member.avatar ? (
-          <img src={member.profileImage || member.avatar} alt={member.name} className="w-10 h-10 rounded-full object-cover border border-gray-100" />
+        {avatarUrl ? (
+          <img 
+            src={avatarUrl} 
+            alt={member.name || member.userName} 
+            className="w-10 h-10 rounded-full object-cover border border-gray-100" 
+          />
         ) : (
           <div className={`w-10 h-10 rounded-full ${COLORS.gradient} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
-            {member.name.charAt(0).toUpperCase()}
+            {(member.name || member.userName || 'U').charAt(0).toUpperCase()}
           </div>
         )}
         {/* Badge Overlay */}
@@ -94,7 +97,7 @@ const WidgetRow = ({ member }) => {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <h4 className="text-sm font-bold text-gray-900 truncate leading-none">
-            {member.name}
+            {member.name || member.userName}
           </h4>
           {isVerified && <ShieldCheck className="w-3.5 h-3.5 text-green-500" />}
         </div>
@@ -111,65 +114,69 @@ const WidgetRow = ({ member }) => {
   );
 };
 
-// --- Main Modal Logic ---
+// --- Modal Component ---
 const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [otpInputVisible, setOtpInputVisible] = useState(null); // stores email of row executing OTP
+  const [otpInputVisible, setOtpInputVisible] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
-  // Form State
   const [newMember, setNewMember] = useState({ name: '', email: '', role: '' });
   const [otpValues, setOtpValues] = useState({});
 
   // Auto-clear messages
   useEffect(() => {
     if (error || success) {
-      const t = setTimeout(() => { setError(null); setSuccess(null); }, 4000);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => {
+        setError(null);
+        setSuccess(null);
+      }, 4000);
+      return () => clearTimeout(timer);
     }
   }, [error, success]);
 
-  // --- Handlers ---
-
   const handleSendInvite = async () => {
     setError(null);
-    if (!newMember.name || !newMember.email || !newMember.role) return setError("Please fill all fields.");
+    setSuccess(null);
     
-    // Check duplicates
+    if (!newMember.name || !newMember.email || !newMember.role) {
+      return setError("Please fill all fields.");
+    }
+    
     if (team.some(m => m.email.toLowerCase() === newMember.email.toLowerCase())) {
       return setError("User already in team.");
     }
 
     setLoading(true);
+    
     try {
-      // 1. Search for existing user to get real avatar/name
+      // 1. Search for existing user to get their profile
       let dbUser = null;
       try {
         const searchRes = await ApiServices.searchUserByEmail(newMember.email);
         dbUser = searchRes.data || searchRes;
       } catch (e) {
-        // Ignore if not found, we use manual data
+        // User doesn't exist in system yet
       }
 
-      // 2. Send Invite
+      // 2. Send invite email
       await ApiServices.sendCoFounderInvite({
         email: newMember.email,
-        name: dbUser?.name || newMember.name,
+        name: dbUser?.userName || dbUser?.name || newMember.name,
         startupName: startupName
       });
 
-      // 3. Update State
+      // 3. Add pending member to local state
       const pendingMember = {
         _id: dbUser?._id || `temp-${Date.now()}`,
-        name: dbUser?.name || newMember.name,
+        name: dbUser?.userName || dbUser?.name || newMember.name,
+        userName: dbUser?.userName || newMember.name,
         email: newMember.email,
         position: newMember.role, 
         role: newMember.role,
         verified: false,
         status: 'pending',
-        profileImage: dbUser?.profileImage || dbUser?.avatar || null // <--- KEY: Show real avatar immediately
+        profileImage: dbUser?.image?.url || dbUser?.profileImage || dbUser?.avatar || null
       };
 
       setTeam(prev => [...prev, pendingMember]);
@@ -177,11 +184,11 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
       setNewMember({ name: '', email: '', role: '' });
       setShowAddForm(false);
       
-      // Auto-open OTP field for UX
-      setTimeout(() => setOtpInputVisible(pendingMember.email), 500);
+      // Auto-open OTP input
+      setTimeout(() => setOtpInputVisible(pendingMember.email), 600);
 
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to invite user.");
+      setError(err.response?.data?.message || err.message || "Failed to send invite.");
     } finally {
       setLoading(false);
     }
@@ -189,9 +196,14 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 
   const handleVerifyOTP = async (memberEmail, memberName, memberRole, memberImg) => {
     const otp = otpValues[memberEmail];
-    if (!otp || otp.length !== 6) return setError("Enter a valid 6-digit OTP");
+    
+    if (!otp || otp.length !== 6) {
+      return setError("Enter a valid 6-digit OTP");
+    }
 
     setLoading(true);
+    setError(null);
+    
     try {
       await ApiServices.verifyCoFounder({
         email: memberEmail,
@@ -201,21 +213,40 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
         profileImage: memberImg || ''
       });
 
-      setTeam(prev => prev.map(m => m.email === memberEmail ? { ...m, verified: true, status: 'verified' } : m));
+      // Update to verified
+      setTeam(prev => prev.map(m => 
+        m.email === memberEmail 
+          ? { ...m, verified: true, status: 'verified' } 
+          : m
+      ));
+      
       setSuccess("Member verified successfully!");
       setOtpInputVisible(null);
-      setOtpValues(prev => { const n = {...prev}; delete n[memberEmail]; return n; });
+      setOtpValues(prev => { 
+        const updated = {...prev}; 
+        delete updated[memberEmail]; 
+        return updated; 
+      });
 
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid OTP.");
+      setError(err.response?.data?.message || err.message || "Invalid OTP.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleRemove = async (email) => {
-    if(!window.confirm("Remove this member?")) return;
-    setTeam(prev => prev.filter(m => m.email !== email));
+    if (!window.confirm("Remove this member?")) return;
+    
+    try {
+      // Call API to remove from backend if needed
+      // await ApiServices.removeCoFounder(email);
+      
+      setTeam(prev => prev.filter(m => m.email !== email));
+      setSuccess("Member removed successfully.");
+    } catch (err) {
+      setError("Failed to remove member.");
+    }
   };
 
   if (!isOpen) return null;
@@ -225,7 +256,7 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
       <div className="bg-white rounded-[2rem] w-full max-w-[850px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         
         {/* Header */}
-        <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-start bg-white z-10">
+        <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-start bg-white">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Manage Founding Team</h2>
             <p className="text-gray-500 text-sm mt-1">Link founder profiles to verify their association with your startup</p>
@@ -245,41 +276,52 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-8 py-6 bg-white">
+          {/* Team Members */}
           <div className="space-y-4">
-            {team.map(member => (
-              <ModalRow 
-                key={member.email} 
-                member={member} 
-                otpInputVisible={otpInputVisible}
-                setOtpInputVisible={setOtpInputVisible}
-                otpValues={otpValues}
-                setOtpValues={setOtpValues}
-                handleVerifyOTP={handleVerifyOTP}
-                handleRemove={handleRemove}
-                loading={loading}
-              />
-            ))}
+            {team.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                No team members yet. Add your first member below.
+              </div>
+            ) : (
+              team.map(member => (
+                <ModalRow 
+                  key={member._id || member.email} 
+                  member={member} 
+                  otpInputVisible={otpInputVisible}
+                  setOtpInputVisible={setOtpInputVisible}
+                  otpValues={otpValues}
+                  setOtpValues={setOtpValues}
+                  handleVerifyOTP={handleVerifyOTP}
+                  handleRemove={handleRemove}
+                  loading={loading}
+                />
+              ))
+            )}
           </div>
 
-          {/* Add Form Area */}
+          {/* Add Form */}
           <div className="mt-6">
             {showAddForm ? (
-              <div className="bg-[#F9FAFB] border border-purple-100 rounded-2xl p-6 shadow-sm animate-in slide-in-from-top-4 duration-300">
+              <div className="bg-[#F9FAFB] border border-purple-100 rounded-2xl p-6 shadow-sm">
                 <h3 className="text-lg font-bold text-gray-900 mb-6">Add Team Member</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Full Name <span className="text-red-500">*</span>
+                    </label>
                     <input 
                       type="text" 
                       placeholder="John Doe" 
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 text-sm font-medium transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 text-sm font-medium"
                       value={newMember.name}
                       onChange={e => setNewMember({...newMember, name: e.target.value})}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Role <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Role <span className="text-red-500">*</span>
+                    </label>
                     <div className="relative">
                       <select 
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 bg-white text-sm font-medium appearance-none cursor-pointer"
@@ -294,20 +336,24 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
                         <option value="COO">COO</option>
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                          <path d="M1 1.5L6 6.5L11 1.5" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mb-8">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input 
                       type="email" 
                       placeholder="john@example.com" 
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 text-sm font-medium transition-all"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 text-sm font-medium"
                       value={newMember.email}
                       onChange={e => setNewMember({...newMember, email: e.target.value})}
                     />
@@ -325,7 +371,7 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
                   <button 
                     onClick={handleSendInvite}
                     disabled={loading}
-                    className={`px-8 py-2.5 rounded-xl text-white font-semibold shadow-lg shadow-purple-100 transition-all transform active:scale-95 ${COLORS.primary} ${COLORS.primaryHover} disabled:opacity-50`}
+                    className={`px-8 py-2.5 rounded-xl text-white font-semibold shadow-lg shadow-purple-100 transition-all ${COLORS.primary} ${COLORS.primaryHover} disabled:opacity-50`}
                   >
                     {loading ? 'Sending...' : 'Add Member'}
                   </button>
@@ -336,7 +382,8 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
                 onClick={() => setShowAddForm(true)}
                 className="w-full border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-500 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all group"
               >
-                <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" /> Add Team Member
+                <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" /> 
+                Add Team Member
               </button>
             )}
           </div>
@@ -344,9 +391,17 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 
         {/* Footer */}
         <div className="px-8 py-5 border-t border-gray-100 flex justify-end gap-3 bg-white">
-          <button onClick={onClose} className="px-6 py-2.5 text-gray-500 font-semibold hover:text-gray-800 transition-colors">Cancel</button>
-          <button onClick={onClose} className={`px-8 py-2.5 rounded-xl text-white font-bold shadow-md ${COLORS.primary} ${COLORS.primaryHover}`}>
-            Save Changes
+          <button 
+            onClick={onClose} 
+            className="px-6 py-2.5 text-gray-500 font-semibold hover:text-gray-800 transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            onClick={onClose} 
+            className={`px-8 py-2.5 rounded-xl text-white font-bold shadow-md ${COLORS.primary} ${COLORS.primaryHover}`}
+          >
+            Done
           </button>
         </div>
       </div>
@@ -354,14 +409,15 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
   );
 };
 
-// --- Modal Row Component (Matches Image 2 & 4) ---
+// --- Modal Row ---
 const ModalRow = ({ 
   member, otpInputVisible, setOtpInputVisible, otpValues, setOtpValues, 
   handleVerifyOTP, handleRemove, loading 
 }) => {
   const isVerified = member.verified || member.status === 'verified';
-  const avatarUrl = member.profileImage || member.avatar;
+  const avatarUrl = member.profileImage || member.avatar || member.image?.url;
   const isEditingOTP = otpInputVisible === member.email;
+  const displayName = member.name || member.userName;
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl p-4 flex items-center justify-between gap-4 border border-transparent hover:border-gray-100 transition-colors">
@@ -369,16 +425,20 @@ const ModalRow = ({
       {/* Left: Info */}
       <div className="flex items-center gap-4 flex-1 overflow-hidden">
         {avatarUrl ? (
-          <img src={avatarUrl} alt={member.name} className="w-12 h-12 rounded-full object-cover border border-white shadow-sm" />
+          <img 
+            src={avatarUrl} 
+            alt={displayName} 
+            className="w-12 h-12 rounded-full object-cover border border-white shadow-sm" 
+          />
         ) : (
           <div className={`w-12 h-12 rounded-full ${COLORS.gradient} flex items-center justify-center text-white font-bold text-lg shadow-sm`}>
-            {member.name.charAt(0).toUpperCase()}
+            {(displayName || 'U').charAt(0).toUpperCase()}
           </div>
         )}
         
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <h4 className="font-bold text-gray-900 text-base truncate">{member.name}</h4>
+            <h4 className="font-bold text-gray-900 text-base truncate">{displayName}</h4>
             <span className="bg-purple-100 text-purple-700 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md font-bold">
               {member.position || member.role}
             </span>
@@ -401,7 +461,7 @@ const ModalRow = ({
             </div>
 
             {isEditingOTP ? (
-              <div className="flex items-center gap-2 animate-in slide-in-from-right-4">
+              <div className="flex items-center gap-2">
                 <input 
                   autoFocus
                   type="text" 
@@ -413,13 +473,18 @@ const ModalRow = ({
                     const val = e.target.value.replace(/\D/g, '');
                     setOtpValues(p => ({ ...p, [member.email]: val }));
                   }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && otpValues[member.email]?.length === 6) {
+                      handleVerifyOTP(member.email, displayName, member.position || member.role, avatarUrl);
+                    }
+                  }}
                 />
                 <button 
-                  onClick={() => handleVerifyOTP(member.email, member.name, (member.position || member.role), avatarUrl)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition-colors"
-                  disabled={loading}
+                  onClick={() => handleVerifyOTP(member.email, displayName, member.position || member.role, avatarUrl)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
+                  disabled={loading || !otpValues[member.email] || otpValues[member.email].length !== 6}
                 >
-                  Confirm
+                  {loading ? 'Verifying...' : 'Confirm'}
                 </button>
               </div>
             ) : (

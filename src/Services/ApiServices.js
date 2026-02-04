@@ -1407,6 +1407,19 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  getFoundingTeam: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/startup/founding-team`)
+        .then((res) => {
+          if (res) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
   sendCoFounderInvite: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
