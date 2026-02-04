@@ -178,6 +178,71 @@ background: var( --button-background);
   border-radius: 8px;
 }
 
+/* Slider styles */
+.slider-container { 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  gap:8px; 
+}
+.slider { 
+  position: relative; 
+  width: 100%; 
+  max-width: 850px; 
+  height: auto; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+}
+.slider-image { 
+  width: 100%; 
+  max-height: 620px; 
+  object-fit: cover; 
+  border-radius: 8px; 
+}
+.slider-arrow { 
+  position:absolute; 
+  top:50%; 
+  transform:translateY(-50%); 
+  background: rgba(0,0,0,0.5); 
+  color:white; 
+  border:none; 
+  width:36px; 
+  height:36px; 
+  border-radius:50%; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  cursor:pointer; 
+  z-index:5; 
+}
+.slider-arrow.left {
+  left: 10px; 
+}
+.slider-arrow.right { 
+  right: 10px; 
+}
+.slider-dots { 
+  display:flex; 
+  gap:6px; 
+}
+.slider-dots .dot { 
+  width:8px; 
+  height:8px; 
+  border-radius:50%; 
+  background:rgba(0,0,0,0.25); 
+  cursor:pointer; 
+  animation: none; 
+}
+.slider-dots .dot.active { 
+  background:rgba(0,0,0,0.8); 
+}
+
+@media (max-width: 768px) {
+  .slider { max-width: 100%; }
+  .slider-image { max-height: 420px; }
+}
+
 /* Responsive tags container */
 .tagsContainer {
   display: flex;
@@ -411,11 +476,12 @@ background: var( --button-background);
 .postType {
   background-color: #fbcbcb; /* The Pink Color */
   color: #000;               /* Text Color */
-  padding: 5px 16px;         /* Size of the pill */
+  padding: 10px 16px;         /* Size of the pill */
   border-radius: 20px;       /* Rounded edges */
   font-size: 14px;
   font-weight: 500;
   display: inline-block;     /* Ensures padding works */
+  margin-top: 7px;
 }
 
 /* 4. Menu Icon alignment */

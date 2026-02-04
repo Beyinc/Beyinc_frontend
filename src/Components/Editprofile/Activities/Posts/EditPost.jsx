@@ -207,17 +207,11 @@ const EditPost = ({
         </div>
         <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
           {images && images.length > 0 && (
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+            <div className="createPost-image-previews" style={{ marginTop: '20px' }}>
               {images.map((img, idx) => (
-                <div key={idx} style={{ position: 'relative' }}>
-                  <img
-                    style={{ cursor: 'pointer', height: '200px', width: '200px', objectFit: 'cover' }}
-                    src={img?.url ? img.url : img}
-                    alt={`img-${idx}`}
-                  />
-                  <div style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => setImages(prev => prev.filter((_, i) => i !== idx))}>
-                    <i class="fas fa-times"></i>
-                  </div>
+                <div key={idx} className="image-thumb">
+                  <img src={img?.url ? img.url : img} alt={`img-${idx}`} />
+                  <button type="button" className="remove-btn" aria-label="Remove image" onClick={() => setImages(prev => prev.filter((_, i) => i !== idx))}>✕</button>
                 </div>
               ))}
             </div>

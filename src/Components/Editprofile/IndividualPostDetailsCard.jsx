@@ -28,7 +28,13 @@ const IndividualPostDetailsCard = () => {
   const { id } = useParams();
 
   const [post, setPost] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [infoOpen, setInfoOpen] = useState(false);
+
+  useEffect(() => {
+    // Reset slider to first image when post changes
+    setCurrentImageIndex(0);
+  }, [post?._id]);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -522,16 +528,41 @@ const IndividualPostDetailsCard = () => {
               </div>
 
               <div className="PostimageContainer">
-                {(post?.images && post.images.length ? post.images : post?.image ? [post.image] : []).map((img, i) => (
-                  <img
-                    key={i}
-                    src={img?.url ? img.url : img}
-                    style={{ objectFit: "contain" }}
-                    alt=""
-                    onClick={() => navigate(`/posts/${post?._id}`)}
-                    className="w-[850px]"
-                  />
-                ))}
+                {(() => {
+                  const imagesArr = (post?.images && post.images.length ? post.images : post?.image ? [post.image] : []);
+                  if (!imagesArr || imagesArr.length === 0) return null;
+                  return (
+                    <div className="slider-container">
+                      <div className="slider">
+                        {imagesArr.length > 1 && (
+                          <button aria-label="Previous image" className="slider-arrow left" onClick={() => setCurrentImageIndex((idx) => (idx > 0 ? idx - 1 : imagesArr.length - 1))}>
+                            ‹
+                          </button>
+                        )}
+
+                        <img
+                          src={imagesArr[currentImageIndex]?.url ? imagesArr[currentImageIndex].url : imagesArr[currentImageIndex]}
+                          alt={`post-img-${currentImageIndex}`}
+                          className="slider-image"
+                          onClick={() => navigate(`/posts/${post?._id}`)}
+                        />
+
+                        {imagesArr.length > 1 && (
+                          <button aria-label="Next image" className="slider-arrow right" onClick={() => setCurrentImageIndex((idx) => (idx < imagesArr.length - 1 ? idx + 1 : 0))}>
+                            ›
+                          </button>
+                        )}
+                      {imagesArr.length > 1 && (
+                        <div className="slider-dots">
+                          {imagesArr.map((_, i) => (
+                            <span key={i} className={`dot ${i === currentImageIndex ? 'active' : ''}`} onClick={() => setCurrentImageIndex(i)} />
+                          ))}
+                        </div>
+                      )}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
               {(post?.openDiscussion === true ||
                 post?.openDiscussionTeam

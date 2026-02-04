@@ -535,41 +535,17 @@ const CreatePostPage = () => {
                 <div>
                   {images && images.length > 0 ? (
                     <div className="createPost-image-container">
-                      {images.map((img, idx) => (
-                        <div key={idx} style={{ position: "relative", display: "inline-block", marginRight: "8px" }}>
-                          <img
-                            style={{
-                              cursor: "pointer",
-                              height: "200px",
-                              width: "200px",
-                              objectFit: "cover",
-                            }}
-                            src={img?.url ? img.url : img}
-                            alt={`post-${idx}`}
-                          />
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="1.5em"
-                            height="1.5em"
-                            viewBox="0 0 24 24"
-                            onClick={() => setImages(prev => prev.filter((_,i)=>i!==idx))}
-                            style={{
-                              position: "absolute",
-                              right: "6px",
-                              top: "6px",
-                              background: "rgba(255,255,255,0.7)",
-                              borderRadius: "50%",
-                              padding: "2px"
-                            }}
-                          >
-                            <title>Delete File</title>
-                            <path
-                              fill="red"
-                              d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"
+                      <div className="createPost-image-previews">
+                        {images.map((img, idx) => (
+                          <div key={idx} className="image-thumb">
+                            <img
+                              src={img?.url ? img.url : img}
+                              alt={`post-${idx}`}
                             />
-                          </svg>
-                        </div>
-                      ))}
+                            <button type="button" className="remove-btn" aria-label="Remove image" onClick={() => setImages(prev => prev.filter((_,i)=>i!==idx))}>✕</button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     <div className="createPost-image-container"></div>

@@ -381,7 +381,8 @@ button:hover {
   transform: translate3d(-50%, -50%, 0);
 }
 
-.dot {
+/* Loader dots are scoped under .loader to prevent global conflicts with other components */
+.loader .dot {
   width: 24px;
   height: 24px;
   border-radius: 100%;
@@ -389,27 +390,27 @@ button:hover {
   animation: slide 1s infinite;
 }
 
-.dot:nth-child(1) {
+.loader .dot:nth-child(1) {
   animation-delay: 0.1s;
   background: #4e54c7;
 }
 
-.dot:nth-child(2) {
+.loader .dot:nth-child(2) {
   animation-delay: 0.2s;
   background: #ff6824;
 }
 
-.dot:nth-child(3) {
+.loader .dot:nth-child(3) {
   animation-delay: 0.3s;
   background: #1799ac;
 }
 
-.dot:nth-child(4) {
+.loader .dot:nth-child(4) {
   animation-delay: 0.4s;
   background: #95e544;
 }
 
-.dot:nth-child(5) {
+.loader .dot:nth-child(5) {
   animation-delay: 0.5s;
   background: #44e585;
 }
