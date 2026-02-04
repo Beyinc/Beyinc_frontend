@@ -15,6 +15,7 @@ import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
 import ProfileCardInfo from "./ProfileCardInfo";
 import MentorCardInfo from "./MentorCardInfo";
 import EditProfileCardPopup from "./EditProfileCardPopup";
+import FoundingTeamWidget from './FoundingTeam';
 import ProfileCompletionStatus from "./ProfileCompletionStatus";
 import {
   Camera,
@@ -428,6 +429,12 @@ const ProfileCard = ({
               </div>
             )}
           </div>
+
+          {selfProfile && profileRole === "Startup" && (
+            <div className="px-6 mt-4">
+              <FoundingTeamWidget />
+            </div>
+          )}
 
           {/* Profile Completion Status */}
           {selfProfile && (

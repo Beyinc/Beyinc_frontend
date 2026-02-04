@@ -1407,4 +1407,40 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  sendCoFounderInvite: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/startup/invite-cofounder`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  // 2. Verify OTP & Add Member
+  verifyCoFounder: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/startup/verify-cofounder`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+  searchUserByEmail: async (email) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/userDetails/search-by-email?email=${email}`)
+        .then((res) => {
+          resolve(res.data);
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };
