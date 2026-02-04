@@ -532,9 +532,7 @@ input[type="radio"] + label {
   border-radius: 6px;
 }
 
-::-webkit-scrollbar-track {
-  /* background-color: #f1f1f1; */
-}
+
 .spinText {
   color: var(--messageNavbar-text) !important;
 }
@@ -563,8 +561,8 @@ input[type="radio"] + label {
   width: 500px;
   height: 500px;
 }
-.noRoute-text {
-}
+/* .noRoute-text {
+} */
 @media (max-width: 768px) {
   input[type="email"],
   input[type="password"],

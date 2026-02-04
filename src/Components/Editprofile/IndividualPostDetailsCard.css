@@ -476,12 +476,11 @@ background: var( --button-background);
 .postType {
   background-color: #fbcbcb; /* The Pink Color */
   color: #000;               /* Text Color */
-  padding: 10px 16px;         /* Size of the pill */
+  padding: 5px 16px;         /* Size of the pill */
   border-radius: 20px;       /* Rounded edges */
   font-size: 14px;
   font-weight: 500;
   display: inline-block;     /* Ensures padding works */
-  margin-top: 7px;
 }
 
 /* 4. Menu Icon alignment */

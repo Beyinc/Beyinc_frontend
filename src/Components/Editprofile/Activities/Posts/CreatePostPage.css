@@ -155,11 +155,26 @@ div#mui-p-73569-P-1.MuiTabPanel-root.css-13xfq8m-MuiTabPanel-root{
   flex: 0 0 auto;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
-.createPost-image-previews .image-thumb img { width: 100%; height: 100%; object-fit: cover; display:block }
-.createPost-image-previews .image-thumb .remove-btn { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,0.9); border-radius: 50%; padding: 4px; cursor: pointer; }
+.createPost-image-previews .image-thumb img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  display:block 
+}
+.createPost-image-previews .image-thumb .remove-btn { 
+  position: absolute; 
+  top: 6px; 
+  right: 6px; 
+  background: rgba(255,255,255,0.9); 
+  border-radius: 50%; 
+  padding: 4px; 
+  cursor: pointer; 
+}
 
 /* make sure the upload area stays below previews */
-.postUploadContainer { margin-top: 12px; }
+.postUploadContainer { 
+  margin-top: 12px; 
+}
 
 
 /* Labels styling */
