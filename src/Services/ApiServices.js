@@ -1411,7 +1411,7 @@ export const ApiServices = {
   getFoundingTeam: () => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .get(`/startup/founding-team`)
+        .get(`/founding-team`)
         .then((res) => {
           if (res) {
             resolve(res.data);
