@@ -129,6 +129,10 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
   const targetMarketFromStartup = user?.startupProfile?.targetMarket || null; // NEW
 
   const [recommendedUserTrigger, setRecommendedUserTrigger] = useState(false);
+
+  if (user.role === "Startup" && !user.verified) {
+    return null;
+  }
   return (
     <>
       {/* --- Main Card Container --- */}
