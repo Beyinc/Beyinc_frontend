@@ -59,6 +59,17 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Hide scrollbar while maintaining scroll functionality */
+.users-main-box::-webkit-scrollbar {
+  display: none;
+}
+
+.users-main-box {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .usersWrapper {
   display: flex;
@@ -609,6 +620,24 @@
   top: 80px; /* adjust based on your navbar height */
   height: calc(100vh - 80px);
   overflow-y: auto;
-
   align-self: flex-start;
+}
+
+/* Hide scrollbar on filter container while maintaining scroll functionality */
+.filterContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.filterContainer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.userscontainer::-webkit-scrollbar {
+  display: none;
+}
+
+.userscontainer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

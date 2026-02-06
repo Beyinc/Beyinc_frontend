@@ -674,8 +674,8 @@ const AllUsers = () => {
             </div>
           )}
           {/* {viewMode} */}
-          <div className="user-cards-panel pr-4 sm:pr-5 md:pr-6 box-border" style={{ width: width > 1210 ? "80%" : "100%", maxWidth: width > 1210 ? "none" : "100%" }}>
-            <div className="mt-4 userscontainer w-full !flex flex-wrap justify-center lg:justify-start gap-4">
+          <div className="user-cards-panel pr-4 sm:pr-5 md:pr-6 box-border scrollbar-hide" style={{ width: width > 1210 ? "80%" : "100%", maxWidth: width > 1210 ? "none" : "100%" }}>
+            <div className="mt-4 userscontainer w-full !flex flex-wrap justify-center lg:justify-start gap-4 scrollbar-hide">
   {viewMode === "mentors" && (
       <div
         className="no-users w-full"
