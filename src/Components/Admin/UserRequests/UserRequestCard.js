@@ -7,20 +7,46 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ApiServices } from "../../../Services/ApiServices";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+// import { AdminServices } from "../../../Services/ApiServices"; // Removed duplicate import if not used, or keep if needed
+import { setToast } from "../../../redux/AuthReducers/AuthReducer";
+import { ToastColors } from "../../Toast/ToastColors";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
 export default function UserRequestCard({ d }) {
   const navigate = useNavigate();
-  // const [image, setImage] = React.useState('')
-  // React.useEffect(() => {
-  //     ApiServices.getProfile({ email: d.email }).then(res => {
-  //         setImage(res.data.image.url)
-  //     })
-  // }, [d])
+  const dispatch = useDispatch(); // MOVED INSIDE
+
+  // MOVED INSIDE so it can access 'd' and 'dispatch'
+  const handleVerify = async (e) => {
+    e.stopPropagation();
+    try {
+      await ApiServices.verifyUser({ userId: d._id });
+      dispatch(
+        setToast({
+          message: "User Verified Successfully!",
+          bgColor: ToastColors.success,
+          visible: "yes",
+        })
+      );
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      dispatch(
+        setToast({
+          message: "Error verifying user",
+          bgColor: ToastColors.failure,
+          visible: "yes",
+        })
+      );
+    }
+  };
 
   const openUser = () => navigate(`/singleProfileRequest/${d._id}`);
+
   return (
     <div
       className={
@@ -51,7 +77,7 @@ export default function UserRequestCard({ d }) {
               />
             )}
           </div>
-         
+
         </div>
         <div className="user-card-details-text">
           <span className="user-name" onClick={openUser}>
@@ -96,10 +122,21 @@ export default function UserRequestCard({ d }) {
           }}
         >
           <span>{d.role}</span>
-          
+
         </div>
         <button onClick={() => navigate(`/singleProfileRequest/${d._id}`)}>
           View
+        </button>
+        <button
+          style={{
+            backgroundColor: d.verified ? 'grey' : 'green',
+            color: 'white',
+            cursor: d.verified ? 'not-allowed' : 'pointer'
+          }}
+          onClick={handleVerify}
+          disabled={d.verified}
+        >
+          {d.verified ? "Verified" : "Verify"}
         </button>
       </div>
     </div>

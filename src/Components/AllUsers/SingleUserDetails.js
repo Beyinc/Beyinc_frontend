@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setReceiverId } from "../../redux/Conversationreducer/ConversationReducer";
@@ -15,10 +15,29 @@ import {
   FaTags,
 } from "react-icons/fa";
 import RecommendedConnectButton from "../Posts/RecommendedConnectButton";
+import { followerController, socket_io } from "../../Utils";
+import { io } from "socket.io-client";
 
 const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
-  const { email, user_id } = useSelector((state) => state.auth.loginDetails);
+  const {
+    email,
+    user_id,
+    userName: loggedInUserName,
+    image: loggedInImage,
+    role: loggedInRole,
+  } = useSelector((state) => state.auth.loginDetails);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io(socket_io);
+  }, []);
+
+  const [isFollowing, setIsFollowing] = useState(false);
+  useEffect(() => {
+    setIsFollowing(!!user?.followers?.some((f) => f._id === user_id));
+  }, [user, user_id]);
 
   // --- Logic State ---
   const [averagereview, setAverageReview] = useState(0);
@@ -152,20 +171,56 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               />
             </div>
 
-            {(user.role === "Startup"|| user.beyincProfile==="Mentor") && (
-              <RecommendedConnectButton
-                id={user._id}
-                viewMode={viewMode}
-                handleFollower={() => {
-                  setRecommendedUserTrigger(!recommendedUserTrigger);
-                }}
-              />
+            {(user.role === "Startup" || user.beyincProfile === "Mentor") && (
+              <div className="flex flex-col items-center gap-2 w-full ">
+                {user._id !== user_id && (
+                  <button
+                    className={`connect-btn w-[100px] h-[30px] text-sm mr-10`}
+                    onClick={async (e) => {
+                      e.target.disabled = true;
+                      try {
+                        await followerController({
+                          dispatch,
+                          e,
+                          followingToId: user._id,
+                          recommendedUserTrigger,
+                          setRecommendedUserTrigger,
+                          socket,
+                          user: {
+                            id: user_id,
+                            userName: loggedInUserName,
+                            image: loggedInImage,
+                            role: loggedInRole,
+                          },
+                        });
+                        setIsFollowing((prev) => !prev);
+                      } catch (err) {
+                        // followerController handles errors via toast
+                      } finally {
+                        e.target.disabled = false;
+                      }
+                    }}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                )}
+
+                <div className="mr-12">
+                  <RecommendedConnectButton
+                    id={user._id}
+                    viewMode={viewMode}
+                    handleFollower={() => {
+                      setRecommendedUserTrigger(!recommendedUserTrigger);
+                    }}
+                  />
+                </div>
+              </div>
             )}
           </div>
           {/* 2. Middle Content Section */}
           <div className="flex-1 min-w-0 md:border-l md:border-gray-300 md:pl-6">
             {/* Header: Name & Verify */}
-            <div className="flex items-center justify-start gap-3 mb-2">
+            <div className="flex items-center justify-start mb-2">
               <h3
                 className="text-xl font-bold text-gray-900 cursor-pointer hover:text-[#4f55c7] transition-colors"
                 onClick={openUser}
@@ -219,7 +274,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                           ? "text-[#4f55c7] shadow-sm"
                           : "bg-transparent text-gray-800 hover:bg-gray-100"
                       }`}
-                      style={activeTab === tab ? { background: '#E3E5FD' } : {}}
+                      style={activeTab === tab ? { background: "#E3E5FD" } : {}}
                     >
                       {tab}
                     </button>
@@ -235,7 +290,11 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                           ? "text-[#4f55c7] shadow-sm"
                           : "bg-transparent text-gray-800 hover:bg-gray-100"
                       }`}
-                      style={startupActiveTab === tab ? { background: '#E3E5FD' } : {}}
+                      style={
+                        startupActiveTab === tab
+                          ? { background: "#E3E5FD" }
+                          : {}
+                      }
                     >
                       {tab}
                     </button>
@@ -482,21 +541,21 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
                       </div>
                     )}
                   </div>
-
-                
                 </>
               )}
 
-                {user.role === "Startup" && (
-                   <div className="flex flex-col min-w-0 w-full">
-                    <h4 className="text-xl font-bold text-gray-900 flex-shrink-0 mb-2 md:mt-0">About</h4>
-                    <div className="max-h-40 md:max-h-48 overflow-y-auto overflow-x-hidden scrollbar-hide rounded-lg min-w-0">
-                      <p className="text-sm text-gray-600 leading-relaxed break-words whitespace-normal pr-1">
-                        {user.about || "No bio available."}
-                      </p>
-                    </div>
+              {user.role === "Startup" && (
+                <div className="flex flex-col min-w-0 w-full">
+                  <h4 className="text-xl font-bold text-gray-900 flex-shrink-0 mb-2 md:mt-0">
+                    About
+                  </h4>
+                  <div className="max-h-40 md:max-h-48 overflow-y-auto overflow-x-hidden scrollbar-hide rounded-lg min-w-0">
+                    <p className="text-sm text-gray-600 leading-relaxed break-words whitespace-normal pr-1">
+                      {user.about || "No bio available."}
+                    </p>
                   </div>
-                  )}
+                </div>
+              )}
             </div>
 
             {/* {user.beyincProfile === "Mentor" && (

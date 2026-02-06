@@ -28,6 +28,7 @@ const Post = ({
   const [editPostPopup, setEditPostpopup] = useState(false);
   const [EditPostCount, setEditPostCount] = useState(false);
   const [post, setPost] = useState(initialPost || {});
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [localLikes, setLocalLikes] = useState([]);
   const [localDislikes, setLocalDislikes] = useState([]);
   const [isLiking, setIsLiking] = useState(false);
@@ -47,6 +48,7 @@ const Post = ({
       setPost(initialPost);
       setLocalLikes(initialPost.likes || []);
       setLocalDislikes(initialPost.disLikes || []);
+      setCurrentImageIndex(0);
     }
   }, [initialPost]);
 
@@ -486,24 +488,70 @@ const Post = ({
                 </div>
               ))}
             </div>
-            {/* <div className="PostimageContainer">
-              {post?.image !== "" &&
-                post?.image !== undefined &&
-                post?.image?.url !== "" && (
+            <div className="PostimageContainer">
+              {post?.images && post.images.length > 0 ? (
+                <div className="post-image-slider">
+                  {post.images.length > 1 && (
+                    <button
+                      aria-label="Previous image"
+                      className="slider-arrow left"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex((idx) =>
+                          idx > 0 ? idx - 1 : post.images.length - 1,
+                        );
+                      }}
+                    >
+                      ‹
+                    </button>
+                  )}
+
                   <img
-                    src={
-                      post?.image !== "" &&
-                      post?.image !== undefined &&
-                      post?.image?.url !== ""
-                        ? post?.image?.url
-                        : "/profile.png"
-                    }
-                    style={{ objectFit: "contain" }}
-                    alt=""
+                    className="slider-image"
+                    src={post.images[currentImageIndex]?.url ? post.images[currentImageIndex].url : post.images[currentImageIndex]}
+                    alt={`post-img-${currentImageIndex}`}
                     onClick={() => navigate(`/posts/${post?._id}`)}
                   />
-                )}
-            </div> */}
+
+                  {post.images.length > 1 && (
+                    <button
+                      aria-label="Next image"
+                      className="slider-arrow right"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex((idx) =>
+                          idx < post.images.length - 1 ? idx + 1 : 0,
+                        );
+                      }}
+                    >
+                      ›
+                    </button>
+                  )}
+
+                  {post.images.length > 1 && (
+                    <div className="slider-dots">
+                      {post.images.map((_, i) => (
+                        <span
+                          key={i}
+                          className={`dot ${i === currentImageIndex ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex(i);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : post?.image && post?.image?.url ? (
+                <img
+                  src={post.image.url}
+                  style={{ objectFit: "contain" }}
+                  alt=""
+                  onClick={() => navigate(`/posts/${post?._id}`)}
+                />
+              ) : null}
+            </div>
 
             <div className="likeCommentDetails mt-2">
               {/* <div className="likeTotal">
