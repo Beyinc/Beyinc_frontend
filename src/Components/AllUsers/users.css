@@ -603,3 +603,12 @@
   max-width: 100%;
   white-space: normal;
 }
+
+.filterContainer {
+  position: sticky;
+  top: 80px; /* adjust based on your navbar height */
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+
+  align-self: flex-start;
+}

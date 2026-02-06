@@ -56,29 +56,33 @@ const CreatePostPage = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
   const [posttype, setposttype] = useState("");
   const [description, setDescription] = useState("");
   const [link, setlink] = useState("");
 
   const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (file.size > 4 * 1024 * 1024) {
+    const files = Array.from(e.target.files || []);
+    const maxSize = 4 * 1024 * 1024;
+    const oversized = files.find((f) => f.size > maxSize);
+    if (oversized) {
       alert(
-        `File size should be less than ${(4 * 1024 * 1024) / (1024 * 1024)} MB.`
+        `Each file should be less than ${(maxSize) / (1024 * 1024)} MB.`
       );
-      e.target.value = null; // Clear the selected file
+      e.target.value = null; // Clear the selected files
       return;
     }
-    setFileBase(file);
+    Promise.all(files.map(readFileAsDataURL)).then((dataUrls) => {
+      setImages((prev) => [...prev, ...dataUrls]);
+    });
   };
-  const setFileBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-  };
+  const readFileAsDataURL = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
 
   const [allUsers, setAllusers] = useState([]);
   const [usertags, setuserTags] = useState([]);
@@ -124,7 +128,7 @@ const CreatePostPage = () => {
       visibility: accessSetting,
       tags: usertags,
       pitchId: userPitchId?._id,
-      image: image || null,
+      images: images.length ? images : null,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       openDiscussion: accessSetting === "public",
@@ -142,7 +146,7 @@ const CreatePostPage = () => {
         setUserPitchid(null);
         setlink("");
         setuserTags([]);
-        setImage("");
+        setImages([]);
         setposttype("");
         setAccessSetting("public");
         setFullDetails("");
@@ -207,7 +211,7 @@ const CreatePostPage = () => {
       postTitle,
       tags: usertags,
       pitchId: userPitchId?._id,
-      image: image,
+      images: images.length ? images : null,
       createdBy: { _id: user_id, userName: userName, email: email },
       type: posttype,
       id: postId,
@@ -226,7 +230,7 @@ const CreatePostPage = () => {
         setUserPitchid(null);
         setlink("");
         setuserTags([]);
-        setImage("");
+        setImages([]);
         setposttype("");
         setAccessSetting("public");
         setFullDetails("");
@@ -268,7 +272,7 @@ const CreatePostPage = () => {
           setDescription(res.data.description);
           setposttype(res.data.type);
           setuserTags(res.data.tags);
-          setImage(res.data.image);
+          setImages(res.data.images ?? (res.data.image ? [res.data.image] : []));
           setlink(res.data.link);
           setAccessSetting(res.data.openDiscussion ? "public" : "members");
           setFullDetails(res.data.fullDetails);
@@ -529,73 +533,55 @@ const CreatePostPage = () => {
 
               <TabPanel value="2">
                 <div>
-                  {image !== undefined && image !== "" ? (
+                  {images && images.length > 0 ? (
                     <div className="createPost-image-container">
-                      <img
-                        style={{
-                          cursor: "pointer",
-                          height: "200px",
-                          width: "200px",
-                          objectFit: "cover",
-                        }}
-                        src={
-                          image?.public_id !== undefined ? image?.url : image
-                        }
-                        alt="Profile"
-                      />
-
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1.5em"
-                        height="1.5em"
-                        viewBox="0 0 24 24"
-                        onClick={() => setImage("")}
-                        style={{
-                          position: "relative",
-                          bottom: "220px",
-                          left: "150px",
-                        }}
-                      >
-                        <title>Delete File</title>
-                        <path
-                          fill="red"
-                          d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"
-                        />
-                      </svg>
+                      <div className="createPost-image-previews">
+                        {images.map((img, idx) => (
+                          <div key={idx} className="image-thumb">
+                            <img
+                              src={img?.url ? img.url : img}
+                              alt={`post-${idx}`}
+                            />
+                            <button type="button" className="remove-btn" aria-label="Remove image" onClick={() => setImages(prev => prev.filter((_,i)=>i!==idx))}>✕</button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : (
-                    <div className="postUploadContainer">
-                      <label htmlFor="profilePic" className="postUploadIcon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="2em"
-                          height="2em"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="black"
-                            d="M2 12h2v5h16v-5h2v5c0 1.11-.89 2-2 2H4a2 2 0 0 1-2-2zM12 2L6.46 7.46l1.42 1.42L11 5.75V15h2V5.75l3.13 3.13l1.42-1.43z"
-                          />
-                        </svg>
-                        <button
-                          className="browseButton"
-                          onClick={() =>
-                            document.getElementById("profilePic").click()
-                          }
-                        >
-                          Browse
-                        </button>
-                      </label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        name=""
-                        id="profilePic"
-                        onChange={handleImage}
-                        style={{ display: "none" }}
-                      />
-                    </div>
+                    <div className="createPost-image-container"></div>
                   )}
+                  <div className="postUploadContainer" style={{ marginTop: "10px" }}>
+                    <label htmlFor="profilePic" className="postUploadIcon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="2em"
+                        height="2em"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="black"
+                          d="M2 12h2v5h16v-5h2v5c0 1.11-.89 2-2 2H4a2 2 0 0 1-2-2zM12 2L6.46 7.46l1.42 1.42L11 5.75V15h2V5.75l3.13 3.13l1.42-1.43z"
+                        />
+                      </svg>
+                      <button
+                        className="browseButton"
+                        onClick={() =>
+                          document.getElementById("profilePic").click()
+                        }
+                      >
+                        Browse
+                      </button>
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name=""
+                      id="profilePic"
+                      onChange={handleImage}
+                      style={{ display: "none" }}
+                      multiple
+                    />
+                  </div>
                 </div>
 
                 <div>
