@@ -13,7 +13,7 @@ const COLORS = {
   gradient: 'bg-gradient-to-br from-blue-500 to-purple-600',
 };
 
-const FoundingTeamWidget = ({ userId, startupName, initialTeam = [] }) => {
+const FoundingTeamWidget = ({ userId, startupName, initialTeam = [], isOwner = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [team, setTeam] = useState(initialTeam);
 
@@ -28,12 +28,15 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [] }) => {
       <div className="bg-white w-full rounded-2xl">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-bold text-gray-900">Founding Team</h3>
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className={`${COLORS.textLink} font-medium text-sm flex items-center hover:opacity-80 transition-opacity`}
-          >
-            <User className="w-4 h-4 mr-1" /> Manage
-          </button>
+          {/* Only show manage button if user is the owner */}
+          {isOwner && (
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className={`${COLORS.textLink} font-medium text-sm flex items-center hover:opacity-80 transition-opacity`}
+            >
+              <User className="w-4 h-4 mr-1" /> Manage
+            </button>
+          )}
         </div>
 
         {team.length === 0 ? (
@@ -49,8 +52,8 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [] }) => {
         )}
       </div>
 
-      {/* --- MODAL --- */}
-      {isModalOpen && (
+      {/* --- MODAL (only for owners) --- */}
+      {isOwner && isModalOpen && (
         <ManageTeamModal 
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 

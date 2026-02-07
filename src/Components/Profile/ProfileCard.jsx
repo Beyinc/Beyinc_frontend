@@ -80,14 +80,14 @@ const ProfileCard = ({
     socket.current = io(socket_io);
   }, []);
 
-  // --- NEW EFFECT TO FETCH FOUNDING TEAM ---
+  // --- EFFECT TO FETCH FOUNDING TEAM (For Owner) ---
   useEffect(() => {
-    // Only fetch if it's the logged-in user viewing their own startup profile
+    // Only fetch specifically via getFoundingTeam if it's the owner
+    // Visitors will get this data via the main getProfile call below
     if (selfProfile && profileRole === "Startup") {
       const fetchTeam = async () => {
         try {
           const response = await ApiServices.getFoundingTeam();
-          // Based on your backend controller, response.cofounders contains the array
           setFoundingTeam(response.cofounders || []);
         } catch (error) {
           console.error("Error fetching founding team:", error);
@@ -97,8 +97,9 @@ const ProfileCard = ({
     }
   }, [selfProfile, profileRole]);
 
+  // ... (Follower/Unfollow logic remains the same) ...
   const followerController = async (e, id) => {
-    // ... (Your existing follower logic) ...
+    // ... same as before
     console.log("Following user:", id);
     e.target.disabled = true;
 
@@ -142,7 +143,7 @@ const ProfileCard = ({
   };
 
   const unfollowHandler = async (e, id) => {
-     // ... (Your existing unfollow logic) ...
+    // ... same as before
     console.log("Unfollowing user:", id);
     e.target.disabled = true;
 
@@ -213,6 +214,7 @@ const ProfileCard = ({
     }));
   };
 
+  // --- MAIN PROFILE DATA FETCH ---
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -222,6 +224,16 @@ const ProfileCard = ({
 
         const profileData = profileResponse.data;
         setProfileData(profileData);
+
+
+        if (!selfProfile && profileData.role === "Startup") {
+            const teamData = profileData.cofounders || profileData.startupProfile?.cofounders || [];
+            setFoundingTeam(teamData);
+        } else if (selfProfile && profileData.cofounders) {
+            // If self profile, we might also get it here initially before the specific useEffect runs
+             setFoundingTeam(profileData.cofounders);
+        }
+        // ------------------------
 
         if (profileData.review !== undefined && profileData.review.length > 0) {
           let avgR = 0;
@@ -266,13 +278,13 @@ const ProfileCard = ({
             message: error?.response?.data?.message,
             bgColor: ToastColors.failure,
             visible: "yes",
-          }),
+          })
         );
       }
     };
 
     fetchProfileData();
-  }, [email, id, user_id]);
+  }, [email, id, user_id]); // Make sure dependencies are correct
 
   const trimHeadline = (text) => {
     const words = text.trim().split(/\s+/);
@@ -447,14 +459,17 @@ const ProfileCard = ({
           </div>
 
           {/* --- UPDATED FOUNDING TEAM WIDGET --- */}
-          {selfProfile && profileRole === "Startup" && (
-            <div className="px-6 mt-4">
-              <FoundingTeamWidget 
-                userId={user_id}
-                startupName={profileDataObj?.startupProfile?.startupName || formState.fullName}
-                initialTeam={foundingTeam}
-              />
-            </div>
+          {/* Only render this section if it is a Startup Profile */}
+          {profileRole === "Startup" && (
+              <div className="px-6 mt-4">
+                <FoundingTeamWidget 
+                  userId={profileData?._id}
+                  startupName={profileDataObj?.startupProfile?.startupName || formState.fullName}
+                  initialTeam={foundingTeam}
+                  // IMPORTANT: Pass isOwner so the widget knows if it can show edit buttons
+                  isOwner={selfProfile} 
+                />
+              </div>
           )}
 
           {/* Profile Completion Status */}
