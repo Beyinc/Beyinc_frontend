@@ -1456,4 +1456,16 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+  verifyUser: (obj) => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(`/userDetails/verifyUser`, obj)
+      .then((res) => {
+        if (res) {
+          resolve(res);
+        }
+      })
+      .catch((err) => reject(err));
+  });
+},
 };

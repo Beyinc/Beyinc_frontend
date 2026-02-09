@@ -39,23 +39,14 @@ const UserAvatar = ({ user, onClick, size = "h-20 w-20 sm:h-24 sm:w-24" }) => {
   );
 };
 
-const FilterContent = ({ searchValue, onSearchChange, onFilterApply, placeholder }) => {
-  return (
-    <div className="flex flex-col gap-4">
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-full"
-        value={searchValue}
-        onChange={onSearchChange}
-      />
-      {/* SearchFilter returns { interests: [...] } on change */}
-      <SearchFilter FilteredSearchProfiles={onFilterApply} />
-    </div>
-  );
-};
+/** Left sidebar: only the role/interest filter (no search input) */
+const FilterOnly = ({ onFilterApply }) => (
+  <div className="connections-filter-wrapper">
+    <SearchFilter FilteredSearchProfiles={onFilterApply} />
+  </div>
+);
 
-const MobileFilterSidebar = ({ isOpen, onClose, searchValue, onSearchChange, onFilterApply, title, placeholder }) => {
+const MobileFilterSidebar = ({ isOpen, onClose, onFilterApply, title }) => {
   if (!isOpen) return null;
 
   return (
@@ -68,12 +59,7 @@ const MobileFilterSidebar = ({ isOpen, onClose, searchValue, onSearchChange, onF
             ✕
           </button>
         </div>
-        <FilterContent
-          searchValue={searchValue}
-          onSearchChange={onSearchChange}
-          onFilterApply={onFilterApply}
-          placeholder={placeholder}
-        />
+        <FilterOnly onFilterApply={onFilterApply} />
       </div>
     </>
   );
@@ -219,7 +205,19 @@ export default function ConnectionsWithSuggestions() {
         onClick={() => navigate(user._id === user_id ? "/editProfile" : `/user/${user._id}`)}
         size="h-20 w-20 sm:h-24 sm:w-24"
       />
-      <h3 className="mt-2 text-center text-sm font-medium line-clamp-2">{user.userName}</h3>
+      <h3 className="mt-2 flex items-center justify-center gap-1 text-sm font-medium w-full">
+        <span className="truncate max-w-[140px]">{user.userName}</span>
+        {user.verified && (
+          <svg
+            className="w-4 h-4 text-green-600 shrink-0"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M23 12l-2.44-2.79.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.79-.34 3.68 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-10 5l-4-4 1.41-1.41L13 14.17l7.59-7.59L22 8l-9 9z" />
+          </svg>
+        )}
+      </h3>
       <h5 className="text-neutral-600 mt-1 text-xs line-clamp-1">{user.role}</h5>
       <p className="mt-2 mb-2 text-center text-xs line-clamp-2">{user.headline}</p>
       
@@ -265,53 +263,50 @@ export default function ConnectionsWithSuggestions() {
 
   // ---------------- JSX ----------------
   return (
-    <div className="flex flex-col items-center gap-8 sm:gap-12 p-3 sm:p-6 w-full">
+    <div className="flex flex-col items-center gap-4 sm:gap-12 p-3 sm:p-6 w-full">
       
       {/* --- Mobile Sidebars --- */}
       <MobileFilterSidebar
         isOpen={isConnectionsFilterOpen}
         onClose={() => setIsConnectionsFilterOpen(false)}
-        searchValue={searchTerm}
-        onSearchChange={(e) => setSearchTerm(e.target.value)}
-        onFilterApply={({ interests }) => setConnectionInterests(interests)} // Set State
+        onFilterApply={({ interests }) => setConnectionInterests(interests)}
         title="Filter Connections"
-        placeholder="Search Connections"
       />
       
       <MobileFilterSidebar
         isOpen={isSuggestionsFilterOpen}
         onClose={() => setIsSuggestionsFilterOpen(false)}
-        searchValue={searchSuggestion}
-        onSearchChange={(e) => setSearchSuggestion(e.target.value)}
-        onFilterApply={({ interests }) => setSuggestionInterests(interests)} // Set State
+        onFilterApply={({ interests }) => setSuggestionInterests(interests)}
         title="Filter Suggestions"
-        placeholder="Search Suggestions"
       />
 
       {/* --- CONNECTIONS SECTION --- */}
       <div className="flex flex-col w-full max-w-[1550px]">
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
-          {/* Desktop Filter */}
-          <div className="hidden lg:block w-80">
-            <FilterContent
-              searchValue={searchTerm}
-              onSearchChange={(e) => setSearchTerm(e.target.value)}
-              onFilterApply={({ interests }) => setConnectionInterests(interests)}
-              placeholder="Search Connections"
-            />
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-6 lg:items-start">
+          {/* Desktop Filter (left) - filter only */}
+          <div className="hidden lg:block w-80 flex-shrink-0">
+            <FilterOnly onFilterApply={({ interests }) => setConnectionInterests(interests)} />
           </div>
 
-          {/* List Area */}
-          <div className="flex-1 bg-white p-4 sm:p-6 rounded-lg border border-gray-300 max-h-[450px] lg:max-h-[600px] overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-              <h2 className="text-lg sm:text-xl font-semibold">Your Connections</h2>
-              <button className="lg:hidden p-2 hover:bg-gray-100 rounded-md" onClick={() => setIsConnectionsFilterOpen(true)}>
-                {/* Filter Icon */}
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-              </button>
+          {/* List Area (right) - search inside card */}
+          <div className="flex-1 min-w-0 bg-white p-4 sm:p-6 rounded-lg border border-gray-300 max-h-[450px] lg:max-h-[600px] overflow-hidden flex flex-col">
+            <div className="flex flex-col gap-2 mb-2 sm:mb-4 sticky top-0 bg-white z-10">
+              <div className="flex items-center justify-between w-full">
+                <h2 className="text-lg sm:text-xl font-semibold">Your Connections</h2>
+                <button className="lg:hidden p-1.5 flex items-center justify-center bg-transparent hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 rounded-md flex-shrink-0" onClick={() => setIsConnectionsFilterOpen(true)} aria-label="Filter">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="Search Connections"
+                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm w-full sm:max-w-[14rem]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
 
-            <div className="flex flex-wrap gap-2 sm:gap-4 mb-4 sticky top-[48px] bg-white z-10">
+            <div className="flex flex-wrap gap-2 sm:gap-4 mb-2 sm:mb-4 sticky top-[48px] bg-white z-10">
               {['followers', 'following'].map(tab => (
                 <button
                   key={tab}
@@ -336,23 +331,18 @@ export default function ConnectionsWithSuggestions() {
 
       {/* --- SUGGESTIONS SECTION --- */}
       <div className="flex flex-col w-full max-w-[1550px]">
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
-          {/* Desktop Filter */}
-          <div className="hidden lg:block w-80">
-            <FilterContent
-              searchValue={searchSuggestion}
-              onSearchChange={(e) => setSearchSuggestion(e.target.value)}
-              onFilterApply={({ interests }) => setSuggestionInterests(interests)}
-              placeholder="Search Suggestions"
-            />
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-6 lg:items-start">
+          {/* Desktop Filter (left) - filter only */}
+          <div className="hidden lg:block w-80 flex-shrink-0">
+            <FilterOnly onFilterApply={({ interests }) => setSuggestionInterests(interests)} />
           </div>
 
-          {/* List Area */}
-          <div className="flex-1 bg-white p-4 sm:p-6 rounded-lg border border-gray-300 max-h-[450px] lg:max-h-[600px] overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
+          {/* List Area (right) - search inside card */}
+          <div className="flex-1 min-w-0 bg-white p-4 sm:p-6 rounded-lg border border-gray-300 max-h-[450px] lg:max-h-[600px] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between w-full mb-2 sm:mb-4 sticky top-0 bg-white z-10">
               <h2 className="text-lg sm:text-xl font-semibold">Suggestions for You</h2>
-              <button className="lg:hidden p-2 hover:bg-gray-100 rounded-md" onClick={() => setIsSuggestionsFilterOpen(true)}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+              <button className="lg:hidden p-1.5 flex items-center justify-center bg-transparent hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-0 rounded-md flex-shrink-0" onClick={() => setIsSuggestionsFilterOpen(true)} aria-label="Filter">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
               </button>
             </div>
 
