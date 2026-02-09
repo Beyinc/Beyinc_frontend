@@ -49,7 +49,7 @@ const SkillsCard = ({selfProfile ,setSelfProfile}) => {
               skills.map((skill, index) => (
                 <span
                   key={index}
-                  className="bg-[#EEEFFF] text-[#4F55C7] py-3 px-4 rounded-lg text-sm cursor-pointer"
+                  className="bg-[#EEEFFF] text-[#E3E5FD] py-3 px-4 rounded-lg text-sm cursor-pointer"
                 >
                   {skill}
                 </span>

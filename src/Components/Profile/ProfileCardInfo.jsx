@@ -1,21 +1,33 @@
+import {
+  MessageSquare,
+  User,
+  Users,
+  Eye,
+  EyeOff,
+  Lightbulb,
+  Globe,
+  Mail,
+} from "lucide-react";
+
+
 const ProfileCardInfo = ({ profileRole, profileData }) => {
+  const getVisibilityIcon = (mode) => {
+    switch (mode) {
+      case "stealth":
+        return <EyeOff size={18} />;
+      case "idea-stage":
+        return <Lightbulb size={18} />;
+      default:
+        return <Globe size={18} />;
+    }
+  };
+
   return (
     <div className="space-y-3 text-gray-600 text-sm">
-      {/* Startup Name */}
-      {/* {profileData.startupProfile.startupName && ( */}
-      {/*   <div className="flex items-center gap-2"> */}
-      {/*     <span className="text-lg">🏢</span> */}
-      {/*     <span className="font-medium text-gray-600">Startup:</span> */}
-      {/*     <span className="font-semibold text-gray-700"> */}
-      {/*       {profileData.startupProfile.startupName} */}
-      {/*     </span> */}
-      {/*   </div> */}
-      {/* )} */}
-
       {/* Tagline */}
       {profileData.startupProfile.startupTagline && (
         <div className="flex items-center gap-2">
-          <span className="text-lg">💬</span>
+          <MessageSquare size={18} className="text-gray-400 shrink-0" />
           <span className="font-medium text-gray-600">Tagline:</span>
           <span className="font-semibold text-gray-700 italic">
             "{profileData.startupProfile.startupTagline}"
@@ -26,7 +38,7 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
       {/* Founder Name */}
       {profileData.startupProfile.founderName && (
         <div className="flex items-center gap-2">
-          <span className="text-lg">👤</span>
+          <User size={18} className="text-gray-400 shrink-0" />
           <span className="font-medium text-gray-600">Founder:</span>
           <span className="font-semibold text-gray-700">
             {profileData.startupProfile.founderName}
@@ -36,7 +48,7 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
 
       {/* Team Size */}
       <div className="flex items-center gap-2">
-        <span className="text-lg">👥</span>
+        <Users size={18} className="text-gray-400 shrink-0" />
         <span className="font-medium text-gray-600">Team:</span>
         <span className="font-semibold text-gray-700">
           {profileData.startupProfile.teamSize || "N/A"}
@@ -46,12 +58,8 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
       {/* Visibility Mode */}
       {profileData.startupProfile.visibilityMode && (
         <div className="flex items-center gap-2 whitespace-nowrap">
-          <span className="text-lg">
-            {profileData.startupProfile.visibilityMode === "stealth"
-              ? "🕵️"
-              : profileData.startupProfile.visibilityMode === "idea-stage"
-                ? "💭"
-                : "🌐"}
+          <span className="text-gray-400 shrink-0">
+            {getVisibilityIcon(profileData.startupProfile.visibilityMode)}
           </span>
           <span className="font-medium text-gray-600">Mode:</span>
           <span className="font-semibold text-gray-700">
@@ -66,7 +74,7 @@ const ProfileCardInfo = ({ profileRole, profileData }) => {
       {/* Email */}
       {profileData.startupProfile.startupEmail && (
         <div className="flex items-center gap-2">
-          <span className="text-lg">✉️</span>
+          <Mail size={18} className="text-gray-400 shrink-0" />
           <span className="font-semibold text-gray-700">
             {profileData.startupProfile.startupEmail}
           </span>
