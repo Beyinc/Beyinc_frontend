@@ -14,7 +14,7 @@ import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
 import GuestNoticeModal from "./components/GuestNoticeModal";
-
+import StaticPost from "./StaticPost";
 const Posts = () => {
   const {
     role,
@@ -547,6 +547,7 @@ const Posts = () => {
 
       <div className="main-content" ref={feedRef}>
         <div className="allPostShowContainer">
+          <StaticPost/>
           {filteredPosts.length > 0 &&
             filteredPosts
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))

@@ -1,0 +1,164 @@
+.static-post-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px !important;
+  /* background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); */
+  background: rgba(255, 255, 255, 1);
+;
+  align-items: center;
+  text-align: center;
+}
+
+/* Bloomr Header Section */
+/* .static-post-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-bottom: 10px;
+} */
+
+.bloomr-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bloomr-logo {
+  flex-shrink: 0;
+}
+
+
+
+.bloomr-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2563EB;
+  margin: 0;
+  line-height: 1.2;
+  font-style: italic;
+}
+
+.bloomr-subtitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Main Title */
+.static-post-main-title {
+  font-size: 38px;
+  font-weight: 700;
+  color: #000000;
+  margin: 15px 0 0 0;
+  line-height: 1.4;
+  text-align: center;
+}
+.static-post-content{
+    text-align: left;
+}
+
+.underline-text {
+  position: relative;
+  display: inline-block;
+}
+
+/* .underline-text::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0ea5e9 0%, transparent 100%);
+  border-radius: 2px;
+} */
+
+/* Description Text */
+.static-post-description {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1.6;
+  margin: 20px 0 15px 25px;
+  text-align: left;
+  
+}
+
+/* Bullet Points */
+.static-post-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: fit-content;
+  margin-left: 40px;
+}
+
+.static-post-bullets li {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.5;
+  padding-left: 24px;
+  position: relative;
+  text-align: left;
+}
+
+.static-post-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #374151;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Divider */
+.static-post-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #e5e7eb;
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .static-post-container {
+    padding: 20px !important;
+    gap: 15px;
+  }
+
+  .bloomr-title {
+    font-size: 24px;
+  }
+
+  .bloomr-subtitle {
+    font-size: 12px;
+  }
+
+  .static-post-main-title {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+
+  .static-post-description {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .static-post-bullets li {
+    font-size: 13px;
+  }
+
+  .bloomr-logo {
+    width: 40px;
+    height: 40px;
+  }
+}
