@@ -739,7 +739,7 @@ export const COMPANY_STAGES = [
     icon: "🏛️",
   },
 ];
-export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace","D2C"];
+export const TARGET_MARKETS = ["B2B", "B2C", "B2B2C", "Marketplace", "D2C"];
 export const STARTUP_TEAM_SIZES = [
   "Solo Founder",
   "2-5",
@@ -884,7 +884,7 @@ export const userColor = {
 const heirarchy = {
   Investor: 0,
   Incubation_Cell: 1,
-  "Individual/Entrepreneur": 1,
+  Enterpreneur: 1,
   Accelerator: 2,
   Mentor: 3,
   Entrepreneur: 4,
@@ -930,8 +930,8 @@ export function updateLastSeen() {
 export const dataEntry = [
   {
     id: 1,
-    title: "Individual/Entrepreneur",
-    key: "Individual/Entrepreneur",
+    title: "Enterpreneur",
+    key: "Enterpreneur",
     icon: "mage:light-bulb",
     paragraph:
       "Already started your entrepreneurial journey, either with an idea or a newly established business.",
@@ -952,6 +952,16 @@ export const dataEntry = [
     icon: "material-symbols:rocket-launch-outline",
     paragraph: "A company in early stages of development and looking to scale.",
   },
+
+  {
+    id: 4,
+    title: "Individual",
+    key: "individual",
+    icon: "material-symbols:person-outline-rounded",
+    paragraph:
+      "A normal user profile for individuals looking to explore opportunities, connect with mentors, investors, and grow their ideas.",
+  },
+
   // {
   //   id: 4,
   //   title: "Incubator",

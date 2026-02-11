@@ -37,7 +37,7 @@ const TabsAndInvestment = ({
   const extractedData = useMemo(() => {
     if (!profileData) return null;
     const userRole = profileData.role;
-    if (userRole === "Individual/Entrepreneur" || userRole === "Mentor") {
+    if (userRole === "Enterpreneur" || userRole === "Mentor" || userRole === "Individual") {
       // Extract from mentorExpertise
       const mentorExpertise = profileData.mentorExpertise || [];
       const extractedIndustries = mentorExpertise.map((item) => item.industry);
@@ -139,7 +139,7 @@ const TabsAndInvestment = ({
           )}
 
           {(profileData.role === "Mentor" ||
-            profileData.role === "Individual/Entrepreneur") && (
+            profileData.role === "Enterpreneur" || profileData.role === "Individual") && (
             <EditMentorProfessional
               isOpen={isEditModalOpen}
               onClose={handleCloseModal}
@@ -159,9 +159,9 @@ const TabsAndInvestment = ({
               </span>
             </p>
           )}
-          {/* Expertise Tab - For Individual/Entrepreneur and Mentor */}
-          {(extractedData?.role === "Individual/Entrepreneur" ||
-            extractedData?.role === "Mentor") &&
+          {/* Expertise Tab - For Enterpreneur and Mentor */}
+          {(extractedData?.role === "Enterpreneur" ||
+            extractedData?.role === "Mentor" || extractedData?.role === "Individual") &&
             activeTab === "Expertise" && (
               <p>
                 <span className="font-semibold text-gray-700 text-sm">

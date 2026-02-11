@@ -54,8 +54,8 @@ export default function ProfileCompletionStatus({
       ];
     }
 
-    // For Mentor or Individual/Entrepreneur
-    if (role === "Mentor" || role === "Individual/Entrepreneur") {
+    // For Mentor or Enterpreneur
+    if (role === "Mentor" || role === "Enterpreneur" || role === "Individual") {
       return [
         {
           key: "about",

@@ -75,7 +75,7 @@ const EditMentorProfessional = ({ isOpen, onClose, currentProfile }) => {
       const updateData = {};
 
       // IMPORTANT: Always send selectedCategory as the current user's role
-      updateData.selectedCategory = currentProfile.role; // "Mentor" or "Individual/Entrepreneur"
+      updateData.selectedCategory = currentProfile.role; // "Mentor" or "Enterpreneur"
 
       if (roleLevel) updateData.role_level = roleLevel;
       if (companyStage) updateData.companyStage = companyStage;
