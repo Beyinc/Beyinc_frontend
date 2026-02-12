@@ -52,7 +52,7 @@ const About = ({ profileData, selfProfile, setSelfProfile }) => {
           )}
 
           {(profileData.role === "Mentor" ||
-            profileData.role === "Individual/Entrepreneur") && (
+            profileData.role === "Enterpreneur") && (
             <div>
               {/* <div className=""> */}
               {/*   <SkillsCard */}

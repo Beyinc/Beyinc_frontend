@@ -105,7 +105,7 @@ const EntryDetails = () => {
         role_level: roleLevel,
         companyStage,
         mentorExpertise: selectedExpertise,
-            beyincProfile: selectedCategory === "Mentor" ? "Mentor" : selectedCategory === "Startup" ? "Startup" : "Individual/Entrepreneur",
+            beyincProfile: selectedCategory === "Mentor" ? "Mentor" : selectedCategory === "Startup" ? "Startup" : "Enterpreneur",
 
       });
 
@@ -121,7 +121,7 @@ const EntryDetails = () => {
     selectedCategory === "" ||
     selectedCategory === "Mentor" ||
     selectedCategory === "Startup" ||
-    selectedCategory === "Individual/Entrepreneur"
+    selectedCategory === "Enterpreneur"
       ? 3
       : 2;
   const progressPercentage = (step / totalSteps) * 100;
@@ -316,7 +316,7 @@ const EntryDetails = () => {
       )}
 
       {/* ---------------- STEP 2 (INDIVIDUAL / ENTREPRENEUR) ---------------- */}
-      {step === 2 && selectedCategory === "Individual/Entrepreneur" && (
+      {step === 2 && (selectedCategory === "Enterpreneur" || selectedCategory === "Individual") && (
         <>
           <h3 className="text-lg font-semibold text-gray-800 mb-6">
             Tell us about yourself
@@ -362,7 +362,7 @@ const EntryDetails = () => {
             {/* Headline */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Professional Headline
+               {selectedCategory === "Individual" ? "Personal" : "Professional"} Headline
                 {/* <span className="text-red-500">*</span> */}
               </label>
               <input
@@ -396,11 +396,12 @@ const EntryDetails = () => {
       {/* ---------------- STEP 3 ---------------- */}
       {step === 3 &&
         (selectedCategory === "Mentor" ||
-          selectedCategory === "Individual/Entrepreneur" ||
-          selectedCategory === "Startup") && (
+          selectedCategory === "Enterpreneur" ||
+          selectedCategory === "Startup"||
+        selectedCategory === "Individual") && (
           <>
             {(selectedCategory === "Mentor" ||
-              selectedCategory === "Individual/Entrepreneur") && (
+              selectedCategory === "Enterpreneur"||selectedCategory === "Individual") && (
               <>
                 <div className="mb-6">
                   <h2 className="text-lg font-semibold text-gray-800 mb-2">
