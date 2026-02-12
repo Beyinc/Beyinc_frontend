@@ -121,7 +121,8 @@ const EntryDetails = () => {
     selectedCategory === "" ||
     selectedCategory === "Mentor" ||
     selectedCategory === "Startup" ||
-    selectedCategory === "Enterpreneur"
+    selectedCategory === "Enterpreneur"||
+    selectedCategory === "Individual"
       ? 3
       : 2;
   const progressPercentage = (step / totalSteps) * 100;
