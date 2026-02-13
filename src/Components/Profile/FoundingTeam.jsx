@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  ShieldCheck, Clock, Trash2, X, Plus, User, 
-  KeyRound, Mail, AlertCircle, CheckCircle2 
+import {
+  ShieldCheck, Clock, Trash2, X, Plus, User,
+  KeyRound, Mail, AlertCircle, CheckCircle2
 } from 'lucide-react';
 import { ApiServices } from "../../Services/ApiServices";
 
@@ -30,11 +30,11 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [], isOwner = f
           <h3 className="text-lg font-bold text-gray-900">Founding Team</h3>
           {/* Only show manage button if user is the owner */}
           {isOwner && (
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
-              className={`${COLORS.textLink} font-medium text-sm flex items-center hover:opacity-80 transition-opacity`}
+              className="bg-white text-[#4E54C6] border border-[#4E54C6] px-6 py-2 rounded-md font-medium text-sm flex items-center hover:bg-[#4E54C6] hover:text-white transition-all shadow-sm"
             >
-              <User className="w-4 h-4 mr-1" /> Manage
+              <User className="w-4 h-4 mr-1.5" /> Manage
             </button>
           )}
         </div>
@@ -54,10 +54,10 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [], isOwner = f
 
       {/* --- MODAL (only for owners) --- */}
       {isOwner && isModalOpen && (
-        <ManageTeamModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          team={team} 
+        <ManageTeamModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          team={team}
           setTeam={setTeam}
           startupName={startupName}
         />
@@ -70,16 +70,16 @@ const FoundingTeamWidget = ({ userId, startupName, initialTeam = [], isOwner = f
 const WidgetRow = ({ member }) => {
   const isVerified = member.verified || member.status === 'verified';
   const avatarUrl = member.profileImage || member.avatar || member.image?.url;
-  
+
   return (
     <div className="flex items-start gap-3">
       {/* Avatar */}
       <div className="relative">
         {avatarUrl ? (
-          <img 
-            src={avatarUrl} 
-            alt={member.name || member.userName} 
-            className="w-10 h-10 rounded-full object-cover border border-gray-100" 
+          <img
+            src={avatarUrl}
+            alt={member.name || member.userName}
+            className="w-10 h-10 rounded-full object-cover border border-gray-100"
           />
         ) : (
           <div className={`w-10 h-10 rounded-full ${COLORS.gradient} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
@@ -141,17 +141,17 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
   const handleSendInvite = async () => {
     setError(null);
     setSuccess(null);
-    
+
     if (!newMember.name || !newMember.email || !newMember.role) {
       return setError("Please fill all fields.");
     }
-    
+
     if (team.some(m => m.email.toLowerCase() === newMember.email.toLowerCase())) {
       return setError("User already in team.");
     }
 
     setLoading(true);
-    
+
     try {
       // 1. Search for existing user to get their profile
       let dbUser = null;
@@ -175,7 +175,7 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
         name: dbUser?.userName || dbUser?.name || newMember.name,
         userName: dbUser?.userName || newMember.name,
         email: newMember.email,
-        position: newMember.role, 
+        position: newMember.role,
         role: newMember.role,
         verified: false,
         status: 'pending',
@@ -186,7 +186,7 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
       setSuccess(`Invite sent to ${newMember.email}`);
       setNewMember({ name: '', email: '', role: '' });
       setShowAddForm(false);
-      
+
       // Auto-open OTP input
       setTimeout(() => setOtpInputVisible(pendingMember.email), 600);
 
@@ -199,14 +199,14 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 
   const handleVerifyOTP = async (memberEmail, memberName, memberRole, memberImg) => {
     const otp = otpValues[memberEmail];
-    
+
     if (!otp || otp.length !== 6) {
       return setError("Enter a valid 6-digit OTP");
     }
 
     setLoading(true);
     setError(null);
-    
+
     try {
       await ApiServices.verifyCoFounder({
         email: memberEmail,
@@ -217,18 +217,18 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
       });
 
       // Update to verified
-      setTeam(prev => prev.map(m => 
-        m.email === memberEmail 
-          ? { ...m, verified: true, status: 'verified' } 
+      setTeam(prev => prev.map(m =>
+        m.email === memberEmail
+          ? { ...m, verified: true, status: 'verified' }
           : m
       ));
-      
+
       setSuccess("Member verified successfully!");
       setOtpInputVisible(null);
-      setOtpValues(prev => { 
-        const updated = {...prev}; 
-        delete updated[memberEmail]; 
-        return updated; 
+      setOtpValues(prev => {
+        const updated = { ...prev };
+        delete updated[memberEmail];
+        return updated;
       });
 
     } catch (err) {
@@ -240,11 +240,11 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 
   const handleRemove = async (email) => {
     if (!window.confirm("Remove this member?")) return;
-    
+
     try {
       // Call API to remove from backend if needed
       // await ApiServices.removeCoFounder(email);
-      
+
       setTeam(prev => prev.filter(m => m.email !== email));
       setSuccess("Member removed successfully.");
     } catch (err) {
@@ -257,7 +257,7 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-[2rem] w-full max-w-[850px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
-        
+
         {/* Header */}
         <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-start bg-white">
           <div>
@@ -287,9 +287,9 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
               </div>
             ) : (
               team.map(member => (
-                <ModalRow 
-                  key={member._id || member.email} 
-                  member={member} 
+                <ModalRow
+                  key={member._id || member.email}
+                  member={member}
                   otpInputVisible={otpInputVisible}
                   setOtpInputVisible={setOtpInputVisible}
                   otpValues={otpValues}
@@ -307,18 +307,18 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
             {showAddForm ? (
               <div className="bg-[#F9FAFB] border border-purple-100 rounded-2xl p-6 shadow-sm">
                 <h3 className="text-lg font-bold text-gray-900 mb-6">Add Team Member</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Full Name <span className="text-red-500">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      placeholder="John Doe" 
+                    <input
+                      type="text"
+                      placeholder="John Doe"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 text-sm font-medium"
                       value={newMember.name}
-                      onChange={e => setNewMember({...newMember, name: e.target.value})}
+                      onChange={e => setNewMember({ ...newMember, name: e.target.value })}
                     />
                   </div>
                   <div>
@@ -326,10 +326,10 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
                       Role <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <select 
+                      <select
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 bg-white text-sm font-medium appearance-none cursor-pointer"
                         value={newMember.role}
-                        onChange={e => setNewMember({...newMember, role: e.target.value})}
+                        onChange={e => setNewMember({ ...newMember, role: e.target.value })}
                       >
                         <option value="">Select Role</option>
                         <option value="Founder">Founder</option>
@@ -340,7 +340,7 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                         <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                          <path d="M1 1.5L6 6.5L11 1.5" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M1 1.5L6 6.5L11 1.5" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
                     </div>
@@ -351,41 +351,41 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Email Address <span className="text-red-500">*</span>
                   </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input 
-                      type="email" 
-                      placeholder="john@example.com" 
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-400 text-sm font-medium"
+                  <div className="flex items-center w-full px-4 rounded-xl border border-gray-200 bg-white focus-within:ring-2 focus-within:ring-purple-100 focus-within:border-purple-400 overflow-hidden transition-all">
+                    <Mail className="w-5 h-5 text-gray-400 shrink-0" />
+                    <input
+                      type="email"
+                      placeholder="john@example.com"
+                      className="w-full py-3 pl-3 text-sm font-medium outline-none border-none bg-transparent placeholder-gray-400"
                       value={newMember.email}
-                      onChange={e => setNewMember({...newMember, email: e.target.value})}
+                      onChange={e => setNewMember({ ...newMember, email: e.target.value })}
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-2 ml-1">A verification email will be sent to this address</p>
                 </div>
 
                 <div className="flex justify-end gap-3">
-                  <button 
+                  <button
                     onClick={() => setShowAddForm(false)}
-                    className="px-6 py-2.5 rounded-xl text-gray-600 font-semibold hover:bg-gray-100 transition-colors"
+                    className="px-6 py-2.5 rounded-xl bg-white text-gray-500 border border-gray-200 font-semibold hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
-                  <button 
+                  <button
                     onClick={handleSendInvite}
                     disabled={loading}
-                    className={`px-8 py-2.5 rounded-xl text-white font-semibold shadow-lg shadow-purple-100 transition-all ${COLORS.primary} ${COLORS.primaryHover} disabled:opacity-50`}
+                    className="px-8 py-2.5 rounded-xl bg-[#4E54C6] text-white font-semibold shadow-md hover:bg-[#4348aa] transition-all disabled:opacity-50"
                   >
                     {loading ? 'Sending...' : 'Add Member'}
                   </button>
                 </div>
               </div>
             ) : (
-              <button 
+              <button
                 onClick={() => setShowAddForm(true)}
-                className="w-full border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-gray-500 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all group"
+                className="w-full bg-white text-[#4E54C6] border border-[#4E54C6] px-6 py-3 rounded-md font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#4E54C6] hover:text-white transition-all shadow-sm group"
               >
-                <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" /> 
+                <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 Add Team Member
               </button>
             )}
@@ -394,15 +394,15 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 
         {/* Footer */}
         <div className="px-8 py-5 border-t border-gray-100 flex justify-end gap-3 bg-white">
-          <button 
-            onClick={onClose} 
-            className="px-6 py-2.5 text-gray-500 font-semibold hover:text-gray-800 transition-colors"
+          <button
+            onClick={onClose}
+            className="px-6 py-2.5 rounded-xl bg-white text-gray-500 border border-gray-200 font-semibold hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
-          <button 
-            onClick={onClose} 
-            className={`px-8 py-2.5 rounded-xl text-white font-bold shadow-md ${COLORS.primary} ${COLORS.primaryHover}`}
+          <button
+            onClick={onClose}
+            className="px-8 py-2.5 rounded-xl bg-[#4E54C6] text-white font-bold shadow-md hover:bg-[#4348aa] transition-all"
           >
             Done
           </button>
@@ -413,9 +413,9 @@ const ManageTeamModal = ({ isOpen, onClose, team, setTeam, startupName }) => {
 };
 
 // --- Modal Row ---
-const ModalRow = ({ 
-  member, otpInputVisible, setOtpInputVisible, otpValues, setOtpValues, 
-  handleVerifyOTP, handleRemove, loading 
+const ModalRow = ({
+  member, otpInputVisible, setOtpInputVisible, otpValues, setOtpValues,
+  handleVerifyOTP, handleRemove, loading
 }) => {
   const isVerified = member.verified || member.status === 'verified';
   const avatarUrl = member.profileImage || member.avatar || member.image?.url;
@@ -424,21 +424,21 @@ const ModalRow = ({
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl p-4 flex items-center justify-between gap-4 border border-transparent hover:border-gray-100 transition-colors">
-      
+
       {/* Left: Info */}
       <div className="flex items-center gap-4 flex-1 overflow-hidden">
         {avatarUrl ? (
-          <img 
-            src={avatarUrl} 
-            alt={displayName} 
-            className="w-12 h-12 rounded-full object-cover border border-white shadow-sm" 
+          <img
+            src={avatarUrl}
+            alt={displayName}
+            className="w-12 h-12 rounded-full object-cover border border-white shadow-sm"
           />
         ) : (
           <div className={`w-12 h-12 rounded-full ${COLORS.gradient} flex items-center justify-center text-white font-bold text-lg shadow-sm`}>
             {(displayName || 'U').charAt(0).toUpperCase()}
           </div>
         )}
-        
+
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             <h4 className="font-bold text-gray-900 text-base truncate">{displayName}</h4>
@@ -452,7 +452,7 @@ const ModalRow = ({
 
       {/* Right: Actions */}
       <div className="flex items-center gap-3 shrink-0">
-        
+
         {isVerified ? (
           <div className="flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg text-sm font-bold">
             <ShieldCheck className="w-4 h-4" /> Verified
@@ -465,10 +465,10 @@ const ModalRow = ({
 
             {isEditingOTP ? (
               <div className="flex items-center gap-2">
-                <input 
+                <input
                   autoFocus
-                  type="text" 
-                  placeholder="Enter OTP" 
+                  type="text"
+                  placeholder="Enter OTP"
                   maxLength={6}
                   className="w-28 px-3 py-1.5 border border-blue-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={otpValues[member.email] || ''}
@@ -482,7 +482,7 @@ const ModalRow = ({
                     }
                   }}
                 />
-                <button 
+                <button
                   onClick={() => handleVerifyOTP(member.email, displayName, member.position || member.role, avatarUrl)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
                   disabled={loading || !otpValues[member.email] || otpValues[member.email].length !== 6}
@@ -491,7 +491,7 @@ const ModalRow = ({
                 </button>
               </div>
             ) : (
-              <button 
+              <button
                 onClick={() => setOtpInputVisible(member.email)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-sm shadow-blue-200"
               >
@@ -501,7 +501,7 @@ const ModalRow = ({
           </>
         )}
 
-        <button 
+        <button
           onClick={() => handleRemove(member.email)}
           className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
         >
