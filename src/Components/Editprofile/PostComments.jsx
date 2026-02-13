@@ -52,29 +52,6 @@ const PostComments = ({ fetchComments, postId }) => {
     setFile(selectedFile);
   };
 
-  // const sendText = async () => {
-  //   if (!comment.trim() && !file) return;
-
-  //   dispatch(setLoading({ visible: "yes" }));
-  //   const formData = new FormData();
-  //   formData.append("postId", postId);
-  //   formData.append("commentBy", user_id);
-  //   formData.append("comment", comment);
-  //   if (file) formData.append("file", file);
-
-  //   try {
-  //     await ApiServices.addPostComment(formData);
-  //     setComment("");
-  //     setFile(null);
-  //     setpostTrigger((prev) => !prev);
-  //   } catch (err) {
-  //     // navigate("/posts");
-  //     alert(err)
-  //   } finally {
-  //     dispatch(setLoading({ visible: "no" }));
-  //   }
-  // };
-
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -176,6 +153,7 @@ const PostComments = ({ fetchComments, postId }) => {
       );
     }
   };
+
   const handleKeyDown = (e) => {
     const currentValue = e.target.value.trim();
 
@@ -188,11 +166,14 @@ const PostComments = ({ fetchComments, postId }) => {
       }
     }
   };
+
   return (
     <div className="">
       <div className="postCommentAddSection ml-5">
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <div>
+        {/* Outer row: avatar + input box */}
+        <div style={{ display: "flex", flexDirection: "row", gap: "8px", alignItems: "flex-start" }}>
+          {/* Avatar — fixed size, never shrinks */}
+          <div style={{ flexShrink: 0 }}>
             <img
               id="Profile-img"
               className="Profile-img"
@@ -200,107 +181,122 @@ const PostComments = ({ fetchComments, postId }) => {
               alt=""
             />
           </div>
-          <div className="relative w-full">
-  {/* 1. MOVED STYLES HERE: This div is now the visual 'Box' */}
-  <div className="flex items-center w-full max-w-[420px] bg-gray-100 rounded-[30px] px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-[#4F55C7] focus-within:ring-2 focus-within:ring-[#ECE9FC] transition-all">
-    
-    <textarea
-      // 2. MADE TRANSPARENT: Removed borders/shadows from textarea so it blends in
-      className="grow bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 !h-fit !p-0 focus:ring-0 min-w-0"
-      onClick={() => {
-        if (!user_id) navigate("/login");
-      }}
-      rows={1} 
-      cols={35}
-      onKeyDown={handleKeyDown}
-      value={comment}
-      onChange={(e) => setComment(e.target.value)}
-      placeholder="Add a comment..."
-      style={{ resize: "none", boxShadow: "none" }} 
-    />
 
-    {/* 3. ICONS: Added 'shrink-0' to prevent squishing */}
-    {user_id && (
-      <div className="flex gap-2 items-center ml-2 shrink-0">
-        {user_id && (
-          <>
-            <input
-              id="file-upload"
-              type="file"
-              style={{ display: "none" }}
-              onChange={(e) => handleFileUpload(e.target.files[0])}
-            />
-            <label htmlFor="file-upload" className="cursor-pointer text-gray-400 hover:text-gray-600">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {/* Input wrapper — takes remaining space, min-width 0 to allow shrinking */}
+          <div style={{ flex: "1 1 0%", minWidth: 0, position: "relative" }}>
+            {/* The pill-shaped input box */}
+            <div
+  className="flex items-center bg-gray-100 rounded-[30px] px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-[#4F55C7] focus-within:ring-2 focus-within:ring-[#ECE9FC] transition-all w-[85%] md:w-[95%]"
+>
+              {/* Textarea — grows to fill, min-width 0 prevents overflow */}
+              <textarea
+                className="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 focus:ring-0"
+                onClick={() => {
+                  if (!user_id) navigate("/login");
+                }}
+                rows={1}
+                onKeyDown={handleKeyDown}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Add a comment..."
+                style={{
+                  resize: "none",
+                  boxShadow: "none",
+                  flex: "1 1 0%",
+                  minWidth: 0,
+                  height: "auto",
+                  padding: 0,
+                }}
+              />
+
+              {/* Action icons — fixed size, never shrink */}
+              {user_id && (
+                <div className="flex gap-2 items-center ml-2" style={{ flexShrink: 0 }}>
+                  {/* File upload */}
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => handleFileUpload(e.target.files[0])}
+                  />
+                  <label htmlFor="file-upload" className="cursor-pointer text-gray-400 hover:text-gray-600">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21.44 11.05l-9.19 9.2a4 4 0 0 1-5.66-5.66l9.2-9.2a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.42-1.42l7.78-7.78" />
+                    </svg>
+                  </label>
+
+                  {/* Send button */}
+                  <svg
+                    onClick={sendText}
+                    className="text-[#4F55C7] hover:opacity-80 transition-opacity"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 34 34"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      cursor: comment === "" && !file ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    <path
+                      d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            {/* File name preview below the input */}
+            {file && (
+              <div
+                style={{
+                  marginTop: "6px",
+                  fontSize: "12px",
+                  color: "gray",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  paddingLeft: "",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
               >
-                <path d="M21.44 11.05l-9.19 9.2a4 4 0 0 1-5.66-5.66l9.2-9.2a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.42-1.42l7.78-7.78" />
-              </svg>
-            </label>
-          </>
-        )}
-        <svg
-          onClick={sendText}
-          className="send-button-svg w-[20px] h-[20px] text-[#4F55C7] hover:opacity-80 transition-opacity"
-          viewBox="0 0 34 34"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{
-            cursor: comment === "" && !file ? "not-allowed" : "pointer",
-          }}
-        >
-          <path
-            d="M13.6668 20.3333L32.0001 2M13.6668 20.3333L19.5001 32C19.5732 32.1596 19.6906 32.2948 19.8384 32.3896C19.9861 32.4844 20.1579 32.5348 20.3335 32.5348C20.509 32.5348 20.6808 32.4844 20.8285 32.3896C20.9763 32.2948 21.0937 32.1596 21.1668 32L32.0001 2M13.6668 20.3333L2.00012 14.5C1.84055 14.4269 1.70533 14.3095 1.61053 14.1618C1.51573 14.014 1.46533 13.8422 1.46533 13.6667C1.46533 13.4911 1.51573 13.3193 1.61053 13.1716C1.70533 13.0239 1.84055 12.9065 2.00012 12.8333L32.0001 2"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    )}
-  </div>
-
-  {/* 4. FILE PREVIEW: Kept absolute positioning */}
-  {file && (
-    <div
-      style={{
-        position: "absolute",
-        bottom: "-24px",
-        left: "10px",
-        fontSize: "12px",
-        color: "gray",
-        display: "flex",
-        alignItems: "center",
-        gap: "4px",
-      }}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="gray"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-      </svg>
-      {file.name}
-    </div>
-  )}
-</div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="gray"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {file.name}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
