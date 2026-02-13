@@ -509,3 +509,20 @@ button.connect {
     padding: 10px;
   }
 }
+
+.follow-blue {
+  border-color: #2563eb !important;   /* blue border */
+  background-color: #2563eb !important;    
+  color: white;      /* blue text */
+}
+
+.follow-blue:hover {
+  background-color: #eff6ff !important; /* light blue hover */
+  color: grey;
+}
+
+.connect-btn:hover {
+  background-color: #3e44a8; /* darker purple */
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(79, 85, 199, 0.35);
+}

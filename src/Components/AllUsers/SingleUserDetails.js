@@ -179,7 +179,7 @@ const SingleUserDetails = ({ user, connectStatus, viewMode }) => {
               <div className="flex flex-col items-center gap-2 w-full ">
                 {user._id !== user_id && (
                   <button
-                    className={`connect-btn w-[100px] h-[30px] text-sm mr-10`}
+                    className={`connect-btn follow-blue w-[100px] h-[30px] text-sm mr-10`}
                     onClick={async (e) => {
                       e.target.disabled = true;
                       try {
