@@ -374,7 +374,7 @@ const ProfileCard = ({
         )}
 
         {/* 2. UPDATE: Only show "Not Verified" if verified is FALSE (added check !profileData.verified) */}
-        {(profileData.role === "Mentor" || profileData.role === "Startup") &&
+        {(profileData.role === "Mentor" || profileData.role === "Startup" || profileData.role !== "Individual") &&
           !profileData.verified && (
             <div className="font-bold text-md text-amber-600">
               Not Verified
@@ -383,7 +383,9 @@ const ProfileCard = ({
 
         {/* 3. Existing "Verification Pending" logic */}
         {profileData?.verified === false &&
-          profileData?.beyincProfile.length === 0 && (
+          profileData?.beyincProfile.length === 0 &&
+          profileData.role !== "Individual"&&
+           (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               Verification Pending
             </div>
@@ -391,7 +393,8 @@ const ProfileCard = ({
 
         {/* 4. Existing "Will Verify Soon" logic */}
         {profileData.verified === false &&
-          profileData?.beyincProfile?.length !== 0 && (
+          profileData?.beyincProfile?.length !== 0 &&
+           profileData.role !== "Individual" && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               <svg
                 className="w-5 h-5"
@@ -497,7 +500,7 @@ const ProfileCard = ({
 
             {/* Mentor / Individual profile info */}
             {(profileRole === "Mentor" ||
-              profileRole === "Individual/Entrepreneur") && (
+              profileRole === "Enterpreneur") && (
               <MentorCardInfo
                 profileData={profileData}
                 profileRole={profileRole}

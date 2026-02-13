@@ -31,7 +31,7 @@ import { ToastColors } from "../Toast/ToastColors";
 
 const investorTypes = [
   {
-    title: "Individual/Entrepreneur",
+    title: "Enterpreneur",
     description:
       "Already started your entrepreneurial journey as an idea or newly established business",
     iconClass: <EmojiObjectsOutlinedIcon />,
@@ -1115,7 +1115,7 @@ const UserDetails = () => {
           <h1>Profile</h1>
       
       {role && (<div style={{marginBottom: '10px'}}>  <b>Selected Role :</b> {role}</div>)}
-          {role === "Individual/Entrepreneur" ? (
+          {role === "Enterpreneur" ? (
             <div>
               <UploadProfile
                 setStep3Data={setStep3Data}

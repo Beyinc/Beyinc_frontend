@@ -5,7 +5,7 @@ import { dataEntry } from "../../Utils";
 const BoxCategories = ({
    onCategoryClick,
    selectedCategory }) => {
-  const allowedTitles = ['Individual/Entrepreneur','Mentor','Startup'];
+  const allowedTitles = ['Enterpreneur','Mentor','Startup','Individual'];
 
   return (
     <div className="flex flex-wrap">
@@ -15,7 +15,7 @@ const BoxCategories = ({
         return (
           <div
             key={item.id}
-            className={`mx-5 my-2 shadow-[0_3px_12px_rgba(0,0,0,0.1)] mt-6 w-[259px] h-[223px] rounded-md py-4 px-5 ${allowed ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' } ${isSelected ? 'bg-customPurple' : 'bg-customWhite'}`}
+            className={`mx-2 my-2 shadow-[0_3px_12px_rgba(0,0,0,0.1)] mt-6 w-[259px] h-[223px] rounded-md py-4 px-5 ${allowed ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' } ${isSelected ? 'bg-customPurple' : 'bg-customWhite'}`}
             onClick={allowed ? () => onCategoryClick(item.title) : undefined}
           >
             <div className="relative flex mt-5">

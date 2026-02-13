@@ -14,7 +14,7 @@ import { io } from "socket.io-client";
 import RecommendedConnectButton from "./RecommendedConnectButton";
 import { RxCaretDown } from "react-icons/rx";
 import GuestNoticeModal from "./components/GuestNoticeModal";
-
+import StaticPost from "./StaticPost";
 const Posts = () => {
   const {
     role,
@@ -289,10 +289,10 @@ const Posts = () => {
 
   const handleTagsChange = (e) => {
     const value = e.target.value;
-    setSelectedTags(prev => {
+    setSelectedTags((prev) => {
       if (prev.includes(value)) {
         // Remove if already selected
-        return prev.filter(tag => tag !== value);
+        return prev.filter((tag) => tag !== value);
       } else {
         // Add if not selected - THIS SHOULD NOT DUPLICATE
         return [...prev, value];
@@ -547,6 +547,7 @@ const Posts = () => {
 
       <div className="main-content" ref={feedRef}>
         <div className="allPostShowContainer">
+          <StaticPost />
           {filteredPosts.length > 0 &&
             filteredPosts
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -577,7 +578,7 @@ const Posts = () => {
       {/* Right Bar */}
 
       <div className="sidebar-right">
-        <div className="trending-section shadow-lg">
+        {/* <div className="trending-section shadow-lg">
           <h3 className="label">Top Trending</h3>
           <div className="trending-item">
             {topTrendingPosts?.map((post, index) => (
@@ -604,8 +605,8 @@ const Posts = () => {
               </div>
             ))}
           </div>
-        </div>
-
+        </div> */}
+        {/* 
         {user_id ? (
           <div className="suggestions-section shadow-lg">
             <div style={{ display: "flex", flexDirection: "row", gap: "30px" }}>
@@ -691,9 +692,9 @@ const Posts = () => {
               </div>
             ))}
           </div>
-        ) : null}
+        ) : null} */}
 
-        {user_id ? (
+        {/* {user_id ? (
           <div className="activity-section shadow-lg">
             <h3 className="label">Latest Activities</h3>
             <div className="activity-item">
@@ -713,7 +714,58 @@ const Posts = () => {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : null} */}
+
+        
+{/* Placeholder for first div  */}
+
+
+        <div className="h-[373px] w-[299px] bg-white flex flex-col mb-2 rounded-lg shadow-lg">
+          <p
+            className="pt-6 text-center font-bold text-[20px] text-[#4F55C7] font-gentium"
+            style={{ lineHeight: "100%" }}
+          >
+            Opportunities Gallery
+          </p>
+
+          <img
+            src="/opportunity.png"
+            alt="Opportunities Gallery"
+            className="mt-6 mx-auto w-[253px] h-[148px] object-cover rounded-lg"
+          />
+          <p className="text-center mt-4 text-black font-bold font-gentium text-[16px]">
+            Government Grants to Watch Out For{" "}
+          </p>
+
+          <div className="w-[220px] ml-10 mt-1 h-[2px] bg-[#BDBDBD] " />
+
+          {/* Sub Section */}
+         <p className="text-left text-black font-bold font-gentium text-[18px] ml-6 mt-4"> Service/Mentors/Angel Investors’ Listing</p>
+                  <p className="text-left text-black font-normal font-gentium text-[14px] ml-6 mt-2"> Coming Soon !</p>
+
+        </div>
+
+{/* Placeholder for LIVE Events  */}
+
+        <div className="h-[373px] w-[299px] bg-white flex justify-center mb-2 rounded-lg shadow-lg">
+          <p
+            className="mt-6 font-bold text-[20px] text-[#4F55C7] font-gentium"
+            style={{ lineHeight: "100%" }}
+          >
+            LIVE Events: Coming Soon!
+          </p>
+        </div>
+
+{/* Placeholder for Job  */}
+
+        <div className="h-[373px] w-[299px] bg-white flex justify-center mb-2 rounded-lg shadow-lg">
+          <p
+            className="mt-6 font-bold text-[20px] text-[#4F55C7] font-gentium"
+            style={{ lineHeight: "100%" }}
+          >
+            Job Openings: Coming Soon!
+          </p>
+        </div>
       </div>
     </div>
   );

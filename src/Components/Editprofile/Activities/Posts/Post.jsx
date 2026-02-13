@@ -313,7 +313,7 @@ const Post = ({
 
   return (
     <section
-      className={` shadow-lg ${
+      className={` ml-[-5px] ${
         screenDecider == "home" && "homeEditProfileOuterCard "
       }`}
     >

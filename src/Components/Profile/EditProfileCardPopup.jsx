@@ -204,7 +204,7 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {profileData &&
-                (profileData.role === "Individual/Entrepreneur" ||
+                (profileData.role === "Enterpreneur" ||
                   profileData.role === "Mentor") && (
                   <div>
                     <div>
@@ -220,7 +220,7 @@ const EditProfileCardPopup = ({ setIsInputPopupVisible, profileData }) => {
                       />
                     </div>
 
-                    {profileData?.role === "Individual/Entrepreneur" && (
+                    {profileData?.role === "Enterpreneur" && (
                       <div>
                         <label className="block text-sm font-semibold text-blue-600 mb-1.5">
                           Headline
