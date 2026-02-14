@@ -340,9 +340,7 @@ const ProfileCard = ({
     {selfProfile && <i className="fas fa-pen ml-1 cursor-pointer text-sm"></i>}
   </span>
 </div> 
-        <div className="font-bold text-sm text-[#4F55C7]">
-          {formState?.role}
-        </div>
+
 
         <div className="flex justify-center">
           <div className="text-center">{trimHeadline(formState.headline)}</div>
@@ -373,13 +371,9 @@ const ProfileCard = ({
           </div>
         )}
 
-        {/* 2. UPDATE: Only show "Not Verified" if verified is FALSE (added check !profileData.verified) */}
-        {(profileData.role === "Mentor" || profileData.role === "Startup" || profileData.role !== "Individual") &&
-          !profileData.verified && (
-            <div className="font-bold text-md text-amber-600">
-              Not Verified
-            </div>
-          )}
+
+
+
 
         {/* 3. Existing "Verification Pending" logic */}
         {profileData?.verified === false &&
