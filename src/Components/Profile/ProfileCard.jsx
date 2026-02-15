@@ -39,7 +39,7 @@ const ProfileCard = ({
   const [singlelanguagesKnown, setSinglelanguagesKnown] = useState("");
 
   // --- NEW STATE FOR FOUNDING TEAM ---
-  const [foundingTeam, setFoundingTeam] = useState([]); 
+  const [foundingTeam, setFoundingTeam] = useState([]);
 
   const [languagesKnown, setlanguagesKnown] = useState([]);
   const [state, setState] = useState("");
@@ -227,11 +227,11 @@ const ProfileCard = ({
 
 
         if (!selfProfile && profileData.role === "Startup") {
-            const teamData = profileData.cofounders || profileData.startupProfile?.cofounders || [];
-            setFoundingTeam(teamData);
+          const teamData = profileData.cofounders || profileData.startupProfile?.cofounders || [];
+          setFoundingTeam(teamData);
         } else if (selfProfile && profileData.cofounders) {
-            // If self profile, we might also get it here initially before the specific useEffect runs
-             setFoundingTeam(profileData.cofounders);
+          // If self profile, we might also get it here initially before the specific useEffect runs
+          setFoundingTeam(profileData.cofounders);
         }
         // ------------------------
 
@@ -316,41 +316,43 @@ const ProfileCard = ({
 
       <div className="w-full flex flex-col items-center bg-white rounded-t-[40px] mt-24 lg:mt-4 pt-16 lg:pt-0">
         {/* Updated Name Container: Flex to align Name + Badge + Pen */}
-<div className="flex items-center justify-center gap-2 font-bold text-xl mt-2">
-  <span>
-    {profileDataObj.role === "Startup"
-      ? profileDataObj?.startupProfile?.startupName
-      : formState?.fullName}
-  </span>
+        <div className="flex items-center justify-center gap-2 font-bold text-xl mt-2">
+          <span>
+            {profileDataObj.role === "Startup"
+              ? profileDataObj?.startupProfile?.startupName
+              : formState?.fullName}
+          </span>
 
-  {/* Instagram-style Verification Badge */}
-  {profileData?.verified && (
-    <svg
-      className="w-5 h-5 text-green-600"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* "Seal" shape with checkmark */}
-      <path d="M23 12l-2.44-2.79.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.79-.34 3.68 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-10 5l-4-4 1.41-1.41L13 14.17l7.59-7.59L22 8l-9 9z" />
-    </svg>
-  )}
+          {/* Instagram-style Verification Badge */}
+          {profileData?.verified && (
+            <svg
+              className="w-5 h-5 text-green-600"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* "Seal" shape with checkmark */}
+              <path d="M23 12l-2.44-2.79.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.79-.34 3.68 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-10 5l-4-4 1.41-1.41L13 14.17l7.59-7.59L22 8l-9 9z" />
+            </svg>
+          )}
 
-  <span onClick={() => setIsInputPopupVisible(true)}>
-    {selfProfile && <i className="fas fa-pen ml-1 cursor-pointer text-sm"></i>}
-  </span>
-</div> 
-
-
-        <div className="flex justify-center">
-          <div className="text-center">{trimHeadline(formState.headline)}</div>
+          <span onClick={() => setIsInputPopupVisible(true)}>
+            {selfProfile && <i className="fas fa-pen ml-1 cursor-pointer text-sm"></i>}
+          </span>
         </div>
-       {/* {(profileData.role==="Mentor"||profileData.role==="Startup") && (
+
+
+        <div className="font-bold text-sm text-[#4F55C7]">
+          {formState?.role}
+        </div>
+
+
+        {/* {(profileData.role==="Mentor"||profileData.role==="Startup") && (
           <div className="font-bold text-md text-amber-600" >
            Not Verified
           </div>
         )} */}
-  
+
         {profileData?.verified === true && (
           <div className="flex items-center gap-2 font-bold text-md text-green-600">
             <svg
@@ -378,8 +380,8 @@ const ProfileCard = ({
         {/* 3. Existing "Verification Pending" logic */}
         {profileData?.verified === false &&
           profileData?.beyincProfile.length === 0 &&
-          profileData.role !== "Individual"&&
-           (
+          profileData.role !== "Individual" &&
+          (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               Verification Pending
             </div>
@@ -388,7 +390,7 @@ const ProfileCard = ({
         {/* 4. Existing "Will Verify Soon" logic */}
         {profileData.verified === false &&
           profileData?.beyincProfile?.length !== 0 &&
-           profileData.role !== "Individual" && (
+          profileData.role !== "Individual" && (
             <div className="flex items-center gap-2 font-semibold text-md text-amber-600">
               <svg
                 className="w-5 h-5"
@@ -407,6 +409,10 @@ const ProfileCard = ({
               Will Verify Soon
             </div>
           )}
+
+        <div className="flex justify-center">
+          <div className="text-center">{trimHeadline(formState.headline)}</div>
+        </div>
         <div className="flex flex-col gap-4 mt-2 ">
           {!selfProfile && (
             <div className="flex items-center gap-2">
@@ -495,11 +501,11 @@ const ProfileCard = ({
             {/* Mentor / Individual profile info */}
             {(profileRole === "Mentor" ||
               profileRole === "Enterpreneur") && (
-              <MentorCardInfo
-                profileData={profileData}
-                profileRole={profileRole}
-              />
-            )}
+                <MentorCardInfo
+                  profileData={profileData}
+                  profileRole={profileRole}
+                />
+              )}
 
             {/* Location */}
             {country && (
@@ -528,15 +534,15 @@ const ProfileCard = ({
           {/* --- UPDATED FOUNDING TEAM WIDGET --- */}
           {/* Only render this section if it is a Startup Profile */}
           {profileRole === "Startup" && (
-              <div className="px-6 mt-4">
-                <FoundingTeamWidget 
-                  userId={profileData?._id}
-                  startupName={profileDataObj?.startupProfile?.startupName || formState.fullName}
-                  initialTeam={foundingTeam}
-                  // IMPORTANT: Pass isOwner so the widget knows if it can show edit buttons
-                  isOwner={selfProfile} 
-                />
-              </div>
+            <div className="px-6 mt-4">
+              <FoundingTeamWidget
+                userId={profileData?._id}
+                startupName={profileDataObj?.startupProfile?.startupName || formState.fullName}
+                initialTeam={foundingTeam}
+                // IMPORTANT: Pass isOwner so the widget knows if it can show edit buttons
+                isOwner={selfProfile}
+              />
+            </div>
           )}
 
           {/* Profile Completion Status */}
