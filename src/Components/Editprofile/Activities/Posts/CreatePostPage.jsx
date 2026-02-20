@@ -216,6 +216,7 @@ const CreatePostPage = () => {
       type: posttype,
       id: postId,
       openDiscussion: accessSetting === "public",
+      visibility: accessSetting,
     })
       .then((res) => {
         setLoading(false);
@@ -274,7 +275,7 @@ const CreatePostPage = () => {
           setuserTags(res.data.tags);
           setImages(res.data.images ?? (res.data.image ? [res.data.image] : []));
           setlink(res.data.link);
-          setAccessSetting(res.data.openDiscussion ? "public" : "members");
+          setAccessSetting(res.data.openDiscussion ? "public" : "private");
           setFullDetails(res.data.fullDetails);
           setGroupDiscussion(res.data.groupDiscussion);
           setUserPitchid(res.data.pitchId);
@@ -312,7 +313,7 @@ const CreatePostPage = () => {
         <div className="createPostHeader">
           {postId === undefined ? "Create Post" : "Update Post"}
         </div>
-        <div className="createPost-privacy-setting">
+        {/* <div className="createPost-privacy-setting">
           <div class="dropdown-container">
             <svg
               class="dropdown-icon"
@@ -335,6 +336,25 @@ const CreatePostPage = () => {
               <option value="public">Public Post</option>
               <option value="private">Private Post</option>
             </select>
+          </div>
+        </div> */}
+        
+        <div className="createPost-privacy-setting">
+          <div className="privacy-toggle-wrapper">
+            <span className="privacy-label">Public</span>
+
+            <label className="privacy-switch">
+              <input
+                type="checkbox"
+                checked={accessSetting === "private"}
+                onChange={(e) =>
+                  setAccessSetting(e.target.checked ? "private" : "public")
+                }
+              />
+              <span className="privacy-slider"></span>
+            </label>
+
+            <span className="privacy-label">Private</span>
           </div>
         </div>
 

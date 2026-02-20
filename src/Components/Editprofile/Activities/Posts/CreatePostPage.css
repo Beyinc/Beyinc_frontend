@@ -350,3 +350,72 @@ button.createPost-Button {
   appearance: none;         /* Standard */
   background-image: none;   /* Extra safety */
 }
+
+
+/* ===== Privacy Toggle (Exact UI Match) ===== */
+
+.createPost-privacy-setting {
+  display: flex;
+  justify-content: flex-start;
+  /* margin: 15px 0 20px 0; */
+  /* margin: 25px 0 10px; */
+}
+
+.privacy-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Text labels */
+.privacy-label {
+  font-size: 16px;
+  color: #6b7280; /* soft gray like image */
+  font-weight: 500;
+}
+
+/* Switch container */
+.privacy-switch {
+  position: relative;
+  width: 80px;   /* long pill like image */
+  height: 36px;
+}
+
+/* Hide checkbox */
+.privacy-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.privacy-slider {
+  position: absolute;
+  inset: 0;
+  background: #d1d5db; /* light gray */
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+/* Toggle knob */
+.privacy-slider::before {
+  content: "";
+  position: absolute;
+  height: 28px;
+  width: 28px;
+  left: 4px;
+  top: 4px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+/* Checked = Private */
+.privacy-switch input:checked + .privacy-slider {
+  background: #c7cdd6;
+}
+
+.privacy-switch input:checked + .privacy-slider::before {
+  transform: translateX(44px);
+}
