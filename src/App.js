@@ -47,6 +47,7 @@ import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBooking
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
+import QuickMatch from "./Components/QuickMatch/QuickMatch";
 import SearchResults from "./Components/Searching/SearchResults";
 import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
@@ -343,6 +344,7 @@ const App = () => {
             <Route path="/editProfile" Component={AuthHoc(Profile)} />
             <Route path="/newProfiles" Component={AuthHoc(NewProfiles)} />
             <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
+            <Route path="/quick-match" Component={AuthHoc(QuickMatch)} />
             <Route path="/search" Component={AuthHoc(SearchResults)} />
             <Route path="/conversations" Component={AuthHoc(Conversations)} />
             <Route

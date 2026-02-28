@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import BoxCategories from "./BoxCategories";
 import { ApiServices } from "../../Services/ApiServices";
-import { INDUSTRY_EXPERTISE, ROLE_LEVELS, COMPANY_STAGES } from "../../Utils";
+import { INDUSTRY_EXPERTISE, ROLE_LEVELS, COMPANY_STAGES, domain_subdomain, allskills } from "../../Utils";
 import {
   Briefcase,
   ChevronDown,
@@ -12,11 +12,13 @@ import {
 } from "lucide-react";
 import Startup from "../OnboardComponents/Startup";
 import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
+import WelcomeScreen from "./WelcomeScreen";
 
 const EntryDetails = () => {
   /* ---------------- COMMON ---------------- */
   const [step, setStep] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [showWelcome, setShowWelcome] = useState(false);
 
   /* ---------------- USER ---------------- */
   const [username, setUsername] = useState("");
@@ -28,6 +30,56 @@ const EntryDetails = () => {
   const [companyStage, setCompanyStage] = useState("");
   const [expandedIndustries, setExpandedIndustries] = useState({});
   const [selectedExpertise, setSelectedExpertise] = useState({});
+
+  /* ---------------- NEW COMMON FIELDS ---------------- */
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [linkedIn, setLinkedIn] = useState("");
+  const [yearsOfExperience, setYearsOfExperience] = useState("");
+  const [selectedIndustries, setSelectedIndustries] = useState([]);
+  const [selectedExpertiseList, setSelectedExpertiseList] = useState([]);
+  const [expertiseSearch, setExpertiseSearch] = useState("");
+  const [industrySearch, setIndustrySearch] = useState("");
+
+  /* Interests */
+  const INTEREST_OPTIONS = [
+    "Startup Ideation",
+    "Startup Growth",
+    "Co-founder Search",
+    "Business Model Ideation",
+    "Problem Statement Validation",
+    "Looking for jobs/hiring",
+    "Others",
+  ];
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [otherInterest, setOtherInterest] = useState("");
+
+  const toggleInterest = (interest) => {
+    setSelectedInterests((prev) =>
+      prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest]
+    );
+  };
+
+  const industryKeys = useMemo(() => Object.keys(domain_subdomain), []);
+  const filteredIndustries = useMemo(
+    () => industryKeys.filter((k) => k.toLowerCase().includes(industrySearch.toLowerCase())),
+    [industryKeys, industrySearch]
+  );
+  const filteredExpertise = useMemo(
+    () => allskills.filter((s) => s.toLowerCase().includes(expertiseSearch.toLowerCase())),
+    [expertiseSearch]
+  );
+
+  const toggleSelectedIndustry = (industry) => {
+    setSelectedIndustries((prev) =>
+      prev.includes(industry) ? prev.filter((i) => i !== industry) : [...prev, industry]
+    );
+  };
+
+  const toggleSelectedExpertiseItem = (skill) => {
+    setSelectedExpertiseList((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
+    );
+  };
 
   /* ---------------- AUTH ---------------- */
   const loginDetails = useSelector((store) => store.auth.loginDetails);
@@ -105,24 +157,43 @@ const EntryDetails = () => {
         role_level: roleLevel,
         companyStage,
         mentorExpertise: selectedExpertise,
-            beyincProfile: selectedCategory === "Mentor" ? "Mentor" : selectedCategory === "Startup" ? "Startup" : "Enterpreneur",
-
+        beyincProfile:
+          selectedCategory === "Mentor"
+            ? "Mentor"
+            : selectedCategory === "Startup"
+              ? "Startup"
+              : "Enterpreneur",
+        phoneNumber,
+        linkedIn,
+        yearsOfExperience,
+        industries: selectedIndustries,
+        expertise: selectedExpertiseList,
+        interests: [
+          ...selectedInterests.filter((i) => i !== "Others"),
+          ...(selectedInterests.includes("Others") && otherInterest.trim()
+            ? [otherInterest.trim()]
+            : []),
+        ],
       });
 
-      alert("Profile created successfully!");
-      window.location.href = "/posts";
+      setShowWelcome(true);
     } catch (err) {
       console.error(err);
       alert("Something went wrong");
     }
   };
 
+  /* Show welcome screen after profile completion */
+  if (showWelcome) {
+    return <WelcomeScreen userName={username} />;
+  }
+
   const totalSteps =
     selectedCategory === "" ||
-    selectedCategory === "Mentor" ||
-    selectedCategory === "Startup" ||
-    selectedCategory === "Enterpreneur"||
-    selectedCategory === "Individual"
+      selectedCategory === "Mentor" ||
+      selectedCategory === "Startup" ||
+      selectedCategory === "Enterpreneur" ||
+      selectedCategory === "Individual"
       ? 3
       : 2;
   const progressPercentage = (step / totalSteps) * 100;
@@ -201,6 +272,151 @@ const EntryDetails = () => {
               />
             </div>
 
+            {/* Phone Number */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="e.g., +91 9876543210"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                LinkedIn Profile URL
+              </label>
+              <input
+                type="url"
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="https://linkedin.com/in/your-profile"
+                value={linkedIn}
+                onChange={(e) => setLinkedIn(e.target.value)}
+              />
+            </div>
+
+            {/* Years of Experience */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Years of Experience
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="50"
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="e.g., 5"
+                value={yearsOfExperience}
+                onChange={(e) => setYearsOfExperience(e.target.value)}
+              />
+            </div>
+
+            {/* Industry / Sector Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Industry / Sector
+                {selectedIndustries.length > 0 && (
+                  <span className="ml-2 text-xs font-medium text-indigo-600">
+                    {selectedIndustries.length} selected
+                  </span>
+                )}
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2 rounded mb-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                placeholder="Search industries..."
+                value={industrySearch}
+                onChange={(e) => setIndustrySearch(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-1">
+                {filteredIndustries.map((industry) => (
+                  <button
+                    key={industry}
+                    type="button"
+                    onClick={() => toggleSelectedIndustry(industry)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedIndustries.includes(industry)
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                      }`}
+                  >
+                    {industry}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Expertise Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Expertise
+                {selectedExpertiseList.length > 0 && (
+                  <span className="ml-2 text-xs font-medium text-indigo-600">
+                    {selectedExpertiseList.length} selected
+                  </span>
+                )}
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2 rounded mb-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                placeholder="Search expertise..."
+                value={expertiseSearch}
+                onChange={(e) => setExpertiseSearch(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-1">
+                {filteredExpertise.map((skill) => (
+                  <button
+                    key={skill}
+                    type="button"
+                    onClick={() => toggleSelectedExpertiseItem(skill)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedExpertiseList.includes(skill)
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                      }`}
+                  >
+                    {skill}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Interests Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Interests
+                {selectedInterests.length > 0 && (
+                  <span className="ml-2 text-xs font-medium text-indigo-600">
+                    {selectedInterests.length} selected
+                  </span>
+                )}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {INTEREST_OPTIONS.map((interest) => (
+                  <button
+                    key={interest}
+                    type="button"
+                    onClick={() => toggleInterest(interest)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedInterests.includes(interest)
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                      }`}
+                  >
+                    {interest}
+                  </button>
+                ))}
+              </div>
+              {selectedInterests.includes("Others") && (
+                <input
+                  className="mt-2 w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
+                  placeholder="Please specify your interest..."
+                  value={otherInterest}
+                  onChange={(e) => setOtherInterest(e.target.value)}
+                />
+              )}
+            </div>
+
             {/* Photo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -235,11 +451,10 @@ const EntryDetails = () => {
               <React.Fragment key={role}>
                 <div
                   onClick={() => setRoleLevel(role)}
-                  className={`cursor-pointer p-4 rounded-lg border-2 text-center transition-all ${
-                    roleLevel === role
-                      ? "bg-indigo-600 text-white border-indigo-600"
-                      : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
-                  }`}
+                  className={`cursor-pointer p-4 rounded-lg border-2 text-center transition-all ${roleLevel === role
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
+                    }`}
                 >
                   <div className="flex items-center justify-center gap-2">
                     <span className="font-medium">{role}</span>
@@ -261,11 +476,10 @@ const EntryDetails = () => {
                         <button
                           key={stage.id}
                           onClick={() => setCompanyStage(stage.label)}
-                          className={`p-4 rounded-lg font-medium transition-all text-left border-2 ${
-                            companyStage === stage.label
-                              ? "bg-indigo-600 text-white border-indigo-600"
-                              : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
-                          }`}
+                          className={`p-4 rounded-lg font-medium transition-all text-left border-2 ${companyStage === stage.label
+                            ? "bg-indigo-600 text-white border-indigo-600"
+                            : "bg-white text-gray-700 border-gray-300 hover:border-indigo-300 hover:bg-indigo-50"
+                            }`}
                         >
                           <div className="flex items-start gap-3">
                             <span className="text-xl">{stage.icon}</span>
@@ -279,11 +493,10 @@ const EntryDetails = () => {
                                 )}
                               </div>
                               <p
-                                className={`text-xs ${
-                                  companyStage === stage.label
-                                    ? "text-indigo-100"
-                                    : "text-gray-500"
-                                }`}
+                                className={`text-xs ${companyStage === stage.label
+                                  ? "text-indigo-100"
+                                  : "text-gray-500"
+                                  }`}
                               >
                                 {stage.description}
                               </p>
@@ -337,6 +550,151 @@ const EntryDetails = () => {
               />
             </div>
 
+            {/* Phone Number */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="e.g., +91 9876543210"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                LinkedIn Profile URL
+              </label>
+              <input
+                type="url"
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="https://linkedin.com/in/your-profile"
+                value={linkedIn}
+                onChange={(e) => setLinkedIn(e.target.value)}
+              />
+            </div>
+
+            {/* Years of Experience */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Years of Experience
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="50"
+                className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="e.g., 5"
+                value={yearsOfExperience}
+                onChange={(e) => setYearsOfExperience(e.target.value)}
+              />
+            </div>
+
+            {/* Industry / Sector Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Industry / Sector
+                {selectedIndustries.length > 0 && (
+                  <span className="ml-2 text-xs font-medium text-indigo-600">
+                    {selectedIndustries.length} selected
+                  </span>
+                )}
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2 rounded mb-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                placeholder="Search industries..."
+                value={industrySearch}
+                onChange={(e) => setIndustrySearch(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-1">
+                {filteredIndustries.map((industry) => (
+                  <button
+                    key={industry}
+                    type="button"
+                    onClick={() => toggleSelectedIndustry(industry)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedIndustries.includes(industry)
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                      }`}
+                  >
+                    {industry}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Expertise Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Expertise
+                {selectedExpertiseList.length > 0 && (
+                  <span className="ml-2 text-xs font-medium text-indigo-600">
+                    {selectedExpertiseList.length} selected
+                  </span>
+                )}
+              </label>
+              <input
+                className="w-full border border-gray-300 p-2 rounded mb-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none"
+                placeholder="Search expertise..."
+                value={expertiseSearch}
+                onChange={(e) => setExpertiseSearch(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-1">
+                {filteredExpertise.map((skill) => (
+                  <button
+                    key={skill}
+                    type="button"
+                    onClick={() => toggleSelectedExpertiseItem(skill)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedExpertiseList.includes(skill)
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                      }`}
+                  >
+                    {skill}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Interests Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Interests
+                {selectedInterests.length > 0 && (
+                  <span className="ml-2 text-xs font-medium text-indigo-600">
+                    {selectedInterests.length} selected
+                  </span>
+                )}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {INTEREST_OPTIONS.map((interest) => (
+                  <button
+                    key={interest}
+                    type="button"
+                    onClick={() => toggleInterest(interest)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedInterests.includes(interest)
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                      }`}
+                  >
+                    {interest}
+                  </button>
+                ))}
+              </div>
+              {selectedInterests.includes("Others") && (
+                <input
+                  className="mt-2 w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
+                  placeholder="Please specify your interest..."
+                  value={otherInterest}
+                  onChange={(e) => setOtherInterest(e.target.value)}
+                />
+              )}
+            </div>
+
             {/* Photo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -363,7 +721,7 @@ const EntryDetails = () => {
             {/* Headline */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-               {selectedCategory === "Individual" ? "Personal" : "Professional"} Headline
+                {selectedCategory === "Individual" ? "Personal" : "Professional"} Headline
                 {/* <span className="text-red-500">*</span> */}
               </label>
               <input
@@ -398,132 +756,131 @@ const EntryDetails = () => {
       {step === 3 &&
         (selectedCategory === "Mentor" ||
           selectedCategory === "Enterpreneur" ||
-          selectedCategory === "Startup"||
-        selectedCategory === "Individual") && (
+          selectedCategory === "Startup" ||
+          selectedCategory === "Individual") && (
           <>
             {(selectedCategory === "Mentor" ||
-              selectedCategory === "Enterpreneur"||selectedCategory === "Individual") && (
-              <>
-                <div className="mb-6">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                    Select your industry and expertise
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Choose the industries you're experienced in and select
-                    specific skills
-                  </p>
-                </div>
+              selectedCategory === "Enterpreneur" || selectedCategory === "Individual") && (
+                <>
+                  <div className="mb-6">
+                    <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                      Select your industry and expertise
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      Choose the industries you're experienced in and select
+                      specific skills
+                    </p>
+                  </div>
 
-                <div className="space-y-3 mb-6">
-                  {Object.entries(INDUSTRY_EXPERTISE).map(
-                    ([industry, skills]) => {
-                      const selectedCount =
-                        selectedExpertise[industry]?.length || 0;
+                  <div className="space-y-3 mb-6">
+                    {Object.entries(INDUSTRY_EXPERTISE).map(
+                      ([industry, skills]) => {
+                        const selectedCount =
+                          selectedExpertise[industry]?.length || 0;
 
-                      return (
-                        <div
-                          key={industry}
-                          className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-indigo-300 transition-all"
-                        >
+                        return (
                           <div
-                            onClick={() => toggleIndustry(industry)}
-                            className="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                            key={industry}
+                            className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-indigo-300 transition-all"
                           >
-                            <div className="flex items-center gap-3">
-                              <Briefcase className="w-5 h-5 text-indigo-600" />
-                              <span className="font-semibold text-gray-800">
-                                {industry}
-                              </span>
-                              {selectedCount > 0 && (
-                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
-                                  {selectedCount} selected
+                            <div
+                              onClick={() => toggleIndustry(industry)}
+                              className="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                            >
+                              <div className="flex items-center gap-3">
+                                <Briefcase className="w-5 h-5 text-indigo-600" />
+                                <span className="font-semibold text-gray-800">
+                                  {industry}
                                 </span>
+                                {selectedCount > 0 && (
+                                  <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
+                                    {selectedCount} selected
+                                  </span>
+                                )}
+                              </div>
+                              {expandedIndustries[industry] ? (
+                                <ChevronUp className="w-5 h-5 text-gray-500" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-gray-500" />
                               )}
                             </div>
-                            {expandedIndustries[industry] ? (
-                              <ChevronUp className="w-5 h-5 text-gray-500" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-gray-500" />
-                            )}
-                          </div>
 
-                          {expandedIndustries[industry] && (
-                            <div className="p-4 bg-white border-t-2 border-gray-100">
-                              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                {skills.map((skill) => {
-                                  const isSelected =
-                                    selectedExpertise[industry]?.includes(
-                                      skill,
-                                    );
+                            {expandedIndustries[industry] && (
+                              <div className="p-4 bg-white border-t-2 border-gray-100">
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                  {skills.map((skill) => {
+                                    const isSelected =
+                                      selectedExpertise[industry]?.includes(
+                                        skill,
+                                      );
 
-                                  return (
-                                    <div
-                                      key={skill}
-                                      onClick={() =>
-                                        handleExpertiseToggle(industry, skill)
-                                      }
-                                      className={`p-3 border-2 rounded-lg cursor-pointer transition-all text-sm font-medium text-center ${
-                                        isSelected
+                                    return (
+                                      <div
+                                        key={skill}
+                                        onClick={() =>
+                                          handleExpertiseToggle(industry, skill)
+                                        }
+                                        className={`p-3 border-2 rounded-lg cursor-pointer transition-all text-sm font-medium text-center ${isSelected
                                           ? "bg-indigo-600 text-white border-indigo-600"
                                           : "border-gray-300 hover:border-indigo-300 hover:bg-indigo-50 text-gray-700"
-                                      }`}
-                                    >
-                                      <div className="flex items-center justify-center gap-2">
-                                        <span>{skill}</span>
-                                        {isSelected && (
-                                          <CheckCircle2 className="w-4 h-4" />
-                                        )}
+                                          }`}
+                                      >
+                                        <div className="flex items-center justify-center gap-2">
+                                          <span>{skill}</span>
+                                          {isSelected && (
+                                            <CheckCircle2 className="w-4 h-4" />
+                                          )}
+                                        </div>
                                       </div>
-                                    </div>
-                                  );
-                                })}
+                                    );
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    },
-                  )}
-                </div>
+                            )}
+                          </div>
+                        );
+                      },
+                    )}
+                  </div>
 
-                {/* Summary */}
-                {Object.keys(selectedExpertise).length > 0 && (
-                  <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-indigo-600 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium text-indigo-900">
-                          {Object.values(selectedExpertise).flat().length}{" "}
-                          skills selected across{" "}
-                          {Object.keys(selectedExpertise).length}{" "}
-                          {Object.keys(selectedExpertise).length === 1
-                            ? "industry"
-                            : "industries"}
-                        </p>
+                  {/* Summary */}
+                  {Object.keys(selectedExpertise).length > 0 && (
+                    <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                      <div className="flex items-start gap-2">
+                        <CheckCircle2 className="w-5 h-5 text-indigo-600 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium text-indigo-900">
+                            {Object.values(selectedExpertise).flat().length}{" "}
+                            skills selected across{" "}
+                            {Object.keys(selectedExpertise).length}{" "}
+                            {Object.keys(selectedExpertise).length === 1
+                              ? "industry"
+                              : "industries"}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Buttons */}
-                <div className="flex gap-4 mt-8">
-                  <button
-                    onClick={() => setStep(2)}
-                    className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all bg-slate-200 hover:bg-slate-300 text-slate-900"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    disabled={Object.keys(selectedExpertise).length === 0}
-                    onClick={handleSubmit}
-                    className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-2"
-                  >
-                    <span>Complete Profile</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </>
-            )}
+                  {/* Buttons */}
+                  <div className="flex gap-4 mt-8">
+                    <button
+                      onClick={() => setStep(2)}
+                      className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all bg-slate-200 hover:bg-slate-300 text-slate-900"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      disabled={Object.keys(selectedExpertise).length === 0}
+                      onClick={handleSubmit}
+                      className="flex-1 px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-2"
+                    >
+                      <span>Complete Profile</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </>
+              )}
           </>
         )}
 

@@ -792,6 +792,19 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  // Stub for group conversation – backend endpoint to be implemented
+  createGroupConversation: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/chat/createGroupConversation`, obj)
+        .then((res) => {
+          if (res) resolve(res);
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   likeComment: (obj) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -1457,15 +1470,15 @@ export const ApiServices = {
     });
   },
   verifyUser: (obj) => {
-  return new Promise((resolve, reject) => {
-    axiosInstance
-      .put(`/userDetails/verifyUser`, obj)
-      .then((res) => {
-        if (res) {
-          resolve(res);
-        }
-      })
-      .catch((err) => reject(err));
-  });
-},
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .put(`/userDetails/verifyUser`, obj)
+        .then((res) => {
+          if (res) {
+            resolve(res);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };
