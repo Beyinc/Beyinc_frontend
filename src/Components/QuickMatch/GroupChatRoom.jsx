@@ -50,7 +50,6 @@ const GroupChatRoom = ({ matchedUsers }) => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    // Attempt to create a group conversation on the backend (stub)
     useEffect(() => {
         const memberIds = matchedUsers.map((u) => u._id).filter(Boolean);
         if (memberIds.length > 0) {

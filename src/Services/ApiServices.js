@@ -1481,4 +1481,69 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  quickMatch: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/chatroom/quickMatch`, obj)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  joinQuickMatchRoom: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/chatroom/joinRoom`, obj)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  sendQuickMatchMessage: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/chatroom/sendMessage`, obj)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  getQuickMatchMessages: (roomId) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/chatroom/messages/${roomId}`)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
+  getQuickMatchRoomDetails: (roomId) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/chatroom/roomDetails/${roomId}`)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };

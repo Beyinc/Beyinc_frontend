@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import { setAllUsers } from "../../redux/Conversationreducer/ConversationReducer";
 import MatchCard from "./MatchCard";
-import GroupChatRoom from "./GroupChatRoom";
 import "./quickMatch.css";
 
 /* ── Icons ──────────────────────────────────────────────────── */
@@ -22,41 +21,6 @@ const SparkleIcon = () => (
 );
 
 /* ── Matching algorithm ──────────────────────────────────────── */
-const scoreMatch = (me, other) => {
-    let score = 0;
-    const shared = { industries: [], skills: [], interests: [] };
-
-    // Experience similarity (within 3 years)
-    const myExp = parseInt(me.yearsOfExperience) || 0;
-    const otherExp = parseInt(other.yearsOfExperience) || 0;
-    if (Math.abs(myExp - otherExp) <= 3) score += 3;
-
-    // Industry overlap
-    const myIndustries = me.industries || [];
-    const otherIndustries = other.industries || [];
-    const commonInd = myIndustries.filter((i) => otherIndustries.includes(i));
-    if (commonInd.length > 0) { score += 2; shared.industries = commonInd; }
-
-    // Interest overlap
-    const myInterests = me.interests || [];
-    const otherInterests = other.interests || [];
-    const commonInt = myInterests.filter((i) => otherInterests.includes(i));
-    if (commonInt.length > 0) { score += 2; shared.interests = commonInt; }
-
-    // Skill overlap
-    const mySkills = [
-        ...(me.expertise || []),
-        ...Object.values(me.mentorExpertise || {}).flat(),
-    ];
-    const otherSkills = [
-        ...(other.expertise || []),
-        ...Object.values(other.mentorExpertise || {}).flat(),
-    ];
-    const commonSkills = mySkills.filter((s) => otherSkills.includes(s));
-    if (commonSkills.length > 0) { score += 3; shared.skills = commonSkills; }
-
-    return { score, shared };
-};
 
 /* ── Component ───────────────────────────────────────────────── */
 const PHASES = { IDLE: "idle", SEARCHING: "searching", MATCHED: "matched", CHATROOM: "chatroom" };
@@ -72,6 +36,8 @@ const QuickMatch = () => {
     const [phase, setPhase] = useState(PHASES.IDLE);
     const [matchedUsers, setMatchedUsers] = useState([]);
     const [matchScores, setMatchScores] = useState({});
+    const [quickMatchRoom, setQuickMatchRoom] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Fetch all users if not yet in redux
     useEffect(() => {
@@ -89,33 +55,46 @@ const QuickMatch = () => {
 
     const runMatch = () => {
         setPhase(PHASES.SEARCHING);
+        setIsLoading(true);
 
-        setTimeout(() => {
-            // Score every candidate
-            const scored = candidates.map((user) => {
-                const { score, shared } = scoreMatch(currentUser || {}, user);
-                return { user, score, shared };
+        ApiServices.quickMatch({})
+            .then((res) => {
+                console.log("Quick Match API Response:", res);
+                
+                // Store the room data from API
+                if (res && res.room) {
+                    setQuickMatchRoom(res.room);
+                }
+                
+                // Simulate loading time for UX
+                setTimeout(() => {
+                    setPhase(PHASES.MATCHED);
+                    setIsLoading(false);
+                }, 800);
+            })
+            .catch((err) => {
+                console.error("Quick Match Error:", err);
+                alert("Failed to create quick match room. Please try again.");
+                setPhase(PHASES.IDLE);
+                setIsLoading(false);
             });
+    };
 
-            // Sort descending, take top 4 (group of 3-5 total incl. me)
-            scored.sort((a, b) => b.score - a.score);
-            const top = scored.slice(0, Math.min(4, scored.length));
-
-            // Ensure at least some "matched" users even if score is 0 (demo fallback)
-            const picks = top.length > 0 ? top : scored.slice(0, Math.min(2, scored.length));
-
-            const users = picks.map((p) => p.user);
-            const scores = {};
-            const shared = {};
-            picks.forEach((p) => {
-                scores[p.user._id] = p.score;
-                shared[p.user._id] = p.shared;
+    const handleJoinRoom = async () => {
+        try {
+            // Call join room API
+            const response = await ApiServices.joinQuickMatchRoom({
+                roomId: quickMatchRoom._id,
             });
-
-            setMatchedUsers(users);
-            setMatchScores({ scores, shared });
-            setPhase(PHASES.CHATROOM); // jump straight into the room
-        }, 3200);
+            
+            console.log("Joined room:", response);
+            
+            // Redirect to chat
+            navigate(`/quickMatch/chat/${quickMatchRoom._id}`);
+        } catch (err) {
+            console.error("Join room error:", err);
+            alert("Failed to join room. Please try again.");
+        }
     };
 
     return (
@@ -162,9 +141,9 @@ const QuickMatch = () => {
                             <div className="qm-radar-ring" />
                             <div className="qm-radar-core" />
                         </div>
-                        <p className="qm-searching-title">Finding your best matches…</p>
+                        <p className="qm-searching-title">Creating your match room…</p>
                         <p className="qm-searching-sub">
-                            Analysing experience, industry overlap, interests &amp; skills
+                            Connecting you with compatible participants
                         </p>
                         <div className="qm-dots">
                             <span /><span /><span />
@@ -172,25 +151,74 @@ const QuickMatch = () => {
                     </div>
                 )}
 
-
-                {/* ── CHATROOM phase ───────────────────────────────── */}
-                {phase === PHASES.CHATROOM && (
+                {/* ── MATCHED phase ─ SHOW ROOM WITH JOIN BUTTON ──────────────── */}
+                {phase === PHASES.MATCHED && quickMatchRoom && (
                     <>
                         <div className="qm-found-header" style={{ marginBottom: 16 }}>
                             <div className="qm-found-badge">
                                 <SparkleIcon /> Live Room
                             </div>
                             <h2 className="qm-found-title" style={{ fontSize: 18 }}>
-                                Your Quick Match Room
+                                {quickMatchRoom.name}
                             </h2>
+                            <p style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
+                                {quickMatchRoom.participants?.length || 0} participant{quickMatchRoom.participants?.length !== 1 ? 's' : ''}
+                            </p>
                         </div>
 
-                        <GroupChatRoom matchedUsers={matchedUsers} />
+                        <div style={{ marginBottom: 16, padding: 12, backgroundColor: "#f5f5f5", borderRadius: 8 }}>
+                            <h4 style={{ marginBottom: 8, fontSize: 13, fontWeight: 600 }}>Room Details</h4>
+                            <p style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
+                                <strong>Room ID:</strong> {quickMatchRoom._id}
+                            </p>
+                            <p style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
+                                <strong>Status:</strong> {quickMatchRoom.isLocked ? "Locked" : "Open"}
+                            </p>
+                            {quickMatchRoom.sharedSkills?.length > 0 && (
+                                <p style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
+                                    <strong>Shared Skills:</strong> {quickMatchRoom.sharedSkills.join(", ")}
+                                </p>
+                            )}
+                            {quickMatchRoom.sharedIndustries?.length > 0 && (
+                                <p style={{ fontSize: 12, color: "#666", marginBottom: 4 }}>
+                                    <strong>Shared Industries:</strong> {quickMatchRoom.sharedIndustries.join(", ")}
+                                </p>
+                            )}
+                            {quickMatchRoom.participants?.length > 0 && (
+                                <p style={{ fontSize: 12, color: "#666" }}>
+                                    <strong>Participants:</strong> {quickMatchRoom.participants.length}
+                                </p>
+                            )}
+                        </div>
 
-                        <div className="qm-skip" style={{ marginTop: 14 }}>
-                            <a onClick={() => navigate("/posts")}>Go to feed</a>
-                            &nbsp;·&nbsp;
-                            <a onClick={() => setPhase(PHASES.IDLE)}>Start over</a>
+                        <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                            <button
+                                onClick={handleJoinRoom}
+                                className="qm-btn-primary"
+                                style={{ flex: 1 }}
+                            >
+                                Join Group
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setPhase(PHASES.IDLE);
+                                    setQuickMatchRoom(null);
+                                }}
+                                style={{
+                                    flex: 1,
+                                    padding: "10px 20px",
+                                    backgroundColor: "#f0f0f0",
+                                    color: "#333",
+                                    border: "1px solid #ddd",
+                                    borderRadius: 8,
+                                    cursor: "pointer",
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    transition: "all 0.3s"
+                                }}
+                            >
+                                Different Match
+                            </button>
                         </div>
                     </>
                 )}

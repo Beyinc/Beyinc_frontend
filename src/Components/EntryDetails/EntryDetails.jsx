@@ -13,7 +13,7 @@ import {
 import Startup from "../OnboardComponents/Startup";
 import ProfileImageUpdate from "../Navbar/ProfileImageUpdate";
 import WelcomeScreen from "./WelcomeScreen";
-
+import { useNavigate } from "react-router-dom";
 const EntryDetails = () => {
   /* ---------------- COMMON ---------------- */
   const [step, setStep] = useState(2); // Step 1 (role selection) commented out — start directly at "Tell us about yourself"
@@ -52,7 +52,7 @@ const EntryDetails = () => {
   ];
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [otherInterest, setOtherInterest] = useState("");
-
+const navigate = useNavigate();
   const toggleInterest = (interest) => {
     setSelectedInterests((prev) =>
       prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest]
@@ -185,7 +185,9 @@ const EntryDetails = () => {
 
   /* Show welcome screen after profile completion */
   if (showWelcome) {
-    return <WelcomeScreen userName={username} />;
+   navigate("/welcomeScreen", {
+      state: { username }
+    });
   }
 
   // Single-step flow: step 2 is the only visible step
@@ -532,6 +534,77 @@ const EntryDetails = () => {
                 value={linkedIn}
                 onChange={(e) => setLinkedIn(e.target.value)}
               />
+            </div>
+
+            {/* Years of Experience */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Years of Experience
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="70"
+                className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
+                placeholder="e.g. 5"
+                value={yearsOfExperience}
+                onChange={(e) => setYearsOfExperience(e.target.value)}
+              />
+            </div>
+
+            {/* Interests */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Interests <span className="text-gray-400 font-normal">(Select multiple)</span>
+              </label>
+              <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-300 rounded-lg p-3">
+                {INTEREST_OPTIONS.map((interest) => (
+                  <div key={interest} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`interest-${interest}`}
+                      checked={selectedInterests.includes(interest)}
+                      onChange={() => toggleInterest(interest)}
+                      className="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                    />
+                    <label
+                      htmlFor={`interest-${interest}`}
+                      className="ml-3 text-sm text-gray-700 cursor-pointer hover:text-indigo-600 transition-colors"
+                    >
+                      {interest}
+                    </label>
+                  </div>
+                ))}
+              </div>
+              {selectedInterests.includes("Others") && (
+                <div className="mt-3">
+                  <input
+                    type="text"
+                    placeholder="Please specify your other interest"
+                    className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
+                    value={otherInterest}
+                    onChange={(e) => setOtherInterest(e.target.value)}
+                  />
+                </div>
+              )}
+              {selectedInterests.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {selectedInterests.map((interest) => (
+                    <span
+                      key={interest}
+                      className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full flex items-center gap-1"
+                    >
+                      {interest}
+                      <button
+                        onClick={() => toggleInterest(interest)}
+                        className="ml-1 hover:text-indigo-900"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
           </div>{/* end space-y-5 */}
