@@ -1546,4 +1546,17 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  getUserRooms: () => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`/chatroom/myRooms`)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };

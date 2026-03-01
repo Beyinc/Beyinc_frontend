@@ -90,7 +90,7 @@ const QuickMatch = () => {
             console.log("Joined room:", response);
             
             // Redirect to chat
-            navigate(`/quickMatch/chat/${quickMatchRoom._id}`);
+            navigate(`/my-chat-rooms`);
         } catch (err) {
             console.error("Join room error:", err);
             alert("Failed to join room. Please try again.");

@@ -49,6 +49,7 @@ import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfession
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
 import QuickMatch from "./Components/QuickMatch/QuickMatch";
 import ChatBox from "./Components/QuickMatch/ChatBox";
+import MyChatRooms from "./Components/QuickMatch/MyChatRooms";
 import SearchResults from "./Components/Searching/SearchResults";
 import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
@@ -350,6 +351,7 @@ const App = () => {
             <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
             <Route path="/quick-match" Component={AuthHoc(QuickMatch)} />
             <Route path="/quickMatch/chat/:roomId" Component={AuthHoc(ChatBox)} />
+            <Route path="/my-chat-rooms" Component={AuthHoc(MyChatRooms)} />
             <Route path="/search" Component={AuthHoc(SearchResults)} />
             <Route path="/conversations" Component={AuthHoc(Conversations)} />
             <Route
