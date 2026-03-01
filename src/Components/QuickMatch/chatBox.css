@@ -24,18 +24,20 @@
   color: #999;
 }
 
-/* CHAT SECTION - 70% */
+/* CHAT SECTION - 40% of screen */
 .chatbox-chat-section {
-  flex: 1;
+  width: 40vw;
+  min-width: 40vw;
   display: flex;
   flex-direction: column;
   border-right: 1px solid #e0e0e0;
   background: white;
 }
 
-/* MEMBERS SECTION - 30% */
+/* MEMBERS SECTION - 30% of entire window */
 .chatbox-members-section {
-  width: 30%;
+  width: 30vw;
+  min-width: 30vw;
   background: #f8f9fa;
   border-left: 1px solid #e0e0e0;
   display: flex;
@@ -450,7 +452,7 @@
   }
 
   .chatbox-members-section {
-    width: 25%;
+    width: 30vw;
   }
 }
 

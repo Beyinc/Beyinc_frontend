@@ -49,7 +49,7 @@ const IndividualMessage = () => {
   const [userchatBlocked, setUserChatBlocked] = useState(null);
   const [userchatBlockedBy, setUserChatBlockedBy] = useState("");
 
-  const scrollRef = useRef();
+  const messageBoxRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const messageCount = useSelector((state) => state.conv.messageCount);
@@ -246,7 +246,6 @@ const IndividualMessage = () => {
     if (file != "") {
       setLoadingFile(file);
       setSentImageLoader(true);
-      // console.log(file);
     }
     setSendMessage("");
     setFile("");
@@ -339,31 +338,7 @@ const IndividualMessage = () => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    // console.log(messages);
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Calculate the distance from the bottom of the page
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const bottomDistance = documentHeight - (scrollPosition + windowHeight);
-
-      // Set visibility based on scroll position
-      setShowDiv(bottomDistance > 100); // Adjust the threshold as needed
-    };
-
-    // Attach the scroll event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const blockChat = async (by) => {
     await ApiServices.chatBlock({
@@ -473,7 +448,7 @@ const IndividualMessage = () => {
               </button>
             ))}
         </div>
-        <div className="messageBox" style={{ position: "relative" }}>
+        <div className="messageBox" style={{ position: "relative" }} ref={messageBoxRef}>
           <div style={{ 
               display: 'flex', 
               justifyContent: 'center', 
@@ -500,7 +475,9 @@ const IndividualMessage = () => {
               id="downGoing"
               style={{ display: showDiv ? "block" : "none" }}
               onClick={() => {
-                scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+                if (messageBoxRef.current) {
+                  messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
+                }
               }}
             >
               <i className="fas fa-arrow-down" title="Scroll below"></i>
@@ -521,7 +498,6 @@ const IndividualMessage = () => {
                   className={`details ${
                     m.senderId === user_id ? "owner" : "friend"
                   }`}
-                  ref={scrollRef}
                   // style={{ marginTop: i === 0 && width < 768 ? "200px" : "0" }}
                 >
                   <div
@@ -623,7 +599,7 @@ const IndividualMessage = () => {
               </>
             ))}
           {loadingFile != "" && (
-            <div className={`details owner`} ref={scrollRef}>
+            <div className={`details owner`}>
               <div className="personalDetails">
                 <div className="email">
                   {/* <div className="time">

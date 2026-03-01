@@ -21,6 +21,19 @@ const ChatBox = ({ roomId: propRoomId }) => {
   const [roomDetails, setRoomDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
+  const isUserNearBottomRef = useRef(true);
+  const prevMessageCountRef = useRef(0);
+
+  // Track whether user is scrolled near the bottom of the messages container
+  const handleMessagesScroll = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+    const threshold = 100; // px from bottom
+    const distanceFromBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight;
+    isUserNearBottomRef.current = distanceFromBottom <= threshold;
+  };
 
   // Initialize socket connection and setup listeners FIRST
   useEffect(() => {
@@ -130,13 +143,27 @@ const ChatBox = ({ roomId: propRoomId }) => {
   }, [roomId, user_id]);
 
   // Polling fallback: Fetch new messages every 3 seconds in case socket delivery fails
+  // Only update state when messages have actually changed to avoid unnecessary re-renders
   useEffect(() => {
     if (!roomId) return;
 
     const pollMessages = async () => {
       try {
         const messagesData = await ApiServices.getQuickMatchMessages(roomId);
-        setMessages(Array.isArray(messagesData) ? messagesData : []);
+        const newMessages = Array.isArray(messagesData) ? messagesData : [];
+
+        setMessages((prev) => {
+          // Skip update if the message count and last message ID are the same
+          if (
+            prev.length === newMessages.length &&
+            prev.length > 0 &&
+            newMessages.length > 0 &&
+            prev[prev.length - 1]._id === newMessages[newMessages.length - 1]._id
+          ) {
+            return prev; // Return same reference — no re-render
+          }
+          return newMessages;
+        });
       } catch (err) {
         console.error("Polling error:", err);
       }
@@ -146,9 +173,16 @@ const ChatBox = ({ roomId: propRoomId }) => {
     return () => clearInterval(pollInterval);
   }, [roomId]);
 
-  // Auto-scroll to latest message
+  // Auto-scroll to latest message ONLY when new messages arrive
+  // and the user is already near the bottom (not reading history)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const currentCount = messages.length;
+    const hadNewMessages = currentCount > prevMessageCountRef.current;
+    prevMessageCountRef.current = currentCount;
+
+    if (hadNewMessages && isUserNearBottomRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const handleSendMessage = async () => {
@@ -228,8 +262,8 @@ const ChatBox = ({ roomId: propRoomId }) => {
             </div>
           ) : (
             messages.map((msg, idx) => {
-              // Convert both to strings for comparison (handles ObjectId)
-              const isSent = String(msg.senderId) === String(user_id);
+              // Convert both to strings for comparison (handles ObjectId or populated object)
+              const isSent = String(msg.senderId?._id || msg.senderId) === String(user_id);
 
               return (
                 <div
@@ -325,12 +359,15 @@ const ChatBox = ({ roomId: propRoomId }) => {
                     </div>
                   )}
 
-                  {userData.expertise && (
-                    <div className="member-details">
-                      <span className="detail-label">Expertise:</span>
-                      <span className="detail-value">{userData.expertise}</span>
-                    </div>
-                  )}
+                  <div className="member-details">
+                    <span className="detail-label">Expertise:</span>
+                    <span className="detail-value">
+                      {(userData.skills?.length > 0 && userData.skills.slice(0, 3).join(", ")) ||
+                       (userData.expertise && (Array.isArray(userData.expertise) ? userData.expertise.slice(0, 3).join(", ") : userData.expertise)) ||
+                       (userData.industryExpertise?.length > 0 && userData.industryExpertise.slice(0, 3).join(", ")) ||
+                       ""}
+                    </span>
+                  </div>
 
                   {userData.experienceYears && (
                     <div className="member-details">

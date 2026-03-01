@@ -23,9 +23,9 @@
   background: #ffe6e6;
 }
 
-/* LEFT SIDEBAR - 30% */
+/* LEFT SIDEBAR - 30% of screen */
 .rooms-sidebar {
-  width: 30%;
+  width: 30vw;
   border-right: 1px solid var(--border-color, #e0e0e0);
   display: flex;
   flex-direction: column;
