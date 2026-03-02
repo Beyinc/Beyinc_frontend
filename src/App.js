@@ -47,6 +47,9 @@ import UserBooking from "./Components/Dashboard/Bookings/UserBooking/UserBooking
 import MentorBookings from "./Components/Dashboard/Bookings/mentorBooking/MentorBookings";
 import BeyincProfessional from "./Components/BeyincProfessional/BeyincProfessional";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
+import QuickMatch from "./Components/QuickMatch/QuickMatch";
+import ChatBox from "./Components/QuickMatch/ChatBox";
+import MyChatRooms from "./Components/QuickMatch/MyChatRooms";
 import SearchResults from "./Components/Searching/SearchResults";
 import payOut from "./Components/PayOut/payOut";
 import Payment from "./Components/Dashboard/Payment/Payment";
@@ -60,6 +63,7 @@ import NewLogin from "./Components/NewLogin/NewLogin";
 import NewSignup from "./Components/NewSignup/NewSignup";
 import VerifyOtp from "./Components/NewSignup/VerifyOtp";
 import EditProfessional from "./Components/EditProfessional";
+import WelcomeScreen from "./Components/EntryDetails/WelcomeScreen";
 const Posts = React.lazy(() => import("./Components/Posts/Posts"));
 
 const IndividualPostDetailsCard = React.lazy(
@@ -211,7 +215,7 @@ const App = () => {
           console.log(d);
           dispatch(setMessageCount(d));
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   }, [user_id]);
 
@@ -338,11 +342,16 @@ const App = () => {
               path="/editProfessional"
               Component={AuthHoc(EditProfessional)}
             />
+            <Route path="/welcomeScreen" Component={AuthHoc(WelcomeScreen)} />
+
             <Route path="*" element={<NoMatch />} />
             <Route path="/dashboard" Component={AuthHoc(Home)} />
             <Route path="/editProfile" Component={AuthHoc(Profile)} />
             <Route path="/newProfiles" Component={AuthHoc(NewProfiles)} />
             <Route path="/entryUserDetails" Component={AuthHoc(EntryDetails)} />
+            <Route path="/quick-match" Component={AuthHoc(QuickMatch)} />
+            <Route path="/quickMatch/chat/:roomId" Component={AuthHoc(ChatBox)} />
+            <Route path="/my-chat-rooms" Component={AuthHoc(MyChatRooms)} />
             <Route path="/search" Component={AuthHoc(SearchResults)} />
             <Route path="/conversations" Component={AuthHoc(Conversations)} />
             <Route
@@ -352,10 +361,7 @@ const App = () => {
             <Route path="/notifications" Component={AuthHoc(Notifications)} />
             <Route path="/userPitches" Component={AuthHoc(LoggedInPitches)} />
             <Route path="/livePitches" Component={AuthHoc(LivePitches)} />
-            <Route
-              path="/posts/:id"
-              element={<IndividualPostDetailsCard />}
-            />
+            <Route path="/posts/:id" element={<IndividualPostDetailsCard />} />
             <Route
               path="/livePitches/:pitchId"
               Component={AuthHoc(IndividualPitch)}
