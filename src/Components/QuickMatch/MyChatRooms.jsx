@@ -10,6 +10,7 @@ const MyChatRooms = () => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showChat, setShowChat] = useState(false);
 
   // Fetch user's rooms on mount
   useEffect(() => {
@@ -78,7 +79,7 @@ const MyChatRooms = () => {
   return (
     <div className="my-chat-rooms-container">
       {/* LEFT SIDEBAR - 30% */}
-      <div className="rooms-sidebar">
+      <div className={`rooms-sidebar${showChat ? " hide-on-mobile" : ""}`}>
         <div className="sidebar-header">
           <h2>My Chat Rooms</h2>
           <p className="rooms-count">{rooms.length} active</p>
@@ -97,7 +98,7 @@ const MyChatRooms = () => {
                 className={`room-item ${
                   selectedRoomId === room._id ? "active" : ""
                 }`}
-                onClick={() => setSelectedRoomId(room._id)}
+                onClick={() => { setSelectedRoomId(room._id); setShowChat(true); }}
               >
                 <div className="room-item-header">
                   <h3 className="room-name">{room.name}</h3>
@@ -127,7 +128,12 @@ const MyChatRooms = () => {
       </div>
 
       {/* RIGHT CONTENT - 70% */}
-      <div className="chat-content">
+      <div className={`chat-content${!showChat ? " hide-on-mobile" : ""}`}>
+        {showChat && (
+          <button className="back-to-rooms" onClick={() => setShowChat(false)}>
+            &#8592; Back
+          </button>
+        )}
         {selectedRoomId ? (
           <ChatBoxNew roomId={selectedRoomId} />
         ) : (

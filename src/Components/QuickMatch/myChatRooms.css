@@ -210,28 +210,58 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .my-chat-rooms-container {
     flex-direction: column;
+    height: 100vh;
   }
 
   .rooms-sidebar {
     width: 100%;
-    height: auto;
-    max-height: 200px;
+    height: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
   }
 
-  .chat-content {
-    flex: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .rooms-sidebar {
+  .rooms-sidebar.hide-on-mobile {
     display: none;
   }
 
   .chat-content {
     width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-content.hide-on-mobile {
+    display: none;
+  }
+
+  .sidebar-header h2 {
+    font-size: 18px;
+  }
+}
+
+.back-to-rooms {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--sidebar-header-bg, #ffffff);
+  border: none;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--primary-color, #4f55c7);
+  width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .back-to-rooms {
+    display: flex;
   }
 }

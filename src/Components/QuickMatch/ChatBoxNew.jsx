@@ -24,6 +24,7 @@ const ChatBox = ({ roomId: propRoomId }) => {
   const messagesContainerRef = useRef(null);
   const isUserNearBottomRef = useRef(true);
   const prevMessageCountRef = useRef(0);
+  const [showMembers, setShowMembers] = useState(false);
 
   // Track whether user is scrolled near the bottom of the messages container
   const handleMessagesScroll = () => {
@@ -237,6 +238,12 @@ const ChatBox = ({ roomId: propRoomId }) => {
               {participants.length !== 1 ? "s" : ""}
             </p>
           </div>
+          <button
+            className="members-toggle-btn"
+            onClick={() => setShowMembers((prev) => !prev)}
+          >
+            {showMembers ? "✕" : "👥"} Members
+          </button>
         </div>
 
         {/* Room Info */}
@@ -318,8 +325,13 @@ const ChatBox = ({ roomId: propRoomId }) => {
         </div>
       </div>
 
+      {/* Backdrop - click to close members panel */}
+      {showMembers && (
+        <div className="members-backdrop" onClick={() => setShowMembers(false)} />
+      )}
+
       {/* RIGHT MEMBERS SECTION - 30% */}
-      <div className="chatbox-members-section">
+      <div className={`chatbox-members-section${showMembers ? " members-open" : ""}`}>
         <div className="members-header">
           <h3>Members</h3>
           <span className="members-count">{participants.length}</span>
