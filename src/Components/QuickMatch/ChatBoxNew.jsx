@@ -6,7 +6,7 @@ import { socket_io } from "../../Utils";
 import { ApiServices } from "../../Services/ApiServices";
 import "./chatBox.css";
 
-const ChatBox = ({ roomId: propRoomId }) => {
+const ChatBox = ({ roomId: propRoomId, onRoomLeft }) => {
   const navigate = useNavigate();
 
   const { image, userName, user_id } = useSelector(
@@ -25,6 +25,30 @@ const ChatBox = ({ roomId: propRoomId }) => {
   const isUserNearBottomRef = useRef(true);
   const prevMessageCountRef = useRef(0);
   const [showMembers, setShowMembers] = useState(false);
+  const [isLeavingRoom, setIsLeavingRoom] = useState(false);
+
+  const handleLeaveRoom = async () => {
+    if (!window.confirm("Are you sure you want to leave this room? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      setIsLeavingRoom(true);
+      await ApiServices.leaveQuickMatchRoom({ roomId });
+      alert("You have successfully left the room");
+      
+      // Call parent's refresh callback if provided
+      if (onRoomLeft) {
+        onRoomLeft();
+      }
+      
+      navigate("/my-chat-rooms");
+    } catch (err) {
+      console.error("Leave room error:", err);
+      alert("Failed to leave room. Please try again.");
+      setIsLeavingRoom(false);
+    }
+  };
 
   // Track whether user is scrolled near the bottom of the messages container
   const handleMessagesScroll = () => {
@@ -238,12 +262,22 @@ const ChatBox = ({ roomId: propRoomId }) => {
               {participants.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <button
-            className="members-toggle-btn"
-            onClick={() => setShowMembers((prev) => !prev)}
-          >
-            {showMembers ? "✕" : "👥"} Members
-          </button>
+          <div className="header-buttons">
+            <button
+              className="members-toggle-btn"
+              onClick={() => setShowMembers((prev) => !prev)}
+            >
+              {showMembers ? "✕" : "👥"} Members
+            </button>
+            <button
+              className="leave-room-btn"
+              onClick={handleLeaveRoom}
+              disabled={isLeavingRoom}
+              title="Leave this chat room"
+            >
+              {isLeavingRoom ? "Leaving..." : "Leave Room"}
+            </button>
+          </div>
         </div>
 
         {/* Room Info */}
@@ -341,10 +375,19 @@ const ChatBox = ({ roomId: propRoomId }) => {
           {participants.map((participant, idx) => {
             const userData = participant.userId || participant;
             const isCurrentUser = String(userData._id || userData.userId) === String(user_id);
+            const memberId = userData._id || userData.userId;
+
+            const handleMemberClick = () => {
+              if (isCurrentUser) {
+                navigate("/editProfile");
+              } else {
+                navigate(`/user/${memberId}`);
+              }
+            };
 
             return (
               <div key={idx} className={`member-card ${isCurrentUser ? "current-user" : ""}`}>
-                <div className="member-avatar">
+                <div className="member-avatar" onClick={handleMemberClick} style={{ cursor: "pointer" }}>
                   {userData.image?.url ? (
                     <img src={userData.image.url} alt={userData.userName} />
                   ) : (
@@ -356,7 +399,11 @@ const ChatBox = ({ roomId: propRoomId }) => {
                 </div>
 
                 <div className="member-info">
-                  <h4 className="member-name">
+                  <h4 
+                    className="member-name" 
+                    onClick={handleMemberClick}
+                    style={{ cursor: "pointer", textDecoration: "none" }}
+                  >
                     {userData.userName || "User"}
                     {isCurrentUser && " (You)"}
                   </h4>

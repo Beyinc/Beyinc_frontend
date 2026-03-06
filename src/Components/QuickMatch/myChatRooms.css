@@ -177,6 +177,28 @@
   color: var(--text-tertiary, #cccccc);
 }
 
+.explore-btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.explore-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.explore-btn:active {
+  transform: scale(0.98);
+}
+
 /* RIGHT CONTENT - 70% */
 .chat-content {
   flex: 1;

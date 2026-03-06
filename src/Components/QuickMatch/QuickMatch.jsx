@@ -63,6 +63,7 @@ const QuickMatch = () => {
                 
                 // Store the room data from API
                 if (res && res.room) {
+                    console.log("Received room data:", res.room);
                     setQuickMatchRoom(res.room);
                 }
                 
@@ -80,14 +81,22 @@ const QuickMatch = () => {
             });
     };
 
+    const isUserAlreadyJoined = () => {
+        if (!quickMatchRoom?.participants) return false;
+        return quickMatchRoom.participants.some((p) => p.userId === myId);
+    };
+
     const handleJoinRoom = async () => {
         try {
-            // Call join room API
-            const response = await ApiServices.joinQuickMatchRoom({
-                roomId: quickMatchRoom._id,
-            });
+            const alreadyJoined = isUserAlreadyJoined();
             
-            console.log("Joined room:", response);
+            if (!alreadyJoined) {
+                // Call join room API only if not already joined
+                const response = await ApiServices.joinQuickMatchRoom({
+                    roomId: quickMatchRoom._id,
+                });
+                console.log("Joined room:", response);
+            }
             
             // Redirect to chat
             navigate(`/my-chat-rooms`);
@@ -164,6 +173,14 @@ const QuickMatch = () => {
                             <p style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
                                 {quickMatchRoom.participants?.length || 0} participant{quickMatchRoom.participants?.length !== 1 ? 's' : ''}
                             </p>
+                            {isUserAlreadyJoined() && (
+                                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, paddingTop: 8, borderTop: "1px solid #e0e0e0" }}>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    <span style={{ fontSize: 13, fontWeight: 600, color: "#22c55e" }}>You've joined this room</span>
+                                </div>
+                            )}
                         </div>
 
                         <div style={{ marginBottom: 16, padding: 12, backgroundColor: "#f5f5f5", borderRadius: 8 }}>
@@ -197,7 +214,7 @@ const QuickMatch = () => {
                                 className="qm-btn-primary"
                                 style={{ flex: 1 }}
                             >
-                                Join Group
+                                {isUserAlreadyJoined() ? "Move to Room" : "Join Group"}
                             </button>
                             <button
                                 onClick={() => {

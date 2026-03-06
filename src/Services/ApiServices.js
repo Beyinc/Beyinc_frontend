@@ -1559,4 +1559,17 @@ export const ApiServices = {
         .catch((err) => reject(err));
     });
   },
+
+  leaveQuickMatchRoom: (obj) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(`/chatroom/leaveRoom`, obj)
+        .then((res) => {
+          if (res.data) {
+            resolve(res.data);
+          }
+        })
+        .catch((err) => reject(err));
+    });
+  },
 };

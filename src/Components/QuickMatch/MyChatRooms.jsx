@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { ApiServices } from "../../Services/ApiServices";
 import ChatBoxNew from "./ChatBoxNew";
 import "./myChatRooms.css";
 
 const MyChatRooms = () => {
+  const navigate = useNavigate();
   const { user_id } = useSelector((state) => state.auth.loginDetails);
   const [rooms, setRooms] = useState([]);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showChat, setShowChat] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  // Fetch user's rooms on mount
+  // Fetch user's rooms on mount or when refreshTrigger changes
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -21,6 +24,8 @@ const MyChatRooms = () => {
         setRooms(data.rooms || []);
         if (data.rooms && data.rooms.length > 0) {
           setSelectedRoomId(data.rooms[0]._id);
+        } else {
+          setSelectedRoomId(null);
         }
       } catch (err) {
         console.error("Failed to fetch rooms:", err);
@@ -33,7 +38,7 @@ const MyChatRooms = () => {
     if (user_id) {
       fetchRooms();
     }
-  }, [user_id]);
+  }, [user_id, refreshTrigger]);
 
   const truncateText = (text, length = 30) => {
     if (!text) return "";
@@ -58,6 +63,10 @@ const MyChatRooms = () => {
     if (diffInHours < 24) return `${diffInHours}h`;
     if (diffInDays < 7) return `${diffInDays}d`;
     return messageDate.toLocaleDateString();
+  };
+
+  const handleRefreshRooms = () => {
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   if (loading) {
@@ -89,6 +98,12 @@ const MyChatRooms = () => {
           <div className="no-rooms">
             <p>No active chat rooms</p>
             <p className="subtext">Join or create a room to start chatting!</p>
+            <button 
+              className="explore-btn"
+              onClick={() => navigate("/quick-match")}
+            >
+              Explore Chat Rooms →
+            </button>
           </div>
         ) : (
           <div className="rooms-list">
@@ -135,7 +150,7 @@ const MyChatRooms = () => {
           </button>
         )}
         {selectedRoomId ? (
-          <ChatBoxNew roomId={selectedRoomId} />
+          <ChatBoxNew roomId={selectedRoomId} onRoomLeft={handleRefreshRooms} />
         ) : (
           <div className="no-room-selected">
             <div className="empty-state">
