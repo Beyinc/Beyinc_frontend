@@ -344,7 +344,6 @@ const App = () => {
             />
             <Route path="/welcomeScreen" Component={AuthHoc(WelcomeScreen)} />
 
-            <Route path="*" element={<NoMatch />} />
             <Route path="/dashboard" Component={AuthHoc(Home)} />
             <Route path="/editProfile" Component={AuthHoc(Profile)} />
             <Route path="/newProfiles" Component={AuthHoc(NewProfiles)} />
@@ -408,6 +407,8 @@ const App = () => {
               element={<ConnectionsWithSuggestions />}
             />
             <Route path="/notification-page" element={<NotificationPage />} />
+
+            <Route path="*" element={<NoMatch />} />
           </Routes>
         </div>
       </Suspense>
