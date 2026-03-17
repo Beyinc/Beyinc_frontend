@@ -135,6 +135,12 @@ const QuickMatch = () => {
                             Find My Match
                         </button>
 
+                          <button className="qm-btn-primary" onClick={() => navigate("/my-chat-rooms")} style={{ marginTop: 12, backgroundColor: "#e0e0e0", color: "#333" }}>
+                            <BoltIcon />
+                            Go to my rooms
+                        </button>
+
+
                         <div className="qm-skip">
                             <a onClick={() => navigate("/posts")}>Skip and go to feed →</a>
                         </div>
