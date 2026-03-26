@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import {  useNavigate } from "react-router";
 import { ApiServices } from "./Services/ApiServices";
 import EntryDetails from "./Components/EntryDetails/EntryDetails";
-
+import LandingPage from "./Components/LandingPage/LandingPage";
 export const LoginAuth = (Component) => {
   return function WithHooks(props) {
     const navigate = useNavigate();
@@ -69,7 +69,7 @@ const AuthHoc = (Component) => {
     ) : loading ? (
       <></>
     ) : (
-      <Login />
+     <LandingPage />
     );
   };
 };

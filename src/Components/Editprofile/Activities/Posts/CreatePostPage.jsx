@@ -790,14 +790,16 @@ const CreatePostPage = () => {
           }}
         >
           <button
+            type="button"
             className="cancelButton"
             onClick={() => {
-              navigate("/profile");
+              navigate("/posts");
             }}
           >
             Cancel
           </button>
           <button
+            type="button"
             className="createPost-Button"
             onClick={postId === undefined ? addingpost : updatePost}
             disabled={

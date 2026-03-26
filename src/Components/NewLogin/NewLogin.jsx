@@ -195,7 +195,7 @@ function NewLogin() {
         );
         localStorage.setItem("user", JSON.stringify(res.data));
         await axiosInstance.customFnAddTokenInHeader(res.data.accessToken);
-        window.location.href = "/posts";
+        window.location.href = "/quick-match";
       })
       .catch((err) => {
         setLoading(false);

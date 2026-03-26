@@ -165,7 +165,7 @@ div#mui-p-73569-P-1.MuiTabPanel-root.css-13xfq8m-MuiTabPanel-root{
   position: absolute; 
   top: 6px; 
   right: 6px; 
-  background: rgba(255,255,255,0.9); 
+  background: rgba(19, 12, 12, 0.9); 
   border-radius: 50%; 
   padding: 4px; 
   cursor: pointer; 
@@ -340,4 +340,13 @@ button.createPost-Button {
   min-height: 150px;
   padding: 12px;
   overflow-y: hidden;
+}
+
+
+/* Remove native select dropdown arrow */
+.dropdown-container select {
+  -webkit-appearance: none; /* Chrome / Safari */
+  -moz-appearance: none;    /* Firefox */
+  appearance: none;         /* Standard */
+  background-image: none;   /* Extra safety */
 }

@@ -30,7 +30,7 @@ const GoogleAuth = () => {
       if (profile.data.isProfileComplete === false) {
          window.location.href = "/editProfile";
       } else {
-        window.location.href = "/posts";
+        window.location.href = "/quick-match";
       }
     } catch (err) {
       console.log(err);
